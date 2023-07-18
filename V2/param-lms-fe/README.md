@@ -4,13 +4,30 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 First, run the development server:
 
-```bash
+
+
+# Preparing deployment
+
+1.
 npm run dev
 # or
 yarn dev
 # or
 pnpm dev
 ```
+
+2. yarn build
+
+3. aws s3 sync dist/ s3://paramlms (to push to s3 bucket) NB: create IAMUser on aws and create user and all s3 permissions
+
+4. logon to aws, navigate to the bucket paramlms and select all files under object then action and select make public
+
+5. to test visit - http://paramlms.s3-website-us-east-1.amazonaws.com/
+
+
+
+http://paramlms.s3-website-us-east-1.amazonaws.com/
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
