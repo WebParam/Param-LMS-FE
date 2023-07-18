@@ -493,7 +493,7 @@ export default function Home() {
                               className="progress-bar bg-warning"
                               role="progressbar"
                               style={{ width: "1.06%" }}
-                              aria-valuenow="1.06"
+                              aria-valuenow={1.06}
                               aria-valuemin={0}
                               aria-valuemax={100}
                             />
@@ -1059,7 +1059,7 @@ export default function Home() {
                         <input
                           type="checkbox"
                           className="custom-control-input js-check-selected-row"
-                          defaultChecked=""
+                          // defaultChecked=""
                           id="customCheck1_contacts_3"
                         />
                         <label

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import styles from './page.module.css'
 
-export default function Login() {
+export default function NewPassword() {
   return (
     <div
     className="mdk-header-layout js-mdk-header-layout"
@@ -22,340 +22,48 @@ export default function Login() {
       </div>
       <div className="mdk-header__content">
         <div
-          className="navbar navbar-expand px-0 navbar-dark bg-dark mdk-header--fixed"
-          id="default-navbar"
           data-primary="data-primary"
+          className="navbar navbar-expand-sm navbar-dark bg-dark p-0 mdk-header--fixed"
+          id="default-navbar"
         >
-          {/* Navbar toggler */}
-          <button
-            className="navbar-toggler d-block rounded-0"
-            type="button"
-            data-toggle="sidebar"
-          >
-            <span className="material-icons">menu</span>
-          </button>
-          {/* Navbar Brand */}
-          <a href="index.html" className="navbar-brand mr-16pt">
-            <img
-              className="navbar-brand-icon mr-0 mr-lg-8pt"
-              src="assets/images/logo/accent-teal-100@2x.png"
-              width={32}
-              alt="Huma"
-            />
-            <span className="d-none d-lg-block">Huma</span>
-          </a>
-          {/* <button class="btn navbar-btn mr-16pt" data-toggle="modal" data-target="#apps">Apps <i class="material-icons">arrow_drop_down</i></button> */}
-          <form
-            className="search-form navbar-search d-none d-md-flex mr-16pt"
-            action="fixed-index.html"
-          >
-            <button className="btn" type="submit">
-              <i className="material-icons">search</i>
-            </button>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search ..."
-            />
-          </form>
-          <div className="flex" />
-          <div
-            className="nav navbar-nav flex-nowrap d-none d-lg-flex mr-16pt"
-            style={{ whiteSpace: "nowrap" }}
-          >
-            <div className="nav-item dropdown d-none d-sm-flex">
-              <a
-                href="#"
-                className="nav-link dropdown-toggle"
-                data-toggle="dropdown"
-              >
-                EN
-              </a>
-              <div className="dropdown-menu dropdown-menu-right">
-                <div className="dropdown-header">
-                  <strong>Select language</strong>
-                </div>
-                <a className="dropdown-item active" href="">
-                  English
+          <div className="container">
+            {/* Navbar Brand */}
+            <a href="fixed-index.html" className="navbar-brand">
+              <img
+                className="navbar-brand-icon"
+                src="assets/images/logo/accent-teal-100@2x.png"
+                width={30}
+                alt="Huma"
+              />
+              <span className="d-none d-md-block">Huma</span>
+            </a>
+            {/* Main Navigation */}
+            <ul className="nav navbar-nav ml-auto d-none d-sm-flex">
+              <li className="nav-item">
+                <a href="fixed-pricing.html" className="nav-link">
+                  Pricing
                 </a>
-                <a className="dropdown-item" href="">
-                  French
+              </li>
+              <li className="nav-item">
+                <a href="fixed-signup.html" className="nav-link">
+                  Signup
                 </a>
-                <a className="dropdown-item" href="">
-                  Romanian
+              </li>
+              <li className="nav-item">
+                <a href="fixed-login.html" className="nav-link">
+                  Login
                 </a>
-                <a className="dropdown-item" href="">
-                  Spanish
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="nav navbar-nav flex-nowrap d-flex ml-0 mr-16pt">
-            <div className="nav-item dropdown d-none d-sm-flex">
-              <a
-                href="#"
-                className="nav-link d-flex align-items-center dropdown-toggle"
-                data-toggle="dropdown"
-              >
-                <img
-                  width={32}
-                  height={32}
-                  className="rounded-circle mr-8pt"
-                  src="assets/images/people/50/guy-3.jpg"
-                  alt="account"
-                />
-                <span className="flex d-flex flex-column mr-8pt">
-                  <span className="navbar-text-100">Laza Bogdan</span>
-                  <small className="navbar-text-50">Administrator</small>
-                </span>
-              </a>
-              <div className="dropdown-menu dropdown-menu-right">
-                <div className="dropdown-header">
-                  <strong>Account</strong>
-                </div>
-                <a className="dropdown-item" href="fixed-edit-account.html">
-                  Edit Account
-                </a>
-                <a className="dropdown-item" href="fixed-billing.html">
-                  Billing
-                </a>
-                <a className="dropdown-item" href="fixed-billing-history.html">
-                  Payments
-                </a>
-                <a className="dropdown-item" href="fixed-login.html">
-                  Logout
-                </a>
-              </div>
-            </div>
-            {/* Notifications dropdown */}
-            <div className="nav-item ml-16pt dropdown dropdown-notifications">
-              <button
-                className="nav-link btn-flush dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                data-dropdown-disable-document-scroll=""
-                data-caret="false"
-              >
-                <i className="material-icons">notifications</i>
-                <span className="badge badge-notifications badge-accent">2</span>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <div data-perfect-scrollbar="" className="position-relative ps">
-                  <div className="dropdown-header">
-                    <strong>System notifications</strong>
-                  </div>
-                  <div className="list-group list-group-flush mb-0">
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action unread"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">3 minutes ago</small>
-                        <span className="ml-auto unread-indicator bg-accent" />
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <span className="avatar-title rounded-circle bg-light">
-                            <i className="material-icons font-size-16pt text-accent">
-                              account_circle
-                            </i>
-                          </span>
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <span className="text-black-70">
-                            Your profile information has not been synced
-                            correctly.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">5 hours ago</small>
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <span className="avatar-title rounded-circle bg-light">
-                            <i className="material-icons font-size-16pt text-primary">
-                              group_add
-                            </i>
-                          </span>
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <strong className="text-black-100">Adrian. D</strong>
-                          <span className="text-black-70">
-                            Wants to join your private group.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">1 day ago</small>
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <span className="avatar-title rounded-circle bg-light">
-                            <i className="material-icons font-size-16pt text-warning">
-                              storage
-                            </i>
-                          </span>
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <span className="text-black-70">
-                            Your deploy was successful.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                  </div>
-                  <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                    <div
-                      className="ps__thumb-x"
-                      tabIndex={0}
-                      style={{ left: 0, width: 0 }}
-                    />
-                  </div>
-                  <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-                    <div
-                      className="ps__thumb-y"
-                      tabIndex={0}
-                      style={{ top: 0, height: 0 }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* // END Notifications dropdown */}
-            {/* Notifications dropdown */}
-            <div className="nav-item ml-16pt dropdown dropdown-notifications">
-              <button
-                className="nav-link btn-flush dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                data-dropdown-disable-document-scroll=""
-                data-caret="false"
-              >
-                <i className="material-icons icon-24pt">mail_outline</i>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <div data-perfect-scrollbar="" className="position-relative ps">
-                  <div className="dropdown-header">
-                    <strong>Messages</strong>
-                  </div>
-                  <div className="list-group list-group-flush mb-0">
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action unread"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">5 minutes ago</small>
-                        <span className="ml-auto unread-indicator bg-accent" />
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <img
-                            src="assets/images/people/110/woman-5.jpg"
-                            alt="people"
-                            className="avatar-img rounded-circle"
-                          />
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <strong className="text-black-100">Michelle</strong>
-                          <span className="text-black-70">
-                            Clients loved the new design.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">5 minutes ago</small>
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <img
-                            src="assets/images/people/110/woman-5.jpg"
-                            alt="people"
-                            className="avatar-img rounded-circle"
-                          />
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <strong className="text-black-100">Michelle</strong>
-                          <span className="text-black-70">🔥 Superb job..</span>
-                        </span>
-                      </span>
-                    </a>
-                  </div>
-                  <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                    <div
-                      className="ps__thumb-x"
-                      tabIndex={0}
-                      style={{ left: 0, width: 0 }}
-                    />
-                  </div>
-                  <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-                    <div
-                      className="ps__thumb-y"
-                      tabIndex={0}
-                      style={{ top: 0, height: 0 }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* // END Notifications dropdown */}
-          </div>
-          <div className="dropdown border-left-2 navbar-border">
+              </li>
+            </ul>
+            {/* // END Main Navigation */}
+            {/* Navbar toggler */}
             <button
-              className="navbar-toggler navbar-toggler-custom d-block"
+              className="navbar-toggler navbar-toggler-right d-block d-md-none"
               type="button"
-              data-toggle="dropdown"
-              data-caret="false"
+              data-toggle="sidebar"
             >
-              <span className="material-icons">business_center</span>
+              <span className="navbar-toggler-icon" />
             </button>
-            <div className="dropdown-menu dropdown-menu-right">
-              <div className="dropdown-header">
-                <strong>Select company</strong>
-              </div>
-              <a
-                href=""
-                className="dropdown-item active d-flex align-items-center"
-              >
-                <div className="avatar avatar-sm mr-8pt">
-                  <span className="avatar-title rounded bg-primary">FM</span>
-                </div>
-                <small className="ml-4pt flex">
-                  <span className="d-flex flex-column">
-                    <strong className="text-black-100">
-                      FrontendMatter Inc.
-                    </strong>
-                    <span className="text-black-50">Administrator</span>
-                  </span>
-                </small>
-              </a>
-              <a href="" className="dropdown-item d-flex align-items-center">
-                <div className="avatar avatar-sm mr-8pt">
-                  <span className="avatar-title rounded bg-accent">HH</span>
-                </div>
-                <small className="ml-4pt flex">
-                  <span className="d-flex flex-column">
-                    <strong className="text-black-100">HumaHuma Inc.</strong>
-                    <span className="text-black-50">Publisher</span>
-                  </span>
-                </small>
-              </a>
-            </div>
           </div>
         </div>
       </div>
@@ -584,10 +292,7 @@ export default function Login() {
                     <div className="row no-gutters">
                       <div className="col border-right">
                         <div className="dropdown-header">Guest</div>
-                        <a
-                          className="dropdown-item active"
-                          href="fixed-login.html"
-                        >
+                        <a className="dropdown-item" href="fixed-login.html">
                           Login
                         </a>
                         <a className="dropdown-item" href="fixed-pricing.html">
@@ -603,7 +308,7 @@ export default function Login() {
                           Payment
                         </a>
                         <a
-                          className="dropdown-item"
+                          className="dropdown-item active"
                           href="fixed-reset-password.html"
                         >
                           Reset Password
@@ -834,22 +539,31 @@ export default function Login() {
                     Layouts
                   </a>
                   <div className="dropdown-menu dropdown-menu-right">
-                    <a className="dropdown-item" href="compact-login.html">
+                    <a
+                      className="dropdown-item"
+                      href="compact-reset-password.html"
+                    >
                       Compact
                     </a>
-                    <a className="dropdown-item" href="mini-login.html">
+                    <a className="dropdown-item" href="mini-reset-password.html">
                       Mini
                     </a>
-                    <a className="dropdown-item" href="login.html">
+                    <a className="dropdown-item" href="reset-password.html">
                       App
                     </a>
-                    <a className="dropdown-item" href="boxed-login.html">
+                    <a className="dropdown-item" href="boxed-reset-password.html">
                       Boxed
                     </a>
-                    <a className="dropdown-item" href="sticky-login.html">
+                    <a
+                      className="dropdown-item"
+                      href="sticky-reset-password.html"
+                    >
                       Sticky
                     </a>
-                    <a className="dropdown-item active" href="fixed-login.html">
+                    <a
+                      className="dropdown-item active"
+                      href="fixed-reset-password.html"
+                    >
                       Fixed
                     </a>
                   </div>
@@ -859,58 +573,52 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <div className=" pt-32pt pt-sm-64pt pb-32pt">
-        <div className="container page__container">
-          <form action="fixed-index.html" className="col-md-5 p-0 mx-auto">
-            <div className="form-group">
-              <label className="form-label" htmlFor="email">
-                Email:
-              </label>
-              <input
-                id="email"
-                type="text"
-                className="form-control"
-                placeholder="Your email address ..."
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="password">
-                Password:
-              </label>
-              <input
-                id="password"
-                type="password"
-                className="form-control"
-                placeholder="Your first and last name ..."
-              />
-              <p className="text-right">
-                <a href="fixed-reset-password.html" className="small">
-                  Forgot your password?
-                </a>
-              </p>
-            </div>
-            <div className="text-center">
-              <button className="btn btn-accent">Login</button>
-            </div>
-          </form>
-        </div>
-      </div>
-      <div className="page-separator justify-content-center m-0">
-        <div className="page-separator__text">or sign-in with</div>
-        <div className="page-separator__bg-top " />
-      </div>
-      <div className="bg-body pt-32pt pb-32pt pb-md-64pt text-center">
-        <div className="container page__container">
-          <a href="fixed-index.html" className="btn btn-secondary btn-block-xs">
-            Facebook
-          </a>
-          <a href="fixed-index.html" className="btn btn-secondary btn-block-xs">
-            Twitter
-          </a>
-          <a href="fixed-index.html" className="btn btn-secondary btn-block-xs">
-            Google+
+      <div className="page-section pb-0">
+        <div className="container page__container d-flex flex-column flex-sm-row align-items-sm-center">
+          <div className="flex">
+            <h1 className="h2 mb-0">Reset Password</h1>
+            <p className="text-breadcrumb">Account Management</p>
+          </div>
+          <p className="d-sm-none" />
+          <a href="" className="btn btn-outline-secondary flex-column">
+            Need Help?
+            <span className="btn__secondary-text">Contact us</span>
           </a>
         </div>
+      </div>
+      <div className="page-section">
+      <div className="container-fluid page__container">
+        <div className="page-separator">
+          <div className="page-separator__text">Change Password</div>
+        </div>
+        <form action="login.html" className="col-sm-5 p-0">
+          <div className="form-group">
+            <label className="form-label" htmlFor="password">
+              Password:
+            </label>
+            <input
+              id="password"
+              type="password"
+              className="form-control"
+              placeholder="Type a new password ..."
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label" htmlFor="password2">
+              Confirm Password:
+            </label>
+            <input
+              id="password2"
+              type="password"
+              className="form-control"
+              placeholder="Confirm your new password ..."
+            />
+          </div>
+          <button type="submit" className="btn btn-accent">
+            Save password
+          </button>
+        </form>
+      </div>
       </div>
     </div>
     {/* // END Header Layout Content */}
@@ -996,6 +704,7 @@ export default function Login() {
       </div>
     </div>
   </div>
+  
   
   )
 }
