@@ -16,8 +16,8 @@ phases:
       # The "sync" command syncs the "dist" folder to the specified S3 bucket.
       # It uploads new and modified files, and deletes files that are not present in the "dist" folder.
 artifacts:
-  files:
-    - dist/**/*  # Include all files from the build phase as artifacts
+    - name: dist
+      location: dist
 
 # Replace "YOUR_PROJECT_NAME" with your project name
 # This is the name you'll see in the AWS CodeBuild console
