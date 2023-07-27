@@ -1,7 +1,133 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client';
+import { toast } from 'react-toastify';
+import { IUserResetPasswordModel } from '@/app/interfaces/user';
+import { useState } from 'react';
+import { BasicOTPComponent } from './basic-otp';
+const axios = require("axios").default;
 
 export default function ResetPassword() {
+
+  const [email, setEmail] = useState<string>("");
+  const [showPassInputs, setShowPassInputs] = useState<boolean>(true)
+  const [disable, setDisable] = useState<boolean>(true);
+  const [emailError, setEmailError] = useState<boolean>(false)
+  const [password, setPassword] = useState<string>("");
+  const [ConfirmPassword, setConfirmPassword] = useState<string>("");
+  const [otpLength, setOtpLength] = useState(0);
+  const [OtpSent, setOtpSent] = useState<boolean>(false);
+  const [otp, setOTP] = useState("");
+  const _id = toast.loading("Sending OTP...", {
+    //loader
+    position: "top-center",
+    autoClose: 1000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
+
+  const setOtp = (e: string) => {
+    setOTP(e);
+    setOtpLength(e.length);
+
+    if (e.length === 5) {
+      setDisable(false);
+    } else {
+      setDisable(true);
+    }
+  };
+
+
+    const ChangePassword = async () => {
+      const _id = toast.loading("Verifying OTP...", {
+        //loader
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+  
+      const payload = {
+        email: email,
+        password: password,
+        otp: otp,
+      };
+      axios
+      .post(
+        "https://322d-154-117-172-210.ngrok-free.app/api/Account/UserVerifyOtpRequestModel",
+        payload
+      )
+      .then((response: any) => {
+        console.log("response", response);
+  
+        toast.update(_id, {
+          render: `Password changed successfully. You may now login.`,
+          type: "error",
+          isLoading: false,
+        });
+        setShowPassInputs(false)
+  
+      })
+      .catch((error: any) => {
+        toast.update(_id, {
+          render: `invalid OTP..}`,
+          type: "error",
+          isLoading: false,
+        });
+        console.log(error);
+      });
+  
+      } 
+    
+  
+
+  const SendOtp = async (event:any) => {
+
+    const payload = {
+      email: email,
+    } as IUserResetPasswordModel; 
+
+    if(email !== ""){
+      setEmailError(false);
+      axios
+      .post(
+        "https://322d-154-117-172-210.ngrok-free.app/api/Account/SendResetPasswordOtp",
+        payload
+      )
+      .then((response: any) => {
+        console.log("response", response);
+  
+        toast.update(_id, {
+          render: `OTP sent succesfully to ${email}.`,
+          type: "error",
+          isLoading: false,
+        });
+        setShowPassInputs(false)
+  
+      })
+      .catch((error: any) => {
+        toast.update(_id, {
+          render: `Error sending OTP..}`,
+          type: "error",
+          isLoading: false,
+        });
+        console.log(error);
+      });
+  
+    }
+  
+    event.preventDefault()
+    }
+  
+ 
+
+
   return (
 <>
 
@@ -18,7 +144,11 @@ export default function ResetPassword() {
           </a>
         </div>
       </div>
+      {}
+      
       <div className="page-section">
+      {
+        showPassInputs ? <><div className="page-section">
         <div className="container page__container">
           <div className="page-separator">
             <div className="page-separator__text">Reset Password</div>
@@ -37,56 +167,71 @@ export default function ResetPassword() {
                 </div>
               </div>
             </div>
-            <form action="fixed-change-password.html">
+            <form >
               <div className="form-group">
-                <label className="form-label">Email:</label>
+                <label className="form-label">Email:</label>{emailError ? <span style = {{color : "red", fontWeight: "600px", marginLeft: "1em"}}>* required field</span>:null}
                 <input
+                value={email}
                   type="text"
                   className="form-control"
                   placeholder="Your email address ..."
+                  onChange={(e:any) => {
+                    setDisable(false)
+                    setEmail(e.target.value)
+                  }}
                 />
                 <small className="form-text text-muted">
                   We will email you with info on how to reset your password.
                 </small>
               </div>
-              <button className="btn btn-accent">Reset</button>
+              <button disabled = {disable} onClick={SendOtp} className="btn btn-accent">Reset</button>
             </form>
           </div>
         </div>
-      </div>
-      <div className="page-section">
-      <div className="container page__container">
+      </div></> :  <>    <div className="container page__container">
         <div className="page-separator">
-          <div className="page-separator__text">Change Password</div>
-        </div>
-        <form action="login.html" className="col-sm-5 p-0">
-          <div className="form-group">
-            <label className="form-label" htmlFor="password">
-              Password:
-            </label>
-            <input
-              id="password"
-              type="password"
-              className="form-control"
-              placeholder="Type a new password ..."
-            />
+            <div className="page-separator__text">Verify OTP</div>
           </div>
-          <div className="form-group">
-            <label className="form-label" htmlFor="password2">
-              Confirm Password:
-            </label>
-            <input
-              id="password2"
-              type="password"
-              className="form-control"
-              placeholder="Confirm your new password ..."
-            />
+          <div style={{width: "50%", marginBottom: "1em"}}>
+          <BasicOTPComponent onChange={setOtp}/>
           </div>
-          <button type="submit" className="btn btn-accent">
-            Save password
-          </button>
-        </form>
-      </div>
+  
+          <div className="page-separator">
+            <div className="page-separator__text">Change Password</div>
+          </div>
+         
+          <form  className="col-sm-5 p-0">
+        
+  
+            <div className="form-group">
+              <label className="form-label" htmlFor="password">
+                Password:
+              </label>
+              <input
+                id="password"
+                type="password"
+                className="form-control"
+                placeholder="Type a new password ..."
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="password2">
+                Confirm Password:
+              </label>
+              <input
+                id="password2"
+                type="password"
+                
+                className="form-control"
+                placeholder="Confirm your new password ..."
+              />
+            </div>
+            <button onClick = {ChangePassword} type="submit" className="btn btn-accent">
+              Save password
+            </button>
+          </form>
+        </div></>
+      }
     </div>
 </>
   

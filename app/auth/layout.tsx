@@ -1,4 +1,9 @@
 import Image from "next/image";
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+
+const isLoggedIn = cookies.get('param-user');
 
 export const metadata = {
   title: "Login",
@@ -18,6 +23,7 @@ export default function RootLayout({
     className="mdk-header-layout js-mdk-header-layout"
     data-domfactory-upgraded="mdk-header-layout"
   >
+    {isLoggedIn ?     <>
     {/* Header */}
     <div
       id="header"
@@ -372,10 +378,12 @@ export default function RootLayout({
       </div>
     </div>
     {/* // END Header */}
+    </> : null }
+
     {/* Header Layout Content */}
     <div
       className="mdk-header-layout__content page-content "
-      style={{ paddingTop: 64 }}
+      style={isLoggedIn ? { paddingTop: 64 } : {}}
     >
       <div
         className="page__subnav navbar navbar-expand-sm navbar-shadow navbar-light bg-white p-sm-0 d-none d-sm-flex"

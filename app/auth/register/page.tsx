@@ -3,13 +3,10 @@ import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Api } from '../../lib/restapi/endpoints';
-import { IUserLoginModel } from '../../interfaces/user';
+import { IUserLoginModel, IUserRegisterModel } from '../../interfaces/user';
 import Cookies from 'universal-cookie'; // Import the library
 
-const cookies = new Cookies(); // Create an instance of Cookies
-
-
-
+const cookies = new Cookies(); 
 const axios = require("axios").default;
 
 
@@ -17,6 +14,9 @@ export default function Login() {
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [ConfirmPassword, setConfirmPassword] = useState<string>("");
+  const [lname, setLname] = useState<string>("");
+  const [fname, setFname] = useState<string>("");
 
   const onChangeEmail = (e:any) => {
 
@@ -29,56 +29,45 @@ export default function Login() {
   }
 
 
-  
+  const Register = (event:any) => {
 
-async function LoginUser (event:any){
- 
+    const date = new Date();
 
-  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    let _id = toast.loading("Logging in..", {//loader
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      });
-
-      if (!emailRegex.test(email)) {
-   toast.update(_id, {
-     render: "Invalid email address",
-     type: "error",
-     isLoading: false,
-   });
-  
- }else if(!passwordRegex.test(password)){
-  toast.update(_id, {
-    render:
-      "Password must contain at least 8 characters, including uppercase and lowercase letters, numbers, and special characters",
-    type: "error",
-    isLoading: false,
-  });
- }else{
-
+    
+    let _id = toast.loading("Registering user..", {//loader
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+    
   const payload = {
+    id : 2,
+    FirstName:"",
+    LastName: "",
     Email : email,
     Password : password,
-    } as IUserLoginModel; 
+    Image : "",
+    CreatedOn : date,
+    CreatedBy : 2,
+    ChangedBy : 3,
+    ChangedOn: date,
+    } as IUserRegisterModel; 
 
     axios
     .post(
-      "https://f281-154-117-172-210.ngrok-free.app/api/Account/Login",
+      "https://f9bb-41-113-235-150.ngrok-free.app/api/Account/Register",
       payload
     )
     .then((response: any) => {
       console.log("response", response);
 
       toast.update(_id, {
-        render: "Successfully logged in",
+        render: "Successfully registered",
         type: "success",
         isLoading: false,
       });
@@ -100,10 +89,9 @@ async function LoginUser (event:any){
     });
 
   event?.preventDefault();
-  }
+  
  
-}
-
+  }
 
   return (
 <>
@@ -111,6 +99,37 @@ async function LoginUser (event:any){
       <div className=" pt-32pt pt-sm-64pt pb-32pt">
         <div className="container page__container">
           <form  className="col-md-5 p-0 mx-auto">
+
+          <div className="form-group">
+              <label className="form-label" htmlFor="email">
+                First Name:
+              </label>
+              <input
+                id="email"
+                type="text"
+                value = {fname}
+                onChange = {(e) => setFname(e.target.value)}
+
+                className="form-control"
+                placeholder="Your First Name ..."
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="email">
+                Last Name:
+              </label>
+              <input
+                id="email"
+                type="text"
+                value = {lname}
+                onChange = {(e) => setLname(e.target.value)}
+
+                className="form-control"
+                placeholder="Your Last Name ..."
+              />
+            </div>
+
             <div className="form-group">
               <label className="form-label" htmlFor="email">
                 Email:
@@ -135,22 +154,32 @@ async function LoginUser (event:any){
                 value = {password}
                 onChange = {onChangePassword}
                 className="form-control"
-                placeholder="Your first and last name ..."
+                placeholder="Your password ..."
               />
-              <p className="text-right">
-                <a href="fixed-reset-password.html" className="small">
-                  Forgot your password?
-                </a>
-              </p>
+             
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="password">
+                Confirm Password:
+              </label>
+              <input
+                id="password"
+                type="password"
+                value = {ConfirmPassword}
+                onChange = {(e) => setConfirmPassword(e.target.value)}
+                className="form-control"
+                placeholder="Confirm password ..."
+              />
+            
             </div>
             <div className="text-center">
-              <button onClick = {LoginUser} className="btn btn-accent">Login</button>
+              <button  className="btn btn-accent" onClick={Register}>signup</button>
             </div>
           </form>
         </div>
       </div>
       <div className="page-separator justify-content-center m-0">
-        <div className="page-separator__text">or sign-in with</div>
+        <div className="page-separator__text">or sign-up with</div>
         <div className="page-separator__bg-top " />
       </div>
       <div className="bg-body pt-32pt pb-32pt pb-md-64pt text-center">
