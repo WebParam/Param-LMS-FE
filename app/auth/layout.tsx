@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-const isLoggedIn = cookies.get('param-user');
+const isLoggedIn = cookies.get('param-lms-user');
 
 export const metadata = {
   title: "Login",

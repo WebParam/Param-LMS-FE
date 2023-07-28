@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Api } from '../../lib/restapi/endpoints';
 import { IUserLoginModel } from '../../interfaces/user';
 import Cookies from 'universal-cookie'; // Import the library
+import Link from 'next/link';
 
 const cookies = new Cookies(); // Create an instance of Cookies
 
@@ -14,10 +15,9 @@ const axios = require("axios").default;
 
 
 export default function Login() {
-
+  const[disable , setDisable] = useState<boolean>(false)
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
   const onChangeEmail = (e:any) => {
 
     setEmail(e.target.value);
@@ -33,7 +33,7 @@ export default function Login() {
 
 async function LoginUser (event:any){
  
-
+  setDisable(true)
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -54,6 +54,10 @@ async function LoginUser (event:any){
      type: "error",
      isLoading: false,
    });
+   setTimeout(() => {
+    setDisable(false)
+    toast.dismiss(_id);
+  }, 2000);
   
  }else if(!passwordRegex.test(password)){
   toast.update(_id, {
@@ -62,6 +66,10 @@ async function LoginUser (event:any){
     type: "error",
     isLoading: false,
   });
+  setTimeout(() => {
+    setDisable(false)
+    toast.dismiss(_id);
+  }, 2000);
  }else{
 
   const payload = {
@@ -71,7 +79,7 @@ async function LoginUser (event:any){
 
     axios
     .post(
-      "https://f281-154-117-172-210.ngrok-free.app/api/Account/Login",
+      "https://7fb0-154-117-172-210.ngrok-free.app/api/Users/Login",
       payload
     )
     .then((response: any) => {
@@ -84,7 +92,7 @@ async function LoginUser (event:any){
       });
 
       // Set cookies here after successful login
-      cookies.set('param-user', response.data, { path: '/' });
+      cookies.set('param-lms-user', response.data, { path: '/' });
 
       // Optionally, you can redirect the user to another page
       // window.location.href = '/dashboard'; // Replace 'dashboard' with the desired route
@@ -96,6 +104,10 @@ async function LoginUser (event:any){
         type: "error",
         isLoading: false,
       });
+      setTimeout(() => {
+        setDisable(false)
+        toast.dismiss(_id);
+      }, 2000);
       console.log(error);
     });
 
@@ -138,13 +150,13 @@ async function LoginUser (event:any){
                 placeholder="Your first and last name ..."
               />
               <p className="text-right">
-                <a href="fixed-reset-password.html" className="small">
+                <Link href="/auth/login/reset-password" className="small">
                   Forgot your password?
-                </a>
+                </Link>
               </p>
             </div>
             <div className="text-center">
-              <button onClick = {LoginUser} className="btn btn-accent">Login</button>
+              <button disabled ={disable} onClick = {LoginUser} className="btn btn-accent">Login</button>
             </div>
           </form>
         </div>

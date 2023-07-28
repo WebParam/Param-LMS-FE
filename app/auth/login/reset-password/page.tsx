@@ -1,8 +1,10 @@
 'use client';
-import { toast } from 'react-toastify';
 import { IUserResetPasswordModel } from '@/app/interfaces/user';
 import { useState } from 'react';
 import { BasicOTPComponent } from './basic-otp';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const axios = require("axios").default;
 
 export default function ResetPassword() {
@@ -16,17 +18,7 @@ export default function ResetPassword() {
   const [otpLength, setOtpLength] = useState(0);
   const [OtpSent, setOtpSent] = useState<boolean>(false);
   const [otp, setOTP] = useState("");
-  const _id = toast.loading("Sending OTP...", {
-    //loader
-    position: "top-center",
-    autoClose: 1000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: false,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-  });
+ 
 
   const setOtp = (e: string) => {
     setOTP(e);
@@ -40,7 +32,8 @@ export default function ResetPassword() {
   };
 
 
-    const ChangePassword = async () => {
+    const ChangePassword = async (event:any) => {
+      setDisable(true)
       const _id = toast.loading("Verifying OTP...", {
         //loader
         position: "top-center",
@@ -60,7 +53,7 @@ export default function ResetPassword() {
       };
       axios
       .post(
-        "https://322d-154-117-172-210.ngrok-free.app/api/Account/UserVerifyOtpRequestModel",
+        "https://7fb0-154-117-172-210.ngrok-free.app/api/Users/ResetPassword",
         payload
       )
       .then((response: any) => {
@@ -68,7 +61,7 @@ export default function ResetPassword() {
   
         toast.update(_id, {
           render: `Password changed successfully. You may now login.`,
-          type: "error",
+          type: "success",
           isLoading: false,
         });
         setShowPassInputs(false)
@@ -82,12 +75,23 @@ export default function ResetPassword() {
         });
         console.log(error);
       });
-  
+event.preventDefault();
       } 
     
   
 
   const SendOtp = async (event:any) => {
+    setDisable(true)
+    let _id = toast.loading("Sending Otp..", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
 
     const payload = {
       email: email,
@@ -97,7 +101,7 @@ export default function ResetPassword() {
       setEmailError(false);
       axios
       .post(
-        "https://322d-154-117-172-210.ngrok-free.app/api/Account/SendResetPasswordOtp",
+        "https://7fb0-154-117-172-210.ngrok-free.app/api/Users/SendResetPasswordOtp",
         payload
       )
       .then((response: any) => {
@@ -105,18 +109,26 @@ export default function ResetPassword() {
   
         toast.update(_id, {
           render: `OTP sent succesfully to ${email}.`,
-          type: "error",
+          type: "success",
           isLoading: false,
         });
+        setTimeout(() => {
+          setDisable(false)
+          toast.dismiss(_id);
+        }, 2000);
         setShowPassInputs(false)
   
       })
       .catch((error: any) => {
         toast.update(_id, {
-          render: `Error sending OTP..}`,
+          render: `Error sending OTP..`,
           type: "error",
           isLoading: false,
         });
+        setTimeout(() => {
+          setDisable(false)
+          toast.dismiss(_id);
+        }, 2000);
         console.log(error);
       });
   
@@ -130,7 +142,7 @@ export default function ResetPassword() {
 
   return (
 <>
-
+<ToastContainer />
       <div className="page-section pb-0">
         <div className="container page__container d-flex flex-column flex-sm-row align-items-sm-center">
           <div className="flex">
@@ -208,6 +220,7 @@ export default function ResetPassword() {
                 Password:
               </label>
               <input
+              onChange={(e:any) => setPassword(e.target.value)}
                 id="password"
                 type="password"
                 className="form-control"
@@ -219,6 +232,7 @@ export default function ResetPassword() {
                 Confirm Password:
               </label>
               <input
+              onChange={(e:any) => setConfirmPassword(e.target.value)}
                 id="password2"
                 type="password"
                 
@@ -226,7 +240,7 @@ export default function ResetPassword() {
                 placeholder="Confirm your new password ..."
               />
             </div>
-            <button onClick = {ChangePassword} type="submit" className="btn btn-accent">
+            <button disabled={disable} onClick = {ChangePassword} type="submit" className="btn btn-accent">
               Save password
             </button>
           </form>

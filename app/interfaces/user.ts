@@ -8,16 +8,20 @@ export interface IUser{
 }
 
 export interface IUserRegisterModel{
-    id?: number,
+    id?: string,
     FirstName : string,
     LastName : string,
     Email : string,
     Password : string,
     Image : string,
     CreatedOn : Date,
-    CreatedBy : number,
-    ChangedBy? : number,
+    CreatedBy? : string,
+    ChangedBy? : string,
     ChangedOn? : Date,
+  //  Status: string,
+    Otp: string,
+    Role: string,
+    LoginType: number,
  
 }
 
