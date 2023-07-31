@@ -39,6 +39,10 @@ export async function GET(endPoint: string) {
 
     return result;
   } catch (error:any) {
+    throw new Error(`Error : ${error} \n
+    Method : Get
+    \n 
+    FrontEnd : restapi/client.ts`);
     console.log(
       `[API ERROR  : Method: GET; Endpoint: ${endPoint}]`,
       error.toJSON()
@@ -85,6 +89,9 @@ export function PUT(endPoint: string, params: Object) {
       return result;
     })
     .catch((error: any) => {
+      throw new Error(`Error : ${error} \n
+      Method : Post \n 
+      FrontEnd : restapi/client.ts`);
       return error;
     });
 }

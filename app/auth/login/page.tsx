@@ -95,10 +95,13 @@ async function LoginUser (event:any){
       cookies.set('param-lms-user', response.data, { path: '/' });
 
       // Optionally, you can redirect the user to another page
-      // window.location.href = '/dashboard'; // Replace 'dashboard' with the desired route
+      window.location.href = '/pages/student/course/course-details'; 
 
     })
     .catch((error: any) => {
+      throw new Error(`Error : ${error} \n
+      Payload: ${payload} \n 
+      FrontEnd : LoginPage`);
       toast.update(_id, {
         render: "Cannot register user with the supplied information",
         type: "error",
@@ -158,6 +161,7 @@ async function LoginUser (event:any){
             <div className="text-center">
               <button disabled ={disable} onClick = {LoginUser} className="btn btn-accent">Login</button>
             </div>
+
           </form>
         </div>
       </div>

@@ -1,3 +1,4 @@
+"use Client"
 import './globals.css'
 import './css/app.css'
 import './vendor/perfect-scrollbar.css'
@@ -11,7 +12,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
-
+const Sentry = require('@sentry/node');
 export const metadata: Metadata = {
   title: 'Param LMS',
   description: 'Param LMS |  A new way to learn',
