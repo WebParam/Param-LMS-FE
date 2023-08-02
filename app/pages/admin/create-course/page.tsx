@@ -1723,36 +1723,7 @@ export default function CreateCourse() {
                       <span className="sidebar-menu-text">Pagination</span>
                     </a>
                   </li>
-                  {/* <li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-typography.html">
-    <span class="sidebar-menu-text">Typography</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-colors.html">
-    <span class="sidebar-menu-text">Colors</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-breadcrumb.html">
-    <span class="sidebar-menu-text">Breadcrumb</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-accordions.html">
-    <span class="sidebar-menu-text">Accordions</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-modals.html">
-    <span class="sidebar-menu-text">Modals</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-chips.html">
-    <span class="sidebar-menu-text">Chips</span>
-  </a>
-</li> */}
+   
                   <li className="sidebar-menu-item">
                     <a className="sidebar-menu-button disabled" href="">
                       <span className="sidebar-menu-text">Disabled</span>
