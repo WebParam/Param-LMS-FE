@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import styles from './page.module.css'
 
+
 export default function CreateCourse() {
   return (
 <div
@@ -333,6 +334,7 @@ export default function CreateCourse() {
           
             <div className="page-separator">
               <div className="page-separator__text">Sections</div>
+             
             </div>
             <div
               className="accordion js-accordion accordion--boxed mb-24pt"

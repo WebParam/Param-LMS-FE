@@ -1,9 +1,129 @@
+'use client';
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import Image from 'next/image'
 import styles from './page.module.css'
-
+import Link from 'next/link';
+import CourseModal from "./create-section/CourseModal";
+import SectionModal from "./create-section/SectionModal";
+import { useRef, useState } from "react";
+import ModuleModal from "./create-section/ModuleModal";
+import { FaPencilAlt } from "react-icons/fa";
 export default function CreateCourse() {
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [courseTitle, setCourseTitle] = useState("");
+  const [courseDescription, setCourseDescription] = useState("");
+  const [sections, setSections] = useState<Section[]>([]);
+  const [currentSection, setCurrentSection] = useState("");
+  const [modules, setModules] = useState<VideoModule[]>([]);
+  const [moduleTitle, setModuleTitle] = useState("");
+  const [videos, setVideos] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const[closeModal, setCloseModal] = useState<boolean>(false);
+  const[openModal, setOpenModal] = useState<boolean>(true);
+
+  const handleAddVideo = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click(); // Trigger the file input programmatically
+    }
+  };
+
+  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = event.target.files;
+    if (selectedFiles) {
+      const selectedVideos = Array.from(selectedFiles).map((file) => file.name);
+      setVideos(selectedVideos);
+    }
+  };
+
+  const handleSaveCourse = () => {
+    setCurrentStep(2);
+  };
+
+  const handleSaveSection = () => {
+    const newSection: Section = {
+      title: currentSection,
+      modules: modules,
+    };
+    setSections((prevSections) => [...prevSections, newSection]);
+    setCurrentStep(3);
+  };
+
+  const handleSaveModule = () => {
+    const newModule: VideoModule = {
+      title: moduleTitle,
+      videos: videos,
+    };
+    setModules((prevModules) => [...prevModules, newModule]);
+  };
+
+  const handleNext = () => {
+    setCurrentStep((prev) => prev + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep((prev) => prev - 1);
+  };
+
+  const handleFinalSave = () => {
+    // Create the course object with all the collected data and save it
+    const course: Course = {
+      title: courseTitle,
+      sections: sections,
+    };
+    // Do whatever you need with the final course data, e.g., save it to a backend server
+    console.log(course);
+    // Close the modal after saving the final data
+    handleClose();
+    setOpenModal(false);
+  }
+  const handleClose = () => {
+    setCloseModal(true)
+ 
+  };
+
+
+  interface VideoModule {
+    title: string;
+    videos: string[];
+  }
+  
+  // Interface for section
+  interface Section {
+    title: string;
+    modules: VideoModule[];
+  }
+  
+  // Interface for course
+  interface Course {
+    title: string;
+    sections: Section[];
+  }
+  
+  interface CourseModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSave: (course: Course) => void;
+    onNext: () => void;
+  }
+  
+  
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [courses, setCourses] = useState<Course[]>([]);
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalSave = (course: Course) => {
+    setCourses((prevCourses) => [...prevCourses, course]);
+  };
+
+
   return (
-<div
+<div onClick={() => setOpenModal(false)}
   className="mdk-drawer-layout js-mdk-drawer-layout"
   data-push=""
   data-responsive-width="992px"
@@ -302,7 +422,8 @@ export default function CreateCourse() {
               <li className="breadcrumb-item">
                 <a href="index.html">Home</a>
               </li>
-              <li className="breadcrumb-item active">Edit Course</li>
+           <li className="breadcrumb-item active">Edit Course</li>
+             
             </ol>
           </div>
         </div>
@@ -332,8 +453,13 @@ export default function CreateCourse() {
             </div>
           
             <div className="page-separator">
-              <div className="page-separator__text">Sections</div>
+              <div  className="page-separator__text">Sections</div>
+              <div style={{zIndex : 1}}>
+      <FaPencilAlt style = {{marginLeft: "36em",  padding: "-4px", width : "5%"}}/>
+     
+    </div>
             </div>
+           
             <div
               className="accordion js-accordion accordion--boxed mb-24pt"
               id="parent"
@@ -473,9 +599,140 @@ export default function CreateCourse() {
                 </div>
               </div>
             </div>
-            <a href="#" className="btn btn-outline-secondary mb-24pt mb-sm-0">
+            <a onClick={() => setOpenModal(true)}  className="btn btn-outline-secondary mb-24pt mb-sm-0" >
+         
               Add Section
+        
             </a>
+            <Modal open={openModal} onClose={handleClose}>
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          outline: "none",
+          borderRadius: "15px",
+          transform: "translate(-50%, -50%)",
+          backgroundColor: "white",
+          padding: "20px",
+          width: 500, // Set the fixed width for the modal
+          maxWidth: "90%", // Limit the width to a maximum of 90% of the viewport width
+        }}
+      >
+        {currentStep === 1 && (
+          <>
+            <h2>Edit Course</h2>
+            <TextField
+              label="Course Title"
+              value={courseTitle}
+              onChange={(e) => setCourseTitle(e.target.value)}
+              sx={{ marginBottom: "10px" }}
+            />
+            <TextField
+              label="Course Description"
+              multiline
+              rows={4}
+              value={courseDescription}
+              onChange={(e) => setCourseDescription(e.target.value)}
+              sx={{ marginBottom: "20px" }} // Increased marginBottom for spacing
+            />
+          </>
+        )}
+        {currentStep === 2 && (
+          <>
+            <h2>Add Section</h2>
+            <TextField
+              label="Section Title"
+              value={currentSection}
+              onChange={(e) => setCurrentSection(e.target.value)}
+              sx={{ marginBottom: "10px" }}
+            />
+            <div>
+              <h4>Add Module</h4>
+              <TextField
+                label="Module Title"
+                value={moduleTitle}
+                onChange={(e) => setModuleTitle(e.target.value)}
+                sx={{ marginBottom: "10px" }}
+              />
+              <div>
+                <h4>Add Videos</h4>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  style={{ display: "none" }}
+                  onChange={handleFileInputChange}
+                />
+                <Button variant="contained" onClick={handleAddVideo}>
+                  Add Video
+                </Button>
+                <div>
+                  {videos.map((video, index) => (
+                    <div key={index}>
+                    {video}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        {currentStep === 3 && (
+          <>
+            <h2>Review Course</h2>
+            <div>
+              <h3>Course Title</h3>
+              <div>{courseTitle}</div>
+            </div>
+            <div>
+              <h3>Course Description</h3>
+              <div>{courseDescription}</div>
+            </div>
+            <div>
+              <h3>Sections</h3>
+              {sections.map((section, index) => (
+                <div key={index}>
+                  <h4>Section Title</h4>
+                  <div>{section.title}</div>
+                  <h4>Modules</h4>
+                  {section.modules.map((module, moduleIndex) => (
+                    <div key={moduleIndex}>
+                      <h5>Module Title</h5>
+                      <div>{module.title}</div>
+                      <h5>Videos</h5>
+                      <div>{module.videos.join(", ")}</div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          {currentStep > 1 && (
+            <Button style = {{marginLeft : "1em"}} variant="contained" onClick={handlePrevious} sx={{ marginRight: "10px" }}>
+              Previous
+            </Button>
+          )}
+          {currentStep === 1 && (
+            <Button variant="contained" onClick={handleNext}>
+              Next
+            </Button>
+          )}
+          {currentStep === 2 && (
+            <Button variant="contained" onClick={handleSaveSection}>
+              Next
+            </Button>
+          )}
+          {currentStep === 3 && (
+            <Button variant="contained" onClick={handleFinalSave}>
+              Save Course
+            </Button>
+          )}
+        </Box>
+      </Box>
+    </Modal>
           </div>
           <div className="col-md-4">
             <div className="card">

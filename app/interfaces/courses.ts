@@ -26,6 +26,7 @@ export interface Course {
     type: number, 
     comments:VideoComment[]
     videoFile: File;
+    state: number,
   }
   
   export interface Sections {
@@ -41,6 +42,7 @@ export interface Course {
     
   export interface Comment {
    message:string,
+   state: number,
    creatingUser:string,
    dateCreated:string,
    id:string,
