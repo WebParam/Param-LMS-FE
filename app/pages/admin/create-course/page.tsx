@@ -454,10 +454,10 @@ export default function CreateCourse() {
           
             <div className="page-separator">
               <div  className="page-separator__text">Sections</div>
-              <div style={{zIndex : 1}}>
-      <FaPencilAlt style = {{marginLeft: "36em",  padding: "-4px", width : "5%"}}/>
+             
+      <FaPencilAlt style = {{marginLeft: "36em", backgroundColor: "#f5f7fa", width : "6%"}}/>
      
-    </div>
+  
             </div>
            
             <div

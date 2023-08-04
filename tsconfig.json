@@ -35,7 +35,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "dist/types/**/*.ts"
-  ],
+, "app/interfaces/videoUtils.test.js"  ],
   "exclude": [
     "node_modules"
   ]
