@@ -55,7 +55,7 @@ describe('updateVideoDetail', () => {
     // Create a copy of the dummy data to avoid direct modification
     const newState = { course: { ...dummyCourse } };
 
-    // Add some console logs for debugging
+ 
     console.log('Initial State:');
     console.log(newState);
 

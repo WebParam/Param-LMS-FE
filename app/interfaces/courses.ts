@@ -1,56 +1,93 @@
-export interface Course {
-    id: number;
-    title: string;
-    description: string;
-    sections: Sections[];
-    createdDate: string,
-    creatingUser: string,
-    state:number
+interface ICourse{
+  _id?:string,
+  title: string;
+  description: string;
+  sections: ISection[];
+  createdDate: string;
+  creatingUser: string;
+  modifiedDate?:string;
+  logo:string;
+  bannerImage:string;
+  courseImage:string;
+  modifyingUser?:string;
+  state:number
   }
   
-  export interface Module {
-    id: number;
-    title: string;
-    sectionId:string;
-    order:number,
-    state: number;
-    videos: Video[];
+  export interface ISection {
+   id?: string;
+   title : string;
+   courseId: string;
+   order:number;
+   state:number,
+   competency:string,
+   createdDate: string;
+   creatingUser: string;
+   modifiedDate?:string;
+   modifyingUser?:string;
+   modules: IModule[];
   }
   
-  export interface Video {
-    id: number;
-    title: string;
-    duration:string,
-    moduleId: string,
-    videoLink: string;
-    type: number, 
-    comments:VideoComment[]
-    videoFile: File;
-    state: number,
+  export interface IModule {
+  id?: string;
+  title: string;
+  description:string;
+  notes:string;
+  sectionId:string;
+  order:number,
+  state: number;
+  createdDate: string;
+  creatingUser: string;
+  modifiedDate?:string;
+  modifyingUser?:string;
+  points:number;
+  videos: IVideo[];
+  
   }
   
-  export interface Sections {
-    id: number;
-    title : string;
-    courseId: string;
-    order:number ;
-    state:number,
-    competency:string,
-    modules: Module[];
+    export interface IVideo {
+  id?: string;
+  title: string;
+  duration:string,
+  moduleId: string,
+  order:number,
+  state: number,
+  videoLink?: string;
+  type: number, 
+  videoFile?: string;
+  createdDate: string;
+  creatingUser: string;
+  modifiedDate?:string;
+  modifyingUser?:string;
+  thumbnailImage:string;
+  length:string,
+  format:string,
+  size:string,
   }
+ export interface IComment {
+  message:string,
+  creatingUser: string;
+  modifiedDate?:string;
+  modifyingUser?:string;
+  id:string,
+  referenceId:string,
+  type:number,
+  state: number
+  } 
+  
+  export interface IRating {
+  rating:number,
+  creatingUser: string;
+  modifiedDate?:string;
+  modifyingUser?:string;
+  id:string,
+  referenceId:string,
+  type:number,
+  state: number
+  }
+  
+  ///create couse payload 
 
-    
-  export interface Comment {
-   message:string,
-   state: number,
-   creatingUser:string,
-   dateCreated:string,
-   id:string,
-  }
-  
-  
-    
-  export interface VideoComment extends Comment {
-       VideoId:string,
-   }
-   
+  // export const createCouse : ICourse={
+
+  // };
+
