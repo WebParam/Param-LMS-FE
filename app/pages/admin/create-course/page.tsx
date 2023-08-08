@@ -1,22 +1,20 @@
-'use client';
+"use client";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Image from 'next/image'
-import styles from './page.module.css'
-import Link from 'next/link';
+import Image from "next/image";
+import styles from "./page.module.css";
+import Link from "next/link";
 import CourseModal from "./create-section/CourseModal";
 import SectionModal from "./create-section/SectionModal";
 import { useRef, useState } from "react";
 import ModuleModal from "./create-section/ModuleModal";
 import { FaPencilAlt } from "react-icons/fa";
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus } from "react-icons/fa";
 import { Api } from "../../../lib/restapi/endpoints";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateCourse() {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -30,106 +28,101 @@ export default function CreateCourse() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [closeModal, setCloseModal] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [showVideos, setShowVideo] = useState<boolean>(false)
-  const [videoIndex, setvideoIndex] = useState<number>(-1)
+  const [showVideos, setShowVideo] = useState<boolean>(false);
+  const [videoIndex, setvideoIndex] = useState<number>(-1);
+  const [moduleDiv, setmoduleDiv] = useState<any>(false);
+  const [openModuleTitle, setOpenMouleTitle] = useState<boolean>(false);
+  const [currentModuleIndex, setCurrentModuleIndex] = useState(-1);
+  const [openVideoModal, setOpenVideoModal] = useState<boolean>(false);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(-1);
+  const [showSection, setShowSection] = useState<boolean>(false);
+  const [addSectionContent, setAddSectionContent] = useState<boolean>(true);
+  const [viewSectionModules, setViewSectionModules] = useState<boolean>(false);
 
 
-
-  async function SaveCourse(){
-
-    
-
+  async function SaveCourse() {
     const deleteSection = {
-      courseId :  "64d0e40fc65c5136b4c7f7b9",
-      sectionId : "fc597194-375a-40b4-89ee-05762efd69b0"
-    }
+      courseId: "64d0e40fc65c5136b4c7f7b9",
+      sectionId: "fc597194-375a-40b4-89ee-05762efd69b0",
+    };
 
     const deleteModule = {
-      courseId :  "64d0e7a3c65c5136b4c7f7bb",
-      sectionId : "1598e9f0-8d3c-460f-9581-214d1590601b",
-      ModuleId : "f0215cc9-0892-47e1-84a8-1f2f05933016"
-    }
+      courseId: "64d0e7a3c65c5136b4c7f7bb",
+      sectionId: "1598e9f0-8d3c-460f-9581-214d1590601b",
+      ModuleId: "f0215cc9-0892-47e1-84a8-1f2f05933016",
+    };
 
     const deleteVideo = {
-      courseId :  "64d0e9c6c65c5136b4c7f7be",
-      sectionId : "01c9d7f8-a8db-4c97-b360-1d60f46e14ce",
-      ModuleId : "afdd08a6-b693-4abb-ae32-132935246434",
-      videoId : "297e1ccb-a942-4ac2-9104-4a247aeaac6a"
-    }
+      courseId: "64d0e9c6c65c5136b4c7f7be",
+      sectionId: "01c9d7f8-a8db-4c97-b360-1d60f46e14ce",
+      ModuleId: "afdd08a6-b693-4abb-ae32-132935246434",
+      videoId: "297e1ccb-a942-4ac2-9104-4a247aeaac6a",
+    };
 
     const request = {
-     
-        "title": "Introduction to Mock Data",
-        "description": "Learn how to create mock data for various applications.",
-        "createdDate": "2023-08-07T11:28:14.632Z",
-        "creatingUser": "user123",
-        "sections": [
-          {
-            "id": "section1",
-            "title": "Getting Started",
-            "courseId": "course123",
-            "order": 0,
-            "state": 0,
-            "competency": "Basic Concepts",
-            "createdDate": "2023-08-07T12:15:30.123Z",
-            "creatingUser": "user123",
-            "modules": [
-              {
-                "id": "module1",
-                "title": "Understanding Mock Data",
-                "description": "Explore the importance and uses of mock data.",
-                "notes": "Remember to keep data consistent for testing purposes.",
-                "sectionId": "section1",
-                "order": 0,
-                "state": 0,
-                "createdDate": "2023-08-07T12:30:00.456Z",
-                "creatingUser": "user123",
-                "points": 100,
-                "videos": [
-                  {
-                    "id": "video1",
-                    "title": "Introduction to Mock Data",
-                    "duration": "10:35",
-                    "moduleId": "module1",
-                    "order": 0,
-                    "state": 0,
-                    "videoLink": "https://www.example.com/intro-to-mock-data",
-                    "type": 0,
-                    "videoFile": "movei1",
-                    "thumbnailImage": "thumbnail_intro.png",
-                    "length": "10 minutes",
-                    "format": "mp4",
-                    "size": "50 MB",
-                    "createdDate": "2023-08-07T12:35:00.123Z",
-                    "creatingUser": "user123"
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        "state": 0,
-        "logo": "course_logo.png",
-        "courseImage": "course_image.png",
-        "bannerImage": "course_banner.png",
-        "modifyingUser": "user123"
-      }
-      
-    
+      title: "Introduction to Mock Data",
+      description: "Learn how to create mock data for various applications.",
+      createdDate: "2023-08-07T11:28:14.632Z",
+      creatingUser: "user123",
+      sections: [
+        {
+          id: "section1",
+          title: "Getting Started",
+          courseId: "course123",
+          order: 0,
+          state: 0,
+          competency: "Basic Concepts",
+          createdDate: "2023-08-07T12:15:30.123Z",
+          creatingUser: "user123",
+          modules: [
+            {
+              id: "module1",
+              title: "Understanding Mock Data",
+              description: "Explore the importance and uses of mock data.",
+              notes: "Remember to keep data consistent for testing purposes.",
+              sectionId: "section1",
+              order: 0,
+              state: 0,
+              createdDate: "2023-08-07T12:30:00.456Z",
+              creatingUser: "user123",
+              points: 100,
+              videos: [
+                {
+                  id: "video1",
+                  title: "Introduction to Mock Data",
+                  duration: "10:35",
+                  moduleId: "module1",
+                  order: 0,
+                  state: 0,
+                  videoLink: "https://www.example.com/intro-to-mock-data",
+                  type: 0,
+                  videoFile: "movei1",
+                  thumbnailImage: "thumbnail_intro.png",
+                  length: "10 minutes",
+                  format: "mp4",
+                  size: "50 MB",
+                  createdDate: "2023-08-07T12:35:00.123Z",
+                  creatingUser: "user123",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      state: 0,
+      logo: "course_logo.png",
+      courseImage: "course_image.png",
+      bannerImage: "course_banner.png",
+      modifyingUser: "user123",
+    };
 
-   // const createCourse = await Api.POST_CreateCourse(request);
-
-       
+    // const createCourse = await Api.POST_CreateCourse(request);
 
     // const DeleteSection = await Api.POST_deleteSection(deleteSection);
 
-       
+    //    const DeleteModule = await Api.POST_deleteModule(deleteModule);
 
- //    const DeleteModule = await Api.POST_deleteModule(deleteModule);
-
-     const Deletevideo = await Api.POST_deleteVideo(deleteVideo);
-
-    
+    const Deletevideo = await Api.POST_deleteVideo(deleteVideo);
 
     const _id = toast.loading("deleting section..", {
       position: "top-center",
@@ -142,7 +135,6 @@ export default function CreateCourse() {
       theme: "light",
     });
     if (Deletevideo.error == true || Deletevideo.data == null) {
-    
       toast.update(_id, {
         render: "Cannot delete with the supplied information",
         type: "error",
@@ -150,7 +142,6 @@ export default function CreateCourse() {
       });
       return;
     } else {
- 
       toast.update(_id, {
         render: "Successfully deleted module.",
         type: "success",
@@ -158,42 +149,26 @@ export default function CreateCourse() {
       });
       // cookies.set('param-hr-user', user.data, { path: '/' });
     }
-  
-    }
+  }
 
-
-
+  const handleEditModuleTitle = (index: number) => {
+    setCurrentModuleIndex(index);
+    setModuleTitle(modules[index].title); // Set the module title for editing
+    setOpenMouleTitle(true);
+  };
 
   const setVideoIndex = (index: number) => {
     setShowVideo(!showVideos);
-    setvideoIndex(index)
-  }
-
-
-  const handleAddVideo = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click(); // Trigger the file input programmatically
-    }
+    setvideoIndex(index);
   };
-
-  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files;//video that is selected
-
-        console.log(selectedFile);
-    if (selectedFile) {
-      const selectedVideos = Array.from(selectedFile).map((file) => 
-      setVideos([...videos, file.name])
-    );
-    
-    
-
-    }
-
-
- 
+  const handleEditVideo = (index: number) => {
+    // Handle video editing for the specified index
+    // Implement your logic here
+    // For example, you can open a video editing modal for the video at the given index
+    // You can track the edited video index in a state variable and use it in your modal
+    setCurrentVideoIndex(index);
+    setOpenVideoModal(true); // Assuming you have a state variable to control the edit modal
   };
-
-  
 
   const handleSaveSection = () => {
     const newSection: Section = {
@@ -201,52 +176,76 @@ export default function CreateCourse() {
       modules: modules,
     };
     setSections((prevSections) => [...prevSections, newSection]);
-    setCurrentStep(3);
+    setAddSectionContent(false);
+    setShowSection(!showSection);
+    
+    setModules([]);
+    setModuleTitle("");
+    setCurrentSection("")
+    setVideos([]);
+  };
+
+  const handleFileInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedFiles = event.target.files;
+
+    if (selectedFiles) {
+      const selectedVideos = Array.from(selectedFiles).map((file) => file.name);
+      setVideos([...videos, ...selectedVideos]);
+    }
+  };
+
+  const handleAddVideo = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   const handleSaveModule = () => {
-    if(videos.length > 0 && moduleTitle != ""){
-      const newModule: VideoModule = {
+    // Check if a module is being edited
+    if (currentModuleIndex !== -1) {
+      const updatedModules = [...modules];
+      updatedModules[currentModuleIndex].title = moduleTitle;
+      setModules(updatedModules);
+      setCurrentModuleIndex(-1); 
+    } else {
+      const newModule = {
         title: moduleTitle,
         videos: videos,
       };
       setModules((prevModules) => [...prevModules, newModule]);
-      setVideos([])
-      handleClose();
-      setOpenModal(false);
-    }else{
-      alert("error encountered...")
     }
- 
+    setmoduleDiv(true);
+    setVideos([]);
+    setModuleTitle("");
+    handleClose();
+    setOpenModal(false);
+    setOpenMouleTitle(false);
   };
-
 
   const handleFinalSave = () => {
+    const course: Course = {
+      title: courseTitle,
+      sections: sections,
+    };
 
-    if(videos.length > 0 && moduleTitle != ""){
-   
-      // Create the course object with all the collected data and save it
-      const course: Course = {
-        title: courseTitle,
-        sections: sections,
-      };
-      // Do whatever you need with the final course data, e.g., save it to a backend server
-      console.log(course);
-      // Close the modal after saving the final data
-      handleClose();
-      setOpenModal(false);
-    }else{
-      alert("errrors encountered...")
-    }
-  
-  }
+    console.log(course);
 
-
-  const handleClose = () => {
-    setCloseModal(true)
-
+    handleClose();
+    setOpenModal(false);
+    console.log(course);
+    setSections([]);
+    setModules([]);
+    setModuleTitle("");
+    setCourseTitle("");
+    setVideos([]);
+    
   };
 
+  const handleClose = () => {
+    setCloseModal(true);
+  };
 
   interface VideoModule {
     title: string;
@@ -265,34 +264,19 @@ export default function CreateCourse() {
     sections: Section[];
   }
 
-  interface CourseModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSave: (course: Course) => void;
-    onNext: () => void;
-  }
+ 
 
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [courses, setCourses] = useState<Course[]>([]);
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleModalSave = (course: Course) => {
-    setCourses((prevCourses) => [...prevCourses, course]);
-  };
 
 
   return (
-    <div 
+    <div
       className="mdk-drawer-layout js-mdk-drawer-layout"
       data-push=""
       data-responsive-width="992px"
       data-domfactory-upgraded="mdk-drawer-layout"
     >
-       <ToastContainer />
+      <ToastContainer />
       <div
         className="mdk-drawer-layout__content page-content"
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
@@ -335,7 +319,11 @@ export default function CreateCourse() {
             <button className="btn" type="submit">
               <i className="material-icons">search</i>
             </button>
-            <input type="text" className="form-control" placeholder="Search ..." />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search ..."
+            />
           </form>
           {/* // END Navbar Search */}
           <div className="flex" />
@@ -446,7 +434,9 @@ export default function CreateCourse() {
                 data-caret="false"
               >
                 <i className="material-icons">notifications_none</i>
-                <span className="badge badge-notifications badge-accent">2</span>
+                <span className="badge badge-notifications badge-accent">
+                  2
+                </span>
               </button>
               <div className="dropdown-menu dropdown-menu-right">
                 <div data-perfect-scrollbar="" className="position-relative ps">
@@ -472,7 +462,8 @@ export default function CreateCourse() {
                         </span>
                         <span className="flex d-flex flex-column">
                           <span className="text-black-70">
-                            Your profile information has not been synced correctly.
+                            Your profile information has not been synced
+                            correctly.
                           </span>
                         </span>
                       </span>
@@ -587,7 +578,6 @@ export default function CreateCourse() {
                     <a href="index.html">Home</a>
                   </li>
                   <li className="breadcrumb-item active">Edit Course</li>
-
                 </ol>
               </div>
             </div>
@@ -609,7 +599,8 @@ export default function CreateCourse() {
                     type="text"
                     className="form-control form-control-lg"
                     placeholder="Course title"
-                    defaultValue="Angular Fundamentals"
+                    value={courseTitle}
+                    onChange={(e) => setCourseTitle(e.target.value)}
                   />
                   <small className="form-text text-muted">
                     Please see our <a href="">course title guideline</a>
@@ -619,199 +610,352 @@ export default function CreateCourse() {
                 <div className="page-separator">
                   <div className="page-separator__text">Sections</div>
 
-                {/* <FaPencilAlt style={{ marginLeft: "36em", backgroundColor: "#f5f7fa", width: "6%" }} />*/}
-
-
+             
                 </div>
-                <label className="form-label">Section title</label>
-                <div
-                  className="accordion js-accordion accordion--boxed mb-24pt"
-                  id="parent"
-                  data-domfactory-upgraded="accordion"
-                >
-                  <div className="accordion__item">
-                    <input
-                      type="text"
-                      className="form-control form-control-lg"
-                      placeholder="Course title"
-                      defaultValue="Course Overview"
-                    />
-                    <div className="accordion__menu collapse" id="course-toc-1">
-                      <div className="accordion__menu-link">
-                        <i className="material-icons text-70 icon-16pt icon--left">
-                          drag_handle
-                        </i>
-                        <a className="flex" href="student-lesson.html">
-                          Watch Trailer
-                        </a>
-                        <span className="text-muted">1m 10s</span>
-                      </div>
-                    </div>
-                  </div>
-                  <label className="form-label">Select Competency Type:</label>
-                  <div className="accordion js-accordion accordion--boxed mb-24pt">
-                    <select className="form-control form-control-lg"
-                      id="competencies" name="competencies">
-                      <option value="programming">Programming</option>
-                      <option value="web_development">Web Development</option>
-                      <option value="mobile_app_development">Mobile App Development</option>
-                      <option value="database_management">Database Management</option>
 
 
-                    </select>
-                  </div>
-                  
-                  <div className="page-separator">
-                  <div className="page-separator__text">Modules</div>
-
-                  <  FaPlus onClick={() => setOpenModal(true)}  style={{ marginLeft: "36em", cursor: "pointer", backgroundColor: "#f5f7fa", width: "6%" }} />
+{showSection ? <>
               
+                <div style={{paddingBottom:"2px"}}  className="accordion js-accordion accordion--boxed mb-24pt"
+              id="parent"
+              data-domfactory-upgraded="accordion">
+{sections.length > 0 &&
 
-                </div>
-                <div>
-      {modules.length > 0 &&
-        modules.map((module, index) => (
-          <div key={index} className="accordion__menu-link">
-            <i
-              onClick={() => setVideoIndex(index === videoIndex ? -1 : index)}
-              className="material-icons text-70 icon-16pt icon--left"
-            >
-              {index === videoIndex ? 'expand_less' : 'drag_handle'}
-            </i>
-            <a className="flex" href="student-lesson.html">
-              {module.title}
-            </a>
-            <span className="text-muted">8min 2s</span>
-
-            {index === videoIndex && (
-              <div>
-                {module.videos.map((video: any, videoIdx: number) => (
-                  <p key={videoIdx} style={{ marginLeft: '2em' }}>
-                    {video}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
-    </div>
-              {/* 
+                      sections.map((section, index) => (
                 <div className="accordion__item open">
-                    <a
-                      href="#"
-                      className="accordion__toggle"
-                      data-toggle="collapse"
-                      data-target="#course-toc-2"
-                      data-parent="#parent"
-                    >
-                      <span className="flex">Getting Started with Angular</span>
-                      <span className="accordion__toggle-icon material-icons">
-                        keyboard_arrow_down
-                      </span>
-                    </a>
-                    <div
-                      className="accordion__menu collapse show"
-                      id="course-toc-2"
-                    >
-                      <div className="accordion__menu-link">
-                        <i className="material-icons text-70 icon-16pt icon--left">
-                          drag_handle
-                        </i>
-                        <a className="flex" href="student-lesson.html">
-                          Introduction
-                        </a>
-                        <span className="text-muted">8m 42s</span>
-                      </div>
-                      <div className="accordion__menu-link active">
-                        <i className="material-icons text-70 icon-16pt icon--left">
-                          drag_handle
-                        </i>
-                        <a className="flex" href="student-lesson.html">
-                          Introduction to TypeScript
-                        </a>
-                        <span className="text-muted">50m 13s</span>
-                      </div>
-                      <div className="accordion__menu-link">
-                        <i className="material-icons text-70 icon-16pt icon--left">
-                          drag_handle
-                        </i>
-                        <a className="flex" href="student-lesson.html">
-                          Comparing Angular to AngularJS
-                        </a>
-                        <span className="text-muted">12m 10s</span>
-                      </div>
-                      <div className="accordion__menu-link">
-                        <i className="material-icons text-70 icon-16pt icon--left">
-                          drag_handle
-                        </i>
-                        <a className="flex" href="student-take-quiz.html">
-                          Quiz: Getting Started With Angular
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion__item">
-                    <a
-                      href="#"
-                      className="accordion__toggle collapsed"
-                      data-toggle="collapse"
-                      data-target="#course-toc-3"
-                      data-parent="#parent"
-                    >
-                      <span className="flex">
-                        Creating and Communicating Between Angular Components
-                      </span>
-                      <span className="accordion__toggle-icon material-icons">
-                        keyboard_arrow_down
-                      </span>
-                    </a>
-                    <div className="accordion__menu collapse" id="course-toc-3">
-                      <div className="accordion__menu-link">
-                        <i className="material-icons text-70 icon-16pt icon--left">
-                          drag_handle
-                        </i>
-                        <a className="flex" href="student-lesson.html">
-                          Angular Components
-                        </a>
-                        <span className="text-muted">04:23</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion__item">
-                    <a
-                      href="#"
-                      className="accordion__toggle collapsed"
-                      data-toggle="collapse"
-                      data-target="#course-toc-4"
-                      data-parent="#parent"
-                    >
-                      <span className="flex">
-                        Exploring the Angular Template Syntax
-                      </span>
-                      <span className="accordion__toggle-icon material-icons">
-                        keyboard_arrow_down
-                      </span>
-                    </a>
-                    <div className="accordion__menu collapse" id="course-toc-4">
-                      <div className="accordion__menu-link">
-                        <i className="material-icons text-70 icon-16pt icon--left">
-                          drag_handle
-                        </i>
-                        <a className="flex" href="student-lesson.html">
-                          Template Syntax
-                        </a>
-                        <span className="text-muted">04:23</span>
-                      </div>
-                    </div>
-                  </div> */}
-                </div>
-
- 
-                <a onClick={() => setOpenModal(true)} className="btn btn-outline-secondary mb-24pt mb-sm-0" >
-
-                  Add Section
-
+                <a
+                  href="#"
+                  className="accordion__toggle"
+                  data-toggle="collapse"
+                  data-target="#course-toc-2"
+                  data-parent="#parent"
+                >
+                  <span onClick={() => setViewSectionModules(!viewSectionModules)}  className="flex">{section.title}</span>
+                  <span onClick={() => setViewSectionModules(!viewSectionModules)}  className="accordion__toggle-icon material-icons">
+                    {viewSectionModules ? "keyboard_arrow_down" : "keyboard_arrow_up"}
+                  </span>
                 </a>
+                <div
+                  className="accordion__menu collapse show"
+                  id="course-toc-2"
+                >
+                  { viewSectionModules && section.modules.map((module, index) => 
+          <div 
+          className=
+             "accordion__item open bg-transparent border-none shadow-none outline-none"  
+          
+          style={{ paddingRight: "10px", border: "none", background:"none", outline:"none" , borderBottom: "1px solid lightgray", borderRadius:"0"} }
+        >
+       
+              <div style={{paddingLeft:"15px", border: "none", background:"none", outline:"none",  }} key={index}>
+                <i
+                  style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    setVideoIndex(
+                      index === videoIndex ? -1 : index
+                    )
+                  }
+                  className="material-icons text-70 icon-16pt icon--left"
+                >
+                  {index === videoIndex
+                    ? "expand_less"
+                    : "drag_handle"}
+                </i>
+                <a
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleEditModuleTitle(index)}
+                  className="flex"
+                >
+                  {module.title}
+                </a>
+                <span
+                  style={{ float: "right" }}
+                  className="text-muted"
+                >
+                  8min 2s
+                </span>
+
+                {index === videoIndex && (
+                  <div>
+                    {module.videos.map(
+                      (video: any, videoIdx: number) => (
+                        <p
+                          key={videoIdx}
+                          style={{ marginLeft: "2em" }}
+                        >
+                          {video}
+                        </p>
+                      )
+                    )}
+                  </div>
+                )}
+              </div>
+            
+        </div>
+                    )}
+          
+                </div>
+              </div>
+              
+                      ))}
+              </div>
+
+                  </> :  <>
+                    <label className="form-label">Section title</label>
+
+                    <div
+                      className="accordion js-accordion accordion--boxed mb-24pt"
+                      id="parent"
+                      data-domfactory-upgraded="accordion"
+                    >
+                      <div className="accordion__item">
+                        <input
+                          type="text"
+                          className="form-control form-control-lg"
+                          placeholder="Section title"
+                          value={currentSection}
+                          onChange={(e) => setCurrentSection(e.target.value)}
+                        />
+                        <div
+                          className="accordion__menu collapse"
+                          id="course-toc-1"
+                        >
+                          <div className="accordion__menu-link">
+                            <i className="material-icons text-70 icon-16pt icon--left">
+                              drag_handle
+                            </i>
+                            <a className="flex" href="student-lesson.html">
+                              Watch Trailer
+                            </a>
+                            <span className="text-muted">1m 10s</span>
+                          </div>
+                        </div>
+                      </div>
+                      <label className="form-label">
+                        Select Competency Type:
+                      </label>
+                      <div className="accordion js-accordion accordion--boxed mb-24pt">
+                        <select
+                          className="form-control form-control-lg"
+                          id="competencies"
+                          name="competencies"
+                        >
+                          <option value="programming">Programming</option>
+                          <option value="web_development">
+                            Web Development
+                          </option>
+                          <option value="mobile_app_development">
+                            Mobile App Development
+                          </option>
+                          <option value="database_management">
+                            Database Management
+                          </option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="form-label">Modules</label>
+                        <FaPlus
+                          onClick={() => setOpenModal(true)}
+                          style={{
+                            marginLeft: "36.5em",
+                            cursor: "pointer",
+                            backgroundColor: "#f5f7fa",
+                            width: "6%",
+                          }}
+                        />
+                      </div>
+                      <div
+                        className={
+                          moduleDiv ? "accordion__item open" : undefined
+                        }
+                        style={moduleDiv ? { padding: "20px" } : undefined}
+                      >
+                        {modules.length > 0 &&
+                          modules.map((module, index) => (
+                            <div style={{ padding: "2px" }} key={index}>
+                              <i
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                  setVideoIndex(
+                                    index === videoIndex ? -1 : index
+                                  )
+                                }
+                                className="material-icons text-70 icon-16pt icon--left"
+                              >
+                                {index === videoIndex
+                                  ? "expand_less"
+                                  : "drag_handle"}
+                              </i>
+                              <a
+                                style={{ cursor: "pointer" }}
+                                onClick={() => handleEditModuleTitle(index)}
+                                className="flex"
+                              >
+                                {module.title}
+                              </a>
+                              <span
+                                style={{ float: "right" }}
+                                className="text-muted"
+                              >
+                                8min 2s
+                              </span>
+
+                              {index === videoIndex && (
+                                <div>
+                                  {module.videos.map(
+                                    (video: any, videoIdx: number) => (
+                                      <p
+                                        key={videoIdx}
+                                        style={{ marginLeft: "2em" }}
+                                      >
+                                        {video}
+                                      </p>
+                                    )
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  </>}
+                
+
+
+
+              
+                <a
+                  onClick={() => {
+                    if(modules.length == 0 && videos.length == 0) {
+                      setShowSection(false)
+                    }else{
+                      handleSaveSection();
+                    }
+                  }}
+                  className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                >
+                  Add Section
+                </a>
+
+                {/*ModuleTitle Modal*/}
+                <Modal
+                  open={openModuleTitle}
+                  onClose={() => setOpenMouleTitle(false)}
+                >
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      outline: "none",
+                      borderRadius: "15px",
+                      transform: "translate(-50%, -50%)",
+                      backgroundColor: "white",
+                      padding: "20px",
+                      width: 500, // Set the fixed width for the modal
+                      maxWidth: "90%", // Limit the width to a maximum of 90% of the viewport width
+                    }}
+                  >
+                    {currentStep === 1 && (
+                      <>
+                        <div>
+                          <h4>Module</h4>
+                          <TextField
+                            label="Module Title"
+                            value={moduleTitle}
+                            onChange={(e) => setModuleTitle(e.target.value)}
+                            sx={{ marginBottom: "10px" }}
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                      {currentStep === 1 && (
+                        <Button variant="contained" onClick={handleSaveModule}>
+                          Save Title
+                        </Button>
+                      )}
+                    </Box>
+                  </Box>
+                </Modal>
+
+                {/*Ens of moduleTitle Modal*/}
+
+                {/*Video Modal*/}
+                <Modal
+                  open={openVideoModal}
+                  onClose={() => setOpenVideoModal(false)}
+                >
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      outline: "none",
+                      borderRadius: "15px",
+                      transform: "translate(-50%, -50%)",
+                      backgroundColor: "white",
+                      padding: "20px",
+                      width: 500, // Set the fixed width for the modal
+                      maxWidth: "90%", // Limit the width to a maximum of 90% of the viewport width
+                    }}
+                  >
+                    {currentStep === 1 && (
+                      <>
+                        {/* Video list and editing */}
+                        <div>
+                          <h4>Videos</h4>
+                          {videos.map((video, index) => (
+                            <div key={index}>
+                              {/* Display video details */}
+                              <p>
+                                <span
+                                  style={{
+                                    cursor: "pointer",
+                                    textDecoration: "underline",
+                                  }}
+                                >
+                                  {video}
+                                </span>
+                              </p>
+                              {/* Edit video */}
+                              <Button
+                                variant="outlined"
+                                onClick={() => handleEditVideo(index)}
+                              >
+                                Edit Video
+                              </Button>
+                            </div>
+                          ))}
+                          <Button variant="outlined" onClick={handleAddVideo}>
+                            Add Video
+                          </Button>
+                          <input
+                            type="file"
+                            ref={fileInputRef}
+                            style={{ display: "none" }}
+                            onChange={handleFileInputChange}
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                      {currentStep === 1 && (
+                        <Button variant="contained" onClick={handleSaveModule}>
+                          Save Module
+                        </Button>
+                      )}
+                    </Box>
+                  </Box>
+                </Modal>
+
+                {/*End of Video Modal*/}
+
+                {/*Module Modal*/}
+
                 <Modal open={openModal} onClose={handleClose}>
                   <Box
                     sx={{
@@ -827,10 +971,8 @@ export default function CreateCourse() {
                       maxWidth: "90%", // Limit the width to a maximum of 90% of the viewport width
                     }}
                   >
-                
                     {currentStep === 1 && (
                       <>
-                  
                         <div>
                           <h4>Module</h4>
                           <TextField
@@ -848,17 +990,22 @@ export default function CreateCourse() {
                               style={{ display: "none" }}
                               onChange={handleFileInputChange}
                             />
-                            <Button variant="contained" onClick={handleAddVideo}>
+                            <Button
+                              variant="contained"
+                              onClick={handleAddVideo}
+                            >
                               Add Video
                             </Button>
                             <div>
-                              {videos.length > 0 && <>{videos[videos.length - 1]}</>}
+                              {videos.length > 0 && (
+                                <>{videos[videos.length - 1]}</>
+                              )}
                             </div>
                           </div>
                         </div>
                       </>
                     )}
-    
+
                     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                       {currentStep === 1 && (
                         <Button variant="contained" onClick={handleSaveModule}>
@@ -868,13 +1015,12 @@ export default function CreateCourse() {
                     </Box>
                   </Box>
                 </Modal>
-
-             
+                {/*End of Module Modal*/}
               </div>
               <div className="col-md-4">
                 <div className="card">
                   <div className="card-header text-center">
-                    <a onClick = {SaveCourse}  href="#" className="btn btn-accent">
+                    <a onClick={handleFinalSave} href="#" className="btn btn-accent">
                       Save changes
                     </a>
                   </div>
@@ -900,7 +1046,7 @@ export default function CreateCourse() {
                     <iframe
                       className="embed-responsive-item"
                       src="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
-                    //   allowFullScreen=""
+                      //   allowFullScreen=""
                     />
                   </div>
                   <div className="card-body">
@@ -1065,9 +1211,9 @@ export default function CreateCourse() {
             </p>
             <p className="measure-lead-max text-50 small mr-8pt">
               Luma is a beautifully crafted user interface for modern Education
-              Platforms, including Courses &amp; Tutorials, Video Lessons, Student
-              and Teacher Dashboard, Curriculum Management, Earnings and Reporting,
-              ERP, HR, CMS, Tasks, Projects, eCommerce and more.
+              Platforms, including Courses &amp; Tutorials, Video Lessons,
+              Student and Teacher Dashboard, Curriculum Management, Earnings and
+              Reporting, ERP, HR, CMS, Tasks, Projects, eCommerce and more.
             </p>
             <p className="mb-8pt d-flex">
               <a href="" className="text-70 text-underline mr-8pt small">
@@ -1371,7 +1517,10 @@ export default function CreateCourse() {
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="billing-history.html">
+                    <a
+                      className="sidebar-menu-button"
+                      href="billing-history.html"
+                    >
                       Payments
                     </a>
                   </li>
@@ -1406,7 +1555,9 @@ export default function CreateCourse() {
                           className="sidebar-menu-button"
                           href="erp-dashboard.html"
                         >
-                          <span className="sidebar-menu-text">ERP Dashboard</span>
+                          <span className="sidebar-menu-text">
+                            ERP Dashboard
+                          </span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
@@ -1414,16 +1565,26 @@ export default function CreateCourse() {
                           className="sidebar-menu-button"
                           href="crm-dashboard.html"
                         >
-                          <span className="sidebar-menu-text">CRM Dashboard</span>
+                          <span className="sidebar-menu-text">
+                            CRM Dashboard
+                          </span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="hr-dashboard.html">
-                          <span className="sidebar-menu-text">HR Dashboard</span>
+                        <a
+                          className="sidebar-menu-button"
+                          href="hr-dashboard.html"
+                        >
+                          <span className="sidebar-menu-text">
+                            HR Dashboard
+                          </span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="employees.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="employees.html"
+                        >
                           <span className="sidebar-menu-text">Employees</span>
                         </a>
                       </li>
@@ -1505,7 +1666,9 @@ export default function CreateCourse() {
                     >
                       <li className="sidebar-menu-item">
                         <a className="sidebar-menu-button" href="teachers.html">
-                          <span className="sidebar-menu-text">Browse Teachers</span>
+                          <span className="sidebar-menu-text">
+                            Browse Teachers
+                          </span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
@@ -1513,7 +1676,9 @@ export default function CreateCourse() {
                           className="sidebar-menu-button"
                           href="student-profile.html"
                         >
-                          <span className="sidebar-menu-text">Student Profile</span>
+                          <span className="sidebar-menu-text">
+                            Student Profile
+                          </span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
@@ -1521,7 +1686,9 @@ export default function CreateCourse() {
                           className="sidebar-menu-button"
                           href="teacher-profile.html"
                         >
-                          <span className="sidebar-menu-text">Teacher Profile</span>
+                          <span className="sidebar-menu-text">
+                            Teacher Profile
+                          </span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
@@ -1530,7 +1697,10 @@ export default function CreateCourse() {
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="blog-post.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="blog-post.html"
+                        >
                           <span className="sidebar-menu-text">Blog Post</span>
                         </a>
                       </li>
@@ -1540,18 +1710,27 @@ export default function CreateCourse() {
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="help-center.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="help-center.html"
+                        >
                           {/*  */}
                           <span className="sidebar-menu-text">Help Center</span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="discussions.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="discussions.html"
+                        >
                           <span className="sidebar-menu-text">Discussions</span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="discussion.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="discussion.html"
+                        >
                           <span className="sidebar-menu-text">
                             Discussion Details
                           </span>
@@ -1562,7 +1741,9 @@ export default function CreateCourse() {
                           className="sidebar-menu-button"
                           href="discussions-ask.html"
                         >
-                          <span className="sidebar-menu-text">Ask Question</span>
+                          <span className="sidebar-menu-text">
+                            Ask Question
+                          </span>
                         </a>
                       </li>
                     </ul>
@@ -1589,12 +1770,18 @@ export default function CreateCourse() {
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="tasks-board.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="tasks-board.html"
+                        >
                           <span className="sidebar-menu-text">Tasks Board</span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="tasks-list.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="tasks-list.html"
+                        >
                           <span className="sidebar-menu-text">Tasks List</span>
                         </a>
                       </li>
@@ -1639,7 +1826,9 @@ export default function CreateCourse() {
                           className="sidebar-menu-button"
                           href="cms-dashboard.html"
                         >
-                          <span className="sidebar-menu-text">CMS Dashboard</span>
+                          <span className="sidebar-menu-text">
+                            CMS Dashboard
+                          </span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
@@ -1666,8 +1855,13 @@ export default function CreateCourse() {
                       id="ecommerce_menu"
                     >
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ecommerce.html">
-                          <span className="sidebar-menu-text">Shop Dashboard</span>
+                        <a
+                          className="sidebar-menu-button"
+                          href="ecommerce.html"
+                        >
+                          <span className="sidebar-menu-text">
+                            Shop Dashboard
+                          </span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
@@ -1675,7 +1869,9 @@ export default function CreateCourse() {
                           className="sidebar-menu-button disabled"
                           href="edit-product.html"
                         >
-                          <span className="sidebar-menu-text">Edit Product</span>
+                          <span className="sidebar-menu-text">
+                            Edit Product
+                          </span>
                         </a>
                       </li>
                     </ul>
@@ -1717,7 +1913,9 @@ export default function CreateCourse() {
                       <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                         account_box
                       </span>
-                      <span className="sidebar-menu-text">Student Dashboard</span>
+                      <span className="sidebar-menu-text">
+                        Student Dashboard
+                      </span>
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
@@ -1732,7 +1930,10 @@ export default function CreateCourse() {
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="student-paths.html">
+                    <a
+                      className="sidebar-menu-button"
+                      href="student-paths.html"
+                    >
                       <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                         timeline
                       </span>
@@ -1748,7 +1949,10 @@ export default function CreateCourse() {
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="student-course.html">
+                    <a
+                      className="sidebar-menu-button"
+                      href="student-course.html"
+                    >
                       <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                         face
                       </span>
@@ -1756,7 +1960,10 @@ export default function CreateCourse() {
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="student-lesson.html">
+                    <a
+                      className="sidebar-menu-button"
+                      href="student-lesson.html"
+                    >
                       <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                         panorama_fish_eye
                       </span>
@@ -1829,7 +2036,9 @@ export default function CreateCourse() {
                       <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                         layers
                       </span>
-                      <span className="sidebar-menu-text">Skill Assessment</span>
+                      <span className="sidebar-menu-text">
+                        Skill Assessment
+                      </span>
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
@@ -1948,17 +2157,26 @@ export default function CreateCourse() {
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="signup-payment.html">
+                    <a
+                      className="sidebar-menu-button"
+                      href="signup-payment.html"
+                    >
                       <span className="sidebar-menu-text">Payment</span>
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="reset-password.html">
+                    <a
+                      className="sidebar-menu-button"
+                      href="reset-password.html"
+                    >
                       <span className="sidebar-menu-text">Reset Password</span>
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="change-password.html">
+                    <a
+                      className="sidebar-menu-button"
+                      href="change-password.html"
+                    >
                       <span className="sidebar-menu-text">Change Password</span>
                     </a>
                   </li>
@@ -1982,7 +2200,9 @@ export default function CreateCourse() {
                       className="sidebar-menu-button"
                       href="edit-account-notifications.html"
                     >
-                      <span className="sidebar-menu-text">Email Notifications</span>
+                      <span className="sidebar-menu-text">
+                        Email Notifications
+                      </span>
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
@@ -1990,7 +2210,9 @@ export default function CreateCourse() {
                       className="sidebar-menu-button"
                       href="edit-account-password.html"
                     >
-                      <span className="sidebar-menu-text">Account Password</span>
+                      <span className="sidebar-menu-text">
+                        Account Password
+                      </span>
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
@@ -1999,22 +2221,36 @@ export default function CreateCourse() {
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="billing-upgrade.html">
+                    <a
+                      className="sidebar-menu-button"
+                      href="billing-upgrade.html"
+                    >
                       <span className="sidebar-menu-text">Upgrade Account</span>
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="billing-payment.html">
-                      <span className="sidebar-menu-text">Payment Information</span>
+                    <a
+                      className="sidebar-menu-button"
+                      href="billing-payment.html"
+                    >
+                      <span className="sidebar-menu-text">
+                        Payment Information
+                      </span>
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="billing-history.html">
+                    <a
+                      className="sidebar-menu-button"
+                      href="billing-history.html"
+                    >
                       <span className="sidebar-menu-text">Payment History</span>
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="billing-invoice.html">
+                    <a
+                      className="sidebar-menu-button"
+                      href="billing-invoice.html"
+                    >
                       <span className="sidebar-menu-text">Invoice</span>
                     </a>
                   </li>
@@ -2055,12 +2291,18 @@ export default function CreateCourse() {
                       id="components_menu"
                     >
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ui-buttons.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="ui-buttons.html"
+                        >
                           <span className="sidebar-menu-text">Buttons</span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ui-avatars.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="ui-avatars.html"
+                        >
                           <span className="sidebar-menu-text">Avatars</span>
                         </a>
                       </li>
@@ -2070,12 +2312,18 @@ export default function CreateCourse() {
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ui-loaders.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="ui-loaders.html"
+                        >
                           <span className="sidebar-menu-text">Loaders</span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ui-tables.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="ui-tables.html"
+                        >
                           <span className="sidebar-menu-text">Tables</span>
                         </a>
                       </li>
@@ -2095,17 +2343,26 @@ export default function CreateCourse() {
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ui-alerts.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="ui-alerts.html"
+                        >
                           <span className="sidebar-menu-text">Alerts</span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ui-badges.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="ui-badges.html"
+                        >
                           <span className="sidebar-menu-text">Badges</span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ui-progress.html">
+                        <a
+                          className="sidebar-menu-button"
+                          href="ui-progress.html"
+                        >
                           <span className="sidebar-menu-text">Progress</span>
                         </a>
                       </li>
@@ -2188,7 +2445,9 @@ export default function CreateCourse() {
                           className="sidebar-menu-button"
                           href="ui-plugin-range-sliders.html"
                         >
-                          <span className="sidebar-menu-text">Range Sliders</span>
+                          <span className="sidebar-menu-text">
+                            Range Sliders
+                          </span>
                         </a>
                       </li>
                       <li className="sidebar-menu-item">
@@ -2280,7 +2539,9 @@ export default function CreateCourse() {
                       className="sidebar-menu-button"
                       href="../Mini_Secondary_Layout/instructor-edit-course.html"
                     >
-                      <span className="sidebar-menu-text">Mini + Secondary</span>
+                      <span className="sidebar-menu-text">
+                        Mini + Secondary
+                      </span>
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
@@ -2337,7 +2598,5 @@ export default function CreateCourse() {
       </div>
       {/* // END drawer */}
     </div>
-
-
-  )
+  );
 }
