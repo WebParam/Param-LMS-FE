@@ -6,10 +6,9 @@ import Button from "@mui/material/Button";
 import Image from "next/image";
 import styles from "./page.module.css";
 import Link from "next/link";
-import CourseModal from "./create-section/CourseModal";
-import SectionModal from "./create-section/SectionModal";
+
 import { useRef, useState } from "react";
-import ModuleModal from "./create-section/ModuleModal";
+
 import { FaPencilAlt } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { Api } from "../../../lib/restapi/endpoints";
@@ -38,7 +37,6 @@ export default function CreateCourse() {
   const [showSection, setShowSection] = useState<boolean>(false);
   const [addSectionContent, setAddSectionContent] = useState<boolean>(true);
   const [viewSectionModules, setViewSectionModules] = useState<boolean>(false);
-
 
   async function SaveCourse() {
     const deleteSection = {
@@ -178,10 +176,10 @@ export default function CreateCourse() {
     setSections((prevSections) => [...prevSections, newSection]);
     setAddSectionContent(false);
     setShowSection(!showSection);
-    
+
     setModules([]);
     setModuleTitle("");
-    setCurrentSection("")
+    setCurrentSection("");
     setVideos([]);
   };
 
@@ -208,7 +206,7 @@ export default function CreateCourse() {
       const updatedModules = [...modules];
       updatedModules[currentModuleIndex].title = moduleTitle;
       setModules(updatedModules);
-      setCurrentModuleIndex(-1); 
+      setCurrentModuleIndex(-1);
     } else {
       const newModule = {
         title: moduleTitle,
@@ -240,7 +238,6 @@ export default function CreateCourse() {
     setModuleTitle("");
     setCourseTitle("");
     setVideos([]);
-    
   };
 
   const handleClose = () => {
@@ -263,11 +260,6 @@ export default function CreateCourse() {
     title: string;
     sections: Section[];
   }
-
- 
-
-
-
 
   return (
     <div
@@ -609,98 +601,124 @@ export default function CreateCourse() {
 
                 <div className="page-separator">
                   <div className="page-separator__text">Sections</div>
-
-             
                 </div>
 
+                {showSection ? (
+                  <>
+                    <div
+                      style={{ paddingBottom: "2px" }}
+                      className="accordion js-accordion accordion--boxed mb-24pt"
+                      id="parent"
+                      data-domfactory-upgraded="accordion"
+                    >
+                      {sections.length > 0 &&
+                        sections.map((section, index) => (
+                          <div className="accordion__item open">
+                            <a
+                              href="#"
+                              className="accordion__toggle"
+                              data-toggle="collapse"
+                              data-target="#course-toc-2"
+                              data-parent="#parent"
+                            >
+                              <span
+                                onClick={() =>
+                                  setViewSectionModules(!viewSectionModules)
+                                }
+                                className="flex"
+                              >
+                                {section.title}
+                              </span>
+                              <span
+                                onClick={() =>
+                                  setViewSectionModules(!viewSectionModules)
+                                }
+                                className="accordion__toggle-icon material-icons"
+                              >
+                                {viewSectionModules
+                                  ? "keyboard_arrow_down"
+                                  : "keyboard_arrow_up"}
+                              </span>
+                            </a>
+                            <div
+                              className="accordion__menu collapse show"
+                              id="course-toc-2"
+                            >
+                              {viewSectionModules &&
+                                section.modules.map((module, index) => (
+                                  <div
+                                    className="accordion__item open bg-transparent border-none shadow-none outline-none"
+                                    style={{
+                                      paddingRight: "10px",
+                                      border: "none",
+                                      background: "none",
+                                      outline: "none",
+                                      borderBottom: "1px solid lightgray",
+                                      borderRadius: "0",
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        paddingLeft: "15px",
+                                        border: "none",
+                                        background: "none",
+                                        outline: "none",
+                                      }}
+                                      key={index}
+                                    >
+                                      <i
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() =>
+                                          setVideoIndex(
+                                            index === videoIndex ? -1 : index
+                                          )
+                                        }
+                                        className="material-icons text-70 icon-16pt icon--left"
+                                      >
+                                        {index === videoIndex
+                                          ? "expand_less"
+                                          : "drag_handle"}
+                                      </i>
+                                      <a
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() =>
+                                          handleEditModuleTitle(index)
+                                        }
+                                        className="flex"
+                                      >
+                                        {module.title}
+                                      </a>
+                                      <span
+                                        style={{ float: "right" }}
+                                        className="text-muted"
+                                      >
+                                        8min 2s
+                                      </span>
 
-{showSection ? <>
-              
-                <div style={{paddingBottom:"2px"}}  className="accordion js-accordion accordion--boxed mb-24pt"
-              id="parent"
-              data-domfactory-upgraded="accordion">
-{sections.length > 0 &&
-
-                      sections.map((section, index) => (
-                <div className="accordion__item open">
-                <a
-                  href="#"
-                  className="accordion__toggle"
-                  data-toggle="collapse"
-                  data-target="#course-toc-2"
-                  data-parent="#parent"
-                >
-                  <span onClick={() => setViewSectionModules(!viewSectionModules)}  className="flex">{section.title}</span>
-                  <span onClick={() => setViewSectionModules(!viewSectionModules)}  className="accordion__toggle-icon material-icons">
-                    {viewSectionModules ? "keyboard_arrow_down" : "keyboard_arrow_up"}
-                  </span>
-                </a>
-                <div
-                  className="accordion__menu collapse show"
-                  id="course-toc-2"
-                >
-                  { viewSectionModules && section.modules.map((module, index) => 
-          <div 
-          className=
-             "accordion__item open bg-transparent border-none shadow-none outline-none"  
-          
-          style={{ paddingRight: "10px", border: "none", background:"none", outline:"none" , borderBottom: "1px solid lightgray", borderRadius:"0"} }
-        >
-       
-              <div style={{paddingLeft:"15px", border: "none", background:"none", outline:"none",  }} key={index}>
-                <i
-                  style={{ cursor: "pointer" }}
-                  onClick={() =>
-                    setVideoIndex(
-                      index === videoIndex ? -1 : index
-                    )
-                  }
-                  className="material-icons text-70 icon-16pt icon--left"
-                >
-                  {index === videoIndex
-                    ? "expand_less"
-                    : "drag_handle"}
-                </i>
-                <a
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleEditModuleTitle(index)}
-                  className="flex"
-                >
-                  {module.title}
-                </a>
-                <span
-                  style={{ float: "right" }}
-                  className="text-muted"
-                >
-                  8min 2s
-                </span>
-
-                {index === videoIndex && (
-                  <div>
-                    {module.videos.map(
-                      (video: any, videoIdx: number) => (
-                        <p
-                          key={videoIdx}
-                          style={{ marginLeft: "2em" }}
-                        >
-                          {video}
-                        </p>
-                      )
-                    )}
-                  </div>
-                )}
-              </div>
-            
-        </div>
-                    )}
-          
-                </div>
-              </div>
-              
-                      ))}
-              </div>
-
-                  </> :  <>
+                                      {index === videoIndex && (
+                                        <div>
+                                          {module.videos.map(
+                                            (video: any, videoIdx: number) => (
+                                              <p
+                                                key={videoIdx}
+                                                style={{ marginLeft: "2em" }}
+                                              >
+                                                {video}
+                                              </p>
+                                            )
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
                     <label className="form-label">Section title</label>
 
                     <div
@@ -819,17 +837,14 @@ export default function CreateCourse() {
                           ))}
                       </div>
                     </div>
-                  </>}
-                
+                  </>
+                )}
 
-
-
-              
                 <a
                   onClick={() => {
-                    if(modules.length == 0 && videos.length == 0) {
-                      setShowSection(false)
-                    }else{
+                    if (modules.length == 0 && videos.length == 0) {
+                      setShowSection(false);
+                    } else {
                       handleSaveSection();
                     }
                   }}
@@ -1020,7 +1035,11 @@ export default function CreateCourse() {
               <div className="col-md-4">
                 <div className="card">
                   <div className="card-header text-center">
-                    <a onClick={handleFinalSave} href="#" className="btn btn-accent">
+                    <a
+                      onClick={handleFinalSave}
+                      href="#"
+                      className="btn btn-accent"
+                    >
                       Save changes
                     </a>
                   </div>
