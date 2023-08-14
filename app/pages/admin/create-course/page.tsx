@@ -16,6 +16,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateCourse() {
+  const [isSectionModulesVisible, setIsSectionModulesVisible] = useState<any>([]);
+
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [courseTitle, setCourseTitle] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
@@ -28,7 +30,7 @@ export default function CreateCourse() {
   const [closeModal, setCloseModal] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [showVideos, setShowVideo] = useState<boolean>(false);
-  const [videoIndex, setvideoIndex] = useState<number>(-1);
+  const [videoIndex, setvideoIndex] = useState<any>(-1);
   const [moduleDiv, setmoduleDiv] = useState<any>(false);
   const [openModuleTitle, setOpenMouleTitle] = useState<boolean>(false);
   const [currentModuleIndex, setCurrentModuleIndex] = useState(-1);
@@ -37,7 +39,7 @@ export default function CreateCourse() {
   const [showSection, setShowSection] = useState<boolean>(false);
   const [addSectionContent, setAddSectionContent] = useState<boolean>(true);
   const [viewSectionModules, setViewSectionModules] = useState<boolean>(false);
-
+  const [selectedSection, setSelectedSection] = useState<boolean>(false);
   async function SaveCourse() {
     const deleteSection = {
       courseId: "64d0e40fc65c5136b4c7f7b9",
@@ -120,6 +122,8 @@ export default function CreateCourse() {
 
     //    const DeleteModule = await Api.POST_deleteModule(deleteModule);
 
+  
+
     const Deletevideo = await Api.POST_deleteVideo(deleteVideo);
 
     const _id = toast.loading("deleting section..", {
@@ -168,6 +172,18 @@ export default function CreateCourse() {
     setOpenVideoModal(true); // Assuming you have a state variable to control the edit modal
   };
 
+
+
+  const toggleSectionModules = (sectionIndex:any) => {
+    const newVisibility = [...isSectionModulesVisible];
+    newVisibility[sectionIndex] = !newVisibility[sectionIndex];
+    setIsSectionModulesVisible(newVisibility);
+  };
+
+  const toggleVideo = (moduleIndex:any) => {
+    setvideoIndex((prevIndex: number) => (prevIndex === moduleIndex ? -1 : moduleIndex));
+  };
+
   const handleSaveSection = () => {
     const newSection: Section = {
       title: currentSection,
@@ -181,6 +197,8 @@ export default function CreateCourse() {
     setModuleTitle("");
     setCurrentSection("");
     setVideos([]);
+    setViewSectionModules(false);
+    setmoduleDiv(false)
   };
 
   const handleFileInputChange = (
@@ -260,7 +278,12 @@ export default function CreateCourse() {
     title: string;
     sections: Section[];
   }
-
+  const SectionModuleIndex = (SectionIndex:number , ModuleIndex:number) => {
+    
+    if(ModuleIndex === SectionIndex) {
+      setSelectedSection(true)
+    }
+}
   return (
     <div
       className="mdk-drawer-layout js-mdk-drawer-layout"
@@ -611,110 +634,85 @@ export default function CreateCourse() {
                       id="parent"
                       data-domfactory-upgraded="accordion"
                     >
-                      {sections.length > 0 &&
-                        sections.map((section, index) => (
-                          <div className="accordion__item open">
-                            <a
-                              href="#"
-                              className="accordion__toggle"
-                              data-toggle="collapse"
-                              data-target="#course-toc-2"
-                              data-parent="#parent"
-                            >
-                              <span
-                                onClick={() =>
-                                  setViewSectionModules(!viewSectionModules)
-                                }
-                                className="flex"
-                              >
-                                {section.title}
-                              </span>
-                              <span
-                                onClick={() =>
-                                  setViewSectionModules(!viewSectionModules)
-                                }
-                                className="accordion__toggle-icon material-icons"
-                              >
-                                {viewSectionModules
-                                  ? "keyboard_arrow_down"
-                                  : "keyboard_arrow_up"}
-                              </span>
-                            </a>
-                            <div
-                              className="accordion__menu collapse show"
-                              id="course-toc-2"
-                            >
-                              {viewSectionModules &&
-                                section.modules.map((module, index) => (
-                                  <div
-                                    className="accordion__item open bg-transparent border-none shadow-none outline-none"
-                                    style={{
-                                      paddingRight: "10px",
-                                      border: "none",
-                                      background: "none",
-                                      outline: "none",
-                                      borderBottom: "1px solid lightgray",
-                                      borderRadius: "0",
-                                    }}
-                                  >
-                                    <div
-                                      style={{
-                                        paddingLeft: "15px",
-                                        border: "none",
-                                        background: "none",
-                                        outline: "none",
-                                      }}
-                                      key={index}
-                                    >
-                                      <i
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() =>
-                                          setVideoIndex(
-                                            index === videoIndex ? -1 : index
-                                          )
-                                        }
-                                        className="material-icons text-70 icon-16pt icon--left"
-                                      >
-                                        {index === videoIndex
-                                          ? "expand_less"
-                                          : "drag_handle"}
-                                      </i>
-                                      <a
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() =>
-                                          handleEditModuleTitle(index)
-                                        }
-                                        className="flex"
-                                      >
-                                        {module.title}
-                                      </a>
-                                      <span
-                                        style={{ float: "right" }}
-                                        className="text-muted"
-                                      >
-                                        8min 2s
-                                      </span>
+{sections.length > 0 &&
+  sections.map((section, sectionIndex) => (
+    <div className="accordion__item" key={sectionIndex}>
+      <a
+        href="#"
+        className="accordion__toggle"
+        data-toggle="collapse"
+        data-target={`#course-toc-${sectionIndex}`}
+        data-parent="#parent"
+        onClick={() => toggleSectionModules(sectionIndex)}
+      >
+        <span className="flex">{section.title}</span>
+        <span className="accordion__toggle-icon material-icons">
+          {isSectionModulesVisible[sectionIndex]
+            ? "keyboard_arrow_down"
+            : "keyboard_arrow_up"}
+        </span>
+      </a>
+      <div
+        className={`accordion__menu collapse ${
+          isSectionModulesVisible[sectionIndex] ? "show" : ""
+        }`}
+        id={`course-toc-${sectionIndex}`}
+      >
+        {section.modules.map((module, moduleIndex) => (
+          <div
+            className="accordion__item"
+            key={moduleIndex}
+            style={{
+              paddingRight: "10px",
+              border: "none",
+              background: "none",
+              outline: "none",
+              borderBottom: "1px solid lightgray",
+              borderRadius: "0",
+            }}
+          >
+            <div
+              style={{
+                paddingLeft: "15px",
+                border: "none",
+                background: "none",
+                outline: "none",
+              }}
+            >
+              <i
+                style={{ cursor: "pointer" }}
+                onClick={() => toggleVideo(moduleIndex)}
+                className="material-icons text-70 icon-16pt icon--left"
+              >
+                {moduleIndex === videoIndex ? "expand_less" : "drag_handle"}
+              </i>
+              <a
+                style={{ cursor: "pointer" }}
+                onClick={() => handleEditModuleTitle(moduleIndex)}
+                className="flex"
+              >
+                {module.title}
+              </a>
+              <span style={{ float: "right" }} className="text-muted">
+                8min 2s
+              </span>
 
-                                      {index === videoIndex && (
-                                        <div>
-                                          {module.videos.map(
-                                            (video: any, videoIdx: number) => (
-                                              <p
-                                                key={videoIdx}
-                                                style={{ marginLeft: "2em" }}
-                                              >
-                                                {video}
-                                              </p>
-                                            )
-                                          )}
-                                        </div>
-                                      )}
-                                    </div>
-                                  </div>
-                                ))}
-                            </div>
-                          </div>
-                        ))}
+              {moduleIndex === videoIndex && (
+                <div>
+                  {module.videos.map((video: any, videoIdx: number) => (
+                    <p key={videoIdx} style={{ marginLeft: "2em" }}>
+                      {video}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+
                     </div>
                   </>
                 ) : (
@@ -795,9 +793,12 @@ export default function CreateCourse() {
                               <i
                                 style={{ cursor: "pointer" }}
                                 onClick={() =>
-                                  setVideoIndex(
-                                    index === videoIndex ? -1 : index
-                                  )
+                                  {
+                                    setVideoIndex(
+                                      index === videoIndex ? -1 : index
+                                    )
+                                  }
+                            
                                 }
                                 className="material-icons text-70 icon-16pt icon--left"
                               >
