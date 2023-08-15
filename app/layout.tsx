@@ -29,6 +29,7 @@ export default function RootLayout({
       ><link href="https://fonts.googleapis.com/css?family=Lato:400,700%7COswald:300,400,500,700%7CRoboto:400,500%7CExo+2:600&amp;display=swap" rel="stylesheet"/>
       </head>
      <body className="layout-mini-secondary has-drawer-opened">{children}</body>
+  
     </html>
   )
 }

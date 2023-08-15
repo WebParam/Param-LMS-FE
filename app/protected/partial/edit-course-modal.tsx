@@ -1,25 +1,15 @@
-
-"use client"
 import Image from 'next/image'
 import styles from './page.module.css'
-import EditCourseModal from '../../partial/edit-course-modal'
-import 'react-responsive-modal/styles.css';
-import { Modal } from 'react-responsive-modal';
-export default function EditCourse() {
- 
-  
+
+
+export default function EditCourseModal() {
   return (
 <div
-id="test"
   className="mdk-drawer-layout js-mdk-drawer-layout"
   data-push=""
   data-responsive-width="992px"
-  data-domfactory-upgraded="mdk-cdrawer-layout"
+  data-domfactory-upgraded="mdk-drawer-layout"
 >
-<button onClick={()=>{}}>Open modal</button>
-      <Modal open={true} onClose={()=>{}} center>
-        <EditCourseModal/>
-      </Modal>
   <div
     className="mdk-drawer-layout__content page-content"
     style={{ transform: "translate3d(0px, 0px, 0px)" }}
@@ -344,6 +334,7 @@ id="test"
           
             <div className="page-separator">
               <div className="page-separator__text">Sections</div>
+             
             </div>
             <div
               className="accordion js-accordion accordion--boxed mb-24pt"
