@@ -2,12 +2,23 @@
 "use client"
 import Image from 'next/image'
 import styles from './page.module.css'
-import EditCourseModal from '../../partial/edit-course-modal'
+import {EditCourseModal} from '../../partial/edit-course-modal'
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
+import { ICourse } from '@/app/interfaces/courseSlice';
+import { useState } from 'react';
+import { FaPlus } from 'react-icons/fa';
+
+
+
 export default function EditCourse() {
- 
+  const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [sectionTitle, setSectionTitle] = useState<string>("");
+  function saveAndCloseEditModal(){
   
+  setEditModalOpen(false)
+  //dispatch (updating state)
+}
   return (
 <div
 id="test"
@@ -16,9 +27,10 @@ id="test"
   data-responsive-width="992px"
   data-domfactory-upgraded="mdk-cdrawer-layout"
 >
-<button onClick={()=>{}}>Open modal</button>
-      <Modal open={true} onClose={()=>{}} center>
-        <EditCourseModal/>
+<button onClick={()=>{setEditModalOpen(true)}}>Open modal</button>
+      <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)} center>
+        <EditCourseModal onClose = {saveAndCloseEditModal} />
+        {/* <EditCourseModal /> */}
       </Modal>
   <div
     className="mdk-drawer-layout__content page-content"
@@ -350,139 +362,47 @@ id="test"
               id="parent"
               data-domfactory-upgraded="accordion"
             >
-              <div className="accordion__item">
-                <a
-                  href="#"
-                  className="accordion__toggle collapsed"
-                  data-toggle="collapse"
-                  data-target="#course-toc-1"
-                  data-parent="#parent"
-                >
-                  <span className="flex">Course Overview</span>
-                  <span className="accordion__toggle-icon material-icons">
-                    keyboard_arrow_down
-                  </span>
-                </a>
-                <div className="accordion__menu collapse" id="course-toc-1">
-                  <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Watch Trailer
-                    </a>
-                    <span className="text-muted">1m 10s</span>
-                  </div>
-                </div>
-              </div>
-              <div className="accordion__item open">
-                <a
-                  href="#"
-                  className="accordion__toggle"
-                  data-toggle="collapse"
-                  data-target="#course-toc-2"
-                  data-parent="#parent"
-                >
-                  <span className="flex">Getting Started with Angular</span>
-                  <span className="accordion__toggle-icon material-icons">
-                    keyboard_arrow_down
-                  </span>
-                </a>
-                <div
-                  className="accordion__menu collapse show"
-                  id="course-toc-2"
-                >
-                  <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Introduction
-                    </a>
-                    <span className="text-muted">8m 42s</span>
-                  </div>
-                  <div className="accordion__menu-link active">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Introduction to TypeScript
-                    </a>
-                    <span className="text-muted">50m 13s</span>
-                  </div>
-                  <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Comparing Angular to AngularJS
-                    </a>
-                    <span className="text-muted">12m 10s</span>
-                  </div>
-                  <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-take-quiz.html">
-                      Quiz: Getting Started With Angular
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div className="accordion__item">
-                <a
-                  href="#"
-                  className="accordion__toggle collapsed"
-                  data-toggle="collapse"
-                  data-target="#course-toc-3"
-                  data-parent="#parent"
-                >
-                  <span className="flex">
-                    Creating and Communicating Between Angular Components
-                  </span>
-                  <span className="accordion__toggle-icon material-icons">
-                    keyboard_arrow_down
-                  </span>
-                </a>
-                <div className="accordion__menu collapse" id="course-toc-3">
-                  <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Angular Components
-                    </a>
-                    <span className="text-muted">04:23</span>
-                  </div>
-                </div>
-              </div>
-              <div className="accordion__item">
-                <a
-                  href="#"
-                  className="accordion__toggle collapsed"
-                  data-toggle="collapse"
-                  data-target="#course-toc-4"
-                  data-parent="#parent"
-                >
-                  <span className="flex">
-                    Exploring the Angular Template Syntax
-                  </span>
-                  <span className="accordion__toggle-icon material-icons">
-                    keyboard_arrow_down
-                  </span>
-                </a>
-                <div className="accordion__menu collapse" id="course-toc-4">
-                  <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Template Syntax
-                    </a>
-                    <span className="text-muted">04:23</span>
-                  </div>
-                </div>
-              </div>
+                      <div className="accordion__item">
+                        <input
+                          type="text"
+                          className="form-control form-control-lg"
+                          placeholder="Section title"
+                          value={sectionTitle}
+                          onChange={(e) => setSectionTitle(e.target.value)}
+                        />
+                        <div
+                          className="accordion__menu collapse"
+                          id="course-toc-1"
+                        >
+                          <div className="accordion__menu-link">
+                            <i className="material-icons text-70 icon-16pt icon--left">
+                              drag_handle
+                            </i>
+                            <a className="flex" href="student-lesson.html">
+                              Watch Trailer
+                            </a>
+                            <span className="text-muted">1m 10s</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="form-group">
+                                    <label className="form-label"
+                                          >Select Competency</label>
+                                    <select id="custom-select"
+                                            className="form-control custom-select">
+                                      
+                                        <option selected>JavaScript</option>
+                                        <option value="1">Angular</option>
+                                        <option value="2">Python</option>
+                                    </select>
+                                </div>
+                                <div style={{display:"flex" , flexDirection:"row" , justifyContent:"space-between",alignItems:"center"}}>
+                        <label className="form-label">Modules</label>
+                        <FaPlus
+                          onClick={() => setEditModalOpen(true)}
+                         
+                        />
+                      </div>
             </div>
             <a href="#" className="btn btn-outline-secondary mb-24pt mb-sm-0">
               Add Section

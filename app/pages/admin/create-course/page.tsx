@@ -16,6 +16,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateCourse() {
+
+  
   const [isSectionModulesVisible, setIsSectionModulesVisible] = useState<any>([]);
 
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -291,6 +293,7 @@ export default function CreateCourse() {
       data-responsive-width="992px"
       data-domfactory-upgraded="mdk-drawer-layout"
     >
+      
       <ToastContainer />
       <div
         className="mdk-drawer-layout__content page-content"
