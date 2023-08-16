@@ -750,9 +750,10 @@ export default function CreateCourse() {
                       <label className="form-label">
                         Select Competency Type:
                       </label>
-                      <div className="accordion js-accordion accordion--boxed mb-24pt">
+                      <div  className="accordion js-accordion accordion--boxed mb-24pt">
                         <select
-                          className="form-control form-control-lg"
+                        style={{width: "250px", fontSize: "18px", outline:"none"}} 
+                          className="form-contr1ol form-control-lg"
                           id="competencies"
                           name="competencies"
                         >
@@ -803,8 +804,8 @@ export default function CreateCourse() {
                                 className="material-icons text-70 icon-16pt icon--left"
                               >
                                 {index === videoIndex
-                                  ? "expand_less"
-                                  : "drag_handle"}
+                                  ?"drag_handle" 
+                                  : "expand_less"}
                               </i>
                               <a
                                 style={{ cursor: "pointer" }}
