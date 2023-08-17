@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Cookies from 'universal-cookie';
+import { ReduxProvider } from "../provider";
 
 const cookies = new Cookies();
 
@@ -17,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
 <>
-
+<ReduxProvider>
 
 <div
     className="mdk-header-layout js-mdk-header-layout"
@@ -967,7 +968,7 @@ export default function RootLayout({
   </div>
 
 
-
+</ReduxProvider>
 
 
 

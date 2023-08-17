@@ -1,59 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AppStore } from "./store";
-import { IPersonnel } from "./interfaces/personnel";
+import { AppStore } from "./interfaces/store";
+import { ICourse, ICourseState, IModule, ISection, IUpdateCourseDetailState, IUpdateModuleDetailState, IUpdateSectionDetailState } from "./interfaces/courses";
 
-interface ICourse{
-_id:string,
-title: string;
-description: string;
-sections: ISection[];
-createdDate: string,
-creatingUser: string,
-state:number
+
+
+
+function sortSectionByOrder(a:ISection, b:ISection) {
+    return a.order - b.order;
 }
-export interface ISection {
- id: string;
- title : string;
- courseId: string;
- order:number ;
- state:number,
- competency:string,
- modules: IModule[];
-}
-
-export interface IModule {
-id: string;
-title: string;
-sectionId:string;
-order:number,
-state: number;
-videos: IVideo[];
-
-}
-
-  export interface IVideo {
-id: string;
-title: string;
-duration:string,
-moduleId: string,
-videoLink: string;
-type: number, 
-comments:VideoComment[]
-videoFile: File;
-}
-
-export interface Comment {
-message:string,
-creatingUser:string,
-dateCreated:string,
-id:string,
-} 
-export interface VideoComment extends Comment {
-    VideoId:string,
-}
-
-export interface ICourseState {
- course:ICourse
+  
+function sortModuleByOrder(a:IModule, b:IModule) {
+    return a.order - b.order;
 }
 
 // ## Define the initial state  
@@ -68,66 +25,28 @@ const initialState: ICourseState = {
     state:0
     }as ICourse
 };
-
-
-export interface IUpdateCourseDetailState{
-    payload:{
-        title:string,
-        description:string,
-        state:number
-    },
-    type:string
-}
-
-export interface IUpdateSectionDetailState{
-    payload:{    
-        sectionId:string,   
-        title : string;
-        order:number ;
-        state:number,
-        competency:string
-    },
-    type:string
-}
-
-export interface IUpdateModuleDetailState{
-    payload:{    
-        sectionId:string, 
-        moduleId:string,  
-        title : string;
-        order:number ;
-        state:number,
-        competency:string
-    },
-    type:string
-}
-
-
-function sortSectionByOrder(a:ISection, b:ISection) {
-    return a.order - b.order;
-}
-  
-function sortModuleByOrder(a:IModule, b:IModule) {
-    return a.order - b.order;
-}
   
 export const courseSlice = createSlice({
     name: "course",
     initialState,
     reducers: {
         //load entire course to state
-        setCourse(state, action) {
+        setSelectedCourseForEdit(state, action) {
             state.course = action.payload;
         },
         //
-        updateCourseDetail(state, action:IUpdateCourseDetailState) {
+        updateCourseDetail(state, action) {
+            console.log("courssase", action)
+           const _action = action.payload as IUpdateCourseDetailState;
+           console.log("course", _action)
             const newState = {
                 ...state.course,
-                description : action.payload.description,
-                state : action.payload.state,
-                title : action.payload.title
+                description : _action.description,
+                state : _action.state,
+                title : _action.title
             } as ICourse;
-           
+
+            
             state.course = newState;
         },
 
@@ -174,7 +93,7 @@ export const courseSlice = createSlice({
     }
 });
 
-export const { setCourse } = courseSlice.actions;
-export const getPersonnel = (state: AppStore) => state.personnel;
+export const { setSelectedCourseForEdit, updateCourseDetail } = courseSlice.actions;
+export const getSelectedCourseForEdit = (state: AppStore) => state.course;
 
 export default courseSlice.reducer; 

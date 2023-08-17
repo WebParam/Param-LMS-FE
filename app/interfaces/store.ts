@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { personnelSlice } from "./personnelSlice";
 import { createWrapper } from "next-redux-wrapper";
+import { courseSlice } from "../courseSlice";
 
 
 export const store = configureStore({
     reducer: {
-      [personnelSlice.name]: personnelSlice.reducer,
+      [courseSlice.name]: courseSlice.reducer,
     },
     devTools: true,
   });

@@ -5,43 +5,64 @@ import styles from './page.module.css'
 import {EditCourseModal} from '../../partial/edit-course-modal'
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
-import { ICourse } from '@/app/interfaces/courseSlice';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { IModule } from '../../../interfaces/courseSlice'; 
-import { useDispatch } from 'react-redux';
-import { addModule } from '../../../interfaces/reducerFunctions'; 
+import { getSelectedCourseForEdit,setSelectedCourseForEdit, updateCourseDetail} from '@/app/courseSlice';
+import { ICourse, IModule, ISection, IUpdateCourseDetailState } from '@/app/interfaces/courses';
+import { useDispatch, useSelector } from "react-redux";
+import { title } from 'process';
 
 
 export default function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
-  const [sectionTitle, setSectionTitle] = useState<string>("");
-
-  
-  function saveAndCloseEditModal(){
-  
-  setEditModalOpen(false)
-  
-
   const dispatch = useDispatch();
+  //get currently selected course from state
 
+  const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
 
-const newModule: IModule = {
-  id: 'someId',
-  title: 'New Module',
-  description: 'Module description',
-  notes: 'Module notes',
-  sectionId: 'sectionId',
-  order: 1,
-  state: 1,
-  createdDate: '2023-08-17',
-  creatingUser: 'User123',
-  points: 10,
-  videos: [],
-};
+  console.log("COURSE", _courseFromState)
 
-dispatch(addModule(newModule));
+  function saveAndCloseEditModal(){
+
+  setEditModalOpen(false)
+
+  const newModule: IModule = {
+    id: 'someId',
+    title: 'New Module',
+    description: 'Module description',
+    notes: 'Module notes',
+    sectionId: 'sectionId',
+    order: 1,
+    state: 1,
+    createdDate: '2023-08-17',
+    creatingUser: 'User123',
+    points: 10,
+    videos: [],
+  };
+
 }
+
+const updateCourse= function(title?:string, description?:string, state?:string){
+
+
+  const payload = { 
+    title:title?? _courseFromState.title, 
+    description:description??_courseFromState.description, 
+    state:state?? _courseFromState.state
+   } as IUpdateCourseDetailState;
+console.log("payload",payload)
+
+  dispatch(updateCourseDetail(payload));
+
+}
+
+const updateCourseSection = function(section:ISection){
+
+
+
+}
+
+
   return (
 <div
 id="test"
@@ -52,7 +73,7 @@ id="test"
 >
 <button onClick={()=>{setEditModalOpen(true)}}>Open modal</button>
       <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)} center>
-        <EditCourseModal onClose = {saveAndCloseEditModal} />
+        <EditCourseModal onClose={saveAndCloseEditModal} />
         {/* <EditCourseModal /> */}
       </Modal>
   <div
@@ -370,7 +391,9 @@ id="test"
                 type="text"
                 className="form-control form-control-lg"
                 placeholder="Course title"
-                defaultValue="Angular Fundamentals"
+                defaultValue="Title of the course.."
+                value={_courseFromState.title}
+                onChange={(e)=>{updateCourse(e.target.value)}}
               />
               <small className="form-text text-muted">
                 Please see our <a href="">course title guideline</a>
@@ -385,7 +408,137 @@ id="test"
               id="parent"
               data-domfactory-upgraded="accordion"
             >
-                      <div className="accordion__item">
+             <div className="accordion__item open">
+                <a
+                  href="#"
+                  className="accordion__toggle"
+                  data-toggle="collapse"
+                  data-target="#course-toc-2"
+                  data-parent="#parent"
+                >
+                  <span className="flex">Create new section</span>
+                  <span className="accordion__toggle-icon material-icons">
+                    keyboard_arrow_down
+                  </span>
+                </a>
+                <div
+                  className="accordion__menu collapse show"
+                  id="course-toc-2"
+                >
+                  <div className="accordion__menu-link">
+        
+                  </div>
+                  <div className="accordion__menu-link active">
+                    <div className="form-group" style={{width:"70%", marginRight:"2%"}}>
+                      <label className="form-label"
+                            >Section Title</label>
+                              <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Section title"
+                            // value={sectionTitle}
+                            // onChange={(e) => setSectionTitle(e.target.value)}
+                          />
+                    </div>
+                    <div className="form-group">
+                          <label className="form-label"
+                                >Competency</label>
+                          <select id="custom-select"
+                                  className="form-control custom-select">
+                            
+                              <option selected>JavaScript</option>
+                              <option value="1">Angular</option>
+                              <option value="2">Python</option>
+                          </select>
+                    </div>
+                  
+                    
+                  </div>
+                  <div style={{display:"flex" , flexDirection:"row" , justifyContent:"space-between",alignItems:"center", padding:"5%"}}>
+                        <label className="form-label">Modules</label>
+                        <FaPlus
+                          onClick={() => setEditModalOpen(true)}
+                         
+                        />
+                      </div>
+                </div>
+              </div>
+                 {/* <div className="accordion__item">
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Section title"
+                          // value={sectionTitle}
+                          // onChange={(e) => setSectionTitle(e.target.value)}
+                        />
+                        <div
+                          className="accordion__menu collapse"
+                          id="course-toc-1"
+                        >
+                          <div className="accordion__menu-link">
+                            <i className="material-icons text-70 icon-16pt icon--left">
+                              drag_handle
+                            </i>
+                            <a className="flex" href="student-lesson.html">
+                              Watch Trailer
+                            </a>
+                            <span className="text-muted">1m 10s</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="form-group">
+                                    <label className="form-label"
+                                          >Select Competency</label>
+                                    <select id="custom-select"
+                                            className="form-control custom-select">
+                                      
+                                        <option selected>JavaScript</option>
+                                        <option value="1">Angular</option>
+                                        <option value="2">Python</option>
+                                    </select>
+                      </div> */}
+              {
+                _courseFromState.sections.map(section=>{
+
+                  return <>
+                   <div className="accordion__item">
+                        <input
+                          type="text"
+                          className="form-control form-control-lg"
+                          placeholder="Section title"
+                          value={section.title}
+                          onChange={(e)=>{updateCourse(undefined,e.target.value,undefined)}}
+                        />
+                        <div
+                          className="accordion__menu collapse"
+                          id="course-toc-1"
+                        >
+                          <div className="accordion__menu-link">
+                            <i className="material-icons text-70 icon-16pt icon--left">
+                              drag_handle
+                            </i>
+                            <a className="flex" href="student-lesson.html">
+                              Watch Trailer
+                            </a>
+                            <span className="text-muted">1m 10s</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="form-group">
+                                    <label className="form-label"
+                                          >Select Competency</label>
+                                    <select id="custom-select"
+                                            className="form-control custom-select">
+                                      
+                                        <option selected>JavaScript</option>
+                                        <option value="1">Angular</option>
+                                        <option value="2">Python</option>
+                                    </select>
+                      </div>
+                  </>
+                })
+              }
+                      {/* <div className="accordion__item">
                         <input
                           type="text"
                           className="form-control form-control-lg"
@@ -418,18 +571,10 @@ id="test"
                                         <option value="1">Angular</option>
                                         <option value="2">Python</option>
                                     </select>
-                                </div>
-                                <div style={{display:"flex" , flexDirection:"row" , justifyContent:"space-between",alignItems:"center"}}>
-                        <label className="form-label">Modules</label>
-                        <FaPlus
-                          onClick={() => setEditModalOpen(true)}
-                         
-                        />
-                      </div>
+                      </div> */}
+                   
             </div>
-            <a href="#" className="btn btn-outline-secondary mb-24pt mb-sm-0">
-              Add Section
-            </a>
+
           </div>
           <div className="col-md-4">
             <div className="card">
@@ -1930,3 +2075,4 @@ id="test"
   
   )
 }
+
