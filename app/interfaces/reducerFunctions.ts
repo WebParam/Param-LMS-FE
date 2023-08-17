@@ -1,6 +1,7 @@
-import { ICourse, ICourseState, IModule, ISection, IUpdateCourseDetailState, IUpdateModuleDetailState, IUpdateSectionDetailState, IUpdateVideoDetailState, IVideo } from "./courseSlice";
+import { ICourse,  IModule, ISection, IVideo , } from "./courseSlice";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export function updateCourseDetail(state: ICourseState, action: IUpdateCourseDetailState) {
+export function updateCourseDetail(state: any, action: any) {
   const newState: ICourse = {
     ...state.course,
     description: action.payload.description,
@@ -14,7 +15,7 @@ export function sortSectionByOrder(a: ISection, b: ISection) {
   return a.order - b.order;
 }
 
-export function updateSectionDetail(state: ICourse, action: IUpdateSectionDetailState) {
+export function updateSectionDetail(state: ICourse, action:any) {
   const targetSection = state.sections.find((section) => section.id === action.payload.sectionId);
 
   if (!targetSection) {
@@ -45,7 +46,7 @@ function sortModuleByOrder(a: IModule, b: IModule) {
   return a.order - b.order;
 }
 
-export function updateModuleDetail(state: ICourse, action: IUpdateModuleDetailState) {
+export function updateModuleDetail(state: ICourse, action: any) {
   const updatedSections = state.sections.map((section) => {
     if (section.id === action.payload.sectionId) {
       const updatedModules = section.modules.map((module) => {
@@ -74,7 +75,7 @@ export function updateModuleDetail(state: ICourse, action: IUpdateModuleDetailSt
   };
 }
 
-export function updateVideoDetail(state: ICourse, action: IUpdateVideoDetailState) {
+export function updateVideoDetail(state: ICourse, action: any) {
   const { sectionId, moduleId, videoId } = action.payload;
 
   // Check if the state object has the 'sections' property and it is an array
@@ -136,3 +137,26 @@ export function updateVideoDetail(state: ICourse, action: IUpdateVideoDetailStat
     sections: updatedSections,
   };
 }
+
+interface ModuleState {
+  modules: IModule[]; // Store all modules here
+}
+
+
+const initialState: ModuleState = {
+  modules: [],
+};
+
+const courseSlice = createSlice({
+  name: 'course',
+  initialState,
+  reducers: {
+    // Action to add a new module
+    addModule: (state, action: PayloadAction<IModule>) => {
+      state.modules.push(action.payload);
+    },
+  },
+});
+
+export const { addModule } = courseSlice.actions;
+export default courseSlice.reducer;
