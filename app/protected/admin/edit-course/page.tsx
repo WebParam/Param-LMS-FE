@@ -8,16 +8,39 @@ import { Modal } from 'react-responsive-modal';
 import { ICourse } from '@/app/interfaces/courseSlice';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-
+import { IModule } from '../../../interfaces/courseSlice'; 
+import { useDispatch } from 'react-redux';
+import { addModule } from '../../../interfaces/reducerFunctions'; 
 
 
 export default function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [sectionTitle, setSectionTitle] = useState<string>("");
+
+  
   function saveAndCloseEditModal(){
   
   setEditModalOpen(false)
-  //dispatch (updating state)
+  
+
+  const dispatch = useDispatch();
+
+
+const newModule: IModule = {
+  id: 'someId',
+  title: 'New Module',
+  description: 'Module description',
+  notes: 'Module notes',
+  sectionId: 'sectionId',
+  order: 1,
+  state: 1,
+  createdDate: '2023-08-17',
+  creatingUser: 'User123',
+  points: 10,
+  videos: [],
+};
+
+dispatch(addModule(newModule));
 }
   return (
 <div

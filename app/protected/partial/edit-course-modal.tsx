@@ -14,7 +14,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   onClose,
 }) => {
   const [content, setContent] = useState("");
-  const [showVideoInput, setShowVideoInput] = useState(false);
+  const [showVideoInputUrl, setShowVideoInputUrl] = useState(false);
+  const [showVideoInputTitle, setShowVideoInputTitle] = useState(false);
   const [videoTitle, setVideoTitle] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [videos, setVideos] = useState<any>([])
@@ -43,7 +44,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     }
 
     setVideos([...videos,video]);
-    setShowVideoInput(false)
+    setShowVideoInputUrl(false)
     setVideoTitle("")
     setVideoUrl("");
   }
@@ -121,26 +122,34 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                     )}
                 </>}
                 </div>
-                <label className="form-label">Title</label>
-                <input
-                onChange={(e) => setVideoTitle(e.target.value)}
+
+                <div>
+                <div style={{display: "flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
+                    <label className="form-label">Title</label>
+                    <FaPlus onClick = {() => setShowVideoInputTitle(!showVideoInputTitle)}/>
+                  </div>
+
+                  {showVideoInputTitle && <>        <input
+       onChange={(e) => setVideoTitle(e.target.value)}
                     id="flatpickrSample04"
                     type="text"
                     className="form-control"
                     placeholder="video title"
-                    value = {videoTitle}
                     data-toggle="flatpickr"
                     data-flatpickr-enable-time="true"
                     data-flatpickr-alt-format="F j, Y at H:i"
                     data-flatpickr-date-format="Y-m-d H:i"
-                  />
+                  /></>}
+                </div>
+         
+          
                 <div className="form-group pt-2">
                   <div style={{display: "flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
                     <label className="form-label">URL</label>
-                    <FaPlus onClick = {() => setShowVideoInput(true)}/>
+                    <FaPlus onClick = {() => setShowVideoInputUrl(!showVideoInputUrl)}/>
                   </div>
 
-{showVideoInput && <>        <input
+{showVideoInputUrl && <>        <input
        onChange={(e) => setVideoUrl(e.target.value)}
                     id="flatpickrSample04"
                     type="text"
@@ -165,7 +174,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
               <div className="col-md-4">
                 <div className="card">
                   <div className="card-header text-center">
-                    <a href="#" className="btn btn-accent">
+                    <a onClick = {() => onClose()} href="#" className="btn btn-accent">
                       Save changes
                     </a>
                   </div>
