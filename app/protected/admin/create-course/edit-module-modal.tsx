@@ -5,9 +5,10 @@ import React, { useRef, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { FaPlus } from "react-icons/fa";
-import { getSelectedCourseForEdit, updateModuleDetail } from "@/app/courseSlice";
+import { addModuleToSection, addVideoToModule, getSelectedCourseForEdit, updateModuleDetail } from "@/app/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ICourse, IModule, IUpdateModuleDetailState } from "@/app/interfaces/courses";
+import { Api } from "@/app/lib/restapi/endpoints";
 
 interface EditCourseModalProps {
   onClose: () => any;
@@ -17,24 +18,19 @@ interface EditCourseModalProps {
 export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   onClose,sectionId
 }) => {
-  const [content, setContent] = useState("");
   const [showVideoInputs, setShowVideoInputs] = useState(false);
   const [videoTitle, setVideoTitle] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [videos, setVideos] = useState<any>([])
-  const [moduletitle, setModuleTitle] = useState<string>("");
+  const [moduleTitle, setModuleTitle] = useState<string>("");
   const [moduleDescription, setModuleDescription] = useState<string>("decription");
   const [viewVideo, setViewVideo] = useState<boolean>(false);
-  const [currentVideoUrl, setCurrentVideoUrl] = useState("");
-
+  const [moduleId, setModuleId] = useState("");
   const dispatch = useDispatch();
-
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
 
 
-
-
-  const modules = {
+  const moduleToolbar = {
     toolbar: [
       [{ header: "1" }, { header: "2" }],
       ["bold", "italic", "link", "blockquote", "code", "image"],
@@ -42,58 +38,75 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     ],
   };
 
-  const selectedVideo = (url:string) => {
-    setCurrentVideoUrl("")
-    setViewVideo(true)
-    setCurrentVideoUrl(url)
-  }
 
-  const AddVideo = () => {
-    const video = {
-      title :videoTitle,
-      url : videoUrl
+  const createModule = () => {
+
+    const plainDescription = moduleDescription ? moduleDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+
+
+    const payload = {
+      sectionId:sectionId, 
+      moduleTitle:moduleTitle,
+       moduleOrder:0, 
+       moduleState:0, 
+       moduleDescription:plainDescription
     }
 
-    setVideos([...videos,video]);
+    
+  console.log("payload: ", payload);
+
+  dispatch(addModuleToSection(payload));
+  
+  console.log("COURSE", _courseFromState); 
+  console.log(sectionId)
+  }
+
+  useEffect(() => {
+    const sectionIds = _courseFromState.sections.map(section => {
+      if(section.id == sectionId){
+        const moduleid = section.modules.map(module => module.id
+          
+      )[0];
+   
+      setModuleId(moduleid)
+      }
+    })
+ 
+  })
+  
+
+  const AddVideo = () => {
+    const payload = {
+      moduleId: moduleId,
+      title :videoTitle,
+      videoLink: videoUrl,
+      videoType:""
+    }
+
+    dispatch(addVideoToModule(payload));
+
+    setVideos([...videos,payload]);
     setShowVideoInputs(!showVideoInputs)
     setVideoTitle("")
     setVideoUrl("");
-    
+    console.log("COURSE", _courseFromState); 
   }
-  const updateCourseSectionModules = function() {
 
- // Check if sectionId and moduleId exist
- const sectionIdExists = _courseFromState.sections.some(section => section.id === sectionId);
 
- console.log("All Section IDs:");
- _courseFromState.sections.map(section => console.log(section.id));
 
-console.log("All Module IDs:");
-_courseFromState.sections.forEach(section => {
-  section.modules.map(module => console.log(module.id));
-});
+  // async function CreateCourse() {
+    
 
- const moduleIdExists = _courseFromState.sections.some(section =>
-   section.modules.some(module => module.id === "0")
- );
-
- if (sectionIdExists && moduleIdExists) {
-   const payload = {
-     sectionId,
-     moduleId : '0',
-     title: moduletitle,
-     order: 2,
-     moduleState: 3,
-     description: moduleDescription,
-   } as IUpdateModuleDetailState;
-
-   console.log("Payload before dispatch:", payload);
-
-   dispatch(updateModuleDetail(payload));
- } else {
-   console.log('Invalid sectionId or moduleId');
- }
-};
+  
+  //   const user = await Api.POST_CreateCourse();
+  //   console.log("new", user);
+  //   if (user.error != false) {
+  //  alert("Cannot create course with the supplied information")
+  //     return;
+  //   } else {
+  //     alert("Successfully created new course. Please login.")
+  //   }
+  // }
 
 
   return (
@@ -124,7 +137,7 @@ _courseFromState.sections.forEach(section => {
           </div>
         </div>
 
-        <div className="page-section border-bottom-2">
+        <div style = {{width:"100%"}}className="page-section border-bottom-2">
           <div className="container page__container">
             <div className="row">
               <div className="col-md-8">
@@ -137,20 +150,25 @@ _courseFromState.sections.forEach(section => {
                     type="text"
                     className="form-control form-control-lg"
                     placeholder="Module Title"
+                    value = {moduleTitle}
+                    onChange={(e) =>  setModuleTitle(e.target.value)}
                   />
                   <small className="form-text text-muted">
                     Please see our <a href="">module title guideline</a>
                   </small>
                 </div>
                 <label className="form-label">Module Description</label>
-                <div style={{ height: "150px" }}>
-                  <ReactQuill
-                    value={content}
-                    onChange={setContent}
-                    placeholder="description...."
-                    modules={modules}
-                  />
-                </div>
+                <div style={{ height: '200px', overflow: 'auto' }}>
+  <ReactQuill
+    style={{ height: '100px' }}
+    value={moduleDescription}
+    onChange={(value) => {
+      setModuleDescription(value); // Pass the new description
+    }}
+    placeholder="Course description..."
+    modules={moduleToolbar}
+  />
+</div>
 
                 <div className="page-separator">
                   <div className="page-separator__text">
@@ -158,59 +176,74 @@ _courseFromState.sections.forEach(section => {
                   </div>
 
                 </div>
-              <div>
-          {showVideoInputs ? null :  <FaPlus onClick = {() => setShowVideoInputs(!showVideoInputs)} />}
+              <div >
+          {showVideoInputs ? null :  <FaPlus  onClick = {() => setShowVideoInputs(!showVideoInputs)} />}
                 </div>
 
-                <div 
-                style={{ display: 'flex', flexDirection : "row" , flexWrap: 'wrap', justifyContent: "space-around" , alignItems: "flex-start", width : "100&"}}
-                      className="accordion js-accordion accordion--boxed mb-24pt"
-                      id="parent"
-                      data-domfactory-upgraded="accordion"
-                    >{videos.length >  0 && <>
-                {videos.map((video:any, index:number )=>
-           
+                <div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+  }}
+  className="accordion js-accordion accordion--boxed mb-24pt"
+  id="parent"
+  data-domfactory-upgraded="accordion"
+>
+  {videos.length > 0 && (
+    <>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: "wrap",
+          width: "150%"
+        }}
+      >
+        {videos.map((video: any, index: number) => (
+             <>
 
-           <div  style={{ flexBasis: '50%' }}  className="card">
-           <div className="embed-responsive embed-responsive-16by9">
-             <iframe
-               className="embed-responsive-item"
-               src="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
-               //   allowFullScreen=""
-             />
-           </div>
-           <div className="card-body">
+<div style={{marginLeft: "10px",flexBasis: "30%", maxWidth: "100% !important" }}  className="card">
+              <div className="embed-responsive embed-responsive-16by9">
+                <iframe
+                  className="embed-responsive-item"
+                  src="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
+                //   allowFullScreen=""
+                />
+              </div>
+              <div className="card-body">
+                <label className="form-label">Title</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  defaultValue="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
+                  placeholder="Enter Video URL"
+                  value = {video.title}
+                />
+                <small className="form-text text-muted">
+                  Enter a valid video title.
+                </small>
+              </div>
+              <div className="card-body">
+                <label className="form-label">URL</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  defaultValue="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
+                  placeholder="Enter Video URL"
+                  value={video.url}
+                />
+                <small className="form-text text-muted">
+                  Enter a valid video URL.
+                </small>
+              </div>
+</div>
+        </>
+        ))}
+      </div>
+    </>
+  )}
+</div>
 
-           <div>
-             <label className="form-label">Title</label>
-             <input
-               type="text"
-               className="form-control"
-               value={video.title}
-               placeholder="Enter Video title"
-             />
-             <small className="form-text text-muted">
-               Enter a valid video Title.
-             </small>
-              </div>
-             <div>
-             <label className="form-label">URL</label>
-             <input
-               type="text"
-               className="form-control"
-               value={video.url}
-               placeholder="Enter Video URL"
-             />
-             <small className="form-text text-muted">
-               Enter a valid video URL.
-             </small>
-              </div>
-           </div>
-         </div>
-                  
-                    )}
-                </>}
-                </div>
 
                 <div>
                   {
@@ -267,9 +300,9 @@ _courseFromState.sections.forEach(section => {
               <div className="col-md-4">
                 <div className="card">
                   <div className="card-header text-center">
-                    <a onClick = {() => 
-                      updateCourseSectionModules()
-                      } href="#" className="btn btn-accent">
+                    <a
+                    onClick={createModule}
+                      href="#" className="btn btn-accent">
                       Save changes
                     </a>
                   </div>

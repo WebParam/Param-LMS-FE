@@ -7,18 +7,33 @@ import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { getSelectedCourseForEdit,setSelectedCourseForEdit, updateCourseDetail} from '@/app/courseSlice';
-import { ICourse, IModule, ISection, IUpdateCourseDetailState } from '@/app/interfaces/courses';
+import { getSelectedCourseForEdit,setSelectedCourseForEdit, updateCourseDetail, updateSectionDetail} from '@/app/courseSlice';
+import { ICourse, IModule, ISection, IUpdateCourseDetailState, IUpdateModuleDetailState, IUpdateSectionDetailState } from '@/app/interfaces/courses';
 import { useDispatch, useSelector } from "react-redux";
 import { title } from 'process';
+import ReactQuill from 'react-quill';
+import { competencies } from '@/app/lib/data/professions';
 
 
 export default function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [competency, setCompetency] = useState<string>('');
+  const [sectionTitle, setSectionTitle] = useState<string>('');
+  const [disableSectionInput, setDisableSectionInput] = useState<boolean>(false);
+  const [sectionId , setSectionId] = useState("");
   const dispatch = useDispatch();
-  //get currently selected course from state
+
+
+  const descriptionToolbar = {
+    toolbar: [
+      [{ header: "1" }, { header: "2" }],
+      ["bold", "italic", "link", "blockquote", "code", "image"],
+      [{ list: "ordered" }, { list: "bullet" }],
+    ],
+  };
 
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
+
 
   console.log("COURSE", _courseFromState)
 
@@ -26,41 +41,43 @@ export default function EditCourse() {
 
   setEditModalOpen(false)
 
-  const newModule: IModule = {
-    id: 'someId',
-    title: 'New Module',
-    description: 'Module description',
-    notes: 'Module notes',
-    sectionId: 'sectionId',
-    order: 1,
-    state: 1,
-    createdDate: '2023-08-17',
-    creatingUser: 'User123',
-    points: 10,
-    videos: [],
-  };
-
 }
 
 const updateCourse= function(title?:string, description?:string, state?:string){
-
+  
+  const plainDescription = description ? description.replace(/<\/?p>/gi, '') : _courseFromState.description;
 
   const payload = { 
     title:title?? _courseFromState.title, 
-    description:description??_courseFromState.description, 
+    description:plainDescription,
     state:state?? _courseFromState.state
    } as IUpdateCourseDetailState;
-console.log("payload",payload)
+
+   console.log("payload: ", payload);
 
   dispatch(updateCourseDetail(payload));
 
-}
-
-const updateCourseSection = function(section:ISection){
-
-
 
 }
+
+const updateCourseSection = function(){
+ 
+  const payload = { 
+    sectionId:"1",   
+    title : sectionTitle,
+    order:1,
+    state:2,
+    competency:competency,
+
+
+   } as IUpdateSectionDetailState;
+   
+   
+   dispatch(updateSectionDetail(payload));
+   setSectionId(payload.sectionId)
+   setDisableSectionInput(true)
+}
+
 
 
   return (
@@ -72,10 +89,12 @@ id="test"
   data-domfactory-upgraded="mdk-cdrawer-layout"
 >
 <button onClick={()=>{setEditModalOpen(true)}}>Open modal</button>
-      <Modal open={editModalOpen} onClose={() => setEditModalOpen(false)} center>
-        <EditCourseModal onClose={saveAndCloseEditModal} />
+    <div >
+    <Modal  open={editModalOpen} onClose={() => setEditModalOpen(false)} center>
+        <EditCourseModal sectionId = {sectionId} onClose={saveAndCloseEditModal} />
         {/* <EditCourseModal /> */}
       </Modal>
+    </div>
   <div
     className="mdk-drawer-layout__content page-content"
     style={{ transform: "translate3d(0px, 0px, 0px)" }}
@@ -399,6 +418,20 @@ id="test"
                 Please see our <a href="">course title guideline</a>
               </small>
             </div>
+
+            <label className="form-label">Course Description</label>
+                <div style={{ height: "150px" }}>
+                <ReactQuill
+  value={_courseFromState.description}
+  onChange={(value) => {
+    updateCourse(undefined, value, undefined); // Pass the new description
+  }}
+  placeholder="Course description..."
+  modules={descriptionToolbar}
+/>
+
+
+                </div>
           
             <div className="page-separator">
               <div className="page-separator__text">Sections</div>
@@ -416,7 +449,7 @@ id="test"
                   data-target="#course-toc-2"
                   data-parent="#parent"
                 >
-                  <span className="flex">Create new section</span>
+                  <span className="flex">{disableSectionInput ? sectionTitle : "Create new section" }</span>
                   <span className="accordion__toggle-icon material-icons">
                     keyboard_arrow_down
                   </span>
@@ -433,6 +466,9 @@ id="test"
                       <label className="form-label"
                             >Section Title</label>
                               <input
+                              disabled= {disableSectionInput}
+                              onChange = {(e) => setSectionTitle(e.target.value)}
+                              value = {sectionTitle}
                             type="text"
                             className="form-control"
                             placeholder="Section title"
@@ -443,24 +479,35 @@ id="test"
                     <div className="form-group">
                           <label className="form-label"
                                 >Competency</label>
-                          <select id="custom-select"
+                          <select     disabled= {disableSectionInput} onChange = {(e) => setCompetency(e.target.value)} value={competency} id="custom-select"
                                   className="form-control custom-select">
-                            
+                              
                               <option selected>JavaScript</option>
                               <option value="1">Angular</option>
                               <option value="2">Python</option>
                           </select>
                     </div>
                   
-                    
                   </div>
-                  <div style={{display:"flex" , flexDirection:"row" , justifyContent:"space-between",alignItems:"center", padding:"5%"}}>
+                  
+                  <div style={{display: "flex", justifyContent: "flex-end", alignItems:"center", padding : "5px 15px"} }>
+                  <a
+                onClick={updateCourseSection}
+                href="#"
+                className="btn btn-outline-secondary mb-24pt mb-sm-0"
+              >
+               {disableSectionInput ? "edit section": "save section"}
+              </a>
+
+
+                  </div>
+                 {disableSectionInput &&  <div style={{display:"flex" , flexDirection:"row" , justifyContent:"space-between",alignItems:"center", padding:"5%"}}>
                         <label className="form-label">Modules</label>
                         <FaPlus
                           onClick={() => setEditModalOpen(true)}
-                         
+                         style = {{cursor: "pointer"}}
                         />
-                      </div>
+                      </div>}
                 </div>
               </div>
                  {/* <div className="accordion__item">
@@ -497,7 +544,7 @@ id="test"
                                         <option value="2">Python</option>
                                     </select>
                       </div> */}
-              {
+              {/* {
                 _courseFromState.sections.map(section=>{
 
                   return <>
@@ -527,17 +574,20 @@ id="test"
                       <div className="form-group">
                                     <label className="form-label"
                                           >Select Competency</label>
-                                    <select id="custom-select"
-                                            className="form-control custom-select">
-                                      
-                                        <option selected>JavaScript</option>
-                                        <option value="1">Angular</option>
-                                        <option value="2">Python</option>
-                                    </select>
+                                  <select
+  value={competency}
+  onChange={(e: any) => setCompetency(e.target.value)}
+  id="custom-select"
+  className="form-control custom-select"
+>
+  <option value="JavaScript">JavaScript</option>
+  <option value="Angular">Angular</option>
+  <option value="Python">Python</option>
+</select>
                       </div>
                   </>
                 })
-              }
+              } */}
                       {/* <div className="accordion__item">
                         <input
                           type="text"

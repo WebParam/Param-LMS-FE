@@ -1,15 +1,125 @@
+
+"use client"
 import Image from 'next/image'
 import styles from './page.module.css'
+import {EditCourseModal} from './edit-module-modal'
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import { useState } from 'react';
+import { FaPlus } from 'react-icons/fa';
+import { addSection, getSelectedCourseForEdit,setSelectedCourseForEdit, updateCourseDetail, updateSectionDetail} from '@/app/courseSlice';
+import { ICourse, IModule, ISection, IUpdateCourseDetailState, IUpdateModuleDetailState, IUpdateSectionDetailState } from '@/app/interfaces/courses';
+import { useDispatch, useSelector } from "react-redux";
+import { title } from 'process';
+import ReactQuill from 'react-quill';
+import {useEffect} from 'react'
+import { competencies } from '@/app/lib/data/professions';
 
 
-export default function CreateCourse() {
+export default function EditCourse() {
+  const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [competency, setCompetency] = useState<string>('');
+  const [sectionTitle, setSectionTitle] = useState<string>('');
+  const [disableSectionInput, setDisableSectionInput] = useState<boolean>(false);
+  const [sectionId , setSectionId] = useState("");
+  const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
+  const [courseTitle , setCourseTitle] = useState("");
+  const [courseDescription , setCourseDescription] = useState("");
+
+  const dispatch = useDispatch();
+
+
+
+  const descriptionToolbar = {
+    toolbar: [
+      [{ header: "1" }, { header: "2" }],
+      ["bold", "italic", "link", "blockquote", "code", "image"],
+      [{ list: "ordered" }, { list: "bullet" }],
+    ],
+  };
+
+
+  function saveAndCloseEditModal(){
+
+  setEditModalOpen(false)
+
+}
+
+  //This function create an infinite loop when I use on the onChange event
+
+  // const updateCourse= function(title?:string, description?:string, state?:string){
+  
+  //   const plainDescription = description ? description.replace(/<\/?p>/gi, '') : _courseFromState.description;
+  
+  //   const payload = { 
+  //     title:title?? _courseFromState.title, 
+  //     description:plainDescription,
+  //     state:state?? _courseFromState.state
+  //    } as IUpdateCourseDetailState;
+  
+  //    console.log("payload: ", payload);
+  
+  //   dispatch(updateCourseDetail(payload));
+  
+  
+  // }
+
+
+const createCourse = function() {
+  const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+
+  const payload = { 
+    title: courseTitle ?? _courseFromState.title, 
+    description: plainDescription,
+    state: 1 ?? _courseFromState.state
+  } as IUpdateCourseDetailState;
+
+  console.log("payload: ", payload);
+
+  dispatch(updateCourseDetail(payload)); 
+}
+
+const createSection = function() {
+  const payload = {
+    sectionTitle: sectionTitle,
+    sectionOrder: 1,
+    sectionState: 1,
+    sectionCompetency: competency
+  };
+
+  console.log("payload: ", payload);
+
+  dispatch(addSection(payload));
+  setDisableSectionInput(!disableSectionInput)
+ 
+}
+
+useEffect(() => {
+  const sectionIds = _courseFromState.sections.map(section => section.id)[0];
+  setSectionId(sectionIds)
+})
+
+
+console.log("COURSE", _courseFromState); 
+
+
+
+
   return (
 <div
+id="test"
   className="mdk-drawer-layout js-mdk-drawer-layout"
   data-push=""
   data-responsive-width="992px"
-  data-domfactory-upgraded="mdk-drawer-layout"
+  data-domfactory-upgraded="mdk-cdrawer-layout"
 >
+<button onClick={()=>{setEditModalOpen(true)}}>Open modal</button>
+    <div >
+    <Modal  open={editModalOpen} onClose={() => setEditModalOpen(false)} center>
+        <EditCourseModal sectionId = {sectionId} onClose={saveAndCloseEditModal} />
+        {/* <EditCourseModal /> */}
+      </Modal>
+    </div>
   <div
     className="mdk-drawer-layout__content page-content"
     style={{ transform: "translate3d(0px, 0px, 0px)" }}
@@ -298,12 +408,12 @@ export default function CreateCourse() {
       <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
         <div className="flex d-flex flex-column flex-sm-row align-items-center">
           <div className="mb-24pt mb-sm-0 mr-sm-24pt">
-            <h2 className="mb-0">Edit Course</h2>
+            <h2 className="mb-0">Create Course</h2>
             <ol className="breadcrumb p-0 m-0">
               <li className="breadcrumb-item">
                 <a href="index.html">Home</a>
               </li>
-              <li className="breadcrumb-item active">Edit Course</li>
+              <li className="breadcrumb-item active">Create Course</li>
             </ol>
           </div>
         </div>
@@ -325,48 +435,52 @@ export default function CreateCourse() {
                 type="text"
                 className="form-control form-control-lg"
                 placeholder="Course title"
-                defaultValue="Angular Fundamentals"
+                defaultValue="Title of the course.."
+                value={courseTitle}
+                onChange={(e)=> setCourseTitle(e.target.value)}
               />
               <small className="form-text text-muted">
                 Please see our <a href="">course title guideline</a>
               </small>
             </div>
+
+            <label className="form-label">Course Description</label>
+
+                <div style={{ height: "150px" }}>
+                <div style={{ height: '200px', overflow: 'auto' }}>
+  <ReactQuill
+    style={{ height: '100px' }}
+    value={courseDescription}
+    onChange={(value) => {
+      setCourseDescription(value); // Pass the new description
+    }}
+    placeholder="Course description..."
+    modules={descriptionToolbar}
+  />
+</div>
+     
+                </div>
+
+            
+                <div style={{display: "flex", flexDirection: "row", justifyContent: "flex-end", marginTop: "5px"}}>
+      <a
+                onClick={createCourse} 
+                 href="#"
+                 className="btn btn-outline-secondary mb-24pt mb-sm-0"
+               >
+                 save course
+               </a>
+      </div>
           
             <div className="page-separator">
               <div className="page-separator__text">Sections</div>
-             
             </div>
             <div
               className="accordion js-accordion accordion--boxed mb-24pt"
               id="parent"
               data-domfactory-upgraded="accordion"
             >
-              <div className="accordion__item">
-                <a
-                  href="#"
-                  className="accordion__toggle collapsed"
-                  data-toggle="collapse"
-                  data-target="#course-toc-1"
-                  data-parent="#parent"
-                >
-                  <span className="flex">Course Overview</span>
-                  <span className="accordion__toggle-icon material-icons">
-                    keyboard_arrow_down
-                  </span>
-                </a>
-                <div className="accordion__menu collapse" id="course-toc-1">
-                  <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Watch Trailer
-                    </a>
-                    <span className="text-muted">1m 10s</span>
-                  </div>
-                </div>
-              </div>
-              <div className="accordion__item open">
+             <div className="accordion__item open">
                 <a
                   href="#"
                   className="accordion__toggle"
@@ -374,7 +488,7 @@ export default function CreateCourse() {
                   data-target="#course-toc-2"
                   data-parent="#parent"
                 >
-                  <span className="flex">Getting Started with Angular</span>
+                  <span className="flex">{disableSectionInput ? sectionTitle : "Create new section" }</span>
                   <span className="accordion__toggle-icon material-icons">
                     keyboard_arrow_down
                   </span>
@@ -384,100 +498,60 @@ export default function CreateCourse() {
                   id="course-toc-2"
                 >
                   <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Introduction
-                    </a>
-                    <span className="text-muted">8m 42s</span>
+        
                   </div>
                   <div className="accordion__menu-link active">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Introduction to TypeScript
-                    </a>
-                    <span className="text-muted">50m 13s</span>
+                    <div className="form-group" style={{width:"70%", marginRight:"2%"}}>
+                      <label className="form-label"
+                            >Section Title</label>
+                              <input
+                              disabled= {disableSectionInput}
+                              onChange = {(e) => setSectionTitle(e.target.value)}
+                              value = {sectionTitle}
+                            type="text"
+                            className="form-control"
+                            placeholder="Section title"
+                            // value={sectionTitle}
+                            // onChange={(e) => setSectionTitle(e.target.value)}
+                          />
+                    </div>
+                    <div className="form-group">
+                          <label className="form-label"
+                                >Competency</label>
+                          <select     disabled= {disableSectionInput} onChange = {(e) => setCompetency(e.target.value)} value={competency} id="custom-select"
+                                  className="form-control custom-select">
+                              
+                              <option value = "JavaScript" selected>JavaScript</option>
+                              <option value="Angular">Angular</option>
+                              <option value="Python">Python</option>
+                          </select>
+                    </div>
+                  
                   </div>
-                  <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Comparing Angular to AngularJS
-                    </a>
-                    <span className="text-muted">12m 10s</span>
+                  
+                  <div style={{display: "flex", justifyContent: "flex-end", alignItems:"center", padding : "5px 15px"} }>
+                  <a
+                  onClick={createSection}
+                href="#"
+                className="btn btn-outline-secondary mb-24pt mb-sm-0"
+              >
+               {disableSectionInput ? "edit section": "save section"}
+              </a>
+
+
                   </div>
-                  <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-take-quiz.html">
-                      Quiz: Getting Started With Angular
-                    </a>
-                  </div>
+                 {disableSectionInput &&  <div style={{display:"flex" , flexDirection:"row" , justifyContent:"space-between",alignItems:"center", padding:"5%"}}>
+                        <label className="form-label">Modules</label>
+                        <FaPlus
+                          onClick={() => setEditModalOpen(true)}
+                         style = {{cursor: "pointer"}}
+                        />
+                      </div>}
                 </div>
               </div>
-              <div className="accordion__item">
-                <a
-                  href="#"
-                  className="accordion__toggle collapsed"
-                  data-toggle="collapse"
-                  data-target="#course-toc-3"
-                  data-parent="#parent"
-                >
-                  <span className="flex">
-                    Creating and Communicating Between Angular Components
-                  </span>
-                  <span className="accordion__toggle-icon material-icons">
-                    keyboard_arrow_down
-                  </span>
-                </a>
-                <div className="accordion__menu collapse" id="course-toc-3">
-                  <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Angular Components
-                    </a>
-                    <span className="text-muted">04:23</span>
-                  </div>
-                </div>
-              </div>
-              <div className="accordion__item">
-                <a
-                  href="#"
-                  className="accordion__toggle collapsed"
-                  data-toggle="collapse"
-                  data-target="#course-toc-4"
-                  data-parent="#parent"
-                >
-                  <span className="flex">
-                    Exploring the Angular Template Syntax
-                  </span>
-                  <span className="accordion__toggle-icon material-icons">
-                    keyboard_arrow_down
-                  </span>
-                </a>
-                <div className="accordion__menu collapse" id="course-toc-4">
-                  <div className="accordion__menu-link">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <a className="flex" href="student-lesson.html">
-                      Template Syntax
-                    </a>
-                    <span className="text-muted">04:23</span>
-                  </div>
-                </div>
-              </div>
+                
             </div>
-            <a href="#" className="btn btn-outline-secondary mb-24pt mb-sm-0">
-              Add Section
-            </a>
+
           </div>
           <div className="col-md-4">
             <div className="card">
@@ -1053,46 +1127,7 @@ export default function CreateCourse() {
                       <span className="sidebar-menu-text">Departments</span>
                     </a>
                   </li>
-                  {/* <li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="documents.html">
-    <span class="sidebar-menu-text">Documents</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="attendance.html">
-    <span class="sidebar-menu-text">Attendance</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="recruitment.html">
-    <span class="sidebar-menu-text">Recruitment</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="payroll.html">
-    <span class="sidebar-menu-text">Payroll</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="training.html">
-    <span class="sidebar-menu-text">Training</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="employee-profile.html">
-    <span class="sidebar-menu-text">Employee Profile</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="accounting.html">
-    <span class="sidebar-menu-text">Accounting</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="inventory.html">
-    <span class="sidebar-menu-text">Inventory</span>
-  </a>
-</li> */}
+                 
                 </ul>
               </li>
               <li className="sidebar-menu-item">
@@ -1214,16 +1249,7 @@ export default function CreateCourse() {
                       <span className="sidebar-menu-text">Kanban</span>
                     </a>
                   </li>
-                  {/* <li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="task-details.html">
-    <span class="sidebar-menu-text">Task Details</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="team-members.html">
-    <span class="sidebar-menu-text">Team Members</span>
-  </a>
-</li> */}
+                 
                 </ul>
               </li>
               <li className="sidebar-menu-item">
@@ -1978,3 +2004,4 @@ export default function CreateCourse() {
   
   )
 }
+

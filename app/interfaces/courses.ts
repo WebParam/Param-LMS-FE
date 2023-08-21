@@ -6,7 +6,12 @@ export interface ICourse{
   sections: ISection[];
   createdDate: string,
   creatingUser: string,
-  state:number
+  state:number,
+  logo: string,
+  courseImage: string,
+  bannerImage: string,
+  modifyingUser: string
+
   }
   export interface ISection {
    id: string;
@@ -36,12 +41,11 @@ export interface ICourse{
     export interface IVideo {
   id: string;
   title: string;
-  duration:string,
   moduleId: string,
   videoLink: string;
   type: number, 
-  comments:VideoComment[]
-  videoFile: File;
+ 
+
   }
   
   export interface Comment {
@@ -80,26 +84,29 @@ export interface ICourse{
      
   }
   
-  export interface IUpdateSectionDetailState{
-      payload:{    
+  export interface IUpdateSectionDetailState {
+         
           sectionId:string,   
           title : string;
           order:number ;
           state:number,
-          competency:string
-      },
-      type:string
+          competency:string,
+         
+
+          
+      
   }
   
   export interface IUpdateModuleDetailState{
-      payload:{    
+      
+                
           sectionId:string, 
           moduleId:string,  
           title : string;
           order:number ;
-          state:number,
-          competency:string
-      },
-      type:string
+          moduleState:number,
+          description:string
+      
+      
   }
   
