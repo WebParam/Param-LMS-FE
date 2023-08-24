@@ -13,6 +13,11 @@ export interface ICourse{
   modifyingUser: string
 
   }
+
+  export interface ICourseResponseModel extends ICourse {
+        
+  }
+
   export interface ISection {
    id: string;
    title : string;
@@ -20,6 +25,10 @@ export interface ICourse{
    order:number ;
    state:number,
    competency:string,
+   creatingUser: string,
+modifiedDate: string,
+      modifyingUser: string,
+      createdDate: string,
    modules: IModule[];
   }
   
@@ -31,10 +40,12 @@ export interface ICourse{
   order:number,
   state: number;
   videos: IVideo[];
-  createdDate:string;
+  creatingDate:string;
   creatingUser:string;
   notes:string;
-  points:number;
+  modifyingUser: string,
+  modifiedDate:string,
+ 
   
   }
   
@@ -44,6 +55,19 @@ export interface ICourse{
   moduleId: string,
   videoLink: string;
   type: number, 
+  duration:string;
+  order: number,
+  state: number,
+  videoFile: string,
+  createdDate: string,
+  creatingUser: string,
+  modifiedDate: string,
+  modifyingUser:string,
+  thumbnailImage: string,
+  length: string,
+  format: string,
+  size: string
+
  
 
   }

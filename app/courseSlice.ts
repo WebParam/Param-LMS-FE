@@ -105,15 +105,19 @@ export const courseSlice = createSlice({
         },
 
         addSection(state, action) {
-            const { sectionTitle, sectionOrder, sectionState, sectionCompetency } = action.payload;
+            const { sectionTitle,  sectionCompetency } = action.payload;
 
             const newSection: ISection = {
                 id: generateUniqueId(),
                 title: sectionTitle,
                 courseId: state.course._id,
-                order: sectionOrder,
-                state: sectionState,
+                order: 1,
+                state: 0,
                 competency: sectionCompetency,
+                createdDate: "2023-08-07T11:28:14.632Z",
+                creatingUser: "user-456",
+                modifiedDate: "2023-08-07T11:28:14.632Z",
+                modifyingUser: "user-789",
                 modules: [],
             };
 
@@ -121,20 +125,22 @@ export const courseSlice = createSlice({
         },
 
         addModuleToSection(state, action) {
-            const { sectionId, moduleTitle, moduleOrder, moduleState, moduleDescription } = action.payload;
+            const { sectionId, moduleTitle,  moduleDescription } = action.payload;
 
             const newModule: IModule = {
                 id: generateUniqueId(),
                 title: moduleTitle,
-                order: moduleOrder,
-                state: moduleState,
                 description: moduleDescription,
-                videos: [],
+                notes: "These are some additional notes for Module 1.",
+                creatingUser: "user-456",
+                creatingDate: "2023-08-07T11:28:14.632Z",
+                modifyingUser: "user-789",
+                modifiedDate: "2023-08-07T11:28:14.632Z",
                 sectionId: sectionId,
-                createdDate: "04/09/2015",
-                creatingUser: "admin",
-                notes: "",
-                points: 0,
+                order: 1,
+                state: 0,
+                videos: [],
+                
             };
 
             const section = state.course.sections.find(section => section.id === sectionId);
@@ -144,14 +150,27 @@ export const courseSlice = createSlice({
         },
 
         addVideoToModule(state, action) {
-            const { moduleId, videoTitle, videoLink, videoType, } = action.payload;
+            const { moduleId, videoTitle, videoLink,  } = action.payload;
 
             const newVideo: IVideo = {
                 id: generateUniqueId(),
                 title: videoTitle,
-                moduleId: moduleId,
+                duration: "5:30",
+                moduleId: "module-101",
+                order: 1,
+                state: 0,
                 videoLink: videoLink,
-                type: videoType,
+                type: 0,
+                videoFile: "video-201.mp4",
+                createdDate: "2023-08-07T11:28:14.632Z",
+                creatingUser: "user-456",
+                modifiedDate: "2023-08-07T11:28:14.632Z",
+                modifyingUser: "user-789",
+                thumbnailImage: "thumbnail-201.jpg",
+                length: "5 minutes",
+                format: "mp4",
+                size: "50 MB"
+  
 
             };
 

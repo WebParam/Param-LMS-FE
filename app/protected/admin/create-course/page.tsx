@@ -14,6 +14,7 @@ import { title } from 'process';
 import ReactQuill from 'react-quill';
 import {useEffect} from 'react'
 import { competencies } from '@/app/lib/data/professions';
+import { Api } from '@/app/lib/restapi/endpoints';
 
 
 export default function EditCourse() {
@@ -25,6 +26,7 @@ export default function EditCourse() {
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
   const [courseTitle , setCourseTitle] = useState("");
   const [courseDescription , setCourseDescription] = useState("");
+  const [disableCreateCourseBtn, setDisableCreateCourseBtn] = useState<boolean>(true);
 
   const dispatch = useDispatch();
 
@@ -65,25 +67,36 @@ export default function EditCourse() {
   // }
 
 
-const createCourse = function() {
+ async function createCourse() {
   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
 
   const payload = { 
     title: courseTitle ?? _courseFromState.title, 
     description: plainDescription,
-    state: 1 ?? _courseFromState.state
+
   } as IUpdateCourseDetailState;
 
   console.log("payload: ", payload);
 
   dispatch(updateCourseDetail(payload)); 
+
+
+   
+  const Coursepayload = _courseFromState
+  
+  const user = await Api.POST_CreateCourse(Coursepayload);
+  console.log("new", user);
+  if (user.error != false) {
+ alert("Cannot create course with the supplied information")
+    return;
+  } else {
+    alert("Successfully created new course. Please login.")
+  }
 }
 
 const createSection = function() {
   const payload = {
     sectionTitle: sectionTitle,
-    sectionOrder: 1,
-    sectionState: 1,
     sectionCompetency: competency
   };
 
@@ -463,13 +476,7 @@ id="test"
 
             
                 <div style={{display: "flex", flexDirection: "row", justifyContent: "flex-end", marginTop: "5px"}}>
-      <a
-                onClick={createCourse} 
-                 href="#"
-                 className="btn btn-outline-secondary mb-24pt mb-sm-0"
-               >
-                 save course
-               </a>
+ 
       </div>
           
             <div className="page-separator">
@@ -543,7 +550,9 @@ id="test"
                  {disableSectionInput &&  <div style={{display:"flex" , flexDirection:"row" , justifyContent:"space-between",alignItems:"center", padding:"5%"}}>
                         <label className="form-label">Modules</label>
                         <FaPlus
-                          onClick={() => setEditModalOpen(true)}
+                          onClick={() => {setEditModalOpen(true)
+                          setDisableCreateCourseBtn(true)
+                          }}
                          style = {{cursor: "pointer"}}
                         />
                       </div>}
@@ -556,9 +565,11 @@ id="test"
           <div className="col-md-4">
             <div className="card">
               <div className="card-header text-center">
-                <a href="#" className="btn btn-accent">
-                  Save changes
+              <button disabled={disableCreateCourseBtn} style={{backgroundColor: "transparent", border:"none", outline:"none"}}>
+              <a  onClick={createCourse} href="#" className="btn btn-accent">
+                  Create Course
                 </a>
+              </button>
               </div>
               <div className="list-group list-group-flush">
                 <div className="list-group-item d-flex">

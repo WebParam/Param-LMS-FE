@@ -22,8 +22,9 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [videoTitle, setVideoTitle] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [videos, setVideos] = useState<any>([])
+  const [courses, setCourses] = useState<any>([])
   const [moduleTitle, setModuleTitle] = useState<string>("");
-  const [moduleDescription, setModuleDescription] = useState<string>("decription");
+  const [moduleDescription, setModuleDescription] = useState<string>("");
   const [viewVideo, setViewVideo] = useState<boolean>(false);
   const [moduleId, setModuleId] = useState("");
   const dispatch = useDispatch();
@@ -38,6 +39,14 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     ],
   };
 
+  
+  // async function ListAllCourses(){
+  //   const data = await Api.GET_Courses();
+  //   console.log("Response",data)
+  //   setCourses(data.data??[]);
+ 
+  //  }
+
 
   const createModule = () => {
 
@@ -47,8 +56,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     const payload = {
       sectionId:sectionId, 
       moduleTitle:moduleTitle,
-       moduleOrder:0, 
-       moduleState:0, 
+    
        moduleDescription:plainDescription
     }
 
@@ -80,7 +88,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
       moduleId: moduleId,
       title :videoTitle,
       videoLink: videoUrl,
-      videoType:""
+    
     }
 
     dispatch(addVideoToModule(payload));
@@ -90,23 +98,9 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     setVideoTitle("")
     setVideoUrl("");
     console.log("COURSE", _courseFromState); 
+    console.log(moduleId)
   }
 
-
-
-  // async function CreateCourse() {
-    
-
-  
-  //   const user = await Api.POST_CreateCourse();
-  //   console.log("new", user);
-  //   if (user.error != false) {
-  //  alert("Cannot create course with the supplied information")
-  //     return;
-  //   } else {
-  //     alert("Successfully created new course. Please login.")
-  //   }
-  // }
 
 
   return (
@@ -165,7 +159,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     onChange={(value) => {
       setModuleDescription(value); // Pass the new description
     }}
-    placeholder="Course description..."
+    placeholder="Module description..."
     modules={moduleToolbar}
   />
 </div>
@@ -296,6 +290,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                 >
                   save Video
                 </a>}
+
+               
               </div>
               <div className="col-md-4">
                 <div className="card">
@@ -303,7 +299,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                     <a
                     onClick={createModule}
                       href="#" className="btn btn-accent">
-                      Save changes
+                      Save Module
                     </a>
                   </div>
                   <div className="list-group list-group-flush">

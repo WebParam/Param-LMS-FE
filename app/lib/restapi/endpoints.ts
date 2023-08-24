@@ -1,16 +1,21 @@
-import { ICourse } from "@/app/interfaces/courses";
+import { ICourse, ICourseResponseModel } from "@/app/interfaces/courses";
 import { GET, POST, PUT } from "./client";
 import { IResponseObject } from "./response";
 ``
 
 
-export const url = "https://6545-41-116-124-131.ngrok-free.app/api";
+export const url = "https://e234-41-116-96-239.ngrok-free.app/api";
 
 
 
 export const Api = {
   Base: url,
 
+
+  GET_Courses: async():Promise<IResponseObject<ICourseResponseModel[]>> => {
+    const response = await GET(`${url}/Courses/GetCourses`);
+    return response;
+  },
 
   POST_CreateCourse: async (
     payload: ICourse
