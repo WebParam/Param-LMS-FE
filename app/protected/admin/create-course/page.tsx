@@ -45,6 +45,7 @@ export default function EditCourse() {
 
   setEditModalOpen(false)
 
+
 }
 
   //This function create an infinite loop when I use on the onChange event
@@ -92,6 +93,12 @@ export default function EditCourse() {
   } else {
     alert("Successfully created new course. Please login.")
   }
+
+
+  setCourseTitle("")
+  setCourseDescription("")
+  setSectionTitle("")
+  setCompetency("")
 }
 
 const createSection = function() {
@@ -551,7 +558,7 @@ id="test"
                         <label className="form-label">Modules</label>
                         <FaPlus
                           onClick={() => {setEditModalOpen(true)
-                          setDisableCreateCourseBtn(true)
+                          setDisableCreateCourseBtn(false)
                           }}
                          style = {{cursor: "pointer"}}
                         />
@@ -1558,7 +1565,7 @@ id="test"
                   <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                     post_add
                   </span>
-                  <span className="sidebar-menu-text">Edit Course</span>
+                  <span className="sidebar-menu-text">Create Course</span>
                 </a>
               </li>
               <li className="sidebar-menu-item">

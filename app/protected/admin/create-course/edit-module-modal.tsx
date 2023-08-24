@@ -4,7 +4,7 @@ import styles from "./page.module.css";
 import React, { useRef, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { FaPlus } from "react-icons/fa";
+import { FaBullseye, FaPlus, FaVideo } from "react-icons/fa";
 import { addModuleToSection, addVideoToModule, getSelectedCourseForEdit, updateModuleDetail } from "@/app/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ICourse, IModule, IUpdateModuleDetailState } from "@/app/interfaces/courses";
@@ -22,13 +22,16 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [videoTitle, setVideoTitle] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [videos, setVideos] = useState<any>([])
-  const [courses, setCourses] = useState<any>([])
   const [moduleTitle, setModuleTitle] = useState<string>("");
   const [moduleDescription, setModuleDescription] = useState<string>("");
-  const [viewVideo, setViewVideo] = useState<boolean>(false);
   const [moduleId, setModuleId] = useState("");
   const dispatch = useDispatch();
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
+  const [modules, setModules] = useState<string[]>([])
+  const [isModuleSaved, setIsModuleSaved] = useState<boolean>(false)
+  const [viewModuleList, setViewModuleList] = useState<boolean>(false)
+  const [changeModulBtn, setChangeModulBtn] = useState<boolean>(false)
+  const [disableSaveChanges, setDisableSaveChanges] = useState<boolean>(true)
 
 
   const moduleToolbar = {
@@ -47,6 +50,13 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
  
   //  }
 
+ 
+  const saveChangeBtn = () => {
+    if(moduleDescription && moduleTitle){
+      setDisableSaveChanges(false);
+    }
+  }
+
 
   const createModule = () => {
 
@@ -60,6 +70,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
        moduleDescription:plainDescription
     }
 
+ 
     
   console.log("payload: ", payload);
 
@@ -67,26 +78,26 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   
   console.log("COURSE", _courseFromState); 
   console.log(sectionId)
+  setIsModuleSaved(true)
+  setModules([...modules, moduleTitle])
   }
 
   useEffect(() => {
-    const sectionIds = _courseFromState.sections.map(section => {
-      if(section.id == sectionId){
-        const moduleid = section.modules.map(module => module.id
-          
-      )[0];
-   
-      setModuleId(moduleid)
+    const sectionIds = _courseFromState.sections.map((section) => {
+      if (section.id === sectionId) {
+        const moduleIds = section.modules.map((module) => module.id);
+        const lastModuleId = moduleIds[moduleIds.length - 1];
+        
+        setModuleId(lastModuleId);
       }
-    })
- 
-  })
+    });
+  }, [sectionId, _courseFromState.sections]);
   
 
   const AddVideo = () => {
     const payload = {
       moduleId: moduleId,
-      title :videoTitle,
+      videoTitle :videoTitle,
       videoLink: videoUrl,
     
     }
@@ -99,8 +110,31 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     setVideoUrl("");
     console.log("COURSE", _courseFromState); 
     console.log(moduleId)
+    setChangeModulBtn(true)
   }
 
+
+  const clearInputs = () => {
+    setModuleTitle("")
+    setModuleDescription("")
+    setVideoUrl("")
+    setVideoTitle("")
+    setViewModuleList(true)
+    setIsModuleSaved(false)
+    setChangeModulBtn(false)
+    setVideos([])
+  }
+
+  const selectedCourse = useSelector(getSelectedCourseForEdit).course;
+  const [expandedModule, setExpandedModule] = useState(null);
+
+  const handleModuleClick = (module:any) => {
+    if (expandedModule === module.id) {
+      setExpandedModule(null);
+    } else {
+      setExpandedModule(module.id);
+    }
+  };
 
 
   return (
@@ -137,7 +171,46 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
               <div className="col-md-8">
                 <div className="page-separator">
                   <div className="page-separator__text">Basic information</div>
+
+
+
                 </div>
+                <div>
+  
+{viewModuleList && <>
+  <div style={{backgroundColor: "#f0f8ff" , marginBottom: "10px"}} className = "accordion__item open">
+      <h1>{selectedCourse.title}</h1>
+      {selectedCourse.sections[0].modules.map((module) => (
+        <div className={`accordion__item ${expandedModule === module.id ? 'open' : ''}`} key={module.id}>
+ <a
+            href="#"
+            className={`accordion__toggle ${expandedModule === module.id ? '' : 'collapsed'}`}
+            data-toggle="collapse"
+            data-target={`#course-toc-${module.id}`}
+            data-parent="#parent"
+            onClick={() => handleModuleClick(module)}
+          >
+            <span className="flex">{module.title}</span>
+            <span className="accordion__toggle-icon material-icons">
+              {expandedModule === module.id ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
+            </span>
+          </a>
+          <div className={`accordion__menu collapse ${expandedModule === module.id ? 'show' : ''}`} id={`course-toc-${module.id}`}>
+            {module.videos.map((video) => (
+              <div className="accordion__menu-link" key={video.id}>
+                <FaVideo   className="video-icon" /> {/* Video icon */}
+                <a style={{marginLeft:"10px"}} className="flex" href={video.videoLink}>
+                  {video.title}
+                </a>
+                <span className="text-muted">{video.duration}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+</>}
+</div>
                 <label className="form-label">Module title</label>
                 <div className="form-group mb-24pt">
                   <input
@@ -145,7 +218,10 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                     className="form-control form-control-lg"
                     placeholder="Module Title"
                     value = {moduleTitle}
-                    onChange={(e) =>  setModuleTitle(e.target.value)}
+                    onChange={(e) => {
+                      
+                      saveChangeBtn()
+                      setModuleTitle(e.target.value)}}
                   />
                   <small className="form-text text-muted">
                     Please see our <a href="">module title guideline</a>
@@ -157,22 +233,28 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     style={{ height: '100px' }}
     value={moduleDescription}
     onChange={(value) => {
+
       setModuleDescription(value); // Pass the new description
+      saveChangeBtn()
+
     }}
     placeholder="Module description..."
     modules={moduleToolbar}
   />
 </div>
+{
 
-                <div className="page-separator">
+isModuleSaved && <>
+
+                <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}  className="page-separator">
                   <div className="page-separator__text">
                     Videos                
                   </div>
-
-                </div>
-              <div >
+                  <div >
           {showVideoInputs ? null :  <FaPlus  onClick = {() => setShowVideoInputs(!showVideoInputs)} />}
                 </div>
+                </div>
+             
 
                 <div
   style={{
@@ -209,9 +291,9 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                 <input
                   type="text"
                   className="form-control"
-                  defaultValue="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
-                  placeholder="Enter Video URL"
+                  placeholder="Enter Video Title"
                   value = {video.title}
+                  onChange={(e) => setVideoTitle(e.target.value)}
                 />
                 <small className="form-text text-muted">
                   Enter a valid video title.
@@ -256,6 +338,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                     data-toggle="flatpickr"
                     data-flatpickr-enable-time="true"
                     data-flatpickr-alt-format="F j, Y at H:i"
+                    value = {videoTitle}
                     data-flatpickr-date-format="Y-m-d H:i"
                   />
                 
@@ -277,6 +360,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                     data-flatpickr-enable-time="true"
                     data-flatpickr-alt-format="F j, Y at H:i"
                     data-flatpickr-date-format="Y-m-d H:i"
+                    value={videoUrl}
                   />
           
                     </>
@@ -290,17 +374,37 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                 >
                   save Video
                 </a>}
-
+</>}
                
               </div>
               <div className="col-md-4">
-                <div className="card">
-                  <div className="card-header text-center">
-                    <a
+                <div className="card" style={{width : "auto"}}>
+                  <div  className="card-header text-center">
+
+              
+                    {
+                      changeModulBtn ?       <button  style={{backgroundColor: "transparent", border:"none", outline:"none"}}>
+<a
+                      onClick={clearInputs}
+                        href="#" className="btn btn-accent">
+                       save module 
+                      </a> 
+                      </button>   :   
+                      <button  disabled={disableSaveChanges} style={{backgroundColor: "transparent", border:"none", outline:"none", width:"150px"}}>
+ <a
                     onClick={createModule}
                       href="#" className="btn btn-accent">
-                      Save Module
+                       save changes
                     </a>
+                      </button>  
+                    }
+               
+          
+            
+              
+
+
+
                   </div>
                   <div className="list-group list-group-flush">
                     <div className="list-group-item d-flex">
