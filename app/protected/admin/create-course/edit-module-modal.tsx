@@ -32,7 +32,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [viewModuleList, setViewModuleList] = useState<boolean>(false)
   const [changeModulBtn, setChangeModulBtn] = useState<boolean>(false)
   const [disableSaveChanges, setDisableSaveChanges] = useState<boolean>(true)
-
+  const [lastSection, setLastSection] = useState<number>(-1)
 
   const moduleToolbar = {
     toolbar: [
@@ -42,13 +42,6 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     ],
   };
 
-  
-  // async function ListAllCourses(){
-  //   const data = await Api.GET_Courses();
-  //   console.log("Response",data)
-  //   setCourses(data.data??[]);
- 
-  //  }
 
  
   const saveChangeBtn = () => {
@@ -136,6 +129,13 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     }
   };
 
+  useEffect(() => {
+    const sections = _courseFromState.sections
+    const lastSection = sections.length - 1;
+    setLastSection(lastSection)
+
+  }, []);
+  
 
   return (
     <div
@@ -178,9 +178,9 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                 <div>
   
 {viewModuleList && <>
-  <div style={{backgroundColor: "#f0f8ff" , marginBottom: "10px"}} className = "accordion__item open">
+  <div style={{backgroundColor: "#f5f7fa" , marginBottom: "10px"}} className = "accordion__item open">
       <h1>{selectedCourse.title}</h1>
-      {selectedCourse.sections[0].modules.map((module) => (
+      {selectedCourse.sections[lastSection].modules.map((module) => (
         <div className={`accordion__item ${expandedModule === module.id ? 'open' : ''}`} key={module.id}>
  <a
             href="#"
@@ -251,7 +251,7 @@ isModuleSaved && <>
                     Videos                
                   </div>
                   <div >
-          {showVideoInputs ? null :  <FaPlus  onClick = {() => setShowVideoInputs(!showVideoInputs)} />}
+          {showVideoInputs ? null :  <FaPlus  style={{cursor:"pointer"}} onClick = {() => setShowVideoInputs(!showVideoInputs)} />}
                 </div>
                 </div>
              
@@ -383,7 +383,7 @@ isModuleSaved && <>
 
               
                     {
-                      changeModulBtn ?       <button  style={{backgroundColor: "transparent", border:"none", outline:"none"}}>
+                      changeModulBtn ?       <button  style={{backgroundColor: "transparent", border:"none", outline:"none",width:"150px"}}>
 <a
                       onClick={clearInputs}
                         href="#" className="btn btn-accent">

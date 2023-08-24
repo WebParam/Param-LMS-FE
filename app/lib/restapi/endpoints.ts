@@ -4,7 +4,7 @@ import { IResponseObject } from "./response";
 ``
 
 
-export const url = "https://e234-41-116-96-239.ngrok-free.app/api";
+export const url = "https://8c8b-41-116-28-148.ngrok-free.app/";
 
 
 

@@ -1,7 +1,30 @@
+"use client"
 import Image from 'next/image'
 import styles from './page.module.css'
+import { Link } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Api } from '@/app/lib/restapi/endpoints';
+import { ICourse } from '@/app/interfaces/courses';
 
 export default function ManageCourses() {
+
+const [courses, SetCourses] = useState<any>()
+
+
+  useEffect(() => {
+    ListAllCourses()
+  }, []);
+  
+  async function ListAllCourses(){
+  
+    const data = await Api.GET_Courses();
+    console.log("Response",data)
+    SetCourses(data.data??[]);
+   }
+
+
+
+
   return (
 <div
   className="mdk-drawer-layout js-mdk-drawer-layout"
@@ -308,12 +331,17 @@ export default function ManageCourses() {
         </div>
         <div className="row" role="tablist">
           <div className="col-auto">
-            <a
-              href="instructor-edit-course.html"
+
+
+          <Link href="/protected/admin/create-course"  style = {{textDecoration:"none"}}className="small">
+          <a
               className="btn btn-outline-secondary"
             >
               Add Course
-            </a>
+            </a>       
+                      
+               </Link>
+     
           </div>
         </div>
       </div>

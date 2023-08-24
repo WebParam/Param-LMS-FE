@@ -1,4 +1,3 @@
-
 "use client"
 import Image from 'next/image'
 import styles from './page.module.css'
@@ -7,14 +6,14 @@ import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { addSection, getSelectedCourseForEdit,setSelectedCourseForEdit, updateCourseDetail, updateSectionDetail} from '@/app/courseSlice';
-import { ICourse, IModule, ISection, IUpdateCourseDetailState, IUpdateModuleDetailState, IUpdateSectionDetailState } from '@/app/interfaces/courses';
+import { addSection, getSelectedCourseForEdit, updateCourseDetail, updateSectionDetail,} from '@/app/courseSlice';
+import { ICourse,  IUpdateCourseDetailState, IUpdateSectionDetailState,  } from '@/app/interfaces/courses';
 import { useDispatch, useSelector } from "react-redux";
 import { title } from 'process';
 import ReactQuill from 'react-quill';
 import {useEffect} from 'react'
-import { competencies } from '@/app/lib/data/professions';
 import { Api } from '@/app/lib/restapi/endpoints';
+import { Link } from '@mui/material';
 
 
 export default function EditCourse() {
@@ -22,11 +21,13 @@ export default function EditCourse() {
   const [competency, setCompetency] = useState<string>('');
   const [sectionTitle, setSectionTitle] = useState<string>('');
   const [disableSectionInput, setDisableSectionInput] = useState<boolean>(false);
+  const [changeBtn, setChangeBtn] = useState<boolean>(false);
   const [sectionId , setSectionId] = useState("");
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
   const [courseTitle , setCourseTitle] = useState("");
   const [courseDescription , setCourseDescription] = useState("");
   const [disableCreateCourseBtn, setDisableCreateCourseBtn] = useState<boolean>(true);
+  const [updateSection, setUpdateSection] = useState<boolean>(true);
 
   const dispatch = useDispatch();
 
@@ -44,29 +45,47 @@ export default function EditCourse() {
   function saveAndCloseEditModal(){
 
   setEditModalOpen(false)
-
+  clearSectionContent()
 
 }
 
-  //This function create an infinite loop when I use on the onChange event
+const updateCourseSection = function(){
+ 
+  const payload = { 
+    sectionId:sectionId,   
+    title : sectionTitle,
+    competency:competency,
 
-  // const updateCourse= function(title?:string, description?:string, state?:string){
-  
-  //   const plainDescription = description ? description.replace(/<\/?p>/gi, '') : _courseFromState.description;
-  
-  //   const payload = { 
-  //     title:title?? _courseFromState.title, 
-  //     description:plainDescription,
-  //     state:state?? _courseFromState.state
-  //    } as IUpdateCourseDetailState;
-  
-  //    console.log("payload: ", payload);
-  
-  //   dispatch(updateCourseDetail(payload));
-  
-  
-  // }
 
+   } as IUpdateSectionDetailState;
+   
+   
+   dispatch(updateSectionDetail(payload));
+   setDisableSectionInput(true)
+}
+
+const selectSection = (id:string) => {
+  const selectedSection = selectedCourse.sections.find((section) => section.id === id);
+  if (selectedSection) {
+   setSectionTitle(selectedSection.title)
+   setSectionId(selectedSection.id)
+   setCompetency(selectedSection.competency)
+  }
+  setDisableSectionInput(true)
+  setChangeBtn(true)
+};
+
+
+  const selectedCourse = useSelector(getSelectedCourseForEdit).course;
+  const [expandedSection, setExpandedSection] = useState(null);
+
+  const handleSectionClick = (section:any) => {
+    if (expandedSection === section.id) {
+      setExpandedSection(null);
+    } else {
+      setExpandedSection(section.id);
+    }
+  };
 
  async function createCourse() {
   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
@@ -111,18 +130,24 @@ const createSection = function() {
 
   dispatch(addSection(payload));
   setDisableSectionInput(!disableSectionInput)
- 
+  setChangeBtn(!changeBtn)
 }
 
 useEffect(() => {
-  const sectionIds = _courseFromState.sections.map(section => section.id)[0];
-  setSectionId(sectionIds)
-})
+  const sectionIds = _courseFromState.sections.map((section) => section.id);
+  const lastSectionId = sectionIds[sectionIds.length - 1];
+  setSectionId(lastSectionId);
+}, [_courseFromState.sections]);
 
 
 console.log("COURSE", _courseFromState); 
 
-
+const clearSectionContent = () => {
+  setSectionTitle("")
+  setCompetency("")
+  setChangeBtn(!changeBtn)
+  setDisableSectionInput(!disableSectionInput)
+}
 
 
   return (
@@ -486,9 +511,47 @@ id="test"
  
       </div>
           
+
             <div className="page-separator">
               <div className="page-separator__text">Sections</div>
             </div>
+            <div className="accordion js-accordion accordion--boxed mb-24pt" id="parent">
+        { selectedCourse.sections.map((section) => (
+          <div onClick={() => selectSection(section.id)}
+            className={`accordion__item ${expandedSection === section.id ? 'open' : ''}`}
+            key={section.id}
+          >
+            <a
+              href="#"
+              className="accordion__toggle"
+              data-toggle="collapse"
+              data-target={`#course-toc-${section.id}`}
+              data-parent="#parent"
+              onClick={() => handleSectionClick(section)}
+            >
+              <span className="flex">{section.title}</span>
+              <span className="accordion__toggle-icon material-icons">
+                keyboard_arrow_down
+              </span>
+            </a>
+            <div
+              className={`accordion__menu collapse ${expandedSection === section.id ? 'show' : ''}`}
+              id={`course-toc-${section.id}`}
+            >
+              {section.modules.map((module) => (
+                <div className="accordion__menu-link" key={module.id}>
+                  <i className="material-icons text-70 icon-16pt icon--left">drag_handle</i>
+                  <a className="flex" href="#">
+                    {module.title}
+                  </a>
+                  <span className="text-muted">8m 42s</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    
             <div
               className="accordion js-accordion accordion--boxed mb-24pt"
               id="parent"
@@ -514,51 +577,92 @@ id="test"
                   <div className="accordion__menu-link">
         
                   </div>
+                
+
+
                   <div className="accordion__menu-link active">
-                    <div className="form-group" style={{width:"70%", marginRight:"2%"}}>
-                      <label className="form-label"
-                            >Section Title</label>
-                              <input
-                              disabled= {disableSectionInput}
-                              onChange = {(e) => setSectionTitle(e.target.value)}
-                              value = {sectionTitle}
-                            type="text"
-                            className="form-control"
-                            placeholder="Section title"
-                            // value={sectionTitle}
-                            // onChange={(e) => setSectionTitle(e.target.value)}
-                          />
-                    </div>
-                    <div className="form-group">
-                          <label className="form-label"
-                                >Competency</label>
-                          <select     disabled= {disableSectionInput} onChange = {(e) => setCompetency(e.target.value)} value={competency} id="custom-select"
-                                  className="form-control custom-select">
-                              
-                              <option value = "JavaScript" selected>JavaScript</option>
-                              <option value="Angular">Angular</option>
-                              <option value="Python">Python</option>
-                          </select>
-                    </div>
-                  
-                  </div>
+        <div className="form-group" style={{ width: '70%', marginRight: '2%' }}>
+          <label className="form-label">Section Title</label>
+          <input
+            disabled={disableSectionInput}
+            onChange={(e) => setSectionTitle(e.target.value)}
+            value={sectionTitle}
+            type="text"
+            className="form-control"
+            placeholder="Section title"
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Competency</label>
+          <select
+            disabled={disableSectionInput}
+            onChange={(e) => setCompetency(e.target.value)}
+            value={competency}
+            id="custom-select"
+            className="form-control custom-select"
+          >
+            <option value="JavaScript">JavaScript</option>
+            <option value="Angular">Angular</option>
+            <option value="Python">Python</option>
+          </select>
+        </div>
+      </div>
+      {/* ... */}
                   
                   <div style={{display: "flex", justifyContent: "flex-end", alignItems:"center", padding : "5px 15px"} }>
-                  <a
-                  onClick={createSection}
+            
+                    {
+                      changeBtn ? 
+                     
+                 <>
+                 
+                {
+                  updateSection ?         <a
+                  onClick={() => {
+                    setDisableSectionInput(false)
+                    setUpdateSection(!updateSection)
+
+                  } }
                 href="#"
                 className="btn btn-outline-secondary mb-24pt mb-sm-0"
               >
-               {disableSectionInput ? "edit section": "save section"}
+                edit section
+              </a> :  <a
+                  onClick={() => {
+                    updateCourseSection()
+                    setDisableSectionInput(true)
+                    setUpdateSection(!updateSection)
+
+                  } }
+                href="#"
+                className="btn btn-outline-secondary mb-24pt mb-sm-0"
+              >
+                update section
               </a>
 
+                }
+                 </>
+    :
+
+    <a
+    onClick={createSection}
+
+      href="#"
+      className="btn btn-outline-secondary mb-24pt mb-sm-0"
+    >
+    save section
+    </a>
+
+   
+                    }
 
                   </div>
-                 {disableSectionInput &&  <div style={{display:"flex" , flexDirection:"row" , justifyContent:"space-between",alignItems:"center", padding:"5%"}}>
+                 {changeBtn &&  <div style={{display:"flex" , flexDirection:"row" , justifyContent:"space-between",alignItems:"center", padding:"5%"}}>
                         <label className="form-label">Modules</label>
                         <FaPlus
                           onClick={() => {setEditModalOpen(true)
                           setDisableCreateCourseBtn(false)
+                          clearSectionContent()
                           }}
                          style = {{cursor: "pointer"}}
                         />
@@ -784,8 +888,8 @@ id="test"
     </div>
     {/* // END Footer */}
   </div>
-  {/* // END drawer-layout__content */}
-  {/* drawer */}
+
+  {}
   <div
     className="mdk-drawer js-mdk-drawer layout-mini-secondary__drawer"
     id="default-drawer"
@@ -1513,16 +1617,22 @@ id="test"
                   </span>
                 </a>
               </li>
+            
+
               <li className="sidebar-menu-item">
-                <a
+
+              <Link href="/protected/admin/manage-courses"  style = {{textDecoration:"none"}}className="small">
+              <a
                   className="sidebar-menu-button"
-                  href="instructor-courses.html"
                 >
                   <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                     import_contacts
                   </span>
                   <span className="sidebar-menu-text">Manage Courses</span>
-                </a>
+                </a>          
+                      
+               </Link>
+          
               </li>
               <li className="sidebar-menu-item">
                 <a
