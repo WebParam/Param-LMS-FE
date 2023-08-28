@@ -80,15 +80,21 @@ export const courseSlice = createSlice({
 
 
         },
+        deleteSection(state, action) {
+            const sectionIdToDelete = action.payload;
 
+            const updatedSections = state.course.sections.filter(section => section.id !== sectionIdToDelete);
+
+            state.course.sections = updatedSections;
+        },
         updateModuleDetail(state, action) {
-            const { sectionId, moduleId, title, order, moduleState, description } = action.payload;
+            const { sectionId, moduleId, title, description } = action.payload;
 
             const updatedSections = state.course.sections.map(section => {
                 if (section.id === sectionId) {
                     const updatedModules = section.modules.map(module => {
                         if (module.id === moduleId) {
-                            return { ...module, title, order, state: moduleState, description };
+                            return { ...module, title,  description };
                         }
                         return module;
                     });
@@ -146,6 +152,36 @@ export const courseSlice = createSlice({
                 section.modules.push(newModule);
             }
         },
+        deleteModuleFromSection(state, action) {
+            const { sectionId, moduleId } = action.payload;
+      
+            const updatedSections = state.course.sections.map(section => {
+              if (section.id === sectionId) {
+                const updatedModules = section.modules.filter(module => module.id !== moduleId);
+                return { ...section, modules: updatedModules };
+              }
+              return section;
+            });
+      
+            state.course.sections = updatedSections;
+          },
+        deleteVideoFromModule(state, action) {
+            const { moduleId, videoId } = action.payload;
+      
+            const updatedSections = state.course.sections.map(section => {
+              const updatedModules = section.modules.map(module => {
+                if (module.id === moduleId) {
+                  const updatedVideos = module.videos.filter(video => video.id !== videoId);
+                  return { ...module, videos: updatedVideos };
+                }
+                return module;
+              });
+      
+              return { ...section, modules: updatedModules };
+            });
+      
+            state.course.sections = updatedSections;
+          },
 
         addVideoToModule(state, action) {
             const { moduleId, videoTitle, videoLink,  } = action.payload;
@@ -190,7 +226,20 @@ export const courseSlice = createSlice({
 }
 );
 
-export const { setSelectedCourseForEdit, updateCourseDetail, updateSectionDetail, updateModuleDetail, addSection, addModuleToSection, addVideoToModule } = courseSlice.actions;
-export const getSelectedCourseForEdit = (state: AppStore) => state.course;
+
+
+  export const {
+    setSelectedCourseForEdit,
+    updateCourseDetail,
+    updateSectionDetail,
+    updateModuleDetail,
+    addSection,
+    deleteSection,
+    addModuleToSection,
+    addVideoToModule,
+    deleteModuleFromSection,
+    deleteVideoFromModule // Add this line
+  } = courseSlice.actions;
+  export const getSelectedCourseForEdit = (state: AppStore) => state.course;
 
 export default courseSlice.reducer; 

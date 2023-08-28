@@ -1,23 +1,23 @@
 "use client"
-import Image from 'next/image'
-import styles from './page.module.css'
-import {EditCourseModal} from './edit-module-modal'
+import {CreateCourseModal} from './create-module-modal'
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { addSection, getSelectedCourseForEdit, updateCourseDetail, updateSectionDetail,} from '@/app/courseSlice';
+import { addSection, deleteModuleFromSection, deleteSection, deleteVideoFromModule, getSelectedCourseForEdit, updateCourseDetail, updateSectionDetail,} from '@/app/courseSlice';
 import { ICourse,  IUpdateCourseDetailState, IUpdateSectionDetailState,  } from '@/app/interfaces/courses';
 import { useDispatch, useSelector } from "react-redux";
-import { title } from 'process';
 import ReactQuill from 'react-quill';
 import {useEffect} from 'react'
 import { Api } from '@/app/lib/restapi/endpoints';
 import { Link } from '@mui/material';
+import { FaTrash } from 'react-icons/fa';
+import { EditCourseModal } from './edit-module-modal';
 
 
 export default function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [editModuleModalOpen, setEditModuleModalOpen] = useState<boolean>(false);
   const [competency, setCompetency] = useState<string>('');
   const [sectionTitle, setSectionTitle] = useState<string>('');
   const [disableSectionInput, setDisableSectionInput] = useState<boolean>(false);
@@ -28,6 +28,8 @@ export default function EditCourse() {
   const [courseDescription , setCourseDescription] = useState("");
   const [disableCreateCourseBtn, setDisableCreateCourseBtn] = useState<boolean>(true);
   const [updateSection, setUpdateSection] = useState<boolean>(true);
+  const[newSection , setNewSection] = useState<boolean>(true)
+  const [moduleId, setModuleId] = useState<string>()
 
   const dispatch = useDispatch();
 
@@ -46,6 +48,13 @@ export default function EditCourse() {
 
   setEditModalOpen(false)
   clearSectionContent()
+
+}
+
+function saveAndCloseEditModuleModal(){
+
+  setEditModuleModalOpen(false)
+
 
 }
 
@@ -73,6 +82,7 @@ const selectSection = (id:string) => {
   }
   setDisableSectionInput(true)
   setChangeBtn(true)
+  setNewSection(false)
 };
 
 
@@ -129,7 +139,7 @@ const createSection = function() {
   console.log("payload: ", payload);
 
   dispatch(addSection(payload));
-  setDisableSectionInput(!disableSectionInput)
+  setDisableSectionInput(true)
   setChangeBtn(!changeBtn)
 }
 
@@ -148,6 +158,22 @@ const clearSectionContent = () => {
   setChangeBtn(!changeBtn)
   setDisableSectionInput(!disableSectionInput)
 }
+1
+const handleDeleteModule = (sectionId:any,moduleId:any) => {
+  console.log(sectionId)
+  console.log(moduleId)
+  dispatch(deleteModuleFromSection({ sectionId, moduleId }));
+};
+
+
+const handleDeleteSection = (sectionId:any) => {
+  clearSectionContent()
+  dispatch(deleteSection(sectionId))
+  setDisableSectionInput(false)
+  setNewSection(true)
+
+};
+
 
 
   return (
@@ -158,10 +184,14 @@ id="test"
   data-responsive-width="992px"
   data-domfactory-upgraded="mdk-cdrawer-layout"
 >
-<button onClick={()=>{setEditModalOpen(true)}}>Open modal</button>
+
     <div >
+    <Modal  open={editModuleModalOpen} onClose={() => setEditModuleModalOpen(false)} center>
+        <EditCourseModal ModuleId = {moduleId} sectionId = {sectionId} onClose={saveAndCloseEditModuleModal} />
+        {/* <EditCourseModal /> */}
+      </Modal>
     <Modal  open={editModalOpen} onClose={() => setEditModalOpen(false)} center>
-        <EditCourseModal sectionId = {sectionId} onClose={saveAndCloseEditModal} />
+        <CreateCourseModal sectionId = {sectionId} onClose={saveAndCloseEditModal} />
         {/* <EditCourseModal /> */}
       </Modal>
     </div>
@@ -480,7 +510,6 @@ id="test"
                 type="text"
                 className="form-control form-control-lg"
                 placeholder="Course title"
-                defaultValue="Title of the course.."
                 value={courseTitle}
                 onChange={(e)=> setCourseTitle(e.target.value)}
               />
@@ -512,24 +541,36 @@ id="test"
       </div>
           
 
-            <div className="page-separator">
-              <div className="page-separator__text">Sections</div>
+            <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between", alignItems:"center"}} className="page-separator">
+                  <div className="page-separator__text">
+                    Sections            
+                  </div>
+                  <div >
+          {newSection ? null :  <FaPlus  style={{cursor:"pointer"}} onClick = {() =>
+            
+          {  clearSectionContent()
+            setNewSection(!newSection)}} />}
+                </div>
+                
             </div>
             <div className="accordion js-accordion accordion--boxed mb-24pt" id="parent">
         { selectedCourse.sections.map((section) => (
-          <div onClick={() => selectSection(section.id)}
+          <div 
             className={`accordion__item ${expandedSection === section.id ? 'open' : ''}`}
             key={section.id}
           >
             <a
-              href="#"
+              style={{cursor:"pointer"}}
               className="accordion__toggle"
               data-toggle="collapse"
               data-target={`#course-toc-${section.id}`}
               data-parent="#parent"
               onClick={() => handleSectionClick(section)}
             >
-              <span className="flex">{section.title}</span>
+              <span onClick={() => selectSection(section.id)} style={{cursor:"pointer"}}  className="flex">{section.title}</span>
+              <button onClick={() => handleDeleteSection(section.id)} style = {{ backgroundColor:"white", border:"none", outline:"none" }}>
+          <FaTrash  />
+        </button>
               <span className="accordion__toggle-icon material-icons">
                 keyboard_arrow_down
               </span>
@@ -539,12 +580,24 @@ id="test"
               id={`course-toc-${section.id}`}
             >
               {section.modules.map((module) => (
-                <div className="accordion__menu-link" key={module.id}>
-                  <i className="material-icons text-70 icon-16pt icon--left">drag_handle</i>
-                  <a className="flex" href="#">
+                <div style ={{cursor:"pointer"}}  className="accordion__menu-link" key={module.id}>
+                  <i onClick={() => 
+                    
+                    {     
+                     setEditModuleModalOpen(true)
+                     setSectionId(section.id)
+                         setModuleId(module.id)}}  className="material-icons text-70 icon-16pt icon--left">drag_handle</i>
+                  <a   className="flex" onClick={() => 
+                    
+               {     
+                setEditModuleModalOpen(true)
+                setSectionId(section.id)
+                    setModuleId(module.id)}}>
                     {module.title}
                   </a>
-                  <span className="text-muted">8m 42s</span>
+                  <span className="text-muted"><button onClick={() => handleDeleteModule(section.id, module.id)} style = {{ backgroundColor:"white", border:"none", outline:"none" }}>
+          <FaTrash  />
+        </button></span>
                 </div>
               ))}
             </div>
@@ -623,7 +676,7 @@ id="test"
                     setUpdateSection(!updateSection)
 
                   } }
-                href="#"
+              
                 className="btn btn-outline-secondary mb-24pt mb-sm-0"
               >
                 edit section
@@ -634,7 +687,7 @@ id="test"
                     setUpdateSection(!updateSection)
 
                   } }
-                href="#"
+              
                 className="btn btn-outline-secondary mb-24pt mb-sm-0"
               >
                 update section
@@ -647,7 +700,7 @@ id="test"
     <a
     onClick={createSection}
 
-      href="#"
+    
       className="btn btn-outline-secondary mb-24pt mb-sm-0"
     >
     save section
@@ -715,10 +768,14 @@ id="test"
                   defaultValue="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
                   placeholder="Enter Video URL"
                 />
-                <small className="form-text text-muted">
+         
+              <small className="form-text text-muted">
                   Enter a valid video URL.
                 </small>
+       
+              
               </div>
+      
             </div>
             <div className="page-separator">
               <div className="page-separator__text">Options</div>

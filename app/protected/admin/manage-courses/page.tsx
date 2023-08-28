@@ -2025,7 +2025,7 @@ const [courses, SetCourses] = useState<any>()
     >
       <div className="arrow" style={{ top: 181 }} />
       <h3 className="popover-header" />
-      <div className="popover-body">
+      {/* <div className="popover-body">
         <div className="media">
           <div className="media-left mr-12pt">
             <img
@@ -2125,7 +2125,7 @@ const [courses, SetCourses] = useState<any>()
             </a>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   </div>
   {/* // END drawer-layout__content */}
