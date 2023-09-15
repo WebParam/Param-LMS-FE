@@ -4,8 +4,8 @@ import styles from "./page.module.css";
 import React, { useRef, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { FaBullseye, FaPlus, FaTrash, FaVideo } from "react-icons/fa";
-import { addModuleToSection, addVideoToModule, deleteVideoFromModule, getSelectedCourseForEdit, updateModuleDetail } from "@/app/courseSlice";
+import { FaBullseye, FaEdit, FaPencilAlt, FaPlus, FaTrash, FaVideo } from "react-icons/fa";
+import { addModuleToSection, addVideoToModule, deleteVideoFromModule, editVideoDetails, getSelectedCourseForEdit, updateModuleDetail } from "@/app/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ICourse, IModule, IUpdateModuleDetailState } from "@/app/interfaces/courses";
 
@@ -34,7 +34,8 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [disableSaveChanges, setDisableSaveChanges] = useState<boolean>(true)
   const [lastSection, setLastSection] = useState<number>(-1)
   const [selectedVideos , setSelectedVideo] = useState<any>([])
-
+  const [changeVidBtn, setChangeVidBtn] = useState<boolean>(true);
+  const [videoId, setVideoId] = useState<string>("");
 
 
   const moduleToolbar = {
@@ -48,39 +49,43 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
 
  
   const saveChangeBtn = () => {
-    if(moduleDescription && moduleTitle ){
+    if(moduleDescription.length > 0 && moduleTitle.length > 0 ){
       setDisableSaveChanges(false);
     }
    
   }
 
+  
 
   const deleteVideoHandler = (moduleId:any, videoId:any) => {
     dispatch(deleteVideoFromModule({ moduleId, videoId }));
   };
   const createModule = () => {
 
-    const plainDescription = moduleDescription ? moduleDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+if(moduleDescription.length > 0 && moduleTitle.length > 0){
+  const plainDescription = moduleDescription ? moduleDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
 
 
-    const payload = {
-      sectionId:sectionId, 
-      moduleTitle:moduleTitle,
-    
-       moduleDescription:plainDescription
-    }
- 
- 
-    
-  console.log("payload: ", payload);
-
-  dispatch(addModuleToSection(payload));
+  const payload = {
+    sectionId:sectionId, 
+    moduleTitle:moduleTitle,
   
-  console.log("COURSE", _courseFromState); 
-  console.log(sectionId)
-  setIsModuleSaved(true)
-  setModules([...modules, moduleTitle])
-  setDisableSaveChanges(true);
+     moduleDescription:plainDescription
+  }
+
+
+  
+console.log("payload: ", payload);
+
+dispatch(addModuleToSection(payload));
+
+console.log("COURSE", _courseFromState); 
+console.log(sectionId)
+setIsModuleSaved(true)
+setModules([...modules, moduleTitle])
+
+setDisableSaveChanges(true);
+}
   }
 
   useEffect(() => {
@@ -96,6 +101,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   
 
   const AddVideo = () => {
+   if(videoTitle && videoUrl){
     const payload = {
       moduleId: moduleId,
       videoTitle :videoTitle,
@@ -112,6 +118,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     console.log("COURSE", _courseFromState); 
     console.log(moduleId)
     setChangeModulBtn(true)
+   }
   }
 
 
@@ -158,10 +165,22 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     }
   }, [sectionId, moduleId, _courseFromState.sections]);
   
-
+  const editVideo = (id:string) => {
+    const payload = {
+      moduleId:moduleId,
+      videoId:id,
+      videoTitle:videoTitle,
+      videoUrl :videoUrl,
+    }
+    dispatch(editVideoDetails(payload));
+    setShowVideoInputs(false)
+    setVideoTitle("")
+    setVideoUrl("")
+    setChangeVidBtn(true)
+  }
   return (
     <div
-   
+    style = {{width:"100%"}}
       className="mdk-drawer-layout js-mdk-drawer-layout"
       data-push=""
       data-responsive-width="992px"
@@ -304,13 +323,14 @@ isModuleSaved && <>
               <div className="embed-responsive embed-responsive-16by9">
                 <iframe
                   className="embed-responsive-item"
-                  src="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
+                  src={video.videoLink}
                 //   allowFullScreen=""
                 />
               </div>
               <div className="card-body">
                 <label className="form-label">Title</label>
                 <input
+                  disabled={true}
                   type="text"
                   className="form-control"
                   placeholder="Enter Video Title"
@@ -324,11 +344,11 @@ isModuleSaved && <>
               <div className="card-body">
                 <label className="form-label">URL</label>
                 <input
+                  disabled={true}
                   type="text"
                   className="form-control"
-                  defaultValue="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
                   placeholder="Enter Video URL"
-                  value={video.url}
+                  value={video.videoLink}
                 />
                    <small className="form-text text-muted">
                   Enter a valid video URL.
@@ -336,8 +356,13 @@ isModuleSaved && <>
              
                 <div style = {{display:"flex", flexDirection:'row', justifyContent:"flex-end", alignItems:"center"}}>
              
-                <FaTrash onClick = {() => deleteVideoHandler(moduleId, video.id)} style = {{cursor:"pointer"}}/>
-                
+                <FaTrash onClick = {() => deleteVideoHandler(moduleId, video.id)} style = {{cursor:"pointer", marginRight:"5px"}}/>
+                <FaPencilAlt  onClick = {() =>
+                  
+                {  
+                  setVideoId(video.id)
+                  setChangeVidBtn(false)
+                  setShowVideoInputs(!showVideoInputs)}} style = {{cursor:"pointer"}}/>
                   </div>      
                  </div>
 </div>
@@ -395,13 +420,26 @@ isModuleSaved && <>
                   }
                 </div>
 
-               {showVideoInputs &&  <a     style ={{marginTop: "10px"}}
+               {showVideoInputs && <>
+               
+               
+              { changeVidBtn ?  <a     style ={{marginTop: "10px"}}
                 onClick = {AddVideo}
                   href="#"
                   className="btn btn-outline-secondary mb-24pt mb-sm-0"
                 >
                   save Video
-                </a>}
+                </a> :  <a     style ={{marginTop: "10px"}}
+                onClick = {() => editVideo(videoId)}
+                  href="#"
+                  className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                >
+                  update Video
+                </a>
+}
+
+               </>
+}
 </>}
                
               </div>

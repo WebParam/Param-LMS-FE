@@ -4,7 +4,7 @@ import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { addSection, deleteModuleFromSection, deleteSection, deleteVideoFromModule, getSelectedCourseForEdit, updateCourseDetail, updateSectionDetail,} from '@/app/courseSlice';
+import { addSection, deleteModuleFromSection, deleteSection, deleteVideoFromModule, getSelectedCourseForEdit, createCourseDetail, updateSectionDetail, addModuleToSection, addVideoToModule, deleteAllSections,} from '@/app/courseSlice';
 import { ICourse,  IUpdateCourseDetailState, IUpdateSectionDetailState,  } from '@/app/interfaces/courses';
 import { useDispatch, useSelector } from "react-redux";
 import ReactQuill from 'react-quill';
@@ -13,13 +13,18 @@ import { Api } from '@/app/lib/restapi/endpoints';
 import { Link } from '@mui/material';
 import { FaTrash } from 'react-icons/fa';
 import { EditCourseModal } from './edit-module-modal';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'universal-cookie'; // Import the library
+import axios from 'axios';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 
 export default function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [editModuleModalOpen, setEditModuleModalOpen] = useState<boolean>(false);
   const [competency, setCompetency] = useState<string>('');
-  const [sectionTitle, setSectionTitle] = useState<string>('');
+  const [sectionTitle, setSectionTitle] = useState<string>("");
   const [disableSectionInput, setDisableSectionInput] = useState<boolean>(false);
   const [changeBtn, setChangeBtn] = useState<boolean>(false);
   const [sectionId , setSectionId] = useState("");
@@ -30,10 +35,16 @@ export default function EditCourse() {
   const [updateSection, setUpdateSection] = useState<boolean>(true);
   const[newSection , setNewSection] = useState<boolean>(true)
   const [moduleId, setModuleId] = useState<string>()
+  const [sectionBtn, setSectionBtn] = useState<boolean>(true)
+
+  let cookies = new Cookies();
+
+  const userData = cookies.get('param-lms-user');
 
   const dispatch = useDispatch();
 
 
+  
 
   const descriptionToolbar = {
     toolbar: [
@@ -59,7 +70,7 @@ function saveAndCloseEditModuleModal(){
 }
 
 const updateCourseSection = function(){
- 
+
   const payload = { 
     sectionId:sectionId,   
     title : sectionTitle,
@@ -70,7 +81,11 @@ const updateCourseSection = function(){
    
    
    dispatch(updateSectionDetail(payload));
-   setDisableSectionInput(true)
+   setDisableSectionInput(false)
+   setUpdateSection(true)
+ 
+ 
+ 
 }
 
 const selectSection = (id:string) => {
@@ -79,10 +94,13 @@ const selectSection = (id:string) => {
    setSectionTitle(selectedSection.title)
    setSectionId(selectedSection.id)
    setCompetency(selectedSection.competency)
+   if(selectedSection.modules.length > 0){
+    setNewSection(false)
+   }
   }
   setDisableSectionInput(true)
   setChangeBtn(true)
-  setNewSection(false)
+    
 };
 
 
@@ -98,49 +116,110 @@ const selectSection = (id:string) => {
   };
 
  async function createCourse() {
+  setDisableCreateCourseBtn(true)
+  let _id = toast.loading("saving course..", {//loader
+    position: "top-center",
+    autoClose: 1000,
+    hideProgressBar: false,
+    closeOnClick: false,
+    pauseOnHover: false,
+    draggable: false,
+    progress: undefined,
+    theme: "light",
+    });
   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
 
   const payload = { 
+    creatingUser:"",
     title: courseTitle ?? _courseFromState.title, 
     description: plainDescription,
 
   } as IUpdateCourseDetailState;
 
-  console.log("payload: ", payload);
+console.log("Creating User ",payload.creatingUser)
 
-  dispatch(updateCourseDetail(payload)); 
+  dispatch(createCourseDetail(payload)); 
 
 
    
-  const Coursepayload = _courseFromState
+  const Coursepayload = _courseFromState;
+  console.log(" This is course payload: ", Coursepayload);
   
-  const user = await Api.POST_CreateCourse(Coursepayload);
-  console.log("new", user);
-  if (user.error != false) {
- alert("Cannot create course with the supplied information")
+  const createCourse = await Api.POST_CreateCourse(Coursepayload);
+
+  try {
+    console.log("response", createCourse);
+    toast.update(_id, { render: "successfully saved course", type: "success", isLoading: false });
+   
+    setTimeout(() => {
+      dispatch(deleteAllSections());
+      setCourseTitle("")
+     setCourseDescription("")
+      setCompetency("")
+      toast.dismiss(_id);
+      setDisableCreateCourseBtn(false)
+
+    }, 2000);
     return;
-  } else {
-    alert("Successfully created new course. Please login.")
+
+  } catch (error) {
+    toast.update(_id, { render: "Error saving course", type: "error", isLoading: false });
+    setTimeout(() => {
+      setDisableCreateCourseBtn(false)
+
+      toast.dismiss(_id);
+    }, 2000);
   }
 
+  // axios
+  // .post(
+  //   "https://a3df-154-0-14-142.ngrok-free.app/api/Courses/AddCourse", Coursepayload
+    
+  // )
+  // .then((response: any) => {
+  //   console.log("response", response);
+  //   toast.update(_id, { render: "successfully saved course", type: "success", isLoading: false });
+   
+  //   setTimeout(() => {
+  //     dispatch(deleteAllSections());
+  //     setCourseTitle("")
+  //    setCourseDescription("")
+  //     setCompetency("")
+  //     toast.dismiss(_id);
+  //     setDisableCreateCourseBtn(false)
 
-  setCourseTitle("")
-  setCourseDescription("")
-  setSectionTitle("")
-  setCompetency("")
+  //   }, 2000);
+  //   return;
+
+  // })
+  // .catch((error: any) => {
+  //   toast.update(_id, { render: "Error saving course", type: "error", isLoading: false });
+  //   setTimeout(() => {
+  //     setDisableCreateCourseBtn(false)
+
+  //     toast.dismiss(_id);
+  //   }, 2000);
+  // });
+
+
+
+
 }
 
 const createSection = function() {
-  const payload = {
-    sectionTitle: sectionTitle,
-    sectionCompetency: competency
-  };
-
-  console.log("payload: ", payload);
-
-  dispatch(addSection(payload));
-  setDisableSectionInput(true)
-  setChangeBtn(!changeBtn)
+  if(sectionTitle.length > 0){
+    setSectionBtn(false)
+    const payload = {
+      sectionTitle: sectionTitle,
+      sectionCompetency: competency
+    };
+  
+    console.log("payload: ", payload);
+  
+    dispatch(addSection(payload));
+    setDisableSectionInput(true)
+    setChangeBtn(!changeBtn)
+  }
 }
 
 useEffect(() => {
@@ -155,8 +234,9 @@ console.log("COURSE", _courseFromState);
 const clearSectionContent = () => {
   setSectionTitle("")
   setCompetency("")
-  setChangeBtn(!changeBtn)
-  setDisableSectionInput(!disableSectionInput)
+  setChangeBtn(false)
+  setDisableSectionInput(false)
+  setNewSection(true)
 }
 1
 const handleDeleteModule = (sectionId:any,moduleId:any) => {
@@ -176,6 +256,13 @@ const handleDeleteSection = (sectionId:any) => {
 
 
 
+const customModalStyles = {
+  modal: {
+    maxWidth: '60%', 
+    width: '100%',
+  },
+};
+
   return (
 <div
 id="test"
@@ -184,13 +271,18 @@ id="test"
   data-responsive-width="992px"
   data-domfactory-upgraded="mdk-cdrawer-layout"
 >
+<ToastContainer />
 
     <div >
-    <Modal  open={editModuleModalOpen} onClose={() => setEditModuleModalOpen(false)} center>
+    <Modal styles={customModalStyles}  open={editModuleModalOpen} onClose={() => {setEditModuleModalOpen(false)
+    setNewSection(true)
+   setUpdateSection(false)
+    clearSectionContent()
+    }} center>
         <EditCourseModal ModuleId = {moduleId} sectionId = {sectionId} onClose={saveAndCloseEditModuleModal} />
         {/* <EditCourseModal /> */}
       </Modal>
-    <Modal  open={editModalOpen} onClose={() => setEditModalOpen(false)} center>
+    <Modal styles={customModalStyles}  open={editModalOpen} onClose={() => setEditModalOpen(false)} center>
         <CreateCourseModal sectionId = {sectionId} onClose={saveAndCloseEditModal} />
         {/* <EditCourseModal /> */}
       </Modal>
@@ -443,37 +535,23 @@ id="test"
           </div>
         </div>
         {/* // END Notifications dropdown */}
-        <div className="nav-item dropdown">
-          <a
-            href="#"
-            className="nav-link d-flex align-items-center dropdown-toggle"
-            data-toggle="dropdown"
-            data-caret="false"
-          >
-            <span className="avatar avatar-sm mr-8pt2">
-              <span className="avatar-title rounded-circle bg-primary">
-                <i className="material-icons">account_box</i>
-              </span>
-            </span>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <div className="dropdown-header">
-              <strong>Account</strong>
-            </div>
-            <a className="dropdown-item" href="edit-account.html">
-              Edit Account
-            </a>
-            <a className="dropdown-item" href="billing.html">
-              Billing
-            </a>
-            <a className="dropdown-item" href="billing-history.html">
-              Payments
-            </a>
-            <a className="dropdown-item" href="login.html">
-              Logout
-            </a>
-          </div>
-        </div>
+        <Dropdown>
+      <Dropdown.Toggle id="accountDropdown" variant="link">
+        <span className="avatar avatar-sm mr-8pt2">
+          <span className="avatar-title rounded-circle bg-primary">
+            <i className="material-icons">account_box</i>
+          </span>
+        </span>
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu style={{textAlign:"right"}}>
+        <Dropdown.Header>Account</Dropdown.Header>
+        <Dropdown.Item href="/protected/admin/account">Edit Account</Dropdown.Item>
+        <Dropdown.Item href="billing.html">Billing</Dropdown.Item>
+        <Dropdown.Item href="billing-history.html">Payments</Dropdown.Item>
+        <Dropdown.Item href="/auth/login">Logout</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
       </div>
       {/* // END Navbar Menu */}
     </div>
@@ -567,10 +645,13 @@ id="test"
               data-parent="#parent"
               onClick={() => handleSectionClick(section)}
             >
-              <span onClick={() => selectSection(section.id)} style={{cursor:"pointer"}}  className="flex">{section.title}</span>
+              <span onClick={() =>{ selectSection(section.id)
+              }
+              } style={{cursor:"pointer"}}  className="flex">{section.title}</span>
               <button onClick={() => handleDeleteSection(section.id)} style = {{ backgroundColor:"white", border:"none", outline:"none" }}>
           <FaTrash  />
         </button>
+      
               <span className="accordion__toggle-icon material-icons">
                 keyboard_arrow_down
               </span>
@@ -612,16 +693,16 @@ id="test"
             >
              <div className="accordion__item open">
                 <a
-                  href="#"
+                  
                   className="accordion__toggle"
                   data-toggle="collapse"
                   data-target="#course-toc-2"
                   data-parent="#parent"
                 >
                   <span className="flex">{disableSectionInput ? sectionTitle : "Create new section" }</span>
-                  <span className="accordion__toggle-icon material-icons">
+                  {/* <span className="accordion__toggle-icon material-icons">
                     keyboard_arrow_down
-                  </span>
+                  </span> */}
                 </a>
                 <div
                   className="accordion__menu collapse show"
@@ -673,7 +754,7 @@ id="test"
                   updateSection ?         <a
                   onClick={() => {
                     setDisableSectionInput(false)
-                    setUpdateSection(!updateSection)
+                    setUpdateSection(false)
 
                   } }
               
@@ -684,7 +765,7 @@ id="test"
                   onClick={() => {
                     updateCourseSection()
                     setDisableSectionInput(true)
-                    setUpdateSection(!updateSection)
+                    setUpdateSection(true)
 
                   } }
               
@@ -697,15 +778,19 @@ id="test"
                  </>
     :
 
-    <a
+
+    <button   style={{border:"none", outline:"none", backgroundColor:"white"}}>
+  <a
     onClick={createSection}
 
     
       className="btn btn-outline-secondary mb-24pt mb-sm-0"
     >
-    save section
+      save section
     </a>
 
+    </button>
+  
    
                     }
 
@@ -714,6 +799,7 @@ id="test"
                         <label className="form-label">Modules</label>
                         <FaPlus
                           onClick={() => {setEditModalOpen(true)
+                            updateCourseSection()
                           setDisableCreateCourseBtn(false)
                           clearSectionContent()
                           }}
@@ -730,7 +816,7 @@ id="test"
             <div className="card">
               <div className="card-header text-center">
               <button disabled={disableCreateCourseBtn} style={{backgroundColor: "transparent", border:"none", outline:"none"}}>
-              <a  onClick={createCourse} href="#" className="btn btn-accent">
+              <a  onClick={createCourse}  className="btn btn-accent">
                   Create Course
                 </a>
               </button>
@@ -788,123 +874,14 @@ id="test"
                     name="category"
                     className="form-control custom-select"
                   >
-                    <option value="vuejs">VueJs</option>
-                    <option value="vuejs">Angular</option>
-                    <option value="vuejs">React</option>
+                    <option value="vuejs">Information Technology</option>
+                    <option value="vuejs">Project Management</option>
+                    <option value="vuejs">Skill Development</option>
                   </select>
-                  <small className="form-text text-muted">
-                    Select a category.
-                  </small>
+                
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Price</label>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="input-group form-inline">
-                        <span className="input-group-prepend">
-                          <span className="input-group-text">$</span>
-                        </span>
-                        <input
-                          type="text"
-                          className="form-control"
-                          defaultValue={24}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <small className="form-text text-muted">
-                    The recommended price is between $17 and $24
-                  </small>
-                </div>
-                <div className="form-group mb-0">
-                  <label className="form-label" htmlFor="select03">
-                    Tags
-                  </label>
-                  <select
-                    id="select03"
-                    data-toggle="select"
-                    // multiple=""
-                    className="form-control select2-hidden-accessible"
-                    data-select2-id="select03"
-                    tabIndex={-1}
-                    aria-hidden="true"
-                  >
-                    <option selected={true} data-select2-id={2}>
-                      JavaScript
-                    </option>
-                    <option selected={true} data-select2-id={3}>
-                      Angular
-                    </option>
-                    <option>Bootstrap</option>
-                    <option>CSS</option>
-                    <option>HTML</option>
-                  </select>
-                  <span
-                    className="select2 select2-container select2-container--bootstrap4"
-                    dir="ltr"
-                    data-select2-id={1}
-                    style={{ width: "245.992px" }}
-                  >
-                    <span className="selection">
-                      <span
-                        className="select2-selection select2-selection--multiple"
-                        role="combobox"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                        tabIndex={-1}
-                        aria-disabled="false"
-                      >
-                        <ul className="select2-selection__rendered">
-                          <li
-                            className="select2-selection__choice"
-                            title="JavaScript"
-                            data-select2-id={4}
-                          >
-                            <span
-                              className="select2-selection__choice__remove"
-                              role="presentation"
-                            >
-                              ×
-                            </span>
-                            JavaScript
-                          </li>
-                          <li
-                            className="select2-selection__choice"
-                            title="Angular"
-                            data-select2-id={5}
-                          >
-                            <span
-                              className="select2-selection__choice__remove"
-                              role="presentation"
-                            >
-                              ×
-                            </span>
-                            Angular
-                          </li>
-                          <li className="select2-search select2-search--inline">
-                            <input
-                              className="select2-search__field"
-                              type="search"
-                              tabIndex={0}
-                              autoComplete="off"
-                              autoCorrect="off"
-                              autoCapitalize="none"
-                              spellCheck="false"
-                              role="searchbox"
-                              aria-autocomplete="list"
-                              placeholder=""
-                              style={{ width: "0.75em" }}
-                            />
-                          </li>
-                        </ul>
-                      </span>
-                    </span>
-                    <span className="dropdown-wrapper" aria-hidden="true" />
-                  </span>
-                  <small className="form-text text-muted">
-                    Select one or more tags.
-                  </small>
-                </div>
+                
+
               </div>
             </div>
           </div>
@@ -1664,7 +1641,7 @@ id="test"
               <li className="sidebar-menu-item">
                 <a
                   className="sidebar-menu-button"
-                  href="instructor-dashboard.html"
+                  href="/procteted/dashboard"
                 >
                   <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                     school
@@ -1727,7 +1704,7 @@ id="test"
               <li className="sidebar-menu-item active">
                 <a
                   className="sidebar-menu-button"
-                  href="instructor-edit-course.html"
+                 
                 >
                   <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                     post_add

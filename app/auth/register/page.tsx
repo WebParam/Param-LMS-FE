@@ -6,14 +6,17 @@ import { Api } from "../../lib/restapi/endpoints";
 import {IUserRegisterModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { error } from "console";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation'
 const cookies = new Cookies();
 const axios = require("axios").default;
 
-export default function Login() {
+export default function Register() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [ConfirmPassword, setConfirmPassword] = useState<string>("");
   const [lname, setLname] = useState<string>("");
+  
   const [fname, setFname] = useState<string>("");
 
   const[NameError, setNameError] = useState<boolean>(false)
@@ -23,7 +26,7 @@ export default function Login() {
   const[EmailError, setEmailError] = useState<boolean>(false)
   const[disable , setDisable] = useState<boolean>(false)
 
-  
+
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const date = new Date();
@@ -37,7 +40,15 @@ export default function Login() {
   };
 
 
-  const Register = (event: any) => {
+  const router = useRouter();
+
+  const navigateToLogin= () => {
+    // Replace "/your-target-page" with the path to the specific page you want to navigate to
+    router.push('/auth/login');
+
+  };
+
+  const Register = async (event: any) => {
     setDisable(true)
      
     setNameError(false)
@@ -107,42 +118,75 @@ export default function Login() {
           Role: "",
           LoginType: 0,
         } as IUserRegisterModel;
-    
-        axios
-          .post(
-            "https://7fb0-154-117-172-210.ngrok-free.app/api/Users/AddUSer",
-            payload
-          )
-          .then((response: any) => {
-            console.log("response", response);
-    
-            toast.update(_id, {
-              render: "Successfully registered",
-              type: "success",
-              isLoading: false,
-            });
-    
-            // Set cookies here after successful login
-            cookies.set("param-lms-user", response.data, { path: "/" });
-    
-            // Optionally, you can redirect the user to another page
-            // window.location.href = '/dashboard'; // Replace 'dashboard' with the desired route
-          })
-          .catch((error: any) => {
-            
-            toast.update(_id, {
-              render: "Cannot register user with the supplied information",
-              type: "error",
-              isLoading: false,
-            });
 
-            setTimeout(() => {
-              setDisable(false)
-              toast.dismiss(_id);
-            }, 2000);
 
-            console.log(error);
+        const user = await  Api.POST_Register(payload);
+
+        try {
+          console.log("response", user);
+    
+          toast.update(_id, {
+            render: "Successfully registered",
+            type: "success",
+            isLoading: false,
           });
+  
+          // Set cookies here after successful login
+  
+          // Optionally, you can redirect the user to another page
+          navigateToLogin()
+    
+          }
+         catch (error) {
+          toast.update(_id, {
+            render: "Cannot register user with the supplied information",
+            type: "error",
+            isLoading: false,
+          });
+
+          setTimeout(() => {
+            setDisable(false)
+            toast.dismiss(_id);
+          }, 2000);
+
+          console.log(error);
+        }
+
+    
+        // axios
+        //   .post(
+        //     "https://86e8-154-0-14-142.ngrok-free.app/api/Users/AddUSer",
+        //     payload
+        //   )
+        //   .then((response: any) => {
+        //     console.log("response", response);
+    
+        //     toast.update(_id, {
+        //       render: "Successfully registered",
+        //       type: "success",
+        //       isLoading: false,
+        //     });
+    
+        //     // Set cookies here after successful login
+    
+        //     // Optionally, you can redirect the user to another page
+        //     navigateToLogin()
+        //   })
+        //   .catch((error: any) => {
+            
+        //     toast.update(_id, {
+        //       render: "Cannot register user with the supplied information",
+        //       type: "error",
+        //       isLoading: false,
+        //     });
+
+        //     setTimeout(() => {
+        //       setDisable(false)
+        //       toast.dismiss(_id);
+        //     }, 2000);
+
+        //     console.log(error);
+        //   });
     
       }
     }else{
@@ -270,17 +314,25 @@ export default function Login() {
         <div className="page-separator__bg-top " />
       </div>
       <div className="bg-body pt-32pt pb-32pt pb-md-64pt text-center">
-        <div className="container page__container">
-          <a href="fixed-index.html" className="btn btn-secondary btn-block-xs">
-            Facebook
-          </a>
-          <a href="fixed-index.html" className="btn btn-secondary btn-block-xs">
-            Twitter
-          </a>
-          <a href="fixed-index.html" className="btn btn-secondary btn-block-xs">
-            Google+
-          </a>
-        </div>
+      <div style={{
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+}} className="container page__container">
+  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+    Facebook
+  </a>
+  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+    Twitter
+  </a>
+  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+    Google+
+  </a>
+</div>
+
+        <div  onClick = {navigateToLogin} className="page-separator__text mt-3">Already have an account? <span style={{cursor:"pointer"}}>sign-in</span></div>
+
       </div>
     </>
   );

@@ -101,12 +101,18 @@ modifiedDate: string,
   
   
   export interface IUpdateCourseDetailState{
-     
+        creatingUser:string,
           title:string,
           description:string,
           state:number
      
   }
+
+    
+  export interface IUpdateCourse extends ICourse{
+  
+   
+}
   
   export interface IUpdateSectionDetailState {
          
@@ -134,3 +140,11 @@ modifiedDate: string,
       
   }
   
+  export interface IDeleteSection{
+      
+        courseId:string, 
+        sectionId:string, 
+        
+    
+    
+}

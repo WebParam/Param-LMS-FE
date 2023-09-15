@@ -5,22 +5,67 @@ import { Link } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Api } from '@/app/lib/restapi/endpoints';
 import { ICourse } from '@/app/interfaces/courses';
+import Cookies from "universal-cookie";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import Dropdown from 'react-bootstrap/Dropdown';
+import '../../../assets/vendor/spinkit.css';
+import '../../../assets/css/preloader.css';
 
 export default function ManageCourses() {
 
-const [courses, SetCourses] = useState<any>()
+const [courses, SetCourses] = useState<any>([])
+const [courseHover, setCourseHover] = useState<boolean>(false)
+
+const cookies = new Cookies();
 
 
+
+const userData = cookies.get('param-lms-user');
+console.log(userData);
   useEffect(() => {
     ListAllCourses()
-  }, []);
+    console.log(courses)
+},[]);
   
   async function ListAllCourses(){
-  
-    const data = await Api.GET_Courses();
-    console.log("Response",data)
-    SetCourses(data.data??[]);
+    let _id = toast.loading("Please wait..", {//loader
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: "light",
+      });
+ const data = await Api.GET_Courses();
+ if(data){
+  toast.dismiss(_id);
+  SetCourses(data);
+  console.log(data)
+  console.log(courses.data??[])
+ }else{
+  toast.update(_id, { render: "Error loading courses", type: "error", isLoading: false });
+
+ }
+
+
+
+ 
+ 
    }
+
+   const editCourse = (courseId:any) => {
+    cookies.set("courseId", courseId);
+    window.location.href = "/protected/admin/edit-course" 
+   }
+   
+
+
+
+   
 
 
 
@@ -32,6 +77,7 @@ const [courses, SetCourses] = useState<any>()
   data-responsive-width="992px"
   data-domfactory-upgraded="mdk-drawer-layout"
 >
+<ToastContainer />
   <div
     className="mdk-drawer-layout__content page-content"
     style={{ transform: "translate3d(0px, 0px, 0px)" }}
@@ -280,37 +326,23 @@ const [courses, SetCourses] = useState<any>()
           </div>
         </div>
         {/* // END Notifications dropdown */}
-        <div className="nav-item dropdown">
-          <a
-            href="#"
-            className="nav-link d-flex align-items-center dropdown-toggle"
-            data-toggle="dropdown"
-            data-caret="false"
-          >
-            <span className="avatar avatar-sm mr-8pt2">
-              <span className="avatar-title rounded-circle bg-primary">
-                <i className="material-icons">account_box</i>
-              </span>
-            </span>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <div className="dropdown-header">
-              <strong>Account</strong>
-            </div>
-            <a className="dropdown-item" href="edit-account.html">
-              Edit Account
-            </a>
-            <a className="dropdown-item" href="billing.html">
-              Billing
-            </a>
-            <a className="dropdown-item" href="billing-history.html">
-              Payments
-            </a>
-            <a className="dropdown-item" href="login.html">
-              Logout
-            </a>
-          </div>
-        </div>
+        <Dropdown>
+      <Dropdown.Toggle id="accountDropdown" variant="link">
+        <span className="avatar avatar-sm mr-8pt2">
+          <span className="avatar-title rounded-circle bg-primary">
+            <i className="material-icons">account_box</i>
+          </span>
+        </span>
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu style={{textAlign:"right"}}>
+        <Dropdown.Header>Account</Dropdown.Header>
+        <Dropdown.Item href="edit-account.html">Edit Account</Dropdown.Item>
+        <Dropdown.Item href="billing.html">Billing</Dropdown.Item>
+        <Dropdown.Item href="billing-history.html">Payments</Dropdown.Item>
+        <Dropdown.Item href="login.html">Logout</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
       </div>
       {/* // END Navbar Menu */}
     </div>
@@ -354,7 +386,10 @@ const [courses, SetCourses] = useState<any>()
         <div className="page-separator__text">Development Courses</div>
       </div>
       <div className="row">
-        <div className="col-sm-6 col-md-4 col-xl-3">
+
+
+      {courses.map((course:any) => <>
+          <div className="col-sm-6 col-md-4 col-xl-3">
           <div
             className="card card-sm card--elevated p-relative o-hidden overlay overlay--primary js-overlay mdk-reveal js-mdk-reveal overlay--show"
             data-overlay-onload-show=""
@@ -371,7 +406,9 @@ const [courses, SetCourses] = useState<any>()
             data-opened=""
           >
             <a
-              href="instructor-edit-course.html"
+            onMouseOver={() => setCourseHover(true)}
+            onMouseLeave={() => setCourseHover(false)}
+            onClick={() => editCourse(course.data.id)}
               className="js-image"
               data-position="center"
               data-height="auto"
@@ -381,7 +418,7 @@ const [courses, SetCourses] = useState<any>()
                 position: "relative",
                 overflow: "hidden",
                 backgroundImage:
-                  'url("https://luma.humatheme.com/public/images/paths/angular_430x168.png")',
+                  `url(${course.data.logo})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center center",
                 height: 168
@@ -392,12 +429,131 @@ const [courses, SetCourses] = useState<any>()
                 alt="course"
                 style={{ visibility: "hidden" }}
               />
-              <span className="overlay__content align-items-start justify-content-start">
-                <span className="overlay__action card-body d-flex align-items-center">
-                  <i className="material-icons mr-4pt">edit</i>
-                  <span className="card-title text-white">Edit</span>
-                </span>
+
+
+{ courseHover && <>        <div
+      className="popover popover-lg fade show bs-popover-right"
+      role="tooltip"
+      id="popover384631"
+      x-placement="right"
+      style={{
+        position: "absolute",
+        willChange: "transform",
+        top: 0,
+        left: 0,
+        transform: "translate3d(275px, 145px, 0px)"
+      }}
+    >
+      <div className="arrow" style={{ top: 181 }} />
+      <h3 className="popover-header" />
+
+      <div className="popover-body">
+        <div className="media">
+          <div className="media-left mr-12pt">
+            <img
+              src="../../public/images/paths/angular_40x40@2x.png"
+              width={40}
+              height={40}
+              alt="Angular"
+              className="rounded"
+            />
+          </div>
+          <div className="media-body">
+            <div className="card-title mb-0">Learn Angular fundamentals</div>
+            <p className="lh-1">
+              <span className="text-50 small">with</span>
+              <span className="text-50 small font-weight-bold">
+                Elijah Murray
               </span>
+            </p>
+          </div>
+        </div>
+        <p className="my-16pt text-70">
+          Learn the fundamentals of working with Angular and how to create basic
+          applications.
+        </p>
+        <div className="mb-16pt">
+          <div className="d-flex align-items-center">
+            <span className="material-icons icon-16pt text-50 mr-8pt">
+              check
+            </span>
+            <p className="flex text-50 lh-1 mb-0">
+              <small>Fundamentals of working with Angular</small>
+            </p>
+          </div>
+          <div className="d-flex align-items-center">
+            <span className="material-icons icon-16pt text-50 mr-8pt">
+              check
+            </span>
+            <p className="flex text-50 lh-1 mb-0">
+              <small>Create complete Angular applications</small>
+            </p>
+          </div>
+          <div className="d-flex align-items-center">
+            <span className="material-icons icon-16pt text-50 mr-8pt">
+              check
+            </span>
+            <p className="flex text-50 lh-1 mb-0">
+              <small>Working with the Angular CLI</small>
+            </p>
+          </div>
+          <div className="d-flex align-items-center">
+            <span className="material-icons icon-16pt text-50 mr-8pt">
+              check
+            </span>
+            <p className="flex text-50 lh-1 mb-0">
+              <small>Understanding Dependency Injection</small>
+            </p>
+          </div>
+          <div className="d-flex align-items-center">
+            <span className="material-icons icon-16pt text-50 mr-8pt">
+              check
+            </span>
+            <p className="flex text-50 lh-1 mb-0">
+              <small>Testing with Angular</small>
+            </p>
+          </div>
+        </div>
+        <div className="row align-items-center">
+          <div className="col-auto">
+            <div className="d-flex align-items-center mb-4pt">
+              <span className="material-icons icon-16pt text-50 mr-4pt">
+                access_time
+              </span>
+              <p className="flex text-50 lh-1 mb-0">
+                <small>6 hours</small>
+              </p>
+            </div>
+            <div className="d-flex align-items-center mb-4pt">
+              <span className="material-icons icon-16pt text-50 mr-4pt">
+                play_circle_outline
+              </span>
+              <p className="flex text-50 lh-1 mb-0">
+                <small>12 lessons</small>
+              </p>
+            </div>
+            <div className="d-flex align-items-center">
+              <span className="material-icons icon-16pt text-50 mr-4pt">
+                assessment
+              </span>
+              <p className="flex text-50 lh-1 mb-0">
+                <small>Beginner</small>
+              </p>
+            </div>
+          </div>
+          <div className="col text-right">
+            <a href="instructor-edit-course.html" className="btn btn-primary">
+              Edit course
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+    </div> </>
+              
+            }
+
             </a>
             <div
               className="mdk-reveal__content"
@@ -411,7 +567,7 @@ const [courses, SetCourses] = useState<any>()
                       className="card-title mb-4pt"
                       href="instructor-edit-course.html"
                     >
-                      Learn Angular fundamentals
+                    {course.data.title}
                     </a>
                   </div>
                   <a
@@ -444,114 +600,46 @@ const [courses, SetCourses] = useState<any>()
               </div>
             </div>
           </div>
-          <div className="popoverContainer d-none">
-            <div className="media">
-              <div className="media-left mr-12pt">
-                <img
-                  src="../../public/images/paths/angular_40x40@2x.png"
-                  width={40}
-                  height={40}
-                  alt="Angular"
-                  className="rounded"
-                />
-              </div>
-              <div className="media-body">
-                <div className="card-title mb-0">
-                  Learn Angular fundamentals
-                </div>
-                <p className="lh-1">
-                  <span className="text-50 small">with</span>
-                  <span className="text-50 small font-weight-bold">
-                    Elijah Murray
-                  </span>
-                </p>
-              </div>
-            </div>
-            <p className="my-16pt text-70">
-              Learn the fundamentals of working with Angular and how to create
-              basic applications.
-            </p>
-            <div className="mb-16pt">
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Fundamentals of working with Angular</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Create complete Angular applications</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Working with the Angular CLI</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Understanding Dependency Injection</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Testing with Angular</small>
-                </p>
-              </div>
-            </div>
-            <div className="row align-items-center">
-              <div className="col-auto">
-                <div className="d-flex align-items-center mb-4pt">
-                  <span className="material-icons icon-16pt text-50 mr-4pt">
-                    access_time
-                  </span>
-                  <p className="flex text-50 lh-1 mb-0">
-                    <small>6 hours</small>
-                  </p>
-                </div>
-                <div className="d-flex align-items-center mb-4pt">
-                  <span className="material-icons icon-16pt text-50 mr-4pt">
-                    play_circle_outline
-                  </span>
-                  <p className="flex text-50 lh-1 mb-0">
-                    <small>12 lessons</small>
-                  </p>
-                </div>
-                <div className="d-flex align-items-center">
-                  <span className="material-icons icon-16pt text-50 mr-4pt">
-                    assessment
-                  </span>
-                  <p className="flex text-50 lh-1 mb-0">
-                    <small>Beginner</small>
-                  </p>
-                </div>
-              </div>
-              <div className="col text-right">
-                <a
-                  href="instructor-edit-course.html"
-                  className="btn btn-primary"
-                >
-                  Edit course
-                </a>
-              </div>
-            </div>
-          </div>
+
         </div>
-        <div className="col-sm-6 col-md-4 col-xl-3">
+
+        
+        
+        </>)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        {/* <div  className="col-sm-6 col-md-4 col-xl-3">
           <div
             className="card card-sm card--elevated p-relative o-hidden overlay overlay--primary js-overlay mdk-reveal js-mdk-reveal "
             data-partial-height={44}
@@ -739,383 +827,9 @@ const [courses, SetCourses] = useState<any>()
               </div>
             </div>
           </div>
-        </div>
-        <div className="col-sm-6 col-md-4 col-xl-3">
-          <div
-            className="card card-sm card--elevated p-relative o-hidden overlay overlay--primary js-overlay mdk-reveal js-mdk-reveal "
-            data-partial-height={44}
-            data-toggle="popover"
-            data-trigger="click"
-            data-original-title=""
-            title=""
-            data-domfactory-upgraded="mdk-reveal,overlay"
-            style={{ height: 212 }}
-          >
-            <a
-              href="instructor-edit-course.html"
-              className="js-image"
-              data-position="center"
-              data-height="auto"
-              data-domfactory-upgraded="image"
-              style={{
-                display: "block",
-                position: "relative",
-                overflow: "hidden",
-                backgroundImage:
-                  'url("https://luma.humatheme.com/public/images/paths/wordpress_430x168.png")',
-                backgroundSize: "cover",
-                backgroundPosition: "center center",
-                height: 168
-              }}
-            >
-              <img
-                src="../../public/images/paths/wordpress_430x168.png"
-                alt="course"
-                style={{ visibility: "hidden" }}
-              />
-              <span className="overlay__content align-items-start justify-content-start">
-                <span className="overlay__action card-body d-flex align-items-center">
-                  <i className="material-icons mr-4pt">edit</i>
-                  <span className="card-title text-white">Edit</span>
-                </span>
-              </span>
-            </a>
-            <div className="mdk-reveal__content">
-              <div className="mdk-reveal__partial" style={{ height: 44 }} />
-              <div className="card-body">
-                <div className="d-flex">
-                  <div className="flex">
-                    <a
-                      className="card-title mb-4pt"
-                      href="instructor-edit-course.html"
-                    >
-                      Build a WordPress Website
-                    </a>
-                  </div>
-                  <a
-                    href="instructor-edit-course.html"
-                    className="ml-4pt material-icons text-20 card-course__icon-favorite"
-                  >
-                    edit
-                  </a>
-                </div>
-                <div className="d-flex">
-                  <div className="rating flex">
-                    <span className="rating__item">
-                      <span className="material-icons">star</span>
-                    </span>
-                    <span className="rating__item">
-                      <span className="material-icons">star</span>
-                    </span>
-                    <span className="rating__item">
-                      <span className="material-icons">star</span>
-                    </span>
-                    <span className="rating__item">
-                      <span className="material-icons">star</span>
-                    </span>
-                    <span className="rating__item">
-                      <span className="material-icons">star_border</span>
-                    </span>
-                  </div>
-                  <small className="text-50">6 hours</small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="popoverContainer d-none">
-            <div className="media">
-              <div className="media-left mr-12pt">
-                <img
-                  src="../../public/images/paths/wordpress_40x40@2x.png"
-                  width={40}
-                  height={40}
-                  alt="Angular"
-                  className="rounded"
-                />
-              </div>
-              <div className="media-body">
-                <div className="card-title mb-0">Build a WordPress Website</div>
-                <p className="lh-1">
-                  <span className="text-50 small">with</span>
-                  <span className="text-50 small font-weight-bold">
-                    Elijah Murray
-                  </span>
-                </p>
-              </div>
-            </div>
-            <p className="my-16pt text-70">
-              Learn the fundamentals of working with Angular and how to create
-              basic applications.
-            </p>
-            <div className="mb-16pt">
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Fundamentals of working with Angular</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Create complete Angular applications</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Working with the Angular CLI</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Understanding Dependency Injection</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Testing with Angular</small>
-                </p>
-              </div>
-            </div>
-            <div className="row align-items-center">
-              <div className="col-auto">
-                <div className="d-flex align-items-center mb-4pt">
-                  <span className="material-icons icon-16pt text-50 mr-4pt">
-                    access_time
-                  </span>
-                  <p className="flex text-50 lh-1 mb-0">
-                    <small>6 hours</small>
-                  </p>
-                </div>
-                <div className="d-flex align-items-center mb-4pt">
-                  <span className="material-icons icon-16pt text-50 mr-4pt">
-                    play_circle_outline
-                  </span>
-                  <p className="flex text-50 lh-1 mb-0">
-                    <small>12 lessons</small>
-                  </p>
-                </div>
-                <div className="d-flex align-items-center">
-                  <span className="material-icons icon-16pt text-50 mr-4pt">
-                    assessment
-                  </span>
-                  <p className="flex text-50 lh-1 mb-0">
-                    <small>Beginner</small>
-                  </p>
-                </div>
-              </div>
-              <div className="col text-right">
-                <a
-                  href="instructor-edit-course.html"
-                  className="btn btn-primary"
-                >
-                  Edit course
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-sm-6 col-md-4 col-xl-3">
-          <div
-            className="card card-sm card--elevated p-relative o-hidden overlay overlay--primary js-overlay mdk-reveal js-mdk-reveal "
-            data-partial-height={44}
-            data-toggle="popover"
-            data-trigger="click"
-            data-original-title=""
-            title=""
-            data-domfactory-upgraded="mdk-reveal,overlay"
-            style={{ height: 212 }}
-          >
-            <a
-              href="instructor-edit-course.html"
-              className="js-image"
-              data-position="left"
-              data-height="auto"
-              data-domfactory-upgraded="image"
-              style={{
-                display: "block",
-                position: "relative",
-                overflow: "hidden",
-                backgroundImage:
-                  'url("https://luma.humatheme.com/public/images/paths/react_430x168.png")',
-                backgroundSize: "cover",
-                backgroundPosition: "left center",
-                height: 168
-              }}
-            >
-              <img
-                src="../../public/images/paths/react_430x168.png"
-                alt="course"
-                style={{ visibility: "hidden" }}
-              />
-              <span className="overlay__content align-items-start justify-content-start">
-                <span className="overlay__action card-body d-flex align-items-center">
-                  <i className="material-icons mr-4pt">edit</i>
-                  <span className="card-title text-white">Edit</span>
-                </span>
-              </span>
-            </a>
-            <div className="mdk-reveal__content">
-              <div className="mdk-reveal__partial" style={{ height: 44 }} />
-              <div className="card-body">
-                <div className="d-flex">
-                  <div className="flex">
-                    <a
-                      className="card-title mb-4pt"
-                      href="instructor-edit-course.html"
-                    >
-                      Become a React Native Developer
-                    </a>
-                  </div>
-                  <a
-                    href="instructor-edit-course.html"
-                    className="ml-4pt material-icons text-20 card-course__icon-favorite"
-                  >
-                    edit
-                  </a>
-                </div>
-                <div className="d-flex">
-                  <div className="rating flex">
-                    <span className="rating__item">
-                      <span className="material-icons">star</span>
-                    </span>
-                    <span className="rating__item">
-                      <span className="material-icons">star</span>
-                    </span>
-                    <span className="rating__item">
-                      <span className="material-icons">star</span>
-                    </span>
-                    <span className="rating__item">
-                      <span className="material-icons">star</span>
-                    </span>
-                    <span className="rating__item">
-                      <span className="material-icons">star_border</span>
-                    </span>
-                  </div>
-                  <small className="text-50">6 hours</small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="popoverContainer d-none">
-            <div className="media">
-              <div className="media-left mr-12pt">
-                <img
-                  src="../../public/images/paths/react_40x40@2x.png"
-                  width={40}
-                  height={40}
-                  alt="Angular"
-                  className="rounded"
-                />
-              </div>
-              <div className="media-body">
-                <div className="card-title mb-0">
-                  Become a React Native Developer
-                </div>
-                <p className="lh-1">
-                  <span className="text-50 small">with</span>
-                  <span className="text-50 small font-weight-bold">
-                    Elijah Murray
-                  </span>
-                </p>
-              </div>
-            </div>
-            <p className="my-16pt text-70">
-              Learn the fundamentals of working with Angular and how to create
-              basic applications.
-            </p>
-            <div className="mb-16pt">
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Fundamentals of working with Angular</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Create complete Angular applications</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Working with the Angular CLI</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Understanding Dependency Injection</small>
-                </p>
-              </div>
-              <div className="d-flex align-items-center">
-                <span className="material-icons icon-16pt text-50 mr-8pt">
-                  check
-                </span>
-                <p className="flex text-50 lh-1 mb-0">
-                  <small>Testing with Angular</small>
-                </p>
-              </div>
-            </div>
-            <div className="row align-items-center">
-              <div className="col-auto">
-                <div className="d-flex align-items-center mb-4pt">
-                  <span className="material-icons icon-16pt text-50 mr-4pt">
-                    access_time
-                  </span>
-                  <p className="flex text-50 lh-1 mb-0">
-                    <small>6 hours</small>
-                  </p>
-                </div>
-                <div className="d-flex align-items-center mb-4pt">
-                  <span className="material-icons icon-16pt text-50 mr-4pt">
-                    play_circle_outline
-                  </span>
-                  <p className="flex text-50 lh-1 mb-0">
-                    <small>12 lessons</small>
-                  </p>
-                </div>
-                <div className="d-flex align-items-center">
-                  <span className="material-icons icon-16pt text-50 mr-4pt">
-                    assessment
-                  </span>
-                  <p className="flex text-50 lh-1 mb-0">
-                    <small>Beginner</small>
-                  </p>
-                </div>
-              </div>
-              <div className="col text-right">
-                <a
-                  href="instructor-edit-course.html"
-                  className="btn btn-primary"
-                >
-                  Edit course
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        </div> */}
+
+
       </div>
       <div className="mb-32pt">
         <ul className="pagination justify-content-start pagination-xsm m-0">
@@ -1978,6 +1692,29 @@ const [courses, SetCourses] = useState<any>()
 </ul> */}
     </div>
     {/* // END Page Content */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     {/* Footer */}
     <div className="bg-body border-top-2 mt-auto">
       <div className="container page__container page-section d-flex flex-column">
@@ -2025,6 +1762,11 @@ const [courses, SetCourses] = useState<any>()
     >
       <div className="arrow" style={{ top: 181 }} />
       <h3 className="popover-header" />
+
+
+{/*when you hover onto the course*/}
+
+
       {/* <div className="popover-body">
         <div className="media">
           <div className="media-left mr-12pt">
@@ -2126,6 +1868,9 @@ const [courses, SetCourses] = useState<any>()
           </div>
         </div>
       </div> */}
+
+      {/*when you hover onto the course*/}
+
     </div>
   </div>
   {/* // END drawer-layout__content */}
@@ -2240,29 +1985,23 @@ const [courses, SetCourses] = useState<any>()
                 <span className="sidebar-menu-text">Apps</span>
               </a>
             </li>
-            <li
-              className="sidebar-menu-item "
-              data-toggle="tooltip"
-              data-title="Account"
-              data-placement="right"
-              data-container="body"
-              data-boundary="window"
-              data-original-title=""
-              title=""
-            >
-              <a
-                className="sidebar-menu-button"
-                href="#sm_account"
-                data-toggle="tab"
-                role="tab"
-                aria-controls="sm_account"
-              >
-                <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
-                  account_box
-                </i>
-                <span className="sidebar-menu-text">Account</span>
-              </a>
-            </li>
+            <Dropdown>
+      <Dropdown.Toggle id="accountDropdown" variant="link">
+        <span className="avatar avatar-sm mr-8pt2">
+          <span className="avatar-title rounded-circle bg-primary">
+            <i className="material-icons">account_box</i>
+          </span>
+        </span>
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu style={{textAlign:"right"}}>
+        <Dropdown.Header>Account</Dropdown.Header>
+        <Dropdown.Item href="/protected/admin/account">Edit Account</Dropdown.Item>
+        <Dropdown.Item href="billing.html">Billing</Dropdown.Item>
+        <Dropdown.Item href="billing-history.html">Payments</Dropdown.Item>
+        <Dropdown.Item href="/auth/login">Logout</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
             <li
               className="sidebar-menu-item "
               data-toggle="tooltip"
@@ -2908,7 +2647,6 @@ const [courses, SetCourses] = useState<any>()
               <li className="sidebar-menu-item active">
                 <a
                   className="sidebar-menu-button"
-                  href="instructor-courses.html"
                 >
                   <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                     import_contacts
@@ -2952,12 +2690,12 @@ const [courses, SetCourses] = useState<any>()
               <li className="sidebar-menu-item">
                 <a
                   className="sidebar-menu-button"
-                  href="instructor-edit-course.html"
+                  href="/protected/admin/create-course"
                 >
                   <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                     post_add
                   </span>
-                  <span className="sidebar-menu-text">Edit Course</span>
+                  <span className="sidebar-menu-text">Create Course</span>
                 </a>
               </li>
               <li className="sidebar-menu-item">

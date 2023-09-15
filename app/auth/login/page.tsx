@@ -6,6 +6,9 @@ import { Api } from '../../lib/restapi/endpoints';
 import { IUserLoginModel } from '../../interfaces/user';
 import Cookies from 'universal-cookie'; // Import the library
 import Link from 'next/link';
+import { useRouter } from 'next/navigation'
+import Dropdown from 'react-bootstrap/Dropdown';
+
 
 const cookies = new Cookies(); // Create an instance of Cookies
 
@@ -27,6 +30,14 @@ export default function Login() {
   const onChangePassword = (e:any) => {
     setPassword(e.target.value);
   }
+  const router = useRouter();
+
+  const navigateToRegister= () => {
+    // Replace "/your-target-page" with the path to the specific page you want to navigate to
+    router.push('/auth/register');
+
+  };
+
 
 
   
@@ -34,7 +45,6 @@ export default function Login() {
 async function LoginUser (event:any){
  
   setDisable(true)
-  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     let _id = toast.loading("Logging in..", {//loader
@@ -59,17 +69,7 @@ async function LoginUser (event:any){
     toast.dismiss(_id);
   }, 2000);
   
- }else if(!passwordRegex.test(password)){
-  toast.update(_id, {
-    render:
-      "Password must contain at least 8 characters, including uppercase and lowercase letters, numbers, and special characters",
-    type: "error",
-    isLoading: false,
-  });
-  setTimeout(() => {
-    setDisable(false)
-    toast.dismiss(_id);
-  }, 2000);
+ 
  }else{
 
   const payload = {
@@ -77,14 +77,13 @@ async function LoginUser (event:any){
     Password : password,
     } as IUserLoginModel; 
 
-    axios
-    .post(
-      "https://7fb0-154-117-172-210.ngrok-free.app/api/Users/Login",
-      payload
-    )
-    .then((response: any) => {
-      console.log("response", response);
 
+    const user = await  Api.POST_Login(payload);
+
+    try {
+      console.log("response", user);
+
+    
       toast.update(_id, {
         render: "Successfully logged in",
         type: "success",
@@ -92,18 +91,14 @@ async function LoginUser (event:any){
       });
 
       // Set cookies here after successful login
-      cookies.set('param-lms-user', response.data, { path: '/' });
+      cookies.set('param-lms-user', user.data);
 
       // Optionally, you can redirect the user to another page
-      window.location.href = '/pages/student/course/course-details'; 
-
-    })
-    .catch((error: any) => {
-      throw new Error(`Error : ${error} \n
-      Payload: ${payload} \n 
-      FrontEnd : LoginPage`);
+      window.location.href = '/protected/admin/manage-courses'; 
+      }
+     catch (error) {
       toast.update(_id, {
-        render: "Cannot register user with the supplied information",
+        render: "error logging in.",
         type: "error",
         isLoading: false,
       });
@@ -112,7 +107,44 @@ async function LoginUser (event:any){
         toast.dismiss(_id);
       }, 2000);
       console.log(error);
-    });
+    }
+
+    // axios
+    // .post(
+    //   "https://86e8-154-0-14-142.ngrok-free.app/api/Users/Login",
+    //   payload
+    // )
+    // .then((response: any) => {
+    //   console.log("response", response);
+
+    
+    //   toast.update(_id, {
+    //     render: "Successfully logged in",
+    //     type: "success",
+    //     isLoading: false,
+    //   });
+
+    //   // Set cookies here after successful login
+    //   cookies.set('param-lms-user', response.data);
+
+    //   // Optionally, you can redirect the user to another page
+    //   window.location.href = '/protected/admin/manage-courses'; 
+
+    // })
+    // .catch((error: any) => {
+
+ 
+    //   toast.update(_id, {
+    //     render: "error logging in.",
+    //     type: "error",
+    //     isLoading: false,
+    //   });
+    //   setTimeout(() => {
+    //     setDisable(false)
+    //     toast.dismiss(_id);
+    //   }, 2000);
+    //   console.log(error);
+    // });
 
   event?.preventDefault();
   }
@@ -170,17 +202,24 @@ async function LoginUser (event:any){
         <div className="page-separator__bg-top " />
       </div>
       <div className="bg-body pt-32pt pb-32pt pb-md-64pt text-center">
-        <div className="container page__container">
-          <a href="fixed-index.html" className="btn btn-secondary btn-block-xs">
-            Facebook
-          </a>
-          <a href="fixed-index.html" className="btn btn-secondary btn-block-xs">
-            Twitter
-          </a>
-          <a href="fixed-index.html" className="btn btn-secondary btn-block-xs">
-            Google+
-          </a>
-        </div>
+      <div style={{
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+}} className="container page__container">
+  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+    Facebook
+  </a>
+  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+    Twitter
+  </a>
+  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+    Google+
+  </a>
+</div>
+
+        <div className="page-separator__text mt-3">Do not have an account? <span style={{cursor:"pointer"}} onClick = {navigateToRegister}>sign-up</span></div>
       </div>
       </>
   

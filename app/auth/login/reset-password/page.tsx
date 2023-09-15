@@ -18,7 +18,7 @@ export default function ResetPassword() {
   const [otpLength, setOtpLength] = useState(0);
   const [OtpSent, setOtpSent] = useState<boolean>(false);
   const [otp, setOTP] = useState("");
- 
+ const [showMessage, setShowMessage] = useState<boolean>(false)
 
   const setOtp = (e: string) => {
     setOTP(e);
@@ -117,7 +117,7 @@ event.preventDefault();
           toast.dismiss(_id);
         }, 2000);
         setShowPassInputs(false)
-  
+        setShowMessage(true)
       })
       .catch((error: any) => {
         toast.update(_id, {
@@ -166,19 +166,29 @@ event.preventDefault();
             <div className="page-separator__text">Reset Password</div>
           </div>
           <div className="col-sm-6 p-0">
+          
+          { showMessage && 
             <div className="alert alert-soft-warning">
-              <div className="d-flex flex-wrap">
+
+           <div className="d-flex flex-wrap">
                 <div className="mr-8pt">
                   <i className="material-icons">check_circle</i>
                 </div>
                 <div className="flex" style={{ minWidth: 180 }}>
+                  
+                 
                   <small className="text-100">
                     An email with password reset instructions has been sent to
                     your email address, if it exists on our system.
                   </small>
+
+
                 </div>
               </div>
+
+
             </div>
+      }
             <form >
               <div className="form-group">
                 <label className="form-label">Email:</label>{emailError ? <span style = {{color : "red", fontWeight: "600px", marginLeft: "1em"}}>* required field</span>:null}

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { AppStore } from "./interfaces/store";
-import { ICourse, ICourseState, IModule, ISection, IUpdateCourseDetailState, IUpdateModuleDetailState, IUpdateSectionDetailState, IVideo } from "./interfaces/courses";
+import { ICourse, ICourseState, IModule, ISection, IUpdateCourse, IUpdateCourseDetailState, IUpdateModuleDetailState, IUpdateSectionDetailState, IVideo } from "./interfaces/courses";
 import { useState } from "react";
 
 const generateUniqueId = () => {
@@ -27,9 +27,9 @@ const initialState: ICourseState = {
         description: "",
         sections: [] as ISection[],
         createdDate: "04/09/2015",
-        creatingUser: "admin",
+        creatingUser: "",
         state: 0,
-        logo: "data:image/png;base64,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",
+        logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/640px-Python-logo-notext.svg.png",
         courseImage: "course_image.jpg",
         bannerImage: "banner_image.jpg",
         modifyingUser: "user-789"
@@ -46,7 +46,7 @@ export const courseSlice = createSlice({
             state.course = action.payload;
         },
         //
-        updateCourseDetail(state, action) {
+        createCourseDetail(state, action) {
 
             const _action = action.payload as IUpdateCourseDetailState;
 
@@ -54,12 +54,34 @@ export const courseSlice = createSlice({
                 ...state.course,
                 description: _action.description,
                 state: _action.state,
+                creatingUser: _action.creatingUser,
                 title: _action.title
             } as ICourse;
 
 
             state.course = newState;
         },
+
+        updateCourseFromDataBase(state, action) {
+            const _action = action.payload as IUpdateCourse;
+          
+            const newState = {
+              _id: _action._id,
+              title: _action.title,
+              description: _action.description,
+              sections: _action.sections,
+              createdDate: _action.createdDate,
+              creatingUser: _action.creatingUser,
+              state: _action.state,
+              logo: _action.logo,
+              courseImage: _action.courseImage,
+              bannerImage: _action.bannerImage,
+              modifyingUser: _action.modifyingUser
+            } as ICourse;
+            state.course = newState;
+          
+          }
+,          
 
 
         updateSectionDetail(state, action) {
@@ -152,6 +174,32 @@ export const courseSlice = createSlice({
                 section.modules.push(newModule);
             }
         },
+        editVideoDetails: (state, action) => {
+      const { moduleId, videoId, videoTitle, videoUrl } = action.payload;
+      // Find the section, module, and video to update
+      const sectionIndex = state.course.sections.findIndex(section =>
+        section.modules.some(module => module.id === moduleId)
+      );
+      if (sectionIndex !== -1) {
+        const moduleIndex = state.course.sections[sectionIndex].modules.findIndex(
+          module => module.id === moduleId
+        );
+        if (moduleIndex !== -1) {
+          const videoIndex = state.course.sections[sectionIndex].modules[
+            moduleIndex
+          ].videos.findIndex(video => video.id === videoId);
+          if (videoIndex !== -1) {
+            // Update the video title and URL
+            state.course.sections[sectionIndex].modules[moduleIndex].videos[
+              videoIndex
+            ].title = videoTitle;
+            state.course.sections[sectionIndex].modules[moduleIndex].videos[
+              videoIndex
+            ].videoLink = videoUrl;
+          }
+        }
+      }
+    },
         deleteModuleFromSection(state, action) {
             const { sectionId, moduleId } = action.payload;
       
@@ -182,7 +230,10 @@ export const courseSlice = createSlice({
       
             state.course.sections = updatedSections;
           },
-
+          deleteAllSections(state) {
+            // Set the sections array to an empty array
+            state.course.sections = [];
+        },
         addVideoToModule(state, action) {
             const { moduleId, videoTitle, videoLink,  } = action.payload;
 
@@ -230,12 +281,15 @@ export const courseSlice = createSlice({
 
   export const {
     setSelectedCourseForEdit,
-    updateCourseDetail,
+    createCourseDetail,
     updateSectionDetail,
     updateModuleDetail,
     addSection,
     deleteSection,
-    addModuleToSection,
+    updateCourseFromDataBase,
+        addModuleToSection,
+        deleteAllSections,
+        editVideoDetails,
     addVideoToModule,
     deleteModuleFromSection,
     deleteVideoFromModule // Add this line

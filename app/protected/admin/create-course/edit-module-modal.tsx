@@ -4,8 +4,8 @@ import styles from "./page.module.css";
 import React, { useRef, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { FaBullseye, FaPlus, FaTrash, FaVideo } from "react-icons/fa";
-import { addModuleToSection, addVideoToModule, deleteVideoFromModule, getSelectedCourseForEdit, updateModuleDetail } from "@/app/courseSlice";
+import { FaBullseye, FaPencilAlt, FaPlus, FaTrash, FaVideo } from "react-icons/fa";
+import { addModuleToSection, addVideoToModule, deleteVideoFromModule, editVideoDetails, getSelectedCourseForEdit, updateModuleDetail } from "@/app/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ICourse, IModule, IUpdateModuleDetailState } from "@/app/interfaces/courses";
 
@@ -31,7 +31,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [disableSaveChanges, setDisableSaveChanges] = useState<boolean>(true)
   const [selectedModule , setSelectedModule] = useState<any>([])
   const [selectedVideos , setSelectedVideo] = useState<any>([])
-
+  const [changeVidBtn, setChangeVidBtn] = useState<boolean>(true);
+  const [videoId, setVideoId] = useState<string>("");
 
 
   const moduleToolbar = {
@@ -50,26 +51,30 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
   const editModule = () => {
 
-    const plainDescription = moduleDescription ? moduleDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+    if(moduleTitle && moduleDescription && (selectedVideos.length > 0 || videos.length > 0)) {
+      const plainDescription = moduleDescription ? moduleDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
 
 
-    const payload = {
-        moduleId :ModuleId,
-      sectionId:sectionId, 
-      title:moduleTitle,
+      const payload = {
+          moduleId :ModuleId,
+        sectionId:sectionId, 
+        title:moduleTitle,
+      
+        description:plainDescription
+      }
+  
+   
+      
+    console.log("payload: ", payload);
+  
+    dispatch(updateModuleDetail(payload));
     
-      description:plainDescription
+    console.log("COURSE", _courseFromState); 
+    console.log(sectionId)
+    onClose()
     }
 
- 
-    
-  console.log("payload: ", payload);
 
-  dispatch(updateModuleDetail(payload));
-  
-  console.log("COURSE", _courseFromState); 
-  console.log(sectionId)
-  onClose()
   }
 
   useEffect(() => {
@@ -94,31 +99,68 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     setModuleDescription(selectedModule.description);
   }, [selectedModule.title,selectedModule.description]);
   
-  // ... rest of your component code
   
+  const handleEditVideoDetails = (e:any, videoId:any) => {
+    setVideoUrl(e.target?.value)
+    dispatch(
+      editVideoDetails({
+        moduleId:ModuleId,
+        videoId,
+        videoTitle,
+        videoUrl,
+      })
+    );
+  }
+
+  const handleEditVideotitle = (e:any, videoId:any) => {
+    setVideoTitle(e.target?.value)
+    dispatch(
+      editVideoDetails({
+        moduleId:ModuleId,
+        videoId,
+        videoTitle,
+        videoUrl,
+      })
+    );
+  }
   
 
   const AddVideo = () => {
-    const payload = {
-      moduleId: ModuleId,
-      videoTitle :videoTitle,
-      videoLink: videoUrl,
-    
+    if(videoTitle && videoUrl){
+      const payload = {
+        moduleId: ModuleId,
+        videoTitle :videoTitle,
+        videoLink: videoUrl,
+      
+      }
+  
+      dispatch(addVideoToModule(payload));
+  
+      setVideos([...videos,payload]);
+      setShowVideoInputs(!showVideoInputs)
+      setVideoTitle("")
+      setVideoUrl("");
+      console.log("COURSE", _courseFromState); 
+      setChangeModulBtn(true)
     }
-
-    dispatch(addVideoToModule(payload));
-
-    setVideos([...videos,payload]);
-    setShowVideoInputs(!showVideoInputs)
-    setVideoTitle("")
-    setVideoUrl("");
-    console.log("COURSE", _courseFromState); 
-    setChangeModulBtn(true)
   }
 
 
+  const editVideo = (id:string) => {
+    const payload = {
+      moduleId:  ModuleId,
+      videoId:id,
+      videoTitle:videoTitle,
+      videoUrl :videoUrl,
+    }
+    dispatch(editVideoDetails(payload));
+    setShowVideoInputs(false)
+    setVideoTitle("")
+    setVideoUrl("")
+    setChangeVidBtn(true)
+  }
 
-
+  
 
   
 
@@ -229,18 +271,21 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
               <div className="embed-responsive embed-responsive-16by9">
                 <iframe
                   className="embed-responsive-item"
-                  src="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
+                  src={video.videoLink}
                 //   allowFullScreen=""
                 />
               </div>
               <div className="card-body">
                 <label className="form-label">Title</label>
                 <input
+                disabled={true}
                   type="text"
                   className="form-control"
                   placeholder="Enter Video Title"
                   value = {video.title}
-                  onChange={(e) => setVideoTitle(e.target.value)}
+                  onChange={(e) => 
+                    handleEditVideotitle(e, video.id)
+                  }
                 />
                 <small className="form-text text-muted">
                   Enter a valid video title.
@@ -249,11 +294,17 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
               <div className="card-body">
                 <label className="form-label">URL</label>
                 <input
+                 disabled={true}
+                onChange = {(e) => 
+                 
+                  
+             
+                  handleEditVideoDetails(e, video.id)}
+        
                   type="text"
                   className="form-control"
-                  defaultValue="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
                   placeholder="Enter Video URL"
-                  value={video.url}
+                  value={video.videoLink}
                 />
                 
                 <small className="form-text text-muted">
@@ -261,8 +312,13 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                 </small>
                 <div style = {{display:"flex", flexDirection:'row', justifyContent:"flex-end", alignItems:"center"}}>
              
-             <FaTrash onClick = {() => deleteVideoHandler(ModuleId, video.id)} style = {{cursor:"pointer"}}/>
-             
+             <FaTrash onClick = {() => deleteVideoHandler(ModuleId, video.id)} style = {{cursor:"pointer", marginRight:"5px"}}/>
+             <FaPencilAlt  onClick = {() =>
+                  
+                  {  
+                    setVideoId(video.id)
+                    setChangeVidBtn(false)
+                    setShowVideoInputs(!showVideoInputs)}} style = {{cursor:"pointer"}}/>
                </div>  
                 
               </div>
@@ -305,7 +361,9 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
                   <input
               
-                    onChange={(e) => setVideoUrl(e.target.value)}
+                    onChange={(e) =>
+                      
+                      setVideoUrl(e.target.value)}
                     id="flatpickrSample04"
                     type="text"
                     className="form-control"
@@ -321,13 +379,25 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                   }
                 </div>
 
-               {showVideoInputs &&  <a     style ={{marginTop: "10px"}}
-                onClick = {AddVideo}
-                  href="#"
-                  className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                >
-                  save Video
-                </a>}
+               {showVideoInputs &&  <>
+               
+               
+               { changeVidBtn ?  <a     style ={{marginTop: "10px"}}
+                 onClick = {AddVideo}
+                   href="#"
+                   className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                 >
+                   save Video
+                 </a> :  <a     style ={{marginTop: "10px"}}
+                 onClick = {() => editVideo(videoId)}
+                   href="#"
+                   className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                 >
+                   update Video
+                 </a>
+ }
+ 
+                </>}
 
                
               </div>
@@ -336,7 +406,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                   <div  className="card-header text-center">
 
               
-                  <button   style={{backgroundColor: "transparent", border:"none", outline:"none", width:"150px"}}>
+                  <button  style={{backgroundColor: "transparent", border:"none", outline:"none", width:"150px"}}>
  <a
                     onClick={editModule}
                       href="#" className="btn btn-accent">
