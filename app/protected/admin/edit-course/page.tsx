@@ -5,7 +5,7 @@ import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { addSection, deleteModuleFromSection, deleteSection, getSelectedCourseForEdit, createCourseDetail, updateCourseFromDataBase, updateSectionDetail, deleteAllSections,} from '@/app/courseSlice';
-import { ICourse,  IUpdateCourse,  IUpdateCourseDetailState, IUpdateSectionDetailState,  } from '@/app/interfaces/courses';
+import { ICourse,  IDeleteModule,  IDeleteSection,  IUpdateCourse,  IUpdateCourseDetailState, IUpdateSectionDetailState,  } from '@/app/interfaces/courses';
 import { useDispatch, useSelector } from "react-redux";
 import ReactQuill from 'react-quill';
 import {useEffect} from 'react'
@@ -176,45 +176,25 @@ const selectSection = (id:string) => {
     theme: "light",
     });
 
+    const updatedcourseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
+
+    const updateCoursedata = await Api.PUT_UpdateCourse(updatedcourseFromState);
+
+    if(updateCoursedata){
+      toast.update(_id, { render: "course saved", type: "success", isLoading: false });
+      setTimeout(() => {
+        toast.dismiss(_id);
+      }, 2000);
+      window.location.href= "protected/admin/manage-course"
+    }else{
+    toast.update(_id, { render: "Error saving course", type: "error", isLoading: false });
     
-
-
-  // axios
-  // .post(
-  //   "https://aff5-41-113-63-46.ngrok-free.app/api/Courses/UpdateCourse", _courseFromState
-    
-  // )
-  // .then((response: any) => {
-    
-  //   dispatch(deleteAllSections());
-  //   setCourseTitle("")
-  //   setCourseDescription("")
-  //   setSectionTitle("")
-  //   setCompetency("")
-  //   console.log("response", response);
-  //   toast.update(_id, { render: "successfully saved course", type: "success", isLoading: false });
-    
-  //   setTimeout(() => {
-  //     toast.dismiss(_id);
-  //   }, 2000);
-  //   window.location.href = "/protected/admin/edit-course" 
-
-  //   return;
-
-  // })
-  // .catch((error: any) => {
-  //   toast.update(_id, { render: "Error saving course", type: "error", isLoading: false });
-  //   setTimeout(() => {
-  //     toast.dismiss(_id);
-  //   }, 2000);
-  // });
-
-
-
-
+    }
+  
 
 }
 
+//Delete Course
 async function deleteCourse  (){
 
   let _id = toast.loading("Please wait..", {//loader
@@ -241,7 +221,7 @@ toast.update(_id, { render: "Error loading courses", type: "error", isLoading: f
 
 }
 
-
+//Create Section
 const createSection = function() {
   const payload = {
     sectionTitle: sectionTitle,
@@ -271,15 +251,11 @@ const clearSectionContent = () => {
   setDisableSectionInput(!disableSectionInput)
 }
 1
-const handleDeleteModule = (sectionId:any,moduleId:any) => {
+const handleDeleteModule = async (sectionId:any,moduleId:any) => {
   console.log(sectionId)
   console.log(moduleId)
-  dispatch(deleteModuleFromSection({ sectionId, moduleId }));
-};
 
-
-const handleDeleteSection = async (sectionId:any) => {
-
+  
   let _id = toast.loading("Please wait..", {//loader
     position: "top-center",
     autoClose: 1000,
@@ -294,37 +270,71 @@ const handleDeleteSection = async (sectionId:any) => {
     const payload = {
       courseId: courseId,
       sectionId: sectionId,
+      moduleId: moduleId
+    } as IDeleteModule
+const data = await Api.PUT_DeleteModule(payload);
+if(data){
+  dispatch(deleteModuleFromSection({ sectionId, moduleId }));
+
+  toast.update(_id, { render: "module deleted", type: "success", isLoading: false });
+  setTimeout(() => {
+    toast.dismiss(_id);
+  }, 2000);
+}else{
+toast.update(_id, { render: "Error deleting module", type: "error", isLoading: false });
+
+}
+
+
+
+};
+
+
+//Delete Section
+const handleDeleteSection = async (sectionId:any) => {
+
+
+    const payload = {
+      courseId: courseId,
+      sectionId: sectionId,
+    } as IDeleteSection
+
+    const delete_section = await Api.DELETE_DeleteSection(payload);
+
+    let _id = toast.loading("Deleting section..", {//loader
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: "light",
+      });
+
+    try {
+      if(delete_section){
+        clearSectionContent()
+        dispatch(deleteSection(sectionId))
+        setDisableSectionInput(false)
+        setNewSection(true)
+        console.log("response", delete_section);
+        toast.update(_id, { render: "successfully deleted section", type: "success", isLoading: false });
+        
+        setTimeout(() => {
+          toast.dismiss(_id);
+        }, 2000);
+        return;
+      }
+    
+  
+    } catch (error) {
+      toast.update(_id, { render: "Error deleting section", type: "error", isLoading: false });
+    setTimeout(() => {
+      toast.dismiss(_id);
+    }, 2000);
     }
 
-    const delete_section = await Api.GET_CourseById(courseId);
-
-  
-  axios
-  .put(
-    "https://aff5-41-113-63-46.ngrok-free.app/api/Courses/DeleteSection", payload
-    
-  )
-  .then((response: any) => {
-    clearSectionContent()
-    dispatch(deleteSection(sectionId))
-    setDisableSectionInput(false)
-    setNewSection(true)
-    console.log("response", response);
-    toast.update(_id, { render: "successfully detelted section", type: "success", isLoading: false });
-    
-    setTimeout(() => {
-      toast.dismiss(_id);
-    }, 2000);
-    return;
-
-  
-  })
-  .catch((error: any) => {
-    toast.update(_id, { render: "Error deting section", type: "error", isLoading: false });
-    setTimeout(() => {
-      toast.dismiss(_id);
-    }, 2000);
-  });
 
 
 };
@@ -335,50 +345,6 @@ const customModalStyles = {
     width: '100%',
   },
 };
-
-const deteleCourse = () => {
-
-  let _id = toast.loading("Please wait..", {//loader
-    position: "top-center",
-    autoClose: 1000,
-    hideProgressBar: false,
-    closeOnClick: false,
-    pauseOnHover: false,
-    draggable: false,
-    progress: undefined,
-    theme: "light",
-    });
-
-    
-  axios
-  .delete(
-    "https://aff5-41-113-63-46.ngrok-free.app/api/Courses/", courseId
-    
-  )
-  .then((response: any) => {
-    clearSectionContent()
-    dispatch(deleteSection(sectionId))
-    setDisableSectionInput(false)
-    setNewSection(true)
-    console.log("response", response);
-    toast.update(_id, { render: "successfully deleted course", type: "success", isLoading: false });
-    window.location.href = "/protected/admin/edit-course" 
-
-    setTimeout(() => {
-      toast.dismiss(_id);
-    }, 2000);
-    return;
-
-  
-  })
-  .catch((error: any) => {
-    toast.update(_id, { render: "Error deting course", type: "error", isLoading: false });
-    setTimeout(() => {
-      toast.dismiss(_id);
-    }, 2000);
-  });
-
-}
 
   return (
 <div

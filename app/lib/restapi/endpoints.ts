@@ -1,5 +1,5 @@
-import { ICourse, ICourseResponseModel, IDeleteSection } from "@/app/interfaces/courses";
-import { GET, POST, PUT } from "./client";
+import { ICourse, ICourseResponseModel, IDeleteModule, IDeleteSection, IDeleteVideo } from "@/app/interfaces/courses";
+import { DELETE, GET, POST, PUT } from "./client";
 import { IResponseObject } from "./response";
 import { IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/user";
 
@@ -25,10 +25,41 @@ export const Api = {
     return response;
   },
 
-  POST_DeleteSection: async (
+  PUT_UpdateCourse: async (
+    payload: ICourse
+  ): Promise<any> => {
+    const response = await PUT(`${courseUrl}/Courses/updateCourse`, payload);
+    return response;
+  },
+
+
+  DELETE_DeleteSection: async (
     payload: IDeleteSection
-  ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${deleteurl}/Courses/AddCourse`, payload);
+  ): Promise<any>=> {
+    const response = await PUT(`${deleteurl}/Courses/deleteSection`, payload);
+    return response;
+  },
+  
+
+  DELETE_DeleteCourse: async (
+    courseId: string
+  ): Promise<any> => {
+    const response = await DELETE(`${courseUrl}/Courses/`,`id=${courseId}`);
+    return response;
+  },
+
+  
+  PUT_DeleteModule: async (
+    payload:  IDeleteModule
+  ): Promise<any> => {
+    const response = await PUT(`${deleteurl}/Courses/deleteModule`, payload);
+    return response;
+  },
+
+  DELETE_DeleteVideo: async (
+    payload:  IDeleteVideo
+  ): Promise<any> => {
+    const response = await PUT(`${deleteurl}/Courses/deleteVideo`, payload);
     return response;
   },
 
@@ -38,6 +69,8 @@ export const Api = {
     const response = await GET(`${courseUrl}/Courses/GetCourse?id=${courseId}`);
     return response;
   },
+
+
   GET_CoursesById: async (
     userId: string
   ): Promise<any> => {
