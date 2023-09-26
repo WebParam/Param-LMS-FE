@@ -19,6 +19,7 @@ export default function ResetPassword() {
   const [OtpSent, setOtpSent] = useState<boolean>(false);
   const [otp, setOTP] = useState("");
  const [showMessage, setShowMessage] = useState<boolean>(false)
+ const [role,setRole] = useState<string>("Student")
 
   const setOtp = (e: string) => {
     setOTP(e);
@@ -206,6 +207,7 @@ event.preventDefault();
                   We will email you with info on how to reset your password.
                 </small>
               </div>
+             
               <button disabled = {disable} onClick={SendOtp} className="btn btn-accent">Reset</button>
             </form>
           </div>

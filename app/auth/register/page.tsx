@@ -24,8 +24,8 @@ export default function Register() {
   const[LastNameError, setLastNameError] = useState<boolean>(false)
   const[ConfirmPassError, setConfirmPassError] = useState<boolean>(false)
   const[EmailError, setEmailError] = useState<boolean>(false)
-  const[disable , setDisable] = useState<boolean>(false)
-
+  const[disable, setDisable] = useState<boolean>(false)
+const [role,setRole]=useState()
 
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -45,7 +45,6 @@ export default function Register() {
   const navigateToLogin= () => {
     // Replace "/your-target-page" with the path to the specific page you want to navigate to
     router.push('/auth/login');
-
   };
 
   const Register = async (event: any) => {
@@ -56,7 +55,7 @@ export default function Register() {
     setEmailError(false)
     setConfirmPassError(false)
     setPasswordError(false)
- 
+    cookies.remove("param-lms-user");
   
 
     if(lname === "" || fname === "" || password === "" || ConfirmPassword === "" || email === "" ){
@@ -118,24 +117,28 @@ export default function Register() {
           Role: "",
           LoginType: 0,
         } as IUserRegisterModel;
-
-
-        const user = await  Api.POST_Register(payload);
+        
+        if(role === "Admin")
+        {
+        const user = await  Api.POST_RegisterAdmin(payload);
 
         try {
-          console.log("response", user);
+          if(user.data){
+            console.log("response", user);
     
-          toast.update(_id, {
-            render: "Successfully registered",
-            type: "success",
-            isLoading: false,
-          });
-  
-          // Set cookies here after successful login
-  
-          // Optionally, you can redirect the user to another page
-          navigateToLogin()
+            toast.update(_id, {
+              render: "Successfully registered",
+              type: "success",
+              isLoading: false,
+            });
     
+            // Set cookies here after successful login
+    
+            // Optionally, you can redirect the user to another page
+            navigateToLogin()
+      
+          }
+          
           }
          catch (error) {
           toast.update(_id, {
@@ -151,6 +154,52 @@ export default function Register() {
 
           console.log(error);
         }
+
+        }else{
+          const  user = await  Api.POST_Register(payload);
+          try {
+            if(user.data){
+              console.log("response", user);
+      
+              toast.update(_id, {
+                render: "Successfully registered",
+                type: "success",
+                isLoading: false,
+              });
+              // Set cookies here after successful login
+      
+              // Optionally, you can redirect the user to another page
+              navigateToLogin()
+            }
+            else if(user.error){
+              console.log("response", user);
+      
+              toast.update(_id, {
+                render: user.message,
+                type: "error",
+                isLoading: false,
+              });
+            }
+            }
+           catch (error) {
+            toast.update(_id, {
+              render: "Cannot register user with the supplied information",
+              type: "error",
+              isLoading: false,
+            });
+  
+            setTimeout(() => {
+              setDisable(false)
+              toast.dismiss(_id);
+            }, 2000);
+  
+            console.log(error);
+          }
+
+        }
+        
+       
+      
 
     
         // axios
@@ -223,11 +272,6 @@ export default function Register() {
       }, 2000);
   }
 
-
-
-
-
-
   return (
     <>
       <ToastContainer />
@@ -275,6 +319,27 @@ export default function Register() {
                 placeholder="Your email address ..."
               />
             </div>
+            <div className="form-group">
+          <label className="form-label">Role</label>
+          <select
+            onChange={(e:any) => setRole(e.target.value)}
+            value={role}
+            id="custom-select"
+            className="form-control custom-select"
+          >
+            <option value="Student">student</option>
+            <option value="Admin">Admin</option>
+
+          </select>
+        </div>
+
+
+
+
+
+
+
+
             <div className="form-group">
               <label className="form-label" htmlFor="password">
                 Password: {PasswordError ? <span style ={{color : "red" , fontSize: "10px"}}>*required field</span> : null}

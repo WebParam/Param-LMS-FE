@@ -54,7 +54,11 @@ export default function EditCourse() {
     ],
   };
 
-
+const logOut = () => {
+cookies.remove("param-lms-user");
+// Optionally, you can redirect the userto another page
+window.location.href = '/auth/login';
+}
   function saveAndCloseEditModal(){
 
   setEditModalOpen(false)
@@ -549,7 +553,7 @@ id="test"
         <Dropdown.Item href="/protected/admin/account">Edit Account</Dropdown.Item>
         <Dropdown.Item href="billing.html">Billing</Dropdown.Item>
         <Dropdown.Item href="billing-history.html">Payments</Dropdown.Item>
-        <Dropdown.Item href="/auth/login">Logout</Dropdown.Item>
+        <Dropdown.Item   onClick={logOut}>Logout</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
       </div>
@@ -1213,8 +1217,9 @@ id="test"
                   Payments
                 </a>
               </li>
-              <li className="sidebar-menu-item">
-                <a className="sidebar-menu-button" href="login.html">
+              <li className="sidebar-menu-item" 
+              onClick={logOut}>
+                <a className="sidebar-menu-button" >
                   Logout
                 </a>
               </li>

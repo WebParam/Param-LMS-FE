@@ -3,7 +3,7 @@ import styles from './page.module.css'
 
 export default function Dashbaord() {
   return (
-<div
+{/* <div
   className="mdk-drawer-layout js-mdk-drawer-layout"
   data-push=""
   data-responsive-width="992px"
@@ -292,7 +292,7 @@ export default function Dashbaord() {
       {/* // END Navbar Menu */}
     </div>
     {/* // END Navbar */}
-    {/* // END Header */}
+    // END Header */}
     <div className="pt-32pt">
       <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
         <div className="flex d-flex flex-column flex-sm-row align-items-center mb-24pt mb-md-0">

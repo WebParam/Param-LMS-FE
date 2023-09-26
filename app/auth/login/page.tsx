@@ -8,6 +8,7 @@ import Cookies from 'universal-cookie'; // Import the library
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
 import Dropdown from 'react-bootstrap/Dropdown';
+import { FaWindowMaximize } from 'react-icons/fa';
 
 
 const cookies = new Cookies(); // Create an instance of Cookies
@@ -18,13 +19,13 @@ const axios = require("axios").default;
 
 
 export default function Login() {
+  cookies.remove("param-lms-user"); 
   const[disable , setDisable] = useState<boolean>(false)
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const onChangeEmail = (e:any) => {
-
     setEmail(e.target.value);
-  
+
   }
 
   const onChangePassword = (e:any) => {
@@ -35,10 +36,9 @@ export default function Login() {
   const navigateToRegister= () => {
     // Replace "/your-target-page" with the path to the specific page you want to navigate to
     router.push('/auth/register');
-
   };
 
-
+ 
 
   
 
@@ -82,30 +82,47 @@ async function LoginUser (event:any){
 
     try {
       console.log("response", user);
-
-    
+    if(user.data)
+    {
       toast.update(_id, {
         render: "Successfully logged in",
         type: "success",
         isLoading: false,
       });
-
       // Set cookies here after successful login
       cookies.set('param-lms-user', user.data);
+      console.log(user.data);
+      //Optionally, you can redirect the user to another page
+      if(user.data.role=="Admin")
+      {
+        window.location.href = '/protected/admin/manage-courses'; 
+      }
+      else{
+        window.location.href = '/protected/student/course/course-detail'; 
+        console.log(user.data);
 
-      // Optionally, you can redirect the user to another page
-      window.location.href = '/protected/admin/manage-courses'; 
+      }
+    }
+    else if(user.error){
+      toast.update(_id, {
+        render: user.message,
+        type: "error",
+        isLoading: false,
+      }); 
+    }
+      
+
       }
      catch (error) {
       toast.update(_id, {
-        render: "error logging in.",
+        render: `${error}`,
         type: "error",
         isLoading: false,
       });
       setTimeout(() => {
         setDisable(false)
         toast.dismiss(_id);
-      }, 2000);
+      }, 3000);
       console.log(error);
     }
 
