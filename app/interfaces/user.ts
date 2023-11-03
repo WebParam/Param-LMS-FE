@@ -20,7 +20,7 @@ export interface IUserRegisterModel{
     ChangedOn? : Date,
   //  Status: string,
     Otp: string,
-    Role: string,
+    role: string,
     LoginType: number,
  
 }

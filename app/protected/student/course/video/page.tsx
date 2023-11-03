@@ -2,9 +2,9 @@ import Image from 'next/image'
 import styles from './page.module.css'
 
 export default function CourseDetail() {
+ 
   return (
 
-<>
 <>
   <div
     className="navbar navbar-light border-0 navbar-expand-sm"
@@ -287,7 +287,7 @@ export default function CourseDetail() {
   {/* // END Page Content */}
 </>
 
-</>
+
   
   )
 }

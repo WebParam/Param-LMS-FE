@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Api } from '../../lib/restapi/endpoints';
-import { IUserLoginModel } from '../../interfaces/user';
+import { IUserLoginModel, IUserRegisterModel } from '../../interfaces/user';
 import Cookies from 'universal-cookie'; // Import the library
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
@@ -79,33 +79,40 @@ async function LoginUser (event:any){
 
 
     const user = await  Api.POST_Login(payload);
-
+     
     try {
+      debugger;
       console.log("response", user);
+      console.log("data", user.data);
     if(user.data)
     {
+      debugger;
       toast.update(_id, {
         render: "Successfully logged in",
         type: "success",
         isLoading: false,
       });
       // Set cookies here after successful login
-      cookies.set('param-lms-user', user.data);
+     // cookies.set('param-lms-user', user.data);
+      cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
+      debugger;
       console.log(user.data);
       //Optionally, you can redirect the user to another page
+      debugger;
+      console.log("Role",user.data.role);
       if(user.data.role=="Admin")
       {
         window.location.href = '/protected/admin/manage-courses'; 
       }
       else{
-        window.location.href = '/protected/student/course/course-detail'; 
+        window.location.href = '/protected/student/course/all-courses'; 
         console.log(user.data);
 
       }
     }
-    else if(user.error){
+    else if(!user){
       toast.update(_id, {
-        render: user.message,
+        render: "Error has occured",
         type: "error",
         isLoading: false,
       }); 

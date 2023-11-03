@@ -1,3 +1,4 @@
+import { IResponseObject } from "../lib/restapi/response";
 
 export interface ICourse{
   _id:string,
@@ -6,12 +7,17 @@ export interface ICourse{
   sections: ISection[];
   createdDate: string,
   creatingUser: string,
+  creatingUserName:string,
   state:number,
   logo: string,
   courseImage: string,
   bannerImage: string,
   modifyingUser: string
 
+  }
+  export interface IStudentCourses{
+        allCourses:ICourse[],
+        enrolledCourses:ICourse[],
   }
 
   export interface ICourseResponseModel extends ICourse {

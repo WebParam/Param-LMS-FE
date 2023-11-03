@@ -1,53 +1,69 @@
-import { ICourse, ICourseResponseModel, IDeleteSection } from "@/app/interfaces/courses";
+import { ICourse, ICourseResponseModel, IDeleteSection ,IStudentCourses} from "@/app/interfaces/courses";
 import { GET, POST, PUT } from "./client";
 import { IResponseObject } from "./response";
 import { IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/user";
 
-export const courseUrl = "http://localhost:50866/api";
+export const courseWriteUrl = "http://localhost:50851/api";
 
+export const courseReadUrl="http://localhost:8001/api";
 
-export const deleteurl = "http://localhost:50866/api";
+export const deleteurl = "http://localhost:50851/api";
 
-export const authUrl = "https://localhost:50872/api";
+export const authUrl = "https://localhost:50894/api";
 
 export const Api = {
-  Base: courseUrl,
+  Base: courseWriteUrl,
 
-  GET_Courses: async (): Promise<IResponseObject<ICourseResponseModel[]>> => {
-    const response = await GET(`${courseUrl}/Courses/GetCourses`);
+  GET_Courses: async (): Promise<any> => {
+    const response = await GET(`${courseReadUrl}/Courses/GetCourses`);
     return response;
   },
 
   POST_CreateCourse: async (
     payload: ICourse
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${courseUrl}/Courses/AddCourse`, payload);
+    const response = await POST(`${courseWriteUrl}/Courses/AddCourse`, payload);
     return response;
   },
 
   POST_DeleteSection: async (
     payload: IDeleteSection
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${deleteurl}/Courses/AddCourse`, payload);
+    const response = await POST(`${courseWriteUrl}/Courses/AddCourse`, payload);
     return response;
   },
 
   GET_CourseById: async (
     courseId: string
   ): Promise<IResponseObject<ICourseResponseModel>> => {
-    const response = await GET(`${courseUrl}/Courses/GetCourse?id=${courseId}`);
+    const response = await GET(`${courseReadUrl}/Courses/GetCourse?id=${courseId}`);
     return response;
   },
+  GET_AllCourses: async (
+    courseId: string
+  ): Promise<IResponseObject<ICourseResponseModel[]>> => {
+    const response = await GET(`${courseReadUrl}/Courses/`);
+    return response;
+  },
+
   GET_CoursesById: async (
     userId: string
   ): Promise<any> => {
-    const response = await GET(`${courseUrl}/Courses/GetCoursesByUser?userId=${userId}`);
+    const response = await GET(`${courseReadUrl}/Courses/GetCoursesByUser?userId=${userId}`);
+    return response;
+  },
+
+  
+  GET_StudentCoursesById: async (
+    studentId: string
+  ): Promise<IResponseObject<IStudentCourses>> => {
+    const response = await GET(`${courseReadUrl}/Courses/GetStudentCourses?studentId=${studentId}`);
     return response;
   },
 
   GET_CoursesByIds: async (courseIds: string[]): Promise<any> => {
     const queryParams = courseIds.map(id => `Ids=${id}`).join('&');
-    const response = await GET(`${courseUrl}/Courses/GetCoursesByIds?${queryParams}`);
+    const response = await GET(`${courseReadUrl}/Courses/GetCoursesByIds?${queryParams}`);
     return response;
   },
 
@@ -60,7 +76,7 @@ DELETE_CourseById: async (
 
   POST_Login: async (
     payload: IUserLoginModel
-  ): Promise<IResponseObject<any>> => {
+  ): Promise<IResponseObject<IUserRegisterModel>> => {
     const response = await POST(`${authUrl}/Users/Login`, payload);
     return response;
   },

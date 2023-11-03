@@ -3,13 +3,15 @@ import Image from "next/image";
 import Cookies from 'universal-cookie';
 import { ReduxProvider } from "../provider";
 
-const cookies = new Cookies();
+const cookies =
+new Cookies();
 
 const isLoggedIn = cookies.get('param-lms-user');
 
 console.log(isLoggedIn)
 
-export const metadata = {
+
+const metadata = {
   title: "Login",
   description: "Supercharge your learning",
 };

@@ -16,7 +16,7 @@ import { EditCourseModal } from './edit-module-modal';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+//import 'react-toastify/dist/ReactToastify.css';
 import Dropdown from 'react-bootstrap/Dropdown';
 export default function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -710,20 +710,7 @@ id="test"
 
             <label className="form-label">Course Description</label>
 
-                <div style={{ height: "150px" }}>
-                <div style={{ height: '200px', overflow: 'auto' }}>
-  <ReactQuill
-    style={{ height: '100px' }}
-    value={courseDescription}
-    onChange={(value) => {
-      setCourseDescription(value); // Pass the new description
-    }}
-    placeholder="Course description..."
-    modules={descriptionToolbar}
-  />
-</div>
-     
-                </div>
+    
 
             
                 <div style={{display: "flex", flexDirection: "row", justifyContent: "flex-end", marginTop: "5px"}}>

@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import React, { useRef, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+//import "react-quill/dist/quill.snow.css";
 import { FaBullseye, FaPencilAlt, FaPlus, FaTrash, FaVideo } from "react-icons/fa";
 import { addModuleToSection, addVideoToModule, deleteVideoFromModule, editVideoDetails, getSelectedCourseForEdit, updateModuleDetail } from "@/app/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -264,7 +264,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                   </small>
                 </div>
                 <label className="form-label">Module Description</label>
-                <div style={{ height: '200px', overflow: 'auto' }}>
+{      /*          <div style={{ height: '200px', overflow: 'auto' }}>
   <ReactQuill
     style={{ height: '100px' }}
     value={moduleDescription}
@@ -277,7 +277,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     placeholder="Module description..."
     modules={moduleToolbar}
   />
-</div>
+  </div>*/}
 {
 
 isModuleSaved && <>

@@ -1,7 +1,73 @@
+"use client"
 import Image from 'next/image'
 import styles from './page.module.css'
+import { useState } from 'react';
+import Cookies from 'universal-cookie';
+import { Api } from '@/app/lib/restapi/endpoints';
+import { ICourse, ISection } from '@/app/interfaces/courses';
+import {useEffect} from 'react'
+const cookies = new Cookies();
+
 
 export default function CourseDetail() {
+  const [data, setData] = useState<ICourse>(
+  );
+  const [description,setDescription]=useState("")
+  const [title,setTitle]=useState("")
+  const [sections,setSection]=useState<ISection[]>([])
+  const [openSections,setOpenSections]=useState<number[]>([]);
+
+ 
+
+  useEffect(() => {
+    //getCourse();
+    var course =cookies.get('course');
+    setData(course);
+    setSection(course.sections)
+    
+  },[]); 
+  // async function getCourse() {
+    
+  //   const course = await  Api.GET_CourseById(courseId);
+  //   console.log("my course",course);
+
+  //   try {
+  //      if (course && course.data) {
+  //       const payload:ICourse ={
+  //        _id : courseId,
+  //        title:  course.data?.title,
+  //        description:  course.data?.description,
+  //        sections:  course.data?.sections,
+  //        createdDate: course.data?.createdDate,
+  //        creatingUser: course.data?.creatingUser,
+  //        state: course.data?.state,
+  //        logo:course.data?.logo,
+  //        courseImage: course.data?.courseImage,
+  //        bannerImage: course.data?.bannerImage,
+  //        modifyingUser: course.data?.modifyingUser
+  //       } 
+  //       setData(payload);
+  //       setDescription(payload.description);
+  //       setTitle(payload.title);
+  //       setSection(payload.sections)
+       
+  //     } else {
+  //       console.log('Course not found');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+
+  //   }
+  // }
+
+  function _SetOpenSections(i:number){
+    debugger;
+    if(openSections.includes(i))
+    { setOpenSections(openSections.filter(x=>x!=i))}
+    else{ setOpenSections([...openSections, i])}
+  }
+
+  console.log("open", openSections)
   return (
 
 <>
@@ -31,12 +97,10 @@ export default function CourseDetail() {
       <div className="mdk-box__content">
         <div className="hero py-64pt text-center text-sm-left">
           <div className="container page__container">
-            <h1 className="text-white">Angular Fundamentals</h1>
+            <h1 className="text-white">{data ? data.title ?? "" : ""}
+</h1>
             <p className="lead text-white-50 measure-hero-lead">
-              It’s not every day that one of the most important front-end
-              libraries in web development gets a complete overhaul. Keep your
-              skills relevant and up-to-date with this comprehensive
-              introduction to Google’s popular community project.
+             {description}
             </p>
             <div className="d-flex flex-column flex-sm-row align-items-center justify-content-start">
               <a
@@ -71,7 +135,7 @@ export default function CourseDetail() {
               </span>
               <div className="media-body">
                 <a className="card-title m-0" href="teacher-profile.html">
-                  Eddie Bryan
+                  {data?.creatingUserName}
                 </a>
                 <p className="text-50 lh-1 mb-0">Instructor</p>
               </div>
@@ -122,7 +186,7 @@ export default function CourseDetail() {
               id="parent"
               data-domfactory-upgraded="accordion"
             >
-              <div className="accordion__item">
+              {/* <div onClick={(e)=>{e.preventDefault(); }} className={  "accordion__item"}>
                 <a
                   href="#"
                   className="accordion__toggle collapsed"
@@ -140,7 +204,7 @@ export default function CourseDetail() {
                     <span className="icon-holder icon-holder--small icon-holder--dark rounded-circle d-inline-flex icon--left">
                       <i className="material-icons icon-16pt">
                         play_circle_outline
-                      </i>
+                      // // </i>
                     </span>
                     <a className="flex" href="student-lesson.html">
                       Watch Trailer
@@ -148,8 +212,8 @@ export default function CourseDetail() {
                     <span className="text-muted">1m 10s</span>
                   </div>
                 </div>
-              </div>
-              <div className="accordion__item open">
+              </div> */}
+               {/* <div className="accordion__item open">
                 <a
                   href="#"
                   className="accordion__toggle"
@@ -206,35 +270,61 @@ export default function CourseDetail() {
                     </a>
                   </div>
                 </div>
-              </div>
-              <div className="accordion__item">
-                <a
-                  href="#"
-                  className="accordion__toggle collapsed"
-                  data-toggle="collapse"
-                  data-target="#course-toc-3"
-                  data-parent="#parent"
-                >
-                  <span className="flex">
-                    Creating and Communicating Between Angular Components
-                  </span>
-                  <span className="accordion__toggle-icon material-icons">
-                    keyboard_arrow_down
-                  </span>
-                </a>
-                <div className="accordion__menu collapse" id="course-toc-3">
-                  <div className="accordion__menu-link">
+        </div>   */}
+              
+              {sections.length > 0 && (
+  <>
+    {sections.map((section,i) => (
+      <div  
+        onClick={(e)=>{ _SetOpenSections(i);e.preventDefault();}}
+        className= { openSections.includes(i)? "accordion__item open": "accordion__item"} 
+         key={section.id}
+        >
+
+        <a
+          href="#"
+          className="accordion__toggle"
+          data-toggle="collapse"
+          data-target={`#course-toc-${section.id}`}
+          data-parent="#parent"
+        >
+          <span className="flex">
+            {section.title ?? "Section title"}
+          </span>
+          <span className="accordion__toggle-icon material-icons">
+            keyboard_arrow_down
+          </span>
+        </a>
+        <div className={openSections.includes(i)? "accordion__menu collapse show": "accordion__menu collapse"} id={`course-toc-${section.id}`}>
+          <div className="accordion__menu-link">
+            <span className="icon-holder icon-holder--small icon-holder--light rounded-circle d-inline-flex icon--left">
+              <i className="material-icons icon-16pt">lock</i>
+            </span>
+            <a className="flex" href="student-lesson.html">
+              
+            </a>
+            <span className="text-muted">04:23</span>
+            <div className="accordion__menu-link">
                     <span className="icon-holder icon-holder--small icon-holder--light rounded-circle d-inline-flex icon--left">
-                      <i className="material-icons icon-16pt">lock</i>
+                      <i className="material-icons icon-16pt">
+                        hourglass_empty
+                      </i>
                     </span>
-                    <a className="flex" href="student-lesson.html">
-                      Angular Components
-                    </a>
-                    <span className="text-muted">04:23</span>
+                    {section.modules.map(module=>(
+                       <a className="flex" href="student-take-quiz.html">
+                        {module.title}
+                       </a>
+                    ))}
+                   
                   </div>
-                </div>
-              </div>
-              <div className="accordion__item">
+          </div>
+        </div>
+      </div>
+    ))}
+  </>
+)}
+
+              {/* <div className="accordion__item">
                 <a
                   href="#"
                   className="accordion__toggle collapsed"
@@ -260,7 +350,7 @@ export default function CourseDetail() {
                     <span className="text-muted">04:23</span>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="col-lg-5 justify-content-center">
@@ -295,17 +385,14 @@ export default function CourseDetail() {
               <div className="page-separator__text">About this course</div>
             </div>
             <p className="text-70">
+             {data?.description}
+            </p>
+            {/* <p className="text-70 mb-0">
               This course will teach you the fundamentals o*f working with
               Angular 2. You *will learn everything you need to know to create
               complete applications including: components, services, directives,
               pipes, routing, HTTP, and even testing.
-            </p>
-            <p className="text-70 mb-0">
-              This course will teach you the fundamentals o*f working with
-              Angular 2. You *will learn everything you need to know to create
-              complete applications including: components, services, directives,
-              pipes, routing, HTTP, and even testing.
-            </p>
+            </p> */}
           </div>
           <div className="col-md-5">
             <div className="page-separator">
