@@ -7,7 +7,10 @@ import ReactQuill from "react-quill";
 import { FaBullseye, FaPencilAlt, FaPlus, FaTrash, FaVideo } from "react-icons/fa";
 import { addModuleToSection, addVideoToModule, deleteVideoFromModule, editVideoDetails, getSelectedCourseForEdit, updateModuleDetail } from "@/app/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { ICourse, IModule, IUpdateModuleDetailState } from "@/app/interfaces/courses";
+import { ICourse, IDeleteVideo, IModule, IUpdateModuleDetailState } from "@/app/interfaces/courses";
+import { Api } from "@/app/lib/restapi/endpoints";
+import Cookies from "universal-cookie";
+import { toast } from "react-toastify";
 
 
 interface EditCourseModalProps {
@@ -34,7 +37,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [changeVidBtn, setChangeVidBtn] = useState<boolean>(true);
   const [videoId, setVideoId] = useState<string>("");
 
-
+  const cookies = new Cookies();
+  const courseId = cookies.get('courseId');
   const moduleToolbar = {
     toolbar: [
       [{ header: "1" }, { header: "2" }],
@@ -45,8 +49,49 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
 
  
-  const deleteVideoHandler = (moduleId:any, videoId:any) => {
-    dispatch(deleteVideoFromModule({ moduleId, videoId }));
+  const deleteVideoHandler = async (moduleId:any, videoId:any) => {
+
+    const payload = {
+      courseId:courseId, 
+      sectionId:sectionId, 
+      moduleId:moduleId,
+      videoId:videoId
+    } as IDeleteVideo
+
+    const deleteVideo = await Api.DELETE_DeleteVideo(payload);
+    let _id = toast.loading("Deleting video..", {//loader
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: "light",
+      });
+
+    try {
+      if(deleteVideo){
+        toast.update(_id, { render: "successfully deleted video", type: "success", isLoading: false });
+        dispatch(deleteVideoFromModule({ moduleId, videoId }));
+        setTimeout(() => {
+          
+          toast.dismiss(_id);
+    
+        }, 2000);
+        return;
+      }
+    
+  
+    } catch (error) {
+      toast.update(_id, { render: "Error deleting  video", type: "error", isLoading: false });
+      setTimeout(() => {
+  
+        toast.dismiss(_id);
+      }, 2000);
+    }
+
+  
   };
 
   const editModule = () => {

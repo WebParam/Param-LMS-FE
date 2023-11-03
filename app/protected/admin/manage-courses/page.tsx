@@ -40,7 +40,7 @@ console.log(userData);
       progress: undefined,
       theme: "light",
       });
- const data = await Api.GET_Courses();
+ const data = await Api.GET_CoursesById(userData.id);
  if(data){
   toast.dismiss(_id);
   SetCourses(data);
@@ -51,10 +51,6 @@ console.log(userData);
 
  }
 
-
-
- 
- 
    }
 
    const editCourse = (courseId:any) => {

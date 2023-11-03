@@ -1,4 +1,4 @@
-import { ICourse, ICourseResponseModel, IDeleteSection ,IStudentCourses} from "@/app/interfaces/courses";
+import { ICourse, ICourseResponseModel, IDeleteSection } from "@/app/interfaces/courses";
 import { GET, POST, PUT } from "./client";
 import { IResponseObject } from "./response";
 import { IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/user";
@@ -26,10 +26,18 @@ export const Api = {
     return response;
   },
 
-  POST_DeleteSection: async (
+  PUT_UpdateCourse: async (
+    payload: ICourse
+  ): Promise<any> => {
+    const response = await PUT(`${courseUrl}/Courses/updateCourse`, payload);
+    return response;
+  },
+
+
+  DELETE_DeleteSection: async (
     payload: IDeleteSection
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${courseWriteUrl}/Courses/AddCourse`, payload);
+    const response = await POST(`${deleteurl}/Courses/AddCourse`, payload);
     return response;
   },
 
@@ -45,7 +53,6 @@ export const Api = {
     const response = await GET(`${courseReadUrl}/Courses/`);
     return response;
   },
-
   GET_CoursesById: async (
     userId: string
   ): Promise<any> => {

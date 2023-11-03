@@ -174,40 +174,6 @@ console.log("Creating User ",payload.creatingUser)
       toast.dismiss(_id);
     }, 2000);
   }
-
-  // axios
-  // .post(
-  //   "https://a3df-154-0-14-142.ngrok-free.app/api/Courses/AddCourse", Coursepayload
-    
-  // )
-  // .then((response: any) => {
-  //   console.log("response", response);
-  //   toast.update(_id, { render: "successfully saved course", type: "success", isLoading: false });
-   
-  //   setTimeout(() => {
-  //     dispatch(deleteAllSections());
-  //     setCourseTitle("")
-  //    setCourseDescription("")
-  //     setCompetency("")
-  //     toast.dismiss(_id);
-  //     setDisableCreateCourseBtn(false)
-
-  //   }, 2000);
-  //   return;
-
-  // })
-  // .catch((error: any) => {
-  //   toast.update(_id, { render: "Error saving course", type: "error", isLoading: false });
-  //   setTimeout(() => {
-  //     setDisableCreateCourseBtn(false)
-
-  //     toast.dismiss(_id);
-  //   }, 2000);
-  // });
-
-
-
-
 }
 
 const createSection = function() {

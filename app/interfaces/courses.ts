@@ -150,7 +150,18 @@ modifiedDate: string,
       
         courseId:string, 
         sectionId:string, 
-        
-    
-    
+
 }
+  
+export interface IDeleteModule{
+      
+        courseId:string, 
+        sectionId:string, 
+        moduleId:string
+}
+
+export interface IDeleteVideo{
+      
+        payload
+}
+
