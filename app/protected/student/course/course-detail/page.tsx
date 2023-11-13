@@ -4,28 +4,59 @@ import styles from './page.module.css'
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';
-import { ICourse, ISection } from '@/app/interfaces/courses';
+import { ICourse, ISection,IModule } from '@/app/interfaces/courses';
 import {useEffect} from 'react'
+import { IUser } from '@/app/interfaces/user';
+import { IResponseObject } from '@/app/lib/restapi/response';
 const cookies = new Cookies();
 
 
 export default function CourseDetail() {
-  const [data, setData] = useState<ICourse>(
-  );
-  const [description,setDescription]=useState("")
-  const [title,setTitle]=useState("")
+  const [data, setData] = useState<ICourse>();
   const [sections,setSection]=useState<ISection[]>([])
   const [openSections,setOpenSections]=useState<number[]>([]);
+  const [userCourses,setUserCourses]=useState<ICourse[]>([]);
+  const [author,setAuthor]=useState<IUser>();
 
+  const goToSectionModule=(module:IModule)=>{
+    localStorage.setItem("module",JSON.stringify(module));
+    window.location.href = '/protected/student/course/video'; 
+   }
  
+   
 
   useEffect(() => {
-    //getCourse();
-    var course =cookies.get('course');
-    setData(course);
-    setSection(course.sections)
-    
+   const state = JSON.parse(localStorage.getItem("course")as any) || null ;
+    setSection(state?.sections);
+       setData(state);
+    getUserCourses(state?.creatingUser);
+    getAuthor(state?.creatingUser);
+  
   },[]); 
+
+
+  async function getUserCourses(id:string){
+    var userCourses= await Api.GET_CoursesByUserId(id);
+    debugger;
+    console.log("Author courses",userCourses.data);
+    setUserCourses(userCourses.data);
+  }
+  async function getAuthor(id:string){
+   
+    var author:IUser= cookies.get(id);
+    debugger;
+    if(!author)
+    {
+      var response:IResponseObject<IUser> = await Api.GET_UserById(id);
+      cookies.set(id,response.data);
+      setAuthor(response.data);
+    }
+    else{
+    setAuthor(author);
+    }
+    
+
+  }
   // async function getCourse() {
     
   //   const course = await  Api.GET_CourseById(courseId);
@@ -100,7 +131,7 @@ export default function CourseDetail() {
             <h1 className="text-white">{data ? data.title ?? "" : ""}
 </h1>
             <p className="lead text-white-50 measure-hero-lead">
-             {description}
+             {data?.description}
             </p>
             <div className="d-flex flex-column flex-sm-row align-items-center justify-content-start">
               <a
@@ -282,7 +313,7 @@ export default function CourseDetail() {
         >
 
         <a
-          href="#"
+         
           className="accordion__toggle"
           data-toggle="collapse"
           data-target={`#course-toc-${section.id}`}
@@ -311,7 +342,7 @@ export default function CourseDetail() {
                       </i>
                     </span>
                     {section.modules.map(module=>(
-                       <a className="flex" href="student-take-quiz.html">
+                       <a className="flex" style={{cursor:"pointer"}}  onClick={()=>goToSectionModule(module)}>
                         {module.title}
                        </a>
                     ))}
@@ -353,7 +384,7 @@ export default function CourseDetail() {
               </div> */}
             </div>
           </div>
-          <div className="col-lg-5 justify-content-center">
+          {/* <div className="col-lg-5 justify-content-center">
             <div className="card">
               <div className="card-body py-16pt text-center">
                 <span className="icon-holder icon-holder--outline-secondary rounded-circle d-inline-flex mb-8pt">
@@ -373,7 +404,7 @@ export default function CourseDetail() {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
@@ -401,13 +432,18 @@ export default function CourseDetail() {
               </div>
             </div>
             <ul className="list-unstyled">
+             {
+              sections.map((section)=>(
+
               <li className="d-flex align-items-center">
-                <span className="material-icons text-50 mr-8pt">check</span>
-                <span className="text-70">
-                  Fundamentals of working with Angular
-                </span>
-              </li>
-              <li className="d-flex align-items-center">
+              <span className="material-icons text-50 mr-8pt">check</span>
+              <span className="text-70">
+                {section.title}
+              </span>
+            </li>))
+             }
+             
+              {/* <li className="d-flex align-items-center">
                 <span className="material-icons text-50 mr-8pt">check</span>
                 <span className="text-70">
                   Create complete Angular applications
@@ -426,7 +462,7 @@ export default function CourseDetail() {
               <li className="d-flex align-items-center">
                 <span className="material-icons text-50 mr-8pt">check</span>
                 <span className="text-70">Testing with Angular</span>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
@@ -438,52 +474,55 @@ export default function CourseDetail() {
           <div className="col-md-7 mb-24pt mb-md-0">
             <h4>About the author</h4>
             <p className="text-70 mb-24pt">
-              Eddie Bryan is a software developer at LearnD*ash. With more than
-              20 years o*f software development experience, he has gained a
-              passion for Agile software development -- especially Lean.
+              {author?.summary}
             </p>
             <div className="page-separator">
               <div className="page-separator__text bg-white">
                 More from the author
               </div>
             </div>
-            <div className="card card-sm mb-8pt">
-              <div className="card-body d-flex align-items-center">
-                <a href="course.html" className="avatar avatar-4by3 mr-12pt">
-                  <img
-                    src="public/images/paths/angular_routing_200x168.png"
-                    alt="Angular Routing In-Depth"
-                    className="avatar-img rounded"
-                  />
-                </a>
-                <div className="flex">
-                  <a className="card-title mb-4pt" href="course.html">
-                    Angular Routing In-Depth
+            {
+              userCourses.map((course)=>(
+                <div className="card card-sm mb-8pt">
+                <div className="card-body d-flex align-items-center">
+                  <a href="course.html" className="avatar avatar-4by3 mr-12pt">
+                    <img
+                      src={course.bannerImage}
+                      alt="Angular Routing In-Depth"
+                      className="avatar-img rounded"
+                    />
                   </a>
-                  <div className="d-flex align-items-center">
-                    <div className="rating mr-8pt">
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star_border</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star_border</span>
-                      </span>
+                  <div className="flex">
+                    <a className="card-title mb-4pt" href="course.html">
+                      {course.title}
+                    </a>
+                    <div className="d-flex align-items-center">
+                      <div className="rating mr-8pt">
+                        <span className="rating__item">
+                          <span className="material-icons">star</span>
+                        </span>
+                        <span className="rating__item">
+                          <span className="material-icons">star</span>
+                        </span>
+                        <span className="rating__item">
+                          <span className="material-icons">star</span>
+                        </span>
+                        <span className="rating__item">
+                          <span className="material-icons">star_border</span>
+                        </span>
+                        <span className="rating__item">
+                          <span className="material-icons">star_border</span>
+                        </span>
+                      </div>
+                      <small className="text-muted">3/5</small>
                     </div>
-                    <small className="text-muted">3/5</small>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="card card-sm mb-16pt">
+              ))
+            }
+           
+            {/* <div className="card card-sm mb-16pt">
               <div className="card-body d-flex align-items-center">
                 <a href="course.html" className="avatar avatar-4by3 mr-12pt">
                   <img
@@ -518,8 +557,8 @@ export default function CourseDetail() {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="list-group list-group-flush">
+            </div> */}
+            {/* <div className="list-group list-group-flush">
               <div className="list-group-item px-0">
                 <a href="" className="card-title mb-4pt">
                   Angular Best Practices
@@ -550,21 +589,21 @@ export default function CourseDetail() {
                   <small className="text-muted">13 May 2018</small>
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="col-md-5 pt-sm-32pt pt-md-0 d-flex flex-column align-items-center justify-content-start">
             <div className="text-center">
               <p className="mb-16pt">
                 <img
-                  src="../../public/images/people/110/guy-6.jpg"
+                  src={author?.image}
                   alt="guy-6"
                   className="rounded-circle"
                   width={64}
                 />
               </p>
-              <h4 className="m-0">Eddie Bryan</h4>
+              <h4 className="m-0">{author?.name} {author?.surname}</h4>
               <p className="lh-1">
-                <small className="text-muted">Angular, Web Development</small>
+                <small className="text-muted">{author?.headLine}</small>
               </p>
               <div className="d-flex flex-column flex-sm-row align-items-center justify-content-start">
                 <a

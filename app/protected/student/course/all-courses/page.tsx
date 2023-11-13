@@ -4,17 +4,24 @@ import styles from './page.module.css'
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';
-import { ICourseResponseModel } from '@/app/interfaces/courses';
+import { ICourse, ICourseResponseModel } from '@/app/interfaces/courses';
 import {useEffect} from 'react'
 import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedCourse } from '@/app/viewCourseSlice';
 const cookies = new Cookies();
 
 
 export default function CourseDetail() {
+  const dispatch = useDispatch();
    const [allCourses, setCourses] = useState<ICourseResponseModel[]>([]); 
    const [enrolledCourses, setEnrolledCourses] = useState<ICourseResponseModel[]>([]); 
-   const goToCourseDetails=(course:any)=>{
-    cookies.set("course",course);
+
+   const goToCourseDetails=(course:ICourse)=>{
+    debugger;
+   // cookies.set("course",course);
+   debugger;
+    dispatch(setSelectedCourse(course));
     window.location.href = '/protected/student/course/course-detail'; 
    }
    
@@ -95,7 +102,7 @@ useEffect(() => {
           enrolledCourses.map((course)=>(
             <div className="col-md-6 col-lg-4 col-xl-3 card-group-row__col">
             <div
-              className="card card-sm card--elevated p-relative o-hidden overlay overlay--primary-dodger-blue js-overlay mdk-reveal js-mdk-reveal card-group-row__card"
+              className="card card-sm card--elevated p-relative o-hidden js-overlay mdk-reveal js-mdk-reveal card-group-row__card"
               data-overlay-onload-show=""
               data-popover-onload-show=""
               data-force-reveal=""
@@ -122,9 +129,12 @@ useEffect(() => {
                       <a className="card-title" onClick={() => goToCourseDetails(course)}>
                        {course.title}
                       </a>
+                      <p>
                       <small className="text-50 font-weight-bold mb-4pt">
                         {course.creatingUserName}
                       </small>
+                      </p>
+                     
                     </div>
                     <a
                       onClick={() => goToCourseDetails(course)}
@@ -806,7 +816,7 @@ useEffect(() => {
                 
             <div className="col-md-6 col-lg-4 col-xl-3 card-group-row__col">
           <div
-            className="card card-sm card--elevated p-relative o-hidden overlay overlay--primary-dodger-blue js-overlay card-group-row__card"
+            className="card card-sm card--elevated p-relative o-hidden js-overlay card-group-row__card"
             data-toggle="popover"
             data-trigger="click"
           >
@@ -836,7 +846,7 @@ useEffect(() => {
                 <div className="flex">
                   <a className="card-title" onClick={() => goToCourseDetails(course)}>
                     {course.title}
-                  </a>
+                  </a><br/>
                   <small className="text-50 font-weight-bold mb-4pt">
                     {course.creatingUser}
                   </small>

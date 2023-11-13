@@ -72,10 +72,8 @@ modifiedDate: string,
   thumbnailImage: string,
   length: string,
   format: string,
-  size: string
-
- 
-
+  size: string,
+  description:string
   }
   
   export interface Comment {
@@ -162,6 +160,6 @@ export interface IDeleteModule{
 
 export interface IDeleteVideo{
       
-        payload
+      
 }
 

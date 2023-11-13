@@ -1,15 +1,15 @@
-import { ICourse, ICourseResponseModel, IDeleteSection } from "@/app/interfaces/courses";
+import { ICourse, ICourseResponseModel, IDeleteSection,IDeleteVideo,IStudentCourses } from "@/app/interfaces/courses";
 import { GET, POST, PUT } from "./client";
 import { IResponseObject } from "./response";
-import { IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/user";
+import { IUser, IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/user";
 
 export const courseWriteUrl = "http://localhost:50851/api";
 
 export const courseReadUrl="http://localhost:8001/api";
 
-export const deleteurl = "http://localhost:50851/api";
+export const userWriteUrl = "https://localhost:50829/api";
 
-export const authUrl = "https://localhost:50894/api";
+export const userReadUrl="https://localhost:51324/api"
 
 export const Api = {
   Base: courseWriteUrl,
@@ -29,7 +29,7 @@ export const Api = {
   PUT_UpdateCourse: async (
     payload: ICourse
   ): Promise<any> => {
-    const response = await PUT(`${courseUrl}/Courses/updateCourse`, payload);
+    const response = await PUT(`${courseWriteUrl}/Courses/updateCourse`, payload);
     return response;
   },
 
@@ -37,7 +37,14 @@ export const Api = {
   DELETE_DeleteSection: async (
     payload: IDeleteSection
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${deleteurl}/Courses/AddCourse`, payload);
+    const response = await POST(`${courseWriteUrl}/Courses/DeleteSection`, payload);
+    return response;
+  },
+
+  DELETE_DeleteVideo: async (
+    payload: IDeleteVideo
+  ): Promise<IResponseObject<any>> => {
+    const response = await POST(`${courseWriteUrl}/Courses/DeleteVideo`, payload);
     return response;
   },
 
@@ -53,7 +60,7 @@ export const Api = {
     const response = await GET(`${courseReadUrl}/Courses/`);
     return response;
   },
-  GET_CoursesById: async (
+  GET_CoursesByUserId: async (
     userId: string
   ): Promise<any> => {
     const response = await GET(`${courseReadUrl}/Courses/GetCoursesByUser?userId=${userId}`);
@@ -77,28 +84,52 @@ export const Api = {
 DELETE_CourseById: async (
     courseId: string
   ): Promise<any> => {
-    const response = await GET(`${deleteurl}/Courses/${courseId}`);
+    const response = await GET(`${courseWriteUrl}/Courses/${courseId}`);
     return response;
   },
 
   POST_Login: async (
     payload: IUserLoginModel
   ): Promise<IResponseObject<IUserRegisterModel>> => {
-    const response = await POST(`${authUrl}/Users/Login`, payload);
+    const response = await POST(`${userWriteUrl}/Users/Login`, payload);
     return response;
   },
 
   POST_Register: async (
     payload: IUserRegisterModel
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${authUrl}/Users/AddUser`, payload);
+    const response = await POST(`${userWriteUrl}/Users/AddUser`, payload);
     return response;
   },
   POST_RegisterAdmin: async (
     payload: IUserRegisterModel
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${authUrl}/Users/AddAdmin`, payload);
+    const response = await POST(`${userWriteUrl}/Users/AddAdmin`, payload);
     return response;
   },
 
+  GET_UserById:async(id:string)
+          :Promise<IResponseObject<IUser>>=>{
+            debugger;
+            const response:IResponseObject<IUserRegisterModel>= await GET(`${userReadUrl}/Users/GetUserById?Id=${id}`);
+            debugger;
+            console.log("response:" ,response);
+           
+            const user:IResponseObject<IUser>={
+              data:{
+                name:response.data?.firstName??"",
+                surname:response.data?.lastName??"",
+                image:response.data?.image??"",
+                email:response.data?.email??"",
+                summary:response.data?.summary??"",
+                headLine:response.data?.headLine??""
+              },
+              message:response.message,
+              error:response.error,
+              status:0
+            };
+            console.log("Author response:",user);
+           return user;
+          }
+          
 };

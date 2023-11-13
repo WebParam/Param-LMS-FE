@@ -273,7 +273,7 @@ setDisableSaveChanges(true);
   <ReactQuill
     style={{ height: '100px' }}
     value={moduleDescription}
-    onChange={(value) => {
+    onChange={(value:string) => {
 
       setModuleDescription(value); // Pass the new description
       saveChangeBtn()
