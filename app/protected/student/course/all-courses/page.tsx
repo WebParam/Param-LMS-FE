@@ -19,7 +19,6 @@ export default function CourseDetail() {
 
    const goToCourseDetails=(course:ICourse)=>{
     debugger;
-   // cookies.set("course",course);
    debugger;
     dispatch(setSelectedCourse(course));
     window.location.href = '/protected/student/course/course-detail'; 
@@ -848,7 +847,7 @@ useEffect(() => {
                     {course.title}
                   </a><br/>
                   <small className="text-50 font-weight-bold mb-4pt">
-                    {course.creatingUser}
+                    {course.creatingUserName}
                   </small>
                 </div>
                 <a
@@ -898,7 +897,7 @@ useEffect(() => {
                     play_circle_outline
                   </span>
                   <p className="flex text-50 lh-1 mb-0">
-                    <small>12 lessons</small>
+                    <small>{`${course.sections.length > 1 ? course.sections.length.toString()+" sections":course.sections.length.toString()+" section"}`}</small>
                   </p>
                 </div>
               </div>

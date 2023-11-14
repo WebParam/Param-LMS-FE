@@ -31,9 +31,7 @@ export const viewCourseSlice = createSlice({
         setSelectedCourse(state, action) {
             state.course = action.payload;
             localStorage.setItem("course", JSON.stringify(action.payload));
-          
-            // const course = 
-            // console.log("Local storage",course);
+        
         }}
 }
 );
@@ -44,8 +42,10 @@ export const {
   } = viewCourseSlice.actions;
 
 export const getSelectedCourse = (state: AppStore) => {
-  
-    return state.course;
+  debugger;
+    state.course=JSON.parse(localStorage.getItem("course")as any) || null ;
+    console.log("State",state.course);
+    return state;
 };
    
      

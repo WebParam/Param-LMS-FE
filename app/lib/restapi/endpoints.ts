@@ -7,7 +7,7 @@ export const courseWriteUrl = "http://localhost:50851/api";
 
 export const courseReadUrl="http://localhost:8001/api";
 
-export const userWriteUrl = "https://localhost:50829/api";
+export const userWriteUrl = "https://localhost:53011/api";
 
 export const userReadUrl="https://localhost:51324/api"
 

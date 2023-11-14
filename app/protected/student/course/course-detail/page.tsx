@@ -6,8 +6,10 @@ import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';
 import { ICourse, ISection,IModule } from '@/app/interfaces/courses';
 import {useEffect} from 'react'
+import { useDispatch, useSelector } from "react-redux";
 import { IUser } from '@/app/interfaces/user';
 import { IResponseObject } from '@/app/lib/restapi/response';
+import { getSelectedCourse } from '@/app/viewCourseSlice';
 const cookies = new Cookies();
 
 
@@ -24,9 +26,11 @@ export default function CourseDetail() {
    }
  
    
-
+   const state:any=useSelector(getSelectedCourse).course;
+   debugger;
+   console.log("Course details",state);
   useEffect(() => {
-   const state = JSON.parse(localStorage.getItem("course")as any) || null ;
+   
     setSection(state?.sections);
        setData(state);
     getUserCourses(state?.creatingUser);
