@@ -2,15 +2,19 @@ import { ICourse, ICourseResponseModel, IDeleteSection,IDeleteVideo,IStudentCour
 import { GET, POST, PUT } from "./client";
 import { IResponseObject } from "./response";
 import { IUser, IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/user";
+import  IComment, { ICommentReply }  from "@/app/interfaces/comment";
 
 export const courseWriteUrl = "http://localhost:50851/api";
 
 export const courseReadUrl="http://localhost:8001/api";
 
-export const userWriteUrl = "https://localhost:53011/api";
+export const userWriteUrl = "https://localhost:51803/api";
 
-export const userReadUrl="https://localhost:51324/api"
+export const userReadUrl="https://localhost:51800/api";
 
+export const commentReadUrl="https://localhost:51812/api";
+
+export const commentWriteUrl="https://localhost:51806/api";
 export const Api = {
   Base: courseWriteUrl,
 
@@ -60,6 +64,14 @@ export const Api = {
     const response = await GET(`${courseReadUrl}/Courses/`);
     return response;
   },
+
+  GET_CommentsByReference: async (
+    referenceId: string
+  ): Promise<IResponseObject<IComment>[]> => {
+    const response = await GET(`${commentReadUrl}/Comments/GetCommentsByReference?referenceId=${referenceId}`);
+    return response;
+  },
+
   GET_CoursesByUserId: async (
     userId: string
   ): Promise<any> => {
@@ -78,6 +90,12 @@ export const Api = {
   GET_CoursesByIds: async (courseIds: string[]): Promise<any> => {
     const queryParams = courseIds.map(id => `Ids=${id}`).join('&');
     const response = await GET(`${courseReadUrl}/Courses/GetCoursesByIds?${queryParams}`);
+    return response;
+  },
+
+  GET_UsersByIds:async (userIds:string[]):Promise<IResponseObject<IUser>[]>=>{
+   const queryParams=userIds.map(id => `Ids=${id}`).join('&');
+   const response = await GET(`${courseReadUrl}/Users/GetUsersByIds?${queryParams}`);
     return response;
   },
 
@@ -110,9 +128,9 @@ DELETE_CourseById: async (
 
   GET_UserById:async(id:string)
           :Promise<IResponseObject<IUser>>=>{
-            debugger;
+            
             const response:IResponseObject<IUserRegisterModel>= await GET(`${userReadUrl}/Users/GetUserById?Id=${id}`);
-            debugger;
+            
             console.log("response:" ,response);
            
             const user:IResponseObject<IUser>={
@@ -130,6 +148,15 @@ DELETE_CourseById: async (
             };
             console.log("Author response:",user);
            return user;
-          }
-          
+          },
+  POST_AddComment:async (payload:IComment)
+  :Promise<IResponseObject<IComment>>=>{
+    const response = await POST(`${commentWriteUrl}/Comments/AddComment`,payload);
+    return response;
+  },
+  POST_AddCommentReply:async(payload:ICommentReply)       
+  :Promise<IResponseObject<IComment>> => {
+    const response:any = await POST(`${commentWriteUrl}/Comments/AddCommentReply`,payload);
+    return response;
+  }
 };

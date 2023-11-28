@@ -81,12 +81,12 @@ async function LoginUser (event:any){
     const user = await  Api.POST_Login(payload);
      
     try {
-      debugger;
+      
       console.log("response", user);
       console.log("data", user.data);
     if(user.data)
     {
-      debugger;
+      
       toast.update(_id, {
         render: "Successfully logged in",
         type: "success",
@@ -95,10 +95,10 @@ async function LoginUser (event:any){
       // Set cookies here after successful login
      // cookies.set('param-lms-user', user.data);
       cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
-      debugger;
+ 
       console.log(user.data);
       //Optionally, you can redirect the user to another page
-      debugger;
+   
       console.log("Role",user.data.role);
       if(user.data.role=="Admin")
       {

@@ -40,7 +40,7 @@ console.log(userData);
       progress: undefined,
       theme: "light",
       });
- const data = await Api.GET_CoursesById(userData.id);
+ const data = await Api.GET_CourseById(userData.id);
  if(data){
   toast.dismiss(_id);
   SetCourses(data);
@@ -1723,12 +1723,7 @@ console.log(userData);
           />{" "}
           Luma
         </p>
-        <p className="measure-lead-max text-50 small mr-8pt">
-          Luma is a beautifully crafted user interface for modern Education
-          Platforms, including Courses &amp; Tutorials, Video Lessons, Student
-          and Teacher Dashboard, Curriculum Management, Earnings and Reporting,
-          ERP, HR, CMS, Tasks, Projects, eCommerce and more.
-        </p>
+        
         <p className="mb-8pt d-flex">
           <a href="" className="text-70 text-underline mr-8pt small">
             Terms

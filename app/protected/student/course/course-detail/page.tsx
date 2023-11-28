@@ -10,10 +10,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { IUser } from '@/app/interfaces/user';
 import { IResponseObject } from '@/app/lib/restapi/response';
 import { getSelectedCourse } from '@/app/viewCourseSlice';
+import {Restrict} from "../../../../lib/auth";
+import { getAuthor } from '@/app/lib/getAuthor';
 const cookies = new Cookies();
 
 
 export default function CourseDetail() {
+
+  //Restrict();
+
   const [data, setData] = useState<ICourse>();
   const [sections,setSection]=useState<ISection[]>([])
   const [openSections,setOpenSections]=useState<number[]>([]);
@@ -27,40 +32,28 @@ export default function CourseDetail() {
  
    
    const state:any=useSelector(getSelectedCourse).course;
-   debugger;
+   
    console.log("Course details",state);
   useEffect(() => {
    
     setSection(state?.sections);
        setData(state);
     getUserCourses(state?.creatingUser);
-    getAuthor(state?.creatingUser);
-  
+    const fetchData=async ()=>{
+      setAuthor(await getAuthor(state?.creatingUser)); 
+    };
+    fetchData();
   },[]); 
+
 
 
   async function getUserCourses(id:string){
     var userCourses= await Api.GET_CoursesByUserId(id);
-    debugger;
+    
     console.log("Author courses",userCourses.data);
     setUserCourses(userCourses.data);
   }
-  async function getAuthor(id:string){
-   
-    var author:IUser= cookies.get(id);
-    debugger;
-    if(!author)
-    {
-      var response:IResponseObject<IUser> = await Api.GET_UserById(id);
-      cookies.set(id,response.data);
-      setAuthor(response.data);
-    }
-    else{
-    setAuthor(author);
-    }
-    
-
-  }
+ 
   // async function getCourse() {
     
   //   const course = await  Api.GET_CourseById(courseId);
@@ -96,7 +89,7 @@ export default function CourseDetail() {
   // }
 
   function _SetOpenSections(i:number){
-    debugger;
+    
     if(openSections.includes(i))
     { setOpenSections(openSections.filter(x=>x!=i))}
     else{ setOpenSections([...openSections, i])}

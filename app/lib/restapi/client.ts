@@ -49,14 +49,14 @@ export async function GET(endPoint: string) {
 
 export async function POST(endPoint: string, payload: Object) {
   try {
-  debugger;
+  
     const result = await axios.post(`${endPoint}`, payload, {
       headers: header,
     });
     Diagnostic("SUCCESS ON POST, returning", result);
     return result.data;
   } catch (error:any) {
-    debugger;
+    
     console.log(`[API ERROR : Method: POST; Endpoint: ${endPoint}]`, error);
     Diagnostic("ERROR ON POST, returning", error);
     return error.response;

@@ -254,8 +254,8 @@ export const courseSlice = createSlice({
                 thumbnailImage: "thumbnail-201.jpg",
                 length: "5 minutes",
                 format: "mp4",
-                size: "50 MB"
-  
+                size: "50 MB",
+                description:""
 
             };
 

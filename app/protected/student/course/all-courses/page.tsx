@@ -12,14 +12,14 @@ import { setSelectedCourse } from '@/app/viewCourseSlice';
 const cookies = new Cookies();
 
 
-export default function CourseDetail() {
+export default function AllCourses() {
   const dispatch = useDispatch();
    const [allCourses, setCourses] = useState<ICourseResponseModel[]>([]); 
    const [enrolledCourses, setEnrolledCourses] = useState<ICourseResponseModel[]>([]); 
 
    const goToCourseDetails=(course:ICourse)=>{
-    debugger;
-   debugger;
+    
+   
     dispatch(setSelectedCourse(course));
     window.location.href = '/protected/student/course/course-detail'; 
    }
@@ -48,7 +48,6 @@ useEffect(() => {
 
   async function getStudentCourses() {
     try {
-      debugger;
       var student =cookies.get('param-lms-user');
       console.log("Id ", student.id)
       const course = await Api.GET_StudentCoursesById(student.id);

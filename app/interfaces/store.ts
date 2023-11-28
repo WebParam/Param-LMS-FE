@@ -7,7 +7,7 @@ import {viewCourseSlice} from "../viewCourseSlice";
 export const store = configureStore({
     reducer: {
       [courseSlice.name]: courseSlice.reducer,
-      [viewCourseSlice.name]:viewCourseSlice.reducer
+      [viewCourseSlice.name]:viewCourseSlice.reducer,
     },
     devTools: true,
   });

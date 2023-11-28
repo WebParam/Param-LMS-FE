@@ -1,16 +1,24 @@
+
 import { ReduxProvider } from "@/app/provider";
 import Image from "next/image";
+import Link from 'next/link'
 
+import Cookies from "universal-cookie";
+var cookies =new Cookies();
 export const metadata = {
   title: "Student - Portal",
   description: "Supercharge your learning",
 };
+
+
 
 export default function RootLayout({
   children,
 }: {
   children?: React.ReactNode;
 }) {
+
+ 
   return (
     <ReduxProvider>
 <div
@@ -269,12 +277,7 @@ export default function RootLayout({
           />{" "}
           Luma
         </p>
-        <p className="measure-lead-max text-50 small mr-8pt">
-          Luma is a beautifully crafted user interface for modern Education
-          Platforms, including Courses &amp; Tutorials, Video Lessons, Student
-          and Teacher Dashboard, Curriculum Management, Earnings and Reporting,
-          ERP, HR, CMS, Tasks, Projects, eCommerce and more.
-        </p>
+        
         <p className="mb-8pt d-flex">
           <a href="" className="text-70 text-underline mr-8pt small">
             Terms
@@ -869,7 +872,7 @@ export default function RootLayout({
           <div className="sidebar-heading">Student</div>
           <ul className="sidebar-menu">
             <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="index.html">
+              <a className="sidebar-menu-button" href="/protected/student/course/course-detail">
                 <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                   home
                 </span>

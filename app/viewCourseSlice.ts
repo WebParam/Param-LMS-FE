@@ -42,7 +42,7 @@ export const {
   } = viewCourseSlice.actions;
 
 export const getSelectedCourse = (state: AppStore) => {
-  debugger;
+  
     state.course=JSON.parse(localStorage.getItem("course")as any) || null ;
     console.log("State",state.course);
     return state;
