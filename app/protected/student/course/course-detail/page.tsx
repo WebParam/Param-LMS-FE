@@ -10,8 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { IUser } from '@/app/interfaces/user';
 import { IResponseObject } from '@/app/lib/restapi/response';
 import { getSelectedCourse } from '@/app/viewCourseSlice';
-import {Restrict} from "../../../../lib/auth";
 import { getAuthor } from '@/app/lib/getAuthor';
+import IComment from '@/app/interfaces/comment';
+import { formatTimeDifference } from '@/app/lib/formatTimeDifference';
+import { getInitials } from '@/app/lib/getInitials';
 const cookies = new Cookies();
 
 
@@ -24,7 +26,7 @@ export default function CourseDetail() {
   const [openSections,setOpenSections]=useState<number[]>([]);
   const [userCourses,setUserCourses]=useState<ICourse[]>([]);
   const [author,setAuthor]=useState<IUser>();
-
+  const [comments,setComments]=useState<IComment[]>();
   const goToSectionModule=(module:IModule)=>{
     localStorage.setItem("module",JSON.stringify(module));
     window.location.href = '/protected/student/course/video'; 
@@ -32,8 +34,6 @@ export default function CourseDetail() {
  
    
    const state:any=useSelector(getSelectedCourse).course;
-   
-   console.log("Course details",state);
   useEffect(() => {
    
     setSection(state?.sections);
@@ -41,11 +41,20 @@ export default function CourseDetail() {
     getUserCourses(state?.creatingUser);
     const fetchData=async ()=>{
       setAuthor(await getAuthor(state?.creatingUser)); 
-    };
+      debugger;
+      var _comments=await Api.GET_CommentsByReference(state.id);
+      if(_comments){
+        setComments(_comments?.map((comment)=>comment.data)as any);
+        console.log("Comments",_comments);
+      }
+      }
     fetchData();
   },[]); 
 
-
+  const goLeaveReview=()=>{
+    window.location.href = '/protected/student/Comments/add-course-comment'; 
+   localStorage.setItem("add-course-comment",JSON.stringify(data));
+  }
 
   async function getUserCourses(id:string){
     var userCourses= await Api.GET_CoursesByUserId(id);
@@ -54,40 +63,7 @@ export default function CourseDetail() {
     setUserCourses(userCourses.data);
   }
  
-  // async function getCourse() {
-    
-  //   const course = await  Api.GET_CourseById(courseId);
-  //   console.log("my course",course);
-
-  //   try {
-  //      if (course && course.data) {
-  //       const payload:ICourse ={
-  //        _id : courseId,
-  //        title:  course.data?.title,
-  //        description:  course.data?.description,
-  //        sections:  course.data?.sections,
-  //        createdDate: course.data?.createdDate,
-  //        creatingUser: course.data?.creatingUser,
-  //        state: course.data?.state,
-  //        logo:course.data?.logo,
-  //        courseImage: course.data?.courseImage,
-  //        bannerImage: course.data?.bannerImage,
-  //        modifyingUser: course.data?.modifyingUser
-  //       } 
-  //       setData(payload);
-  //       setDescription(payload.description);
-  //       setTitle(payload.title);
-  //       setSection(payload.sections)
-       
-  //     } else {
-  //       console.log('Course not found');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error:', error);
-
-  //   }
-  // }
-
+ 
   function _SetOpenSections(i:number){
     
     if(openSections.includes(i))
@@ -630,7 +606,7 @@ export default function CourseDetail() {
             learning with us and reaching their goals.
           </p>
         </div>
-        <div className="position-relative carousel-card p-0 mx-auto">
+        {/* <div className="position-relative carousel-card p-0 mx-auto">
           <div
             className="row d-block js-mdk-carousel"
             id="carousel-feedback"
@@ -657,7 +633,7 @@ export default function CourseDetail() {
               className="mdk-carousel__content"
               style={{ transitionDuration: "0ms", width: 1404 }}
             >
-              <div
+              {/* <div
                 className="col-12 col-md-6 mdk-carousel__item"
                 style={{ width: 468 }}
               >
@@ -674,7 +650,52 @@ export default function CourseDetail() {
                 <div className="media ml-12pt">
                   <div className="media-left mr-12pt">
                     <a href="student-profile.html" className="avatar avatar-sm">
-                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> */}
+                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> 
+                      <span className="avatar-title rounded-circle">UK</span>
+                    </a>
+                  </div>
+                  <div className="media-body media-middle">
+                    <a href="student-profile.html" className="card-title">
+                      Umberto Kass
+                    </a>
+                    <div className="rating mt-4pt">
+                      <span className="rating__item">
+                        <span className="material-icons">star</span>
+                      </span>
+                      <span className="rating__item">
+                        <span className="material-icons">star</span>
+                      </span>
+                      <span className="rating__item">
+                        <span className="material-icons">star</span>
+                      </span>
+                      <span className="rating__item">
+                        <span className="material-icons">star</span>
+                      </span>
+                      <span className="rating__item">
+                        <span className="material-icons">star_border</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div> */}
+              {/* <div
+                className="col-12 col-md-6 mdk-carousel__item"
+                style={{ width: 468 }}
+              >
+                <div className="card card-feedback card-body">
+                  <blockquote className="blockquote mb-0">
+                    <p className="text-70 small mb-0">
+                      A wonderful course on how to start. Eddie beautifully
+                      conveys all essentials of a becoming a good Angular
+                      developer. Very glad to have taken this course. Thank you
+                      Eddie Bryan.
+                    </p>
+                  </blockquote>
+                </div>
+                <div className="media ml-12pt">
+                  <div className="media-left mr-12pt">
+                    <a href="student-profile.html" className="avatar avatar-sm">
+                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> 
                       <span className="avatar-title rounded-circle">UK</span>
                     </a>
                   </div>
@@ -719,7 +740,7 @@ export default function CourseDetail() {
                 <div className="media ml-12pt">
                   <div className="media-left mr-12pt">
                     <a href="student-profile.html" className="avatar avatar-sm">
-                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> */}
+                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> 
                       <span className="avatar-title rounded-circle">UK</span>
                     </a>
                   </div>
@@ -746,61 +767,17 @@ export default function CourseDetail() {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div
-                className="col-12 col-md-6 mdk-carousel__item"
-                style={{ width: 468 }}
-              >
-                <div className="card card-feedback card-body">
-                  <blockquote className="blockquote mb-0">
-                    <p className="text-70 small mb-0">
-                      A wonderful course on how to start. Eddie beautifully
-                      conveys all essentials of a becoming a good Angular
-                      developer. Very glad to have taken this course. Thank you
-                      Eddie Bryan.
-                    </p>
-                  </blockquote>
-                </div>
-                <div className="media ml-12pt">
-                  <div className="media-left mr-12pt">
-                    <a href="student-profile.html" className="avatar avatar-sm">
-                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> */}
-                      <span className="avatar-title rounded-circle">UK</span>
-                    </a>
-                  </div>
-                  <div className="media-body media-middle">
-                    <a href="student-profile.html" className="card-title">
-                      Umberto Kass
-                    </a>
-                    <div className="rating mt-4pt">
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star_border</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </div> 
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
     <div className="page-section bg-white border-bottom-2">
       <div className="container page__container">
         <div className="page-separator">
           <div className="page-separator__text">Student Feedback</div>
+          <a onClick={goLeaveReview} style={{cursor:"pointer"}}  className="page-separator__text ml-auto">Tell Us What You Think<i className="material-icons icon--right">arrow_forward</i></a>
         </div>
         <div className="row mb-32pt">
           <div className="col-md-3 mb-32pt mb-md-0">
@@ -1026,7 +1003,9 @@ export default function CourseDetail() {
             </div>
           </div>
         </div>
-        <div className="pb-16pt mb-16pt border-bottom row">
+       {comments&&(
+        comments.map((comment)=>(
+          <div className="pb-16pt mb-16pt border-bottom row">
           <div className="col-md-3 mb-16pt mb-md-0">
             <div className="d-flex">
               <a
@@ -1034,12 +1013,12 @@ export default function CourseDetail() {
                 className="avatar avatar-sm mr-12pt"
               >
                 {/* <img src="LB" alt="avatar" class="avatar-img rounded-circle"> */}
-                <span className="avatar-title rounded-circle">LB</span>
+                <span className="avatar-title rounded-circle">{getInitials(comment?.creatingUserName)}</span>
               </a>
               <div className="flex">
-                <p className="small text-muted m-0">2 days ago</p>
+                <p className="small text-muted m-0">{formatTimeDifference(comment.createdDate)}</p>
                 <a href="student-profile.html" className="card-title">
-                  Laza Bogdan
+                  {comment.creatingUserName}
                 </a>
               </div>
             </div>
@@ -1063,98 +1042,13 @@ export default function CourseDetail() {
               </span>
             </div>
             <p className="text-70 mb-0">
-              A wonderful course on how to start. Eddie beautifully conveys all
-              essentials of a becoming a good Angular developer. Very glad to
-              have taken this course. Thank you Eddie Bryan.
+             {comment.message}
             </p>
           </div>
         </div>
-        <div className="pb-16pt mb-16pt border-bottom row">
-          <div className="col-md-3 mb-16pt mb-md-0">
-            <div className="d-flex">
-              <a
-                href="student-profile.html"
-                className="avatar avatar-sm mr-12pt"
-              >
-                {/* <img src="UK" alt="avatar" class="avatar-img rounded-circle"> */}
-                <span className="avatar-title rounded-circle">UK</span>
-              </a>
-              <div className="flex">
-                <p className="small text-muted m-0">2 days ago</p>
-                <a href="student-profile.html" className="card-title">
-                  Umberto Klass
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-9">
-            <div className="rating mb-8pt">
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star_border</span>
-              </span>
-            </div>
-            <p className="text-70 mb-0">
-              This course is absolutely amazing, Bryan goes* out of his way to
-              really expl*ain things clearly I couldnt be happier, so glad I
-              made this purchase!
-            </p>
-          </div>
-        </div>
-        <div className="pb-16pt mb-24pt row">
-          <div className="col-md-3 mb-16pt mb-md-0">
-            <div className="d-flex">
-              <a
-                href="student-profile.html"
-                className="avatar avatar-sm mr-12pt"
-              >
-                {/* <img src="AD" alt="avatar" class="avatar-img rounded-circle"> */}
-                <span className="avatar-title rounded-circle">AD</span>
-              </a>
-              <div className="flex">
-                <p className="small text-muted m-0">2 days ago</p>
-                <a href="student-profile.html" className="card-title">
-                  Adrian Demian
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-9">
-            <div className="rating mb-8pt">
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star_border</span>
-              </span>
-            </div>
-            <p className="text-70 mb-0">
-              This course is absolutely amazing, Bryan goes* out of his way to
-              really expl*ain things clearly I couldnt be happier, so glad I
-              made this purchase!
-            </p>
-          </div>
-        </div>
+        ))
+       )}
+       
       </div>
     </div>
     <div className="page-section">

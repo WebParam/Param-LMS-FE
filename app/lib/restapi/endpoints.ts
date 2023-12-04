@@ -8,13 +8,13 @@ export const courseWriteUrl = "http://localhost:50851/api";
 
 export const courseReadUrl="http://localhost:8001/api";
 
-export const userWriteUrl = "https://localhost:51803/api";
+export const userWriteUrl = "https://localhost:52376/api";
 
-export const userReadUrl="https://localhost:51800/api";
+export const userReadUrl="https://localhost:52370/api";
 
-export const commentReadUrl="https://localhost:51812/api";
+export const commentReadUrl="https://localhost:52372/api";
 
-export const commentWriteUrl="https://localhost:51806/api";
+export const commentWriteUrl="https://localhost:52374/api";
 export const Api = {
   Base: courseWriteUrl,
 

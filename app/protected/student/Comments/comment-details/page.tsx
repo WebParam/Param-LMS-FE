@@ -8,6 +8,7 @@ import { formatTimeDifference } from "@/app/lib/formatTimeDifference";
 import { Api } from "@/app/lib/restapi/endpoints";
 import { IResponseObject } from "@/app/lib/restapi/response";
 import { IUser, IUserRegisterModel } from "@/app/interfaces/user";
+import { getInitials } from "@/app/lib/getInitials";
 const cookies = new Cookies();
 export default function commentDetails(){
 
@@ -139,7 +140,8 @@ const getReplies=async(reference:string)=>{
                   <div className="card card-body">
                     <div className="d-flex">
                       <a href="" className="avatar avatar-32pt avatar-online mr-12pt">
-                        <img src="assets/images/people/256/256_rsz_nicolas-horn-689011-unsplash.jpg" alt="people" className="avatar-img rounded-circle" />
+                        {/* <img src="assets/images/people/256/256_rsz_nicolas-horn-689011-unsplash.jpg" alt="people" className="avatar-img rounded-circle" /> */}
+                        <span className="avatar-title rounded-circle">{getInitials(comment?.creatingUserName??"")}</span>
                       </a>
                       <div className="flex">
                         <p className="d-flex align-items-center mb-2">
@@ -160,7 +162,8 @@ const getReplies=async(reference:string)=>{
                   </div>
                   <div className="d-flex mb-4">
                     <a href="" className="avatar avatar-32pt mr-8pt">
-                      <img src="assets/images/people/50/guy-6.jpg" alt="people" className="avatar-img rounded-circle" />
+                      {/* <img src="assets/images/people/50/guy-6.jpg" alt="people" className="avatar-img rounded-circle" /> */}
+                      <span className="avatar-title rounded-circle">{getInitials(`${user?.firstName} ${user?.lastName}`)}</span>
                     </a>
                     <div className="flex">
                       <div className="form-group">
@@ -194,12 +197,16 @@ const getReplies=async(reference:string)=>{
                     <div className="ml-sm-32pt mt-3 card p-3">
                       <div className="d-flex">
                         <a href="#" className="avatar avatar-32pt mr-8pt">
-                          <img src="assets/images/people/110/guy-6.jpg" alt="Guy" className="avatar-img rounded-circle" />
+                          {/* <img src="assets/images/people/110/guy-6.jpg" alt="Guy" className="avatar-img rounded-circle" /> */}
+                          <span className="avatar-title rounded-circle">{getInitials(comment?.creatingUserName??"")}</span>
                         </a>
                         <div className="flex">
                           <div className="d-flex align-items-center">
-                            <a href="" className="text-body"><strong>{reply.creatingUserName}</strong></a>
+                           <div>
+                           <a href="" className="text-body"><strong>{reply.creatingUserName}</strong></a><br/>
                             <small className="ml-auto text-muted">{formatTimeDifference(reply.createdDate)}</small>
+                           </div>
+                            <a className="ml-auto"> <i className="material-icons" style={{ fontSize: '24px', cursor: 'pointer' }}>delete</i></a>
                           </div>
                           <p className="mt-1 text-70">{reply.message}</p>
                           <div className="d-flex align-items-center">
@@ -219,7 +226,8 @@ const getReplies=async(reference:string)=>{
                    {topCommenters?.map((commenter)=>(
                      <div className="d-flex align-items-center mb-2">
                      <a href="" className="avatar avatar-xs mr-8pt">
-                       <img src="assets/images/people/50/guy-1.jpg" alt="course" className="avatar-img rounded-circle" />
+                       {/* <img src="assets/images/people/50/guy-1.jpg" alt="course" className="avatar-img rounded-circle" /> */}
+                       <span className="avatar-title rounded-circle">{getInitials(commenter[0])}</span>
                      </a>
                      <a href="" className="flex mr-2 text-body"><strong>{commenter[0]}</strong></a>
                      <span className="text-70 mr-2">{commenter[1]}</span>

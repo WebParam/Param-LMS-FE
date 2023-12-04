@@ -3,6 +3,7 @@
 import IComment from "@/app/interfaces/comment";
 import { IVideo } from "@/app/interfaces/courses";
 import { formatTimeDifference } from "@/app/lib/formatTimeDifference";
+import { getInitials } from "@/app/lib/getInitials";
 import { Api } from "@/app/lib/restapi/endpoints";
 import { IResponseObject } from "@/app/lib/restapi/response";
 import { useState,useEffect } from "react";
@@ -14,8 +15,6 @@ const [video,setVideo]=useState<IVideo>();
 
 
 useEffect(() => {
-  var _comments=JSON.parse(localStorage.getItem("comments")as any) || null ;
-   setComments(_comments);
    const fetchData=async()=>{
     await getComments();
    };
@@ -23,7 +22,8 @@ useEffect(() => {
  }, []);
 
  const getComments=async ()=>{
-  const _video=JSON.parse(localStorage.getItem("add-comment-video")as any) || null ;
+  const _video=JSON.parse(localStorage.getItem("comment-video")as any) || null ;
+  console.log(_video.id);
   var _comment:IResponseObject<IComment>[]= await Api.GET_CommentsByReference(_video?.id);
   var data:IComment[]=_comment.map((comment) => comment.data) as IComment[];
   setComments(data);
@@ -132,7 +132,10 @@ useEffect(() => {
                      <div className="col-md-3 mb-8pt mb-md-0">
                        <div className="media align-items-center">
                          <div className="media-left mr-8pt">
-                           <a href="" className="avatar avatar-32pt"><img src="assets/images/people/110/guy-1.jpg" alt="avatar" className="avatar-img rounded-circle" /></a>
+                           <a href="" className="avatar avatar-32pt">
+                            {/* <img src="assets/images/people/110/guy-1.jpg" alt="avatar" className="avatar-img rounded-circle" /> */}
+                            <span className="avatar-title rounded-circle">{getInitials(comment?.creatingUserName)}</span>
+                            </a>
                          </div>
                          <div className="d-flex flex-column media-body media-middle">
                            <a href="" className="text-body"><strong>{comment.creatingUserName}</strong></a>

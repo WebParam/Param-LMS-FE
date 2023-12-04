@@ -9,9 +9,9 @@ import IComment  from '@/app/interfaces/comment';
 import { IResponseObject } from '@/app/lib/restapi/response';
 import { Api } from '@/app/lib/restapi/endpoints';
 import Cookies from 'universal-cookie';
-import { useDispatch, useSelector } from "react-redux";
 import { getAuthor } from '@/app/lib/getAuthor';
 import{formatTimeDifference} from '@/app/lib/formatTimeDifference';
+import { getInitials } from '@/app/lib/getInitials';
 const cookies = new Cookies();
 
 export default function CourseVideo() {
@@ -30,6 +30,7 @@ export default function CourseVideo() {
   const first =_module.videos[0];
   setVideo(first);
   getComments(first.id); 
+  console.log("first",first.id);
 },[]);
 
 const goToCommentDetails=(Comment:IComment)=> {
@@ -47,11 +48,11 @@ const handlePlayClick = useCallback((event:React.MouseEvent<HTMLAnchorElement, M
 
 const goToAskQuestion=()=>{
   window.location.href = '/protected/student/Comments/add-comment'; 
- localStorage.setItem("add-comment-video",JSON.stringify(video));
+ localStorage.setItem("comment-video",JSON.stringify(video));
 }
 const goToAllComments=()=>{
   window.location.href = '/protected/student/Comments/all-comments'; 
-  cookies.set(video?.id??"noVideo",video);
+ localStorage.setItem("comment-video",JSON.stringify(video)); 
 }
 const handleBackClick=()=>{
   window.location.href = '/protected/student/course/course-detail'; 
@@ -91,6 +92,7 @@ const getComments=async (id:string)=>{
   </div>
   <div className="bg-primary pb-lg-64pt py-32pt">
     <div className="container page__container">
+   
       <nav className="course-nav">
         <a data-toggle="tooltip" data-placement="bottom" data-title="Getting Started with Angular: Introduction"  data-original-title title=""><span className="material-icons">check_circle</span></a>
         <a data-toggle="tooltip" data-placement="bottom" data-title="Getting Started with Angular: Introduction to TypeScript" href="" data-original-title title=""><span className="material-icons text-primary">account_circle</span></a>
@@ -161,7 +163,7 @@ const getComments=async (id:string)=>{
     <div className="container page__container">
       <div className="d-flex align-items-center mb-heading">
         <h4 className="m-0">Discussions</h4>
-        <a onClick={goToAskQuestion} className="text-underline ml-auto">Ask a Question</a>
+        <a onClick={goToAskQuestion} style={{cursor:"pointer"}}  className="text-underline ml-auto">Ask a Question</a>
       </div>
       <div className="border-top">
         <div className="list-group list-group-flush">
@@ -174,7 +176,7 @@ const getComments=async (id:string)=>{
                  <div className="media-left mr-12pt">
                    <a href="#" className="avatar avatar-sm">
                      {/* <img src="../../AC" alt="avatar" className="avatar-img rounded-circle"/>  */}
-                     <span className="avatar-title rounded-circle">AC</span>
+                     <span className="avatar-title rounded-circle">{getInitials(comment?.creatingUserName)}</span>
                    </a>
                  </div>
                  <div className="d-flex flex-column media-body media-middle">
