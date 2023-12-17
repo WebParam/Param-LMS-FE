@@ -9,7 +9,7 @@ import {useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { IUser } from '@/app/interfaces/user';
 import { IResponseObject } from '@/app/lib/restapi/response';
-import { getSelectedCourse } from '@/app/viewCourseSlice';
+import { getSelectedCourse } from '@/app/redux/viewCourseSlice';
 import { getAuthor } from '@/app/lib/getAuthor';
 import IComment from '@/app/interfaces/comment';
 import { formatTimeDifference } from '@/app/lib/formatTimeDifference';

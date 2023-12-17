@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {IQuiz,IChoice,IQuestion} from "./interfaces/quiz"
+import {IQuiz,IChoice,IQuestion} from "../interfaces/quiz"
 
 const generateUniqueId = () => {
     return 'xxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, () => {

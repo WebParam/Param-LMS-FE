@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
-import { courseSlice } from "../courseSlice";
-import {viewCourseSlice} from "../viewCourseSlice";
-import { quizSlice } from "../quizSlice";
+import { courseSlice } from "../redux/courseSlice";
+import {viewCourseSlice} from "../redux/viewCourseSlice";
+import { quizSlice } from "../redux/quizSlice";
 
 
 export const store = configureStore({

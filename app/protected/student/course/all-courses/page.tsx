@@ -8,7 +8,7 @@ import { ICourse, ICourseResponseModel } from '@/app/interfaces/courses';
 import {useEffect} from 'react'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedCourse } from '@/app/viewCourseSlice';
+import { setSelectedCourse } from '@/app/redux/viewCourseSlice';
 const cookies = new Cookies();
 
 

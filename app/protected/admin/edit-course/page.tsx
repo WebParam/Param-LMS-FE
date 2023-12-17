@@ -4,7 +4,7 @@ import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { addSection, deleteModuleFromSection, deleteSection, getSelectedCourseForEdit, createCourseDetail, updateCourseFromDataBase, updateSectionDetail, deleteAllSections,} from '@/app/courseSlice';
+import { addSection, deleteModuleFromSection, deleteSection, getSelectedCourseForEdit, createCourseDetail, updateCourseFromDataBase, updateSectionDetail, deleteAllSections,} from '@/app/redux/courseSlice';
 import { ICourse,  IDeleteModule,  IDeleteSection,  IUpdateCourse,  IUpdateCourseDetailState, IUpdateSectionDetailState,  } from '@/app/interfaces/courses';
 import { useDispatch, useSelector } from "react-redux";
 import ReactQuill from 'react-quill';
