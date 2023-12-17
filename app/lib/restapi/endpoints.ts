@@ -3,18 +3,26 @@ import { GET, POST, PUT } from "./client";
 import { IResponseObject } from "./response";
 import { IUser, IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/user";
 import  IComment, { ICommentReply }  from "@/app/interfaces/comment";
+import { IRating } from "@/app/interfaces/Rating";
+import { get } from "http";
+import { IQuiz } from "@/app/interfaces/quiz";
 
-export const courseWriteUrl = "http://localhost:50851/api";
+export const courseWriteUrl = "http://localhost:53125/api";
 
-export const courseReadUrl="http://localhost:8001/api";
+export const courseReadUrl="http://localhost:53133/api";
 
-export const userWriteUrl = "https://localhost:52376/api";
+export const userWriteUrl = "https://localhost:51105/api";
+ 
+export const userReadUrl="https://localhost:62017/api";
 
-export const userReadUrl="https://localhost:52370/api";
+export const commentReadUrl="https://localhost:62037/api";
 
-export const commentReadUrl="https://localhost:52372/api";
+export const commentWriteUrl="https://localhost:62023/api";
 
-export const commentWriteUrl="https://localhost:52374/api";
+export const quizReadUrl = "https://localhost:53137/api";
+
+export const quizWriteUrl ="https://localhost:51095/api";
+
 export const Api = {
   Base: courseWriteUrl,
 
@@ -154,9 +162,27 @@ DELETE_CourseById: async (
     const response = await POST(`${commentWriteUrl}/Comments/AddComment`,payload);
     return response;
   },
+
+  POST_AddRating:async (payload:IRating)
+  :Promise<IResponseObject<IRating>>=>{
+    const response = await POST(`${commentWriteUrl}/Ratings/AddRating`,payload);
+    return response;
+  },
+
+  GET_GetRating:async (id:string):
+  Promise<IResponseObject<IRating>>=>{
+    const response=await GET(`${commentReadUrl}/Ratings/GetRating?id=${id}`);
+    return response;
+  },
   POST_AddCommentReply:async(payload:ICommentReply)       
   :Promise<IResponseObject<IComment>> => {
     const response:any = await POST(`${commentWriteUrl}/Comments/AddCommentReply`,payload);
+    return response;
+  },
+
+  POST_AddQuiz:async(payload:IQuiz)       
+  :Promise<IResponseObject<IQuiz>> => {
+    const response:any = await POST(`${quizWriteUrl}/Quizzes/AddQuiz`,payload);
     return response;
   }
 };

@@ -1,7 +1,63 @@
+"use client"
 import Image from 'next/image'
 import styles from './page.module.css'
+import { IChoice,IQuestion,IQuiz } from '@/app/interfaces/quiz';
+import { Api } from '@/app/lib/restapi/endpoints';
+
 
 export default function CreateQuiz() {
+
+
+const  textPost=async()=>{
+  // Define a choice
+const choice1: IChoice = {
+  text: "Option A",
+  isCorrect: true,
+};
+
+const choice2: IChoice = {
+  text: "Option B",
+  isCorrect: false,
+};
+
+// Define a question with choices
+const question1: IQuestion = {
+  id: "1",
+  text: "What is the capital of France?",
+  choices: [choice1, choice2],
+};
+
+// Define another question with choices
+const question2: IQuestion = {
+  id: "2",
+  text: "What is the largest mammal?",
+  choices: [
+    {
+      text: "Elephant",
+      isCorrect: false,
+    },
+    {
+      text: "Blue Whale",
+      isCorrect: true,
+    },
+  ],
+};
+
+// Define a quiz with questions
+const quiz: IQuiz = {
+  id: "",
+  questions: [question1, question2],
+  reference: "Quiz123",
+  createdByUserId: "user1",
+  modifiedByUserId: "user1",
+  createdDate: "2023-01-01",
+  modifiedDate: "2023-01-02",
+};
+
+var response =await Api.POST_AddQuiz(quiz);
+console.log(response);
+}
+
   return (
 <div
   className="mdk-drawer-layout js-mdk-drawer-layout"
@@ -450,449 +506,60 @@ export default function CreateQuiz() {
                 </div>
               </li>
             </ul>
-            <div className="page-separator">
-              <div className="page-separator__text">New Question</div>
+            <div>
+        <div className="page-separator">
+          <div className="page-separator__text">New Question</div>
+        </div>
+        <div className="card card-body">
+          <div className="form-group">
+            <label className="form-label">Question</label>
+            
+            {/* <div style={{height: '150px'}} className="mb-0" data-toggle="quill" data-quill-placeholder="Question">
+              An angular 2 project written in typescript is* transpiled to javascript duri*ng the build process. Which of the following additional features are provided to the developer while programming on typescript over javascript?
+            </div> */}
+            <small className="form-text text-muted">Shortly describe the question.</small>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Question Type</label>
+            <select name="category" className="form-control custom-select">
+              <option value="vuejs">Multiple Answer</option>
+              <option value="vuejs">Single Answer</option>
+              <option value="vuejs">Essay</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label className="form-label" htmlFor="select01">Answers</label>
+            <select id="select01" data-toggle="select" data-multiple="true" multiple className="form-control">
+              <option selected>My first option</option>
+              <option selected>Another option</option>
+              <option>Third option is here</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Completion Points</label>
+            <input type="text" className="form-control" defaultValue={1000} />
+          </div>
+          <div>
+            <a href="#" className="btn btn-outline-secondary">Add Question</a>
+          </div>
+        </div>
+        <div className="col-md-4">
+          <div className="card">
+            <div className="card-header text-center">
+              <a onClick={textPost} className="btn btn-accent">Save changes</a>
             </div>
-            <div className="card card-body">
-              <div className="form-group">
-                <label className="form-label">Question</label>
-                {/* <textarea class="form-control" rows="3" placeholder="Question"></textarea> */}
-                <div className="ql-toolbar ql-snow">
-                  <span className="ql-formats">
-                    <span className="ql-header ql-picker">
-                      <span
-                        className="ql-picker-label"
-                        tabIndex={0}
-                        role="button"
-                        aria-expanded="false"
-                        aria-controls="ql-picker-options-0"
-                      >
-                        <svg viewBox="0 0 18 18">
-                          {" "}
-                          <polygon
-                            className="ql-stroke"
-                            points="7 11 9 13 11 11 7 11"
-                          />{" "}
-                          <polygon
-                            className="ql-stroke"
-                            points="7 7 9 5 11 7 7 7"
-                          />{" "}
-                        </svg>
-                      </span>
-                      <span
-                        className="ql-picker-options"
-                        aria-hidden="true"
-                        tabIndex={-1}
-                        id="ql-picker-options-0"
-                      >
-                        <span
-                          tabIndex={0}
-                          role="button"
-                          className="ql-picker-item"
-                          data-value={1}
-                        />
-                        <span
-                          tabIndex={0}
-                          role="button"
-                          className="ql-picker-item"
-                          data-value={2}
-                        />
-                        <span
-                          tabIndex={0}
-                          role="button"
-                          className="ql-picker-item"
-                          data-value={3}
-                        />
-                        <span
-                          tabIndex={0}
-                          role="button"
-                          className="ql-picker-item"
-                        />
-                      </span>
-                    </span>
-                    <select className="ql-header" style={{ display: "none" }}>
-                      <option value={1} />
-                      <option value={2} />
-                      <option value={3} />
-                      <option
-                      //  selected="selected"
-                        />
-                    </select>
-                  </span>
-                  <span className="ql-formats">
-                    <button type="button" className="ql-bold">
-                      <svg viewBox="0 0 18 18">
-                        {" "}
-                        <path
-                          className="ql-stroke"
-                          d="M5,4H9.5A2.5,2.5,0,0,1,12,6.5v0A2.5,2.5,0,0,1,9.5,9H5A0,0,0,0,1,5,9V4A0,0,0,0,1,5,4Z"
-                        />{" "}
-                        <path
-                          className="ql-stroke"
-                          d="M5,9h5.5A2.5,2.5,0,0,1,13,11.5v0A2.5,2.5,0,0,1,10.5,14H5a0,0,0,0,1,0,0V9A0,0,0,0,1,5,9Z"
-                        />{" "}
-                      </svg>
-                    </button>
-                    <button type="button" className="ql-italic">
-                      <svg viewBox="0 0 18 18">
-                        {" "}
-                        <line
-                          className="ql-stroke"
-                          x1={7}
-                          x2={13}
-                          y1={4}
-                          y2={4}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={5}
-                          x2={11}
-                          y1={14}
-                          y2={14}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={8}
-                          x2={10}
-                          y1={14}
-                          y2={4}
-                        />{" "}
-                      </svg>
-                    </button>
-                    <button type="button" className="ql-underline">
-                      <svg viewBox="0 0 18 18">
-                        {" "}
-                        <path
-                          className="ql-stroke"
-                          d="M5,3V9a4.012,4.012,0,0,0,4,4H9a4.012,4.012,0,0,0,4-4V3"
-                        />{" "}
-                        <rect
-                          className="ql-fill"
-                          height={1}
-                          rx="0.5"
-                          ry="0.5"
-                          width={12}
-                          x={3}
-                          y={15}
-                        />{" "}
-                      </svg>
-                    </button>
-                    <button type="button" className="ql-link">
-                      <svg viewBox="0 0 18 18">
-                        {" "}
-                        <line
-                          className="ql-stroke"
-                          x1={7}
-                          x2={11}
-                          y1={7}
-                          y2={11}
-                        />{" "}
-                        <path
-                          className="ql-even ql-stroke"
-                          d="M8.9,4.577a3.476,3.476,0,0,1,.36,4.679A3.476,3.476,0,0,1,4.577,8.9C3.185,7.5,2.035,6.4,4.217,4.217S7.5,3.185,8.9,4.577Z"
-                        />{" "}
-                        <path
-                          className="ql-even ql-stroke"
-                          d="M13.423,9.1a3.476,3.476,0,0,0-4.679-.36,3.476,3.476,0,0,0,.36,4.679c1.392,1.392,2.5,2.542,4.679.36S14.815,10.5,13.423,9.1Z"
-                        />{" "}
-                      </svg>
-                    </button>
-                  </span>
-                  <span className="ql-formats">
-                    <button type="button" className="ql-list" value="ordered">
-                      <svg viewBox="0 0 18 18">
-                        {" "}
-                        <line
-                          className="ql-stroke"
-                          x1={7}
-                          x2={15}
-                          y1={4}
-                          y2={4}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={7}
-                          x2={15}
-                          y1={9}
-                          y2={9}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={7}
-                          x2={15}
-                          y1={14}
-                          y2={14}
-                        />{" "}
-                        <line
-                          className="ql-stroke ql-thin"
-                          x1="2.5"
-                          x2="4.5"
-                          y1="5.5"
-                          y2="5.5"
-                        />{" "}
-                        <path
-                          className="ql-fill"
-                          d="M3.5,6A0.5,0.5,0,0,1,3,5.5V3.085l-0.276.138A0.5,0.5,0,0,1,2.053,3c-0.124-.247-0.023-0.324.224-0.447l1-.5A0.5,0.5,0,0,1,4,2.5v3A0.5,0.5,0,0,1,3.5,6Z"
-                        />{" "}
-                        <path
-                          className="ql-stroke ql-thin"
-                          d="M4.5,10.5h-2c0-.234,1.85-1.076,1.85-2.234A0.959,0.959,0,0,0,2.5,8.156"
-                        />{" "}
-                        <path
-                          className="ql-stroke ql-thin"
-                          d="M2.5,14.846a0.959,0.959,0,0,0,1.85-.109A0.7,0.7,0,0,0,3.75,14a0.688,0.688,0,0,0,.6-0.736,0.959,0.959,0,0,0-1.85-.109"
-                        />{" "}
-                      </svg>
-                    </button>
-                    <button type="button" className="ql-list" value="bullet">
-                      <svg viewBox="0 0 18 18">
-                        {" "}
-                        <line
-                          className="ql-stroke"
-                          x1={6}
-                          x2={15}
-                          y1={4}
-                          y2={4}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={6}
-                          x2={15}
-                          y1={9}
-                          y2={9}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={6}
-                          x2={15}
-                          y1={14}
-                          y2={14}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={3}
-                          x2={3}
-                          y1={4}
-                          y2={4}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={3}
-                          x2={3}
-                          y1={9}
-                          y2={9}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={3}
-                          x2={3}
-                          y1={14}
-                          y2={14}
-                        />{" "}
-                      </svg>
-                    </button>
-                  </span>
-                  <span className="ql-formats">
-                    <button type="button" className="ql-clean">
-                      <svg className="" viewBox="0 0 18 18">
-                        {" "}
-                        <line
-                          className="ql-stroke"
-                          x1={5}
-                          x2={13}
-                          y1={3}
-                          y2={3}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={6}
-                          x2="9.35"
-                          y1={12}
-                          y2={3}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={11}
-                          x2={15}
-                          y1={11}
-                          y2={15}
-                        />{" "}
-                        <line
-                          className="ql-stroke"
-                          x1={15}
-                          x2={11}
-                          y1={11}
-                          y2={15}
-                        />{" "}
-                        <rect
-                          className="ql-fill"
-                          height={1}
-                          rx="0.5"
-                          ry="0.5"
-                          width={7}
-                          x={2}
-                          y={14}
-                        />{" "}
-                      </svg>
-                    </button>
-                  </span>
-                </div>
-                <div
-                  style={{ height: 150 }}
-                  className="mb-0 ql-container ql-snow"
-                  data-toggle="quill"
-                  data-quill-placeholder="Question"
-                >
-                  <div
-                    className="ql-editor"
-                    data-gramm="false"
-                    contentEditable="true"
-                    data-placeholder="Question"
-                  >
-                    <p>
-                      An angular 2 project written in typescript is* transpiled
-                      to javascript duri*ng the build process. Which of the
-                      following additional features are provided to the
-                      developer while programming on typescript over javascript?
-                    </p>
-                  </div>
-                  <div
-                    className="ql-clipboard"
-                    contentEditable="true"
-                    tabIndex={-1}
-                  />
-                  <div className="ql-tooltip ql-hidden">
-                    <a
-                      className="ql-preview"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                      href="about:blank"
-                    />
-                    <input
-                      type="text"
-                      data-formula="e=mc^2"
-                      data-link="https://quilljs.com"
-                      data-video="Embed URL"
-                    />
-                    <a className="ql-action" />
-                    <a className="ql-remove" />
-                  </div>
-                </div>
-                <small className="form-text text-muted">
-                  Shortly describe the question.
-                </small>
+            <div className="list-group list-group-flush">
+              <div className="list-group-item d-flex">
+                <a className="flex" href="#"><strong>Save Draft</strong></a>
+                <i className="material-icons text-muted">check</i>
               </div>
-              <div className="form-group">
-                <label className="form-label">Question Type</label>
-                <select name="category" className="form-control custom-select">
-                  <option value="vuejs">Multiple Answer</option>
-                  <option value="vuejs">Single Answer</option>
-                  <option value="vuejs">Essay</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="select01">
-                  Answers
-                </label>
-                <select
-                  id="select01"
-                  data-toggle="select"
-                  data-multiple="true"
-                  // multiple=""
-                  className="form-control select2-hidden-accessible"
-                  data-select2-id="select01"
-                  tabIndex={-1}
-                  aria-hidden="true"
-                >
-                  <option 
-                  // selected=""
-                   data-select2-id={2}>
-                    My first option
-                  </option>
-                  <option
-                  //  selected="" 
-                   data-select2-id={3}>
-                    Another option
-                  </option>
-                  <option>Third option is here</option>
-                </select>
-                <span
-                  className="select2 select2-container select2-container--bootstrap4"
-                  dir="ltr"
-                  data-select2-id={1}
-                  style={{ width: "549.984px" }}
-                >
-                  <span className="selection">
-                    <span
-                      className="select2-selection select2-selection--multiple"
-                      role="combobox"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                      tabIndex={-1}
-                      aria-disabled="false"
-                    >
-                      <ul className="select2-selection__rendered">
-                        <li
-                          className="select2-selection__choice"
-                          title="My first option"
-                          data-select2-id={4}
-                        >
-                          <span
-                            className="select2-selection__choice__remove"
-                            role="presentation"
-                          >
-                            ×
-                          </span>
-                          My first option
-                        </li>
-                        <li
-                          className="select2-selection__choice"
-                          title="Another option"
-                          data-select2-id={5}
-                        >
-                          <span
-                            className="select2-selection__choice__remove"
-                            role="presentation"
-                          >
-                            ×
-                          </span>
-                          Another option
-                        </li>
-                        <li className="select2-search select2-search--inline">
-                          <input
-                            className="select2-search__field"
-                            type="search"
-                            tabIndex={0}
-                            autoComplete="off"
-                            autoCorrect="off"
-                            autoCapitalize="none"
-                            spellCheck="false"
-                            role="searchbox"
-                            aria-autocomplete="list"
-                            placeholder=""
-                            style={{ width: "0.75em" }}
-                          />
-                        </li>
-                      </ul>
-                    </span>
-                  </span>
-                  <span className="dropdown-wrapper" aria-hidden="true" />
-                </span>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Completion Points</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  defaultValue={1000}
-                />
-              </div>
-              <div>
-                <a href="#" className="btn btn-outline-secondary">
-                  Add Question
-                </a>
+              <div className="list-group-item">
+                <a href="#" className="text-danger"><strong>Delete Quiz</strong></a>
               </div>
             </div>
+          </div>
+        </div></div>
+
           </div>
           <div className="col-md-4">
             <div className="card">

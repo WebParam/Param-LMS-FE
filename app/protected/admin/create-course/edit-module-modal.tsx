@@ -224,7 +224,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   <ReactQuill
     style={{ height: '100px' }}
     value={moduleDescription}
-    onChange={(value) => {
+    onChange={(value:any) => {
 
       setModuleDescription(value); // Pass the new description
     

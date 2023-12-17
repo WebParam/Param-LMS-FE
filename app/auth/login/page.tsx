@@ -79,6 +79,8 @@ async function LoginUser (event:any){
 
 
     const user = await  Api.POST_Login(payload);
+    debugger;
+    console.log("User",user);
      
     try {
       

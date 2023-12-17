@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'universal-cookie'; // Import the library
 import axios from 'axios';
 import Dropdown from 'react-bootstrap/Dropdown';
+import "react-quill/dist/quill.snow.css";
 
 
 export default function EditCourse() {
@@ -573,7 +574,7 @@ id="test"
   <ReactQuill
     style={{ height: '100px' }}
     value={courseDescription}
-    onChange={(value) => {
+    onChange={(value:any) => {
       setCourseDescription(value); // Pass the new description
     }}
     placeholder="Course description..."

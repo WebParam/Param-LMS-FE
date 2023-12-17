@@ -29,20 +29,6 @@ useEffect(() => {
    getStudentCourses();
   }, []);
 
-  // useEffect(() => {
-  //   axios.get('http://localhost:8001/api/Courses/GetCourses')
-  //     .then((response) => {
-  //       const _data = response.data.map((x:any)=> {return x.data});
-  //       setCourses(_data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching data:', error);
-  //     });
-
-      
-  // }, []);
-
- 
   console.log("courses",allCourses);
   console.log("enrolledCourses",enrolledCourses);
 

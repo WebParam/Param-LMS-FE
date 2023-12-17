@@ -12,6 +12,7 @@ import Cookies from 'universal-cookie';
 import { getAuthor } from '@/app/lib/getAuthor';
 import{formatTimeDifference} from '@/app/lib/formatTimeDifference';
 import { getInitials } from '@/app/lib/getInitials';
+import Aside from './aside/Aside';
 const cookies = new Cookies();
 
 export default function CourseVideo() {
@@ -20,8 +21,11 @@ export default function CourseVideo() {
  const [video,setVideo]=useState<IVideo>();
  const [play, setPlay] = useState<boolean>(false);
  const [comments,setComments]=useState<IComment[]>();
+ const [asideToggler, setAsideToggler] = useState(false);
 
- 
+ function toggleAside() {
+  setAsideToggler(state => !state)
+ }
 
  useEffect(()=>{
   var course:ICourse = JSON.parse(localStorage.getItem("course")as any) || null
@@ -66,6 +70,16 @@ const getComments=async (id:string)=>{
 
   return (
 <>
+<div className='asideToggler' onClick={toggleAside} style={{position: 'fixed', top: '50vh', right: '0', zIndex: '10', width: '20px'}}>
+<button
+  type="button"
+  className="btn btn-dark app-settings-button app-settings-button--left"
+  aria-expanded="false"
+>
+<i className="material-icons icon--left" style={{transform: 'scale(1.3)'}}>arrow_back_ios_new</i>
+</button>
+{asideToggler && <Aside />}
+</div>
 <div>
   <div className="navbar navbar-list navbar-light bg-white border-bottom-2 border-bottom navbar-expand-sm" style={{whiteSpace: 'nowrap'}}>
     <div className="container page__container">
@@ -298,6 +312,7 @@ const getComments=async (id:string)=>{
   </div>
   {/* // END drawer */}
 </div>
+
 </>
 
 

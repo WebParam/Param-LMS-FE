@@ -1,7 +1,5 @@
 "use client"
-import { ToastContainer, toast } from 'react-toastify';
 import IComment from "@/app/interfaces/comment";
-import { ICourse, IVideo } from "@/app/interfaces/courses";
 import { IUser, IUserRegisterModel } from "@/app/interfaces/user";
 import { getAuthor } from "@/app/lib/getAuthor";
 import { Api } from "@/app/lib/restapi/endpoints";
@@ -45,7 +43,6 @@ const handleNewComment=async ()=>{
       replies: [],
       creatingUserName: user?.firstName + " " + user?.lastName
     };
-    debugger;  
     var response =await Api.POST_AddComment(newComment);
     if(response.data)
     {
@@ -53,6 +50,10 @@ const handleNewComment=async ()=>{
     }
     
   }
+}
+
+const handleNewRating=async ()=>{
+  
 }
   
     return (
