@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import styles from "./page.module.css";
 import React, { useRef, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -8,6 +6,8 @@ import { FaBullseye, FaEdit, FaPencilAlt, FaPlus, FaTrash, FaVideo } from "react
 import { addModuleToSection, addVideoToModule, deleteVideoFromModule, editVideoDetails, getSelectedCourseForEdit, updateModuleDetail } from "@/app/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ICourse, IModule, IUpdateModuleDetailState } from "@/app/interfaces/courses";
+import { createChoice, createQuestion, createQuiz, getQuiz } from "@/app/quizSlice";
+import { IQuiz } from "@/app/interfaces/quiz";
 
 interface CreateCourseModalProps {
   onClose: () => any;
@@ -41,7 +41,8 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [questionDescription,setQuestionDescription] =useState<string>("");
   const [choiceDescription,setChoiceDescription] =useState<string>("");
   const [choiceAnswer,setChoiceAnswer]=useState<boolean>(false);
-
+  const [questionId,setQuestionId]=useState<string>("");
+  const [quiz,setQuiz]=useState<IQuiz>();
 
   const moduleToolbar = {
     toolbar: [
@@ -58,9 +59,56 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
 
   const cursorStyle=(predicate:boolean)=> predicate ? 'pointer' : 'not-allowed';
  
-  const addChoice=()=>{
-    setChoiceDescription("");
+  const generateUniqueId = () => {
+    return 'xxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, () => {
+        return (Math.random() * 16 | 0).toString(16);
+    });
+};
+
+  const handleCreateQuiz=()=>{
+    dispatch(createQuiz({
+      id:generateUniqueId,
+      questions:[
+        {
+          id:questionId,
+          text:questionDescription,
+          choices:[
+            {
+              text:choiceDescription,
+              isCorrect:choiceAnswer
+            }
+          ]
+        }
+      ],
+    }))
   }
+
+  const handleCreateQuestion=()=>
+  {
+    dispatch(createQuestion({
+      question:{
+        id:questionId,
+        text:questionDescription,
+        choices:[{
+          text:choiceDescription,
+          isCorrect:setChoiceAnswer
+        }]
+      }
+    }));
+    setQuestionId(generateUniqueId);
+    setQuestionDescription("");
+  }
+
+  const handleCreateChoice = () =>{
+    dispatch(createChoice({
+      questionId:questionId,
+    choice:{
+      text:choiceDescription,
+      isCorrect:setChoiceAnswer
+    }
+    }))
+  }
+
   const saveChangeBtn = () => {
     if(moduleDescription.length > 0 && moduleTitle.length > 0 ){
       setDisableSaveChanges(false);
@@ -167,7 +215,8 @@ setDisableSaveChanges(true);
 
   useEffect(() => {
     const section = _courseFromState.sections.find(section => section.id === sectionId);
-  
+    setQuestionId(generateUniqueId);
+   
     if (section) {
       const module = section.modules.find(module => module.id === moduleId);
   
@@ -673,7 +722,7 @@ isModuleSaved && <>
               <option value="false">Incorrect</option>
             </select> 
             <div>
-            <a href="#" className="btn btn-outline-secondary" onClick={addChoice}>Add Choice</a>
+            <a href="#" className="btn btn-outline-secondary" onClick={handleCreateChoice}>Add Choice</a>
           </div>
           </div>
           <div className="form-group">
