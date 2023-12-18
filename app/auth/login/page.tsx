@@ -34,7 +34,7 @@ export default function Login() {
   const router = useRouter();
 
   const navigateToRegister= () => {
-    // Replace "/your-target-page" with the path to the specific page you want to navigate to
+    
     router.push('/auth/register');
   };
 
@@ -78,51 +78,44 @@ async function LoginUser (event:any){
     } as IUserLoginModel; 
 
 
+    
     const user = await  Api.POST_Login(payload);
-    debugger;
-    console.log("User",user);
-     
+    console.log("data", user.data);
     try {
       
-      console.log("response", user);
-      console.log("data", user.data);
-    if(user?.data?.id)
-    {
-      
+    if(user?.data?.id){
       toast.update(_id, {
         render: "Successfully logged in",
         type: "success",
         isLoading: false,
       });
-      // Set cookies here after successful login
-     // cookies.set('param-lms-user', user.data);
-      cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
- 
-      console.log(user.data);
-      //Optionally, you can redirect the user to another page
-   
-      console.log("Role",user.data.role);
-      if(user.data.role=="Admin")
-      {
-        window.location.href = '/protected/admin/manage-courses'; 
-      }
-      else{
-        window.location.href = '/protected/student/course/all-courses'; 
-        console.log(user.data);
 
-      }
-    }
-    else if(!user?.data == null){
-      setDisable(false)
+     cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
+ 
+     console.log(user.data);
+  
+     console.log("Role",user?.data?.role);
+     if(user?.data?.role=="Admin")
+     {
+       window.location.href = '/protected/admin/manage-courses'; 
+     }
+     else{
+       window.location.href = '/protected/student/course/all-courses'; 
+       console.log(user.data);
+
+     }
+    }else{
       toast.update(_id, {
         render: "Invalid login credentials",
         type: "error",
         isLoading: false,
-      }); 
+      });
+      setTimeout(() => {
+        setDisable(false)
+        toast.dismiss(_id);
+      }, 3000);
     }
-      
-
-      }
+    }
      catch (error) {
       toast.update(_id, {
         render: "Invalid login credentials",

@@ -82,7 +82,7 @@ export const Api = {
 
   GET_CoursesByUserId: async (
     userId: string
-  ): Promise<any> => {
+  ): Promise<IResponseObject<ICourse[]>> => {
     const response = await GET(`${courseReadUrl}/Courses/GetCoursesByUser?userId=${userId}`);
     return response;
   },
