@@ -86,7 +86,7 @@ async function LoginUser (event:any){
       
       console.log("response", user);
       console.log("data", user.data);
-    if(user.data)
+    if(user?.data?.id)
     {
       
       toast.update(_id, {
@@ -112,9 +112,10 @@ async function LoginUser (event:any){
 
       }
     }
-    else if(!user){
+    else if(!user?.data == null){
+      setDisable(false)
       toast.update(_id, {
-        render: "Error has occured",
+        render: "Invalid login credentials",
         type: "error",
         isLoading: false,
       }); 
@@ -124,7 +125,7 @@ async function LoginUser (event:any){
       }
      catch (error) {
       toast.update(_id, {
-        render: `${error}`,
+        render: "Invalid login credentials",
         type: "error",
         isLoading: false,
       });

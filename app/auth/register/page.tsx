@@ -5,8 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { Api } from "../../lib/restapi/endpoints";
 import {IUserRegisterModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
-import { error } from "console";
-import Link from 'next/link';
 import { useRouter } from 'next/navigation'
 const cookies = new Cookies();
 const axios = require("axios").default;
