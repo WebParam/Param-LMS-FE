@@ -184,5 +184,14 @@ DELETE_CourseById: async (
   :Promise<IResponseObject<IQuiz>> => {
     const response:any = await POST(`${quizWriteUrl}/Quizzes/AddQuiz`,payload);
     return response;
+  },
+
+  POST_QuizAndCourse: async (quiz:IQuiz,course:ICourse)
+  :Promise<IResponseObject<ICourse>> => {
+    const _course = await POST(`${courseWriteUrl}/Courses/AddCourse`, course);
+    if(_course.data){
+      const _quiz:any = await POST(`${quizWriteUrl}/Quizzes/AddQuiz`,quiz);
+    }
+    return _course;
   }
 };

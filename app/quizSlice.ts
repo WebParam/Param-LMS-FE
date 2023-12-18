@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {IQuiz,IChoice,IQuestion} from "./interfaces/quiz"
+import { AppStore } from "./interfaces/store";
 
 const generateUniqueId = () => {
     return 'xxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, () => {
@@ -44,16 +45,15 @@ export const initialState: IQuiz = {
             if (question) {
               question.choices.push(choice);
             }
-        },
-
-        getQuiz(state){
-            return state;
-        },
+        }
     }
   })
-
+  
   export const {
-    createQuiz,createQuestion,createChoice,getQuiz
+    createQuiz,createQuestion,createChoice
   }=quizSlice.actions;
 
+ export const getQuiz=(state:AppStore)=>{
+    return state.Quiz;
+}
   export default quizSlice.reducer;

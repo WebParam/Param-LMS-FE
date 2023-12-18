@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ICourse, IModule, IUpdateModuleDetailState } from "@/app/interfaces/courses";
 import { createChoice, createQuestion, createQuiz, getQuiz } from "@/app/quizSlice";
 import { IQuiz } from "@/app/interfaces/quiz";
+import { useSearchParams } from "react-router-dom";
 
 interface CreateCourseModalProps {
   onClose: () => any;
@@ -43,6 +44,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [choiceAnswer,setChoiceAnswer]=useState<boolean>(false);
   const [questionId,setQuestionId]=useState<string>("");
   const [quiz,setQuiz]=useState<IQuiz>();
+  const [openAnswers,setOpenAnswers]=useState<number[]>([])
 
   const moduleToolbar = {
     toolbar: [
@@ -66,6 +68,8 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
 };
 
   const handleCreateQuiz=()=>{
+    
+   if(includeQuiz&&choiceDescription&&questionDescription){
     dispatch(createQuiz({
       id:generateUniqueId,
       questions:[
@@ -81,29 +85,46 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
         }
       ],
     }))
+   }
+   else{
+  setDisableSaveChanges(true);
+
+   }
+  }
+
+  function _SetOpenAnswers(i:number){
+    
+    if(openAnswers.includes(i))
+    { setOpenAnswers(openAnswers.filter(x=>x!=i))}
+    else{ setOpenAnswers([...openAnswers, i])}
   }
 
   const handleCreateQuestion=()=>
   {
+    debugger;
     dispatch(createQuestion({
       question:{
         id:questionId,
-        text:questionDescription,
+        text:questionDescription.replace(/<\/?p>/gi, ''),
         choices:[{
-          text:choiceDescription,
+          text:choiceDescription.replace(/<\/?p>/gi, ''),
           isCorrect:setChoiceAnswer
         }]
       }
+
     }));
     setQuestionId(generateUniqueId);
     setQuestionDescription("");
+    setChoiceDescription("");
+    setQuiz(_quiz);
+    console.log("quiz",_quiz);
   }
 
   const handleCreateChoice = () =>{
     dispatch(createChoice({
       questionId:questionId,
     choice:{
-      text:choiceDescription,
+      text:choiceDescription.replace(/<\/?p>/gi, ''),
       isCorrect:setChoiceAnswer
     }
     }))
@@ -204,12 +225,14 @@ setDisableSaveChanges(true);
       setExpandedModule(module.id);
     }
   };
-
+  const _quiz:any =useSelector(getQuiz);
   useEffect(() => {
     const sections = _courseFromState.sections
     const lastSection = sections.length - 1;
-    setLastSection(lastSection)
-
+    setLastSection(lastSection);
+    debugger;
+  
+    setQuiz(_quiz)
   }, []);
 
 
@@ -556,35 +579,61 @@ isModuleSaved && <>
                
               </div>
               <div className={toggler===2?"col-md-8":"col-md-8 d-md-none"}>
-            <div className="page-separator">
+            
+              <div className={quiz&&quiz?.questions.length>0?"page-separator":"d-none"}>
               <div className="page-separator__text">Questions</div>
             </div>
-            <ul className="list-group stack mb-40pt">
-              <li className="list-group-item d-flex">
+             {quiz&&quiz?.questions.length>1&&(
+              
+               <ul className="list-group stack mb-40pt">
+                <li className="list-group-item d-flex">
                 <i className="material-icons text-70 icon-16pt icon--left">
                   drag_handle
                 </i>
                 <div className="flex d-flex flex-column">
-                  <div className="card-title mb-4pt">Question 1 of 2</div>
+                  <div className="card-title mb-4pt">Question {quiz.questions.length} of {quiz?.questions?.length}</div>
                   <div className="card-subtitle text-70 paragraph-max mb-16pt">
-                    An angular 2 project written in typescript is* transpiled to
-                    javascript duri*ng the build process. Which of the following
-                    additional features are provided to the developer while
-                    programming on typescript over javascript?
+                  {quiz?.questions[quiz.questions.length-1].text}
                   </div>
                   <div>
                     <a
+                    onClick={(e)=>e.preventDefault()}
                       href=""
                       className="chip chip-light d-inline-flex align-items-center"
                     >
-                      <i className="material-icons icon-16pt icon--left">
-                        keyboard_arrow_down
-                      </i>{" "}
-                      Answers
+                   {quiz?.questions?.find((question)=>question.id===questionId)?.choices.map((choice,i)=>(
+                     <div
+                     onClick={(e)=>{_SetOpenAnswers(i),e.preventDefault()}}
+                      className={openAnswers.includes(i)?"accordion__item open":"accordion__item"}>
+                     <a
+                       href="#"
+                       className="accordion__toggle collapsed"
+                       data-toggle="collapse"
+                       data-target="#course-toc-4"
+                       data-parent="#parent"
+                     >
+                       <span className="flex">
+                        Answers
+                       </span>
+                       <span className="accordion__toggle-icon material-icons">
+                         keyboard_arrow_down
+                       </span>
+                     </a>
+                     <div className="accordion__menu collapse" id="course-toc-4">
+                       <div className="accordion__menu-link">
+                         <span className="icon-holder icon-holder--small icon-holder--light rounded-circle d-inline-flex icon--left">
+                           <i className="material-icons icon-16pt">lock</i>
+                         </span>
+                         <a className="flex" href="student-lesson.html">
+                           Template Syntax
+                         </a>
+                         <span className="text-muted">04:23</span>
+                       </div>
+                     </div>
+                   </div>
+                   ))}
                     </a>
-                    <div className="chip chip-outline-secondary">
-                      Single Answer
-                    </div>
+                    
                   </div>
                 </div>
                 <span className="text-muted mx-12pt">800 pt</span>
@@ -611,7 +660,8 @@ isModuleSaved && <>
                   </div>
                 </div>
               </li>
-              <li className="list-group-item d-flex">
+             
+              {/* <li className="list-group-item d-flex">
                 <i className="material-icons text-70 icon-16pt icon--left">
                   drag_handle
                 </i>
@@ -689,8 +739,10 @@ isModuleSaved && <>
                     </a>
                   </div>
                 </div>
-              </li>
+              </li> */}
             </ul>
+             )
+            }
             <div>
         <div className="page-separator">
           <div className="page-separator__text">New Question</div>
@@ -725,20 +777,13 @@ isModuleSaved && <>
             <a href="#" className="btn btn-outline-secondary" onClick={handleCreateChoice}>Add Choice</a>
           </div>
           </div>
-          <div className="form-group">
-            <label className="form-label" htmlFor="select01">Answers</label>
-            <select id="select01" data-toggle="select" data-multiple="true" multiple className="form-control">
-              <option selected>My first option</option>
-              <option selected>Another option</option>
-              <option>Third option is here</option>
-            </select>
-          </div>
+         
           <div className="form-group">
             <label className="form-label">Completion Points</label>
             <input type="text" className="form-control" defaultValue={1000} />
           </div>
           <div>
-            <a href="#" className="btn btn-outline-secondary">Add Question</a>
+            <a href="#" className="btn btn-outline-secondary" onClick={handleCreateQuestion}>Add Question</a>
           </div>
         </div>
         {/* <div className="col-md-4">
@@ -773,8 +818,8 @@ isModuleSaved && <>
                       </a> 
                       </button>   :   
                       <button  disabled={disableSaveChanges} style={{backgroundColor: "transparent", border:"none", outline:"none", width:"150px"}}>
- <a
-                    onClick={createModule}
+ <a  
+                    onClick={()=>{createModule;handleCreateQuiz}}
                       href="#" className="btn btn-accent">
                        save changes
                     </a>
