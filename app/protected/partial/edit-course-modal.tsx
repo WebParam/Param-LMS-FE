@@ -5,7 +5,7 @@ import React, { useRef, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { FaPlus } from "react-icons/fa";
-import { getSelectedCourseForEdit, updateModuleDetail } from "@/app/courseSlice";
+import { getSelectedCourseForEdit, updateModuleDetail } from "@/app/redux/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ICourse, IModule, IUpdateModuleDetailState } from "@/app/interfaces/courses";
 

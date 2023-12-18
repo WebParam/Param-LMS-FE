@@ -5,8 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { Api } from "../../lib/restapi/endpoints";
 import {IUserRegisterModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
-import { error } from "console";
-import Link from 'next/link';
 import { useRouter } from 'next/navigation'
 const cookies = new Cookies();
 const axios = require("axios").default;
@@ -99,29 +97,31 @@ const [role,setRole]=useState()
         toast.dismiss(_id);
       }, 2000);
       }else{
-     
+      
     
         const payload = {
-          id: "",
-          FirstName: fname,
-          LastName: lname,
-          Email: email,
-          Password: password,
-          Image: "",
-          CreatedOn: date,
-          CreatedBy: "",
-          ChangedBy: "",
-          ChangedOn: date,
+   
+          firstName: fname,
+          lastName: lname,
+          email: email,
+          password: password,
+          image: "",
+          headLine:"",
+          summary:"",
+          createdOn: date,
+          createdBy: "",
+          changedBy: "",
+          changedOn: date,
           Otp: "",
          // Status: "new",
-          Role: "",
+          role: "",
           LoginType: 0,
         } as IUserRegisterModel;
         
         if(role === "Admin")
         {
         const user = await  Api.POST_RegisterAdmin(payload);
-
+debugger;
         try {
           if(user.data){
             console.log("response", user);
