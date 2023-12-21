@@ -67,7 +67,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [includeDocument, setIncludeDocument] = useState<boolean>(false);
   const [questionDescription, setQuestionDescription] = useState<string>("");
   const [choiceDescription, setChoiceDescription] = useState<string>("");
-  const [choiceAnswer, setChoiceAnswer] = useState<string>(''); // Can be boolean or string
+  const [choiceAnswer, setChoiceAnswer] = useState<boolean>(true);
   const [questionId, setQuestionId] = useState<string>("");
   const [quiz, setQuiz] = useState<IQuiz>();
   const [openAnswers,setOpenAnswers]=useState<number[]>([])
@@ -142,20 +142,12 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
     setQuestionDescription("");
   };
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue: string = event.target.value;
-    setChoiceAnswer(selectedValue); // Set the state
-  };
-
+  
   const handleCreateChoice = () => {
     setChoiceError(false);
     setChoiceAnswerError(false)
     if( choiceDescription.length === 0){
       setChoiceError(true)
-      return;
-    }
-    if(choiceAnswer.length === 0){
-      setChoiceAnswerError(true)
       return;
     }
     dispatch(
@@ -893,10 +885,10 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
                         placeholder="Enter your choice here..."
                       />
            <select style={{border: `${choiceAnswerError ? "2px solid tomato" : "none"}`}}
-      onChange={handleSelectChange}
+      onChange={(e)=>setChoiceAnswer(e.target.value==="true")}
       name="category"
       className="form-control custom-select mb-3"
-      value={choiceAnswer}
+     
     >
       <option value="">Select an answer</option>
       <option value="true">Correct</option>
