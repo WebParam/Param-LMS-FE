@@ -7,7 +7,11 @@ import { IRating } from "@/app/interfaces/Rating";
 import { get } from "http";
 import { IQuiz } from "@/app/interfaces/quiz";
 
+<<<<<<< HEAD
 export const courseWriteUrl = "https://localhost:61289/api";
+=======
+export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
+>>>>>>> 454a0c0bc7b45dfb4646150bcb6a233de270251d
 
 export const courseReadUrl="https://localhost:61271/api";
 
@@ -33,7 +37,7 @@ export const Api = {
 
   POST_CreateCourse: async (
     payload: ICourse
-  ): Promise<IResponseObject<any>> => {
+  ): Promise<IResponseObject<ICourse>> => {
     const response = await POST(`${courseWriteUrl}/Courses/AddCourse`, payload);
     return response;
   },
@@ -48,15 +52,15 @@ export const Api = {
 
   DELETE_DeleteSection: async (
     payload: IDeleteSection
-  ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${courseWriteUrl}/Courses/DeleteSection`, payload);
+  ): Promise<any> => {
+    const response = await PUT(`${courseWriteUrl}/Courses/DeleteSection`, payload);
     return response;
   },
 
   DELETE_DeleteVideo: async (
     payload: IDeleteVideo
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${courseWriteUrl}/Courses/DeleteVideo`, payload);
+    const response = await POST(`${courseWriteUrl}/Courses/DeleteVideo`, payload);//USE PUT METHOD
     return response;
   },
 
@@ -83,7 +87,7 @@ export const Api = {
   GET_CoursesByUserId: async (
     userId: string
   ): Promise<IResponseObject<ICourse[]>> => {
-    const response = await GET(`${courseReadUrl}/Courses/GetCoursesByUser?userId=${userId}`);
+    const response = await GET(`${courseReadUrl}/Courses/${userId}`);
     return response;
   },
 

@@ -8,6 +8,7 @@ import { addSection, deleteModuleFromSection, deleteSection, getSelectedCourseFo
 import { ICourse,  IDeleteModule,  IDeleteSection,  IUpdateCourse,  IUpdateCourseDetailState, IUpdateSectionDetailState,  } from '@/app/interfaces/courses';
 import { useDispatch, useSelector } from "react-redux";
 import ReactQuill from 'react-quill';
+import "react-quill/dist/quill.snow.css";
 import {useEffect} from 'react'
 import { Api } from '@/app/lib/restapi/endpoints';
 import { Link } from '@mui/material';
@@ -28,57 +29,46 @@ export default function EditCourse() {
   const [sectionId , setSectionId] = useState("");
   const [courseTitle , setCourseTitle] = useState<string|undefined>("");
   const [courseDescription , setCourseDescription] = useState<string|undefined>("");
-  const [disableCreateCourseBtn, setDisableCreateCourseBtn] = useState<boolean>(true);
+  const [disableCreateCourseBtn, setDisableCreateCourseBtn] = useState<boolean>(false);
   const [updateSection, setUpdateSection] = useState<boolean>(true);
   const[newSection , setNewSection] = useState<boolean>(true)
   const [moduleId, setModuleId] = useState<string>()
+  const [courseId , setCourseId] = useState<string>("")
 
 
 
   const dispatch = useDispatch();
-  const cookies = new Cookies();
-  const courseId = cookies.get('courseId');
-  console.log(courseId);
+  
 
   useEffect(() => {
-    getCourse();
+    const courseDataString = localStorage.getItem("course");
+    if (courseDataString) {
+      const course = JSON.parse(courseDataString);
+      setCourseId( course.id);
+      const payload ={
+        _id : course.id,
+        title:  course?.title,
+        description:  course?.description,
+        sections:  course?.sections,
+        createdDate: course?.createdDate,
+        creatingUser: course?.creatingUser,
+        state: course?.state,
+        logo:course?.logo,
+        courseImage: course?.courseImage,
+        bannerImage: course?.bannerImage,
+        modifyingUser: course?.modifyingUser
+       } as IUpdateCourse
+       dispatch(updateCourseFromDataBase(payload));
+       setCourseTitle(payload.title)
+       setCourseDescription(payload.description)
+   
+    } else {
+      console.log("No 'course' data found in localStorage");
+    }
+
     
   },[]); 
-
-  async function getCourse() {
-    
-      const course = await  Api.GET_CourseById(courseId);
-      console.log("my course",course);
-
-      try {
-         if (course) {
-          const payload ={
-           _id : courseId,
-           title:  course.data?.title,
-           description:  course.data?.description,
-           sections:  course.data?.sections,
-           createdDate: course.data?.createdDate,
-           creatingUser: course.data?.creatingUser,
-           state: course.data?.state,
-           logo:course.data?.logo,
-           courseImage: course.data?.courseImage,
-           bannerImage: course.data?.bannerImage,
-           modifyingUser: course.data?.modifyingUser
-          } as IUpdateCourse
-          dispatch(updateCourseFromDataBase(payload));
-          setCourseTitle(payload.title)
-          setCourseDescription(payload.description)
-       
-  
-        } else {
-          console.log('Course not found');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-
-      }
-    }
-      
+ 
    
    
   
@@ -146,8 +136,9 @@ const selectSection = (id:string) => {
       setExpandedSection(section.id);
     }
   };
-
+  const updatedcourseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
  async function UpdateCourse() {
+
   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
 
   const payload = { 
@@ -176,7 +167,8 @@ const selectSection = (id:string) => {
     theme: "light",
     });
 
-    const updatedcourseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
+
+    console.log("updated course description", updatedcourseFromState.description)
 
     const updateCoursedata = await Api.PUT_UpdateCourse(updatedcourseFromState);
 
@@ -213,7 +205,7 @@ if(data){
   setTimeout(() => {
     toast.dismiss(_id);
   }, 2000);
-  window.location.href= "protected/admin/manage-course"
+
 }else{
 toast.update(_id, { render: "Error loading courses", type: "error", isLoading: false });
 
@@ -250,8 +242,8 @@ const clearSectionContent = () => {
   setChangeBtn(!changeBtn)
   setDisableSectionInput(!disableSectionInput)
 }
-1
-const handleDeleteModule = async (sectionId:any,moduleId:any) => {
+
+const handleDeleteModule =  (sectionId:any,moduleId:any) => {
   console.log(sectionId)
   console.log(moduleId)
 
@@ -267,31 +259,16 @@ const handleDeleteModule = async (sectionId:any,moduleId:any) => {
     theme: "light",
     });
 
-    const payload = {
-      courseId: courseId,
-      sectionId: sectionId,
-      moduleId: moduleId
-    } as IDeleteModule
-const data = await Api.PUT_DeleteModule(payload);
-if(data){
-  dispatch(deleteModuleFromSection({ sectionId, moduleId }));
-
-  toast.update(_id, { render: "module deleted", type: "success", isLoading: false });
-  setTimeout(() => {
-    toast.dismiss(_id);
-  }, 2000);
-}else{
-toast.update(_id, { render: "Error deleting module", type: "error", isLoading: false });
-
-}
-
-
+    toast.update(_id, { render: "module deleted", type: "success", isLoading: false });
+    setTimeout(() => {
+      toast.dismiss(_id);
+    }, 2000);
 
 };
 
 
 //Delete Section
-const handleDeleteSection = async (sectionId:any) => {
+const handleDeleteSection =  (sectionId:any) => {
 
 
     const payload = {
@@ -299,7 +276,6 @@ const handleDeleteSection = async (sectionId:any) => {
       sectionId: sectionId,
     } as IDeleteSection
 
-    const delete_section = await Api.DELETE_DeleteSection(payload);
 
     let _id = toast.loading("Deleting section..", {//loader
       position: "top-center",
@@ -312,28 +288,11 @@ const handleDeleteSection = async (sectionId:any) => {
       theme: "light",
       });
 
-    try {
-      if(delete_section){
-        clearSectionContent()
-        dispatch(deleteSection(sectionId))
-        setDisableSectionInput(false)
-        setNewSection(true)
-        console.log("response", delete_section);
-        toast.update(_id, { render: "successfully deleted section", type: "success", isLoading: false });
+      toast.update(_id, { render: "successfully deleted section", type: "success", isLoading: false });
         
-        setTimeout(() => {
-          toast.dismiss(_id);
-        }, 2000);
-        return;
-      }
-    
-  
-    } catch (error) {
-      toast.update(_id, { render: "Error deleting section", type: "error", isLoading: false });
-    setTimeout(() => {
-      toast.dismiss(_id);
-    }, 2000);
-    }
+      setTimeout(() => {
+        toast.dismiss(_id);
+      }, 2000);
 
 
 
@@ -677,6 +636,20 @@ id="test"
             <label className="form-label">Course Description</label>
 
     
+            <div style={{ height: '200px', overflow: 'auto' }}>
+  <ReactQuill
+    style={{ height: '100px' }}
+    value={courseDescription}
+    onChange={(value:any) => {
+
+      setCourseDescription(value); // Pass the new description
+    
+
+    }}
+    placeholder="Module description..."
+    modules={descriptionToolbar}
+  />
+</div>
 
             
                 <div style={{display: "flex", flexDirection: "row", justifyContent: "flex-end", marginTop: "5px"}}>
