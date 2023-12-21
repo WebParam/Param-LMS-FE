@@ -159,7 +159,10 @@ export interface IDeleteModule{
 }
 
 export interface IDeleteVideo{
-      
+      courseId : string,
+      sectionId : string
+      moduleId : string
+      videoId : string
       
 }
 
