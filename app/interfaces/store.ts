@@ -1,8 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { createWrapper } from "next-redux-wrapper";
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import { courseSlice } from "../redux/courseSlice";
 import {viewCourseSlice} from "../redux/viewCourseSlice";
 import { quizSlice } from "../redux/quizSlice";
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: quizSlice.name
+};
 
 
 export const store = configureStore({

@@ -7,17 +7,17 @@ import { IRating } from "@/app/interfaces/Rating";
 import { get } from "http";
 import { IQuiz } from "@/app/interfaces/quiz";
 
-export const courseWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api";
+export const courseWriteUrl = "https://localhost:61289/api";
 
-export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api";
+export const courseReadUrl="https://localhost:61271/api";
 
-export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api";
+export const userWriteUrl = "https://localhost:61281/api";
  
-export const userReadUrl="https://khumla-dev-user-read.azurewebsites.net/api";
+export const userReadUrl="https://localhost:61273/api";
 
-export const commentReadUrl="https://localhost:62037/api";
+export const commentReadUrl="https://localhost:61280/api";
 
-export const commentWriteUrl="https://localhost:62023/api";
+export const commentWriteUrl="https://localhost:61275/api";
 
 export const quizReadUrl = "https://localhost:53137/api";
 

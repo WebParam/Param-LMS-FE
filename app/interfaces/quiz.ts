@@ -7,6 +7,7 @@ export interface IQuestion{
     id:string;
     text:string;
     choices:IChoice[];
+    points:Number;
 }
 
 export interface IQuiz{
