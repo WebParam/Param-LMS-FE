@@ -7,11 +7,7 @@ import { IRating } from "@/app/interfaces/Rating";
 import { get } from "http";
 import { IQuiz } from "@/app/interfaces/quiz";
 
-<<<<<<< HEAD
-export const courseWriteUrl = "https://localhost:61289/api";
-=======
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
->>>>>>> 454a0c0bc7b45dfb4646150bcb6a233de270251d
 
 export const courseReadUrl="https://localhost:61271/api";
 

@@ -19,7 +19,7 @@ const axios = require("axios").default;
 
 
 export default function Login() {
-  cookies.remove("param-lms-user"); 
+ // cookies.remove("param-lms-user"); 
   const[disable , setDisable] = useState<boolean>(false)
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -202,7 +202,7 @@ async function LoginUser (event:any){
                 value = {password}
                 onChange = {onChangePassword}
                 className="form-control"
-                placeholder="Your first and last name ..."
+                placeholder="Your password ..."
               />
               <p className="text-right">
                 <Link href="/auth/login/reset-password" className="small">

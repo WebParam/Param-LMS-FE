@@ -323,7 +323,7 @@ export default function ManageCourses() {
                 <Dropdown.Item href="billing-history.html">
                   Payments
                 </Dropdown.Item>
-                <Dropdown.Item href="login.html">Logout</Dropdown.Item>
+                <Dropdown.Item href="/auth/login">Logout</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </div>
@@ -2092,7 +2092,7 @@ export default function ManageCourses() {
                     </a>
                   </li>
                   <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="login.html">
+                    <a className="sidebar-menu-button" href="/auth/login">
                       Logout
                     </a>
                   </li>

@@ -25,10 +25,10 @@ import {
   IUpdateModuleDetailState,
 } from "@/app/interfaces/courses";
 import {
-  createChoice,
+  addChoices,
   createQuestion,
-  createQuiz,
-  getQuiz,
+  createQuizDetail,
+  setSelectedQuizForEdit
 } from "@/app/redux/quizSlice";
 import { IQuiz } from "@/app/interfaces/quiz";
 import { useSearchParams } from "react-router-dom";
@@ -98,23 +98,23 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
   };
 
   const handleCreateQuiz = () => {
-    dispatch(
-      createQuiz({
-        id: generateUniqueId,
-        questions: [
-          {
-            id: questionId,
-            text: questionDescription,
-            choices: [
-              {
-                text: choiceDescription,
-                isCorrect: choiceAnswer,
-              },
-            ],
-          },
-        ],
-      })
-    );
+    // dispatch(
+    //   create({
+    //     id: generateUniqueId,
+    //     questions: [
+    //       {
+    //         id: questionId,
+    //         text: questionDescription,
+    //         choices: [
+    //           {
+    //             text: choiceDescription,
+    //             isCorrect: choiceAnswer,
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   })
+    // );
   };
 
   const handleCreateQuestion = () => {
@@ -144,21 +144,25 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
 
   
   const handleCreateChoice = () => {
-    setChoiceError(false);
-    setChoiceAnswerError(false)
-    if( choiceDescription.length === 0){
-      setChoiceError(true)
-      return;
-    }
-    dispatch(
-      createChoice({
-        questionId: questionId,
-        choice: {
-          text: choiceDescription,
-          isCorrect: setChoiceAnswer,
-        },
-      })
-    );
+    // setChoiceError(false);
+    // setChoiceAnswerError(false)
+    // if( choiceDescription.length === 0){
+    //   setChoiceError(true)
+    //   return;
+    // }
+    // if(choiceAnswer.length === 0){
+    //   setChoiceAnswerError(true)
+    //   return;
+    // }
+    // dispatch(
+    //   createChoice({
+    //     questionId: questionId,
+    //     choice: {
+    //       text: choiceDescription,
+    //       isCorrect: setChoiceAnswer,
+    //     },
+    //   })
+    // );
   };
 
   const saveChangeBtn = () => {
@@ -248,7 +252,8 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
       setExpandedModule(module.id);
     }
   };
-  const _quiz:any =useSelector(getQuiz);
+  //const _quiz:any =useSelector(getQuiz);
+
   useEffect(() => {
     const sections = _courseFromState.sections;
     const lastSection = sections.length - 1;
@@ -706,6 +711,9 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
                   </>
                 )}
               </div>
+
+              {/*Quiz Content Starts Here*/}
+
               <div
                 className={toggler === 2 ? "col-md-8" : "col-md-8 d-md-none"}
               >
@@ -938,22 +946,7 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
                         </button>
                     </div>
                   </div>
-                  {/* <div className="col-md-4">
-          <div className="card">
-            <div className="card-header text-center">
-              <a  className="btn btn-accent">Save changes</a>
-            </div>
-            <div className="list-group list-group-flush">
-              <div className="list-group-item d-flex">
-                <a className="flex" href="#"><strong>Save Draft</strong></a>
-                <i className="material-icons text-muted">check</i>
-              </div>
-              <div className="list-group-item">
-                <a href="#" className="text-danger"><strong>Delete Quiz</strong></a>
-              </div>
-            </div>
-          </div>
-        </div> */}
+                  
                 </div>
               </div>
               <div className="col-md-4">
@@ -1014,6 +1007,12 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
                         }}
                       />
                     </div>
+                                  {/*Quiz Content Ends Here*/}
+
+
+
+
+
                     <div className="list-group-item d-flex">
                       <a href="#" className="flex">
                         <strong>Include Documents?</strong>

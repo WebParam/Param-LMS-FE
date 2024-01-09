@@ -11,6 +11,7 @@ import { ICourse, IDeleteVideo, IModule, IUpdateModuleDetailState } from "@/app/
 import { Api } from "@/app/lib/restapi/endpoints";
 import Cookies from "universal-cookie";
 import { toast } from "react-toastify";
+import { addChoices, createQuestion } from "@/app/redux/quizSlice";
 
 
 interface EditCourseModalProps {
@@ -36,6 +37,16 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [selectedVideos , setSelectedVideo] = useState<any>([])
   const [changeVidBtn, setChangeVidBtn] = useState<boolean>(true);
   const [videoId, setVideoId] = useState<string>("");
+  const [questionId, setQuestionId] = useState<string>("");
+  const [choiceAnswerError, setChoiceAnswerError] = useState(false);
+  const [choiceAnswer, setChoiceAnswer] = useState<string>(""); // Can be boolean or string
+  const [choiceError, setChoiceError] = useState(false);
+  const [toggler, setToggler] = useState<Number>(1);
+  const [includeQuiz, setIncludeQuiz] = useState<boolean>(false);
+  const [includeDocument, setIncludeDocument] = useState<boolean>(false);
+  const [questionError, setQuestionError] = useState(false);
+  const [choiceDescription, setChoiceDescription] = useState<string>("");
+  const [questionDescription, setQuestionDescription] = useState<string>("");
 
   const cookies = new Cookies();
   const courseId = cookies.get('courseId');
@@ -47,7 +58,38 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     ],
   };
 
+  const generateUniqueId = () => {
+    return "xxxxxxxxxxxxxxxxxxxxxxxx".replace(/[x]/g, () => {
+      return ((Math.random() * 16) | 0).toString(16);
+    });
+  }; 
+  const tabSelect = (id: Number, e: any) => {
+    setToggler(id);
+    e.preventDefault();
+  };
 
+  
+  const handleCreateChoice = () => {
+    // setChoiceError(false);
+    // setChoiceAnswerError(false);
+    // if (choiceDescription.length === 0) {
+    //   setChoiceError(true);
+    //   return;
+    // }
+    // if (choiceAnswer.length === 0) {
+    //   setChoiceAnswerError(true);
+    //   return;
+    // }
+    // dispatch(
+    //   createChoice({
+    //     questionId: questionId,
+    //     choice: {
+    //       text: choiceDescription,
+    //       isCorrect: setChoiceAnswer,
+    //     },
+    //   })
+    // );
+  };
  
   const deleteVideoHandler = async (moduleId:any, videoId:any) => {
 
@@ -173,7 +215,43 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     setVideoUrl("")
     setChangeVidBtn(true)
   }
+  const cursorStyle = (predicate: boolean) =>
+    predicate ? "pointer" : "not-allowed";
 
+    const handleCreateQuestion = () => {
+      setQuestionError(false);
+      if (questionDescription.length === 0 || choiceDescription.length === 0) {
+        setQuestionError(true);
+  
+        return;
+      }
+      dispatch(
+        createQuestion({
+          question: {
+            id: questionId,
+            text: questionDescription,
+            choices: [
+              {
+                text: choiceDescription,
+                isCorrect: setChoiceAnswer,
+              },
+            ],
+          },
+        })
+      );
+      setQuestionId(generateUniqueId);
+      setQuestionDescription("");
+    };
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const selectedValue: string = event.target.value;
+      setChoiceAnswer(selectedValue); // Set the state
+    };
+    const saveChangeBtn = () => {
+      if (moduleDescription && moduleTitle) {
+        setDisableSaveChanges(false);
+      }
+    };
+  
   return (
     <div
       className="mdk-drawer-layout js-mdk-drawer-layout"
@@ -185,11 +263,95 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
         className="mdk-drawer-layout__content page-content"
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
       >
+       <div className="card-header p-0 nav">
+          <div className="row no-gutters" role="tablist">
+            <div className="col-auto">
+              <a
+                href="#"
+                data-toggle="tab"
+                onClick={(e) => tabSelect(1, e)}
+                role="tab"
+                aria-selected="true"
+                className={
+                  toggler === 1
+                    ? "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
+                    : "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start"
+                }
+              >
+                <span className="h2 mb-0 mr-3">1</span>
+                <span className="flex d-flex flex-column">
+                  <strong className="card-title">Edit Module</strong>
+                  {/* <small className="card-subtitle text-50">Ongoing Projects</small> */}
+                </span>
+              </a>
+            </div>
+            <div className="col-auto border-left border-right">
+              <a
+                href="#"
+                data-toggle="tab"
+                style={{ cursor: cursorStyle(includeQuiz) }}
+                onClick={(e) => {
+                  if (includeQuiz) {
+                    tabSelect(2, e);
+                  } else {
+                    e.preventDefault();
+                  }
+                }}
+                role="tab"
+                aria-selected="true"
+                className={
+                  toggler === 2
+                    ? "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
+                    : "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start"
+                }
+              >
+                <span className="h2 mb-0 mr-3">2</span>
+                <span className="flex d-flex flex-column">
+                  <strong className="card-title">Edit Quiz</strong>
+                  {/* <small className="card-subtitle text-50">Past Projects</small> */}
+                </span>
+              </a>
+            </div>
+            <div className="col-auto border-left border-right">
+              <a
+                href="#"
+                style={{ cursor: cursorStyle(includeDocument) }}
+                data-toggle="tab"
+                onClick={(e) => {
+                  if (includeDocument) {
+                    tabSelect(3, e);
+                  } else {
+                    e.preventDefault();
+                  }
+                }}
+                role="tab"
+                aria-selected="true"
+                className={
+                  toggler === 3
+                    ? "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
+                    : "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start"
+                }
+              >
+                <span className="h2 mb-0 mr-3">3</span>
+                <span className="flex d-flex flex-column">
+                  <strong className="card-title">Edit Document</strong>
+                  {/* <small className="card-subtitle text-50">Past Projects</small> */}
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
         <div className="pt-32pt">
           <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
             <div className="flex d-flex flex-column flex-sm-row align-items-center">
               <div className="mb-24pt mb-sm-0 mr-sm-24pt">
-                <h2 className="mb-0">Edit Module</h2>
+                <h2 className="mb-0">
+                  {toggler === 1
+                    ? "Edit Module"
+                    : toggler === 2
+                    ? "Edit Quiz"
+                    : "Edit Document"}
+                </h2>
                 <ol className="breadcrumb p-0 m-0">
                   <li className="breadcrumb-item">
                     <a href="index.html">Home</a>
@@ -200,11 +362,12 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
             </div>
           </div>
         </div>
-
         <div style = {{width:"100%"}} className="page-section border-bottom-2">
           <div className="container page__container">
             <div className="row">
-              <div className="col-md-8">
+            <div
+                className={toggler === 1 ? "col-md-8" : "col-md-8 d-md-none"}
+              >
                 <div className="page-separator">
                   <div className="page-separator__text">Basic information</div>
 
@@ -399,38 +562,342 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
                
               </div>
-              <div className="col-md-4">
-                <div className="card" style={{width : "auto"}}>
-                  <div  className="card-header text-center">
 
-              
-                  <button   style={{backgroundColor: "transparent", border:"none", outline:"none", width:"150px"}}>
- <a
-                    onClick={editModule}
-                      href="#" className="btn btn-accent">
-                       save changes
-                    </a>
-                      </button>  
-          
-          
-
+              <div
+                className={toggler === 2 ? "col-md-8" : "col-md-8 d-md-none"}
+              >
+                <div className="page-separator">
+                  <div className="page-separator__text">Questions</div>
+                </div>
+                <ul className="list-group stack mb-40pt">
+                  <li className="list-group-item d-flex">
+                    <i className="material-icons text-70 icon-16pt icon--left">
+                      drag_handle
+                    </i>
+                    <div className="flex d-flex flex-column">
+                      <div className="card-title mb-4pt">Question 1 of 2</div>
+                      <div className="card-subtitle text-70 paragraph-max mb-16pt">
+                        An angular 2 project written in typescript is*
+                        transpiled to javascript duri*ng the build process.
+                        Which of the following additional features are provided
+                        to the developer while programming on typescript over
+                        javascript?
+                      </div>
+                      <div>
+                        <a
+                          href=""
+                          className="chip chip-light d-inline-flex align-items-center"
+                        >
+                          <i className="material-icons icon-16pt icon--left">
+                            keyboard_arrow_down
+                          </i>{" "}
+                          Answers
+                        </a>
+                        <div className="chip chip-outline-secondary">
+                          Single Answer
+                        </div>
+                      </div>
+                    </div>
+                    <span className="text-muted mx-12pt">800 pt</span>
+                    <div className="dropdown">
+                      <a
+                        href="#"
+                        data-toggle="dropdown"
+                        data-caret="false"
+                        className="text-muted"
+                      >
+                        <i className="material-icons">more_horiz</i>
+                      </a>
+                      <div className="dropdown-menu dropdown-menu-right">
+                        <a href="javascript:void(0)" className="dropdown-item">
+                          Edit Question
+                        </a>
+                        <div className="dropdown-divider" />
+                        <a
+                          href="javascript:void(0)"
+                          className="dropdown-item text-danger"
+                        >
+                          Delete Question
+                        </a>
+                      </div>
+                    </div>
+                  </li>
+                  <li className="list-group-item d-flex">
+                    <i className="material-icons text-70 icon-16pt icon--left">
+                      drag_handle
+                    </i>
+                    <div className="flex d-flex flex-column">
+                      <div className="card-title mb-4pt">Question 2 of 2</div>
+                      <div className="card-subtitle text-70 paragraph-max mb-8pt">
+                        What will be the output of below program?
+                      </div>
+                      <code className="highlight js mb-16pt bg-transparent hljs javascript">
+                        <span className="hljs-function">
+                          <span className="hljs-keyword">function</span>&nbsp;
+                          <span className="hljs-title">f</span>(
+                          <span className="hljs-params">
+                            input:&nbsp;boolean
+                          </span>
+                          )&nbsp;
+                        </span>
+                        {"{"}
+                        <br />
+                        &nbsp;&nbsp;<span className="hljs-keyword">let</span>
+                        &nbsp;a&nbsp;=&nbsp;
+                        <span className="hljs-number">100</span>
+                        ;<br />
+                        <br />
+                        &nbsp;&nbsp;<span className="hljs-keyword">if</span>
+                        &nbsp;(input)&nbsp;{"{"}
+                        <br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span className="hljs-keyword">let</span>
+                        &nbsp;b&nbsp;=&nbsp;a&nbsp;+&nbsp;
+                        <span className="hljs-number">1</span>;<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span className="hljs-keyword">return</span>&nbsp;b;
+                        <br />
+                        &nbsp;&nbsp;{"}"}
+                        <br />
+                        &nbsp;&nbsp;<span className="hljs-keyword">return</span>
+                        &nbsp;b;
+                        <br />
+                        {"}"}
+                      </code>
+                      <div className="d-flex">
+                        <a
+                          href=""
+                          className="chip chip-light d-inline-flex align-items-center"
+                        >
+                          <i className="material-icons icon-16pt icon--left">
+                            keyboard_arrow_down
+                          </i>{" "}
+                          Answers
+                        </a>
+                        <div className="chip chip-outline-secondary">
+                          Single Answer
+                        </div>
+                        <div className="chip chip-outline-secondary">Code</div>
+                      </div>
+                    </div>
+                    <span className="text-muted mx-12pt">800 pt</span>
+                    <div className="dropdown">
+                      <a
+                        href="#"
+                        data-toggle="dropdown"
+                        data-caret="false"
+                        className="text-muted"
+                      >
+                        <i className="material-icons">more_horiz</i>
+                      </a>
+                      <div className="dropdown-menu dropdown-menu-right">
+                        <a href="javascript:void(0)" className="dropdown-item">
+                          Edit Question
+                        </a>
+                        <div className="dropdown-divider" />
+                        <a
+                          href="javascript:void(0)"
+                          className="dropdown-item text-danger"
+                        >
+                          Delete Question
+                        </a>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <div>
+                  <div className="page-separator">
+                    <div className="page-separator__text">New Question</div>
                   </div>
-                  <div className="list-group list-group-flush">
+                  <div className="card card-body">
+                    <div className="form-group">
+                      <label className="form-label">
+                        Question{" "}
+                        {questionError && (
+                          <span
+                            style={{
+                              color: "tomato",
+                              fontWeight: "600",
+                              fontSize: "small",
+                            }}
+                          >
+                            *required field
+                          </span>
+                        )}
+                      </label>
+
+                      <div
+                        style={{ height: "150px" }}
+                        className="mb-0"
+                        data-toggle="quill"
+                        data-quill-placeholder="Question"
+                      >
+                        <ReactQuill
+                          style={{ height: "100px" }}
+                          value={questionDescription}
+                          onChange={(value: string) => {
+                            setQuestionDescription(value);
+                            saveChangeBtn();
+                          }}
+                          placeholder="Enter your question description here..."
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">
+                        Add Choices{" "}
+                        {choiceError && (
+                          <span
+                            style={{
+                              color: "tomato",
+                              fontWeight: "600",
+                              fontSize: "small",
+                            }}
+                          >
+                            *required field
+                          </span>
+                        )}
+                      </label>
+
+                      <input
+                        minLength={10}
+                        onChange={(event) =>
+                          setChoiceDescription(event.target.value)
+                        }
+                        className="form-control mb-3"
+                        placeholder="Enter your choice here..."
+                      />
+                      <select
+                        style={{
+                          border: `${
+                            choiceAnswerError ? "2px solid tomato" : "none"
+                          }`,
+                        }}
+                        onChange={handleSelectChange}
+                        name="category"
+                        className="form-control custom-select mb-3"
+                        value={choiceAnswer}
+                      >
+                        <option value="">Select an answer</option>
+                        <option value="true">Correct</option>
+                        <option value="false">Incorrect</option>
+                      </select>
+                      <div>
+                        <button
+                          onClick={handleCreateChoice}
+                          style={{
+                            outline: "none",
+                            border: "none",
+                            backgroundColor: "transparent",
+                          }}
+                        >
+                          <a href="#" className="btn btn-outline-secondary">
+                            Add Choice
+                          </a>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="select01">
+                        Answers
+                      </label>
+                      <select
+                        id="select01"
+                        data-toggle="select"
+                        data-multiple="true"
+                        multiple
+                        className="form-control"
+                      >
+                        <option selected>My first option</option>
+                        <option selected>Another option</option>
+                        <option>Third option is here</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Completion Points</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={1000}
+                      />
+                    </div>
+                    <div>
+                      <button
+                        onClick={handleCreateQuestion}
+                        style={{
+                          outline: "none",
+                          border: "none",
+                          backgroundColor: "transparent",
+                        }}
+                      >
+                        <a href="#" className="btn btn-outline-secondary">
+                          Add Question
+                        </a>
+                      </button>
+                    </div>
+                  </div>
+    
+                </div>
+              </div>
+
+              <div className="col-md-4">
+                <div className="card" style={{ width: "auto" }}>
+                  <div className="card-header text-center">
+                  <button
+                        disabled={disableSaveChanges}
+                        style={{
+                          backgroundColor: "transparent",
+                          border: "none",
+                          outline: "none",
+                          width: "150px",
+                        }}
+                      >
+                        <a
+                          onClick={editModule}
+                          href="#"
+                          className="btn btn-accent"
+                        >
+                          save changes
+                        </a>
+                      </button>
+                  </div>
+                  <div className="list-group list-group-flush" >
                     <div className="list-group-item d-flex">
                       <a className="flex" href="#">
-                        <strong>Save Draft</strong>
+                        <strong>Include Quiz?</strong>
                       </a>
-                      <i className="material-icons text-muted">check</i>
+                      <input
+                        type="checkbox"
+                        checked={includeQuiz}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setIncludeQuiz(e.target.checked);
+                          } else {
+                            setIncludeQuiz(e.target.checked);
+                            setToggler(1);
+                          }
+                        }}
+                      />
                     </div>
-                    <div className="list-group-item">
-                      <a href="#" className="text-danger">
-                        <strong>Delete Course</strong>
+                    <div className="list-group-item d-flex">
+                      <a href="#" className="flex">
+                        <strong>Include Documents?</strong>
                       </a>
+                      <input
+                        type="checkbox"
+                        checked={includeDocument}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setIncludeDocument(e.target.checked);
+                          } else {
+                            setIncludeDocument(e.target.checked);
+                            setToggler(1);
+                          }
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
-               
-         
               </div>
             </div>
           </div>

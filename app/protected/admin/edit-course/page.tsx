@@ -1348,7 +1348,7 @@ id="test"
                 </a>
               </li>
               <li className="sidebar-menu-item">
-                <a className="sidebar-menu-button" href="login.html">
+                <a className="sidebar-menu-button" href="/auth/login">
                   Logout
                 </a>
               </li>

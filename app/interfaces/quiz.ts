@@ -7,7 +7,8 @@ export interface IQuestion{
     id:string;
     text:string;
     choices:IChoice[];
-    points:Number;
+    points: 0
+
 }
 
 export interface IQuiz{
@@ -18,4 +19,10 @@ export interface IQuiz{
     modifiedByUserId:string;
     createdDate:string;
     modifiedDate:string;
+ 
+}
+
+
+export interface IQuizState{
+    quiz : IQuiz
 }
