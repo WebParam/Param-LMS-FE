@@ -80,7 +80,7 @@ async function LoginUser (event:any){
 
     
     const user = await  Api.POST_Login(payload);
-    console.log("data", user.data);
+    console.log("data", user);
     try {
       
     if(user?.data?.id){

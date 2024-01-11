@@ -2,6 +2,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { RiDeleteBin6Line } from "react-icons/ri";
+
+import Dropdown from "react-bootstrap/Dropdown";
 import {
   FaBullseye,
   FaEdit,
@@ -28,10 +31,21 @@ import {
   addChoices,
   createQuestion,
   createQuizDetail,
-  setSelectedQuizForEdit
+  setSelectedQuizForEdit,
+  getSelectedQuizForEdit,
+  updateQuestionDetails,
 } from "@/app/redux/quizSlice";
-import { IQuiz } from "@/app/interfaces/quiz";
+import {
+  IChoice,
+  IQuestion,
+  IQuiz,
+  IQuizState,
+  IUpdateQuestionDetailState,
+  IUpdateQuizDetailState,
+} from "@/app/interfaces/quiz";
 import { useSearchParams } from "react-router-dom";
+import Cookies from "universal-cookie";
+import { current } from "@reduxjs/toolkit";
 
 interface CreateCourseModalProps {
   onClose: () => any;
@@ -67,14 +81,31 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [includeDocument, setIncludeDocument] = useState<boolean>(false);
   const [questionDescription, setQuestionDescription] = useState<string>("");
   const [choiceDescription, setChoiceDescription] = useState<string>("");
-  const [choiceAnswer, setChoiceAnswer] = useState<boolean>(true);
-  const [questionId, setQuestionId] = useState<string>("");
-  const [quiz, setQuiz] = useState<IQuiz>();
-  const [openAnswers,setOpenAnswers]=useState<number[]>([])
+  const [choiceAnswer, setChoiceAnswer] = useState<string>("");
+  const [points, setPoints] = useState<number>(0);
   const [choiceError, setChoiceError] = useState(false);
-const [questionError, setQuestionError] = useState(false);
-const [choiceAnswerError, setChoiceAnswerError] = useState(false)
+  const [questionError, setQuestionError] = useState(false);
+  const [choiceAnswerError, setChoiceAnswerError] = useState(false);
+  const [isQuestionCreated, setIsQuestionCreated] = useState<boolean>(false);
+  const [countChoice, setCountChoices] = useState<number>(0);
+  const [date, setDate] = useState<string>("");
+  const [questionId, setQuestionId] = useState<any>(0);
+  const [enableEditQuestion, setEnableEditQuestion] = useState<boolean>(false);
+  const [pointsError, setPointsError] = useState(false);
+  const [choices, setChoices] = useState<any>([]);
+  const [questionNumber, setQuestionNumber] = useState<number>(1);
+  const [questions, setQuestions] = useState<any>();
+  const [openChoices, setOpenChoices] = useState(false);
+  const [choiceInstruction, setChoiceInstruction] = useState(false);
+  const [selectedQuestionForEdit, setSelectedQuestionForEdit] =
+    useState<IQuestion>();
+  const _quizFromState: IQuiz = useSelector(getSelectedQuizForEdit).quiz;
+  const cookies = new Cookies();
 
+  const handleDeleteOption = (value: any) => {
+    // Logic to delete the selected option
+    console.log(`Deleting option: ${value}`);
+  };
   const moduleToolbar = {
     toolbar: [
       [{ header: "1" }, { header: "2" }],
@@ -91,79 +122,97 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
   const cursorStyle = (predicate: boolean) =>
     predicate ? "pointer" : "not-allowed";
 
-  const generateUniqueId = () => {
-    return "xxxxxxxxxxxxxxxxxxxxxxxx".replace(/[x]/g, () => {
-      return ((Math.random() * 16) | 0).toString(16);
-    });
-  };
+  const userData = cookies.get("param-lms-user");
+  function getTodaysDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    let month: number | string = today.getMonth() + 1;
+    let day: number | string = today.getDate();
+
+    month = month < 10 ? `0${month}` : month;
+    day = day < 10 ? `0${day}` : day;
+
+    setDate(`${year}-${month}-${day}`);
+  }
 
   const handleCreateQuiz = () => {
-    // dispatch(
-    //   create({
-    //     id: generateUniqueId,
-    //     questions: [
-    //       {
-    //         id: questionId,
-    //         text: questionDescription,
-    //         choices: [
-    //           {
-    //             text: choiceDescription,
-    //             isCorrect: choiceAnswer,
-    //           },
-    //         ],
-    //       },
-    //     ],
-    //   })
-    // );
+    const payload = {
+      reference: "module",
+      createdByUserId: userData?.id,
+      modifiedByUserId: userData?.id,
+      createdDate: date,
+    } as IUpdateQuizDetailState;
+
+    dispatch(createQuizDetail(payload));
   };
 
+  console.log("New Quiz: ", _quizFromState.questions);
+
   const handleCreateQuestion = () => {
-    setQuestionError(false)
-    if(questionDescription.length === 0 || choiceDescription.length === 0) {
-      setQuestionError(true)
+    setPointsError(false);
+    setQuestionError(false);
+    if (questionDescription.length === 0) {
+      setQuestionError(true);
 
       return;
     }
-    dispatch(
-      createQuestion({
-        question: {
-          id: questionId,
-          text: questionDescription,
-          choices: [
-            {
-              text: choiceDescription,
-              isCorrect: setChoiceAnswer,
-            },
-          ],
-        },
-      })
-    );
-    setQuestionId(generateUniqueId);
-    setQuestionDescription("");
+    const plainDescription =
+      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+    if (isNaN(points) || points === 0) {
+      setPointsError(true);
+      return;
+    }
+    setEnableEditQuestion(true);
+    const payload = {
+      text: plainDescription,
+      points: points,
+    } as IQuestion;
+    dispatch(createQuestion(payload));
+    setIsQuestionCreated(true);
   };
 
-  
-  const handleCreateChoice = () => {
-    // setChoiceError(false);
-    // setChoiceAnswerError(false)
-    // if( choiceDescription.length === 0){
-    //   setChoiceError(true)
-    //   return;
-    // }
-    // if(choiceAnswer.length === 0){
-    //   setChoiceAnswerError(true)
-    //   return;
-    // }
-    // dispatch(
-    //   createChoice({
-    //     questionId: questionId,
-    //     choice: {
-    //       text: choiceDescription,
-    //       isCorrect: setChoiceAnswer,
-    //     },
-    //   })
-    // );
+  const updateQuizQuestion = function () {
+    setEnableEditQuestion(true);
+    const plainDescription =
+      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+    const payload = {
+      questionId: questionId,
+      text: plainDescription,
+      points: points,
+    } as IUpdateQuestionDetailState;
+
+    dispatch(updateQuestionDetails(payload));
   };
+
+  const handleCreateChoice = () => {
+    setChoiceError(false);
+    setCountChoices(countChoice + 1);
+    setChoiceAnswerError(false);
+    if (choiceDescription.length === 0) {
+      setChoiceError(true);
+      return;
+    }
+    if (!choiceAnswer) {
+      setChoiceAnswerError(true);
+      return;
+    }
+
+    const payload = {
+      questionId: questionId,
+      text: choiceDescription,
+      isCorrect: choiceAnswer,
+    } as IChoice;
+    dispatch(addChoices(payload));
+    setChoices([
+      ...choices,
+      { text: payload.text, isCorrect: payload.isCorrect },
+    ]);
+    setChoiceAnswer("");
+    setChoiceDescription("");
+  };
+
+  console.log("New Quiz: ", _quizFromState.questions);
+  console.log("QuestionId:", questionId);
 
   const saveChangeBtn = () => {
     if (moduleDescription.length > 0 && moduleTitle.length > 0) {
@@ -199,6 +248,16 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
       setDisableSaveChanges(true);
     }
   };
+  useEffect(() => {
+    const quizQuestions = _quizFromState.questions.map(
+      (questions) => questions
+    );
+
+    if (quizQuestions.length > 0) {
+      const lastQuestionId = quizQuestions.map((question) => question.id);
+      setQuestionId(lastQuestionId[quizQuestions.length - 1]);
+    }
+  }, [_quizFromState.questions]);
 
   useEffect(() => {
     const sectionIds = _courseFromState.sections.map((section) => {
@@ -252,19 +311,25 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
       setExpandedModule(module.id);
     }
   };
-  //const _quiz:any =useSelector(getQuiz);
 
   useEffect(() => {
+    getTodaysDate();
     const sections = _courseFromState.sections;
     const lastSection = sections.length - 1;
     setLastSection(lastSection);
   }, []);
 
   useEffect(() => {
+    const choices = _quizFromState.questions.map(
+      (question) => question.choices
+    );
+    console.log("Choices", choices[0]);
+  }, [countChoice]);
+
+  useEffect(() => {
     const section = _courseFromState.sections.find(
       (section) => section.id === sectionId
     );
-    setQuestionId(generateUniqueId);
 
     if (section) {
       const module = section.modules.find((module) => module.id === moduleId);
@@ -288,6 +353,40 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
     setVideoUrl("");
     setChangeVidBtn(true);
   };
+console.log("Questions Length:", questions.length)
+  const newQuestion = () => {
+    const quizQuestions = _quizFromState.questions.map(
+      (questions) => questions
+    );
+
+    console.log("Quiz Question:", quizQuestions)
+
+    quizQuestions.forEach((question) => {
+      if (question.choices.length > 0) {
+        setQuestions(_quizFromState.questions);
+      }
+    });
+    setIsQuestionCreated(!isQuestionCreated);
+    setEnableEditQuestion(!enableEditQuestion);
+    setChoices([])
+    setQuestionDescription("");
+    setPoints(0);
+    setChoiceDescription("");
+    setChoiceAnswer("");
+  };
+  console.log("Questions", questions);
+  const nextQuestion = () => {
+    if (questionNumber < questions.length) {
+      setQuestionNumber(questionNumber + 1);
+    }
+  };
+
+  const prevQuestion = () => {
+    if (questionNumber > 1) {
+      setQuestionNumber(questionNumber - 1);
+    }
+  };
+
   return (
     <div
       style={{ width: "100%" }}
@@ -344,7 +443,9 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
               >
                 <span className="h2 mb-0 mr-3">2</span>
                 <span className="flex d-flex flex-column">
-                  <strong className="card-title">Add Quiz</strong>
+                  <strong className="card-title" onClick={handleCreateQuiz}>
+                    Add Quiz
+                  </strong>
                   {/* <small className="card-subtitle text-50">Past Projects</small> */}
                 </span>
               </a>
@@ -720,149 +821,149 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
                 <div className="page-separator">
                   <div className="page-separator__text">Questions</div>
                 </div>
-                <ul className="list-group stack mb-40pt">
-                  <li className="list-group-item d-flex">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <div className="flex d-flex flex-column">
-                      <div className="card-title mb-4pt">Question 1 of 2</div>
-                      <div className="card-subtitle text-70 paragraph-max mb-16pt">
-                        An angular 2 project written in typescript is*
-                        transpiled to javascript duri*ng the build process.
-                        Which of the following additional features are provided
-                        to the developer while programming on typescript over
-                        javascript?
-                      </div>
-                      <div>
-                        <a
-                          href=""
-                          className="chip chip-light d-inline-flex align-items-center"
-                        >
-                          <i className="material-icons icon-16pt icon--left">
-                            keyboard_arrow_down
-                          </i>{" "}
-                          Answers
-                        </a>
-                        <div className="chip chip-outline-secondary">
-                          Single Answer
+                {questions?.length > 0 && (
+                  <ul className="list-group stack mb-40pt">
+                    <li className="list-group-item d-flex">
+                      <i className="material-icons text-70 icon-16pt icon--left">
+                        drag_handle
+                      </i>
+                      <div className="flex d-flex flex-column">
+                        <div className="card-title mb-4pt">
+                          Question {questionNumber} of {questions?.length}
+                        </div>
+                        <div className="card-subtitle text-70 paragraph-max mb-16pt">
+                          {questions?.length > 0 &&
+                            questions[questionNumber - 1]?.text}
+                        </div>
+                        <div>
+                          <a
+                            onClick={() => setOpenChoices((prev) => !prev)}
+                            className="chip chip-light d-inline-flex align-items-center"
+                          >
+                            <i className="material-icons icon-16pt icon--left">
+                              {openChoices
+                                ? "keyboard_arrow_up"
+                                : "keyboard_arrow_down"}
+                            </i>{" "}
+                            Answers
+                          </a>
+
+                          {openChoices && (
+                            <div className="form-group">
+                              <select
+                                id="select01"
+                                data-toggle="select"
+                                data-multiple="true"
+                                multiple
+                                className="form-control mt-2"
+                              >
+                                {questions[questionNumber - 1].choices.map(
+                                  (option: any, index: any) => (
+                                    <option key={index} value={option}>
+                                      {option.text}
+                                      <RiDeleteBin6Line
+                                        style={{
+                                          cursor: "pointer",
+                                          fontSize: "60px",
+                                          position: "absolute",
+                                        }}
+                                        onClick={() =>
+                                          handleDeleteOption(option.text)
+                                        }
+                                      />
+                                    </option>
+                                  )
+                                )}
+                              </select>
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                    <span className="text-muted mx-12pt">800 pt</span>
-                    <div className="dropdown">
-                      <a
-                        href="#"
-                        data-toggle="dropdown"
-                        data-caret="false"
-                        className="text-muted"
+                      <span className="text-muted mx-12pt">
+                        {questions[questionNumber - 1].points} pt
+                      </span>
+
+                      <Dropdown style={{ marginRight: "8em" }}>
+                        <Dropdown.Toggle
+                          id="accountDropdown"
+                          variant="link"
+                        ></Dropdown.Toggle>
+
+                        <Dropdown.Menu style={{ textAlign: "right" }}>
+                          <Dropdown.Item
+                            onClick={() =>
+                              setSelectedQuestionForEdit(
+                                questions[questionNumber - 1]
+                              )
+                            }
+                          >
+                            Edit Question
+                          </Dropdown.Item>
+                          <Dropdown.Item>
+                            Delete Question
+                            <RiDeleteBin6Line
+                              className="text-danger"
+                              style={{
+                                fontSize: "0.8em",
+                                marginLeft: "5px",
+                                cursor: "pointer",
+                              }}
+                            />
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                      <div className="dropdown"></div>
+                    </li>
+                    <li className="list-group-item d-flex">
+                      <button
+                        onClick={nextQuestion}
+                        style={{
+                          outline: "none",
+                          border: "none",
+                          backgroundColor: "transparent",
+                        }}
                       >
-                        <i className="material-icons">more_horiz</i>
-                      </a>
-                      <div className="dropdown-menu dropdown-menu-right">
-                        <a href="javascript:void(0)" className="dropdown-item">
-                          Edit Question
+                        <a href="#" className="btn btn-outline-secondary">
+                          Next
                         </a>
-                        <div className="dropdown-divider" />
-                        <a
-                          href="javascript:void(0)"
-                          className="dropdown-item text-danger"
-                        >
-                          Delete Question
-                        </a>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="list-group-item d-flex">
-                    <i className="material-icons text-70 icon-16pt icon--left">
-                      drag_handle
-                    </i>
-                    <div className="flex d-flex flex-column">
-                      <div className="card-title mb-4pt">Question 2 of 2</div>
-                      <div className="card-subtitle text-70 paragraph-max mb-8pt">
-                        What will be the output of below program?
-                      </div>
-                      <code className="highlight js mb-16pt bg-transparent hljs javascript">
-                        <span className="hljs-function">
-                          <span className="hljs-keyword">function</span>&nbsp;
-                          <span className="hljs-title">f</span>(
-                          <span className="hljs-params">
-                            input:&nbsp;boolean
-                          </span>
-                          )&nbsp;
-                        </span>
-                        {"{"}
-                        <br />
-                        &nbsp;&nbsp;<span className="hljs-keyword">let</span>
-                        &nbsp;a&nbsp;=&nbsp;
-                        <span className="hljs-number">100</span>
-                        ;<br />
-                        <br />
-                        &nbsp;&nbsp;<span className="hljs-keyword">if</span>
-                        &nbsp;(input)&nbsp;{"{"}
-                        <br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span className="hljs-keyword">let</span>
-                        &nbsp;b&nbsp;=&nbsp;a&nbsp;+&nbsp;
-                        <span className="hljs-number">1</span>;<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span className="hljs-keyword">return</span>&nbsp;b;
-                        <br />
-                        &nbsp;&nbsp;{"}"}
-                        <br />
-                        &nbsp;&nbsp;<span className="hljs-keyword">return</span>
-                        &nbsp;b;
-                        <br />
-                        {"}"}
-                      </code>
-                      <div className="d-flex">
-                        <a
-                          href=""
-                          className="chip chip-light d-inline-flex align-items-center"
-                        >
-                          <i className="material-icons icon-16pt icon--left">
-                            keyboard_arrow_down
-                          </i>{" "}
-                          Answers
-                        </a>
-                        <div className="chip chip-outline-secondary">
-                          Single Answer
-                        </div>
-                        <div className="chip chip-outline-secondary">Code</div>
-                      </div>
-                    </div>
-                    <span className="text-muted mx-12pt">800 pt</span>
-                    <div className="dropdown">
-                      <a
-                        href="#"
-                        data-toggle="dropdown"
-                        data-caret="false"
-                        className="text-muted"
+                      </button>
+
+                      <button
+                        onClick={prevQuestion}
+                        style={{
+                          outline: "none",
+                          border: "none",
+                          backgroundColor: "transparent",
+                        }}
                       >
-                        <i className="material-icons">more_horiz</i>
-                      </a>
-                      <div className="dropdown-menu dropdown-menu-right">
-                        <a href="javascript:void(0)" className="dropdown-item">
-                          Edit Question
+                        <a href="#" className="btn btn-outline-secondary">
+                          prev
                         </a>
-                        <div className="dropdown-divider" />
-                        <a
-                          href="javascript:void(0)"
-                          className="dropdown-item text-danger"
-                        >
-                          Delete Question
-                        </a>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
+                      </button>
+                    </li>
+                  </ul>
+                )}
+
                 <div>
                   <div className="page-separator">
                     <div className="page-separator__text">New Question</div>
                   </div>
                   <div className="card card-body">
                     <div className="form-group">
-                      <label className="form-label">Question {questionError && <span style={{color: "tomato", fontWeight:"600", fontSize:"small"}}>*required field</span>}</label>
+                      <label className="form-label">
+                        Question{" "}
+                        {questionError && (
+                          <span
+                            style={{
+                              color: "tomato",
+                              fontWeight: "600",
+                              fontSize: "small",
+                            }}
+                          >
+                            *required field
+                          </span>
+                        )}
+                      </label>
 
                       <div
                         style={{ height: "150px" }}
@@ -871,6 +972,7 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
                         data-quill-placeholder="Question"
                       >
                         <ReactQuill
+                          readOnly={enableEditQuestion}
                           style={{ height: "100px" }}
                           value={questionDescription}
                           onChange={(value: string) => {
@@ -882,71 +984,186 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
                       </div>
                     </div>
                     <div className="form-group">
-                      <label className="form-label">Add Choices {choiceError && <span style={{color: "tomato", fontWeight:"600", fontSize:"small"}}>*required field</span>}</label>
-
-                      <input
-                        minLength={10}
-                        onChange={(event) =>
-                          setChoiceDescription(event.target.value)
-                        }
-                        className="form-control mb-3"
-                        placeholder="Enter your choice here..."
-                      />
-           <select style={{border: `${choiceAnswerError ? "2px solid tomato" : "none"}`}}
-      onChange={(e)=>setChoiceAnswer(e.target.value==="true")}
-      name="category"
-      className="form-control custom-select mb-3"
-     
-    >
-      <option value="">Select an answer</option>
-      <option value="true">Correct</option>
-      <option value="false">Incorrect</option>
-    </select>
-                      <div>
-                        <button onClick={handleCreateChoice} style={{outline:"none", border:"none", backgroundColor:"transparent"}}>
-                        <a
-                          href="#"
-                          className="btn btn-outline-secondary"
-                       
-                        >
-                          Add Choice
-                        </a>
-                        </button>
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label" htmlFor="select01">
-                        Answers
+                      <label className="form-label">
+                        Completion Points
+                        {pointsError && (
+                          <span
+                            style={{
+                              color: "tomato",
+                              fontWeight: "600",
+                              fontSize: "small",
+                            }}
+                          >
+                            *invalid points
+                          </span>
+                        )}
                       </label>
-                      <select
-                        id="select01"
-                        data-toggle="select"
-                        data-multiple="true"
-                        multiple
-                        className="form-control"
-                      >
-                        <option selected>My first option</option>
-                        <option selected>Another option</option>
-                        <option>Third option is here</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Completion Points</label>
                       <input
+                        style={{
+                          border: `${
+                            pointsError ? "2px solid tomato" : "none"
+                          }`,
+                        }}
+                        disabled={enableEditQuestion}
+                        onChange={(e: any) => setPoints(e.target.value)}
                         type="text"
                         className="form-control"
-                        defaultValue={1000}
+                        value={points}
                       />
                     </div>
-                    <div>
-                        <button onClick={handleCreateQuestion} style={{outline:"none", border:"none", backgroundColor:"transparent"}}>
-                        <a href="#" className="btn btn-outline-secondary">
-                        Add Question
-                      </a>
+                    <div className="mb-3">
+                      {!isQuestionCreated && (
+                        <button
+                          onClick={handleCreateQuestion}
+                          style={{
+                            outline: "none",
+                            border: "none",
+                            backgroundColor: "transparent",
+                          }}
+                        >
+                          <a href="#" className="btn btn-outline-secondary">
+                            Add Question
+                          </a>
                         </button>
+                      )}
+                      {isQuestionCreated && (
+                        <>
+                          {enableEditQuestion ? (
+                            <button
+                              onClick={() => setEnableEditQuestion(false)}
+                              style={{
+                                outline: "none",
+                                border: "none",
+                                backgroundColor: "transparent",
+                              }}
+                            >
+                              <a href="#" className="btn btn-outline-secondary">
+                                Edit Question
+                              </a>
+                            </button>
+                          ) : (
+                            <button
+                              onClick={updateQuizQuestion}
+                              style={{
+                                outline: "none",
+                                border: "none",
+                                backgroundColor: "transparent",
+                              }}
+                            >
+                              <a href="#" className="btn btn-outline-secondary">
+                                save Question
+                              </a>
+                            </button>
+                          )}
+                        </>
+                      )}
                     </div>
+                    {isQuestionCreated && (
+                      <>
+                        <div className="form-group">
+                          <label className="form-label">
+                            Add Choices{" "}
+                            {choiceError && (
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *required field
+                              </span>
+                            )}
+                          </label>
+
+                          <input
+                            value={choiceDescription}
+                            minLength={10}
+                            onChange={(event) =>
+                              setChoiceDescription(event.target.value)
+                            }
+                            className="form-control mb-3"
+                            placeholder="Enter your choice here..."
+                          />
+                          <select
+                            value={choiceAnswer}
+                            style={{
+                              border: `${
+                                choiceAnswerError ? "2px solid tomato" : "none"
+                              }`,
+                            }}
+                            onChange={(e: any) =>
+                              setChoiceAnswer(e.target.value)
+                            }
+                            name="category"
+                            className="form-control custom-select mb-3"
+                          >
+                            <option value="">Select an answer</option>
+                            <option value="true">Correct</option>
+                            <option value="false">Incorrect</option>
+                          </select>
+                          <div>
+                            <button
+                              onClick={handleCreateChoice}
+                              style={{
+                                outline: "none",
+                                border: "none",
+                                backgroundColor: "transparent",
+                              }}
+                            >
+                              <a href="#" className="btn btn-outline-secondary">
+                                Add Choice
+                              </a>
+                            </button>
+                          </div>
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label" htmlFor="select01">
+                            Answers
+                          </label>
+                          <select
+                            id="select01"
+                            data-toggle="select"
+                            data-multiple="true"
+                            multiple
+                            className="form-control"
+                          >
+                            {choices.map((option: any, index: any) => (
+                              <option key={index} value={option}>
+                                {option.text}
+                                <RiDeleteBin6Line
+                                  style={{
+                                    cursor: "pointer",
+                                    fontSize: "60px",
+                                    position: "absolute",
+                                  }}
+                                  onClick={() =>
+                                    handleDeleteOption(option.text)
+                                  }
+                                />
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </>
+                    )}
+                    {isQuestionCreated && (
+                      <div>
+                        <button
+                          onClick={newQuestion}
+                          style={{
+                            outline: "none",
+                            border: "none",
+                            backgroundColor: "transparent",
+                          }}
+                        >
+                          <a href="#" className="btn btn-outline-secondary">
+                            new Question
+                          </a>
+                        </button>
+                      </div>
+                    )}
                   </div>
-                  
                 </div>
               </div>
               <div className="col-md-4">
@@ -1007,11 +1224,7 @@ const [choiceAnswerError, setChoiceAnswerError] = useState(false)
                         }}
                       />
                     </div>
-                                  {/*Quiz Content Ends Here*/}
-
-
-
-
+                    {/*Quiz Content Ends Here*/}
 
                     <div className="list-group-item d-flex">
                       <a href="#" className="flex">

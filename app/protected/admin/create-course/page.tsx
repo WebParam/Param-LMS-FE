@@ -37,7 +37,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import "react-quill/dist/quill.snow.css";
 
 export default function EditCourse() {
-  const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [editModalOpen, setEditModalOpen] = useState<boolean>(true);
   const [editModuleModalOpen, setEditModuleModalOpen] =
     useState<boolean>(false);
   const [competency, setCompetency] = useState<string>("");
@@ -102,7 +102,7 @@ export default function EditCourse() {
 
   const selectSection = (id: string) => {
     const selectedSection = selectedCourse.sections.find(
-      (section) => section.id === id
+      (section:any) => section.id === id
     );
     if (selectedSection) {
       setSectionTitle(selectedSection.title);

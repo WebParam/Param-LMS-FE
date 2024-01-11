@@ -1,13 +1,15 @@
 export interface IChoice{
+    questionId?:string;
+    id:string;
     text:string;
-    isCorrect:boolean;
+    isCorrect:string;
 }
 
 export interface IQuestion{
     id:string;
     text:string;
     choices:IChoice[];
-    points: 0
+    points: number
 
 }
 
@@ -25,4 +27,22 @@ export interface IQuiz{
 
 export interface IQuizState{
     quiz : IQuiz
+}
+
+export interface IUpdateQuizDetailState{
+    reference: string;
+    createdByUserId: string;
+    modifiedByUserId: string;
+    createdDate: string;
+}
+
+
+export interface IUpdateQuestionDetailState {
+         
+    questionId:string,   
+    text : string;
+    points: number
+
+    
+
 }

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {IQuiz,IChoice,IQuestion, IQuizState} from "../interfaces/quiz"
+import { IQuiz, IChoice, IQuestion, IQuizState, IUpdateQuizDetailState, IUpdateQuestionDetailState } from "../interfaces/quiz"
 import { AppStore } from "../interfaces/store";
 
 const generateUniqueId = () => {
@@ -8,6 +8,7 @@ const generateUniqueId = () => {
   });
 };
 
+export const questionId = generateUniqueId();
 export const initialState: IQuizState = {
   quiz: {
     id: generateUniqueId(),
@@ -31,14 +32,14 @@ export const quizSlice = createSlice({
     //
     createQuizDetail(state, action) {
 
-      const _action = action.payload as IQuizState;
+      const _action = action.payload as IUpdateQuizDetailState;
 
       const newState = {
         ...state.quiz,
-        reference: _action.quiz.reference,
-        createdByUserId: _action.quiz.createdByUserId,
-        modifiedByUserId: _action.quiz.modifiedByUserId,
-        createdDate: _action.quiz.createdDate,
+        reference: _action.reference,
+        createdByUserId: _action.createdByUserId,
+        modifiedByUserId: _action.modifiedByUserId,
+        createdDate: _action.createdDate,
       } as IQuiz;
 
 
@@ -47,42 +48,60 @@ export const quizSlice = createSlice({
 
 
     createQuestion(state, action) {
-      const { text,  points } = action.payload;
-
+      
+      const { text, points } = action.payload;
       const newQuestion: IQuestion = {
-          id: generateUniqueId(),
-          text:text,
-          choices:[],
-          points: points
+        id: generateUniqueId(),
+        text: text,
+        choices: [],
+        points: points
       };
 
       state.quiz.questions.push(newQuestion);
-  },
+    },
 
-  addChoices(state, action) {
-    const { questionId, text, isCorrect } = action.payload;
+    addChoices(state, action) {
+      const { questionId, text, isCorrect } = action.payload;
 
-    const newChoice: IChoice = {
-        text:text,
-        isCorrect:isCorrect
-       
-        
-    };
+      const newChoice: IChoice = {
+        id: generateUniqueId(),
+        text: text,
+        isCorrect: isCorrect
 
-    const question = state.quiz.questions.find(question => question.id === questionId);
-    if (question) {
+
+      };
+
+      const question = state.quiz.questions.find(question => question.id === questionId);
+      if (question) {
         question.choices.push(newChoice);
-    }
-},
-  
+      }
+    },
+    updateQuestionDetails(state, action) {
+      const _action = action.payload as IUpdateQuestionDetailState;
+      const targetQuestion = state.quiz.questions.filter(question => question.id == _action.questionId)[0];
+      const newQuestion = {
+          ...targetQuestion,
+          text: _action.text,
+          points: _action.points
+       
+      };
+      const existingQuestions = state.quiz.questions.filter(x => x.id != action.payload.questionId);
+      const newQuestions = [...existingQuestions, newQuestion];
+      const newState = { ...state.quiz, questions: newQuestions };
+
+      state.quiz = newState;
+
+
+  },
   }
 })
 
 export const {
- createQuestion,
- addChoices,
- setSelectedQuizForEdit,
- createQuizDetail
+  createQuestion,
+  addChoices,
+  setSelectedQuizForEdit,
+  createQuizDetail,
+  updateQuestionDetails
 } = quizSlice.actions;
 export const getSelectedQuizForEdit = (state: AppStore) => state.Quiz;
 

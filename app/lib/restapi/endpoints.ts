@@ -9,11 +9,11 @@ import { IQuiz } from "@/app/interfaces/quiz";
 
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
-export const courseReadUrl="https://localhost:61271/api";
+export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api";
 
-export const userWriteUrl = "https://localhost:61281/api";
+export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api";
  
-export const userReadUrl="https://localhost:61273/api";
+export const userReadUrl="https://khumla-dev-user-read.azurewebsites.net/api";
 
 export const commentReadUrl="https://localhost:61280/api";
 
