@@ -353,13 +353,13 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     setVideoUrl("");
     setChangeVidBtn(true);
   };
-console.log("Questions Length:", questions.length)
+
   const newQuestion = () => {
     const quizQuestions = _quizFromState.questions.map(
       (questions) => questions
     );
 
-    console.log("Quiz Question:", quizQuestions)
+
 
     quizQuestions.forEach((question) => {
       if (question.choices.length > 0) {
@@ -374,8 +374,7 @@ console.log("Questions Length:", questions.length)
     setChoiceDescription("");
     setChoiceAnswer("");
   };
-  console.log("Questions", questions);
-  const nextQuestion = () => {
+  console.log("Questions", questions);  const nextQuestion = () => {
     if (questionNumber < questions.length) {
       setQuestionNumber(questionNumber + 1);
     }

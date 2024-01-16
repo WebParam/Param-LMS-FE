@@ -1,7 +1,7 @@
 import { IResponseObject } from "../lib/restapi/response";
 
 export interface ICourse {
-        _id: string,
+        id: string;
         title: string;
         description: string;
         sections: ISection[];
@@ -93,7 +93,7 @@ export interface ICourseState {
 // ## Define the initial state  
 const initialState: ICourseState = {
         course: {
-                _id: "",
+                id: "",
                 title: "",
                 description: "",
                 sections: [] as ISection[],

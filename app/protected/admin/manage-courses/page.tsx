@@ -12,8 +12,9 @@ import axios from "axios";
 import Dropdown from "react-bootstrap/Dropdown";
 import "../../../assets/vendor/spinkit.css";
 import "../../../assets/css/preloader.css";
+import dynamic from 'next/dynamic';
 
-export default function ManageCourses() {
+function ManageCourses() {
 
   const [courseHover, setCourseHover] = useState<boolean>(false);
   const [courses, setCourses] = useState<ICourse[] | any>()
@@ -23,11 +24,27 @@ export default function ManageCourses() {
   console.log(userData);
 
   async function ListAllCourses() {
+    
+  let _id = toast.loading("Please wait..", {//loader
+    position: "top-center",
+    autoClose: 1000,
+    hideProgressBar: false,
+    closeOnClick: false,
+    pauseOnHover: false,
+    draggable: false,
+    progress: undefined,
+    theme: "light",
+    });
     try {
       const data = await Api.GET_CoursesByUserId(userData.id);
       setCourses(data)
+      toast.dismiss(_id);
     } catch (error) {
       console.log("Error fetching courses:", error);
+      toast.update(_id, { render: "Error loading courses", type: "success", isLoading: false });
+      setTimeout(() => {
+        toast.dismiss(_id);
+      }, 2000);
     }
   }
 
@@ -37,6 +54,7 @@ export default function ManageCourses() {
   };
 
   useEffect(() => {
+    console.log("useEffect is running");
     ListAllCourses();
   }, []);
 
@@ -365,7 +383,7 @@ export default function ManageCourses() {
             <div className="page-separator__text">Development Courses</div>
           </div>
           <div className="row">
-            { courses && courses.map((course: any) => (
+            { courses?.length > 0 && courses.map((course: any) => (
               <>
                 <div className="col-sm-6 col-md-4 col-xl-3">
                   <div
@@ -3194,7 +3212,4 @@ export default function ManageCourses() {
   );
 }
 
-
-
-/*
-*/
+export default dynamic (() => Promise.resolve(ManageCourses), {ssr: false})

@@ -62,29 +62,39 @@ export async function POST(endPoint: string, payload: Object) {
     return error.response;
   }
 }
+export function DELETE(endPoint: string): Promise<any> {
+  let HEADER = {
+    "Authorization": "Basic YWRtaW46cmpOdjJhU1omPXxuRDYpJQ==",
+    "Access-Control-Allow-Origin": "*",
+  };
 
-export function DELETE(endPoint: string, params: Object) {
-  axios
-    .delete(`${endPoint}`, { headers: header, params: params })
+  // Return the axios promise directly
+  return axios
+    .delete(`${endPoint}`, { headers: HEADER })
     .then((result: any) => {
-      return result;
+      // Assuming result.data is the actual data returned from the API
+      return result.data;
     })
     .catch((error: any) => {
+      // Returning an error object or throwing an error, based on your preference
       return error;
     });
 }
-
-export function PUT(endPoint: string, params: Object) {
+export function PUT(endPoint: string, payload: Object): Promise<any> {
   let HEADER = {
-    "Authorization":"Basic YWRtaW46cmpPdjJhU1omPXxuRDYpJQ==",
+    "Authorization": "Basic YWRtaW46cmpOdjJhU1omPXxuRDYpJQ==",
     "Access-Control-Allow-Origin": "*",
   };
-  axios
-    .put(`${endPoint}`, { headers: HEADER, params: params })
+
+  // Return the axios promise directly
+  return axios
+    .put(`${endPoint}`, payload, { headers: HEADER })
     .then((result: any) => {
-      return result;
+      // Assuming result.data is the actual data returned from the API
+      return result.data;
     })
     .catch((error: any) => {
+      // Returning an error object or throwing an error, based on your preference
       return error;
     });
 }

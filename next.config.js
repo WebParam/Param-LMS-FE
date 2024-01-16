@@ -11,6 +11,9 @@ const nextConfig = {
 
 module.exports = nextConfig
 
+module.exports = {
+  reactStrictMode: false,
+}
 
 // Injected content via Sentry wizard below
 

@@ -37,7 +37,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import "react-quill/dist/quill.snow.css";
 
 export default function EditCourse() {
-  const [editModalOpen, setEditModalOpen] = useState<boolean>(true);
+  const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [editModuleModalOpen, setEditModuleModalOpen] =
     useState<boolean>(false);
   const [competency, setCompetency] = useState<string>("");
@@ -61,7 +61,7 @@ export default function EditCourse() {
   let cookies = new Cookies();
 
   const userData = cookies.get("param-lms-user");
-
+    console.log("userDataID:", userData.id);
   const dispatch = useDispatch();
 
   console.log("UserData", userData?.id);
@@ -145,7 +145,7 @@ export default function EditCourse() {
       : _courseFromState.description;
 
     const payload = {
-      creatingUser: "6580051b2b3b4e16f159792d",
+      creatingUser: userData.id,
       title: courseTitle ?? _courseFromState.title,
       description: plainDescription,
     } as IUpdateCourseDetailState;
@@ -153,12 +153,15 @@ export default function EditCourse() {
     console.log("Creating User ", payload.creatingUser);
 
     dispatch(createCourseDetail(payload));
+    console.log("after creating a course", _courseFromState)
 
     try {
+ //     debugger;
       const createCourse = await Api.POST_CreateCourse(_courseFromState);
       console.log(" Create Course after request: ", createCourse);
       console.log("response", createCourse);
-      if(createCourse.data?._id){
+    //  debugger;
+      if(createCourse.data?.id){
         toast.update(_id, {
           render: "successfully saved course",
           type: "success",
