@@ -29,7 +29,7 @@ const initialState: ICourseState = {
         createdDate: "04/09/2015",
         creatingUser: "",
         state: 0,
-        logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/640px-Python-logo-notext.svg.png",
+        logo:"",
         courseImage: "course_image.jpg",
         bannerImage: "banner_image.jpg",
         modifyingUser: "user-789"
@@ -55,7 +55,8 @@ export const courseSlice = createSlice({
                 description: _action.description,
                 state: _action.state,
                 creatingUser: _action.creatingUser,
-                title: _action.title
+                title: _action.title,
+                logo:_action.imageUrl
             } as ICourse;
 
 

@@ -26,15 +26,14 @@ import { useDispatch, useSelector } from "react-redux";
 import ReactQuill from "react-quill";
 import { useEffect } from "react";
 import { Api } from "@/app/lib/restapi/endpoints";
-import { Link } from "@mui/material";
 import { FaTrash } from "react-icons/fa";
 import { EditCourseModal } from "./edit-module-modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "universal-cookie"; // Import the library
-import axios from "axios";
 import Dropdown from "react-bootstrap/Dropdown";
 import "react-quill/dist/quill.snow.css";
+import Sidebar from "@/app/components/Sidebar";
 
 export default function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -57,11 +56,12 @@ export default function EditCourse() {
   const [newSection, setNewSection] = useState<boolean>(true);
   const [moduleId, setModuleId] = useState<string>();
   const [sectionBtn, setSectionBtn] = useState<boolean>(true);
+  const [imageUrl, setImageUrl] = useState<string>("")
 
   let cookies = new Cookies();
 
   const userData = cookies.get("param-lms-user");
-    console.log("userDataID:", userData.id);
+    console.log("userDataID:", userData?.id);
   const dispatch = useDispatch();
 
   console.log("UserData", userData?.id);
@@ -145,12 +145,17 @@ export default function EditCourse() {
       : _courseFromState.description;
 
     const payload = {
-      creatingUser: userData.id,
+      creatingUser: userData?.id,
       title: courseTitle ?? _courseFromState.title,
       description: plainDescription,
+      imageUrl:imageUrl ?? _courseFromState.logo
     } as IUpdateCourseDetailState;
 
     console.log("Creating User ", payload.creatingUser);
+
+    if(!imageUrl || !courseDescription || !courseTitle) {
+      return;
+    }
 
     dispatch(createCourseDetail(payload));
     console.log("after creating a course", _courseFromState)
@@ -927,28 +932,24 @@ export default function EditCourse() {
                   </div>
                 </div>
                 <div className="page-separator">
-                  <div className="page-separator__text">Video</div>
+                  <div className="page-separator__text">Course Logo</div>
                 </div>
-                <div className="card">
-                  <div className="embed-responsive embed-responsive-16by9">
-                    <iframe
-                      className="embed-responsive-item"
-                      src="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
-                      //   allowFullScreen=""
-                    />
-                  </div>
-                  <div className="card-body">
-                    <label className="form-label">URL</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      defaultValue="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
-                      placeholder="Enter Video URL"
-                    />
+               
 
-                    <small className="form-text text-muted">
-                      Enter a valid video URL.
-                    </small>
+                <div className="card">
+                  <div className="card-body">
+                    <div className="form-group">
+                      <label className="form-label">Image url</label>
+                      <input
+              
+                            onChange={(e) => setImageUrl(e.target.value)}
+                            value={imageUrl}
+                            type="text"
+                            style={{padding:"10px"}}
+                            className="form-control"
+                            placeholder="Image URL"
+                          />
+                    </div>
                   </div>
                 </div>
                 <div className="page-separator">
@@ -1263,8 +1264,8 @@ export default function EditCourse() {
                   </span>
                 </span>
                 <small className="flex d-flex flex-column">
-                  <strong className="navbar-text-100">Earnings</strong>
-                  <span className="navbar-text-50">$12.3k</span>
+                  <strong className="navbar-text-100">Courses</strong>
+                  <span className="navbar-text-50">23</span>
                 </small>
               </span>
               <span className="d-none d-md-flex align-items-center mr-16pt">
@@ -1274,7 +1275,7 @@ export default function EditCourse() {
                   </span>
                 </span>
                 <small className="flex d-flex flex-column">
-                  <strong className="navbar-text-100">Sales</strong>
+                  <strong className="navbar-text-100">Students</strong>
                   <span className="navbar-text-50">264</span>
                 </small>
               </span>
@@ -1779,93 +1780,11 @@ export default function EditCourse() {
                   </li>
                 </ul>
               </div>
-              <div className="tab-pane  fade active show " id="sm_instructor">
-                <div className="sidebar-heading">Instructor</div>
-                <ul className="sidebar-menu">
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="/procteted/dashboard"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        school
-                      </span>
-                      <span className="sidebar-menu-text">
-                        Instructor Dashboard
-                      </span>
-                    </a>
-                  </li>
+            
 
-                  <li className="sidebar-menu-item">
-                    <Link
-                      href="/protected/admin/manage-courses"
-                      style={{ textDecoration: "none" }}
-                      className="small"
-                    >
-                      <a className="sidebar-menu-button">
-                        <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                          import_contacts
-                        </span>
-                        <span className="sidebar-menu-text">
-                          Manage Courses
-                        </span>
-                      </a>
-                    </Link>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-quizzes.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        help
-                      </span>
-                      <span className="sidebar-menu-text">Manage Quizzes</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-earnings.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        trending_up
-                      </span>
-                      <span className="sidebar-menu-text">Earnings</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-statement.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        receipt
-                      </span>
-                      <span className="sidebar-menu-text">Statement</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item active">
-                    <a className="sidebar-menu-button">
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        post_add
-                      </span>
-                      <span className="sidebar-menu-text">Create Course</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-edit-quiz.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        format_shapes
-                      </span>
-                      <span className="sidebar-menu-text">Edit Quiz</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
+                <Sidebar/>
+
+
               <div className="tab-pane " id="sm_account">
                 <div className="sidebar-heading">Account</div>
                 <ul className="sidebar-menu">
@@ -2102,36 +2021,7 @@ export default function EditCourse() {
                           <span className="sidebar-menu-text">Pagination</span>
                         </a>
                       </li>
-                      {/* <li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-typography.html">
-    <span class="sidebar-menu-text">Typography</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-colors.html">
-    <span class="sidebar-menu-text">Colors</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-breadcrumb.html">
-    <span class="sidebar-menu-text">Breadcrumb</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-accordions.html">
-    <span class="sidebar-menu-text">Accordions</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-modals.html">
-    <span class="sidebar-menu-text">Modals</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-chips.html">
-    <span class="sidebar-menu-text">Chips</span>
-  </a>
-</li> */}
+                     
                       <li className="sidebar-menu-item">
                         <a className="sidebar-menu-button disabled" href="">
                           <span className="sidebar-menu-text">Disabled</span>

@@ -1,79 +1,80 @@
-"use client"
-import React from 'react'
-import { Link } from '@mui/material';
+"use client";
+import React from "react";
+import { Link } from "@mui/material";
+import Sidebar from "@/app/components/Sidebar";
 
 function EditAccount() {
   return (
     <div>
-         <div className="dropdown-menu dropdown-menu-right">
-            <div data-perfect-scrollbar="" className="position-relative ps">
-              <div className="dropdown-header">
-                <strong>Messages</strong>
-              </div>
-              <div className="list-group list-group-flush mb-0">
-                <a
-                  href="javascript:void(0);"
-                  className="list-group-item list-group-item-action unread"
-                >
-                  <span className="d-flex align-items-center mb-1">
-                    <small className="text-black-50">5 minutes ago</small>
-                    <span className="ml-auto unread-indicator bg-accent" />
-                  </span>
-                  <span className="d-flex">
-                    <span className="avatar avatar-xs mr-2">
-                      <img
-                        src="../../public/images/people/110/woman-5.jpg"
-                        alt="people"
-                        className="avatar-img rounded-circle"
-                      />
-                    </span>
-                    <span className="flex d-flex flex-column">
-                      <strong className="text-black-100">Michelle</strong>
-                      <span className="text-black-70">
-                        Clients loved the new design.
-                      </span>
-                    </span>
-                  </span>
-                </a>
-                <a
-                  href="javascript:void(0);"
-                  className="list-group-item list-group-item-action"
-                >
-                  <span className="d-flex align-items-center mb-1">
-                    <small className="text-black-50">5 minutes ago</small>
-                  </span>
-                  <span className="d-flex">
-                    <span className="avatar avatar-xs mr-2">
-                      <img
-                        src="../../public/images/people/110/woman-5.jpg"
-                        alt="people"
-                        className="avatar-img rounded-circle"
-                      />
-                    </span>
-                    <span className="flex d-flex flex-column">
-                      <strong className="text-black-100">Michelle</strong>
-                      <span className="text-black-70">🔥 Superb job..</span>
-                    </span>
-                  </span>
-                </a>
-              </div>
-              <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                <div
-                  className="ps__thumb-x"
-                  tabIndex={0}
-                  style={{ left: 0, width: 0 }}
-                />
-              </div>
-              <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-                <div
-                  className="ps__thumb-y"
-                  tabIndex={0}
-                  style={{ top: 0, height: 0 }}
-                />
-              </div>
-            </div>
+      <div className="dropdown-menu dropdown-menu-right">
+        <div data-perfect-scrollbar="" className="position-relative ps">
+          <div className="dropdown-header">
+            <strong>Messages</strong>
           </div>
-          <div
+          <div className="list-group list-group-flush mb-0">
+            <a
+              href="javascript:void(0);"
+              className="list-group-item list-group-item-action unread"
+            >
+              <span className="d-flex align-items-center mb-1">
+                <small className="text-black-50">5 minutes ago</small>
+                <span className="ml-auto unread-indicator bg-accent" />
+              </span>
+              <span className="d-flex">
+                <span className="avatar avatar-xs mr-2">
+                  <img
+                    src="../../public/images/people/110/woman-5.jpg"
+                    alt="people"
+                    className="avatar-img rounded-circle"
+                  />
+                </span>
+                <span className="flex d-flex flex-column">
+                  <strong className="text-black-100">Michelle</strong>
+                  <span className="text-black-70">
+                    Clients loved the new design.
+                  </span>
+                </span>
+              </span>
+            </a>
+            <a
+              href="javascript:void(0);"
+              className="list-group-item list-group-item-action"
+            >
+              <span className="d-flex align-items-center mb-1">
+                <small className="text-black-50">5 minutes ago</small>
+              </span>
+              <span className="d-flex">
+                <span className="avatar avatar-xs mr-2">
+                  <img
+                    src="../../public/images/people/110/woman-5.jpg"
+                    alt="people"
+                    className="avatar-img rounded-circle"
+                  />
+                </span>
+                <span className="flex d-flex flex-column">
+                  <strong className="text-black-100">Michelle</strong>
+                  <span className="text-black-70">🔥 Superb job..</span>
+                </span>
+              </span>
+            </a>
+          </div>
+          <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
+            <div
+              className="ps__thumb-x"
+              tabIndex={0}
+              style={{ left: 0, width: 0 }}
+            />
+          </div>
+          <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
+            <div
+              className="ps__thumb-y"
+              tabIndex={0}
+              style={{ top: 0, height: 0 }}
+            />
+          </div>
+        </div>
+      </div>
+      <div
         className="sidebar sidebar-light sidebar-left flex sidebar-secondary ps"
         data-perfect-scrollbar=""
       >
@@ -190,7 +191,6 @@ function EditAccount() {
                       <span className="sidebar-menu-text">Departments</span>
                     </a>
                   </li>
-                 
                 </ul>
               </li>
               <li className="sidebar-menu-item">
@@ -312,7 +312,6 @@ function EditAccount() {
                       <span className="sidebar-menu-text">Kanban</span>
                     </a>
                   </li>
-                 
                 </ul>
               </li>
               <li className="sidebar-menu-item">
@@ -543,94 +542,7 @@ function EditAccount() {
             </ul>
           </div>
           <div className="tab-pane  fade active show " id="sm_instructor">
-            <div className="sidebar-heading">Instructor</div>
-            <ul className="sidebar-menu">
-              <li className="sidebar-menu-item">
-                <a
-                  className="sidebar-menu-button"
-                  href="/protected/admin/dashboard"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    school
-                  </span>
-                  <span className="sidebar-menu-text">
-                    Instructor Dashboard
-                  </span>
-                </a>
-              </li>
-            
-
-              <li className="sidebar-menu-item">
-
-              <Link href="/protected/admin/manage-courses"  style = {{textDecoration:"none"}}className="small">
-              <a
-                  className="sidebar-menu-button"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    import_contacts
-                  </span>
-                  <span className="sidebar-menu-text">Manage Courses</span>
-                </a>          
-                      
-               </Link>
-          
-              </li>
-              <li className="sidebar-menu-item">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-quizzes.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    help
-                  </span>
-                  <span className="sidebar-menu-text">Manage Quizzes</span>
-                </a>
-              </li>
-              <li className="sidebar-menu-item">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-earnings.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    trending_up
-                  </span>
-                  <span className="sidebar-menu-text">Earnings</span>
-                </a>
-              </li>
-              <li className="sidebar-menu-item">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-statement.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    receipt
-                  </span>
-                  <span className="sidebar-menu-text">Statement</span>
-                </a>
-              </li>
-              <li className="sidebar-menu-item active">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-edit-course.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    post_add
-                  </span>
-                  <span className="sidebar-menu-text">Edit Course</span>
-                </a>
-              </li>
-              <li className="sidebar-menu-item">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-edit-quiz.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    format_shapes
-                  </span>
-                  <span className="sidebar-menu-text">Edit Quiz</span>
-                </a>
-              </li>
-            </ul>
+            <Sidebar />
           </div>
           <div className="tab-pane " id="sm_account">
             <div className="sidebar-heading">Account</div>
@@ -1065,9 +977,9 @@ function EditAccount() {
           />
         </div>
       </div>
-      
-        <div >
-            {/* <div className="sk-chase">
+
+      <div>
+        {/* <div className="sk-chase">
                 <div className="sk-chase-dot"></div>
                 <div className="sk-chase-dot"></div>
                 <div className="sk-chase-dot"></div>
@@ -1075,669 +987,862 @@ function EditAccount() {
                 <div className="sk-chase-dot"></div>
                 <div className="sk-chase-dot"></div>
             </div> */}
-{/* 
+        {/* 
             <!-- <div className="sk-bounce">
     <div className="sk-bounce-dot"></div>
     <div className="sk-bounce-dot"></div>
   </div> */}
 
-            {/* <!-- More spinner examples at https://github.com/tobiasahlin/SpinKit/blob/master/examples.html --> */}
-        </div>
+        {/* <!-- More spinner examples at https://github.com/tobiasahlin/SpinKit/blob/master/examples.html --> */}
+      </div>
 
-        <div className="mdk-drawer-layout js-mdk-drawer-layout"
-             data-push
-             data-responsive-width="992px">
-            <div className="mdk-drawer-layout__content page-content">
+      <div
+        className="mdk-drawer-layout js-mdk-drawer-layout"
+        data-push
+        data-responsive-width="992px"
+      >
+        <div className="mdk-drawer-layout__content page-content">
+          {/* <!-- Header --> */}
 
-                {/* <!-- Header --> */}
+          <div
+            className="navbar navbar-expand navbar-shadow px-0  pl-lg-16pt navbar-dark bg-dark"
+            id="default-navbar"
+            data-primary
+          >
+            {/* <!-- Navbar toggler --> */}
+            <button
+              className="navbar-toggler d-block d-lg-none rounded-0"
+              type="button"
+              data-toggle="sidebar"
+            >
+              <span className="material-icons">menu</span>
+            </button>
 
-                <div className="navbar navbar-expand navbar-shadow px-0  pl-lg-16pt navbar-dark bg-dark"
-                     id="default-navbar"
-                     data-primary>
+            {/* <!-- Navbar Brand --> */}
+            <a href="index.html" className="navbar-brand mr-16pt d-lg-none">
+              <img
+                className="navbar-brand-icon mr-0 mr-lg-8pt"
+                src="assets/images/logo/accent-teal-100@2x.png"
+                width="32"
+                alt="Huma"
+              />
+              <span className="d-none d-lg-block">Huma</span>
+            </a>
 
-                    {/* <!-- Navbar toggler --> */}
-                    <button className="navbar-toggler d-block d-lg-none rounded-0"
-                            type="button"
-                            data-toggle="sidebar">
-                        <span className="material-icons">menu</span>
-                    </button>
+            {/* <!-- <button className="btn navbar-btn mr-16pt" data-toggle="modal" data-target="#apps">Apps <i className="material-icons">arrow_drop_down</i></button> --> */}
 
-                    {/* <!-- Navbar Brand --> */}
-                    <a href="index.html"
-                       className="navbar-brand mr-16pt d-lg-none">
-                        <img className="navbar-brand-icon mr-0 mr-lg-8pt"
-                             src="assets/images/logo/accent-teal-100@2x.png"
-                             width="32"
-                             alt="Huma"/>
-                        <span className="d-none d-lg-block">Huma</span>
-                    </a>
+            <form
+              className="search-form navbar-search d-none d-md-flex mr-16pt"
+              action="boxed-index.html"
+            >
+              <button className="btn" type="submit">
+                <i className="material-icons">search</i>
+              </button>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search ..."
+              />
+            </form>
 
-                    {/* <!-- <button className="btn navbar-btn mr-16pt" data-toggle="modal" data-target="#apps">Apps <i className="material-icons">arrow_drop_down</i></button> --> */}
+            <div className="flex"></div>
 
-                    <form className="search-form navbar-search d-none d-md-flex mr-16pt"
-                          action="boxed-index.html">
-                        <button className="btn"
-                                type="submit"><i className="material-icons">search</i></button>
-                        <input type="text"
-                               className="form-control"
-                               placeholder="Search ..."/>
-                    </form>
-
-                    <div className="flex"></div>
-
-                    <div className="nav navbar-nav flex-nowrap d-none d-lg-flex mr-16pt"
-                         style={{whiteSpace: "nowrap"}}>
-                        <div className="nav-item dropdown d-none d-sm-flex">
-                            <a 
-                               className="nav-link dropdown-toggle"
-                               data-toggle="dropdown">EN</a>
-                            <div className="dropdown-menu dropdown-menu-right">
-                                <div className="dropdown-header"><strong>Select language</strong></div>
-                                <a className="dropdown-item active"
-                                   href="">English</a>
-                                <a className="dropdown-item"
-                                   href="">French</a>
-                                <a className="dropdown-item"
-                                   href="">Romanian</a>
-                                <a className="dropdown-item"
-                                   href="">Spanish</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="nav navbar-nav flex-nowrap d-flex ml-0 mr-16pt">
-                        <div className="nav-item dropdown d-none d-sm-flex">
-                            <a href="#"
-                               className="nav-link d-flex align-items-center dropdown-toggle"
-                               data-toggle="dropdown">
-                                <img width="32"
-                                     height="32"
-                                     className="rounded-circle mr-8pt"
-                                     src="assets/images/people/50/guy-3.jpg"
-                                     alt="account" />
-                                <span className="flex d-flex flex-column mr-8pt">
-                                    <span className="navbar-text-100">Laza Bogdan</span>
-                                    <small className="navbar-text-50">Administrator</small>
-                                </span>
-                            </a>
-                            <div className="dropdown-menu dropdown-menu-right">
-                                <div className="dropdown-header"><strong>Account</strong></div>
-                                <a className="dropdown-item active"
-                                   href="boxed-edit-account.html">Edit Account</a>
-                                <a className="dropdown-item"
-                                   href="boxed-billing.html">Billing</a>
-                                <a className="dropdown-item"
-                                   href="boxed-billing-history.html">Payments</a>
-                                <a className="dropdown-item"
-                                   href="boxed-login.html">Logout</a>
-                            </div>
-                        </div>
-{/* 
-                        <!-- Notifications dropdown --> */}
-                        <div className="nav-item ml-16pt dropdown dropdown-notifications">
-                            <button className="nav-link btn-flush dropdown-toggle"
-                                    type="button"
-                                    data-toggle="dropdown"
-                                    data-dropdown-disable-document-scroll
-                                    data-caret="false">
-                                <i className="material-icons">notifications</i>
-                                <span className="badge badge-notifications badge-accent">2</span>
-                            </button>
-                            <div className="dropdown-menu dropdown-menu-right">
-                                <div data-perfect-scrollbar
-                                     className="position-relative">
-                                    <div className="dropdown-header"><strong>System notifications</strong></div>
-                                    <div className="list-group list-group-flush mb-0">
-
-                                        <a href="javascript:void(0);"
-                                           className="list-group-item list-group-item-action unread">
-                                            <span className="d-flex align-items-center mb-1">
-                                                <small className="text-black-50">3 minutes ago</small>
-
-                                                <span className="ml-auto unread-indicator bg-accent"></span>
-
-                                            </span>
-                                            <span className="d-flex">
-                                                <span className="avatar avatar-xs mr-2">
-                                                    <span className="avatar-title rounded-circle bg-light">
-                                                        <i className="material-icons font-size-16pt text-accent">account_circle</i>
-                                                    </span>
-                                                </span>
-                                                <span className="flex d-flex flex-column">
-
-                                                    <span className="text-black-70">Your profile information has not been synced correctly.</span>
-                                                </span>
-                                            </span>
-                                        </a>
-
-                                        <a href="javascript:void(0);"
-                                           className="list-group-item list-group-item-action">
-                                            <span className="d-flex align-items-center mb-1">
-                                                <small className="text-black-50">5 hours ago</small>
-
-                                            </span>
-                                            <span className="d-flex">
-                                                <span className="avatar avatar-xs mr-2">
-                                                    <span className="avatar-title rounded-circle bg-light">
-                                                        <i className="material-icons font-size-16pt text-primary">group_add</i>
-                                                    </span>
-                                                </span>
-                                                <span className="flex d-flex flex-column">
-                                                    <strong className="text-black-100">Adrian. D</strong>
-                                                    <span className="text-black-70">Wants to join your private group.</span>
-                                                </span>
-                                            </span>
-                                        </a>
-
-                                        <a href="javascript:void(0);"
-                                           className="list-group-item list-group-item-action">
-                                            <span className="d-flex align-items-center mb-1">
-                                                <small className="text-black-50">1 day ago</small>
-
-                                            </span>
-                                            <span className="d-flex">
-                                                <span className="avatar avatar-xs mr-2">
-                                                    <span className="avatar-title rounded-circle bg-light">
-                                                        <i className="material-icons font-size-16pt text-warning">storage</i>
-                                                    </span>
-                                                </span>
-                                                <span className="flex d-flex flex-column">
-
-                                                    <span className="text-black-70">Your deploy was successful.</span>
-                                                </span>
-                                            </span>
-                                        </a>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* <!-- // END Notifications dropdown -->
-
-                        <!-- Notifications dropdown --> */}
-                        <div className="nav-item ml-16pt dropdown dropdown-notifications">
-                            <button className="nav-link btn-flush dropdown-toggle"
-                                    type="button"
-                                    data-toggle="dropdown"
-                                    data-dropdown-disable-document-scroll
-                                    data-caret="false">
-                                <i className="material-icons icon-24pt">mail_outline</i>
-                            </button>
-                            <div className="dropdown-menu dropdown-menu-right">
-                                <div data-perfect-scrollbar
-                                     className="position-relative">
-                                    <div className="dropdown-header"><strong>Messages</strong></div>
-                                    <div className="list-group list-group-flush mb-0">
-
-                                        <a href="javascript:void(0);"
-                                           className="list-group-item list-group-item-action unread">
-                                            <span className="d-flex align-items-center mb-1">
-                                                <small className="text-black-50">5 minutes ago</small>
-
-                                                <span className="ml-auto unread-indicator bg-accent"></span>
-
-                                            </span>
-                                            <span className="d-flex">
-                                                <span className="avatar avatar-xs mr-2">
-                                                    <img src="assets/images/people/110/woman-5.jpg"
-                                                         alt="people"
-                                                         className="avatar-img rounded-circle"/>
-                                                </span>
-                                                <span className="flex d-flex flex-column">
-                                                    <strong className="text-black-100">Michelle</strong>
-                                                    <span className="text-black-70">Clients loved the new design.</span>
-                                                </span>
-                                            </span>
-                                        </a>
-
-                                        <a href="javascript:void(0);"
-                                           className="list-group-item list-group-item-action">
-                                            <span className="d-flex align-items-center mb-1">
-                                                <small className="text-black-50">5 minutes ago</small>
-
-                                            </span>
-                                            <span className="d-flex">
-                                                <span className="avatar avatar-xs mr-2">
-                                                    <img src="assets/images/people/110/woman-5.jpg"
-                                                         alt="people"
-                                                         className="avatar-img rounded-circle"/>
-                                                </span>
-                                                <span className="flex d-flex flex-column">
-                                                    <strong className="text-black-100">Michelle</strong>
-                                                    <span className="text-black-70">🔥 Superb job..</span>
-                                                </span>
-                                            </span>
-                                        </a>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* <!-- // END Notifications dropdown --> */}
-                    </div>
-
-                    <div className="dropdown border-left-2 navbar-border">
-                        <button className="navbar-toggler navbar-toggler-custom d-block"
-                                type="button"
-                                data-toggle="dropdown"
-                                data-caret="false">
-                            <span className="material-icons">business_center</span>
-                        </button>
-                        <div className="dropdown-menu dropdown-menu-right">
-                            <div className="dropdown-header"><strong>Select company</strong></div>
-                            <a href=""
-                               className="dropdown-item active d-flex align-items-center">
-
-                                <div className="avatar avatar-sm mr-8pt">
-
-                                    <span className="avatar-title rounded bg-primary">FM</span>
-
-                                </div>
-
-                                <small className="ml-4pt flex">
-                                    <span className="d-flex flex-column">
-                                        <strong className="text-black-100">FrontendMatter Inc.</strong>
-                                        <span className="text-black-50">Administrator</span>
-                                    </span>
-                                </small>
-                            </a>
-                            <a href=""
-                               className="dropdown-item d-flex align-items-center">
-
-                                <div className="avatar avatar-sm mr-8pt">
-
-                                    <span className="avatar-title rounded bg-accent">HH</span>
-
-                                </div>
-
-                                <small className="ml-4pt flex">
-                                    <span className="d-flex flex-column">
-                                        <strong className="text-black-100">HumaHuma Inc.</strong>
-                                        <span className="text-black-50">Publisher</span>
-                                    </span>
-                                </small>
-                            </a>
-                        </div>
-                    </div>
-
+            <div
+              className="nav navbar-nav flex-nowrap d-none d-lg-flex mr-16pt"
+              style={{ whiteSpace: "nowrap" }}
+            >
+              <div className="nav-item dropdown d-none d-sm-flex">
+                <a className="nav-link dropdown-toggle" data-toggle="dropdown">
+                  EN
+                </a>
+                <div className="dropdown-menu dropdown-menu-right">
+                  <div className="dropdown-header">
+                    <strong>Select language</strong>
+                  </div>
+                  <a className="dropdown-item active" href="">
+                    English
+                  </a>
+                  <a className="dropdown-item" href="">
+                    French
+                  </a>
+                  <a className="dropdown-item" href="">
+                    Romanian
+                  </a>
+                  <a className="dropdown-item" href="">
+                    Spanish
+                  </a>
                 </div>
-
-                {/* <!-- // END Header --> */}
-
-                <div className="border-bottom-2 py-32pt position-relative z-1">
-                    <div className="container-fluid page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
-                        <div className="flex d-flex flex-column flex-sm-row align-items-center">
-
-                            <div className="mb-24pt mb-sm-0 mr-sm-24pt">
-                                <h2 className="mb-0">Account</h2>
-
-                                <ol className="breadcrumb p-0 m-0">
-                                    <li className="breadcrumb-item"><a href="index.html">Home</a></li>
-
-                                    <li className="breadcrumb-item">
-
-                                        <a href="">Account</a>
-
-                                    </li>
-
-                                    <li className="breadcrumb-item active">
-
-                                        Edit Account
-
-                                    </li>
-
-                                </ol>
-
-                            </div>
-
-                            <div className="dropdown">
-                                <a href=""
-                                   className="border rounded d-flex align-items-center p-16pt"
-                                   data-toggle="dropdown"
-                                   data-caret="false">
-
-                                    <div className="avatar avatar-sm mr-8pt">
-
-                                        <span className="avatar-title rounded bg-primary">FM</span>
-
-                                    </div>
-
-                                    <small className="ml-4pt flex">
-                                        <span className="d-flex align-items-center">
-                                            <span className="flex d-flex flex-column">
-                                                <strong className="text-100">FrontendMatter Inc.</strong>
-                                                <span className="text-50">Select company</span>
-                                            </span>
-                                            <i className="material-icons icon-16pt text-50 ml-4pt">arrow_drop_down</i>
-                                        </span>
-                                    </small>
-                                </a>
-                                <div className="dropdown-menu w-100">
-                                    <div className="dropdown-header"><strong>Select company</strong></div>
-                                    <a href=""
-                                       className="dropdown-item active d-flex align-items-center">
-
-                                        <div className="avatar avatar-sm mr-8pt">
-
-                                            <span className="avatar-title rounded bg-primary">FM</span>
-
-                                        </div>
-
-                                        <small className="ml-4pt flex">
-                                            <span className="d-flex flex-column">
-                                                <strong className="text-black-100">FrontendMatter Inc.</strong>
-                                                <span className="text-black-50">Administrator</span>
-                                            </span>
-                                        </small>
-                                    </a>
-                                    <a href=""
-                                       className="dropdown-item d-flex align-items-center">
-
-                                        <div className="avatar avatar-sm mr-8pt">
-
-                                            <span className="avatar-title rounded bg-accent">HH</span>
-
-                                        </div>
-
-                                        <small className="ml-4pt flex">
-                                            <span className="d-flex flex-column">
-                                                <strong className="text-black-100">HumaHuma Inc.</strong>
-                                                <span className="text-black-50">Publisher</span>
-                                            </span>
-                                        </small>
-                                    </a>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-
-                <div className="container-fluid page__container">
-                    <form action="boxed-edit-account.html">
-                        <div className="row">
-                            <div className="col-lg-9 pr-lg-0">
-
-                                <div className="page-section">
-                                    <h4>Basic Information</h4>
-                                    <div className="list-group list-group-form">
-                                        <div className="list-group-item">
-                                            <div className="form-group row align-items-center mb-0">
-                                                <label className="form-label col-form-label col-sm-3">First name</label>
-                                                <div className="col-sm-9">
-                                                    <input type="text"
-                                                           className="form-control"
-                                                           value="Alexander"
-                                                           placeholder="Your first name ..."/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="list-group-item">
-                                            <div className="form-group row align-items-center mb-0">
-                                                <label className="form-label col-form-label col-sm-3">Last name</label>
-                                                <div className="col-sm-9">
-                                                    <input type="text"
-                                                           className="form-control"
-                                                           value="Watson"
-                                                           placeholder="Your last name ..."/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="list-group-item">
-                                            <div className="form-group row align-items-center mb-0">
-                                                <label className="form-label col-form-label col-sm-3">Email address</label>
-                                                <div className="col-sm-9">
-                                                    <input type="email"
-                                                           className="form-control"
-                                                           value="alexander.watson@fake-mail.com"
-                                                           placeholder="Your email address ..."/>
-                                                    <small className="form-text text-muted">Note that if you change your email, you will have to confirm it again.</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="col-lg-3 page-nav">
-                                <div className="page-section pt-lg-112pt">
-                                    <nav className="nav page-nav__menu">
-                                        <a className="nav-link active"
-                                           href="boxed-edit-account.html">Basic Information</a>
-                                        <a className="nav-link"
-                                           href="boxed-edit-account-profile.html">Profile &amp; Privacy</a>
-                                        <a className="nav-link"
-                                           href="boxed-edit-account-notifications.html">Email Notifications</a>
-                                        <a className="nav-link"
-                                           href="boxed-edit-account-password.html">Change Password</a>
-                                    </nav>
-                                    <div className="page-nav__content">
-                                        <button type="submit"
-                                                className="btn btn-accent">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <div className="js-fix-footer footer border-top-2">
-                    <div className="container-fluid page__container page-section d-flex flex-column">
-                        <p className="text-70 brand mb-24pt">
-                            <img className="brand-icon"
-                                 src="assets/images/logo/black-70@2x.png"
-                                 width="30"
-                                 alt="Huma"/> Huma
-                        </p>
-                        <p className="measure-lead-max text-muted mb-0 small">Huma is a beautifully crafted user interface for modern Business Admin Web Applications, with examples for many pages needed for Customer Relationship Management, Enterprise Resource Planning, Human Resources, Content Management System, Project Management, Tasks, eCommerce, Messaging and Account Management.</p>
-                    </div>
-                    <div className="pb-16pt pb-lg-24pt">
-                        <div className="container-fluid page__container">
-                            <div className="bg-dark rounded page-section py-lg-32pt px-16pt px-lg-24pt">
-                                <div className="row">
-                                    <div className="col-md-2 col-sm-4 mb-24pt mb-md-0">
-                                        <p className="text-white-70 mb-8pt"><strong>Follow us</strong></p>
-                                        <nav className="nav nav-links nav--flush">
-                                            <a href="#"
-                                               className="nav-link mr-8pt"><img src="assets/images/icon/footer/facebook-square@2x.png"
-                                                     width="24"
-                                                     height="24"
-                                                     alt="Facebook"/></a>
-                                            <a href="#"
-                                               className="nav-link mr-8pt"><img src="assets/images/icon/footer/twitter-square@2x.png"
-                                                     width="24"
-                                                     height="24"
-                                                     alt="Twitter"/></a>
-                                            <a href="#"
-                                               className="nav-link mr-8pt"><img src="assets/images/icon/footer/vimeo-square@2x.png"
-                                                     width="24"
-                                                     height="24"
-                                                     alt="Vimeo"/></a>
-                                            {/* <!-- <a href="#" className="nav-link"><img src="assets/images/icon/footer/youtube-square@2x.png" width="24" height="24" alt="YouTube"></a> --> */}
-                                        </nav>
-                                    </div>
-                                    <div className="col-md-6 col-sm-4 mb-24pt mb-md-0 d-flex align-items-center">
-                                        <a href=""
-                                           className="btn btn-outline-white">English <span className="icon--right material-icons">arrow_drop_down</span></a>
-                                    </div>
-                                    <div className="col-md-4 text-md-right">
-                                        <p className="mb-8pt d-flex align-items-md-center justify-content-md-end">
-                                            <a href=""
-                                               className="text-white-70 text-underline mr-16pt">Terms</a>
-                                            <a href=""
-                                               className="text-white-70 text-underline">Privacy policy</a>
-                                        </p>
-                                        <p className="text-white-50 small mb-0">Copyright 2019 &copy; All rights reserved.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+              </div>
             </div>
-            {/* <!-- // END drawer-layout__content -->
+
+            <div className="nav navbar-nav flex-nowrap d-flex ml-0 mr-16pt">
+              <div className="nav-item dropdown d-none d-sm-flex">
+                <a
+                  href="#"
+                  className="nav-link d-flex align-items-center dropdown-toggle"
+                  data-toggle="dropdown"
+                >
+                  <img
+                    width="32"
+                    height="32"
+                    className="rounded-circle mr-8pt"
+                    src="assets/images/people/50/guy-3.jpg"
+                    alt="account"
+                  />
+                  <span className="flex d-flex flex-column mr-8pt">
+                    <span className="navbar-text-100">Laza Bogdan</span>
+                    <small className="navbar-text-50">Administrator</small>
+                  </span>
+                </a>
+                <div className="dropdown-menu dropdown-menu-right">
+                  <div className="dropdown-header">
+                    <strong>Account</strong>
+                  </div>
+                  <a
+                    className="dropdown-item active"
+                    href="boxed-edit-account.html"
+                  >
+                    Edit Account
+                  </a>
+                  <a className="dropdown-item" href="boxed-billing.html">
+                    Billing
+                  </a>
+                  <a
+                    className="dropdown-item"
+                    href="boxed-billing-history.html"
+                  >
+                    Payments
+                  </a>
+                  <a className="dropdown-item" href="boxed-login.html">
+                    Logout
+                  </a>
+                </div>
+              </div>
+              {/* 
+                        <!-- Notifications dropdown --> */}
+              <div className="nav-item ml-16pt dropdown dropdown-notifications">
+                <button
+                  className="nav-link btn-flush dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  data-dropdown-disable-document-scroll
+                  data-caret="false"
+                >
+                  <i className="material-icons">notifications</i>
+                  <span className="badge badge-notifications badge-accent">
+                    2
+                  </span>
+                </button>
+                <div className="dropdown-menu dropdown-menu-right">
+                  <div data-perfect-scrollbar className="position-relative">
+                    <div className="dropdown-header">
+                      <strong>System notifications</strong>
+                    </div>
+                    <div className="list-group list-group-flush mb-0">
+                      <a
+                        href="javascript:void(0);"
+                        className="list-group-item list-group-item-action unread"
+                      >
+                        <span className="d-flex align-items-center mb-1">
+                          <small className="text-black-50">3 minutes ago</small>
+
+                          <span className="ml-auto unread-indicator bg-accent"></span>
+                        </span>
+                        <span className="d-flex">
+                          <span className="avatar avatar-xs mr-2">
+                            <span className="avatar-title rounded-circle bg-light">
+                              <i className="material-icons font-size-16pt text-accent">
+                                account_circle
+                              </i>
+                            </span>
+                          </span>
+                          <span className="flex d-flex flex-column">
+                            <span className="text-black-70">
+                              Your profile information has not been synced
+                              correctly.
+                            </span>
+                          </span>
+                        </span>
+                      </a>
+
+                      <a
+                        href="javascript:void(0);"
+                        className="list-group-item list-group-item-action"
+                      >
+                        <span className="d-flex align-items-center mb-1">
+                          <small className="text-black-50">5 hours ago</small>
+                        </span>
+                        <span className="d-flex">
+                          <span className="avatar avatar-xs mr-2">
+                            <span className="avatar-title rounded-circle bg-light">
+                              <i className="material-icons font-size-16pt text-primary">
+                                group_add
+                              </i>
+                            </span>
+                          </span>
+                          <span className="flex d-flex flex-column">
+                            <strong className="text-black-100">
+                              Adrian. D
+                            </strong>
+                            <span className="text-black-70">
+                              Wants to join your private group.
+                            </span>
+                          </span>
+                        </span>
+                      </a>
+
+                      <a
+                        href="javascript:void(0);"
+                        className="list-group-item list-group-item-action"
+                      >
+                        <span className="d-flex align-items-center mb-1">
+                          <small className="text-black-50">1 day ago</small>
+                        </span>
+                        <span className="d-flex">
+                          <span className="avatar avatar-xs mr-2">
+                            <span className="avatar-title rounded-circle bg-light">
+                              <i className="material-icons font-size-16pt text-warning">
+                                storage
+                              </i>
+                            </span>
+                          </span>
+                          <span className="flex d-flex flex-column">
+                            <span className="text-black-70">
+                              Your deploy was successful.
+                            </span>
+                          </span>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* <!-- // END Notifications dropdown -->
+
+                        <!-- Notifications dropdown --> */}
+              <div className="nav-item ml-16pt dropdown dropdown-notifications">
+                <button
+                  className="nav-link btn-flush dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  data-dropdown-disable-document-scroll
+                  data-caret="false"
+                >
+                  <i className="material-icons icon-24pt">mail_outline</i>
+                </button>
+                <div className="dropdown-menu dropdown-menu-right">
+                  <div data-perfect-scrollbar className="position-relative">
+                    <div className="dropdown-header">
+                      <strong>Messages</strong>
+                    </div>
+                    <div className="list-group list-group-flush mb-0">
+                      <a
+                        href="javascript:void(0);"
+                        className="list-group-item list-group-item-action unread"
+                      >
+                        <span className="d-flex align-items-center mb-1">
+                          <small className="text-black-50">5 minutes ago</small>
+
+                          <span className="ml-auto unread-indicator bg-accent"></span>
+                        </span>
+                        <span className="d-flex">
+                          <span className="avatar avatar-xs mr-2">
+                            <img
+                              src="assets/images/people/110/woman-5.jpg"
+                              alt="people"
+                              className="avatar-img rounded-circle"
+                            />
+                          </span>
+                          <span className="flex d-flex flex-column">
+                            <strong className="text-black-100">Michelle</strong>
+                            <span className="text-black-70">
+                              Clients loved the new design.
+                            </span>
+                          </span>
+                        </span>
+                      </a>
+
+                      <a
+                        href="javascript:void(0);"
+                        className="list-group-item list-group-item-action"
+                      >
+                        <span className="d-flex align-items-center mb-1">
+                          <small className="text-black-50">5 minutes ago</small>
+                        </span>
+                        <span className="d-flex">
+                          <span className="avatar avatar-xs mr-2">
+                            <img
+                              src="assets/images/people/110/woman-5.jpg"
+                              alt="people"
+                              className="avatar-img rounded-circle"
+                            />
+                          </span>
+                          <span className="flex d-flex flex-column">
+                            <strong className="text-black-100">Michelle</strong>
+                            <span className="text-black-70">
+                              🔥 Superb job..
+                            </span>
+                          </span>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* <!-- // END Notifications dropdown --> */}
+            </div>
+
+            <div className="dropdown border-left-2 navbar-border">
+              <button
+                className="navbar-toggler navbar-toggler-custom d-block"
+                type="button"
+                data-toggle="dropdown"
+                data-caret="false"
+              >
+                <span className="material-icons">business_center</span>
+              </button>
+              <div className="dropdown-menu dropdown-menu-right">
+                <div className="dropdown-header">
+                  <strong>Select company</strong>
+                </div>
+                <a
+                  href=""
+                  className="dropdown-item active d-flex align-items-center"
+                >
+                  <div className="avatar avatar-sm mr-8pt">
+                    <span className="avatar-title rounded bg-primary">FM</span>
+                  </div>
+
+                  <small className="ml-4pt flex">
+                    <span className="d-flex flex-column">
+                      <strong className="text-black-100">
+                        FrontendMatter Inc.
+                      </strong>
+                      <span className="text-black-50">Administrator</span>
+                    </span>
+                  </small>
+                </a>
+                <a href="" className="dropdown-item d-flex align-items-center">
+                  <div className="avatar avatar-sm mr-8pt">
+                    <span className="avatar-title rounded bg-accent">HH</span>
+                  </div>
+
+                  <small className="ml-4pt flex">
+                    <span className="d-flex flex-column">
+                      <strong className="text-black-100">HumaHuma Inc.</strong>
+                      <span className="text-black-50">Publisher</span>
+                    </span>
+                  </small>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* <!-- // END Header --> */}
+
+          <div className="border-bottom-2 py-32pt position-relative z-1">
+            <div className="container-fluid page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
+              <div className="flex d-flex flex-column flex-sm-row align-items-center">
+                <div className="mb-24pt mb-sm-0 mr-sm-24pt">
+                  <h2 className="mb-0">Account</h2>
+
+                  <ol className="breadcrumb p-0 m-0">
+                    <li className="breadcrumb-item">
+                      <a href="index.html">Home</a>
+                    </li>
+
+                    <li className="breadcrumb-item">
+                      <a href="">Account</a>
+                    </li>
+
+                    <li className="breadcrumb-item active">Edit Account</li>
+                  </ol>
+                </div>
+
+                <div className="dropdown">
+                  <a
+                    href=""
+                    className="border rounded d-flex align-items-center p-16pt"
+                    data-toggle="dropdown"
+                    data-caret="false"
+                  >
+                    <div className="avatar avatar-sm mr-8pt">
+                      <span className="avatar-title rounded bg-primary">
+                        FM
+                      </span>
+                    </div>
+
+                    <small className="ml-4pt flex">
+                      <span className="d-flex align-items-center">
+                        <span className="flex d-flex flex-column">
+                          <strong className="text-100">
+                            FrontendMatter Inc.
+                          </strong>
+                          <span className="text-50">Select company</span>
+                        </span>
+                        <i className="material-icons icon-16pt text-50 ml-4pt">
+                          arrow_drop_down
+                        </i>
+                      </span>
+                    </small>
+                  </a>
+                  <div className="dropdown-menu w-100">
+                    <div className="dropdown-header">
+                      <strong>Select company</strong>
+                    </div>
+                    <a
+                      href=""
+                      className="dropdown-item active d-flex align-items-center"
+                    >
+                      <div className="avatar avatar-sm mr-8pt">
+                        <span className="avatar-title rounded bg-primary">
+                          FM
+                        </span>
+                      </div>
+
+                      <small className="ml-4pt flex">
+                        <span className="d-flex flex-column">
+                          <strong className="text-black-100">
+                            FrontendMatter Inc.
+                          </strong>
+                          <span className="text-black-50">Administrator</span>
+                        </span>
+                      </small>
+                    </a>
+                    <a
+                      href=""
+                      className="dropdown-item d-flex align-items-center"
+                    >
+                      <div className="avatar avatar-sm mr-8pt">
+                        <span className="avatar-title rounded bg-accent">
+                          HH
+                        </span>
+                      </div>
+
+                      <small className="ml-4pt flex">
+                        <span className="d-flex flex-column">
+                          <strong className="text-black-100">
+                            HumaHuma Inc.
+                          </strong>
+                          <span className="text-black-50">Publisher</span>
+                        </span>
+                      </small>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="container-fluid page__container">
+            <form action="boxed-edit-account.html">
+              <div className="row">
+                <div className="col-lg-9 pr-lg-0">
+                  <div className="page-section">
+                    <h4>Basic Information</h4>
+                    <div className="list-group list-group-form">
+                      <div className="list-group-item">
+                        <div className="form-group row align-items-center mb-0">
+                          <label className="form-label col-form-label col-sm-3">
+                            First name
+                          </label>
+                          <div className="col-sm-9">
+                            <input
+                              type="text"
+                              className="form-control"
+                              value="Alexander"
+                              placeholder="Your first name ..."
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="list-group-item">
+                        <div className="form-group row align-items-center mb-0">
+                          <label className="form-label col-form-label col-sm-3">
+                            Last name
+                          </label>
+                          <div className="col-sm-9">
+                            <input
+                              type="text"
+                              className="form-control"
+                              value="Watson"
+                              placeholder="Your last name ..."
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="list-group-item">
+                        <div className="form-group row align-items-center mb-0">
+                          <label className="form-label col-form-label col-sm-3">
+                            Email address
+                          </label>
+                          <div className="col-sm-9">
+                            <input
+                              type="email"
+                              className="form-control"
+                              value="alexander.watson@fake-mail.com"
+                              placeholder="Your email address ..."
+                            />
+                            <small className="form-text text-muted">
+                              Note that if you change your email, you will have
+                              to confirm it again.
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-3 page-nav">
+                  <div className="page-section pt-lg-112pt">
+                    <nav className="nav page-nav__menu">
+                      <a
+                        className="nav-link active"
+                        href="boxed-edit-account.html"
+                      >
+                        Basic Information
+                      </a>
+                      <a
+                        className="nav-link"
+                        href="boxed-edit-account-profile.html"
+                      >
+                        Profile &amp; Privacy
+                      </a>
+                      <a
+                        className="nav-link"
+                        href="boxed-edit-account-notifications.html"
+                      >
+                        Email Notifications
+                      </a>
+                      <a
+                        className="nav-link"
+                        href="boxed-edit-account-password.html"
+                      >
+                        Change Password
+                      </a>
+                    </nav>
+                    <div className="page-nav__content">
+                      <button type="submit" className="btn btn-accent">
+                        Save changes
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div className="js-fix-footer footer border-top-2">
+            <div className="container-fluid page__container page-section d-flex flex-column">
+              <p className="text-70 brand mb-24pt">
+                <img
+                  className="brand-icon"
+                  src="assets/images/logo/black-70@2x.png"
+                  width="30"
+                  alt="Huma"
+                />{" "}
+                Huma
+              </p>
+              <p className="measure-lead-max text-muted mb-0 small">
+                Huma is a beautifully crafted user interface for modern Business
+                Admin Web Applications, with examples for many pages needed for
+                Customer Relationship Management, Enterprise Resource Planning,
+                Human Resources, Content Management System, Project Management,
+                Tasks, eCommerce, Messaging and Account Management.
+              </p>
+            </div>
+            <div className="pb-16pt pb-lg-24pt">
+              <div className="container-fluid page__container">
+                <div className="bg-dark rounded page-section py-lg-32pt px-16pt px-lg-24pt">
+                  <div className="row">
+                    <div className="col-md-2 col-sm-4 mb-24pt mb-md-0">
+                      <p className="text-white-70 mb-8pt">
+                        <strong>Follow us</strong>
+                      </p>
+                      <nav className="nav nav-links nav--flush">
+                        <a href="#" className="nav-link mr-8pt">
+                          <img
+                            src="assets/images/icon/footer/facebook-square@2x.png"
+                            width="24"
+                            height="24"
+                            alt="Facebook"
+                          />
+                        </a>
+                        <a href="#" className="nav-link mr-8pt">
+                          <img
+                            src="assets/images/icon/footer/twitter-square@2x.png"
+                            width="24"
+                            height="24"
+                            alt="Twitter"
+                          />
+                        </a>
+                        <a href="#" className="nav-link mr-8pt">
+                          <img
+                            src="assets/images/icon/footer/vimeo-square@2x.png"
+                            width="24"
+                            height="24"
+                            alt="Vimeo"
+                          />
+                        </a>
+                        {/* <!-- <a href="#" className="nav-link"><img src="assets/images/icon/footer/youtube-square@2x.png" width="24" height="24" alt="YouTube"></a> --> */}
+                      </nav>
+                    </div>
+                    <div className="col-md-6 col-sm-4 mb-24pt mb-md-0 d-flex align-items-center">
+                      <a href="" className="btn btn-outline-white">
+                        English{" "}
+                        <span className="icon--right material-icons">
+                          arrow_drop_down
+                        </span>
+                      </a>
+                    </div>
+                    <div className="col-md-4 text-md-right">
+                      <p className="mb-8pt d-flex align-items-md-center justify-content-md-end">
+                        <a
+                          href=""
+                          className="text-white-70 text-underline mr-16pt"
+                        >
+                          Terms
+                        </a>
+                        <a href="" className="text-white-70 text-underline">
+                          Privacy policy
+                        </a>
+                      </p>
+                      <p className="text-white-50 small mb-0">
+                        Copyright 2019 &copy; All rights reserved.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <!-- // END drawer-layout__content -->
 
             <!-- drawer --> */}
-            <div className="mdk-drawer js-mdk-drawer"
-                 id="default-drawer">
-                <div className="mdk-drawer__content">
-                    <div className="sidebar sidebar-light sidebar-left"
-                         data-perfect-scrollbar>
+        <div className="mdk-drawer js-mdk-drawer" id="default-drawer">
+          <div className="mdk-drawer__content">
+            <div
+              className="sidebar sidebar-light sidebar-left"
+              data-perfect-scrollbar
+            >
+              <a
+                href="boxed-index.html"
+                className="sidebar-brand sidebar-brand-dark bg-dark"
+              >
+                <img
+                  className="sidebar-brand-icon"
+                  src="assets/images/logo/accent-teal-100@2x.png"
+                  alt="Huma"
+                />
+                <span>Huma</span>
+              </a>
 
-                        <a href="boxed-index.html"
-                           className="sidebar-brand sidebar-brand-dark bg-dark">
-                            <img className="sidebar-brand-icon"
-                                 src="assets/images/logo/accent-teal-100@2x.png"
-                                 alt="Huma"/>
-                            <span>Huma</span>
-                        </a>
+              <div className="sidebar-heading">Overview</div>
+              <ul className="sidebar-menu">
+                <li className="sidebar-menu-item">
+                  <a className="sidebar-menu-button" href="boxed-index.html">
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      insert_chart_outlined
+                    </span>
+                    <span className="sidebar-menu-text">Dashboard</span>
+                  </a>
+                </li>
+                <li className="sidebar-menu-item">
+                  <a
+                    className="sidebar-menu-button"
+                    data-toggle="collapse"
+                    href="#dashboards_menu"
+                  >
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      link
+                    </span>
+                    Shortcuts
+                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
+                  </a>
+                  <ul
+                    className="sidebar-submenu collapse sm-indent"
+                    id="dashboards_menu"
+                  >
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-index.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Analytics Dashboard
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-analytics.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Analytics 2 Dashboard
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-projects.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Projects Dashboard
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-tasks-board.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Tasks Dashboard
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-staff.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Staff Dashboard
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ecommerce.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Shop Dashboard
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-erp-dashboard.html"
+                      >
+                        <span className="sidebar-menu-text">ERP Dashboard</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-crm-dashboard.html"
+                      >
+                        <span className="sidebar-menu-text">CRM Dashboard</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-hr-dashboard.html"
+                      >
+                        <span className="sidebar-menu-text">HR Dashboard</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-cms-dashboard.html"
+                      >
+                        <span className="sidebar-menu-text">CMS Dashboard</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button disabled"
+                        href="boxed-ui-card-metrics.html"
+                      >
+                        <span className="sidebar-menu-text">Card Metrics</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
 
-                        <div className="sidebar-heading">Overview</div>
-                        <ul className="sidebar-menu">
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button"
-                                   href="boxed-index.html">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">insert_chart_outlined</span>
-                                    <span className="sidebar-menu-text">Dashboard</span>
-                                </a>
-                            </li>
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button"
-                                   data-toggle="collapse"
-                                   href="#dashboards_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">link</span>
-                                    Shortcuts
-                                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
-                                </a>
-                                <ul className="sidebar-submenu collapse sm-indent"
-                                    id="dashboards_menu">
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-index.html">
-                                            <span className="sidebar-menu-text">Analytics Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-analytics.html">
-                                            <span className="sidebar-menu-text">Analytics 2 Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-projects.html">
-                                            <span className="sidebar-menu-text">Projects Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-tasks-board.html">
-                                            <span className="sidebar-menu-text">Tasks Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-staff.html">
-                                            <span className="sidebar-menu-text">Staff Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ecommerce.html">
-                                            <span className="sidebar-menu-text">Shop Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-erp-dashboard.html">
-                                            <span className="sidebar-menu-text">ERP Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-crm-dashboard.html">
-                                            <span className="sidebar-menu-text">CRM Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-hr-dashboard.html">
-                                            <span className="sidebar-menu-text">HR Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-cms-dashboard.html">
-                                            <span className="sidebar-menu-text">CMS Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button disabled"
-                                           href="boxed-ui-card-metrics.html">
-                                            <span className="sidebar-menu-text">Card Metrics</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-
-                        <div className="sidebar-heading">Applications</div>
-                        <ul className="sidebar-menu">
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button js-sidebar-collapse"
-                                   data-toggle="collapse"
-                                   href="#enterprise_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">donut_large</span>
-                                    Enterprise
-                                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
-                                </a>
-                                <ul className="sidebar-submenu collapse sm-indent"
-                                    id="enterprise_menu">
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-erp-dashboard.html">
-                                            <span className="sidebar-menu-text">ERP Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-crm-dashboard.html">
-                                            <span className="sidebar-menu-text">CRM Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-hr-dashboard.html">
-                                            <span className="sidebar-menu-text">HR Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-employees.html">
-                                            <span className="sidebar-menu-text">Employees</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-staff.html">
-                                            <span className="sidebar-menu-text">Staff</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-leaves.html">
-                                            <span className="sidebar-menu-text">Leaves</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button disabled"
-                                           href="boxed-departments.html">
-                                            <span className="sidebar-menu-text">Departments</span>
-                                        </a>
-                                    </li>
-                                    {/* <!-- <li className="sidebar-menu-item">
+              <div className="sidebar-heading">Applications</div>
+              <ul className="sidebar-menu">
+                <li className="sidebar-menu-item">
+                  <a
+                    className="sidebar-menu-button js-sidebar-collapse"
+                    data-toggle="collapse"
+                    href="#enterprise_menu"
+                  >
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      donut_large
+                    </span>
+                    Enterprise
+                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
+                  </a>
+                  <ul
+                    className="sidebar-submenu collapse sm-indent"
+                    id="enterprise_menu"
+                  >
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-erp-dashboard.html"
+                      >
+                        <span className="sidebar-menu-text">ERP Dashboard</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-crm-dashboard.html"
+                      >
+                        <span className="sidebar-menu-text">CRM Dashboard</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-hr-dashboard.html"
+                      >
+                        <span className="sidebar-menu-text">HR Dashboard</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-employees.html"
+                      >
+                        <span className="sidebar-menu-text">Employees</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-staff.html"
+                      >
+                        <span className="sidebar-menu-text">Staff</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-leaves.html"
+                      >
+                        <span className="sidebar-menu-text">Leaves</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button disabled"
+                        href="boxed-departments.html"
+                      >
+                        <span className="sidebar-menu-text">Departments</span>
+                      </a>
+                    </li>
+                    {/* <!-- <li className="sidebar-menu-item">
   <a className="sidebar-menu-button disabled" href="boxed-documents.html">
     <span className="sidebar-menu-text">Documents</span>
   </a>
@@ -1777,43 +1882,57 @@ function EditAccount() {
     <span className="sidebar-menu-text">Inventory</span>
   </a>
 </li> --> */}
-                                </ul>
-                            </li>
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button"
-                                   data-toggle="collapse"
-                                   href="#productivity_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">access_time</span>
-                                    Productivity
-                                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
-                                </a>
-                                <ul className="sidebar-submenu collapse sm-indent"
-                                    id="productivity_menu">
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-projects.html">
-                                            <span className="sidebar-menu-text">Projects</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-tasks-board.html">
-                                            <span className="sidebar-menu-text">Tasks Board</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-tasks-list.html">
-                                            <span className="sidebar-menu-text">Tasks List</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button disabled"
-                                           href="boxed-kanban.html">
-                                            <span className="sidebar-menu-text">Kanban</span>
-                                        </a>
-                                    </li>
-                                    {/* <!-- <li className="sidebar-menu-item">
+                  </ul>
+                </li>
+                <li className="sidebar-menu-item">
+                  <a
+                    className="sidebar-menu-button"
+                    data-toggle="collapse"
+                    href="#productivity_menu"
+                  >
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      access_time
+                    </span>
+                    Productivity
+                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
+                  </a>
+                  <ul
+                    className="sidebar-submenu collapse sm-indent"
+                    id="productivity_menu"
+                  >
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-projects.html"
+                      >
+                        <span className="sidebar-menu-text">Projects</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-tasks-board.html"
+                      >
+                        <span className="sidebar-menu-text">Tasks Board</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-tasks-list.html"
+                      >
+                        <span className="sidebar-menu-text">Tasks List</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button disabled"
+                        href="boxed-kanban.html"
+                      >
+                        <span className="sidebar-menu-text">Kanban</span>
+                      </a>
+                    </li>
+                    {/* <!-- <li className="sidebar-menu-item">
   <a className="sidebar-menu-button disabled" href="boxed-task-details.html">
     <span className="sidebar-menu-text">Task Details</span>
   </a>
@@ -1823,58 +1942,82 @@ function EditAccount() {
     <span className="sidebar-menu-text">Team Members</span>
   </a>
 </li> --> */}
-                                </ul>
-                            </li>
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button"
-                                   data-toggle="collapse"
-                                   href="#ecommerce_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">shopping_cart</span>
-                                    eCommerce
-                                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
-                                </a>
-                                <ul className="sidebar-submenu collapse sm-indent"
-                                    id="ecommerce_menu">
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ecommerce.html">
-                                            <span className="sidebar-menu-text">Shop Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button disabled"
-                                           href="boxed-edit-product.html">
-                                            <span className="sidebar-menu-text">Edit Product</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button"
-                                   data-toggle="collapse"
-                                   href="#messaging_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">message</span>
-                                    Messaging
-                                    <span className="sidebar-menu-badge badge badge-accent badge-notifications ml-auto">2</span>
-                                    <span className="sidebar-menu-toggle-icon"></span>
-                                </a>
-                                <ul className="sidebar-submenu collapse sm-indent"
-                                    id="messaging_menu">
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-messages.html">
-                                            <span className="sidebar-menu-text">Messages</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-email.html">
-                                            <span className="sidebar-menu-text">Email</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            {/* <!-- <li className="sidebar-menu-item">
+                  </ul>
+                </li>
+                <li className="sidebar-menu-item">
+                  <a
+                    className="sidebar-menu-button"
+                    data-toggle="collapse"
+                    href="#ecommerce_menu"
+                  >
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      shopping_cart
+                    </span>
+                    eCommerce
+                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
+                  </a>
+                  <ul
+                    className="sidebar-submenu collapse sm-indent"
+                    id="ecommerce_menu"
+                  >
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ecommerce.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Shop Dashboard
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button disabled"
+                        href="boxed-edit-product.html"
+                      >
+                        <span className="sidebar-menu-text">Edit Product</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="sidebar-menu-item">
+                  <a
+                    className="sidebar-menu-button"
+                    data-toggle="collapse"
+                    href="#messaging_menu"
+                  >
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      message
+                    </span>
+                    Messaging
+                    <span className="sidebar-menu-badge badge badge-accent badge-notifications ml-auto">
+                      2
+                    </span>
+                    <span className="sidebar-menu-toggle-icon"></span>
+                  </a>
+                  <ul
+                    className="sidebar-submenu collapse sm-indent"
+                    id="messaging_menu"
+                  >
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-messages.html"
+                      >
+                        <span className="sidebar-menu-text">Messages</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-email.html"
+                      >
+                        <span className="sidebar-menu-text">Email</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                {/* <!-- <li className="sidebar-menu-item">
           <a className="sidebar-menu-button" data-toggle="collapse" href="#marketplace_menu">
             <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">assessment</span>
             Marketplace
@@ -1898,255 +2041,360 @@ function EditAccount() {
             
           </ul>
         </li> --> */}
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button"
-                                   data-toggle="collapse"
-                                   href="#cms_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">content_copy</span>
-                                    CMS
-                                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
-                                </a>
-                                <ul className="sidebar-submenu collapse sm-indent"
-                                    id="cms_menu">
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-cms-dashboard.html">
-                                            <span className="sidebar-menu-text">CMS Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-posts.html">
-                                            <span className="sidebar-menu-text">Posts</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="sidebar-menu-item active open">
-                                <a className="sidebar-menu-button"
-                                   data-toggle="collapse"
-                                   href="#account_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">account_box</span>
-                                    Account
-                                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
-                                </a>
-                                <ul className="sidebar-submenu collapse show sm-indent"
-                                    id="account_menu">
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-pricing.html">
-                                            <span className="sidebar-menu-text">Pricing</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-login.html">
-                                            <span className="sidebar-menu-text">Login</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-signup.html">
-                                            <span className="sidebar-menu-text">Signup</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-signup-payment.html">
-                                            <span className="sidebar-menu-text">Payment</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-reset-password.html">
-                                            <span className="sidebar-menu-text">Reset Password</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-change-password.html">
-                                            <span className="sidebar-menu-text">Change Password</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item active">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-edit-account.html">
-                                            <span className="sidebar-menu-text">Edit Account</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-edit-account-profile.html">
-                                            <span className="sidebar-menu-text">Profile &amp; Privacy</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-edit-account-notifications.html">
-                                            <span className="sidebar-menu-text">Email Notifications</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-edit-account-password.html">
-                                            <span className="sidebar-menu-text">Account Password</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-billing.html">
-                                            <span className="sidebar-menu-text">Subscription</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-billing-upgrade.html">
-                                            <span className="sidebar-menu-text">Upgrade Account</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-billing-payment.html">
-                                            <span className="sidebar-menu-text">Payment Information</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-billing-history.html">
-                                            <span className="sidebar-menu-text">Payment History</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-billing-invoice.html">
-                                            <span className="sidebar-menu-text">Invoice</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button"
-                                   data-toggle="collapse"
-                                   href="#community_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">people_outline</span>
-                                    Community
-                                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
-                                </a>
-                                <ul className="sidebar-submenu collapse sm-indent"
-                                    id="community_menu">
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-faq.html">
-                                            <span className="sidebar-menu-text">FAQ</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-discussions.html">
-                                            <span className="sidebar-menu-text">Discussions</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-discussion.html">
-                                            <span className="sidebar-menu-text">Discussion Details</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-discussions-ask.html">
-                                            <span className="sidebar-menu-text">Ask Question</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
+                <li className="sidebar-menu-item">
+                  <a
+                    className="sidebar-menu-button"
+                    data-toggle="collapse"
+                    href="#cms_menu"
+                  >
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      content_copy
+                    </span>
+                    CMS
+                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
+                  </a>
+                  <ul
+                    className="sidebar-submenu collapse sm-indent"
+                    id="cms_menu"
+                  >
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-cms-dashboard.html"
+                      >
+                        <span className="sidebar-menu-text">CMS Dashboard</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-posts.html"
+                      >
+                        <span className="sidebar-menu-text">Posts</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="sidebar-menu-item active open">
+                  <a
+                    className="sidebar-menu-button"
+                    data-toggle="collapse"
+                    href="#account_menu"
+                  >
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      account_box
+                    </span>
+                    Account
+                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
+                  </a>
+                  <ul
+                    className="sidebar-submenu collapse show sm-indent"
+                    id="account_menu"
+                  >
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-pricing.html"
+                      >
+                        <span className="sidebar-menu-text">Pricing</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-login.html"
+                      >
+                        <span className="sidebar-menu-text">Login</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-signup.html"
+                      >
+                        <span className="sidebar-menu-text">Signup</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-signup-payment.html"
+                      >
+                        <span className="sidebar-menu-text">Payment</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-reset-password.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Reset Password
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-change-password.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Change Password
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item active">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-edit-account.html"
+                      >
+                        <span className="sidebar-menu-text">Edit Account</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-edit-account-profile.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Profile &amp; Privacy
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-edit-account-notifications.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Email Notifications
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-edit-account-password.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Account Password
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-billing.html"
+                      >
+                        <span className="sidebar-menu-text">Subscription</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-billing-upgrade.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Upgrade Account
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-billing-payment.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Payment Information
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-billing-history.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Payment History
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-billing-invoice.html"
+                      >
+                        <span className="sidebar-menu-text">Invoice</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="sidebar-menu-item">
+                  <a
+                    className="sidebar-menu-button"
+                    data-toggle="collapse"
+                    href="#community_menu"
+                  >
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      people_outline
+                    </span>
+                    Community
+                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
+                  </a>
+                  <ul
+                    className="sidebar-submenu collapse sm-indent"
+                    id="community_menu"
+                  >
+                    <li className="sidebar-menu-item">
+                      <a className="sidebar-menu-button" href="boxed-faq.html">
+                        <span className="sidebar-menu-text">FAQ</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-discussions.html"
+                      >
+                        <span className="sidebar-menu-text">Discussions</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-discussion.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Discussion Details
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-discussions-ask.html"
+                      >
+                        <span className="sidebar-menu-text">Ask Question</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
 
-                        <div className="sidebar-heading">UI</div>
-                        <ul className="sidebar-menu">
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button"
-                                   data-toggle="collapse"
-                                   href="#components_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">tune</span>
-                                    Components
-                                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
-                                </a>
-                                <ul className="sidebar-submenu collapse sm-indent"
-                                    id="components_menu">
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-buttons.html">
-                                            <span className="sidebar-menu-text">Buttons</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-avatars.html">
-                                            <span className="sidebar-menu-text">Avatars</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-forms.html">
-                                            <span className="sidebar-menu-text">Forms</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-loaders.html">
-                                            <span className="sidebar-menu-text">Loaders</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-tables.html">
-                                            <span className="sidebar-menu-text">Tables</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-cards.html">
-                                            <span className="sidebar-menu-text">Cards</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-icons.html">
-                                            <span className="sidebar-menu-text">Icons</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-tabs.html">
-                                            <span className="sidebar-menu-text">Tabs</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-alerts.html">
-                                            <span className="sidebar-menu-text">Alerts</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-badges.html">
-                                            <span className="sidebar-menu-text">Badges</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-progress.html">
-                                            <span className="sidebar-menu-text">Progress</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-pagination.html">
-                                            <span className="sidebar-menu-text">Pagination</span>
-                                        </a>
-                                    </li>
-                                    {/* <!-- <li className="sidebar-menu-item">
+              <div className="sidebar-heading">UI</div>
+              <ul className="sidebar-menu">
+                <li className="sidebar-menu-item">
+                  <a
+                    className="sidebar-menu-button"
+                    data-toggle="collapse"
+                    href="#components_menu"
+                  >
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      tune
+                    </span>
+                    Components
+                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
+                  </a>
+                  <ul
+                    className="sidebar-submenu collapse sm-indent"
+                    id="components_menu"
+                  >
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-buttons.html"
+                      >
+                        <span className="sidebar-menu-text">Buttons</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-avatars.html"
+                      >
+                        <span className="sidebar-menu-text">Avatars</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-forms.html"
+                      >
+                        <span className="sidebar-menu-text">Forms</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-loaders.html"
+                      >
+                        <span className="sidebar-menu-text">Loaders</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-tables.html"
+                      >
+                        <span className="sidebar-menu-text">Tables</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-cards.html"
+                      >
+                        <span className="sidebar-menu-text">Cards</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-icons.html"
+                      >
+                        <span className="sidebar-menu-text">Icons</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-tabs.html"
+                      >
+                        <span className="sidebar-menu-text">Tabs</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-alerts.html"
+                      >
+                        <span className="sidebar-menu-text">Alerts</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-badges.html"
+                      >
+                        <span className="sidebar-menu-text">Badges</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-progress.html"
+                      >
+                        <span className="sidebar-menu-text">Progress</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-pagination.html"
+                      >
+                        <span className="sidebar-menu-text">Pagination</span>
+                      </a>
+                    </li>
+                    {/* <!-- <li className="sidebar-menu-item">
   <a className="sidebar-menu-button disabled" href="boxed-ui-typography.html">
     <span className="sidebar-menu-text">Typography</span>
   </a>
@@ -2176,170 +2424,219 @@ function EditAccount() {
     <span className="sidebar-menu-text">Chips</span>
   </a>
 </li> --> */}
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button disabled"
-                                           href="">
-                                            <span className="sidebar-menu-text">Disabled</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button"
-                                   data-toggle="collapse"
-                                   href="#plugins_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">folder</span>
-                                    Plugins
-                                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
-                                </a>
-                                <ul className="sidebar-submenu collapse sm-indent"
-                                    id="plugins_menu">
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-charts.html">
-                                            <span className="sidebar-menu-text">Charts</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-flatpickr.html">
-                                            <span className="sidebar-menu-text">Flatpickr</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-daterangepicker.html">
-                                            <span className="sidebar-menu-text">Date Range Picker</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-dragula.html">
-                                            <span className="sidebar-menu-text">Dragula</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-dropzone.html">
-                                            <span className="sidebar-menu-text">Dropzone</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-range-sliders.html">
-                                            <span className="sidebar-menu-text">Range Sliders</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-quill.html">
-                                            <span className="sidebar-menu-text">Quill</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-select2.html">
-                                            <span className="sidebar-menu-text">Select2</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-nestable.html">
-                                            <span className="sidebar-menu-text">Nestable</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-fancytree.html">
-                                            <span className="sidebar-menu-text">Fancy Tree</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-maps-vector.html">
-                                            <span className="sidebar-menu-text">Vector Maps</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-sweet-alert.html">
-                                            <span className="sidebar-menu-text">Sweet Alert</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-ui-plugin-toastr.html">
-                                            <span className="sidebar-menu-text">Toastr</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button disabled"
-                                           href="">
-                                            <span className="sidebar-menu-text">Disabled</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button"
-                                   data-toggle="collapse"
-                                   href="#layouts_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">view_compact</span>
-                                    Layouts
-                                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
-                                </a>
-                                <ul className="sidebar-submenu collapse sm-indent"
-                                    id="layouts_menu">
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="compact-edit-account.html">
-                                            <span className="sidebar-menu-text">Compact</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="mini-edit-account.html">
-                                            <span className="sidebar-menu-text">Mini</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="edit-account.html">
-                                            <span className="sidebar-menu-text">App</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item active">
-                                        <a className="sidebar-menu-button"
-                                           href="boxed-edit-account.html">
-                                            <span className="sidebar-menu-text">Boxed</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="sticky-edit-account.html">
-                                            <span className="sidebar-menu-text">Sticky</span>
-                                        </a>
-                                    </li>
-                                    <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button"
-                                           href="fixed-edit-account.html">
-                                            <span className="sidebar-menu-text">Fixed</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
+                    <li className="sidebar-menu-item">
+                      <a className="sidebar-menu-button disabled" href="">
+                        <span className="sidebar-menu-text">Disabled</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="sidebar-menu-item">
+                  <a
+                    className="sidebar-menu-button"
+                    data-toggle="collapse"
+                    href="#plugins_menu"
+                  >
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      folder
+                    </span>
+                    Plugins
+                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
+                  </a>
+                  <ul
+                    className="sidebar-submenu collapse sm-indent"
+                    id="plugins_menu"
+                  >
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-charts.html"
+                      >
+                        <span className="sidebar-menu-text">Charts</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-flatpickr.html"
+                      >
+                        <span className="sidebar-menu-text">Flatpickr</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-daterangepicker.html"
+                      >
+                        <span className="sidebar-menu-text">
+                          Date Range Picker
+                        </span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-dragula.html"
+                      >
+                        <span className="sidebar-menu-text">Dragula</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-dropzone.html"
+                      >
+                        <span className="sidebar-menu-text">Dropzone</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-range-sliders.html"
+                      >
+                        <span className="sidebar-menu-text">Range Sliders</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-quill.html"
+                      >
+                        <span className="sidebar-menu-text">Quill</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-select2.html"
+                      >
+                        <span className="sidebar-menu-text">Select2</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-nestable.html"
+                      >
+                        <span className="sidebar-menu-text">Nestable</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-fancytree.html"
+                      >
+                        <span className="sidebar-menu-text">Fancy Tree</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-maps-vector.html"
+                      >
+                        <span className="sidebar-menu-text">Vector Maps</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-sweet-alert.html"
+                      >
+                        <span className="sidebar-menu-text">Sweet Alert</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-ui-plugin-toastr.html"
+                      >
+                        <span className="sidebar-menu-text">Toastr</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a className="sidebar-menu-button disabled" href="">
+                        <span className="sidebar-menu-text">Disabled</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="sidebar-menu-item">
+                  <a
+                    className="sidebar-menu-button"
+                    data-toggle="collapse"
+                    href="#layouts_menu"
+                  >
+                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                      view_compact
+                    </span>
+                    Layouts
+                    <span className="ml-auto sidebar-menu-toggle-icon"></span>
+                  </a>
+                  <ul
+                    className="sidebar-submenu collapse sm-indent"
+                    id="layouts_menu"
+                  >
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="compact-edit-account.html"
+                      >
+                        <span className="sidebar-menu-text">Compact</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="mini-edit-account.html"
+                      >
+                        <span className="sidebar-menu-text">Mini</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="edit-account.html"
+                      >
+                        <span className="sidebar-menu-text">App</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item active">
+                      <a
+                        className="sidebar-menu-button"
+                        href="boxed-edit-account.html"
+                      >
+                        <span className="sidebar-menu-text">Boxed</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="sticky-edit-account.html"
+                      >
+                        <span className="sidebar-menu-text">Sticky</span>
+                      </a>
+                    </li>
+                    <li className="sidebar-menu-item">
+                      <a
+                        className="sidebar-menu-button"
+                        href="fixed-edit-account.html"
+                      >
+                        <span className="sidebar-menu-text">Fixed</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
             </div>
-            {/* <!-- // END drawer --> */}
+          </div>
         </div>
-        {/* <!-- // END drawer-layout -->
+        {/* <!-- // END drawer --> */}
+      </div>
+      {/* <!-- // END drawer-layout -->
 
         <!-- App Settings FAB --> */}
-        <div id="app-settings">
-            {/* <app-settings layout-active="boxed"
+      <div id="app-settings">
+        {/* <app-settings layout-active="boxed"
                           :layout-location="{
       'compact': 'compact-edit-account.html',
       'mini': 'mini-edit-account.html',
@@ -2350,9 +2647,9 @@ function EditAccount() {
     }"
                           sidebar-type="light"
                           sidebar-variant="bg-body"></app-settings> */}
-        </div>
+      </div>
     </div>
-  )
+  );
 }
 
 export default EditAccount;

@@ -109,6 +109,7 @@ export interface IUpdateCourseDetailState {
         title: string,
         description: string,
         state: number
+        imageUrl?: string
 
 }
 

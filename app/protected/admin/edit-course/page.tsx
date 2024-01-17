@@ -35,6 +35,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dropdown from "react-bootstrap/Dropdown";
+import Sidebar from "@/app/components/Sidebar";
 export default function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [editModuleModalOpen, setEditModuleModalOpen] =
@@ -1908,96 +1909,9 @@ export default function EditCourse() {
                   </li>
                 </ul>
               </div>
-              <div className="tab-pane  fade active show " id="sm_instructor">
-                <div className="sidebar-heading">Instructor</div>
-                <ul className="sidebar-menu">
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="/protected/admin/dashboard"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        school
-                      </span>
-                      <span className="sidebar-menu-text">
-                        Instructor Dashboard
-                      </span>
-                    </a>
-                  </li>
 
-                  <li className="sidebar-menu-item">
-                    <Link
-                      href="/protected/admin/manage-courses"
-                      style={{ textDecoration: "none" }}
-                      className="small"
-                    >
-                      <a className="sidebar-menu-button">
-                        <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                          import_contacts
-                        </span>
-                        <span className="sidebar-menu-text">
-                          Manage Courses
-                        </span>
-                      </a>
-                    </Link>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-quizzes.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        help
-                      </span>
-                      <span className="sidebar-menu-text">Manage Quizzes</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-earnings.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        trending_up
-                      </span>
-                      <span className="sidebar-menu-text">Earnings</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-statement.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        receipt
-                      </span>
-                      <span className="sidebar-menu-text">Statement</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item active">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-edit-course.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        post_add
-                      </span>
-                      <span className="sidebar-menu-text">Edit Course</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-edit-quiz.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        format_shapes
-                      </span>
-                      <span className="sidebar-menu-text">Edit Quiz</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
+
+<Sidebar/>
               <div className="tab-pane " id="sm_account">
                 <div className="sidebar-heading">Account</div>
                 <ul className="sidebar-menu">
