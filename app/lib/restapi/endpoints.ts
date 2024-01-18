@@ -1,5 +1,5 @@
 import { ICourse, ICourseResponseModel, IDeleteSection,IDeleteVideo,IStudentCourses } from "@/app/interfaces/courses";
-import { GET, POST, PUT } from "./client";
+import { GET, POST, PUT ,DELETE} from "./client";
 import { IResponseObject } from "./response";
 import { IUser, IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/user";
 import  IComment, { ICommentReply }  from "@/app/interfaces/comment";
@@ -38,12 +38,19 @@ export const Api = {
     return response;
   },
 
-  PUT_UpdateCourse: async (
-    payload: ICourse
-  ): Promise<any> => {
-    const response = await PUT(`${courseWriteUrl}/Courses/updateCourse`, payload);
-    return response;
+  PUT_UpdateCourse: async (payload: ICourse): Promise<any> => {
+    try {
+      debugger
+      const response = await PUT(`${courseWriteUrl}/Courses/updateCourse`, payload);
+      debugger
+      return response;
+    } catch (error) {
+      console.error("Error updating course:", error);
+      throw error;
+    }
   },
+  
+  
 
 
   DELETE_DeleteSection: async (
@@ -117,7 +124,9 @@ export const Api = {
 DELETE_CourseById: async (
     courseId: string
   ): Promise<any> => {
-    const response = await GET(`${courseWriteUrl}/Courses/${courseId}`);
+    debugger;
+    const response = await DELETE(`${courseWriteUrl}/Courses/${courseId}`);
+    debugger;
     return response;
   },
 

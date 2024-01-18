@@ -12,8 +12,10 @@ import axios from "axios";
 import Dropdown from "react-bootstrap/Dropdown";
 import "../../../assets/vendor/spinkit.css";
 import "../../../assets/css/preloader.css";
+import dynamic from 'next/dynamic';
+import Sidebar from "@/app/components/Sidebar";
 
-export default function ManageCourses() {
+function ManageCourses() {
 
   const [courseHover, setCourseHover] = useState<boolean>(false);
   const [courses, setCourses] = useState<ICourse[] | any>()
@@ -23,11 +25,27 @@ export default function ManageCourses() {
   console.log(userData);
 
   async function ListAllCourses() {
+    
+  let _id = toast.loading("Please wait..", {//loader
+    position: "top-center",
+    autoClose: 1000,
+    hideProgressBar: false,
+    closeOnClick: false,
+    pauseOnHover: false,
+    draggable: false,
+    progress: undefined,
+    theme: "light",
+    });
     try {
-      const data = await Api.GET_CoursesByUserId(userData.id);
+      const data = await Api.GET_CoursesByUserId(userData?.id);
       setCourses(data)
+      toast.dismiss(_id);
     } catch (error) {
       console.log("Error fetching courses:", error);
+      toast.update(_id, { render: "Error loading courses", type: "success", isLoading: false });
+      setTimeout(() => {
+        toast.dismiss(_id);
+      }, 2000);
     }
   }
 
@@ -37,6 +55,7 @@ export default function ManageCourses() {
   };
 
   useEffect(() => {
+    console.log("useEffect is running");
     ListAllCourses();
   }, []);
 
@@ -365,7 +384,7 @@ export default function ManageCourses() {
             <div className="page-separator__text">Development Courses</div>
           </div>
           <div className="row">
-            { courses && courses.map((course: any) => (
+            { courses?.length > 0 && courses.map((course: any) => (
               <>
                 <div className="col-sm-6 col-md-4 col-xl-3">
                   <div
@@ -816,30 +835,7 @@ export default function ManageCourses() {
                 </a>
               </li>
             </ul>
-            {/* <ul class="pagination justify-content-center pagination-sm">
-  <li class="page-item disabled">
-    <a class="page-link" href="#" aria-label="Previous">
-<span aria-hidden="true" class="material-icons">chevron_left</span>
-<span>Prev</span>
-    </a>
-  </li>
-  <li class="page-item active">
-    <a class="page-link" href="#" aria-label="1">
-<span>1</span>
-    </a>
-  </li>
-  <li class="page-item">
-    <a class="page-link" href="#" aria-label="1">
-<span>2</span>
-    </a>
-  </li>
-  <li class="page-item">
-    <a class="page-link" href="#" aria-label="Next">
-<span>Next</span>
-<span aria-hidden="true" class="material-icons">chevron_right</span>
-    </a>
-  </li>
-</ul> */}
+            
           </div>
           <div className="page-separator">
             <div className="page-separator__text">Design Courses</div>
@@ -2622,86 +2618,8 @@ export default function ManageCourses() {
                 </ul>
               </div>
               <div className="tab-pane  fade active show " id="sm_instructor">
-                <div className="sidebar-heading">Instructor</div>
-                <ul className="sidebar-menu">
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-dashboard.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        school
-                      </span>
-                      <span className="sidebar-menu-text">
-                        Instructor Dashboard
-                      </span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item active">
-                    <a className="sidebar-menu-button">
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        import_contacts
-                      </span>
-                      <span className="sidebar-menu-text">Manage Courses</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-quizzes.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        help
-                      </span>
-                      <span className="sidebar-menu-text">Manage Quizzes</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-earnings.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        trending_up
-                      </span>
-                      <span className="sidebar-menu-text">Earnings</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-statement.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        receipt
-                      </span>
-                      <span className="sidebar-menu-text">Statement</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="/protected/admin/create-course"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        post_add
-                      </span>
-                      <span className="sidebar-menu-text">Create Course</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="instructor-edit-quiz.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        format_shapes
-                      </span>
-                      <span className="sidebar-menu-text">Edit Quiz</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
+                <Sidebar/>
+</div>
               <div className="tab-pane " id="sm_account">
                 <div className="sidebar-heading">Account</div>
                 <ul className="sidebar-menu">
@@ -3194,7 +3112,4 @@ export default function ManageCourses() {
   );
 }
 
-
-
-/*
-*/
+export default dynamic (() => Promise.resolve(ManageCourses), {ssr: false})

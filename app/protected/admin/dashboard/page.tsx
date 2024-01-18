@@ -1,9 +1,10 @@
 import Image from 'next/image'
 import styles from './page.module.css'
+import Sidebar from '@/app/components/Sidebar'
 
 export default function Dashbaord() {
   return (
-{/* <div
+ <div
   className="mdk-drawer-layout js-mdk-drawer-layout"
   data-push=""
   data-responsive-width="992px"
@@ -292,7 +293,7 @@ export default function Dashbaord() {
       {/* // END Navbar Menu */}
     </div>
     {/* // END Navbar */}
-    // END Header */}
+   {/* // END Header */}
     <div className="pt-32pt">
       <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
         <div className="flex d-flex flex-column flex-sm-row align-items-center mb-24pt mb-md-0">
@@ -1534,88 +1535,7 @@ export default function Dashbaord() {
             </ul>
           </div>
           <div className="tab-pane  fade active show " id="sm_instructor">
-            <div className="sidebar-heading">Instructor</div>
-            <ul className="sidebar-menu">
-              <li className="sidebar-menu-item active">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-dashboard.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    school
-                  </span>
-                  <span className="sidebar-menu-text">
-                    Instructor Dashboard
-                  </span>
-                </a>
-              </li>
-              <li className="sidebar-menu-item">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-courses.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    import_contacts
-                  </span>
-                  <span className="sidebar-menu-text">Manage Courses</span>
-                </a>
-              </li>
-              <li className="sidebar-menu-item">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-quizzes.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    help
-                  </span>
-                  <span className="sidebar-menu-text">Manage Quizzes</span>
-                </a>
-              </li>
-              <li className="sidebar-menu-item">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-earnings.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    trending_up
-                  </span>
-                  <span className="sidebar-menu-text">Earnings</span>
-                </a>
-              </li>
-              <li className="sidebar-menu-item">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-statement.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    receipt
-                  </span>
-                  <span className="sidebar-menu-text">Statement</span>
-                </a>
-              </li>
-              <li className="sidebar-menu-item">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-edit-course.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    post_add
-                  </span>
-                  <span className="sidebar-menu-text">Edit Course</span>
-                </a>
-              </li>
-              <li className="sidebar-menu-item">
-                <a
-                  className="sidebar-menu-button"
-                  href="instructor-edit-quiz.html"
-                >
-                  <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                    format_shapes
-                  </span>
-                  <span className="sidebar-menu-text">Edit Quiz</span>
-                </a>
-              </li>
-            </ul>
+            <Sidebar/>
           </div>
           <div className="tab-pane " id="sm_account">
             <div className="sidebar-heading">Account</div>

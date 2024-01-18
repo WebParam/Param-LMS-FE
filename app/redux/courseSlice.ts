@@ -22,14 +22,14 @@ function sortModuleByOrder(a: IModule, b: IModule) {
 // ## Define the initial state  
 const initialState: ICourseState = {
     course: {
-        _id: generateUniqueId(),
+        id: generateUniqueId(),
         title: "",
         description: "",
         sections: [] as ISection[],
         createdDate: "04/09/2015",
         creatingUser: "",
         state: 0,
-        logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/640px-Python-logo-notext.svg.png",
+        logo:"",
         courseImage: "course_image.jpg",
         bannerImage: "banner_image.jpg",
         modifyingUser: "user-789"
@@ -55,7 +55,8 @@ export const courseSlice = createSlice({
                 description: _action.description,
                 state: _action.state,
                 creatingUser: _action.creatingUser,
-                title: _action.title
+                title: _action.title,
+                logo:_action.imageUrl
             } as ICourse;
 
 
@@ -66,7 +67,7 @@ export const courseSlice = createSlice({
             const _action = action.payload as IUpdateCourse;
           
             const newState = {
-              _id: _action._id,
+              id: _action.id,
               title: _action.title,
               description: _action.description,
               sections: _action.sections,
@@ -136,7 +137,7 @@ export const courseSlice = createSlice({
             const newSection: ISection = {
                 id: generateUniqueId(),
                 title: sectionTitle,
-                courseId: state.course._id,
+                courseId: state.course.id,
                 order: 1,
                 state: 0,
                 competency: sectionCompetency,

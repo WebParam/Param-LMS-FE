@@ -13,7 +13,7 @@ import {  Routes, Route, BrowserRouter } from "react-router-dom";
 import Login from './auth/login/page'
 export default function Home() {
   return (
-    <BrowserRouter> 
+
 
 
     <div
@@ -2290,6 +2290,6 @@ export default function Home() {
     
    
   </div>
-  </BrowserRouter>
+
   )
 }
