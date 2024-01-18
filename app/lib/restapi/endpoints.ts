@@ -94,6 +94,13 @@ export const Api = {
     const response = await GET(`${courseReadUrl}/Courses/GetStudentCourses?studentId=${studentId}`);
     return response;
   },
+  
+  GET_EnrolledCoursesByStudentId: async (
+    studentId:string
+  ): Promise<IResponseObject<IStudentCourses>> => {
+    const response = await GET(`${courseReadUrl}/Enrollments/GetUserEnrollements?userId=${studentId}`);
+    return response;
+  },
 
   GET_CoursesByIds: async (courseIds: string[]): Promise<any> => {
     const queryParams = courseIds.map(id => `Ids=${id}`).join('&');

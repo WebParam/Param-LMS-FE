@@ -27,6 +27,7 @@ export default function AllCourses() {
   
 useEffect(() => {
    getStudentCourses();
+   
   }, []);
 
   console.log("courses",allCourses);
@@ -37,7 +38,8 @@ useEffect(() => {
       var student =cookies.get('param-lms-user');
       console.log("Id ", student.id)
       const course = await Api.GET_StudentCoursesById(student.id);
-      console.log("Student-Courses",course);
+      const enrolled = await Api.GET_EnrolledCoursesByStudentId(student.id)
+      console.log("Student-Courses",course, "enrolled", enrolled);
         setCourses(course.data!.allCourses);
         setEnrolledCourses(course.data!.enrolledCourses);
        console.log("AllCourses",allCourses);
@@ -49,7 +51,7 @@ useEffect(() => {
 <>
   {/* Page Content */}
   <div className="page-section">
-    <div className="container page__container">
+    <div className="page__container">
       <div
         className="d-flex flex-column flex-sm-row align-items-sm-center mb-24pt"
         style={{ whiteSpace: "nowrap" }}
