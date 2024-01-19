@@ -59,8 +59,8 @@ export default function CourseDetail() {
   async function getUserCourses(id:string){
     var userCourses= await Api.GET_CoursesByUserId(id);
     
-    console.log("Author courses",userCourses.data);
-    setUserCourses(userCourses.data);
+    console.log("Author courses",userCourses?.data);
+    setUserCourses(userCourses?.data);
   }
  
  
@@ -455,7 +455,7 @@ export default function CourseDetail() {
               </div>
             </div>
             {
-              userCourses.map((course)=>(
+              userCourses?.map((course)=>(
                 <div className="card card-sm mb-8pt">
                 <div className="card-body d-flex align-items-center">
                   <a href="course.html" className="avatar avatar-4by3 mr-12pt">

@@ -9,6 +9,7 @@ import {useEffect} from 'react'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedCourse } from '@/app/redux/viewCourseSlice';
+import MyCoursesChart from '@/app/components/CoursesChart';
 const cookies = new Cookies();
 
 
@@ -16,6 +17,8 @@ export default function StudentDashboard() {
   const dispatch = useDispatch();
    const [allCourses, setCourses] = useState<ICourseResponseModel[]>([]); 
    const [enrolledCourses, setEnrolledCourses] = useState<ICourseResponseModel[]>([]); 
+
+   const [courseScores, setCourseScores] = useState(['Angular', 'Nodejs', 'Python', 'Javascript', 'Java', 'Databases'])
 
    const goToCourseDetails=(course:ICourse)=>{
     
@@ -92,7 +95,8 @@ useEffect(() => {
                 <div className="" />
               </div>
             </div>
-            <canvas
+            <MyCoursesChart courses={courseScores}/>
+            {/* <canvas
               id="topicIqChart"
               className="chart-canvas js-update-chart-line chartjs-render-monitor"
               data-chart-hide-axes="true"
@@ -102,7 +106,7 @@ useEffect(() => {
               width={788}
               height={688}
               style={{ display: "block", height: 344, width: 394 }}
-            />
+            /> */}
           </div>
         </div>
       </div>
