@@ -817,7 +817,7 @@ useEffect(() => {
                 alt="course",
                 width="100%"
               /> */}
-              <img src ={course.logo} width="100%"/>
+              <img src ={course.logo} className='courseLogo' style={{"width":"100%","height": "200px","margin": "auto 0"}} />
               <span className="overlay__content">
                 <span className="overlay__action d-flex flex-column text-center">
                   <i className="material-icons icon-32pt">
