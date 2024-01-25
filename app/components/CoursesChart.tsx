@@ -6,7 +6,7 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 const MyCoursesChart = (props:any) => {
-    console.log(props.courses)
+    console.log(props.courses, "Enrolled", props.enrolled)
   const data = {
     labels: props.courses,
     datasets: [
