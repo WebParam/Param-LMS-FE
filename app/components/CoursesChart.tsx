@@ -5,16 +5,19 @@ import { Line } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
+const pluckLabels = (arr:any, key:string) => arr.map(i => i[key]);
+
 const MyCoursesChart = (props:any) => {
-    console.log(props.courses, "Enrolled", props.enrolled)
+    console.log(props?.enrolled);
+ 
   const data = {
-    labels: props.courses,
+    labels: pluckLabels(props?.enrolled, 'title'),
     datasets: [
       {
         label: 'Enrolled Corses',
         data: [65, 59, 80, 81, 56, 55],
         fill: false,
-        borderColor: 'rgba(75,192,192,1)',
+        borderColor: 'rgba(75,192,192,1)'
       },
     ],
   };
