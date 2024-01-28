@@ -17,6 +17,7 @@ export default function StudentDashboard() {
   const dispatch = useDispatch();
    const [allCourses, setCourses] = useState<ICourseResponseModel[]>([]); 
    const [enrolledCourses, setEnrolledCourses] = useState<ICourseResponseModel[]>([]); 
+   const [highScore,setHighScore] = useState<Number> (0);
 
    const [courseScores, setCourseScores] = useState(['Angular', 'Nodejs', 'Python', 'Javascript', 'Java', 'Databases'])
 
@@ -35,6 +36,8 @@ useEffect(() => {
   console.log("courses",allCourses);
   console.log("enrolledCourses",enrolledCourses);
 
+  
+
   async function getStudentCourses() {
     try {
       var student =cookies.get('param-lms-user');
@@ -43,6 +46,10 @@ useEffect(() => {
       console.log("Student-Courses",course);
         setCourses(course.data!.allCourses);
         setEnrolledCourses(course.data!.enrolledCourses);
+
+        var highScore = Math.max.apply(Math, enrolledCourses?.score);  
+        setHighScore(0);
+
        console.log("AllCourses",allCourses);
     } catch (error) {
       console.error('Error:', error);
@@ -62,7 +69,7 @@ useEffect(() => {
     <div className="col-lg-6">
       <div className="card">
         <div className="card-header d-flex align-items-center">
-          <div className="h2 mb-0 mr-3">116</div>
+          <div className="h2 mb-0 mr-3">{highScore}</div>
           <div className="flex">
             <p className="card-title">Angular</p>
             <p className="card-subtitle text-50">Best score</p>
