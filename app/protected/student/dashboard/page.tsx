@@ -95,7 +95,7 @@ useEffect(() => {
                 <div className="" />
               </div>
             </div>
-            <MyCoursesChart courses={courseScores}/>
+            <MyCoursesChart enrolled={enrolledCourses}/>
             {/* <canvas
               id="topicIqChart"
               className="chart-canvas js-update-chart-line chartjs-render-monitor"
