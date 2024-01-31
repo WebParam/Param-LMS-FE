@@ -30,9 +30,11 @@ const initialState: ICourseState = {
         creatingUser: "",
         state: 0,
         logo:"",
+
         courseImage: "course_image.jpg",
         bannerImage: "banner_image.jpg",
-        modifyingUser: "user-789"
+        modifyingUser: "user-789",
+        creatingUserName:"Kwanele"
 
     } as ICourse
 };
@@ -53,10 +55,9 @@ export const courseSlice = createSlice({
             const newState = {
                 ...state.course,
                 description: _action.description,
-                state: _action.state,
+                state:0,
                 creatingUser: _action.creatingUser,
                 title: _action.title,
-                logo:_action.imageUrl
             } as ICourse;
 
 
@@ -73,7 +74,7 @@ export const courseSlice = createSlice({
               sections: _action.sections,
               createdDate: _action.createdDate,
               creatingUser: _action.creatingUser,
-              state: _action.state,
+              state: 0,
               logo: _action.logo,
               courseImage: _action.courseImage,
               bannerImage: _action.bannerImage,
@@ -164,6 +165,7 @@ export const courseSlice = createSlice({
                 modifyingUser: "user-789",
                 modifiedDate: "2023-08-07T11:28:14.632Z",
                 sectionId: sectionId,
+                reference:generateUniqueId(),
                 order: 1,
                 state: 0,
                 videos: [],

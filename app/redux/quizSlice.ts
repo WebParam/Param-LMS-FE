@@ -1,6 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { IQuiz, IChoice, IQuestion, IQuizState, IUpdateQuizDetailState, IUpdateQuestionDetailState } from "../interfaces/quiz"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IQuiz, IQuestion, IChoice, IQuizState, IUpdateQuizDetailState, IUpdateQuestionDetailState, IDeleteQuestion, IDeleteChoice, IUpdateQuizReference } from "../interfaces/quiz";
 import { AppStore } from "../interfaces/store";
+import { IModule } from "../interfaces/courses";
+import { Api } from "../lib/restapi/endpoints";
 
 const generateUniqueId = () => {
   return 'xxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, () => {
@@ -8,101 +10,173 @@ const generateUniqueId = () => {
   });
 };
 
-export const questionId = generateUniqueId();
+function sortChoicesByOrder(a: IChoice, b: IChoice) {
+  return a.order - b.order;
+}
+
+function sortQuestionsByOrder(a: IQuestion, b: IQuestion) {
+  return a.order - b.order;
+}
+
 export const initialState: IQuizState = {
-  quiz: {
-    id: generateUniqueId(),
-    questions: [] as IQuestion[],
-    reference: "",
-    createdByUserId: "",
-    modifiedByUserId: "",
-    createdDate: "",
-    modifiedDate: "",
-  }
+  quizzes: [] as IQuiz[],
 };
 
 export const quizSlice = createSlice({
-  name: "Quiz",
+  name: "quiz",
   initialState,
   reducers: {
-    //load entire course to state
     setSelectedQuizForEdit(state, action) {
-      state.quiz = action.payload;
+      return action.payload;
     },
-    //
-    createQuizDetail(state, action) {
 
-      const _action = action.payload as IUpdateQuizDetailState;
+    createQuizDetail(state, action: PayloadAction<IUpdateQuizDetailState>) {
+      const _action = action.payload;
 
-      const newState = {
-        ...state.quiz,
+      const newQuiz: IQuiz = {
+        id: generateUniqueId(),
         reference: _action.reference,
         createdByUserId: _action.createdByUserId,
         modifiedByUserId: _action.modifiedByUserId,
         createdDate: _action.createdDate,
-      } as IQuiz;
+        questions: [],
+        modifiedDate: _action.modifiedDate,
+        moduleId: _action.moduleId,
+      };
 
-
-      state.quiz = newState;
+      state.quizzes.push(newQuiz);
     },
-
-
-    createQuestion(state, action) {
-      
-      const { text, points } = action.payload;
+   updateQuizModuleId(state, action: PayloadAction<IModule[]>) {
+      const modulesData = action.payload;
+      state.quizzes.forEach((quiz) => {
+        const matchingModule = modulesData.find((module) => module.reference === quiz.reference);
+        if (matchingModule) {
+          quiz.moduleId = matchingModule.id;
+        }
+      });
+    },
+    createQuestion(state, action: PayloadAction<{ questionDescription: string, points: number }>) {
+      const { questionDescription, points } = action.payload;
       const newQuestion: IQuestion = {
         id: generateUniqueId(),
-        text: text,
-        choices: [],
-        points: points
+        order: 1,
+        questionDescription: questionDescription,
+        choices: [] as IChoice[],
+        points: points,
       };
 
-      state.quiz.questions.push(newQuestion);
+      const quizIndex = state.quizzes.length - 1;
+      state.quizzes[quizIndex].questions.push(newQuestion);
     },
 
-    addChoices(state, action) {
-      const { questionId, text, isCorrect } = action.payload;
+    deleteQuestion(state, action: PayloadAction<IDeleteQuestion>) {
+      const { quizId, questionId } = action.payload;
 
-      const newChoice: IChoice = {
-        id: generateUniqueId(),
-        text: text,
-        isCorrect: isCorrect
+      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
 
-
-      };
-
-      const question = state.quiz.questions.find(question => question.id === questionId);
-      if (question) {
-        question.choices.push(newChoice);
+      if (quizIndex !== -1) {
+        const updatedQuestions = state.quizzes[quizIndex].questions.filter((question) => question.id !== questionId);
+        state.quizzes[quizIndex].questions = updatedQuestions;
       }
     },
-    updateQuestionDetails(state, action) {
-      const _action = action.payload as IUpdateQuestionDetailState;
-      const targetQuestion = state.quiz.questions.filter(question => question.id == _action.questionId)[0];
-      const newQuestion = {
-          ...targetQuestion,
-          text: _action.text,
-          points: _action.points
-       
-      };
-      const existingQuestions = state.quiz.questions.filter(x => x.id != action.payload.questionId);
-      const newQuestions = [...existingQuestions, newQuestion];
-      const newState = { ...state.quiz, questions: newQuestions };
 
-      state.quiz = newState;
+    addChoices(state, action: PayloadAction<{ quizId: string, questionId: string, choiceDescription: string, isCorrect: boolean }>) {
+      const { quizId, questionId, choiceDescription, isCorrect } = action.payload;
 
+      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
 
+      if (quizIndex !== -1) {
+        const questionIndex = state.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
+
+        if (questionIndex !== -1) {
+          const newChoice: IChoice = {
+            id: generateUniqueId(),
+            order: 1,
+            choiceDescription: choiceDescription,
+            isCorrect: isCorrect,
+          };
+
+          state.quizzes[quizIndex].questions[questionIndex].choices.push(newChoice);
+        }
+      } else {
+        console.log("Choice not created");
+      }
+    },
+
+    deleteChoiceFromQuestion(state, action: PayloadAction<IDeleteChoice>) {
+      const { quizId, questionId, choiceId } = action.payload;
+
+      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
+
+      if (quizIndex !== -1) {
+        const questionIndex = state.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
+
+        if (questionIndex !== -1) {
+          const updatedChoices = state.quizzes[quizIndex].questions[questionIndex].choices.filter((choice) => choice.id !== choiceId);
+          state.quizzes[quizIndex].questions[questionIndex].choices = updatedChoices;
+        }
+      }
+    },
+
+    updateChoiceDetail(state, action: PayloadAction<{ quizId: string, questionId: string, choiceId: string, choiceDescription: string, isCorrect: boolean }>) {
+      const { quizId, questionId, choiceId, choiceDescription, isCorrect } = action.payload;
+
+      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
+
+      if (quizIndex !== -1) {
+        const questionIndex = state.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
+
+        if (questionIndex !== -1) {
+          const updatedChoices = state.quizzes[quizIndex].questions[questionIndex].choices.map((choice) => {
+            if (choice.id === choiceId) {
+              return { ...choice, choiceDescription, isCorrect };
+            }
+            return choice;
+          });
+
+          // Sort the choices by order
+          state.quizzes[quizIndex].questions[questionIndex].choices = updatedChoices.sort(sortChoicesByOrder);
+        }
+      } else {
+        console.log("Choice is not updated");
+      }
+    },
+
+    updateQuestionDetails(state, action: PayloadAction<IUpdateQuestionDetailState>) {
+      const { quizId, questionId, questionDescription, points } = action.payload;
+
+      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
+
+      if (quizIndex !== -1) {
+        const questionIndex = state.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
+
+        if (questionIndex !== -1) {
+          state.quizzes[quizIndex].questions[questionIndex] = {
+            ...state.quizzes[quizIndex].questions[questionIndex],
+            questionDescription,
+            points,
+          };
+
+          // Sort the questions by order
+          state.quizzes[quizIndex].questions.sort(sortQuestionsByOrder);
+        }
+      }
+    },
   },
-  }
-})
+});
 
 export const {
   createQuestion,
   addChoices,
   setSelectedQuizForEdit,
+  updateChoiceDetail,
   createQuizDetail,
-  updateQuestionDetails
+  updateQuestionDetails,
+  deleteChoiceFromQuestion,
+  deleteQuestion,
+  updateQuizModuleId
 } = quizSlice.actions;
-export const getSelectedQuizForEdit = (state: AppStore) => state.Quiz;
 
-export default quizSlice.reducer; 
+export const getSelectedQuizForEdit = (state: AppStore) => state.quizzes.quizzes;
+
+export default quizSlice.reducer;

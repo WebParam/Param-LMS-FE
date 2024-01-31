@@ -1,4 +1,4 @@
-import { ICourse, ICourseResponseModel, IDeleteSection,IDeleteVideo,IStudentCourses } from "@/app/interfaces/courses";
+import { ICourse, IDeleteSection,IDeleteVideo,IStudentCourses } from "@/app/interfaces/courses";
 import { GET, POST, PUT ,DELETE} from "./client";
 import { IResponseObject } from "./response";
 import { IUser, IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/user";
@@ -11,7 +11,7 @@ export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net
 
 export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api";
 
-export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api";
+export const userWriteUrl = "https://khumla-dev-user-read.azurewebsites.net/api";
  
 export const userReadUrl="https://khumla-dev-user-read.azurewebsites.net/api";
 
@@ -21,7 +21,7 @@ export const commentWriteUrl="https://localhost:61275/api";
 
 export const quizReadUrl = "https://localhost:53137/api";
 
-export const quizWriteUrl ="https://localhost:51095/api";
+export const quizWriteUrl ="https://khumla-dev-quiz-write.azurewebsites.net/api";
 
 export const Api = {
   Base: courseWriteUrl,
@@ -69,13 +69,13 @@ export const Api = {
 
   GET_CourseById: async (
     courseId: string
-  ): Promise<IResponseObject<ICourseResponseModel>> => {
+  ): Promise<IResponseObject<ICourse>> => {
     const response = await GET(`${courseReadUrl}/Courses/GetCourse?id=${courseId}`);
     return response;
   },
   GET_AllCourses: async (
     courseId: string
-  ): Promise<IResponseObject<ICourseResponseModel[]>> => {
+  ): Promise<IResponseObject<ICourse[]>> => {
     const response = await GET(`${courseReadUrl}/Courses/`);
     return response;
   },
@@ -198,16 +198,23 @@ DELETE_CourseById: async (
 
   POST_AddQuiz:async(payload:IQuiz)       
   :Promise<IResponseObject<IQuiz>> => {
-    const response:any = await POST(`${quizWriteUrl}/Quizzes/AddQuiz`,payload);
+    const response:any = await POST(`${quizWriteUrl}/Quizzes/AddQuizzes`,payload);
     return response;
   },
 
-  POST_QuizAndCourse: async (quiz:IQuiz,course:ICourse)
-  :Promise<IResponseObject<ICourse>> => {
-    const _course = await POST(`${courseWriteUrl}/Courses/AddCourse`, course);
-    if(_course.data){
-      const _quiz:any = await POST(`${quizWriteUrl}/Quizzes/AddQuiz`,quiz);
-    }
-    return _course;
-  }
+  POST_Quiz: async (quiz:IQuiz[])
+  :Promise<IResponseObject<IQuiz[]>> => {
+    const _quiz:any = await POST(`${quizWriteUrl}/Quizzes/AddQuizzes`,quiz);
+    return _quiz;
+  },
+
+  
+POST_Image: async (courseId :string , imageFile:any)
+:Promise<IResponseObject<ICourse>> => {
+  const _course:any = await POST(`${courseWriteUrl}/Courses/UploadImage/${courseId}`,imageFile);
+  return _course;
+}
+
+
 };
+

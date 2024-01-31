@@ -1,4 +1,3 @@
-
 import { ReduxProvider } from "@/app/provider";
 import Image from "next/image";
 import Link from 'next/link'
@@ -637,46 +636,7 @@ export default function RootLayout({
                     <span className="sidebar-menu-text">Departments</span>
                   </a>
                 </li>
-                {/* <li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="documents.html">
-    <span class="sidebar-menu-text">Documents</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="attendance.html">
-    <span class="sidebar-menu-text">Attendance</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="recruitment.html">
-    <span class="sidebar-menu-text">Recruitment</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="payroll.html">
-    <span class="sidebar-menu-text">Payroll</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="training.html">
-    <span class="sidebar-menu-text">Training</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="employee-profile.html">
-    <span class="sidebar-menu-text">Employee Profile</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="accounting.html">
-    <span class="sidebar-menu-text">Accounting</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="inventory.html">
-    <span class="sidebar-menu-text">Inventory</span>
-  </a>
-</li> */}
+
               </ul>
             </li>
             <li className="sidebar-menu-item">

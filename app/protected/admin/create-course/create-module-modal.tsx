@@ -1,18 +1,10 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useDebugValue } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { RiDeleteBin6Line } from "react-icons/ri";
-
 import Dropdown from "react-bootstrap/Dropdown";
-import {
-  FaBullseye,
-  FaEdit,
-  FaPencilAlt,
-  FaPlus,
-  FaTrash,
-  FaVideo,
-} from "react-icons/fa";
+import { FaPencilAlt, FaPlus, FaTrash, FaVideo } from "react-icons/fa";
 import {
   addModuleToSection,
   addVideoToModule,
@@ -22,90 +14,104 @@ import {
   updateModuleDetail,
 } from "@/app/redux/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  ICourse,
-  IModule,
-  IUpdateModuleDetailState,
-} from "@/app/interfaces/courses";
+import { ICourse } from "@/app/interfaces/courses";
 import {
   addChoices,
   createQuestion,
   createQuizDetail,
-  setSelectedQuizForEdit,
+  deleteChoiceFromQuestion,
+  deleteQuestion,
   getSelectedQuizForEdit,
+  updateChoiceDetail,
   updateQuestionDetails,
 } from "@/app/redux/quizSlice";
 import {
   IChoice,
+  IDeleteQuestion,
   IQuestion,
   IQuiz,
-  IQuizState,
   IUpdateQuestionDetailState,
   IUpdateQuizDetailState,
 } from "@/app/interfaces/quiz";
-import { useSearchParams } from "react-router-dom";
 import Cookies from "universal-cookie";
-import { current } from "@reduxjs/toolkit";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { configureScope } from "@sentry/nextjs";
+
 
 interface CreateCourseModalProps {
   onClose: () => any;
   sectionId: string;
+  quizzes: [];
+  setQuizzes: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   onClose,
+  quizzes,
+  setQuizzes,
   sectionId,
 }) => {
-  const [showVideoInputs, setShowVideoInputs] = useState(false);
+  const cookies = new Cookies();
+  const userData = cookies.get("param-lms-user");
+  const dispatch = useDispatch();
+
   const [videoTitle, setVideoTitle] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
-  const [videos, setVideos] = useState<any>([]);
   const [moduleTitle, setModuleTitle] = useState<string>("");
   const [moduleDescription, setModuleDescription] = useState<string>("");
   const [moduleId, setModuleId] = useState("");
-  const dispatch = useDispatch();
-  const _courseFromState: ICourse = useSelector(
-    getSelectedCourseForEdit
-  ).course;
-  const [modules, setModules] = useState<string[]>([]);
-  const [isModuleSaved, setIsModuleSaved] = useState<boolean>(false);
-  const [viewModuleList, setViewModuleList] = useState<boolean>(false);
-  const [changeModulBtn, setChangeModulBtn] = useState<boolean>(false);
-  const [disableSaveChanges, setDisableSaveChanges] = useState<boolean>(true);
-  const [lastSection, setLastSection] = useState<number>(-1);
-  const [selectedVideos, setSelectedVideo] = useState<any>([]);
-  const [changeVidBtn, setChangeVidBtn] = useState<boolean>(true);
   const [videoId, setVideoId] = useState<string>("");
   const [toggler, setToggler] = useState<Number>(1);
-  const [includeQuiz, setIncludeQuiz] = useState<boolean>(false);
-  const [includeDocument, setIncludeDocument] = useState<boolean>(false);
   const [questionDescription, setQuestionDescription] = useState<string>("");
   const [choiceDescription, setChoiceDescription] = useState<string>("");
   const [choiceAnswer, setChoiceAnswer] = useState<string>("");
   const [points, setPoints] = useState<number>(0);
+  const [documentName, setDocumentName] = useState<string>();
+  const [countChoice, setCountChoices] = useState<number>(0);
+  const [date, setDate] = useState<string>("");
+  const [questionId, setQuestionId] = useState<string>("");
+  const [questionNumber, setQuestionNumber] = useState<number>(1);
+  const [moduleReference, setModuleReference] = useState<any>("");
+  const [openChoices, setOpenChoices] = useState(false);
+  const [expandedModule, setExpandedModule] = useState(null);
+  const [choiceId, setChoiceId] = useState<string>("");
+  const [quizId, setQuizId] = useState<string>("")
+
+  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
+  const _quizFromState: IQuiz  = _quizzesFromState[0];
+  
+  const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
+const [expandedSection, setExpandedSection] = useState()
+  const [videos, setVideos] = useState<any>([]);
+  const [modules, setModules] = useState<string[]>([]);
+  const [selectedVideos, setSelectedVideo] = useState<any>([]);
+  const [choices, setChoices] = useState<any>([]);
+  const [questions, setQuestions] = useState<IQuestion[]>([]);
+  const [choicesToEdit, setChoicesToEdit] = useState<any>([]);
+
+  const [showVideoInputs, setShowVideoInputs] = useState(false);
+  const [isModuleSaved, setIsModuleSaved] = useState<boolean>(false);
+  const [hideCreateModuleSection, setHideCreateModuleSection] = useState(false);
+  const [changeModulBtn, setChangeModulBtn] = useState<boolean>(false);
+  const [disableSaveChanges, setDisableSaveChanges] = useState<boolean>(true);
   const [choiceError, setChoiceError] = useState(false);
   const [questionError, setQuestionError] = useState(false);
   const [choiceAnswerError, setChoiceAnswerError] = useState(false);
   const [isQuestionCreated, setIsQuestionCreated] = useState<boolean>(false);
-  const [countChoice, setCountChoices] = useState<number>(0);
-  const [date, setDate] = useState<string>("");
-  const [questionId, setQuestionId] = useState<any>(0);
   const [enableEditQuestion, setEnableEditQuestion] = useState<boolean>(false);
   const [pointsError, setPointsError] = useState(false);
-  const [choices, setChoices] = useState<any>([]);
-  const [questionNumber, setQuestionNumber] = useState<number>(1);
-  const [questions, setQuestions] = useState<any>();
-  const [openChoices, setOpenChoices] = useState(false);
-  const [choiceInstruction, setChoiceInstruction] = useState(false);
-  const [selectedQuestionForEdit, setSelectedQuestionForEdit] =
-    useState<IQuestion>();
-  const _quizFromState: IQuiz = useSelector(getSelectedQuizForEdit).quiz;
-  const cookies = new Cookies();
+  const [editQuizQuestion, setEditQuizQuestion] = useState<boolean>(false);
+  const [changeEditQuizQuestionContent, setChangeEditQuizQuestionContent] = useState(false)
+  const [enableUpdateChoice, setEnableUpdateChoice] = useState(false);
+  const [viewCreatedQuestion, setViewCreatedQuestion] = useState(true);
+  const [changeVidBtn, setChangeVidBtn] = useState<boolean>(true);
+  const [includeQuiz, setIncludeQuiz] = useState<boolean>(false);
+  const [includeDocument, setIncludeDocument] = useState<boolean>(false);
+  const [updateQuestions, setUpdateQuestion] = useState(false)
+  const [hideSaveChangesBtn, setHideSaveChangesBtn] = useState(false)
+  const [disableModuleInputs, setDisableModuleInputs] = useState<boolean>(false)  
 
-  const handleDeleteOption = (value: any) => {
-    // Logic to delete the selected option
-    console.log(`Deleting option: ${value}`);
-  };
   const moduleToolbar = {
     toolbar: [
       [{ header: "1" }, { header: "2" }],
@@ -113,7 +119,6 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
       [{ list: "ordered" }, { list: "bullet" }],
     ],
   };
-
   const tabSelect = (id: Number, e: any) => {
     setToggler(id);
     e.preventDefault();
@@ -122,7 +127,6 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const cursorStyle = (predicate: boolean) =>
     predicate ? "pointer" : "not-allowed";
 
-  const userData = cookies.get("param-lms-user");
   function getTodaysDate() {
     const today = new Date();
     const year = today.getFullYear();
@@ -135,18 +139,75 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     setDate(`${year}-${month}-${day}`);
   }
 
+  //Quiz Functions starts here
+  const addQuiz = (e: any) => {
+    setIncludeQuiz(false);
+    if (modules.length === 0) {
+      let _id = toast.loading("Please add module first..", {
+        //loader
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      setIncludeQuiz(false);
+
+      toast.update(_id, {
+        render: "Please add module first",
+        type: "error",
+        isLoading: false,
+      });
+      setTimeout(() => {
+        toast.dismiss(_id);
+      }, 2000);
+    } else {
+      setIncludeQuiz(e.target.checked);
+      setIncludeQuiz(true);
+      handleCreateQuiz();
+      setToggler(2);
+    }
+  };
+
+  const selectQuestionForEdit = (id: string) => {
+    setViewCreatedQuestion(true);
+    setEnableEditQuestion(!enableEditQuestion);
+    setDisableSaveChanges(false);
+    setChangeEditQuizQuestionContent(true)
+
+    const hasQuestion = questions.filter(
+      (question: IQuestion) => question.id === id
+    );
+    setQuestionDescription(hasQuestion[0].questionDescription);
+    setPoints(hasQuestion[0].points);
+    setQuestionId(hasQuestion[0].id);
+  };
+
+
+  const selectChoiceForEdit = (id: string) => {
+    setEnableUpdateChoice(true);
+    const hasChoice = choicesToEdit.filter(
+      (choice: IChoice) => choice.id === id
+    );
+    setChoiceDescription(hasChoice[0].choiceDescription);
+    setChoiceId(hasChoice[0].id);
+    setChoiceAnswer(hasChoice[0].choiceAnswer);
+  };
+
   const handleCreateQuiz = () => {
     const payload = {
-      reference: "module",
+      reference: moduleReference,
       createdByUserId: userData?.id,
       modifiedByUserId: userData?.id,
       createdDate: date,
+      moduleId: moduleId,
     } as IUpdateQuizDetailState;
 
     dispatch(createQuizDetail(payload));
   };
-
-  console.log("New Quiz: ", _quizFromState.questions);
 
   const handleCreateQuestion = () => {
     setPointsError(false);
@@ -164,25 +225,77 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     }
     setEnableEditQuestion(true);
     const payload = {
-      text: plainDescription,
+      questionDescription: plainDescription,
       points: points,
     } as IQuestion;
     dispatch(createQuestion(payload));
     setIsQuestionCreated(true);
   };
 
+  const deleteQuestionFromQuizState = (id:string) => {
+
+    const payload:IDeleteQuestion = {
+      quizId,
+      questionId,
+ 
+    } 
+    if(payload.questionId &&  payload.quizId ){
+      dispatch(deleteQuestion(payload))
+    
+     setUpdateQuestion(true)
+    }
+  }
+
+
   const updateQuizQuestion = function () {
+
     setEnableEditQuestion(true);
     const plainDescription =
       questionDescription && questionDescription.replace(/<\/?p>/gi, "");
     const payload = {
+      quizId : quizId,
       questionId: questionId,
-      text: plainDescription,
+      questionDescription: plainDescription,
       points: points,
     } as IUpdateQuestionDetailState;
 
     dispatch(updateQuestionDetails(payload));
   };
+
+  const editChoice = () => {
+
+    setChoiceError(false);
+    setChoiceAnswerError(false);
+
+    if (choiceDescription.length === 0) {
+      setChoiceError(true);
+      return;
+    }
+
+    if (!choiceAnswer) {
+      setChoiceAnswerError(true);
+      return;
+    }
+
+    const payload = {
+      quizId : quizId,
+      questionId:questionId,
+      choiceId: choiceId,
+      choiceDescription: choiceDescription,
+      isCorrect: choiceAnswer === "true" ? true : false,
+    };
+    
+
+   dispatch(updateChoiceDetail(payload));
+    setEnableUpdateChoice(false);
+    setChoiceAnswer("");
+    setChoiceDescription("");
+    setCountChoices(countChoice);
+ 
+
+  };
+
+
 
   const handleCreateChoice = () => {
     setChoiceError(false);
@@ -197,79 +310,147 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
       return;
     }
 
-    const payload = {
-      questionId: questionId,
-      text: choiceDescription,
-      isCorrect: choiceAnswer,
-    } as IChoice;
+    const payload  = {
+      quizId: quizId!,
+      questionId: questionId!,
+      choiceDescription: choiceDescription!,
+      isCorrect: choiceAnswer === "true" ? true : false,
+    } 
     dispatch(addChoices(payload));
-    setChoices([
-      ...choices,
-      { text: payload.text, isCorrect: payload.isCorrect },
-    ]);
+
     setChoiceAnswer("");
     setChoiceDescription("");
   };
 
-  console.log("New Quiz: ", _quizFromState.questions);
-  console.log("QuestionId:", questionId);
+  const deleteChoiceAnswer = (id:string) => {
 
-  const saveChangeBtn = () => {
-    if (moduleDescription.length > 0 && moduleTitle.length > 0) {
-      setDisableSaveChanges(false);
+    const payload = {
+      quizId,
+      questionId,
+      choiceId:id
     }
-  };
 
-  const deleteVideoHandler = (moduleId: any, videoId: any) => {
-    dispatch(deleteVideoFromModule({ moduleId, videoId }));
-  };
-  const createModule = () => {
-    if (moduleDescription.length > 0 && moduleTitle.length > 0) {
-      const plainDescription = moduleDescription
-        ? moduleDescription.replace(/<\/?p>/gi, "")
-        : _courseFromState.description;
+    dispatch(deleteChoiceFromQuestion(payload));
+    setEnableUpdateChoice(false);
 
-      const payload = {
-        sectionId: sectionId,
-        moduleTitle: moduleTitle,
+    setChoiceDescription("");
 
-        moduleDescription: plainDescription,
-      };
+    setChoiceAnswer("");
+  }
 
-      console.log("payload: ", payload);
+  const newQuestion = () => {
+    if(choices.length === 0){
+      let _id = toast.loading("Please add choices first..", {
+        //loader
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      setIncludeQuiz(false);
 
-      dispatch(addModuleToSection(payload));
-
-      console.log("COURSE", _courseFromState);
-      console.log(sectionId);
-      setIsModuleSaved(true);
-      setModules([...modules, moduleTitle]);
-
-      setDisableSaveChanges(true);
+      toast.update(_id, {
+        render: "Please add choices first",
+        type: "error",
+        isLoading: false,
+      });
+      setTimeout(() => {
+        toast.dismiss(_id);
+      }, 2000);
+      return;
     }
-  };
-  useEffect(() => {
     const quizQuestions = _quizFromState.questions.map(
       (questions) => questions
     );
 
-    if (quizQuestions.length > 0) {
-      const lastQuestionId = quizQuestions.map((question) => question.id);
-      setQuestionId(lastQuestionId[quizQuestions.length - 1]);
-    }
-  }, [_quizFromState.questions]);
-
-  useEffect(() => {
-    const sectionIds = _courseFromState.sections.map((section) => {
-      if (section.id === sectionId) {
-        const moduleIds = section.modules.map((module) => module.id);
-        const lastModuleId = moduleIds[moduleIds.length - 1];
-
-        setModuleId(lastModuleId);
+    quizQuestions.forEach((question) => {
+      if (question.choices.length > 0) {
+        setQuestions(_quizFromState.questions);
+        setQuizzes((prevQuizzes) =>
+          Array.isArray(prevQuizzes)
+            ? [...prevQuizzes, _quizFromState]
+            : [_quizFromState]
+        );
       }
     });
-  }, [sectionId, _courseFromState.sections]);
+if(changeEditQuizQuestionContent){
+  setEditQuizQuestion(false)
+  setChangeEditQuizQuestionContent(false);
+}
+setChangeEditQuizQuestionContent(false);
+    setIsQuestionCreated(false);
+    setEnableEditQuestion(!enableEditQuestion);
+    setViewCreatedQuestion(false);
+    setChoices([]);
+    setQuestionDescription("");
+    setPoints(0);
+    setChoiceDescription("");
+    setChoiceAnswer("");
 
+  };
+  const nextQuestion = () => {
+    if (questionNumber < questions.length) {
+      setQuestionNumber(questionNumber + 1);
+    }
+  }
+
+  const prevQuestion = () => {
+    if (questionNumber > 1) {
+      setQuestionNumber(questionNumber - 1);
+    }
+  };
+  //Quiz Functions ends here
+
+  //Dcoument functions start here
+  const formData = new FormData();
+  const handleDocument = (e: any) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      formData.append("document", file);
+      setDocumentName(file.name);
+    }
+  };
+  const addDocument = (e: any) => {
+    setIncludeDocument(false);
+    if (modules.length === 0) {
+      let _id = toast.loading("Please add module first..", {
+        //loader
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      setIncludeDocument(false);
+
+      toast.update(_id, {
+        render: "Please add module first",
+        type: "error",
+        isLoading: false,
+      });
+      setTimeout(() => {
+        toast.dismiss(_id);
+      }, 2000);
+    } else {
+      setIncludeDocument(true);
+      setToggler(3);
+      setIncludeDocument(e.target.checked);
+    }
+  };
+  //Document functions ends here
+
+  //Video functions start here
+  const deleteVideoHandler = (moduleId: any, videoId: any) => {
+    dispatch(deleteVideoFromModule({ moduleId, videoId }));
+  };
   const AddVideo = () => {
     if (videoTitle && videoUrl) {
       const payload = {
@@ -284,62 +465,10 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
       setShowVideoInputs(!showVideoInputs);
       setVideoTitle("");
       setVideoUrl("");
-      console.log("COURSE", _courseFromState);
-      console.log(moduleId);
+   
       setChangeModulBtn(true);
     }
   };
-
-  const clearInputs = () => {
-    setModuleTitle("");
-    setModuleDescription("");
-    setVideoUrl("");
-    setVideoTitle("");
-    setViewModuleList(true);
-    setIsModuleSaved(false);
-    setChangeModulBtn(false);
-    setVideos([]);
-  };
-
-  const selectedCourse = useSelector(getSelectedCourseForEdit).course;
-  const [expandedModule, setExpandedModule] = useState(null);
-
-  const handleModuleClick = (module: any) => {
-    if (expandedModule === module.id) {
-      setExpandedModule(null);
-    } else {
-      setExpandedModule(module.id);
-    }
-  };
-
-  useEffect(() => {
-    getTodaysDate();
-    const sections = _courseFromState.sections;
-    const lastSection = sections.length - 1;
-    setLastSection(lastSection);
-  }, []);
-
-  useEffect(() => {
-    const choices = _quizFromState.questions.map(
-      (question) => question.choices
-    );
-    console.log("Choices", choices[0]);
-  }, [countChoice]);
-
-  useEffect(() => {
-    const section = _courseFromState.sections.find(
-      (section) => section.id === sectionId
-    );
-
-    if (section) {
-      const module = section.modules.find((module) => module.id === moduleId);
-
-      if (module) {
-        setSelectedVideo(module.videos);
-      }
-    }
-  }, [sectionId, moduleId, _courseFromState.sections]);
-
   const editVideo = (id: string) => {
     const payload = {
       moduleId: moduleId,
@@ -353,38 +482,172 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     setVideoUrl("");
     setChangeVidBtn(true);
   };
+  //Video functions ends here
 
-  const newQuestion = () => {
-    const quizQuestions = _quizFromState.questions.map(
+  //Module functions start here
+  const saveChangeBtn = () => {
+    if (moduleDescription.length > 0 && moduleTitle.length > 0) {
+      setDisableSaveChanges(false);
+    }
+  };
+
+  const createModule = () => {
+    if (moduleDescription.length > 0 && moduleTitle.length > 0) {
+      const plainDescription = moduleDescription
+        ? moduleDescription.replace(/<\/?p>/gi, "")
+        : _courseFromState.description;
+
+      const payload = {
+        sectionId: sectionId,
+        moduleTitle: moduleTitle,
+
+        moduleDescription: plainDescription,
+      };
+
+
+      dispatch(addModuleToSection(payload));
+
+      setIsModuleSaved(true);
+
+      setModules([...modules, moduleTitle]);
+
+      setDisableSaveChanges(true);
+      setHideSaveChangesBtn(true)
+      setDisableModuleInputs(true);
+    }
+  };
+  const editModule = () => {
+
+    if (
+      moduleTitle &&
+      moduleDescription 
+     
+    ) {
+      const plainDescription = moduleDescription
+        ? moduleDescription.replace(/<\/?p>/gi, "")
+        : _courseFromState.description;
+
+      const payload = {
+        moduleId: moduleId,
+        sectionId: sectionId,
+        title: moduleTitle,
+
+        description: plainDescription,
+      };
+
+      console.log("payload: ", payload);
+
+      dispatch(updateModuleDetail(payload));
+
+      console.log("COURSE", _courseFromState);
+      console.log(sectionId);
+     setDisableModuleInputs(true);
+    }
+  };
+
+
+  const clearInputs = () => {
+    if(videos.length > 0) {
+      setModuleTitle("");
+      setModuleDescription("");
+      setVideoUrl("");
+      setVideoTitle("");
+  
+      setIsModuleSaved(false);
+      setHideCreateModuleSection(true);
+      setChangeModulBtn(false);
+      setVideos([]);
+      onClose();
+    }
+  };
+  const handleModuleClick = (module: any) => {
+    if (expandedModule === module.id) {
+      setExpandedModule(null);
+    } else {
+      setExpandedModule(module.id);
+    }
+  };
+
+
+
+  //Module functions ends
+
+  //UseEffect Hooks
+  useEffect(() => {
+    const quizQuestions = _quizFromState?.questions.map(
       (questions) => questions
     );
 
+    if (quizQuestions?.length > 0) {
+      const lastQuestionId = quizQuestions?.map((question) => question.id);
+      setQuestionId(lastQuestionId[quizQuestions.length - 1]);
+    }
+  }, [_quizFromState?.questions]);
 
+  // useEffect(() => {
+  //   localStorage.setItem("quizzes", JSON.stringify(quizzes));
+  // }, [quizzes]);
 
-    quizQuestions.forEach((question) => {
-      if (question.choices.length > 0) {
-        setQuestions(_quizFromState.questions);
+  useEffect(() => {
+    const sectionIds = _courseFromState.sections.map((section) => {
+      if (section.id === sectionId) {
+        const moduleIds = section.modules.map((module) => module.id);
+        const lastModuleId = moduleIds[moduleIds.length - 1];
+
+        setModuleId(lastModuleId);
       }
     });
-    setIsQuestionCreated(!isQuestionCreated);
-    setEnableEditQuestion(!enableEditQuestion);
-    setChoices([])
-    setQuestionDescription("");
-    setPoints(0);
-    setChoiceDescription("");
-    setChoiceAnswer("");
-  };
-  console.log("Questions", questions);  const nextQuestion = () => {
-    if (questionNumber < questions.length) {
-      setQuestionNumber(questionNumber + 1);
-    }
-  };
+  }, [sectionId, _courseFromState.sections]);
 
-  const prevQuestion = () => {
-    if (questionNumber > 1) {
-      setQuestionNumber(questionNumber - 1);
+
+  useEffect(() => {
+    const quiz = _quizzesFromState.filter(quiz => quiz.id === quizId);
+    setQuestions(quiz[0]?.questions);
+  },[updateQuestions])
+
+  useEffect(() => {
+    getTodaysDate();
+    const sections = _courseFromState.sections;
+    const lastSection = sections.length - 1;
+  }, []);
+
+  useEffect(() => {
+    if (_quizzesFromState.length > 0) {
+      setQuizId(_quizzesFromState[_quizzesFromState.length - 1].id);
     }
-  };
+  }, [_quizzesFromState]);
+
+  useEffect(() => {
+    const choices = _quizFromState?.questions.map(
+      (question) => question.choices
+    );
+
+    const hasQuestion = _quizFromState?.questions?.filter(
+      (question: IQuestion) => question.id === questionId
+    )!;
+    setChoicesToEdit(hasQuestion?.length > 0 && hasQuestion[0]?.choices);
+    setChoices(hasQuestion?.length > 0 && hasQuestion[0]?.choices);
+  });
+
+
+
+  useEffect(() => {
+    const section = _courseFromState.sections.find(
+      (section) => section.id === sectionId
+    );
+
+    if (section) {
+      const module = section.modules.find((module) => module.id === moduleId);
+
+      if (module) {
+        setSelectedVideo(module.videos);
+        setModuleReference(module.reference);
+      }
+    }
+  }, [sectionId, moduleId, _courseFromState.sections]);
+
+
+  console.log("All quizzes", _quizzesFromState)
 
   return (
     <div
@@ -442,9 +705,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
               >
                 <span className="h2 mb-0 mr-3">2</span>
                 <span className="flex d-flex flex-column">
-                  <strong className="card-title" onClick={handleCreateQuiz}>
-                    Add Quiz
-                  </strong>
+                  <strong className="card-title">Add Quiz</strong>
                   {/* <small className="card-subtitle text-50">Past Projects</small> */}
                 </span>
               </a>
@@ -509,302 +770,304 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                 <div className="page-separator">
                   <div className="page-separator__text">Basic information</div>
                 </div>
-                <div>
-                  {viewModuleList && (
-                    <>
-                      <div
-                        style={{
-                          backgroundColor: "#f5f7fa",
-                          marginBottom: "10px",
-                        }}
-                        className="accordion__item open"
-                      >
-                        <h1>{selectedCourse.title}</h1>
-                        {selectedCourse.sections[lastSection].modules.map(
-                          (module) => (
-                            <div
-                              className={`accordion__item ${
-                                expandedModule === module.id ? "open" : ""
-                              }`}
-                              key={module.id}
-                            >
-                              <a
-                                href="#"
-                                className={`accordion__toggle ${
-                                  expandedModule === module.id
-                                    ? ""
-                                    : "collapsed"
-                                }`}
-                                data-toggle="collapse"
-                                data-target={`#course-toc-${module.id}`}
-                                data-parent="#parent"
-                                onClick={() => handleModuleClick(module)}
-                              >
-                                <span className="flex">{module.title}</span>
-                                <span className="accordion__toggle-icon material-icons">
-                                  {expandedModule === module.id
-                                    ? "keyboard_arrow_up"
-                                    : "keyboard_arrow_down"}
-                                </span>
-                              </a>
-                              <div
-                                className={`accordion__menu collapse ${
-                                  expandedModule === module.id ? "show" : ""
-                                }`}
-                                id={`course-toc-${module.id}`}
-                              >
-                                {module.videos.map((video) => (
-                                  <div
-                                    className="accordion__menu-link"
-                                    key={video.id}
-                                  >
-                                    <FaVideo className="video-icon" />{" "}
-                                    {/* Video icon */}
-                                    <a
-                                      style={{ marginLeft: "10px" }}
-                                      className="flex"
-                                      href={video.videoLink}
-                                    >
-                                      {video.title}
-                                    </a>
-                                    <span className="text-muted">
-                                      {video.duration}
-                                    </span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </>
-                  )}
-                </div>
-                <label className="form-label">Module title</label>
-                <div className="form-group mb-24pt">
-                  <input
-                    type="text"
-                    className="form-control form-control-lg"
-                    placeholder="Module Title"
-                    value={moduleTitle}
-                    onChange={(e) => {
-                      saveChangeBtn();
-                      setModuleTitle(e.target.value);
-                    }}
-                  />
-                  <small className="form-text text-muted">
-                    Please see our <a href="">module title guideline</a>
-                  </small>
-                </div>
-                <label className="form-label">Module Description</label>
-                <div style={{ height: "200px", overflow: "auto" }}>
-                  <ReactQuill
-                    style={{ height: "100px" }}
-                    value={moduleDescription}
-                    onChange={(value: string) => {
-                      setModuleDescription(value); // Pass the new description
-                      saveChangeBtn();
-                    }}
-                    placeholder="Module description..."
-                    modules={moduleToolbar}
-                  />
-                </div>
-                {isModuleSaved && (
+              
+
+                {!hideCreateModuleSection && (
                   <>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                      className="page-separator"
-                    >
-                      <div className="page-separator__text">Videos</div>
-                      <div>
-                        {showVideoInputs ? null : (
-                          <FaPlus
-                            style={{ cursor: "pointer" }}
-                            onClick={() => setShowVideoInputs(!showVideoInputs)}
-                          />
-                        )}
-                      </div>
+                    <label className="form-label">Module title</label>
+                    <div className="form-group mb-24pt">
+                      <input
+                        type="text"
+                        disabled={disableModuleInputs}
+                        className="form-control form-control-lg"
+                        placeholder="Module Title"
+                        value={moduleTitle}
+                        onChange={(e) => {
+                          saveChangeBtn();
+                          setModuleTitle(e.target.value);
+                        }}
+                      />
+                      <small className="form-text text-muted">
+                        Please see our <a href="">module title guideline</a>
+                      </small>
                     </div>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                      className="accordion js-accordion accordion--boxed mb-24pt"
-                      id="parent"
-                      data-domfactory-upgraded="accordion"
-                    >
-                      {videos.length > 0 && (
-                        <>
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "row",
-                              flexWrap: "wrap",
-                              width: "150%",
-                            }}
-                          >
-                            {selectedVideos.map((video: any, index: number) => (
-                              <>
-                                <div
-                                  style={{
-                                    marginLeft: "10px",
-                                    flexBasis: "30%",
-                                    maxWidth: "100% !important",
-                                  }}
-                                  className="card"
-                                >
-                                  <div className="embed-responsive embed-responsive-16by9">
-                                    <iframe
-                                      className="embed-responsive-item"
-                                      src={video.videoLink}
-                                      //   allowFullScreen=""
-                                    />
-                                  </div>
-                                  <div className="card-body">
-                                    <label className="form-label">Title</label>
-                                    <input
-                                      disabled={true}
-                                      type="text"
-                                      className="form-control"
-                                      placeholder="Enter Video Title"
-                                      value={video.title}
-                                      onChange={(e) =>
-                                        setVideoTitle(e.target.value)
-                                      }
-                                    />
-                                    <small className="form-text text-muted">
-                                      Enter a valid video title.
-                                    </small>
-                                  </div>
-                                  <div className="card-body">
-                                    <label className="form-label">URL</label>
-                                    <input
-                                      disabled={true}
-                                      type="text"
-                                      className="form-control"
-                                      placeholder="Enter Video URL"
-                                      value={video.videoLink}
-                                    />
-                                    <small className="form-text text-muted">
-                                      Enter a valid video URL.
-                                    </small>
-
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        justifyContent: "flex-end",
-                                        alignItems: "center",
-                                      }}
-                                    >
-                                      <FaTrash
-                                        onClick={() =>
-                                          deleteVideoHandler(moduleId, video.id)
-                                        }
-                                        style={{
-                                          cursor: "pointer",
-                                          marginRight: "5px",
-                                        }}
-                                      />
-                                      <FaPencilAlt
-                                        onClick={() => {
-                                          setVideoId(video.id);
-                                          setChangeVidBtn(false);
-                                          setShowVideoInputs(!showVideoInputs);
-                                        }}
-                                        style={{ cursor: "pointer" }}
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              </>
-                            ))}
-                          </div>
-                        </>
-                      )}
+                    <label className="form-label">Module Description</label>
+                    <div style={{ height: "200px", overflow: "auto" }}>
+                      <ReactQuill
+                      readOnly={disableModuleInputs}
+                        style={{ height: "100px" }}
+                        value={moduleDescription}
+                        onChange={(value: string) => {
+                          setModuleDescription(value); // Pass the new description
+                          saveChangeBtn();
+                        }}
+                        placeholder="Module description..."
+                        modules={moduleToolbar}
+                      />
+                      
                     </div>
+               {
+                !hideSaveChangesBtn ?  <button
+                disabled={disableSaveChanges}
+                style={{
+                  backgroundColor: "transparent",
+                  border: "none",
+                  outline: "none",
+                  width: "150px",
+                  position:"relative",
+                  bottom:"2em"
 
-                    <div>
-                      {showVideoInputs && (
-                        <>
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "row",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                            }}
-                          >
-                            <label className="form-label">Title</label>
-                          </div>
+                }}
+              >
+                <a
+                  onClick={createModule}
+                  href="#"
+                  className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                  >
+                  Save Details
+                </a>
+              </button> : <button
+                style={{
+                  backgroundColor: "transparent",
+                  border: "none",
+                  outline: "none",
+                  width: "150px",
+                  position:"relative",
+                  bottom:"2em"
 
-                          <input
-                            onChange={(e) => setVideoTitle(e.target.value)}
-                            id="flatpickrSample04"
-                            type="text"
-                            className="form-control"
-                            placeholder="video title"
-                            data-toggle="flatpickr"
-                            data-flatpickr-enable-time="true"
-                            data-flatpickr-alt-format="F j, Y at H:i"
-                            value={videoTitle}
-                            data-flatpickr-date-format="Y-m-d H:i"
-                          />
-
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "row",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                            }}
-                          >
-                            <label className="form-label">URL</label>
-                          </div>
-
-                          <input
-                            onChange={(e) => setVideoUrl(e.target.value)}
-                            id="flatpickrSample04"
-                            type="text"
-                            className="form-control"
-                            placeholder="video url"
-                            data-toggle="flatpickr"
-                            data-flatpickr-enable-time="true"
-                            data-flatpickr-alt-format="F j, Y at H:i"
-                            data-flatpickr-date-format="Y-m-d H:i"
-                            value={videoUrl}
-                          />
-                        </>
-                      )}
-                    </div>
-
-                    {showVideoInputs && (
+                }}
+              >
+               { disableModuleInputs ?
+                 <a
+                 onClick={()=> {
+                   setDisableModuleInputs(false)
+                 }}
+                 href="#"
+                 className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                 >
+                 Edit Details
+               </a>:
+               <a
+                 onClick={editModule}
+                 href="#"
+                 className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                 >
+                 update Details
+               </a>
+               }
+              </button>
+               }
+                    {isModuleSaved && (
                       <>
-                        {changeVidBtn ? (
-                          <a
-                            style={{ marginTop: "10px" }}
-                            onClick={AddVideo}
-                            href="#"
-                            className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                          >
-                            save Video
-                          </a>
-                        ) : (
-                          <a
-                            style={{ marginTop: "10px" }}
-                            onClick={() => editVideo(videoId)}
-                            href="#"
-                            className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                          >
-                            update Video
-                          </a>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                          className="page-separator"
+                        >
+                          <div className="page-separator__text">Videos</div>
+                          <div>
+                            {showVideoInputs ? null : (
+                              <FaPlus
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                  setShowVideoInputs(!showVideoInputs)
+                                }
+                              />
+                            )}
+                          </div>
+                        </div>
+
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                          className="accordion js-accordion accordion--boxed mb-24pt"
+                          id="parent"
+                          data-domfactory-upgraded="accordion"
+                        >
+                          {videos.length > 0 && (
+                            <>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  flexWrap: "wrap",
+                                  width: "150%",
+                                }}
+                              >
+                                {selectedVideos.map(
+                                  (video: any, index: number) => (
+                                    <>
+                                      <div
+                                        style={{
+                                          marginLeft: "10px",
+                                          flexBasis: "30%",
+                                          maxWidth: "100% !important",
+                                        }}
+                                        className="card"
+                                      >
+                                        <div className="embed-responsive embed-responsive-16by9">
+                                          <iframe
+                                            className="embed-responsive-item"
+                                            src={video.videoLink}
+                                            //   allowFullScreen=""
+                                          />
+                                        </div>
+                                        <div className="card-body">
+                                          <label className="form-label">
+                                            Title
+                                          </label>
+                                          <input
+                                            disabled={true}
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Enter Video Title"
+                                            value={video.title}
+                                            onChange={(e) =>
+                                              setVideoTitle(e.target.value)
+                                            }
+                                          />
+                                          <small className="form-text text-muted">
+                                            Enter a valid video title.
+                                          </small>
+                                        </div>
+                                        <div className="card-body">
+                                          <label className="form-label">
+                                            URL
+                                          </label>
+                                          <input
+                                            disabled={true}
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Enter Video URL"
+                                            value={video.videoLink}
+                                          />
+                                          <small className="form-text text-muted">
+                                            Enter a valid video URL.
+                                          </small>
+
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              flexDirection: "row",
+                                              justifyContent: "flex-end",
+                                              alignItems: "center",
+                                            }}
+                                          >
+                                            <FaTrash
+                                              onClick={() =>
+                                                deleteVideoHandler(
+                                                  moduleId,
+                                                  video.id
+                                                )
+                                              }
+                                              style={{
+                                                cursor: "pointer",
+                                                marginRight: "5px",
+                                              }}
+                                            />
+                                            <FaPencilAlt
+                                              onClick={() => {
+                                                setVideoId(video.id);
+                                                setChangeVidBtn(false);
+                                                setShowVideoInputs(
+                                                  !showVideoInputs
+                                                );
+                                              }}
+                                              style={{ cursor: "pointer" }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </>
+                                  )
+                                )}
+                              </div>
+                            </>
+                          )}
+                        </div>
+
+                        <div>
+                          {showVideoInputs && (
+                            <>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <label className="form-label">Title</label>
+                              </div>
+
+                              <input
+                                onChange={(e) => setVideoTitle(e.target.value)}
+                                id="flatpickrSample04"
+                                type="text"
+                                className="form-control"
+                                placeholder="video title"
+                                data-toggle="flatpickr"
+                                data-flatpickr-enable-time="true"
+                                data-flatpickr-alt-format="F j, Y at H:i"
+                                value={videoTitle}
+                                data-flatpickr-date-format="Y-m-d H:i"
+                              />
+
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <label className="form-label">URL</label>
+                              </div>
+
+                              <input
+                                onChange={(e) => setVideoUrl(e.target.value)}
+                                id="flatpickrSample04"
+                                type="text"
+                                className="form-control"
+                                placeholder="video url"
+                                data-toggle="flatpickr"
+                                data-flatpickr-enable-time="true"
+                                data-flatpickr-alt-format="F j, Y at H:i"
+                                data-flatpickr-date-format="Y-m-d H:i"
+                                value={videoUrl}
+                              />
+                            </>
+                          )}
+                        </div>
+
+                        {showVideoInputs && (
+                          <>
+                            {changeVidBtn ? (
+                              <a
+                                style={{ marginTop: "10px" }}
+                                onClick={AddVideo}
+                                href="#"
+                                className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                              >
+                                save Video
+                              </a>
+                            ) : (
+                              <a
+                                style={{ marginTop: "10px" }}
+                                onClick={() => editVideo(videoId)}
+                                href="#"
+                                className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                              >
+                                update Video
+                              </a>
+                            )}
+                          </>
                         )}
                       </>
                     )}
@@ -813,10 +1076,12 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
               </div>
 
               {/*Quiz Content Starts Here*/}
-
-              <div
-                className={toggler === 2 ? "col-md-8" : "col-md-8 d-md-none"}
-              >
+           {
+            !viewCreatedQuestion &&    <div
+            className={
+              toggler === 2 ? "col-md-8" : "col-md-8 d-md-none"
+            }
+          >
                 <div className="page-separator">
                   <div className="page-separator__text">Questions</div>
                 </div>
@@ -828,15 +1093,19 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                       </i>
                       <div className="flex d-flex flex-column">
                         <div className="card-title mb-4pt">
-                          Question {questionNumber} of {questions?.length}
+                          Question {questionNumber} of{" "}
+                          {questions?.length}
                         </div>
                         <div className="card-subtitle text-70 paragraph-max mb-16pt">
                           {questions?.length > 0 &&
-                            questions[questionNumber - 1]?.text}
+                            questions[questionNumber - 1]
+                              ?.questionDescription}
                         </div>
                         <div>
                           <a
-                            onClick={() => setOpenChoices((prev) => !prev)}
+                            onClick={() =>
+                              setOpenChoices((prev) => !prev)
+                            }
                             className="chip chip-light d-inline-flex align-items-center"
                           >
                             <i className="material-icons icon-16pt icon--left">
@@ -856,20 +1125,13 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                                 multiple
                                 className="form-control mt-2"
                               >
-                                {questions[questionNumber - 1].choices.map(
+                                {questions[
+                                  questionNumber - 1
+                                ].choices.map(
                                   (option: any, index: any) => (
                                     <option key={index} value={option}>
-                                      {option.text}
-                                      <RiDeleteBin6Line
-                                        style={{
-                                          cursor: "pointer",
-                                          fontSize: "60px",
-                                          position: "absolute",
-                                        }}
-                                        onClick={() =>
-                                          handleDeleteOption(option.text)
-                                        }
-                                      />
+                                      {option.choiceDescription}
+                                     
                                     </option>
                                   )
                                 )}
@@ -890,15 +1152,23 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
 
                         <Dropdown.Menu style={{ textAlign: "right" }}>
                           <Dropdown.Item
-                            onClick={() =>
-                              setSelectedQuestionForEdit(
-                                questions[questionNumber - 1]
-                              )
-                            }
+                            onClick={() => {
+
+                              selectQuestionForEdit(
+                                questions[questionNumber - 1].id
+                              );
+                              setEditQuizQuestion(true);
+                         
+                        
+                            }}
                           >
                             Edit Question
                           </Dropdown.Item>
-                          <Dropdown.Item>
+                          <Dropdown.Item onClick={() => {
+                            deleteQuestionFromQuizState(questions[questionNumber - 1].id)
+                          }}
+                           
+                          >
                             Delete Question
                             <RiDeleteBin6Line
                               className="text-danger"
@@ -922,7 +1192,10 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                           backgroundColor: "transparent",
                         }}
                       >
-                        <a href="#" className="btn btn-outline-secondary">
+                        <a
+                          href="#"
+                          className="btn btn-outline-secondary"
+                        >
                           Next
                         </a>
                       </button>
@@ -935,7 +1208,10 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                           backgroundColor: "transparent",
                         }}
                       >
-                        <a href="#" className="btn btn-outline-secondary">
+                        <a
+                          href="#"
+                          className="btn btn-outline-secondary"
+                        >
                           prev
                         </a>
                       </button>
@@ -943,126 +1219,25 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                   </ul>
                 )}
 
-                <div>
-                  <div className="page-separator">
-                    <div className="page-separator__text">New Question</div>
-                  </div>
-                  <div className="card card-body">
-                    <div className="form-group">
-                      <label className="form-label">
-                        Question{" "}
-                        {questionError && (
-                          <span
-                            style={{
-                              color: "tomato",
-                              fontWeight: "600",
-                              fontSize: "small",
-                            }}
-                          >
-                            *required field
-                          </span>
-                        )}
-                      </label>
-
-                      <div
-                        style={{ height: "150px" }}
-                        className="mb-0"
-                        data-toggle="quill"
-                        data-quill-placeholder="Question"
-                      >
-                        <ReactQuill
-                          readOnly={enableEditQuestion}
-                          style={{ height: "100px" }}
-                          value={questionDescription}
-                          onChange={(value: string) => {
-                            setQuestionDescription(value);
-                            saveChangeBtn();
-                          }}
-                          placeholder="Enter your question description here..."
-                        />
+          </div>
+           }
+           {!editQuizQuestion && (
+                <>
+                  <div
+                    className={
+                      toggler === 2 ? "col-md-8" : "col-md-8 d-md-none"
+                    }
+                  >
+                 
+                    <div>
+                      <div className="page-separator">
+                        <div className="page-separator__text">New Question</div>
                       </div>
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">
-                        Completion Points
-                        {pointsError && (
-                          <span
-                            style={{
-                              color: "tomato",
-                              fontWeight: "600",
-                              fontSize: "small",
-                            }}
-                          >
-                            *invalid points
-                          </span>
-                        )}
-                      </label>
-                      <input
-                        style={{
-                          border: `${
-                            pointsError ? "2px solid tomato" : "none"
-                          }`,
-                        }}
-                        disabled={enableEditQuestion}
-                        onChange={(e: any) => setPoints(e.target.value)}
-                        type="text"
-                        className="form-control"
-                        value={points}
-                      />
-                    </div>
-                    <div className="mb-3">
-                      {!isQuestionCreated && (
-                        <button
-                          onClick={handleCreateQuestion}
-                          style={{
-                            outline: "none",
-                            border: "none",
-                            backgroundColor: "transparent",
-                          }}
-                        >
-                          <a href="#" className="btn btn-outline-secondary">
-                            Add Question
-                          </a>
-                        </button>
-                      )}
-                      {isQuestionCreated && (
-                        <>
-                          {enableEditQuestion ? (
-                            <button
-                              onClick={() => setEnableEditQuestion(false)}
-                              style={{
-                                outline: "none",
-                                border: "none",
-                                backgroundColor: "transparent",
-                              }}
-                            >
-                              <a href="#" className="btn btn-outline-secondary">
-                                Edit Question
-                              </a>
-                            </button>
-                          ) : (
-                            <button
-                              onClick={updateQuizQuestion}
-                              style={{
-                                outline: "none",
-                                border: "none",
-                                backgroundColor: "transparent",
-                              }}
-                            >
-                              <a href="#" className="btn btn-outline-secondary">
-                                save Question
-                              </a>
-                            </button>
-                          )}
-                        </>
-                      )}
-                    </div>
-                    {isQuestionCreated && (
-                      <>
+                      <div className="card card-body">
                         <div className="form-group">
                           <label className="form-label">
-                            Add Choices{" "}
-                            {choiceError && (
+                            Question{" "}
+                            {questionError && (
                               <span
                                 style={{
                                   color: "tomato",
@@ -1075,35 +1250,56 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                             )}
                           </label>
 
+                          <div
+                            style={{ height: "150px" }}
+                            className="mb-0"
+                            data-toggle="quill"
+                            data-quill-placeholder="Question"
+                          >
+                            <ReactQuill
+                              readOnly={enableEditQuestion}
+                              style={{ height: "100px" }}
+                              value={questionDescription}
+                              onChange={(value: string) => {
+                                setQuestionDescription(value);
+                                saveChangeBtn();
+                              }}
+                              placeholder="Enter your question description here..."
+                            />
+                          </div>
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label">
+                            Completion Points
+                            {pointsError && (
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *invalid points
+                              </span>
+                            )}
+                          </label>
                           <input
-                            value={choiceDescription}
-                            minLength={10}
-                            onChange={(event) =>
-                              setChoiceDescription(event.target.value)
-                            }
-                            className="form-control mb-3"
-                            placeholder="Enter your choice here..."
-                          />
-                          <select
-                            value={choiceAnswer}
                             style={{
                               border: `${
-                                choiceAnswerError ? "2px solid tomato" : "none"
+                                pointsError ? "2px solid tomato" : "none"
                               }`,
                             }}
-                            onChange={(e: any) =>
-                              setChoiceAnswer(e.target.value)
-                            }
-                            name="category"
-                            className="form-control custom-select mb-3"
-                          >
-                            <option value="">Select an answer</option>
-                            <option value="true">Correct</option>
-                            <option value="false">Incorrect</option>
-                          </select>
-                          <div>
+                            disabled={enableEditQuestion}
+                            onChange={(e: any) => setPoints(e.target.value)}
+                            type="text"
+                            className="form-control"
+                            value={points}
+                          />
+                        </div>
+                        <div className="mb-3">
+                          {!isQuestionCreated && (
                             <button
-                              onClick={handleCreateChoice}
+                              onClick={handleCreateQuestion}
                               style={{
                                 outline: "none",
                                 border: "none",
@@ -1111,64 +1307,519 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                               }}
                             >
                               <a href="#" className="btn btn-outline-secondary">
-                                Add Choice
+                                Add Question
+                              </a>
+                            </button>
+                          )}
+                          {isQuestionCreated && (
+                            <>
+                              {enableEditQuestion ? (
+                                <button
+                                  onClick={() => setEnableEditQuestion(false)}
+                                  style={{
+                                    outline: "none",
+                                    border: "none",
+                                    backgroundColor: "transparent",
+                                  }}
+                                >
+                                  <a
+                                    href="#"
+                                    className="btn btn-outline-secondary"
+                                  >
+                                    Edit Question
+                                  </a>
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={updateQuizQuestion}
+                                  style={{
+                                    outline: "none",
+                                    border: "none",
+                                    backgroundColor: "transparent",
+                                  }}
+                                >
+                                  <a
+                                    href="#"
+                                    className="btn btn-outline-secondary"
+                                  >
+                                    save Question
+                                  </a>
+                                </button>
+                              )}
+                            </>
+                          )}
+                        </div>
+                        {isQuestionCreated && (
+                          <>
+                            <div className="form-group">
+                              <label className="form-label">
+                                Add Choices{" "}
+                                {choiceError && (
+                                  <span
+                                    style={{
+                                      color: "tomato",
+                                      fontWeight: "600",
+                                      fontSize: "small",
+                                    }}
+                                  >
+                                    *required field
+                                  </span>
+                                )}
+                              </label>
+
+                              <input
+                                value={choiceDescription}
+                                minLength={10}
+                                onChange={(event) =>
+                                  setChoiceDescription(event.target.value)
+                                }
+                                className="form-control mb-3"
+                                placeholder="Enter your choice here..."
+                              />
+                              <select
+                                value={choiceAnswer}
+                                style={{
+                                  border: `${
+                                    choiceAnswerError
+                                      ? "2px solid tomato"
+                                      : "none"
+                                  }`,
+                                }}
+                                onChange={(e: any) =>
+                                  setChoiceAnswer(e.target.value)
+                                }
+                                name="category"
+                                className="form-control custom-select mb-3"
+                              >
+                                <option >Select an answer</option>
+                                <option value="true">Correct</option>
+                                <option value='false'>Incorrect</option>
+                              </select>
+                              <div>
+                                {!enableUpdateChoice ? (
+                                  <button
+                                    onClick={handleCreateChoice}
+                                    style={{
+                                      outline: "none",
+                                      border: "none",
+                                      backgroundColor: "transparent",
+                                    }}
+                                  >
+                                    <a
+                                      href="#"
+                                      className="btn btn-outline-secondary"
+                                    >
+                                      Add Choice
+                                    </a>
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={editChoice}
+                                    style={{
+                                      outline: "none",
+                                      border: "none",
+                                      backgroundColor: "transparent",
+                                    }}
+                                  >
+                                    <a
+                                      href="#"
+                                      className="btn btn-outline-secondary"
+                                    >
+                                      Update choice
+                                    </a>
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                            <div className="form-group">
+                              <label className="form-label" htmlFor="select01">
+                                Answers
+                              </label>
+
+
+                              <div
+                      className={`accordion__item ${
+                        expandedSection   === true ? "open" : ""
+                      }`}
+                      key={"section.id"}
+                    >
+
+{choices?.length > 0 && choices?.map((option: IChoice, index: any) => (
+                                   <a
+                                   
+                                   onClick={() =>
+                                    selectChoiceForEdit(option?.id)
+                                  }
+                                  key={index}
+                                   style={{ cursor: "pointer" ,backgroundColor: '#e9ecef',padding:"8px",marginTop:"5px",borderRadius:"5px"}}
+                                   className="accordion__toggle"
+                                   data-toggle="collapse"
+                                   data-target={`#course-toc-$section.id`}
+                                   data-parent="#parent"
+                                 >
+                                   <span
+                                 
+                                     style={{ cursor: "pointer" }}
+                                     className="flex"
+                                   >
+                                     {option?.choiceDescription}
+                                   </span>
+                                   <button
+                                     style={{
+                                       backgroundColor: "transparent",
+                                       border: "none",
+                                       outline: "none",
+                                     }}
+                                   >
+                                     <FaTrash
+                                     onClick={() =>
+                                      deleteChoiceAnswer(option.id)
+                                    }
+                                     />
+                                   </button>
+                                 </a>
+                               
+                             
+                                ))}
+                  
+
+                      </div>
+                    
+                            </div>
+                          </>
+                        )}
+                        {isQuestionCreated && (
+                          <div>
+                            <button
+                              onClick={newQuestion}
+                              style={{
+                                outline: "none",
+                                border: "none",
+                                backgroundColor: "transparent",
+                              }}
+                            >
+                              <a href="#" className="btn btn-outline-secondary">
+                                new Question
                               </a>
                             </button>
                           </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {editQuizQuestion && (
+                <>
+                  <div
+                    className={
+                      toggler === 2 ? "col-md-8" : "col-md-8 d-md-none"
+                    }
+                  >
+                    <div>
+                      <div className="page-separator">
+                        <div className="page-separator__text">Edit Question</div>
+                      </div>
+                      <div className="card card-body">
+                        <div className="form-group">
+                          <label className="form-label">
+                            Question{" "}
+                            {questionError && (
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *required field
+                              </span>
+                            )}
+                          </label>
+
+                          <div
+                            style={{ height: "150px" }}
+                            className="mb-0"
+                            data-toggle="quill"
+                            data-quill-placeholder="Question"
+                          >
+                            <ReactQuill
+                              readOnly={enableEditQuestion}
+                              style={{ height: "100px" }}
+                              value={questionDescription}
+                              onChange={(value: string) => {
+                                setQuestionDescription(value);
+                                saveChangeBtn();
+                              }}
+                              placeholder="Enter your question description here..."
+                            />
+                          </div>
                         </div>
                         <div className="form-group">
-                          <label className="form-label" htmlFor="select01">
-                            Answers
+                          <label className="form-label">
+                            Completion Points
+                            {pointsError && (
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *invalid points
+                              </span>
+                            )}
                           </label>
-                          <select
-                            id="select01"
-                            data-toggle="select"
-                            data-multiple="true"
-                            multiple
+                          <input
+                            style={{
+                              border: `${
+                                pointsError ? "2px solid tomato" : "none"
+                              }`,
+                            }}
+                            disabled={enableEditQuestion}
+                            onChange={(e: any) => setPoints(e.target.value)}
+                            type="text"
                             className="form-control"
-                          >
-                            {choices.map((option: any, index: any) => (
-                              <option key={index} value={option}>
-                                {option.text}
-                                <RiDeleteBin6Line
-                                  style={{
-                                    cursor: "pointer",
-                                    fontSize: "60px",
-                                    position: "absolute",
-                                  }}
-                                  onClick={() =>
-                                    handleDeleteOption(option.text)
-                                  }
-                                />
-                              </option>
-                            ))}
-                          </select>
+                            value={points}
+                          />
                         </div>
-                      </>
-                    )}
-                    {isQuestionCreated && (
-                      <div>
-                        <button
-                          onClick={newQuestion}
-                          style={{
-                            outline: "none",
-                            border: "none",
-                            backgroundColor: "transparent",
-                          }}
-                        >
-                          <a href="#" className="btn btn-outline-secondary">
-                            new Question
-                          </a>
-                        </button>
+                        <div className="mb-3">
+                          {isQuestionCreated && (
+                            <button
+                              onClick={handleCreateQuestion}
+                              style={{
+                                outline: "none",
+                                border: "none",
+                                backgroundColor: "transparent",
+                              }}
+                            >
+                              <a href="#" className="btn btn-outline-secondary">
+                                Add Question
+                              </a>
+                            </button>
+                          )}
+                          {!isQuestionCreated && (
+                            <>
+                              {enableEditQuestion ? (
+                                <button
+                                  onClick={() => setEnableEditQuestion(false)}
+                                  style={{
+                                    outline: "none",
+                                    border: "none",
+                                    backgroundColor: "transparent",
+                                  }}
+                                >
+                                  <a
+                                    href="#"
+                                    className="btn btn-outline-secondary"
+                                  >
+                                    Edit Question
+                                  </a>
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={updateQuizQuestion}
+                                  style={{
+                                    outline: "none",
+                                    border: "none",
+                                    backgroundColor: "transparent",
+                                  }}
+                                >
+                                  <a
+                                    href="#"
+                                    className="btn btn-outline-secondary"
+                                  >
+                                    save Question
+                                  </a>
+                                </button>
+                              )}
+                            </>
+                          )}
+                        </div>
+                        {!isQuestionCreated && (
+                          <>
+                            <div className="form-group">
+                              <label className="form-label">
+                                Add Choices{" "}
+                                {choiceError && (
+                                  <span
+                                    style={{
+                                      color: "tomato",
+                                      fontWeight: "600",
+                                      fontSize: "small",
+                                    }}
+                                  >
+                                    *required field
+                                  </span>
+                                )}
+                              </label>
+
+                              <input
+                                value={choiceDescription}
+                                minLength={10}
+                                onChange={(event) =>
+                                  setChoiceDescription(event.target.value)
+                                }
+                                className="form-control mb-3"
+                                placeholder="Enter your choice here..."
+                              />
+                              <select
+                                value={choiceAnswer}
+                                style={{
+                                  border: `${
+                                    choiceAnswerError
+                                      ? "2px solid tomato"
+                                      : "none"
+                                  }`,
+                                }}
+                                onChange={(e: any) =>
+                                  setChoiceAnswer(e.target.value)
+                                }
+                                name="category"
+                                className="form-control custom-select mb-3"
+                              >
+                                <option value="">Select an answer</option>
+                                <option value="true">Correct</option>
+                                <option value="false">Incorrect</option>
+                              </select>
+                              <div>
+                                {!enableUpdateChoice ? (
+                                  <button
+                                    onClick={handleCreateChoice}
+                                    style={{
+                                      outline: "none",
+                                      border: "none",
+                                      backgroundColor: "transparent",
+                                    }}
+                                  >
+                                    <a
+                                      href="#"
+                                      className="btn btn-outline-secondary"
+                                    >
+                                      Add Choice
+                                    </a>
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={editChoice}
+                                    style={{
+                                      outline: "none",
+                                      border: "none",
+                                      backgroundColor: "transparent",
+                                    }}
+                                  >
+                                    <a
+                                      href="#"
+                                      className="btn btn-outline-secondary"
+                                    >
+                                      Update choice
+                                    </a>
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                            <div className="form-group">
+                              <label className="form-label" htmlFor="select01">
+                                Answers
+                              </label>
+                              <div
+                      className={`accordion__item ${
+                        expandedSection   === true ? "open" : ""
+                      }`}
+                      key={"section.id"}
+                    >
+
+{choicesToEdit?.length > 0 && choicesToEdit?.map((option: IChoice, index: any) => (
+                                   <a
+                                   
+                                   onClick={() =>
+                                    selectChoiceForEdit(option?.id)
+                                  }
+                                  key={index}
+                                   style={{ cursor: "pointer" ,backgroundColor: '#e9ecef',padding:"8px",marginTop:"5px",borderRadius:"5px"}}
+                                   className="accordion__toggle"
+                                   data-toggle="collapse"
+                                   data-target={`#course-toc-$section.id`}
+                                   data-parent="#parent"
+                                 >
+                                   <span
+                                 
+                                     style={{ cursor: "pointer" }}
+                                     className="flex"
+                                   >
+                                     {option?.choiceDescription}
+                                   </span>
+                                   <button
+                                     style={{
+                                       backgroundColor: "transparent",
+                                       border: "none",
+                                       outline: "none",
+                                     }}
+                                   >
+                                     <FaTrash
+                                     onClick={() =>
+                                      deleteChoiceAnswer(option.id)
+                                    }
+                                     />
+                                   </button>
+                                 </a>
+                               
+                             
+                                ))}
+                  
+
                       </div>
-                    )}
+
+                            </div>
+                          </>
+                        )}
+                        {!isQuestionCreated && (
+                          <div>
+                            <button
+                              onClick={newQuestion}
+                              style={{
+                                outline: "none",
+                                border: "none",
+                                backgroundColor: "transparent",
+                              }}
+                            >
+                              <a href="#" className="btn btn-outline-secondary">
+                                new Question
+                              </a>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <div
+                className={toggler === 3 ? "col-md-8" : "col-md-8 d-md-none"}
+              >
+                <div className="form-group m-0">
+                  <div className="custom-file">
+                    <input
+                      type="file"
+                      id="file"
+                      onChange={handleDocument}
+                      className="custom-file-input"
+                    />
+                    <label className="custom-file-label">Choose file</label>
                   </div>
                 </div>
+
+                <p style={{ color: "rgba(39,44,51,.35)", paddingTop: "10px" }}>
+                  {documentName}
+                </p>
               </div>
+
               <div className="col-md-4">
                 <div className="card" style={{ width: "auto" }}>
                   <div className="card-header text-center">
-                    {changeModulBtn ? (
+                    {changeModulBtn && (
                       <button
                         style={{
                           backgroundColor: "transparent",
@@ -1185,26 +1836,9 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                           save module
                         </a>
                       </button>
-                    ) : (
-                      <button
-                        disabled={disableSaveChanges}
-                        style={{
-                          backgroundColor: "transparent",
-                          border: "none",
-                          outline: "none",
-                          width: "150px",
-                        }}
-                      >
-                        <a
-                          onClick={createModule}
-                          href="#"
-                          className="btn btn-accent"
-                        >
-                          save changes
-                        </a>
-                      </button>
-                    )}
+                          )}           
                   </div>
+
                   <div className="list-group list-group-flush">
                     <div className="list-group-item d-flex">
                       <a className="flex" href="#">
@@ -1213,14 +1847,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                       <input
                         type="checkbox"
                         checked={includeQuiz}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setIncludeQuiz(e.target.checked);
-                          } else {
-                            setIncludeQuiz(e.target.checked);
-                            setToggler(1);
-                          }
-                        }}
+                        onChange={addQuiz}
                       />
                     </div>
                     {/*Quiz Content Ends Here*/}
@@ -1232,19 +1859,13 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
                       <input
                         type="checkbox"
                         checked={includeDocument}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setIncludeDocument(e.target.checked);
-                          } else {
-                            setIncludeDocument(e.target.checked);
-                            setToggler(1);
-                          }
-                        }}
+                        onChange={addDocument}
                       />
                     </div>
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -1253,3 +1874,77 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     </div>
   );
 };
+
+
+
+// <div>
+// {modules.length > 0 && (
+//   <>
+//     <div
+//       style={{
+//         backgroundColor: "#f5f7fa",
+//         marginBottom: "10px",
+//       }}
+//       className="accordion__item open"
+//     >
+//       {/* <h1>{selectedCourse.title}</h1> */}
+//       {selectedCourse.sections[lastSection].modules.map(
+//         (module: any) => (
+//           <div
+//             className={`accordion__item ${
+//               expandedModule === module.id ? "open" : ""
+//             }`}
+//             key={module.id}
+//           >
+//             <a
+//               href="#"
+//               className={`accordion__toggle ${
+//                 expandedModule === module.id
+//                   ? ""
+//                   : "collapsed"
+//               }`}
+//               data-toggle="collapse"
+//               data-target={`#course-toc-${module.id}`}
+//               data-parent="#parent"
+//               onClick={() => handleModuleClick(module)}
+//             >
+//               <span className="flex">{module.title}</span>
+//               <span className="accordion__toggle-icon material-icons">
+//                 {expandedModule === module.id
+//                   ? "keyboard_arrow_up"
+//                   : "keyboard_arrow_down"}
+//               </span>
+//             </a>
+//             <div
+//               className={`accordion__menu collapse ${
+//                 expandedModule === module.id ? "show" : ""
+//               }`}
+//               id={`course-toc-${module.id}`}
+//             >
+//               {module.videos.map((video: any) => (
+//                 <div
+//                   className="accordion__menu-link"
+//                   key={video.id}
+//                 >
+//                   <FaVideo className="video-icon" />{" "}
+//                   {/* Video icon */}
+//                   <a
+//                     style={{ marginLeft: "10px" }}
+//                     className="flex"
+//                     href={video.videoLink}
+//                   >
+//                     {video.title}
+//                   </a>
+//                   <span className="text-muted">
+//                     {video.duration}
+//                   </span>
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+//         )
+//       )}
+//     </div>
+//   </>
+// )}
+// </div>

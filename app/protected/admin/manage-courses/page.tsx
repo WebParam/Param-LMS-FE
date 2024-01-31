@@ -8,7 +8,7 @@ import { ICourse } from "@/app/interfaces/courses";
 import Cookies from "universal-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+
 import Dropdown from "react-bootstrap/Dropdown";
 import "../../../assets/vendor/spinkit.css";
 import "../../../assets/css/preloader.css";
@@ -42,7 +42,7 @@ function ManageCourses() {
       toast.dismiss(_id);
     } catch (error) {
       console.log("Error fetching courses:", error);
-      toast.update(_id, { render: "Error loading courses", type: "success", isLoading: false });
+      toast.update(_id, { render: "Error loading courses", type: "error", isLoading: false });
       setTimeout(() => {
         toast.dismiss(_id);
       }, 2000);

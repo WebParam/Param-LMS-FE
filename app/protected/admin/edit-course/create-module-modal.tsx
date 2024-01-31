@@ -56,6 +56,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [selectedVideos, setSelectedVideo] = useState<any>([]);
   const [changeVidBtn, setChangeVidBtn] = useState<boolean>(true);
   const [videoId, setVideoId] = useState<string>("");
+  const [quizzses, setQuizzses] = useState()
   const [toggler, setToggler] = useState<Number>(1);
   const [includeQuiz, setIncludeQuiz] = useState<boolean>(false);
   const [includeDocument, setIncludeDocument] = useState<boolean>(false);

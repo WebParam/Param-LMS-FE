@@ -1,4 +1,6 @@
 import { IResponseObject } from "../lib/restapi/response";
+import { IDocument } from "./document";
+import { IQuiz } from "./quiz";
 
 export interface ICourse {
         id: string;
@@ -18,10 +20,6 @@ export interface ICourse {
 export interface IStudentCourses {
         allCourses: ICourse[],
         enrolledCourses: ICourse[],
-}
-
-export interface ICourseResponseModel extends ICourse {
-
 }
 
 export interface ISection {
@@ -51,6 +49,8 @@ export interface IModule {
         notes: string;
         modifyingUser: string,
         modifiedDate: string,
+        reference?: string;
+
 
 
 }
@@ -108,8 +108,8 @@ export interface IUpdateCourseDetailState {
         creatingUser: string,
         title: string,
         description: string,
-        state: number
-        imageUrl?: string
+        state?: number
+        logoImageFile?: File
 
 }
 

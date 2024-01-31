@@ -8,16 +8,14 @@ import {
   addSection,
   deleteModuleFromSection,
   deleteSection,
-  deleteVideoFromModule,
   getSelectedCourseForEdit,
   createCourseDetail,
   updateSectionDetail,
-  addModuleToSection,
-  addVideoToModule,
   deleteAllSections,
 } from "@/app/redux/courseSlice";
 import {
   ICourse,
+  IModule,
   ISection,
   IUpdateCourseDetailState,
   IUpdateSectionDetailState,
@@ -34,6 +32,11 @@ import Cookies from "universal-cookie"; // Import the library
 import Dropdown from "react-bootstrap/Dropdown";
 import "react-quill/dist/quill.snow.css";
 import Sidebar from "@/app/components/Sidebar";
+import { IQuiz } from "@/app/interfaces/quiz";
+import {
+  getSelectedQuizForEdit,
+  updateQuizModuleId,
+} from "@/app/redux/quizSlice";
 
 export default function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -56,12 +59,17 @@ export default function EditCourse() {
   const [newSection, setNewSection] = useState<boolean>(true);
   const [moduleId, setModuleId] = useState<string>();
   const [sectionBtn, setSectionBtn] = useState<boolean>(true);
-  const [imageUrl, setImageUrl] = useState<string>("")
+  const [imageUrl, setImageUrl] = useState<File>();
+  const [quizzes, setQuizzes] = useState<any>([]);
+  const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit);
+  const [imgError, setImgError] = useState(false);
+
+  console.log("Course", _courseFromState);
 
   let cookies = new Cookies();
 
   const userData = cookies.get("param-lms-user");
-    console.log("userDataID:", userData?.id);
+  console.log("userDataID:", userData?.id);
   const dispatch = useDispatch();
 
   console.log("UserData", userData?.id);
@@ -72,6 +80,12 @@ export default function EditCourse() {
       ["bold", "italic", "link", "blockquote", "code", "image"],
       [{ list: "ordered" }, { list: "bullet" }],
     ],
+  };
+
+  const payload = {
+    creatingUser: userData?.id,
+    title: courseTitle ?? _courseFromState.title,
+    description: courseDescription,
   };
 
   const logOut = () => {
@@ -102,7 +116,7 @@ export default function EditCourse() {
 
   const selectSection = (id: string) => {
     const selectedSection = selectedCourse.sections.find(
-      (section:any) => section.id === id
+      (section: any) => section.id === id
     );
     if (selectedSection) {
       setSectionTitle(selectedSection.title);
@@ -127,10 +141,40 @@ export default function EditCourse() {
     }
   };
 
+  useEffect(() => {
+    setCourseDescription(_courseFromState.description);
+    setCourseTitle(_courseFromState.title);
+  }, []);
+
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImageUrl(file);
+      alert("added");
+      console.log("Image selected: " + file);
+    }
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCourseTitle(e.target.value);
+    dispatch(createCourseDetail(payload));
+  };
+
+  const handleDescriptionChange = (content: string, _: any, source: string) => {
+    if (source === "user") {
+      const plainDescription = content.replace(/<\/?p>/gi, "");
+
+      setCourseDescription(plainDescription);
+
+      dispatch(createCourseDetail(payload));
+    }
+  };
+
+  const formData: any = new FormData();
+
   async function createCourse() {
     setDisableCreateCourseBtn(true);
-    let _id = toast.loading("saving course..", {
-      //loader
+    let _id = toast.loading("Saving course...", {
       position: "top-center",
       autoClose: 1000,
       hideProgressBar: false,
@@ -140,39 +184,56 @@ export default function EditCourse() {
       progress: undefined,
       theme: "light",
     });
-    const plainDescription = courseDescription
-      ? courseDescription.replace(/<\/?p>/gi, "")
-      : _courseFromState.description;
-
-    const payload = {
-      creatingUser: userData?.id,
-      title: courseTitle ?? _courseFromState.title,
-      description: plainDescription,
-      imageUrl:imageUrl ?? _courseFromState.logo
-    } as IUpdateCourseDetailState;
-
-    console.log("Creating User ", payload.creatingUser);
-
-    if(!imageUrl || !courseDescription || !courseTitle) {
-      return;
-    }
-
-    dispatch(createCourseDetail(payload));
-    console.log("after creating a course", _courseFromState)
 
     try {
- //     debugger;
-      const createCourse = await Api.POST_CreateCourse(_courseFromState);
-      console.log(" Create Course after request: ", createCourse);
-      console.log("response", createCourse);
-    //  debugger;
-      if(createCourse.data?.id){
+      // if(!imageUrl){
+      //   setImgError(true)
+      //   return;
+      // }
+
+      const createCourseResponse = await Api.POST_CreateCourse(
+        _courseFromState
+      )!;
+
+      if (createCourseResponse?.data?.id) {
+      
+
+        const courseId: string = createCourseResponse.data?.id!;
+        const uploadImageResponse = await Api.POST_Image(courseId, formData);
+
+        const extractedModules = createCourseResponse?.data?.sections.reduce(
+          (accumulator: IModule[], section: any) => {
+            return accumulator.concat(section.modules);
+          },
+          []
+        );
+
+        const updatedQuizzes = await Promise.all(
+          _quizzesFromState.map(async (quiz: IQuiz) => {
+            try {
+              const matchingModule = extractedModules?.find(
+                (module: IModule) => module.reference === quiz.reference
+              );
+              if (matchingModule) {
+                const newQuiz = { ...quiz, moduleId: matchingModule.id };
+                return newQuiz;
+              }
+              return quiz;
+            } catch (error) {
+              console.error("Error updating quiz:", error);
+              return quiz;
+            }
+          })
+        );
+
+        const uploadQuizzes = await Api.POST_Quiz(updatedQuizzes);
+debugger
         toast.update(_id, {
-          render: "successfully saved course",
+          render: "Successfully saved course",
           type: "success",
           isLoading: false,
         });
-  
+
         setTimeout(() => {
           dispatch(deleteAllSections());
           setCourseTitle("");
@@ -181,21 +242,18 @@ export default function EditCourse() {
           toast.dismiss(_id);
           setDisableCreateCourseBtn(false);
         }, 2000);
-        return;
-      }else{
-           toast.update(_id, {
-        render: "Error saving course",
-        type: "error",
-        isLoading: false,
-      });
-      setTimeout(() => {
-        setDisableCreateCourseBtn(false);
-
-        toast.dismiss(_id);
-      }, 2000);
+      } else {
+        toast.update(_id, {
+          render: "Failed to save course",
+          type: "error",
+          isLoading: false,
+        });
+        setTimeout(() => {
+          toast.dismiss(_id);
+        }, 2000);
       }
-    
     } catch (error) {
+      console.error("Error saving course:", error);
       toast.update(_id, {
         render: "Error saving course",
         type: "error",
@@ -203,7 +261,6 @@ export default function EditCourse() {
       });
       setTimeout(() => {
         setDisableCreateCourseBtn(false);
-
         toast.dismiss(_id);
       }, 2000);
     }
@@ -216,7 +273,6 @@ export default function EditCourse() {
         sectionTitle: sectionTitle,
         sectionCompetency: competency,
       };
-
       console.log("payload: ", payload);
 
       dispatch(addSection(payload));
@@ -226,12 +282,18 @@ export default function EditCourse() {
   };
 
   useEffect(() => {
-    const sectionIds = _courseFromState.sections.map((section) => section.id);
-    const lastSectionId = sectionIds[sectionIds.length - 1];
+    const sectionIds = _courseFromState?.sections?.map((section) => section.id);
+    const lastSectionId = sectionIds[sectionIds?.length - 1];
     setSectionId(lastSectionId);
-  }, [_courseFromState.sections]);
+    if (sectionId?.length > 0) {
+      setDisableCreateCourseBtn(false);
+    }
+  });
 
-  console.log("COURSE", _courseFromState);
+  useEffect(() => {
+    formData.append("file", imageUrl);
+    console.log("File from formdata", formData?.logoImageFile);
+  }, [imageUrl]);
 
   const clearSectionContent = () => {
     setSectionTitle("");
@@ -297,6 +359,8 @@ export default function EditCourse() {
           center
         >
           <CreateCourseModal
+            quizzes={quizzes}
+            setQuizzes={setQuizzes}
             sectionId={sectionId}
             onClose={saveAndCloseEditModal}
           />
@@ -616,7 +680,7 @@ export default function EditCourse() {
                     className="form-control form-control-lg"
                     placeholder="Course title"
                     value={courseTitle}
-                    onChange={(e) => setCourseTitle(e.target.value)}
+                    onChange={handleTitleChange}
                   />
                   <small className="form-text text-muted">
                     Please see our <a href="">course title guideline</a>
@@ -630,9 +694,7 @@ export default function EditCourse() {
                     <ReactQuill
                       style={{ height: "100px" }}
                       value={courseDescription}
-                      onChange={(value: any) => {
-                        setCourseDescription(value); // Pass the new description
-                      }}
+                      onChange={handleDescriptionChange}
                       placeholder="Course description..."
                       modules={descriptionToolbar}
                     />
@@ -674,7 +736,7 @@ export default function EditCourse() {
                   className="accordion js-accordion accordion--boxed mb-24pt"
                   id="parent"
                 >
-                  {selectedCourse.sections.map((section:ISection) => (
+                  {selectedCourse.sections.map((section: ISection) => (
                     <div
                       className={`accordion__item ${
                         expandedSection === section.id ? "open" : ""
@@ -924,31 +986,30 @@ export default function EditCourse() {
                       </a>
                       <i className="material-icons text-muted">check</i>
                     </div>
-                    <div className="list-group-item">
-                      <a href="#" className="text-danger">
-                        <strong>Delete Course</strong>
-                      </a>
-                    </div>
                   </div>
                 </div>
                 <div className="page-separator">
                   <div className="page-separator__text">Course Logo</div>
                 </div>
-               
 
                 <div className="card">
                   <div className="card-body">
                     <div className="form-group">
                       <label className="form-label">Image url</label>
-                      <input
-              
-                            onChange={(e) => setImageUrl(e.target.value)}
-                            value={imageUrl}
-                            type="text"
-                            style={{padding:"10px"}}
-                            className="form-control"
-                            placeholder="Image URL"
-                          />
+                      {/* <div className="form-group m-0"> */}
+                      <div className="custom-file">
+                        <input
+                          type="file"
+                          id="file"
+                          style={{
+                            border: `${imgError ? "2px solid tomato" : "none"}`,
+                          }}
+                          onChange={handleImageChange}
+                          className="custom-file-input"
+                        />
+                        <label className="custom-file-label">Choose file</label>
+                        {/* </div> */}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1780,10 +1841,8 @@ export default function EditCourse() {
                   </li>
                 </ul>
               </div>
-            
 
-                <Sidebar/>
-
+              <Sidebar />
 
               <div className="tab-pane " id="sm_account">
                 <div className="sidebar-heading">Account</div>
@@ -2021,7 +2080,7 @@ export default function EditCourse() {
                           <span className="sidebar-menu-text">Pagination</span>
                         </a>
                       </li>
-                     
+
                       <li className="sidebar-menu-item">
                         <a className="sidebar-menu-button disabled" href="">
                           <span className="sidebar-menu-text">Disabled</span>
