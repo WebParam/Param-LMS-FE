@@ -496,7 +496,7 @@ useEffect(() => {
                 style={{ height: 212 }}
               >
                 <a
-                  href="student-take-course.html"
+                  onClick={() => goToCourseDetails(course)}
                   className="js-image"
                   data-position="center"
                   data-height="auto"
