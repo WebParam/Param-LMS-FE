@@ -332,7 +332,8 @@ useEffect(() => {
               </div>
             </div>
             <a
-              href="__quiz.html"
+              // href="__quiz.html"
+              onClick={() => goToCourseDetails(enrolledCourse)}
               className="ml-4pt btn btn-sm btn-link text-secondary"
             >
               Resume
