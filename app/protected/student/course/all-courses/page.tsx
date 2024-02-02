@@ -4,11 +4,7 @@ import styles from './page.module.css'
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';
-<<<<<<< Updated upstream
-import { ICourse, ICourseResponseModel, IStudentCourses } from '@/app/interfaces/courses';
-=======
 import { ICourse } from '@/app/interfaces/courses';
->>>>>>> Stashed changes
 import {useEffect} from 'react'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
@@ -18,14 +14,9 @@ const cookies = new Cookies();
 
 export default function AllCourses() {
   const dispatch = useDispatch();
-<<<<<<< Updated upstream
    const [allCourses, setCourses] = useState<ICourseResponseModel[]>([]); 
    const [enrolledCourses, setEnrolledCourses] = useState<ICourseResponseModel[]>([]); 
    const [studentEnrolledCourses, setStudentEnrolledCourses] = useState<IStudentCourses[]>([]);
-=======
-   const [allCourses, setCourses] = useState<ICourse[]>([]); 
-   const [enrolledCourses, setEnrolledCourses] = useState<ICourse[]>([]); 
->>>>>>> Stashed changes
 
    const goToCourseDetails=(course:ICourse)=>{
     

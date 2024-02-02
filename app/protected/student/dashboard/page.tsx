@@ -8,7 +8,7 @@ import { ICourse, ICourseResponseModel } from '@/app/interfaces/courses';
 import {useEffect} from 'react'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedCourse } from '@/app/redux/viewCourseSlice';
+import { setSelectedCourseForEdit } from '@/app/redux/courseSlice';
 import MyCoursesChart from '@/app/components/CoursesChart';
 const cookies = new Cookies();
 
@@ -24,7 +24,7 @@ export default function StudentDashboard() {
    const goToCourseDetails=(course:ICourse)=>{
     
    
-    dispatch(setSelectedCourse(course));
+    dispatch(setSelectedCourseForEdit(course));
     window.location.href = '/protected/student/course/course-detail'; 
    }
    
@@ -305,7 +305,7 @@ useEffect(() => {
                 <div className="rounded mr-12pt z-0 o-hidden">
                   <div className="overlay">
                     <img
-                      src={enrolledCourse?.bannerImage}
+                      src={enrolledCourse?.logo}
                       width={40}
                       height={40}
                       alt="Angular"
@@ -505,15 +505,14 @@ useEffect(() => {
                     display: "block",
                     position: "relative",
                     overflow: "hidden",
-                    backgroundImage:
-                      'url("https://luma.humatheme.com/public/images/paths/angular_430x168.png")',
+                    backgroundImage: `url("${course.logo}")`,
                     backgroundSize: "cover",
                     backgroundPosition: "center center",
                     height: 168
                   }}
                 >
                   <img
-                    src="../../public/images/paths/angular_430x168.png"
+                    src={course.logo}
                     alt="course"
                     style={{ visibility: "hidden" }}
                   />

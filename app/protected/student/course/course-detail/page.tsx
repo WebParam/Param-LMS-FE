@@ -9,7 +9,7 @@ import {useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { IUser } from '@/app/interfaces/user';
 import { IResponseObject } from '@/app/lib/restapi/response';
-import { getSelectedCourse } from '@/app/redux/courseSlice';
+import { getSelectedCourseForEdit } from '@/app/redux/courseSlice';
 import { getAuthor } from '@/app/lib/getAuthor';
 import IComment from '@/app/interfaces/comment';
 import { formatTimeDifference } from '@/app/lib/formatTimeDifference';
@@ -33,7 +33,7 @@ export default function CourseDetail() {
    }
  
    
-   const state:any=useSelector(getSelectedCourse).course;
+   const state:any=useSelector(getSelectedCourseForEdit).course;
   useEffect(() => {
    
     setSection(state?.sections);
@@ -61,6 +61,26 @@ export default function CourseDetail() {
     
     console.log("Author courses",userCourses?.data);
     setUserCourses(userCourses?.data);
+  }
+
+  const courseEnrollment = async (enrollmentData: any) => {
+    var student = cookies.get('param-lms-user');
+  
+    const payload = {
+      "userId": student?.id,
+      "createdDate": enrollmentData?.createdDate,
+      "creatingUser": enrollmentData?.creatingUser,
+      "modifiedDate": "2024-01-12T10:22:30",
+      "modifyingUser": enrollmentData?.modifyingUser,
+      "state": 0,
+      "courses": [enrollmentData?.id]
+    }
+    console.log("payload", payload);
+
+    const enroll = await Api.POST_CourseEnrollment(payload);
+
+    console.log("res", enroll)
+
   }
  
  
@@ -116,8 +136,13 @@ export default function CourseDetail() {
                   play_circle_outline
                 </i>
               </a>
-              <a href="pricing.html" className="btn btn-white">
+              <a href="pricing.html" className="btn btn-white mb-16pt mb-sm-0 mr-sm-16pt">
                 Start your free trial
+              </a>
+              <a 
+                onClick={() => courseEnrollment(data)}
+                href="#" className="btn btn-outline-white">
+                Enroll 
               </a>
             </div>
           </div>

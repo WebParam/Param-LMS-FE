@@ -11,7 +11,7 @@ export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net
 
 export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api";
 
-export const userWriteUrl = "https://khumla-dev-user-read.azurewebsites.net/api";
+export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api";
  
 export const userReadUrl="https://khumla-dev-user-read.azurewebsites.net/api";
 
@@ -28,7 +28,7 @@ export const Api = {
 
   GET_Courses: async (): Promise<any> => {
     const response = await GET(`${courseReadUrl}/Courses/GetCourses`);
-    return response;
+    return response;s
   },
 
   POST_CreateCourse: async (
@@ -50,9 +50,16 @@ export const Api = {
     }
   },
   
-  
-
-
+  POST_CourseEnrollment: async (payload:any): Promise<any> => {
+    try{
+      const response = await POST(`${courseWriteUrl}/Enrollments/AddEnrollment`, payload);
+      return response;
+    }
+    catch(error){
+      console.error("Error enrolling course:", error);
+      throw error;
+    }
+  },
   DELETE_DeleteSection: async (
     payload: IDeleteSection
   ): Promise<any> => {
