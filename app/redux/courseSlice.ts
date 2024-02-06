@@ -243,7 +243,7 @@ export const courseSlice = createSlice({
             const newVideo: IVideo = {
                 id: generateUniqueId(),
                 title: videoTitle,
-                duration: "5:30",
+                duration: "5:00",
                 moduleId: "module-101",
                 order: 1,
                 state: 0,
@@ -290,13 +290,14 @@ export const courseSlice = createSlice({
     addSection,
     deleteSection,
     updateCourseFromDataBase,
-        addModuleToSection,
-        deleteAllSections,
-        editVideoDetails,
+    addModuleToSection,
+    deleteAllSections,
+    editVideoDetails,
     addVideoToModule,
     deleteModuleFromSection,
     deleteVideoFromModule // Add this line
   } = courseSlice.actions;
+
   export const getSelectedCourseForEdit = (state: AppStore) => state.course;
 
 export default courseSlice.reducer; 

@@ -78,8 +78,11 @@ export default function CourseDetail() {
     console.log("payload", payload);
 
     const enroll = await Api.POST_CourseEnrollment(payload);
+    if(enroll){
+      window.location.href = '/protected/student/dashboard'; 
+      console.log("res", enroll)
+    }
 
-    console.log("res", enroll)
 
   }
  
@@ -155,12 +158,13 @@ export default function CourseDetail() {
           <li className="nav-item navbar-list__item">
             <div className="media align-items-center">
               <span className="media-left mr-16pt">
-                <img
+              <span className="material-icons text-primary">account_circle</span>
+                {/* <img
                   src="../../public/images/people/50/guy-6.jpg"
                   width={40}
                   alt="avatar"
                   className="rounded-circle"
-                />
+                /> */}
               </span>
               <div className="media-body">
                 <a className="card-title m-0" href="teacher-profile.html">
@@ -324,29 +328,53 @@ export default function CourseDetail() {
             keyboard_arrow_down
           </span>
         </a>
+
+
+        {/* {
+          section.modules.map((
+
+          ))
+        } */}
+
+
         <div className={openSections.includes(i)? "accordion__menu collapse show": "accordion__menu collapse"} id={`course-toc-${section.id}`}>
-          <div className="accordion__menu-link">
+          {/* <div className="accordion__menu-link">
             <span className="icon-holder icon-holder--small icon-holder--light rounded-circle d-inline-flex icon--left">
               <i className="material-icons icon-16pt">lock</i>
             </span>
-            <a className="flex" href="student-lesson.html">
-              
-            </a>
-            <span className="text-muted">04:23</span>
+            <span className="text-muted">Lance</span> */}
             <div className="accordion__menu-link">
                     <span className="icon-holder icon-holder--small icon-holder--light rounded-circle d-inline-flex icon--left">
                       <i className="material-icons icon-16pt">
                         hourglass_empty
                       </i>
                     </span>
+                   
                     {section.modules.map(module=>(
-                       <a className="flex" style={{cursor:"pointer"}}  onClick={()=>goToSectionModule(module)}>
-                        {module.title}
-                       </a>
+                      <div>
+                        {
+                       
+                          
+                            module.videos.map(video => (
+                              <>
+                            <span className="text-muted">{video.duration}</span> 
+                            <a className="flex" style={{cursor:"pointer", paddingLeft:"1em"}}  onClick={()=>goToSectionModule(module)}>
+                          {video.title}
+                         </a>
+                              </>
+                      
+                          ))
+                        
+                          
+                    
+                        }
+                     
+                      </div>
+                   
                     ))}
                    
                   </div>
-          </div>
+          {/* </div> */}
         </div>
       </div>
     ))}

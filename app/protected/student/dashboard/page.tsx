@@ -74,7 +74,7 @@ useEffect(() => {
             <p className="card-title">Angular</p>
             <p className="card-subtitle text-50">Best score</p>
           </div>
-          <div className="dropdown">
+          {/* <div className="dropdown">
             <a
               href="#"
               className="btn btn-sm btn-outline-secondary dropdown-toggle"
@@ -90,7 +90,7 @@ useEffect(() => {
                 Web Design
               </a>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="card-body p-24pt">
           <div className="chart" style={{ height: 344 }}>
@@ -154,11 +154,10 @@ useEffect(() => {
       </div>
       <div
         id="carouselExampleFade"
-        className="carousel carousel-card slide mb-24pt"
-      >
+        className="carousel carousel-card slide mb-24pt">
         <div className="carousel-inner">
           <div className="carousel-item active">
-            <a className="card border-0 mb-0" href="">
+            {/* <a className="card border-0 mb-0" href="">
               <img
                 src="../../public/images/achievements/flinto.png"
                 alt="Flinto"
@@ -207,7 +206,7 @@ useEffect(() => {
                   </span>
                 </span>
               </span>
-            </a>
+            </a> */}
           </div>
           <div className="carousel-item">
             <a className="card border-0 mb-0" href="">
@@ -266,7 +265,7 @@ useEffect(() => {
     <span class="carousel-control-icon material-icons" aria-hidden="true">keyboard_arrow_left</span>
     <span class="sr-only">Previous</span>
     </a> */}
-        <a
+        {/* <a
           className="carousel-control-next"
           href="#carouselExampleFade"
           role="button"
@@ -279,7 +278,7 @@ useEffect(() => {
             keyboard_arrow_right
           </span>
           <span className="sr-only">Next</span>
-        </a>
+        </a> */}
       </div>
     </div>
   </div>
