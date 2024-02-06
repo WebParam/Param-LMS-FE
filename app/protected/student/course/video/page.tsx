@@ -108,10 +108,19 @@ const getComments=async (id:string)=>{
     <div className="container page__container">
    
       <nav className="course-nav">
+
+        {
+          module?.videos.map((video:any) => (
+            <a data-toggle="tooltip" data-placement="bottom" data-title={video?.title}  data-original-title title=""><span className="material-icons">check_circle</span></a>
+          ))
+        }
+
+{/*         
         <a data-toggle="tooltip" data-placement="bottom" data-title="Getting Started with Angular: Introduction"  data-original-title title=""><span className="material-icons">check_circle</span></a>
         <a data-toggle="tooltip" data-placement="bottom" data-title="Getting Started with Angular: Introduction to TypeScript" href="" data-original-title title=""><span className="material-icons text-primary">account_circle</span></a>
         <a data-toggle="tooltip" data-placement="bottom" data-title="Getting Started with Angular: Comparing Angular to AngularJS" href="" data-original-title title=""><span className="material-icons">play_circle_outline</span></a>
         <a data-toggle="tooltip" data-placement="bottom" data-title="Quiz: Getting Started with Angular" href="student-take-quiz.html" data-original-title title=""><span className="material-icons">hourglass_empty</span></a>
+       */}
       </nav>
       <div className="js-player bg-primary embed-responsive embed-responsive-16by9 mb-32pt" data-domfactory-upgraded="player">
         <div className="player embed-responsive-item">

@@ -213,7 +213,7 @@ export default function CourseDetail() {
           <div className="page-separator__text">Table of Contents</div>
         </div>
         <div className="row mb-0">
-          <div className="col-lg-7">
+          <div className="col-lg-12">
             <div
               className="accordion js-accordion accordion--boxed list-group-flush"
               id="parent"
