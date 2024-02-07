@@ -14,6 +14,7 @@ import { getAuthor } from '@/app/lib/getAuthor';
 import IComment from '@/app/interfaces/comment';
 import { formatTimeDifference } from '@/app/lib/formatTimeDifference';
 import { getInitials } from '@/app/lib/getInitials';
+import CourseInfoPanel from './about-panel/page';
 const cookies = new Cookies();
 
 
@@ -27,6 +28,7 @@ export default function CourseDetail() {
   const [userCourses,setUserCourses]=useState<ICourse[]>([]);
   const [author,setAuthor]=useState<IUser>();
   const [comments,setComments]=useState<IComment[]>();
+  const [isLoading, setIsLoading] = useState(true);
   const goToSectionModule=(module:IModule)=>{
     localStorage.setItem("module",JSON.stringify(module));
     window.location.href = '/protected/student/course/video'; 
@@ -35,9 +37,11 @@ export default function CourseDetail() {
    
    const state:any=useSelector(getSelectedCourseForEdit).course;
   useEffect(() => {
-   
     setSection(state?.sections);
        setData(state);
+       if(state){
+        setIsLoading(false);
+       }
     getUserCourses(state?.creatingUser);
     const fetchData=async ()=>{
       setAuthor(await getAuthor(state?.creatingUser)); 
@@ -152,19 +156,14 @@ export default function CourseDetail() {
         </div>
       </div>
     </div>
-    <div className="navbar navbar-expand-sm navbar-light bg-white border-bottom-2 navbar-list p-0 m-0 align-items-center">
+    {/* <div className="navbar navbar-expand-sm navbar-light bg-white border-bottom-2 navbar-list p-0 m-0 align-items-center">
       <div className="container page__container">
         <ul className="nav navbar-nav flex align-items-sm-center">
           <li className="nav-item navbar-list__item">
             <div className="media align-items-center">
               <span className="media-left mr-16pt">
               <span className="material-icons text-primary">account_circle</span>
-                {/* <img
-                  src="../../public/images/people/50/guy-6.jpg"
-                  width={40}
-                  alt="avatar"
-                  className="rounded-circle"
-                /> */}
+       
               </span>
               <div className="media-body">
                 <a className="card-title m-0" href="teacher-profile.html">
@@ -206,7 +205,8 @@ export default function CourseDetail() {
           </li>
         </ul>
       </div>
-    </div>
+    </div> */}
+    <CourseInfoPanel  course={data} isLoading={isLoading}/>
     <div className="page-section border-bottom-2">
       <div className="container page__container">
         <div className="page-separator">
