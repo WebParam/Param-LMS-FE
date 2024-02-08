@@ -1,14 +1,42 @@
+import { useEffect, useState } from "react";
+
 import Image from 'next/image'
 import styles from './page.module.css'
 
-export default function Quiz() {
+export default function QuizData() {
+  const [quiz, setQuiz] = useState();
+  const [index, setIndex] = useState(null);
+  const [start,setStart] = useState("");
+  const [selectedOption, setSelectedOption] = useState();
+
+  useEffect(() => {
+      const fetchData = async () => {
+          try {
+            const response = await fetch('./quizQuestions.json');
+            const data = await response.json();
+            setQuiz(data);
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      };
+      fetchData();
+  }, [quiz]);
+
+  const handleClick = () => {
+      console.log("quiz", quiz[index])
+      if (index === quiz.length - 1) {
+          setStart("Finish")
+          setIndex(null)
+      } else {
+          setIndex(index + 1)
+          setStart('Next');
+
+      }
+  };
+
+
   return (
 <>
-  {/* // END Navbar */}
-  {/* // END Header */}
-  {/* BEFORE Page Content */}
-  {/* // END BEFORE Page Content */}
-  {/* Page Content */}
   <div
     className="navbar navbar-list navbar-light bg-white border-bottom-2 border-bottom navbar-expand-sm"
     style={{ whiteSpace: "nowrap" }}

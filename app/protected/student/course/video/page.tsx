@@ -13,15 +13,37 @@ import { getAuthor } from '@/app/lib/getAuthor';
 import{formatTimeDifference} from '@/app/lib/formatTimeDifference';
 import { getInitials } from '@/app/lib/getInitials';
 import Aside from './aside/Aside';
+import ReactPlayer from 'react-player';
+import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
+import ReactDOM from 'react-dom';
+import 'react-responsive-modal/styles.css';
+import './modal.css'
+import { Modal } from 'react-responsive-modal';
+import Quiz from '../quiz/page';
 const cookies = new Cookies();
 
+
 export default function CourseVideo() {
+  
  const [author,setAuthor]=useState<IUser>();
  const [module,setModule]=useState<IModule>();
  const [video,setVideo]=useState<IVideo>();
  const [play, setPlay] = useState<boolean>(false);
  const [comments,setComments]=useState<IComment[]>();
  const [asideToggler, setAsideToggler] = useState(false);
+ const [open, setOpen] = useState(false);
+
+ const [openNew, setOpenNew] = useState(false);
+
+  const onOpenModal = () => setOpenNew(true);
+  const onCloseModal = () => setOpenNew(false);
+
+ 
+  const openQuiz = () => {
+    setOpen(false);
+    console.log("open quiz")
+    onOpenModal();
+  }
 
  function toggleAside() {
   setAsideToggler(state => !state)
@@ -35,6 +57,12 @@ export default function CourseVideo() {
   setVideo(first);
   getComments(first.id); 
   console.log("first",first.id);
+
+
+
+
+
+  
 },[]);
 
 const goToCommentDetails=(Comment:IComment)=> {
@@ -44,7 +72,9 @@ const goToCommentDetails=(Comment:IComment)=> {
  }
  
 const handlePlayClick = useCallback((event:React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-  setPlay(true);
+  //setPlay(true);
+  setPlay(!play);
+  console.log("play", play)
   event.preventDefault();
 }, []);
 
@@ -61,6 +91,13 @@ const goToAllComments=()=>{
 const handleBackClick=()=>{
   window.location.href = '/protected/student/course/course-detail'; 
 }
+
+const handleVideoEnd = () => {
+  // Video has ended, you can add your logic here
+  console.log('Video has completed.');
+  setOpen(!open)
+};
+
 
 const getComments=async (id:string)=>{
   var _comment:IResponseObject<IComment>[]= await Api.GET_CommentsByReference(id);
@@ -114,38 +151,67 @@ const getComments=async (id:string)=>{
             <a data-toggle="tooltip" data-placement="bottom" data-title={video?.title}  data-original-title title=""><span className="material-icons">check_circle</span></a>
           ))
         }
-
-{/*         
-        <a data-toggle="tooltip" data-placement="bottom" data-title="Getting Started with Angular: Introduction"  data-original-title title=""><span className="material-icons">check_circle</span></a>
-        <a data-toggle="tooltip" data-placement="bottom" data-title="Getting Started with Angular: Introduction to TypeScript" href="" data-original-title title=""><span className="material-icons text-primary">account_circle</span></a>
-        <a data-toggle="tooltip" data-placement="bottom" data-title="Getting Started with Angular: Comparing Angular to AngularJS" href="" data-original-title title=""><span className="material-icons">play_circle_outline</span></a>
-        <a data-toggle="tooltip" data-placement="bottom" data-title="Quiz: Getting Started with Angular" href="student-take-quiz.html" data-original-title title=""><span className="material-icons">hourglass_empty</span></a>
-       */}
       </nav>
       <div className="js-player bg-primary embed-responsive embed-responsive-16by9 mb-32pt" data-domfactory-upgraded="player">
         <div className="player embed-responsive-item">
           <div className="player__content">
-          <div className="player__image" />
-                      <a onClick={handlePlayClick} href="" className="player__play bg-primary">
-                        <span className="material-icons">play_arrow</span>
-                      </a>
-                    </div>
-          <div className={play?"player__embed":"player__embed d-none"}>
-            <iframe className="embed-responsive-item" src={video?.videoLink} allowFullScreen/>
+            <div className="player__image" />
+            <a onClick={handlePlayClick} href="" className="player__play bg-primary">
+              <span className="material-icons">play_arrow</span>
+            </a>
+          </div>
+          <div className={play ? "player__embed" : "player__embed d-none"}>
+            {/* <iframe
+              className="embed-responsive-item"
+              src={video?.videoLink}
+              allowFullScreen
+              onEnded={handleVideoEnd}
+            /> */}
+                 <ReactPlayer
+                          width='100%'
+                          height='100%'
+                            url={video?.videoLink}
+                            controls={true}
+                            autoPlay={true}
+                            onEnded={() => handleVideoEnd()}
+                          />
           </div>
         </div>
       </div>
+      <ConfirmationModal
+        open={open}
+        onConfirm={() => openQuiz()}
+        onCancel={() => setOpen(false)}
+        title="Congratulations"
+        buttonText="Take Quiz"
+      >
+        Thank you for completing the module, We have attached a quiz to rate your understading of the module. Please click Take Quiz or cancel.
+      </ConfirmationModal>
+      <Modal open={openNew} onClose={onCloseModal} center
+      closeOnOverlayClick={false}
+      classNames={{
+        overlay: 'customOverlay',
+        modal: 'customModal',
+      }}
+      >
+        <Quiz />
+      </Modal>
       <div className="d-flex flex-wrap align-items-end mb-16pt">
         <h1 className="text-white flex m-0">{module?.title}</h1>
         <p className="h1 text-white-50 font-weight-light m-0">{video?.length}</p>
       </div>
       <p className="hero__lead measure-hero-lead text-white-50 mb-24pt">{video?.description}</p>
-      <a onClick={(e:React.MouseEvent<HTMLAnchorElement, MouseEvent>)=>{handlePlayClick(e);
-       window.scrollTo({
-       top: 0,
-       behavior: 'smooth',
-  });} }  className="btn btn-white">Resume lesson</a>
-    </div>
+      <a
+        onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+          handlePlayClick(e);
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
+        }}
+      >
+      </a>
+     </div>
   </div>
   <div className="navbar navbar-expand-sm navbar-light bg-white border-bottom-2 navbar-list p-0 m-0 align-items-center">
     <div className="container page__container">
