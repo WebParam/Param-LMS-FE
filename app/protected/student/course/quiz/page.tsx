@@ -1,39 +1,41 @@
 import { useEffect, useState } from "react";
-
+import data from './quizQuestions.json'
 import Image from 'next/image'
 import styles from './page.module.css'
 
 export default function QuizData() {
-  const [quiz, setQuiz] = useState();
-  const [index, setIndex] = useState(null);
-  const [start,setStart] = useState("");
+  const [quiz, setQuiz] = useState([]);
+  const [index, setIndex] = useState();
+  const [start,setStart] = useState("Next Question");
   const [selectedOption, setSelectedOption] = useState();
 
   useEffect(() => {
       const fetchData = async () => {
           try {
-            const response = await fetch('./quizQuestions.json');
-            const data = await response.json();
-            setQuiz(data);
+            console.log("quiz", data);
+            setIndex(0);
           } catch (error) {
               console.error('Error fetching data:', error);
           }
       };
       fetchData();
-  }, [quiz]);
+  }, [data]);
 
   const handleClick = () => {
-      console.log("quiz", quiz[index])
-      if (index === quiz.length - 1) {
+      console.log("quiz", data);
+      if (index === data.length - 1) {
           setStart("Finish")
           setIndex(null)
       } else {
           setIndex(index + 1)
-          setStart('Next');
+          setStart('Next Question');
 
       }
   };
 
+  if (!quiz) {
+    return <p>Loading...</p>;
+  }
 
   return (
 <>
@@ -85,56 +87,18 @@ export default function QuizData() {
   <div className="bg-primary pb-lg-64pt py-32pt">
     <div className="container page__container">
       <nav className="course-nav">
-        <a
-          href="student-take-lesson.html"
-          data-toggle="tooltip"
-          data-placement="bottom"
-          data-title="Getting Started with Angular: Introduction"
-          data-original-title=""
-          title=""
-        >
-          <span className="material-icons">check_circle</span>
-        </a>
-        <a
-          data-toggle="tooltip"
-          data-placement="bottom"
-          data-title="Getting Started with Angular: Introduction to TypeScript"
-          href="student-take-lesson.html"
-          data-original-title=""
-          title=""
-        >
-          <span className="material-icons">check_circle</span>
-        </a>
-        <a
-          data-toggle="tooltip"
-          data-placement="bottom"
-          data-title="Getting Started with Angular: Comparing Angular to AngularJS"
-          href="student-take-lesson.html"
-          data-original-title=""
-          title=""
-        >
-          <span className="material-icons">check_circle</span>
-        </a>
-        <a
-          href="student-take-quiz.html"
-          data-toggle="tooltip"
-          data-placement="bottom"
-          data-title="Quiz: Getting Started with Angular"
-          data-original-title=""
-          title=""
-        >
-          <span className="material-icons text-primary">account_circle</span>
-        </a>
+      {
+          data?.map((q:any) => (
+            <a data-toggle="tooltip" data-placement="bottom" data-title={q?.name}  data-original-title title={q?.name}><span className="material-icons">check_circle</span></a>
+          ))
+        }
       </nav>
       <div className="d-flex flex-wrap align-items-end justify-content-end mb-16pt">
-        <h1 className="text-white flex m-0">Question 1 of 5</h1>
+        <h1 className="text-white flex m-0">Question {index + 1} of {data?.length}</h1>
         <p className="h1 text-white-50 font-weight-light m-0">00:14</p>
       </div>
       <p className="hero__lead measure-hero-lead text-white-50">
-        An angular 2 project written in typescript is* transpiled to javascript
-        duri*ng the build process. Which of the following additional features
-        are provided to the developer while programming on typescript over
-        javascript?
+        {data[index]?.question}
       </p>
     </div>
   </div>
@@ -164,10 +128,10 @@ export default function QuizData() {
             Review Video
           </a>
           <a
-            href="student-quiz-result-details.html"
+            onClick={() => handleClick()}
             className="btn justify-content-center btn-accent w-100 w-sm-auto mb-16pt mb-sm-0 ml-sm-16pt"
           >
-            Next Question{" "}
+            {start}
             <i className="material-icons icon--right">keyboard_arrow_right</i>
           </a>
         </div>
@@ -179,19 +143,24 @@ export default function QuizData() {
       <div className="page-separator">
         <div className="page-separator__text">Your Answer</div>
       </div>
-      <div className="form-group">
-        <div className="custom-control custom-checkbox">
-          <input
-            id="customCheck01"
-            type="checkbox"
-            className="custom-control-input"
-          />
-          <label htmlFor="customCheck01" className="custom-control-label">
-            Ability to use newer syntax and offers reliability
-          </label>
+      {
+        data[index]?.options?.map((option, i) => (
+        <div className="form-group" key={i}>
+          <div className="custom-control custom-checkbox">
+            <input
+              id="customCheck01"
+              type="checkbox"
+              className="custom-control-input"
+            />
+            <label htmlFor="customCheck01" className="custom-control-label">
+              {option.name}
+            </label>
+          </div>
         </div>
-      </div>
-      <div className="form-group">
+        ))
+      }
+      
+      {/* <div className="form-group">
         <div className="custom-control custom-checkbox">
           <input
             id="customCheck02"
@@ -215,7 +184,7 @@ export default function QuizData() {
             Usage of missing features
           </label>
         </div>
-      </div>
+      </div> */}
       <p className="text-50 mb-0">
         Note: There can be multiple correct answers to this question.
       </p>
