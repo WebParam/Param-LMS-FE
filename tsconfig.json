@@ -38,7 +38,7 @@
     "dist/types/**/*.ts",
     "app/interfaces/**/*.ts",
     "middleware.ts",
-    "node_modules/react-redux",
+    "node_modules/react-redux", "app/protected/student/course/quiz/quiz-questions/page.tsx",
     
   ],
   "exclude": [

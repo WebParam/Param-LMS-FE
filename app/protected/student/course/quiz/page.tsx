@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from "react";
 import data from './quizQuestions.json'
 import Image from 'next/image'
@@ -5,7 +6,7 @@ import styles from './page.module.css'
 
 export default function QuizData() {
   const [quiz, setQuiz] = useState([]);
-  const [index, setIndex] = useState();
+  const [index, setIndex] = useState(0);
   const [start,setStart] = useState("Next Question");
   const [selectedOption, setSelectedOption] = useState();
 
@@ -25,7 +26,7 @@ export default function QuizData() {
       console.log("quiz", data);
       if (index === data.length - 1) {
           setStart("Finish")
-          setIndex(null)
+          setIndex(0)
       } else {
           setIndex(index + 1)
           setStart('Next Question');

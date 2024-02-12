@@ -94,19 +94,23 @@ export default function EditCourse() {
 
     let getAllQuizzes: IQuiz[] = [];
     const quizzesFromStorage = localStorage.getItem("quizzes");
+    console.log("Quiz", quizzesFromStorage);
     
     if (quizzesFromStorage) {
       try {
         getAllQuizzes = JSON.parse(quizzesFromStorage);
-        dispatch(updateQuizzes(getAllQuizzes));
+        dispatch(updateQuizzes(JSON.parse(quizzesFromStorage)));
       } catch (error) {
         console.error("Error parsing quizzes from localStorage:", error);
         // Optionally handle the error here
       }
     }
-    
+    debugger;
 
   }, []);
+
+
+  console.log("Quizzes from localStorage",_quizzesFromState)
 
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
 

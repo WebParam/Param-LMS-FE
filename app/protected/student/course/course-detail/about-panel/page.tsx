@@ -1,3 +1,4 @@
+"use client"
 import { ICourse } from "@/app/interfaces/courses";
 import { getSelectedCourseForEdit } from "@/app/redux/courseSlice";
 import React,{useState, useEffect} from "react";

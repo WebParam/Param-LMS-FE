@@ -5,7 +5,7 @@ import { Line } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
-const pluckLabels = (arr:any, key:string) => arr.map(i => i[key]);
+const pluckLabels = (arr:any, key:string) => arr.map((i:any) => i[key]);
 
 const MyCoursesChart = (props:any) => {
     console.log(props?.enrolled);

@@ -4,19 +4,20 @@ import styles from './page.module.css'
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';
-import { ICourse, ICourseResponseModel } from '@/app/interfaces/courses';
+import { ICourse } from '@/app/interfaces/courses';
 import {useEffect} from 'react'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedCourseForEdit } from '@/app/redux/courseSlice';
 import MyCoursesChart from '@/app/components/CoursesChart';
+import { IEnrollment } from '@/app/interfaces/Enrollment';
 const cookies = new Cookies();
 
 
 export default function StudentDashboard() {
   const dispatch = useDispatch();
-   const [allCourses, setCourses] = useState<ICourseResponseModel[]>([]); 
-   const [enrolledCourses, setEnrolledCourses] = useState<ICourseResponseModel[]>([]); 
+   const [allCourses, setCourses] = useState<ICourse[]>(); 
+   const [enrolledCourses, setEnrolledCourses] = useState<any[]>(); 
    const [highScore,setHighScore] = useState<Number> (0);
 
    const [courseScores, setCourseScores] = useState(['Angular', 'Nodejs', 'Python', 'Javascript', 'Java', 'Databases'])
@@ -47,7 +48,7 @@ useEffect(() => {
         setCourses(course.data!.allCourses);
         setEnrolledCourses(course.data!.enrolledCourses);
 
-        var highScore = Math.max.apply(Math, enrolledCourses?.score);  
+     //   var highScore = Math.max.apply(Math, enrolledCourses?.score);  
         setHighScore(0);
 
        console.log("AllCourses",allCourses);
@@ -69,7 +70,7 @@ useEffect(() => {
     <div className="col-lg-6">
       <div className="card">
         <div className="card-header d-flex align-items-center">
-          <div className="h2 mb-0 mr-3">{highScore}</div>
+          <div className="h2 mb-0 mr-3">{""}</div>
           <div className="flex">
             <p className="card-title">Angular</p>
             <p className="card-subtitle text-50">Best score</p>
@@ -288,7 +289,7 @@ useEffect(() => {
         <div className="page-separator__text">Learning Paths</div>
       </div>
       {
-        enrolledCourses.map((enrolledCourse, i) => (
+        enrolledCourses?.map((enrolledCourse, i) => (
       <div
         className="card js-overlay card-sm overlay--primary-dodger-blue stack stack--1 mb-16pt"
         data-toggle="popover"
@@ -479,7 +480,7 @@ useEffect(() => {
           >
 
 {
-        allCourses.map((course, ind) => (
+        allCourses?.map((course, ind) => (
           <div
               className="col-12 col-sm-6 mdk-carousel__item"
               style={{ width: 234 }}

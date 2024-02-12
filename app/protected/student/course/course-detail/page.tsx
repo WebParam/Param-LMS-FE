@@ -25,7 +25,7 @@ export default function CourseDetail() {
   const [data, setData] = useState<ICourse>();
   const [sections,setSection]=useState<ISection[]>([])
   const [openSections,setOpenSections]=useState<number[]>([]);
-  const [userCourses,setUserCourses]=useState<ICourse[]>([]);
+  const [userCourses,setUserCourses]=useState<ICourse[]>();
   const [author,setAuthor]=useState<IUser>();
   const [comments,setComments]=useState<IComment[]>();
   const [isLoading, setIsLoading] = useState(true);
