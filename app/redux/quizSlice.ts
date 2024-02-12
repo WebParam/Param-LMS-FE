@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IQuiz, IQuestion, IChoice, IQuizState, IUpdateQuizDetailState, IUpdateQuestionDetailState, IDeleteQuestion, IDeleteChoice, IUpdateQuizReference } from "../interfaces/quiz";
+import { IQuiz, IQuestion, IChoice, IQuizState, IUpdateQuizDetailState, IUpdateQuestionDetailState, IDeleteQuestion, IDeleteChoice} from "../interfaces/quiz";
 import { AppStore } from "../interfaces/store";
-import { IModule } from "../interfaces/courses";
+import { IModule, IVideo } from "../interfaces/courses";
 import { Api } from "../lib/restapi/endpoints";
 
 const generateUniqueId = () => {
@@ -41,17 +41,20 @@ export const quizSlice = createSlice({
         createdDate: _action.createdDate,
         questions: [],
         modifiedDate: _action.modifiedDate,
-        moduleId: _action.moduleId,
+        videoId: _action.videoId,
       };
 
       state.quizzes.push(newQuiz);
     },
-   updateQuizModuleId(state, action: PayloadAction<IModule[]>) {
-      const modulesData = action.payload;
+    updateQuizzes(state, action: PayloadAction<IQuiz[]>) {
+      state.quizzes = action.payload;
+    },
+   updateQuizVideoId(state, action: PayloadAction<IVideo[]>) {
+      const videosData = action.payload;
       state.quizzes.forEach((quiz) => {
-        const matchingModule = modulesData.find((module) => module.reference === quiz.reference);
-        if (matchingModule) {
-          quiz.moduleId = matchingModule.id;
+        const matchingVideo = videosData.find((video:IVideo) => video.reference === quiz.reference);
+        if (matchingVideo) {
+          quiz.videoId = matchingVideo.id;
         }
       });
     },
@@ -141,6 +144,30 @@ export const quizSlice = createSlice({
         console.log("Choice is not updated");
       }
     },
+    updateChoiceAnswer(state, action: PayloadAction<{ quizId: string, questionId: string, choiceId: string, isCorrect: boolean }>) {
+      const { quizId, questionId, choiceId,  isCorrect } = action.payload;
+
+      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
+
+      if (quizIndex !== -1) {
+        const questionIndex = state.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
+
+        if (questionIndex !== -1) {
+          const updatedChoices = state.quizzes[quizIndex].questions[questionIndex].choices.map((choice) => {
+            if (choice.id === choiceId) {
+              return { ...choice, isCorrect };
+            }
+            return choice;
+          });
+
+          // Sort the choices by order
+          state.quizzes[quizIndex].questions[questionIndex].choices = updatedChoices.sort(sortChoicesByOrder);
+        }
+      } else {
+        console.log("Choice is not updated");
+      }
+    },
+
 
     updateQuestionDetails(state, action: PayloadAction<IUpdateQuestionDetailState>) {
       const { quizId, questionId, questionDescription, points } = action.payload;
@@ -174,7 +201,9 @@ export const {
   updateQuestionDetails,
   deleteChoiceFromQuestion,
   deleteQuestion,
-  updateQuizModuleId
+  updateQuizzes,
+  updateQuizVideoId,
+  updateChoiceAnswer
 } = quizSlice.actions;
 
 export const getSelectedQuizForEdit = (state: AppStore) => state.quizzes.quizzes;

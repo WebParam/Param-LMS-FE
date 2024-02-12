@@ -14,11 +14,13 @@ import "../../../assets/vendor/spinkit.css";
 import "../../../assets/css/preloader.css";
 import dynamic from 'next/dynamic';
 import Sidebar from "@/app/components/Sidebar";
+import { IQuiz } from "@/app/interfaces/quiz";
 
 function ManageCourses() {
 
   const [courseHover, setCourseHover] = useState<boolean>(false);
   const [courses, setCourses] = useState<ICourse[] | any>()
+  const [quizzes, setQuizzes] = useState<any>([])
   const cookies = new Cookies();
 
   const userData = cookies.get("param-lms-user");
@@ -49,14 +51,31 @@ function ManageCourses() {
     }
   }
 
+  async function getAllQuizzes() {
+    try {
+      const getQuizzes = await Api.GET_AllQuizzes();
+      setQuizzes(getQuizzes);
+  
+      if (getQuizzes && getQuizzes.length > 0) {
+        const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
+        localStorage.setItem('quizzes', JSON.stringify(mappedQuizzes));
+      } else {
+        console.log("No quizzes found");
+      }
+    } catch (error) {
+      console.error("Error fetching quizzes:", error);
+    }
+  }
+  
 
   const editCourse = (course: any) => {
     localStorage.setItem('course', JSON.stringify(course.data));
+
   };
 
   useEffect(() => {
-    console.log("useEffect is running");
     ListAllCourses();
+    getAllQuizzes();
   }, []);
 
 

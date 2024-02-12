@@ -7,10 +7,15 @@ import { IRating } from "@/app/interfaces/Rating";
 import { get } from "http";
 import { IQuiz } from "@/app/interfaces/quiz";
 
-export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
+export const courseWriteUrl = "https://95ad-197-184-171-251.ngrok-free.app/api";
 
-export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api";
+export const courseReadUrl="https://9f2a-197-184-171-251.ngrok-free.app/api";
 
+<<<<<<< Updated upstream
+=======
+export const uploadImage = ""
+
+>>>>>>> Stashed changes
 export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api";
  
 export const userReadUrl="https://khumla-dev-user-read.azurewebsites.net/api";
@@ -19,9 +24,9 @@ export const commentReadUrl="https://localhost:61280/api";
 
 export const commentWriteUrl="https://localhost:61275/api";
 
-export const quizReadUrl = "https://localhost:53137/api";
+export const quizReadUrl = "https://5e5c-197-184-171-251.ngrok-free.app/api";
 
-export const quizWriteUrl ="https://khumla-dev-quiz-write.azurewebsites.net/api";
+export const quizWriteUrl ="https://khumla-dev-quiz-read.azurewebsites.net/api";
 
 export const Api = {
   Base: courseWriteUrl,
@@ -215,13 +220,28 @@ DELETE_CourseById: async (
     return _quiz;
   },
 
+  PUT_UpdateQuizzes: async (payload: IQuiz[]): Promise<IResponseObject<IQuiz[]>> => {
+    try {
+      debugger
+      const response = await PUT(`${quizWriteUrl}/Quizzes/UpdateQuizzes`,payload);
+      debugger
+      return response;
+    } catch (error) {
+      console.error("Error updating quizzes:", error);
+      throw error;
+    }
+  },
   
 POST_Image: async (courseId :string , imageFile:any)
 :Promise<IResponseObject<ICourse>> => {
   const _course:any = await POST(`${courseWriteUrl}/Courses/UploadImage/${courseId}`,imageFile);
   return _course;
-}
+},
 
-
+GET_AllQuizzes: async (
+  ) => {
+  const response:IQuiz[] = await GET(`${quizReadUrl}/Quizzes/getQuizzes`);
+  return response;
+},
 };
 

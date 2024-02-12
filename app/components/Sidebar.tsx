@@ -5,7 +5,12 @@ function Sidebar() {
 
   console.log("Pathname", pathname);
   return (
-    <div>
+    <div style={{
+      position:"relative",
+      zIndex: "1",
+      display:"inline-block",
+      
+    }}>
       <div className="tab-pane  fade active show " id="sm_instructor">
         <div className="sidebar-heading">Instructor</div>
         <ul className="sidebar-menu">

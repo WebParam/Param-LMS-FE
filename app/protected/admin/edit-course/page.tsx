@@ -3,7 +3,7 @@ import { CreateCourseModal } from "./create-module-modal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaVideo } from "react-icons/fa";
 import {
   addSection,
   deleteModuleFromSection,
@@ -13,14 +13,19 @@ import {
   updateCourseFromDataBase,
   updateSectionDetail,
   deleteAllSections,
+  addModuleToSection,
+  deleteVideoFromModule,
 } from "@/app/redux/courseSlice";
 import {
   ICourse,
   IDeleteModule,
   IDeleteSection,
+  IModule,
+  ISection,
   IUpdateCourse,
   IUpdateCourseDetailState,
   IUpdateSectionDetailState,
+  IVideo,
 } from "@/app/interfaces/courses";
 import { useDispatch, useSelector } from "react-redux";
 import ReactQuill from "react-quill";
@@ -36,6 +41,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dropdown from "react-bootstrap/Dropdown";
 import Sidebar from "@/app/components/Sidebar";
+import { IQuiz } from "@/app/interfaces/quiz";
+import { getSelectedQuizForEdit, updateQuizzes } from "@/app/redux/quizSlice";
 export default function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [editModuleModalOpen, setEditModuleModalOpen] =
@@ -47,6 +54,7 @@ export default function EditCourse() {
   const [changeBtn, setChangeBtn] = useState<boolean>(false);
   const [sectionId, setSectionId] = useState("");
   const [courseTitle, setCourseTitle] = useState<any>("");
+  const [videoId, setVideoId] = useState<string>("")
   const [courseDescription, setCourseDescription] = useState<any>("");
   const [disableCreateCourseBtn, setDisableCreateCourseBtn] =
     useState<boolean>(false);
@@ -54,6 +62,8 @@ export default function EditCourse() {
   const [newSection, setNewSection] = useState<boolean>(true);
   const [moduleId, setModuleId] = useState<string>();
   const [courseId, setCourseId] = useState<string>("");
+  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
+
 
   const dispatch = useDispatch();
 
@@ -81,12 +91,24 @@ export default function EditCourse() {
     } else {
       console.log("No 'course' data found in localStorage");
     }
+
+    let getAllQuizzes: IQuiz[] = [];
+    const quizzesFromStorage = localStorage.getItem("quizzes");
+    
+    if (quizzesFromStorage) {
+      try {
+        getAllQuizzes = JSON.parse(quizzesFromStorage);
+        dispatch(updateQuizzes(getAllQuizzes));
+      } catch (error) {
+        console.error("Error parsing quizzes from localStorage:", error);
+        // Optionally handle the error here
+      }
+    }
+    
+
   }, []);
 
-  const _courseFromState: ICourse = useSelector(
-    getSelectedCourseForEdit
-  ).course;
-  console.log("Updated course: " + _courseFromState);
+  const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
 
   const descriptionToolbar = {
     toolbar: [
@@ -104,6 +126,28 @@ export default function EditCourse() {
   function saveAndCloseEditModuleModal() {
     setEditModuleModalOpen(false);
   }
+
+
+  const payload = {
+    title: courseTitle ?? _courseFromState.title,
+    description: courseDescription,
+  } as IUpdateCourseDetailState;
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCourseTitle(e.target.value);
+    dispatch(createCourseDetail(payload));
+  };
+
+  const handleDescriptionChange = (content: string, _: any, source: string) => {
+    if (source === "user") {
+      const plainDescription = content.replace(/<\/?p>/gi, "");
+
+      setCourseDescription(plainDescription);
+
+      dispatch(createCourseDetail(payload));
+    }
+  };
+
 
   const updateCourseSection = function () {
     const payload = {
@@ -140,17 +184,24 @@ export default function EditCourse() {
     }
   };
 
-  async function UpdateCourse() {
-    const plainDescription = courseDescription
-      ? courseDescription.replace(/<\/?p>/gi, "")
-      : _courseFromState.description;
+
+  const createModule = () => {
 
     const payload = {
-      title: courseTitle ?? _courseFromState.title,
-      description: plainDescription,
-    } as IUpdateCourseDetailState;
+      sectionId: sectionId,
+  
+    };
 
-    dispatch(createCourseDetail(payload));
+
+   if(sectionId){
+    dispatch(addModuleToSection(payload));
+   }
+
+};
+
+
+  async function UpdateCourse() {
+
 
     let _id = toast.loading("Please wait..", {
       position: "top-center",
@@ -163,11 +214,48 @@ export default function EditCourse() {
       theme: "light",
     });
 
-    console.log("updated course from endpoint", _courseFromState);
 
     try {
       const updateCoursedata = await Api.PUT_UpdateCourse(_courseFromState);
       if (updateCoursedata.data.id) {
+
+        const extractedVideo = updateCoursedata?.data?.sections.reduce(
+          (accumulator: IVideo[], section: any) => {
+            // Iterate through modules within the section
+            const videosInModules = section.modules.reduce(
+              (moduleAccumulator: IVideo[], module: any) => {
+                // Concatenate videos within the module to the accumulator
+                return moduleAccumulator.concat(module.videos);
+              },
+              []
+            );
+            // Concatenate videos from all modules in the section to the accumulator
+            return accumulator.concat(videosInModules);
+          },
+          []
+        );
+        
+        const updatedQuizzes = await Promise.all(
+          _quizzesFromState.map(async (quiz: IQuiz) => {
+            try {
+              const matchingVideo = extractedVideo?.find(
+                (video: IVideo) => video.reference === quiz.reference
+              );
+              if (matchingVideo) {
+                const newQuiz = { ...quiz, videoId: matchingVideo.id };
+                return newQuiz;
+              }
+              return quiz;
+            } catch (error) {
+              console.error("Error updating quiz:", error);
+              return quiz;
+            }
+          })
+        );
+
+        const updateQuizzes = await Api.PUT_UpdateQuizzes(updatedQuizzes);
+
+          debugger;
         toast.update(_id, {
           render: "course saved",
           type: "success",
@@ -184,6 +272,9 @@ export default function EditCourse() {
         type: "error",
         isLoading: false,
       });
+      setTimeout(() => {
+        toast.dismiss(_id);
+      }, 2000);
     }
   }
 
@@ -234,7 +325,11 @@ export default function EditCourse() {
       window.location.href = "/protected/admin/manage-courses";
     }
   }
-
+  const handleDeleteVideo = (videoId: string, ModuleId:string) => {
+ 
+    dispatch(deleteVideoFromModule({ moduleId: ModuleId, videoId }));
+    };
+  
   //Create Section
   const createSection = function () {
     const payload = {
@@ -260,14 +355,7 @@ export default function EditCourse() {
     setDisableSectionInput(!disableSectionInput);
   };
 
-  const handleDeleteModule = (sectionId: any, moduleId: any) => {
-    const payload = {
-      sectionId,
-      moduleId,
-    };
 
-    dispatch(deleteModuleFromSection(payload));
-  };
 
   const handleDeleteSection = async (sectionId: any) => {
     clearSectionContent();
@@ -300,7 +388,8 @@ export default function EditCourse() {
           center
         >
           <EditCourseModal
-            ModuleId={moduleId}
+         videoId = {videoId}
+         moduleId={moduleId}
             sectionId={sectionId}
             onClose={saveAndCloseEditModuleModal}
           />
@@ -320,12 +409,18 @@ export default function EditCourse() {
         </Modal>
       </div>
       <div
+      
         className="mdk-drawer-layout__content page-content"
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
       >
         {/* Header */}
         {/* Navbar */}
         <div
+      style={{
+        "position": "relative",
+  "left": "20em",
+  "width": "1200px" 
+      }}
           className="navbar navbar-expand pr-0 navbar-light border-bottom-2"
           id="default-navbar"
           data-primary=""
@@ -355,6 +450,7 @@ export default function EditCourse() {
           {/* // END Navbar Brand */}
           {/* Navbar Search */}
           <form
+          
             className="search-form navbar-search d-none d-md-flex mr-16pt"
             action="index.html"
           >
@@ -370,7 +466,9 @@ export default function EditCourse() {
           {/* // END Navbar Search */}
           <div className="flex" />
           {/* Navbar Menu */}
-          <div className="nav navbar-nav flex-nowrap d-flex mr-16pt">
+          <div className="nav navbar-nav flex-nowrap d-flex mr-16pt"
+          
+          >
             {/* Notifications dropdown */}
             <div
               className="nav-item dropdown dropdown-notifications dropdown-xs-down-full"
@@ -632,7 +730,7 @@ export default function EditCourse() {
                     className="form-control form-control-lg"
                     placeholder="Course title"
                     value={courseTitle}
-                    onChange={(e) => setCourseTitle(e.target.value)}
+                    onChange={handleTitleChange}
                   />
                   <small className="form-text text-muted">
                     Please see our <a href="">course title guideline</a>
@@ -645,9 +743,7 @@ export default function EditCourse() {
                   <ReactQuill
                     style={{ height: "100px" }}
                     value={courseDescription}
-                    onChange={(value: any) => {
-                      setCourseDescription(value); // Pass the new description
-                    }}
+                    onChange={handleDescriptionChange}
                     placeholder="Module description..."
                     modules={descriptionToolbar}
                   />
@@ -684,104 +780,110 @@ export default function EditCourse() {
                     )}
                   </div>
                 </div>
-                <div
+                   <div
                   className="accordion js-accordion accordion--boxed mb-24pt"
                   id="parent"
                 >
-                  {_courseFromState.sections.length > 0 && (
-                    <>
-                      {" "}
-                      {_courseFromState.sections.map((section) => (
-                        <div
-                          className={`accordion__item ${
-                            expandedSection === section.id ? "open" : ""
-                          }`}
-                          key={section.id}
+                  {_courseFromState.sections.map((section: ISection) => (
+                    <div
+                      className={`accordion__item ${
+                        expandedSection === section.id ? "open" : ""
+                      }`}
+                      key={section.id}
+                    >
+                      <a
+                        style={{ cursor: "pointer" }}
+                        className="accordion__toggle"
+                        data-toggle="collapse"
+                        data-target={`#course-toc-${section.id}`}
+                        data-parent="#parent"
+                        onClick={() => handleSectionClick(section)}
+                      >
+                        <span
+                          onClick={() => {
+                            selectSection(section.id);
+                          }}
+                          style={{ cursor: "pointer" }}
+                          className="flex"
                         >
-                          <a
+                          {section.title}
+                        </span>
+                        <button
+                          onClick={() => handleDeleteSection(section.id)}
+                          style={{
+                            backgroundColor: "white",
+                            border: "none",
+                            outline: "none",
+                          }}
+                        >
+                          <FaTrash />
+                        </button>
+
+                        <span className="accordion__toggle-icon material-icons">
+                          keyboard_arrow_down
+                        </span>
+                      </a>
+                      <div
+                        className={`accordion__menu collapse ${
+                          expandedSection === section.id ? "show" : ""
+                        }`}
+                        id={`course-toc-${section.id}`}
+                      >
+                        {section.modules?.map((module:IModule) => 
+                          module.videos.map((video:IVideo) => (
+                            <div
                             style={{ cursor: "pointer" }}
-                            className="accordion__toggle"
-                            data-toggle="collapse"
-                            data-target={`#course-toc-${section.id}`}
-                            data-parent="#parent"
-                            onClick={() => handleSectionClick(section)}
-                          >
-                            <span
-                              onClick={() => selectSection(section.id)}
-                              style={{ cursor: "pointer" }}
-                              className="flex"
+                            className="accordion__menu-link"
+                            onClick={() =>       setVideoId(video?.id)}
+                            key={video?.id}
                             >
-                              {section.title}
-                            </span>
-                            <button
-                              onClick={() => handleDeleteSection(section.id)}
-                              style={{
-                                backgroundColor: "white",
-                                border: "none",
-                                outline: "none",
+                             <FaVideo
+                             
+                                        onClick={() => {
+                                          setModuleId(module.id)
+                                setEditModuleModalOpen(true);
+                                setSectionId(section.id);
+                                setVideoId(video?.id);
+                              }}
+                                       
+                                       className="video-icon" /> 
+                            <a
+                              style={{marginLeft:"8px"}}
+                              className="flex"
+                              onClick={() => {
+                                setModuleId(module.id)
+                                setEditModuleModalOpen(true);
+                                setSectionId(section.id);
+                                setVideoId(video?.id);
                               }}
                             >
-                              <FaTrash />
-                            </button>
-                            <span className="accordion__toggle-icon material-icons">
-                              keyboard_arrow_down
-                            </span>
-                          </a>
-                          <div
-                            className={`accordion__menu collapse ${
-                              expandedSection === section.id ? "show" : ""
-                            }`}
-                            id={`course-toc-${section.id}`}
-                          >
-                            {section.modules.map((module) => (
-                              <div
-                                style={{ cursor: "pointer" }}
-                                className="accordion__menu-link"
-                                key={module.id}
-                              >
-                                <i
-                                  onClick={() => {
-                                    setEditModuleModalOpen(true);
-                                    setSectionId(section.id);
-                                    setModuleId(module.id);
-                                  }}
-                                  className="material-icons text-70 icon-16pt icon--left"
-                                >
-                                  drag_handle
-                                </i>
-                                <a
-                                  className="flex"
-                                  onClick={() => {
-                                    setEditModuleModalOpen(true);
-                                    setSectionId(section.id);
-                                    setModuleId(module.id);
-                                  }}
-                                >
-                                  {module.title}
-                                </a>
-                                <span className="text-muted">
-                                  <button
-                                    onClick={() =>
-                                      handleDeleteModule(section.id, module.id)
-                                    }
-                                    style={{
-                                      backgroundColor: "white",
-                                      border: "none",
-                                      outline: "none",
-                                    }}
-                                  >
-                                    <FaTrash />
-                                  </button>
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </>
-                  )}
-                </div>
+                              {video.title}
+                            </a>
+                            <span className="text-muted">
+                              <button
+                                onClick={() =>
+                                  {
 
+                                    handleDeleteVideo(video.id, module?.id)
+                                    console.log("Module And VideoId", module.id , video.id);
+                                  }
+                                }
+                                style={{
+                                  backgroundColor: "white",
+                                  border: "none",
+                                  outline: "none",
+                                }}
+                              >
+                                <FaTrash />
+                              </button>
+                            </span>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
                 <div
                   className="accordion js-accordion accordion--boxed mb-24pt"
                   id="parent"
@@ -894,12 +996,14 @@ export default function EditCourse() {
                             padding: "5%",
                           }}
                         >
-                          <label className="form-label">Modules</label>
+                          <label className="form-label">Videos</label>
                           <FaPlus
                             onClick={() => {
                               setEditModalOpen(true);
+                              updateCourseSection();
                               setDisableCreateCourseBtn(false);
                               clearSectionContent();
+                              createModule();
                             }}
                             style={{ cursor: "pointer" }}
                           />
@@ -948,7 +1052,30 @@ export default function EditCourse() {
                   </div>
                 </div>
                 <div className="page-separator">
-                  <div className="page-separator__text">Video</div>
+                  <div className="page-separator__text">Course Logo</div>
+                  <div className="card">
+                  <div className="card-body">
+                    <div className="form-group">
+                      <label className="form-label">Image url {false && <span style={{color : "tomato" , fontWeight : "500px"}}>* required</span>}</label>
+                      {/* <div className="form-group m-0"> */}
+                      <div className="custom-file"
+                      
+                      >
+                        <input
+                          type="file"
+                          id="file"
+                          style={{
+                            border: "2px solid tomato" ,
+                          }}
+                          onChange={() =>{}}
+                          className="custom-file-input"
+                        />
+                        <label className="custom-file-label">Choose file</label>
+                        {/* </div> */}
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 </div>
                 <div className="card">
                   <div className="embed-responsive embed-responsive-16by9">

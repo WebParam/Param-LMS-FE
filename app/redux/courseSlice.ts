@@ -30,7 +30,7 @@ const initialState: ICourseState = {
         creatingUser: "",
         state: 0,
         logo:"",
-
+        instructor:"John Smith",
         courseImage: "course_image.jpg",
         bannerImage: "banner_image.jpg",
         modifyingUser: "user-789",
@@ -153,19 +153,19 @@ export const courseSlice = createSlice({
         },
 
         addModuleToSection(state, action) {
-            const { sectionId, moduleTitle,  moduleDescription } = action.payload;
+            const { sectionId } = action.payload;
 
             const newModule: IModule = {
                 id: generateUniqueId(),
-                title: moduleTitle,
-                description: moduleDescription,
+                title: "",
+                description: "",
                 notes: "These are some additional notes for Module 1.",
                 creatingUser: "user-456",
                 creatingDate: "2023-08-07T11:28:14.632Z",
                 modifyingUser: "user-789",
                 modifiedDate: "2023-08-07T11:28:14.632Z",
                 sectionId: sectionId,
-                reference:generateUniqueId(),
+              
                 order: 1,
                 state: 0,
                 videos: [],
@@ -238,7 +238,7 @@ export const courseSlice = createSlice({
             state.course.sections = [];
         },
         addVideoToModule(state, action) {
-            const { moduleId, videoTitle, videoLink,  } = action.payload;
+            const { moduleId, videoTitle, videoLink, description } = action.payload;
 
             const newVideo: IVideo = {
                 id: generateUniqueId(),
@@ -258,7 +258,8 @@ export const courseSlice = createSlice({
                 length: "5 minutes",
                 format: "mp4",
                 size: "50 MB",
-                description:""
+                description:description,
+                reference:generateUniqueId(),
 
             };
 

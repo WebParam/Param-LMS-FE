@@ -41,7 +41,7 @@ export interface IQuiz{
     modifiedByUserId:string;
     createdDate:string;
     modifiedDate:string;
-    moduleId?:string;
+    videoId?:string;
 }
 
 
@@ -54,14 +54,11 @@ export interface IUpdateQuizDetailState{
     createdByUserId: string;
     modifiedByUserId: string;
     createdDate: string;
-    moduleId?: string;
+    videoId?: string;
     modifiedDate:string;    
 }
 
-export interface IUpdateQuizReference{
-    quizId: string;
-    moduleId?: string;
-}
+
 
 export interface IUpdateQuestionDetailState {
     quizId : string;     

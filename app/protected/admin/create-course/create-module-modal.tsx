@@ -6,15 +6,11 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FaPencilAlt, FaPlus, FaTrash, FaVideo } from "react-icons/fa";
 import {
-  addModuleToSection,
-  addVideoToModule,
-  deleteVideoFromModule,
-  editVideoDetails,
-  getSelectedCourseForEdit,
-  updateModuleDetail,
+  addVideoToModule, deleteVideoFromModule, getSelectedCourseForEdit, editVideoDetails,
+ 
 } from "@/app/redux/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { ICourse } from "@/app/interfaces/courses";
+import { ICourse, ISection, IVideo } from "@/app/interfaces/courses";
 import {
   addChoices,
   createQuestion,
@@ -22,6 +18,7 @@ import {
   deleteChoiceFromQuestion,
   deleteQuestion,
   getSelectedQuizForEdit,
+  updateChoiceAnswer,
   updateChoiceDetail,
   updateQuestionDetails,
 } from "@/app/redux/quizSlice";
@@ -42,14 +39,11 @@ import { configureScope } from "@sentry/nextjs";
 interface CreateCourseModalProps {
   onClose: () => any;
   sectionId: string;
-  quizzes: [];
-  setQuizzes: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   onClose,
-  quizzes,
-  setQuizzes,
+
   sectionId,
 }) => {
   const cookies = new Cookies();
@@ -58,46 +52,40 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
 
   const [videoTitle, setVideoTitle] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
-  const [moduleTitle, setModuleTitle] = useState<string>("");
-  const [moduleDescription, setModuleDescription] = useState<string>("");
-  const [moduleId, setModuleId] = useState("");
+  const [videoDescription, setVideoDescription] = useState<string>("");
+
   const [videoId, setVideoId] = useState<string>("");
   const [toggler, setToggler] = useState<Number>(1);
   const [questionDescription, setQuestionDescription] = useState<string>("");
   const [choiceDescription, setChoiceDescription] = useState<string>("");
-  const [choiceAnswer, setChoiceAnswer] = useState<string>("");
   const [points, setPoints] = useState<number>(0);
   const [documentName, setDocumentName] = useState<string>();
   const [countChoice, setCountChoices] = useState<number>(0);
+  const [moduleId, setModuleId] = useState<string>("")
   const [date, setDate] = useState<string>("");
   const [questionId, setQuestionId] = useState<string>("");
   const [questionNumber, setQuestionNumber] = useState<number>(1);
-  const [moduleReference, setModuleReference] = useState<any>("");
+  const [expandedVideo, setExpandedVideo] = useState<string>("1")
+  const [videoReference, setVideoReference] = useState<any>("")
   const [openChoices, setOpenChoices] = useState(false);
-  const [expandedModule, setExpandedModule] = useState(null);
   const [choiceId, setChoiceId] = useState<string>("");
   const [quizId, setQuizId] = useState<string>("")
+  const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
 
   const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
-  const _quizFromState: IQuiz  = _quizzesFromState[0];
+  const _quizFromState: IQuiz  = _quizzesFromState[_quizzesFromState.length - 1];
   
-  const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
-const [expandedSection, setExpandedSection] = useState()
-  const [videos, setVideos] = useState<any>([]);
-  const [modules, setModules] = useState<string[]>([]);
-  const [selectedVideos, setSelectedVideo] = useState<any>([]);
+ const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
+  const [expandedSection, setExpandedSection] = useState()
+  const [videos, setVideos] = useState<IVideo[]>([]);
   const [choices, setChoices] = useState<any>([]);
   const [questions, setQuestions] = useState<IQuestion[]>([]);
-  const [choicesToEdit, setChoicesToEdit] = useState<any>([]);
 
-  const [showVideoInputs, setShowVideoInputs] = useState(false);
-  const [isModuleSaved, setIsModuleSaved] = useState<boolean>(false);
   const [hideCreateModuleSection, setHideCreateModuleSection] = useState(false);
-  const [changeModulBtn, setChangeModulBtn] = useState<boolean>(false);
+  const [hideCreateVideoSection, setHideCreateVideoSection] = useState(false);
   const [disableSaveChanges, setDisableSaveChanges] = useState<boolean>(true);
   const [choiceError, setChoiceError] = useState(false);
   const [questionError, setQuestionError] = useState(false);
-  const [choiceAnswerError, setChoiceAnswerError] = useState(false);
   const [isQuestionCreated, setIsQuestionCreated] = useState<boolean>(false);
   const [enableEditQuestion, setEnableEditQuestion] = useState<boolean>(false);
   const [pointsError, setPointsError] = useState(false);
@@ -105,13 +93,35 @@ const [expandedSection, setExpandedSection] = useState()
   const [changeEditQuizQuestionContent, setChangeEditQuizQuestionContent] = useState(false)
   const [enableUpdateChoice, setEnableUpdateChoice] = useState(false);
   const [viewCreatedQuestion, setViewCreatedQuestion] = useState(true);
-  const [changeVidBtn, setChangeVidBtn] = useState<boolean>(true);
   const [includeQuiz, setIncludeQuiz] = useState<boolean>(false);
+  const [viewAddedVideos, setViewAddedVideos] = useState(false)
   const [includeDocument, setIncludeDocument] = useState<boolean>(false);
   const [updateQuestions, setUpdateQuestion] = useState(false)
   const [hideSaveChangesBtn, setHideSaveChangesBtn] = useState(false)
   const [disableModuleInputs, setDisableModuleInputs] = useState<boolean>(false)  
+  const [enableEditVideo, setEnableEditVideo] = useState(false);
+  const [videoTitleError, setVideoTitleError] = useState(false);
+  const [videoDescError, setVideoDescError] = useState(false);
+  const [videoUrlError, setVideoUrlError] = useState(false);
 
+
+
+  const onChange = (isChecked: boolean , id : string) => {
+
+  const choiceDetails = choices.filter((choice:IChoice) => choice.id === id)[0];
+
+    const payload = {
+      quizId : quizId,
+      questionId:questionId,
+      choiceId: id,
+      choiceDescription: choiceDetails.choiceDescription,
+      isCorrect: isChecked
+    };
+    
+
+    dispatch(updateChoiceDetail(payload));
+  };
+  console.log("isChecked",_quizzesFromState);
   const moduleToolbar = {
     toolbar: [
       [{ header: "1" }, { header: "2" }],
@@ -142,8 +152,19 @@ const [expandedSection, setExpandedSection] = useState()
   //Quiz Functions starts here
   const addQuiz = (e: any) => {
     setIncludeQuiz(false);
-    if (modules.length === 0) {
-      let _id = toast.loading("Please add module first..", {
+
+    const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz.videoId === videoId);
+    if(hasQuiz?.length === 1 ){
+      setIncludeQuiz(e.target.checked);
+
+      setIncludeQuiz(true);
+
+      setToggler(2);
+
+      return
+    }
+    if (!videoId) {
+      let _id = toast.loading("Please add video first..", {
         //loader
         position: "top-center",
         autoClose: 1000,
@@ -157,7 +178,7 @@ const [expandedSection, setExpandedSection] = useState()
       setIncludeQuiz(false);
 
       toast.update(_id, {
-        render: "Please add module first",
+        render: "Please add video first",
         type: "error",
         isLoading: false,
       });
@@ -165,6 +186,11 @@ const [expandedSection, setExpandedSection] = useState()
         toast.dismiss(_id);
       }, 2000);
     } else {
+      if (includeQuiz) {
+        tabSelect(2, e);
+      } else {
+        e.preventDefault();
+      }
       setIncludeQuiz(e.target.checked);
       setIncludeQuiz(true);
       handleCreateQuiz();
@@ -189,27 +215,29 @@ const [expandedSection, setExpandedSection] = useState()
 
   const selectChoiceForEdit = (id: string) => {
     setEnableUpdateChoice(true);
-    const hasChoice = choicesToEdit.filter(
+    const hasChoice = choices.filter(
       (choice: IChoice) => choice.id === id
     );
     setChoiceDescription(hasChoice[0].choiceDescription);
     setChoiceId(hasChoice[0].id);
-    setChoiceAnswer(hasChoice[0].choiceAnswer);
   };
 
   const handleCreateQuiz = () => {
     const payload = {
-      reference: moduleReference,
+      reference: videoReference,
       createdByUserId: userData?.id,
       modifiedByUserId: userData?.id,
       createdDate: date,
-      moduleId: moduleId,
+      videoId: videoId,
     } as IUpdateQuizDetailState;
 
     dispatch(createQuizDetail(payload));
   };
 
+
   const handleCreateQuestion = () => {
+  
+
     setPointsError(false);
     setQuestionError(false);
     if (questionDescription.length === 0) {
@@ -233,10 +261,10 @@ const [expandedSection, setExpandedSection] = useState()
   };
 
   const deleteQuestionFromQuizState = (id:string) => {
-
+   
     const payload:IDeleteQuestion = {
       quizId,
-      questionId,
+      questionId : id,
  
     } 
     if(payload.questionId &&  payload.quizId ){
@@ -244,9 +272,10 @@ const [expandedSection, setExpandedSection] = useState()
     
      setUpdateQuestion(true)
     }
+    debugger
   }
 
-
+  console.log("Quiz",_quizzesFromState)
   const updateQuizQuestion = function () {
 
     setEnableEditQuestion(true);
@@ -265,33 +294,25 @@ const [expandedSection, setExpandedSection] = useState()
   const editChoice = () => {
 
     setChoiceError(false);
-    setChoiceAnswerError(false);
 
-    if (choiceDescription.length === 0) {
+    if (choiceDescription.length === 0 ) {
       setChoiceError(true);
       return;
     }
-
-    if (!choiceAnswer) {
-      setChoiceAnswerError(true);
-      return;
-    }
-
     const payload = {
       quizId : quizId,
       questionId:questionId,
       choiceId: choiceId,
       choiceDescription: choiceDescription,
-      isCorrect: choiceAnswer === "true" ? true : false,
+      isCorrect: false
     };
     
 
+
    dispatch(updateChoiceDetail(payload));
-    setEnableUpdateChoice(false);
-    setChoiceAnswer("");
+   setEnableUpdateChoice(false);
     setChoiceDescription("");
     setCountChoices(countChoice);
- 
 
   };
 
@@ -300,13 +321,8 @@ const [expandedSection, setExpandedSection] = useState()
   const handleCreateChoice = () => {
     setChoiceError(false);
     setCountChoices(countChoice + 1);
-    setChoiceAnswerError(false);
     if (choiceDescription.length === 0) {
       setChoiceError(true);
-      return;
-    }
-    if (!choiceAnswer) {
-      setChoiceAnswerError(true);
       return;
     }
 
@@ -314,16 +330,15 @@ const [expandedSection, setExpandedSection] = useState()
       quizId: quizId!,
       questionId: questionId!,
       choiceDescription: choiceDescription!,
-      isCorrect: choiceAnswer === "true" ? true : false,
+      isCorrect: false 
     } 
     dispatch(addChoices(payload));
 
-    setChoiceAnswer("");
     setChoiceDescription("");
   };
 
   const deleteChoiceAnswer = (id:string) => {
-
+setChoiceError(false)
     const payload = {
       quizId,
       questionId,
@@ -335,7 +350,7 @@ const [expandedSection, setExpandedSection] = useState()
 
     setChoiceDescription("");
 
-    setChoiceAnswer("");
+
   }
 
   const newQuestion = () => {
@@ -363,20 +378,9 @@ const [expandedSection, setExpandedSection] = useState()
       }, 2000);
       return;
     }
-    const quizQuestions = _quizFromState.questions.map(
-      (questions) => questions
-    );
+ 
 
-    quizQuestions.forEach((question) => {
-      if (question.choices.length > 0) {
-        setQuestions(_quizFromState.questions);
-        setQuizzes((prevQuizzes) =>
-          Array.isArray(prevQuizzes)
-            ? [...prevQuizzes, _quizFromState]
-            : [_quizFromState]
-        );
-      }
-    });
+
 if(changeEditQuizQuestionContent){
   setEditQuizQuestion(false)
   setChangeEditQuizQuestionContent(false);
@@ -389,7 +393,6 @@ setChangeEditQuizQuestionContent(false);
     setQuestionDescription("");
     setPoints(0);
     setChoiceDescription("");
-    setChoiceAnswer("");
 
   };
   const nextQuestion = () => {
@@ -417,8 +420,8 @@ setChangeEditQuizQuestionContent(false);
   };
   const addDocument = (e: any) => {
     setIncludeDocument(false);
-    if (modules.length === 0) {
-      let _id = toast.loading("Please add module first..", {
+    if (!videoId) {
+      let _id = toast.loading("Please add video first..", {
         //loader
         position: "top-center",
         autoClose: 1000,
@@ -432,7 +435,7 @@ setChangeEditQuizQuestionContent(false);
       setIncludeDocument(false);
 
       toast.update(_id, {
-        render: "Please add module first",
+        render: "Please add video first",
         type: "error",
         isLoading: false,
       });
@@ -440,139 +443,208 @@ setChangeEditQuizQuestionContent(false);
         toast.dismiss(_id);
       }, 2000);
     } else {
+      if (includeDocument) {
+        tabSelect(3, e);
+      } else {
+        e.preventDefault();
+      }
       setIncludeDocument(true);
       setToggler(3);
-      setIncludeDocument(e.target.checked);
     }
   };
   //Document functions ends here
 
   //Video functions start here
-  const deleteVideoHandler = (moduleId: any, videoId: any) => {
+  const deleteVideoHandler = (videoId: any) => {
     dispatch(deleteVideoFromModule({ moduleId, videoId }));
-  };
-  const AddVideo = () => {
-    if (videoTitle && videoUrl) {
-      const payload = {
-        moduleId: moduleId,
-        videoTitle: videoTitle,
-        videoLink: videoUrl,
-      };
-
-      dispatch(addVideoToModule(payload));
-
-      setVideos([...videos, payload]);
-      setShowVideoInputs(!showVideoInputs);
-      setVideoTitle("");
-      setVideoUrl("");
-   
-      setChangeModulBtn(true);
+    const section = _courseFromState.sections.filter(
+      (section) => section.id === sectionId
+    );
+    const module = section[0].modules[section[0].modules.length - 1];
+    setModuleId(module.id)
+    if (module?.videos.length === 0) {
+     newVideo();
     }
   };
-  const editVideo = (id: string) => {
-    const payload = {
-      moduleId: moduleId,
-      videoId: id,
-      videoTitle: videoTitle,
-      videoUrl: videoUrl,
-    };
-    dispatch(editVideoDetails(payload));
-    setShowVideoInputs(false);
-    setVideoTitle("");
-    setVideoUrl("");
-    setChangeVidBtn(true);
-  };
-  //Video functions ends here
 
-  //Module functions start here
+
+  //Video functions ends here
   const saveChangeBtn = () => {
-    if (moduleDescription.length > 0 && moduleTitle.length > 0) {
+  
+    if (videoDescription.length > 0 && videoTitle.length > 0 && videoUrl.length > 0) {
       setDisableSaveChanges(false);
     }
   };
 
-  const createModule = () => {
-    if (moduleDescription.length > 0 && moduleTitle.length > 0) {
-      const plainDescription = moduleDescription
-        ? moduleDescription.replace(/<\/?p>/gi, "")
-        : _courseFromState.description;
+
+
+  const createVideo = () => {
+    setVideoDescError(false);
+    setVideoTitleError(false);
+    setVideoUrlError(false);
+    setDisableSaveChanges(false);
+    if (videoDescription.length > 0 && videoTitle.length > 0  && videoUrl.length > 0) {
+      const plainDescription = videoDescription
+      && videoDescription.replace(/<\/?p>/gi, "");
 
       const payload = {
-        sectionId: sectionId,
-        moduleTitle: moduleTitle,
-
-        moduleDescription: plainDescription,
+        moduleId: moduleId,
+        videoTitle: videoTitle,
+        videoLink: videoUrl,
+        description: plainDescription,
       };
 
 
-      dispatch(addModuleToSection(payload));
+      dispatch(addVideoToModule(payload));
 
-      setIsModuleSaved(true);
 
-      setModules([...modules, moduleTitle]);
+
+
 
       setDisableSaveChanges(true);
       setHideSaveChangesBtn(true)
       setDisableModuleInputs(true);
-    }
-  };
-  const editModule = () => {
+    
+  
 
+
+
+
+    }else{
+      if(!videoDescription){
+        setVideoDescError(true);
+      }
+      if(!videoTitle){
+        setVideoTitleError(true);
+
+      }
+      if(!videoUrl){
+        setVideoUrlError(true);
+
+      }
+    }
+    console.log("Course" , _courseFromState)
+  };
+  const editVideo = () => {
+
+    setDisableSaveChanges(false)
+    setVideoDescError(false);
+    setVideoTitleError(false);
+    setVideoUrlError(false);
     if (
-      moduleTitle &&
-      moduleDescription 
+      videoTitle &&
+      videoDescription && videoUrl 
      
     ) {
-      const plainDescription = moduleDescription
-        ? moduleDescription.replace(/<\/?p>/gi, "")
-        : _courseFromState.description;
-
+      const plainDescription = videoDescription
+        && videoDescription.replace(/<\/?p>/gi, "")
+        
       const payload = {
+        videoId: videoId,
         moduleId: moduleId,
-        sectionId: sectionId,
-        title: moduleTitle,
-
+        videoLink: videoUrl,
+        videoTitle: videoTitle,
         description: plainDescription,
       };
 
       console.log("payload: ", payload);
 
-      dispatch(updateModuleDetail(payload));
+      dispatch(editVideoDetails(payload));
 
       console.log("COURSE", _courseFromState);
       console.log(sectionId);
      setDisableModuleInputs(true);
+
+     setHideSaveChangesBtn(true)
+    }else{
+      if(!videoDescription){
+        setVideoDescError(true);
+      }
+      if(!videoTitle){
+        setVideoTitleError(true);
+
+      }
+      if(!videoUrl){
+        setVideoUrlError(true);
+
+      }
     }
   };
 
+
+  const selectVideoForEdit = (id:string) => {
+    setVideoIdForEdit(id);
+    
+    setEnableEditVideo(true);
+ 
+    setHideCreateVideoSection(false);
+  setViewAddedVideos(false)
+  setDisableModuleInputs(false);
+  setHideSaveChangesBtn(false)
+
+  const video = videos.filter((video:IVideo) => video.id === id);
+  setVideoTitle(video[0]?.title);
+  setVideoDescription(video[0]?.description);
+  setVideoUrl(video[0]?.videoLink);
+  setVideoId(video[0]?.id)
+  setVideoReference(video[0]?.reference)
+
+  }
+
+  const newVideo = () => {
+    
+
+    setHideCreateModuleSection(false);
+
+  setViewAddedVideos(false)
+  setDisableModuleInputs(false);
+  setHideSaveChangesBtn(false)
+  }
 
   const clearInputs = () => {
-    if(videos.length > 0) {
-      setModuleTitle("");
-      setModuleDescription("");
+    setVideoDescError(false);
+    setVideoTitleError(false);
+    setVideoUrlError(false);
+    if(videoUrl && videoTitle && videoDescription) {
+      setQuestions([]);
       setVideoUrl("");
+      setEditQuizQuestion(false);
       setVideoTitle("");
-  
-      setIsModuleSaved(false);
+      setVideoDescription("")
+      setVideoId("");
+      setVideoReference("");
+      setIsQuestionCreated(false);
+      setQuestionDescription("");
+      setPoints(0);
+      setQuizId("");
+      setVideoIdForEdit("")
+      setChoiceDescription("");
+      setEnableEditQuestion(false);
+      setEnableEditVideo(false);
+
       setHideCreateModuleSection(true);
-      setChangeModulBtn(false);
-      setVideos([]);
-      onClose();
+      setHideCreateVideoSection(true)
+
+      setViewAddedVideos(true)
+      setToggler(1);
+
+    }else{
+      if(!videoDescription){
+        setVideoDescError(true);
+      }
+      if(!videoTitle){
+        setVideoTitleError(true);
+
+      }
+      if(!videoUrl){
+        setVideoUrlError(true);
+
+      }
     }
   };
-  const handleModuleClick = (module: any) => {
-    if (expandedModule === module.id) {
-      setExpandedModule(null);
-    } else {
-      setExpandedModule(module.id);
-    }
-  };
 
 
-
-  //Module functions ends
-
-  //UseEffect Hooks
+ //UseEffect Hooks
   useEffect(() => {
     const quizQuestions = _quizFromState?.questions.map(
       (questions) => questions
@@ -584,31 +656,29 @@ setChangeEditQuizQuestionContent(false);
     }
   }, [_quizFromState?.questions]);
 
-  // useEffect(() => {
-  //   localStorage.setItem("quizzes", JSON.stringify(quizzes));
-  // }, [quizzes]);
 
-  useEffect(() => {
-    const sectionIds = _courseFromState.sections.map((section) => {
-      if (section.id === sectionId) {
-        const moduleIds = section.modules.map((module) => module.id);
-        const lastModuleId = moduleIds[moduleIds.length - 1];
-
-        setModuleId(lastModuleId);
-      }
-    });
-  }, [sectionId, _courseFromState.sections]);
 
 
   useEffect(() => {
-    const quiz = _quizzesFromState.filter(quiz => quiz.id === quizId);
-    setQuestions(quiz[0]?.questions);
-  },[updateQuestions])
+    
+    const videoQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz.videoId === videoIdForEdit)[0];
+    if(videoQuiz?.id){
+      setQuizId(videoQuiz?.id)
+      setQuestions(videoQuiz?.questions);
+      
+    }else{
+      setQuestions([]);
+      const quiz = _quizzesFromState.filter((quiz:IQuiz) => quiz.id === quizId)[0];
+      setQuestions(quiz?.questions);
+      console.log("Quiz Questions",quiz?.questions);
+    }
+
+  })
+
+  
 
   useEffect(() => {
     getTodaysDate();
-    const sections = _courseFromState.sections;
-    const lastSection = sections.length - 1;
   }, []);
 
   useEffect(() => {
@@ -625,29 +695,30 @@ setChangeEditQuizQuestionContent(false);
     const hasQuestion = _quizFromState?.questions?.filter(
       (question: IQuestion) => question.id === questionId
     )!;
-    setChoicesToEdit(hasQuestion?.length > 0 && hasQuestion[0]?.choices);
     setChoices(hasQuestion?.length > 0 && hasQuestion[0]?.choices);
   });
 
 
 
   useEffect(() => {
-    const section = _courseFromState.sections.find(
-      (section) => section.id === sectionId
-    );
+ 
 
-    if (section) {
-      const module = section.modules.find((module) => module.id === moduleId);
-
-      if (module) {
-        setSelectedVideo(module.videos);
-        setModuleReference(module.reference);
-      }
+    const section = _courseFromState.sections.filter((section:ISection) => section.id === sectionId);
+    const module = section[0].modules[section[0].modules.length - 1];
+    setModuleId(module.id)
+    const video = module.videos[module.videos.length - 1];
+    setVideoId(video?.id)
+    setVideoReference(video?.reference)
+   
+    console.log("Section-Id", section[0])
+    if (module.id && module.videos?.length < 1) {
+      newVideo();
+    }else if(section){
+      setVideos( module?.videos);
     }
-  }, [sectionId, moduleId, _courseFromState.sections]);
 
+  }, [sectionId, _courseFromState.sections, ]);
 
-  console.log("All quizzes", _quizzesFromState)
 
   return (
     <div
@@ -662,82 +733,75 @@ setChangeEditQuizQuestionContent(false);
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
       >
         <div className="card-header p-0 nav">
-          <div className="row no-gutters" role="tablist">
-            <div className="col-auto">
-              <a
-                href="#"
-                data-toggle="tab"
-                onClick={(e) => tabSelect(1, e)}
-                role="tab"
-                aria-selected="true"
-                className={
-                  toggler === 1
-                    ? "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
-                    : "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start"
-                }
-              >
-                <span className="h2 mb-0 mr-3">1</span>
-                <span className="flex d-flex flex-column">
-                  <strong className="card-title">Add Module</strong>
-                  {/* <small className="card-subtitle text-50">Ongoing Projects</small> */}
-                </span>
-              </a>
-            </div>
-            <div className="col-auto border-left border-right">
-              <a
-                href="#"
-                data-toggle="tab"
-                style={{ cursor: cursorStyle(includeQuiz) }}
-                onClick={(e) => {
-                  if (includeQuiz) {
-                    tabSelect(2, e);
-                  } else {
-                    e.preventDefault();
-                  }
-                }}
-                role="tab"
-                aria-selected="true"
-                className={
-                  toggler === 2
-                    ? "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
-                    : "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start"
-                }
-              >
-                <span className="h2 mb-0 mr-3">2</span>
-                <span className="flex d-flex flex-column">
-                  <strong className="card-title">Add Quiz</strong>
-                  {/* <small className="card-subtitle text-50">Past Projects</small> */}
-                </span>
-              </a>
-            </div>
-            <div className="col-auto border-left border-right">
-              <a
-                href="#"
-                style={{ cursor: cursorStyle(includeDocument) }}
-                data-toggle="tab"
-                onClick={(e) => {
-                  if (includeDocument) {
-                    tabSelect(3, e);
-                  } else {
-                    e.preventDefault();
-                  }
-                }}
-                role="tab"
-                aria-selected="true"
-                className={
-                  toggler === 3
-                    ? "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
-                    : "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start"
-                }
-              >
-                <span className="h2 mb-0 mr-3">3</span>
-                <span className="flex d-flex flex-column">
-                  <strong className="card-title">Add Document</strong>
-                  {/* <small className="card-subtitle text-50">Past Projects</small> */}
-                </span>
-              </a>
-            </div>
+         {
+          !viewAddedVideos &&  <div className="row no-gutters" role="tablist">
+          <div className="col-auto">
+            <a
+              href="#"
+              data-toggle="tab"
+              onClick={(e) => tabSelect(1, e)}
+              role="tab"
+              aria-selected="true"
+              className={
+                toggler === 1
+                  ? "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
+                  : "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start"
+              }
+            >
+              <span className="h2 mb-0 mr-3">1</span>
+              <span className="flex d-flex flex-column">
+                <strong className="card-title">Add Video</strong>
+                {/* <small className="card-subtitle text-50">Ongoing Projects</small> */}
+              </span>
+            </a>
           </div>
+          <div className="col-auto border-left border-right">
+            <a
+              data-toggle="tab"
+              style={{ cursor: "pointer"}}
+             
+              role="tab"
+              aria-selected="true"
+              className={
+                toggler === 2
+                  ? "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
+                  : "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start"
+              }
+            >
+              <span className="h2 mb-0 mr-3">2</span>
+              <span className="flex d-flex flex-column">
+                <strong
+                onClick={addQuiz}
+                className="card-title">Add Quiz</strong>
+                {/* <small className="card-subtitle text-50">Past Projects</small> */}
+              </span>
+            </a>
+          </div>
+          <div className="col-auto border-left border-right">
+            <a
+              href="#"
+              style={{ cursor: "pointer" }}
+              data-toggle="tab"
+             
+              role="tab"
+              aria-selected="true"
+              className={
+                toggler === 3
+                  ? "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
+                  : "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start"
+              }
+            >
+              <span className="h2 mb-0 mr-3">3</span>
+              <span className="flex d-flex flex-column">
+                <strong
+                onClick={addDocument}
+                className="card-title">Add Document</strong>
+                {/* <small className="card-subtitle text-50">Past Projects</small> */}
+              </span>
+            </a>
+          </div>
+        </div>
+         }
         </div>
         <div className="pt-32pt">
           <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
@@ -745,7 +809,7 @@ setChangeEditQuizQuestionContent(false);
               <div className="mb-24pt mb-sm-0 mr-sm-24pt">
                 <h2 className="mb-0">
                   {toggler === 1
-                    ? "Add Module"
+                    ? enableEditVideo ? "Edit Video" : "Add Video"
                     : toggler === 2
                     ? "Add Quiz"
                     : "Add Document"}
@@ -754,7 +818,7 @@ setChangeEditQuizQuestionContent(false);
                   <li className="breadcrumb-item">
                     <a href="index.html">Home</a>
                   </li>
-                  <li className="breadcrumb-item active">Add Module</li>
+                  <li className="breadcrumb-item active">{enableEditVideo ? "Edit Video" : "Add Video"}</li>
                 </ol>
               </div>
             </div>
@@ -764,48 +828,175 @@ setChangeEditQuizQuestionContent(false);
         <div style={{ width: "100%" }} className="page-section border-bottom-2">
           <div className="container page__container">
             <div className="row">
+
+
+
               <div
                 className={toggler === 1 ? "col-md-8" : "col-md-8 d-md-none"}
               >
                 <div className="page-separator">
-                  <div className="page-separator__text">Basic information</div>
+                  <div className="page-separator__text">{viewAddedVideos ? "Videos" : "Basic information"}</div>
                 </div>
-              
+              <div>
+                {viewAddedVideos && (
+                    <>
+                      <div
+                        style={{
+                          backgroundColor: "#f5f7fa",
+                          marginBottom: "10px",
+                        }}
+                        className="accordion__item open"
+                      >
+                      <div>
+  {_courseFromState.sections.map((section) => {
+    if (section.id === sectionId) {
+      return section.modules[section.modules.length - 1].videos.map((video) => (
+        <div
+         
+          style={{ cursor: "pointer" }}
+          className={`accordion__item ${expandedVideo === "1" ? "open" : ""}`}
+          key={video.id}
+        >
+          <div
+            className="accordion__menu collapse show"
+            
+            id={`course-toc-${module.id}`}
+          >
+            <div className="accordion__menu-link" key={video.id}>
+              <FaVideo className="video-icon" /> {/* Video icon */}
+              <a  onClick={() => selectVideoForEdit(video.id)} style={{ marginLeft: "10px" }} className="flex">
+                {video.title}
+              </a>
+              <span className="text-muted">
+              <button
+                          onClick={() => deleteVideoHandler(video.id)}
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                            outline: "none",
+                          }}
+                        >
+                          <FaTrash />
+                        </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      ));
+    }
+    return null; 
+  })}
+</div>
+
+                        
+                      </div>
+                      <button
+                              onClick={newVideo}
+                              style={{
+                                outline: "none",
+                                border: "none",
+                                backgroundColor: "transparent",
+                              }}
+                            >
+                              <a href="#" className="btn btn-outline-secondary">
+                                Add Video
+                              </a>
+                            </button>
+                    </>
+                  )}
+                </div>
 
                 {!hideCreateModuleSection && (
                   <>
-                    <label className="form-label">Module title</label>
+                    <label className="form-label">Video title
+                    {videoTitleError && 
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *required field
+                              </span>
+                            }
+                    </label>
                     <div className="form-group mb-24pt">
                       <input
                         type="text"
                         disabled={disableModuleInputs}
                         className="form-control form-control-lg"
-                        placeholder="Module Title"
-                        value={moduleTitle}
+                        placeholder="Video Title"
+                        value={videoTitle}
                         onChange={(e) => {
                           saveChangeBtn();
-                          setModuleTitle(e.target.value);
+                          setVideoTitle(e.target.value);
                         }}
                       />
                       <small className="form-text text-muted">
-                        Please see our <a href="">module title guideline</a>
+                        Please see our <a href="">video title guideline</a>
                       </small>
                     </div>
-                    <label className="form-label">Module Description</label>
+                    <label className="form-label">Video Description
+                    
+                    {videoDescError && 
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *required field
+                              </span>
+                            }
+                    </label>
                     <div style={{ height: "200px", overflow: "auto" }}>
                       <ReactQuill
                       readOnly={disableModuleInputs}
                         style={{ height: "100px" }}
-                        value={moduleDescription}
+                        value={videoDescription}
                         onChange={(value: string) => {
-                          setModuleDescription(value); // Pass the new description
+
+                          setVideoDescription(value); // Pass the new description
                           saveChangeBtn();
                         }}
-                        placeholder="Module description..."
+                        placeholder="Video description..."
                         modules={moduleToolbar}
                       />
                       
                     </div>
+                   <div style={{position:"relative", bottom :"2.5em"}}>
+                   <label className="form-label">Video URL
+                   
+                   {videoUrlError && 
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *required field
+                              </span>
+                            }
+                   
+                   </label>
+                    <div className="form-group mb-24pt">
+                      <input
+                        type="text"
+                        disabled={disableModuleInputs}
+                        className="form-control form-control-lg"
+                        placeholder="Video URL"
+                        value={videoUrl}
+                        onChange={(e) => {
+                          saveChangeBtn();
+                          setVideoUrl(e.target.value);
+                        }}
+                      />
+                  
+                    </div>
+                   </div>
                {
                 !hideSaveChangesBtn ?  <button
                 disabled={disableSaveChanges}
@@ -820,7 +1011,7 @@ setChangeEditQuizQuestionContent(false);
                 }}
               >
                 <a
-                  onClick={createModule}
+                  onClick={createVideo}
                   href="#"
                   className="btn btn-outline-secondary mb-24pt mb-sm-0"
                   >
@@ -848,7 +1039,7 @@ setChangeEditQuizQuestionContent(false);
                  Edit Details
                </a>:
                <a
-                 onClick={editModule}
+                 onClick={editVideo}
                  href="#"
                  className="btn btn-outline-secondary mb-24pt mb-sm-0"
                  >
@@ -856,224 +1047,140 @@ setChangeEditQuizQuestionContent(false);
                </a>
                }
               </button>
+
                }
-                    {isModuleSaved && (
-                      <>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                          className="page-separator"
-                        >
-                          <div className="page-separator__text">Videos</div>
-                          <div>
-                            {showVideoInputs ? null : (
-                              <FaPlus
-                                style={{ cursor: "pointer" }}
-                                onClick={() =>
-                                  setShowVideoInputs(!showVideoInputs)
-                                }
-                              />
-                            )}
-                          </div>
-                        </div>
 
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
-                          className="accordion js-accordion accordion--boxed mb-24pt"
-                          id="parent"
-                          data-domfactory-upgraded="accordion"
-                        >
-                          {videos.length > 0 && (
-                            <>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "row",
-                                  flexWrap: "wrap",
-                                  width: "150%",
-                                }}
-                              >
-                                {selectedVideos.map(
-                                  (video: any, index: number) => (
-                                    <>
-                                      <div
-                                        style={{
-                                          marginLeft: "10px",
-                                          flexBasis: "30%",
-                                          maxWidth: "100% !important",
-                                        }}
-                                        className="card"
-                                      >
-                                        <div className="embed-responsive embed-responsive-16by9">
-                                          <iframe
-                                            className="embed-responsive-item"
-                                            src={video.videoLink}
-                                            //   allowFullScreen=""
-                                          />
-                                        </div>
-                                        <div className="card-body">
-                                          <label className="form-label">
-                                            Title
-                                          </label>
-                                          <input
-                                            disabled={true}
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="Enter Video Title"
-                                            value={video.title}
-                                            onChange={(e) =>
-                                              setVideoTitle(e.target.value)
-                                            }
-                                          />
-                                          <small className="form-text text-muted">
-                                            Enter a valid video title.
-                                          </small>
-                                        </div>
-                                        <div className="card-body">
-                                          <label className="form-label">
-                                            URL
-                                          </label>
-                                          <input
-                                            disabled={true}
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="Enter Video URL"
-                                            value={video.videoLink}
-                                          />
-                                          <small className="form-text text-muted">
-                                            Enter a valid video URL.
-                                          </small>
-
-                                          <div
-                                            style={{
-                                              display: "flex",
-                                              flexDirection: "row",
-                                              justifyContent: "flex-end",
-                                              alignItems: "center",
-                                            }}
-                                          >
-                                            <FaTrash
-                                              onClick={() =>
-                                                deleteVideoHandler(
-                                                  moduleId,
-                                                  video.id
-                                                )
-                                              }
-                                              style={{
-                                                cursor: "pointer",
-                                                marginRight: "5px",
-                                              }}
-                                            />
-                                            <FaPencilAlt
-                                              onClick={() => {
-                                                setVideoId(video.id);
-                                                setChangeVidBtn(false);
-                                                setShowVideoInputs(
-                                                  !showVideoInputs
-                                                );
-                                              }}
-                                              style={{ cursor: "pointer" }}
-                                            />
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </>
-                                  )
-                                )}
-                              </div>
-                            </>
-                          )}
-                        </div>
-
-                        <div>
-                          {showVideoInputs && (
-                            <>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "row",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <label className="form-label">Title</label>
-                              </div>
-
-                              <input
-                                onChange={(e) => setVideoTitle(e.target.value)}
-                                id="flatpickrSample04"
-                                type="text"
-                                className="form-control"
-                                placeholder="video title"
-                                data-toggle="flatpickr"
-                                data-flatpickr-enable-time="true"
-                                data-flatpickr-alt-format="F j, Y at H:i"
-                                value={videoTitle}
-                                data-flatpickr-date-format="Y-m-d H:i"
-                              />
-
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "row",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <label className="form-label">URL</label>
-                              </div>
-
-                              <input
-                                onChange={(e) => setVideoUrl(e.target.value)}
-                                id="flatpickrSample04"
-                                type="text"
-                                className="form-control"
-                                placeholder="video url"
-                                data-toggle="flatpickr"
-                                data-flatpickr-enable-time="true"
-                                data-flatpickr-alt-format="F j, Y at H:i"
-                                data-flatpickr-date-format="Y-m-d H:i"
-                                value={videoUrl}
-                              />
-                            </>
-                          )}
-                        </div>
-
-                        {showVideoInputs && (
-                          <>
-                            {changeVidBtn ? (
-                              <a
-                                style={{ marginTop: "10px" }}
-                                onClick={AddVideo}
-                                href="#"
-                                className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                              >
-                                save Video
-                              </a>
-                            ) : (
-                              <a
-                                style={{ marginTop: "10px" }}
-                                onClick={() => editVideo(videoId)}
-                                href="#"
-                                className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                              >
-                                update Video
-                              </a>
-                            )}
-                          </>
-                        )}
-                      </>
-                    )}
+                  
                   </>
                 )}
               </div>
+
+               {
+                enableEditVideo &&     <div
+                className={toggler === 1 ? "col-md-8" : "col-md-8 d-md-none"}
+              >
+              
+
+                {!hideCreateVideoSection && (
+                  <>
+                    <label className="form-label">Video title
+                    {videoTitleError && 
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *required field
+                              </span>
+                            }
+                    </label>
+                    <div className="form-group mb-24pt">
+                      <input
+                        type="text"
+                        disabled={disableModuleInputs}
+                        className="form-control form-control-lg"
+                        placeholder="Video Title"
+                        value={videoTitle}
+                        onChange={(e) => {
+                          setVideoTitle(e.target.value);
+                        }}
+                      />
+                      <small className="form-text text-muted">
+                        Please see our <a href="">video title guideline</a>
+                      </small>
+                    </div>
+                    <label className="form-label">Video Description
+                    {videoDescError && 
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *required field
+                              </span>
+                            }
+                    </label>
+                    <div style={{ height: "200px", overflow: "auto" }}>
+                      <ReactQuill
+                      readOnly={disableModuleInputs}
+                        style={{ height: "100px" }}
+                        value={videoDescription}
+                        onChange={(value: string) => {
+                          setVideoDescription(value); 
+                        }}
+                        placeholder="Video description..."
+                        modules={moduleToolbar}
+                      />
+                      
+                    </div>
+                   <div style={{position:"relative", bottom :"2.5em"}}>
+                   <label className="form-label">Video URL
+                   {videoUrlError && 
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *required field
+                              </span>
+                            }
+                   </label>
+                    <div className="form-group mb-24pt">
+                      <input
+                        type="text"
+                        disabled={disableModuleInputs}
+                        className="form-control form-control-lg"
+                        placeholder="Video URL"
+                        value={videoUrl}
+                        onChange={(e) => {
+                          setVideoUrl(e.target.value);
+                        }}
+                      />
+                  
+                    </div>
+                   </div>
+
+                   <button
+                style={{
+                  backgroundColor: "transparent",
+                  border: "none",
+                  outline: "none",
+                  width: "150px",
+                  position:"relative",
+                  bottom:"2em"
+
+                }}
+              >
+               { disableModuleInputs ?
+                 <a
+                 onClick={()=> {
+                   setDisableModuleInputs(false)
+                 }}
+                 href="#"
+                 className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                 >
+                 Edit Details
+               </a>:
+               <a
+                 onClick={editVideo}
+                 href="#"
+                 className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                 >
+                 update Details
+               </a>
+               }
+              </button>
+                  
+                  </>
+                )}
+              </div>
+               }
 
               {/*Quiz Content Starts Here*/}
            {
@@ -1221,6 +1328,7 @@ setChangeEditQuizQuestionContent(false);
 
           </div>
            }
+           
            {!editQuizQuestion && (
                 <>
                   <div
@@ -1262,7 +1370,6 @@ setChangeEditQuizQuestionContent(false);
                               value={questionDescription}
                               onChange={(value: string) => {
                                 setQuestionDescription(value);
-                                saveChangeBtn();
                               }}
                               placeholder="Enter your question description here..."
                             />
@@ -1376,25 +1483,7 @@ setChangeEditQuizQuestionContent(false);
                                 className="form-control mb-3"
                                 placeholder="Enter your choice here..."
                               />
-                              <select
-                                value={choiceAnswer}
-                                style={{
-                                  border: `${
-                                    choiceAnswerError
-                                      ? "2px solid tomato"
-                                      : "none"
-                                  }`,
-                                }}
-                                onChange={(e: any) =>
-                                  setChoiceAnswer(e.target.value)
-                                }
-                                name="category"
-                                className="form-control custom-select mb-3"
-                              >
-                                <option >Select an answer</option>
-                                <option value="true">Correct</option>
-                                <option value='false'>Incorrect</option>
-                              </select>
+                              
                               <div>
                                 {!enableUpdateChoice ? (
                                   <button
@@ -1447,9 +1536,7 @@ setChangeEditQuizQuestionContent(false);
 {choices?.length > 0 && choices?.map((option: IChoice, index: any) => (
                                    <a
                                    
-                                   onClick={() =>
-                                    selectChoiceForEdit(option?.id)
-                                  }
+                                  onClick={() => setChoiceId(option?.id)}
                                   key={index}
                                    style={{ cursor: "pointer" ,backgroundColor: '#e9ecef',padding:"8px",marginTop:"5px",borderRadius:"5px"}}
                                    className="accordion__toggle"
@@ -1458,13 +1545,20 @@ setChangeEditQuizQuestionContent(false);
                                    data-parent="#parent"
                                  >
                                    <span
-                                 
+                                    onClick={() =>
+                                      selectChoiceForEdit(option?.id)
+                                    }
                                      style={{ cursor: "pointer" }}
                                      className="flex"
                                    >
                                      {option?.choiceDescription}
                                    </span>
-                                   <button
+               <input
+        type="checkbox"
+        checked={option?.isCorrect}
+        onChange={(e) => onChange(e.target.checked, option?.id)}
+      />
+                              <button
                                      style={{
                                        backgroundColor: "transparent",
                                        border: "none",
@@ -1550,7 +1644,6 @@ setChangeEditQuizQuestionContent(false);
                               value={questionDescription}
                               onChange={(value: string) => {
                                 setQuestionDescription(value);
-                                saveChangeBtn();
                               }}
                               placeholder="Enter your question description here..."
                             />
@@ -1664,25 +1757,7 @@ setChangeEditQuizQuestionContent(false);
                                 className="form-control mb-3"
                                 placeholder="Enter your choice here..."
                               />
-                              <select
-                                value={choiceAnswer}
-                                style={{
-                                  border: `${
-                                    choiceAnswerError
-                                      ? "2px solid tomato"
-                                      : "none"
-                                  }`,
-                                }}
-                                onChange={(e: any) =>
-                                  setChoiceAnswer(e.target.value)
-                                }
-                                name="category"
-                                className="form-control custom-select mb-3"
-                              >
-                                <option value="">Select an answer</option>
-                                <option value="true">Correct</option>
-                                <option value="false">Incorrect</option>
-                              </select>
+                        
                               <div>
                                 {!enableUpdateChoice ? (
                                   <button
@@ -1730,12 +1805,10 @@ setChangeEditQuizQuestionContent(false);
                       key={"section.id"}
                     >
 
-{choicesToEdit?.length > 0 && choicesToEdit?.map((option: IChoice, index: any) => (
+{choices?.length > 0 && choices?.map((option: IChoice, index: any) => (
                                    <a
                                    
-                                   onClick={() =>
-                                    selectChoiceForEdit(option?.id)
-                                  }
+                                  onClick={() => setChoiceId(option?.id)}
                                   key={index}
                                    style={{ cursor: "pointer" ,backgroundColor: '#e9ecef',padding:"8px",marginTop:"5px",borderRadius:"5px"}}
                                    className="accordion__toggle"
@@ -1744,13 +1817,20 @@ setChangeEditQuizQuestionContent(false);
                                    data-parent="#parent"
                                  >
                                    <span
-                                 
+                                    onClick={() =>
+                                      selectChoiceForEdit(option?.id)
+                                    }
                                      style={{ cursor: "pointer" }}
                                      className="flex"
                                    >
                                      {option?.choiceDescription}
                                    </span>
-                                   <button
+               <input
+        type="checkbox"
+        checked={option?.isCorrect}
+        onChange={(e) => onChange(e.target.checked, option?.id)}
+      />
+                              <button
                                      style={{
                                        backgroundColor: "transparent",
                                        border: "none",
@@ -1816,135 +1896,106 @@ setChangeEditQuizQuestionContent(false);
                 </p>
               </div>
 
-              <div className="col-md-4">
-                <div className="card" style={{ width: "auto" }}>
-                  <div className="card-header text-center">
-                    {changeModulBtn && (
-                      <button
-                        style={{
-                          backgroundColor: "transparent",
-                          border: "none",
-                          outline: "none",
-                          width: "150px",
-                        }}
-                      >
-                        <a
-                          onClick={clearInputs}
-                          href="#"
-                          className="btn btn-accent"
-                        >
-                          save module
-                        </a>
-                      </button>
-                          )}           
-                  </div>
+          {
+            !viewAddedVideos &&     <div className="col-md-4">
+            <div className="card" style={{ width: "auto" }}>
+              <div className="card-header text-center">
+              <button
 
-                  <div className="list-group list-group-flush">
-                    <div className="list-group-item d-flex">
-                      <a className="flex" href="#">
-                        <strong>Include Quiz?</strong>
-                      </a>
-                      <input
-                        type="checkbox"
-                        checked={includeQuiz}
-                        onChange={addQuiz}
-                      />
-                    </div>
-                    {/*Quiz Content Ends Here*/}
-
-                    <div className="list-group-item d-flex">
-                      <a href="#" className="flex">
-                        <strong>Include Documents?</strong>
-                      </a>
-                      <input
-                        type="checkbox"
-                        checked={includeDocument}
-                        onChange={addDocument}
-                      />
-                    </div>
-                  </div>
-                </div>
+                    style={{
+                      backgroundColor: "transparent",
+                      border: "none",
+                      outline: "none",
+                      width: "150px",
+                    }}
+                  >
+                    <a
+                      onClick={clearInputs}
+                      href="#"
+                      className="btn btn-accent"
+                    >
+                      save video
+                    </a>
+                  </button>         
               </div>
+
+              <div className="list-group list-group-flush">
+                <div className="list-group-item d-flex">
+                  <a className="flex" href="#">
+                    <strong>Include Quiz?</strong>
+                  </a>
+                  <input
+                    type="checkbox"
+                    checked={includeQuiz}
+                  
+                  />
+                </div>
+                {/*Quiz Content Ends Here*/}
+
+                <div className="list-group-item d-flex">
+                  <a href="#" className="flex">
+                    <strong>Include Documents?</strong>
+                  </a>
+                  <input
+                    type="checkbox"
+                    checked={includeDocument}
+                  />
+                </div>
+                
+              </div>
+              
+            </div>
+            <div className="card">
+              <div className="embed-responsive embed-responsive-16by9">
+                <iframe
+                  className="embed-responsive-item"
+                  src={videoUrl}
+                  //   allowFullScreen=""
+                />
+              </div>
+              <div className="card-body">
+                <label className="form-label">URL</label>
+                <input
+                  type="text"
+                  className="form-control"
+                    value ={videoUrl}
+                  placeholder="Enter Video URL"
+                />
+
+                <small className="form-text text-muted">
+                  Enter a valid video URL.
+                </small>
+              </div>
+            </div>
+          </div>
+          }
 
             </div>
           </div>
         </div>
         {/* // END Page Content */}
-      </div>
+
+ <div
+ style={{alignSelf:"flex-end",marginRight:"6em",marginTop:"2em"}}
+ >
+ <button
+        style={{
+  backgroundColor: "transparent",
+  border: "none",
+  outline: "none",
+  width: "150px",
+}}
+>
+<a
+
+  href="#"
+  className={`btn ${disableModuleInputs ? "btn-accent" : "btn-outline-secondary"}`}
+>
+  Next
+</a>
+</button>
+  </div> 
+      </div>  
     </div>
   );
 };
-
-
-
-// <div>
-// {modules.length > 0 && (
-//   <>
-//     <div
-//       style={{
-//         backgroundColor: "#f5f7fa",
-//         marginBottom: "10px",
-//       }}
-//       className="accordion__item open"
-//     >
-//       {/* <h1>{selectedCourse.title}</h1> */}
-//       {selectedCourse.sections[lastSection].modules.map(
-//         (module: any) => (
-//           <div
-//             className={`accordion__item ${
-//               expandedModule === module.id ? "open" : ""
-//             }`}
-//             key={module.id}
-//           >
-//             <a
-//               href="#"
-//               className={`accordion__toggle ${
-//                 expandedModule === module.id
-//                   ? ""
-//                   : "collapsed"
-//               }`}
-//               data-toggle="collapse"
-//               data-target={`#course-toc-${module.id}`}
-//               data-parent="#parent"
-//               onClick={() => handleModuleClick(module)}
-//             >
-//               <span className="flex">{module.title}</span>
-//               <span className="accordion__toggle-icon material-icons">
-//                 {expandedModule === module.id
-//                   ? "keyboard_arrow_up"
-//                   : "keyboard_arrow_down"}
-//               </span>
-//             </a>
-//             <div
-//               className={`accordion__menu collapse ${
-//                 expandedModule === module.id ? "show" : ""
-//               }`}
-//               id={`course-toc-${module.id}`}
-//             >
-//               {module.videos.map((video: any) => (
-//                 <div
-//                   className="accordion__menu-link"
-//                   key={video.id}
-//                 >
-//                   <FaVideo className="video-icon" />{" "}
-//                   {/* Video icon */}
-//                   <a
-//                     style={{ marginLeft: "10px" }}
-//                     className="flex"
-//                     href={video.videoLink}
-//                   >
-//                     {video.title}
-//                   </a>
-//                   <span className="text-muted">
-//                     {video.duration}
-//                   </span>
-//                 </div>
-//               ))}
-//             </div>
-//           </div>
-//         )
-//       )}
-//     </div>
-//   </>
-// )}
-// </div>
