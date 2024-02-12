@@ -1,11 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: 'export',
-    distDir: 'dist'
+    distDir: 'dist',
+    images: {
+      unoptimized: true
+     
+    },
+    
 }
 
 module.exports = nextConfig
 
+module.exports = {
+  reactStrictMode: false,
+}
 
 // Injected content via Sentry wizard below
 

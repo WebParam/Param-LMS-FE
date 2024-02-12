@@ -4,23 +4,27 @@ export interface IUser{
     name : string,
     surname: string,
     email : string,
-  
+    image:string,
+    summary:string,
+    headLine:string
 }
 
 export interface IUserRegisterModel{
     id?: string,
-    FirstName : string,
-    LastName : string,
-    Email : string,
-    Password : string,
-    Image : string,
-    CreatedOn : Date,
-    CreatedBy? : string,
-    ChangedBy? : string,
-    ChangedOn? : Date,
+    firstName : string,
+    lastName : string,
+    email : string,
+    headLine:string,
+    summary:string,
+    password : string,
+    image : string,
+    createdOn : Date,
+    createdBy? : string,
+    changedBy? : string,
+    changedOn? : Date,
   //  Status: string,
     Otp: string,
-    Role: string,
+    role: string,
     LoginType: number,
  
 }
