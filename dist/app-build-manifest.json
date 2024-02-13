@@ -3,7 +3,6 @@
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/page.css",
       "static/chunks/app/page.js"
     ],
     "/layout": [
@@ -11,34 +10,6 @@
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
-    ],
-    "/protected/admin/manage-courses/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/protected/admin/manage-courses/page.css",
-      "static/chunks/app/protected/admin/manage-courses/page.js"
-    ],
-    "/protected/admin/edit-course/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/protected/admin/edit-course/page.css",
-      "static/chunks/app/protected/admin/edit-course/page.js"
-    ],
-    "/protected/admin/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/protected/admin/dashboard/page.js"
-    ],
-    "/protected/admin/create-course/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/protected/admin/create-course/page.css",
-      "static/chunks/app/protected/admin/create-course/page.js"
-    ],
-    "/not-found": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
     ]
   }
 }
