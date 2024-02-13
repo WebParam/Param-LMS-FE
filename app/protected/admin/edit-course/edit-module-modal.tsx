@@ -601,9 +601,9 @@ setChangeEditQuizQuestionContent(false);
       (section) => section.id === sectionId
     )!;
 
-    const module = section[0].modules.filter((module:IModule) => module.id === moduleId);
+    const Module = section[0].modules.filter((Module:IModule) => Module.id === moduleId);
 
-    const video = module[0]?.videos.filter((video:IVideo) => video.id === videoId)!;
+    const video = Module[0]?.videos.filter((video:IVideo) => video.id === videoId)!;
       if(video && video.length > 0) {
         setVideoTitle(video[0]?.title);
         setVideoDescription(video[0]?.description);

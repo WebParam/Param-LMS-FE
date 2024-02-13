@@ -95,7 +95,7 @@ export default function Home() {
               className="nav-link d-flex align-items-center dropdown-toggle"
               data-toggle="dropdown"
             >
-              <img
+              <Image
                 width={32}
                 height={32}
                 className="rounded-circle mr-8pt"
