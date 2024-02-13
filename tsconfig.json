@@ -23,6 +23,7 @@
         "name": "next"
       }
     ],
+    "baseUrl": "./",
     "paths": {
       "@/*": [
         "./*"
@@ -34,7 +35,11 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "dist/types/**/*.ts"
+    "dist/types/**/*.ts",
+    "app/interfaces/**/*.ts",
+    "middleware.ts",
+    "node_modules/react-redux", "app/protected/student/course/quiz/quiz-questions/page.tsx",
+    
   ],
   "exclude": [
     "node_modules"

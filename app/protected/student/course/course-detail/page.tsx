@@ -1,7 +1,104 @@
+"use client"
 import Image from 'next/image'
 import styles from './page.module.css'
+import { useState } from 'react';
+import Cookies from 'universal-cookie';
+import { Api } from '@/app/lib/restapi/endpoints';
+import { ICourse, ISection,IModule } from '@/app/interfaces/courses';
+import {useEffect} from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { IUser } from '@/app/interfaces/user';
+import { IResponseObject } from '@/app/lib/restapi/response';
+import { getSelectedCourseForEdit } from '@/app/redux/courseSlice';
+import { getAuthor } from '@/app/lib/getAuthor';
+import IComment from '@/app/interfaces/comment';
+import { formatTimeDifference } from '@/app/lib/formatTimeDifference';
+import { getInitials } from '@/app/lib/getInitials';
+import CourseInfoPanel from './about-panel/page';
+const cookies = new Cookies();
+
 
 export default function CourseDetail() {
+
+  //Restrict();
+
+  const [data, setData] = useState<ICourse>();
+  const [sections,setSection]=useState<ISection[]>([])
+  const [openSections,setOpenSections]=useState<number[]>([]);
+  const [userCourses,setUserCourses]=useState<ICourse[]>();
+  const [author,setAuthor]=useState<IUser>();
+  const [comments,setComments]=useState<IComment[]>();
+  const [isLoading, setIsLoading] = useState(true);
+  const goToSectionModule=(module:IModule)=>{
+    localStorage.setItem("module",JSON.stringify(module));
+    window.location.href = '/protected/student/course/video'; 
+   }
+ 
+   
+   const state:any=useSelector(getSelectedCourseForEdit).course;
+  useEffect(() => {
+    setSection(state?.sections);
+       setData(state);
+       if(state){
+        setIsLoading(false);
+       }
+    getUserCourses(state?.creatingUser);
+    const fetchData=async ()=>{
+      setAuthor(await getAuthor(state?.creatingUser)); 
+      debugger;
+      var _comments=await Api.GET_CommentsByReference(state.id);
+      if(_comments){
+        setComments(_comments?.map((comment)=>comment.data)as any);
+        console.log("Comments",_comments);
+      }
+      }
+    fetchData();
+  },[]); 
+
+  const goLeaveReview=()=>{
+    window.location.href = '/protected/student/Comments/add-course-comment'; 
+   localStorage.setItem("add-course-comment",JSON.stringify(data));
+  }
+
+  async function getUserCourses(id:string){
+    var userCourses= await Api.GET_CoursesByUserId(id);
+    
+    console.log("Author courses",userCourses?.data);
+    setUserCourses(userCourses?.data);
+  }
+
+  const courseEnrollment = async (enrollmentData: any) => {
+    var student = cookies.get('param-lms-user');
+  
+    const payload = {
+      "userId": student?.id,
+      "createdDate": enrollmentData?.createdDate,
+      "creatingUser": enrollmentData?.creatingUser,
+      "modifiedDate": "2024-01-12T10:22:30",
+      "modifyingUser": enrollmentData?.modifyingUser,
+      "state": 0,
+      "courses": [enrollmentData?.id]
+    }
+    console.log("payload", payload);
+
+    const enroll = await Api.POST_CourseEnrollment(payload);
+    if(enroll){
+      window.location.href = '/protected/student/dashboard'; 
+      console.log("res", enroll)
+    }
+
+
+  }
+ 
+ 
+  function _SetOpenSections(i:number){
+    
+    if(openSections.includes(i))
+    { setOpenSections(openSections.filter(x=>x!=i))}
+    else{ setOpenSections([...openSections, i])}
+  }
+
+  console.log("open", openSections)
   return (
 
 <>
@@ -31,12 +128,10 @@ export default function CourseDetail() {
       <div className="mdk-box__content">
         <div className="hero py-64pt text-center text-sm-left">
           <div className="container page__container">
-            <h1 className="text-white">Angular Fundamentals</h1>
+            <h1 className="text-white">{data ? data.title ?? "" : ""}
+</h1>
             <p className="lead text-white-50 measure-hero-lead">
-              It’s not every day that one of the most important front-end
-              libraries in web development gets a complete overhaul. Keep your
-              skills relevant and up-to-date with this comprehensive
-              introduction to Google’s popular community project.
+             {data?.description}
             </p>
             <div className="d-flex flex-column flex-sm-row align-items-center justify-content-start">
               <a
@@ -48,30 +143,31 @@ export default function CourseDetail() {
                   play_circle_outline
                 </i>
               </a>
-              <a href="pricing.html" className="btn btn-white">
+              <a href="pricing.html" className="btn btn-white mb-16pt mb-sm-0 mr-sm-16pt">
                 Start your free trial
+              </a>
+              <a 
+                onClick={() => courseEnrollment(data)}
+                href="#" className="btn btn-outline-white">
+                Enroll 
               </a>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div className="navbar navbar-expand-sm navbar-light bg-white border-bottom-2 navbar-list p-0 m-0 align-items-center">
+    {/* <div className="navbar navbar-expand-sm navbar-light bg-white border-bottom-2 navbar-list p-0 m-0 align-items-center">
       <div className="container page__container">
         <ul className="nav navbar-nav flex align-items-sm-center">
           <li className="nav-item navbar-list__item">
             <div className="media align-items-center">
               <span className="media-left mr-16pt">
-                <img
-                  src="../../public/images/people/50/guy-6.jpg"
-                  width={40}
-                  alt="avatar"
-                  className="rounded-circle"
-                />
+              <span className="material-icons text-primary">account_circle</span>
+       
               </span>
               <div className="media-body">
                 <a className="card-title m-0" href="teacher-profile.html">
-                  Eddie Bryan
+                  {data?.creatingUserName}
                 </a>
                 <p className="text-50 lh-1 mb-0">Instructor</p>
               </div>
@@ -109,20 +205,21 @@ export default function CourseDetail() {
           </li>
         </ul>
       </div>
-    </div>
+    </div> */}
+    <CourseInfoPanel  course={data} isLoading={isLoading}/>
     <div className="page-section border-bottom-2">
       <div className="container page__container">
         <div className="page-separator">
           <div className="page-separator__text">Table of Contents</div>
         </div>
         <div className="row mb-0">
-          <div className="col-lg-7">
+          <div className="col-lg-12">
             <div
               className="accordion js-accordion accordion--boxed list-group-flush"
               id="parent"
               data-domfactory-upgraded="accordion"
             >
-              <div className="accordion__item">
+              {/* <div onClick={(e)=>{e.preventDefault(); }} className={  "accordion__item"}>
                 <a
                   href="#"
                   className="accordion__toggle collapsed"
@@ -140,7 +237,7 @@ export default function CourseDetail() {
                     <span className="icon-holder icon-holder--small icon-holder--dark rounded-circle d-inline-flex icon--left">
                       <i className="material-icons icon-16pt">
                         play_circle_outline
-                      </i>
+                      // // </i>
                     </span>
                     <a className="flex" href="student-lesson.html">
                       Watch Trailer
@@ -148,8 +245,8 @@ export default function CourseDetail() {
                     <span className="text-muted">1m 10s</span>
                   </div>
                 </div>
-              </div>
-              <div className="accordion__item open">
+              </div> */}
+               {/* <div className="accordion__item open">
                 <a
                   href="#"
                   className="accordion__toggle"
@@ -206,35 +303,85 @@ export default function CourseDetail() {
                     </a>
                   </div>
                 </div>
-              </div>
-              <div className="accordion__item">
-                <a
-                  href="#"
-                  className="accordion__toggle collapsed"
-                  data-toggle="collapse"
-                  data-target="#course-toc-3"
-                  data-parent="#parent"
-                >
-                  <span className="flex">
-                    Creating and Communicating Between Angular Components
-                  </span>
-                  <span className="accordion__toggle-icon material-icons">
-                    keyboard_arrow_down
-                  </span>
-                </a>
-                <div className="accordion__menu collapse" id="course-toc-3">
-                  <div className="accordion__menu-link">
+        </div>   */}
+              
+              {sections.length > 0 && (
+  <>
+    {sections.map((section,i) => (
+      <div  
+        onClick={(e)=>{ _SetOpenSections(i);e.preventDefault();}}
+        className= { openSections.includes(i)? "accordion__item open": "accordion__item"} 
+         key={section.id}
+        >
+
+        <a
+         
+          className="accordion__toggle"
+          data-toggle="collapse"
+          data-target={`#course-toc-${section.id}`}
+          data-parent="#parent"
+        >
+          <span className="flex">
+            {section.title ?? "Section title"}
+          </span>
+          <span className="accordion__toggle-icon material-icons">
+            keyboard_arrow_down
+          </span>
+        </a>
+
+
+        {/* {
+          section.modules.map((
+
+          ))
+        } */}
+
+
+        <div className={openSections.includes(i)? "accordion__menu collapse show": "accordion__menu collapse"} id={`course-toc-${section.id}`}>
+          {/* <div className="accordion__menu-link">
+            <span className="icon-holder icon-holder--small icon-holder--light rounded-circle d-inline-flex icon--left">
+              <i className="material-icons icon-16pt">lock</i>
+            </span>
+            <span className="text-muted">Lance</span> */}
+            <div className="accordion__menu-link">
                     <span className="icon-holder icon-holder--small icon-holder--light rounded-circle d-inline-flex icon--left">
-                      <i className="material-icons icon-16pt">lock</i>
+                      <i className="material-icons icon-16pt">
+                        hourglass_empty
+                      </i>
                     </span>
-                    <a className="flex" href="student-lesson.html">
-                      Angular Components
-                    </a>
-                    <span className="text-muted">04:23</span>
+                   
+                    {section.modules.map(module=>(
+                      <div>
+                        {
+                       
+                          
+                            module.videos.map(video => (
+                              <>
+                            <span className="text-muted">{video.duration}</span> 
+                            <a className="flex" style={{cursor:"pointer", paddingLeft:"1em"}}  onClick={()=>goToSectionModule(module)}>
+                          {video.title}
+                         </a>
+                              </>
+                      
+                          ))
+                        
+                          
+                    
+                        }
+                     
+                      </div>
+                   
+                    ))}
+                   
                   </div>
-                </div>
-              </div>
-              <div className="accordion__item">
+          {/* </div> */}
+        </div>
+      </div>
+    ))}
+  </>
+)}
+
+              {/* <div className="accordion__item">
                 <a
                   href="#"
                   className="accordion__toggle collapsed"
@@ -260,10 +407,10 @@ export default function CourseDetail() {
                     <span className="text-muted">04:23</span>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
-          <div className="col-lg-5 justify-content-center">
+          {/* <div className="col-lg-5 justify-content-center">
             <div className="card">
               <div className="card-body py-16pt text-center">
                 <span className="icon-holder icon-holder--outline-secondary rounded-circle d-inline-flex mb-8pt">
@@ -283,7 +430,7 @@ export default function CourseDetail() {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
@@ -295,17 +442,14 @@ export default function CourseDetail() {
               <div className="page-separator__text">About this course</div>
             </div>
             <p className="text-70">
+             {data?.description}
+            </p>
+            {/* <p className="text-70 mb-0">
               This course will teach you the fundamentals o*f working with
               Angular 2. You *will learn everything you need to know to create
               complete applications including: components, services, directives,
               pipes, routing, HTTP, and even testing.
-            </p>
-            <p className="text-70 mb-0">
-              This course will teach you the fundamentals o*f working with
-              Angular 2. You *will learn everything you need to know to create
-              complete applications including: components, services, directives,
-              pipes, routing, HTTP, and even testing.
-            </p>
+            </p> */}
           </div>
           <div className="col-md-5">
             <div className="page-separator">
@@ -314,13 +458,18 @@ export default function CourseDetail() {
               </div>
             </div>
             <ul className="list-unstyled">
+             {
+              sections.map((section)=>(
+
               <li className="d-flex align-items-center">
-                <span className="material-icons text-50 mr-8pt">check</span>
-                <span className="text-70">
-                  Fundamentals of working with Angular
-                </span>
-              </li>
-              <li className="d-flex align-items-center">
+              <span className="material-icons text-50 mr-8pt">check</span>
+              <span className="text-70">
+                {section.title}
+              </span>
+            </li>))
+             }
+             
+              {/* <li className="d-flex align-items-center">
                 <span className="material-icons text-50 mr-8pt">check</span>
                 <span className="text-70">
                   Create complete Angular applications
@@ -339,7 +488,7 @@ export default function CourseDetail() {
               <li className="d-flex align-items-center">
                 <span className="material-icons text-50 mr-8pt">check</span>
                 <span className="text-70">Testing with Angular</span>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
@@ -351,52 +500,55 @@ export default function CourseDetail() {
           <div className="col-md-7 mb-24pt mb-md-0">
             <h4>About the author</h4>
             <p className="text-70 mb-24pt">
-              Eddie Bryan is a software developer at LearnD*ash. With more than
-              20 years o*f software development experience, he has gained a
-              passion for Agile software development -- especially Lean.
+              {author?.summary}
             </p>
             <div className="page-separator">
               <div className="page-separator__text bg-white">
                 More from the author
               </div>
             </div>
-            <div className="card card-sm mb-8pt">
-              <div className="card-body d-flex align-items-center">
-                <a href="course.html" className="avatar avatar-4by3 mr-12pt">
-                  <img
-                    src="public/images/paths/angular_routing_200x168.png"
-                    alt="Angular Routing In-Depth"
-                    className="avatar-img rounded"
-                  />
-                </a>
-                <div className="flex">
-                  <a className="card-title mb-4pt" href="course.html">
-                    Angular Routing In-Depth
+            {
+              userCourses?.map((course)=>(
+                <div className="card card-sm mb-8pt">
+                <div className="card-body d-flex align-items-center">
+                  <a href="course.html" className="avatar avatar-4by3 mr-12pt">
+                    <img
+                      src={course.bannerImage}
+                      alt="Angular Routing In-Depth"
+                      className="avatar-img rounded"
+                    />
                   </a>
-                  <div className="d-flex align-items-center">
-                    <div className="rating mr-8pt">
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star_border</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star_border</span>
-                      </span>
+                  <div className="flex">
+                    <a className="card-title mb-4pt" href="course.html">
+                      {course.title}
+                    </a>
+                    <div className="d-flex align-items-center">
+                      <div className="rating mr-8pt">
+                        <span className="rating__item">
+                          <span className="material-icons">star</span>
+                        </span>
+                        <span className="rating__item">
+                          <span className="material-icons">star</span>
+                        </span>
+                        <span className="rating__item">
+                          <span className="material-icons">star</span>
+                        </span>
+                        <span className="rating__item">
+                          <span className="material-icons">star_border</span>
+                        </span>
+                        <span className="rating__item">
+                          <span className="material-icons">star_border</span>
+                        </span>
+                      </div>
+                      <small className="text-muted">3/5</small>
                     </div>
-                    <small className="text-muted">3/5</small>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="card card-sm mb-16pt">
+              ))
+            }
+           
+            {/* <div className="card card-sm mb-16pt">
               <div className="card-body d-flex align-items-center">
                 <a href="course.html" className="avatar avatar-4by3 mr-12pt">
                   <img
@@ -431,8 +583,8 @@ export default function CourseDetail() {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="list-group list-group-flush">
+            </div> */}
+            {/* <div className="list-group list-group-flush">
               <div className="list-group-item px-0">
                 <a href="" className="card-title mb-4pt">
                   Angular Best Practices
@@ -463,21 +615,21 @@ export default function CourseDetail() {
                   <small className="text-muted">13 May 2018</small>
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="col-md-5 pt-sm-32pt pt-md-0 d-flex flex-column align-items-center justify-content-start">
             <div className="text-center">
               <p className="mb-16pt">
                 <img
-                  src="../../public/images/people/110/guy-6.jpg"
+                  src={author?.image}
                   alt="guy-6"
                   className="rounded-circle"
                   width={64}
                 />
               </p>
-              <h4 className="m-0">Eddie Bryan</h4>
+              <h4 className="m-0">{author?.name} {author?.surname}</h4>
               <p className="lh-1">
-                <small className="text-muted">Angular, Web Development</small>
+                <small className="text-muted">{author?.headLine}</small>
               </p>
               <div className="d-flex flex-column flex-sm-row align-items-center justify-content-start">
                 <a
@@ -507,7 +659,7 @@ export default function CourseDetail() {
             learning with us and reaching their goals.
           </p>
         </div>
-        <div className="position-relative carousel-card p-0 mx-auto">
+        {/* <div className="position-relative carousel-card p-0 mx-auto">
           <div
             className="row d-block js-mdk-carousel"
             id="carousel-feedback"
@@ -534,7 +686,7 @@ export default function CourseDetail() {
               className="mdk-carousel__content"
               style={{ transitionDuration: "0ms", width: 1404 }}
             >
-              <div
+              {/* <div
                 className="col-12 col-md-6 mdk-carousel__item"
                 style={{ width: 468 }}
               >
@@ -551,7 +703,52 @@ export default function CourseDetail() {
                 <div className="media ml-12pt">
                   <div className="media-left mr-12pt">
                     <a href="student-profile.html" className="avatar avatar-sm">
-                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> */}
+                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> 
+                      <span className="avatar-title rounded-circle">UK</span>
+                    </a>
+                  </div>
+                  <div className="media-body media-middle">
+                    <a href="student-profile.html" className="card-title">
+                      Umberto Kass
+                    </a>
+                    <div className="rating mt-4pt">
+                      <span className="rating__item">
+                        <span className="material-icons">star</span>
+                      </span>
+                      <span className="rating__item">
+                        <span className="material-icons">star</span>
+                      </span>
+                      <span className="rating__item">
+                        <span className="material-icons">star</span>
+                      </span>
+                      <span className="rating__item">
+                        <span className="material-icons">star</span>
+                      </span>
+                      <span className="rating__item">
+                        <span className="material-icons">star_border</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div> */}
+              {/* <div
+                className="col-12 col-md-6 mdk-carousel__item"
+                style={{ width: 468 }}
+              >
+                <div className="card card-feedback card-body">
+                  <blockquote className="blockquote mb-0">
+                    <p className="text-70 small mb-0">
+                      A wonderful course on how to start. Eddie beautifully
+                      conveys all essentials of a becoming a good Angular
+                      developer. Very glad to have taken this course. Thank you
+                      Eddie Bryan.
+                    </p>
+                  </blockquote>
+                </div>
+                <div className="media ml-12pt">
+                  <div className="media-left mr-12pt">
+                    <a href="student-profile.html" className="avatar avatar-sm">
+                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> 
                       <span className="avatar-title rounded-circle">UK</span>
                     </a>
                   </div>
@@ -596,7 +793,7 @@ export default function CourseDetail() {
                 <div className="media ml-12pt">
                   <div className="media-left mr-12pt">
                     <a href="student-profile.html" className="avatar avatar-sm">
-                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> */}
+                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> 
                       <span className="avatar-title rounded-circle">UK</span>
                     </a>
                   </div>
@@ -623,61 +820,17 @@ export default function CourseDetail() {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div
-                className="col-12 col-md-6 mdk-carousel__item"
-                style={{ width: 468 }}
-              >
-                <div className="card card-feedback card-body">
-                  <blockquote className="blockquote mb-0">
-                    <p className="text-70 small mb-0">
-                      A wonderful course on how to start. Eddie beautifully
-                      conveys all essentials of a becoming a good Angular
-                      developer. Very glad to have taken this course. Thank you
-                      Eddie Bryan.
-                    </p>
-                  </blockquote>
-                </div>
-                <div className="media ml-12pt">
-                  <div className="media-left mr-12pt">
-                    <a href="student-profile.html" className="avatar avatar-sm">
-                      {/* <img src="../../public/images/people/110/guy-.jpg" width="40" alt="avatar" class="rounded-circle"> */}
-                      <span className="avatar-title rounded-circle">UK</span>
-                    </a>
-                  </div>
-                  <div className="media-body media-middle">
-                    <a href="student-profile.html" className="card-title">
-                      Umberto Kass
-                    </a>
-                    <div className="rating mt-4pt">
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star</span>
-                      </span>
-                      <span className="rating__item">
-                        <span className="material-icons">star_border</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </div> 
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
     <div className="page-section bg-white border-bottom-2">
       <div className="container page__container">
         <div className="page-separator">
           <div className="page-separator__text">Student Feedback</div>
+          <a onClick={goLeaveReview} style={{cursor:"pointer"}}  className="page-separator__text ml-auto">Tell Us What You Think<i className="material-icons icon--right">arrow_forward</i></a>
         </div>
         <div className="row mb-32pt">
           <div className="col-md-3 mb-32pt mb-md-0">
@@ -903,7 +1056,9 @@ export default function CourseDetail() {
             </div>
           </div>
         </div>
-        <div className="pb-16pt mb-16pt border-bottom row">
+       {comments&&(
+        comments.map((comment)=>(
+          <div className="pb-16pt mb-16pt border-bottom row">
           <div className="col-md-3 mb-16pt mb-md-0">
             <div className="d-flex">
               <a
@@ -911,12 +1066,12 @@ export default function CourseDetail() {
                 className="avatar avatar-sm mr-12pt"
               >
                 {/* <img src="LB" alt="avatar" class="avatar-img rounded-circle"> */}
-                <span className="avatar-title rounded-circle">LB</span>
+                <span className="avatar-title rounded-circle">{getInitials(comment?.creatingUserName)}</span>
               </a>
               <div className="flex">
-                <p className="small text-muted m-0">2 days ago</p>
+                <p className="small text-muted m-0">{formatTimeDifference(comment.createdDate)}</p>
                 <a href="student-profile.html" className="card-title">
-                  Laza Bogdan
+                  {comment.creatingUserName}
                 </a>
               </div>
             </div>
@@ -940,98 +1095,13 @@ export default function CourseDetail() {
               </span>
             </div>
             <p className="text-70 mb-0">
-              A wonderful course on how to start. Eddie beautifully conveys all
-              essentials of a becoming a good Angular developer. Very glad to
-              have taken this course. Thank you Eddie Bryan.
+             {comment.message}
             </p>
           </div>
         </div>
-        <div className="pb-16pt mb-16pt border-bottom row">
-          <div className="col-md-3 mb-16pt mb-md-0">
-            <div className="d-flex">
-              <a
-                href="student-profile.html"
-                className="avatar avatar-sm mr-12pt"
-              >
-                {/* <img src="UK" alt="avatar" class="avatar-img rounded-circle"> */}
-                <span className="avatar-title rounded-circle">UK</span>
-              </a>
-              <div className="flex">
-                <p className="small text-muted m-0">2 days ago</p>
-                <a href="student-profile.html" className="card-title">
-                  Umberto Klass
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-9">
-            <div className="rating mb-8pt">
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star_border</span>
-              </span>
-            </div>
-            <p className="text-70 mb-0">
-              This course is absolutely amazing, Bryan goes* out of his way to
-              really expl*ain things clearly I couldnt be happier, so glad I
-              made this purchase!
-            </p>
-          </div>
-        </div>
-        <div className="pb-16pt mb-24pt row">
-          <div className="col-md-3 mb-16pt mb-md-0">
-            <div className="d-flex">
-              <a
-                href="student-profile.html"
-                className="avatar avatar-sm mr-12pt"
-              >
-                {/* <img src="AD" alt="avatar" class="avatar-img rounded-circle"> */}
-                <span className="avatar-title rounded-circle">AD</span>
-              </a>
-              <div className="flex">
-                <p className="small text-muted m-0">2 days ago</p>
-                <a href="student-profile.html" className="card-title">
-                  Adrian Demian
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-9">
-            <div className="rating mb-8pt">
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star</span>
-              </span>
-              <span className="rating__item">
-                <span className="material-icons">star_border</span>
-              </span>
-            </div>
-            <p className="text-70 mb-0">
-              This course is absolutely amazing, Bryan goes* out of his way to
-              really expl*ain things clearly I couldnt be happier, so glad I
-              made this purchase!
-            </p>
-          </div>
-        </div>
+        ))
+       )}
+       
       </div>
     </div>
     <div className="page-section">
