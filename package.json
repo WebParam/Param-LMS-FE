@@ -15,7 +15,7 @@
     "@leafygreen-ui/confirmation-modal": "^5.0.9",
     "@mui/material": "^5.14.3",
     "@reduxjs/toolkit": "^1.9.7",
-    "@sentry/nextjs": "^7.60.1",
+    "@sentry/nextjs": "^7.100.1",
     "@sentry/utils": "^7.92.0",
     "@types/node": "20.4.2",
     "@types/react": "18.2.15",
