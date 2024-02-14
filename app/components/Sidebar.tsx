@@ -1,7 +1,7 @@
 import { Link } from "@mui/material";
 import { usePathname } from "next/navigation";
 function Sidebar() {
-  const pathname = usePathname();
+  const pathname ="test";
 
   console.log("Pathname", pathname);
   return (
@@ -11,7 +11,7 @@ function Sidebar() {
       display:"inline-block",
       
     }}>
-      <div className="tab-pane  fade active show " id="sm_instructor">
+      {/* <div className="tab-pane  fade active show " id="sm_instructor">
         <div className="sidebar-heading">Instructor</div>
         <ul className="sidebar-menu">
           <li
@@ -77,7 +77,7 @@ function Sidebar() {
             </a>
           </li>
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 }

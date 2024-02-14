@@ -6,12 +6,9 @@ import React,{useState, useEffect} from "react";
 
 const CourseInfoPanel = (course:any) => {
 
-    if (course.isLoading) {
-        return <p>Loading...</p>;
-      }
-
     const [data, setData] = useState<ICourse>(course.course);
     const [duration, setDuration] = useState("");
+
 
 
     const getData = () => {
@@ -49,6 +46,9 @@ const CourseInfoPanel = (course:any) => {
       },[]); 
   
 
+      if (course.isLoading) {
+        return <p>Loading...</p>;
+      }
     return (
         
     <div className="navbar navbar-expand-sm navbar-light bg-white border-bottom-2 navbar-list p-0 m-0 align-items-center">

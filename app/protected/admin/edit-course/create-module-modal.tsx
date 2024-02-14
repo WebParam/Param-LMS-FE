@@ -431,8 +431,9 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
     //Quiz Functions ends here
   
     //Dcoument functions start here
-    const formData = new FormData();
+
     const handleDocument = (e: any) => {
+      const formData = new FormData();
       const file = e.target.files[0];
   
       if (file) {
@@ -694,15 +695,15 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
  
 
     const section = _courseFromState.sections.filter((section:ISection) => section.id === sectionId);
-    const module = section[0].modules[section[0].modules.length - 1];
-    setModuleId(module.id)
-    const video = module.videos[module.videos.length - 1];
+    const Module = section[0].modules[section[0].modules.length - 1];
+    setModuleId(Module.id)
+    const video = Module.videos[Module.videos.length - 1];
     setVideoId(video?.id)
     setVideoReference(video?.reference)
-    if (module.id && module.videos?.length < 1) {
+    if (Module.id && Module.videos?.length < 1) {
       newVideo();
     }else if(section){
-      setVideos( module?.videos);
+      setVideos( Module?.videos);
     }
 
   }, [sectionId, _courseFromState.sections, ]);
@@ -839,7 +840,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
           <div
             className="accordion__menu collapse show"
             
-            id={`course-toc-${module.id}`}
+            id={`course-toc-${video.id}`}
           >
             <div className="accordion__menu-link" key={video.id}>
               <FaVideo className="video-icon" /> {/* Video icon */}

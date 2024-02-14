@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import styles from "./page.module.css";
 import { Link } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Api } from "@/app/lib/restapi/endpoints";

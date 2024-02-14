@@ -33,7 +33,6 @@ import {
 import Cookies from "universal-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { configureScope } from "@sentry/nextjs";
 
 
 interface CreateCourseModalProps {
@@ -409,8 +408,9 @@ setChangeEditQuizQuestionContent(false);
   //Quiz Functions ends here
 
   //Dcoument functions start here
-  const formData = new FormData();
-  const handleDocument = (e: any) => {
+
+  const handleDocument = (e: any) => { 
+     const formData = new FormData();
     const file = e.target.files[0];
 
     if (file) {
@@ -460,9 +460,9 @@ setChangeEditQuizQuestionContent(false);
     const section = _courseFromState.sections.filter(
       (section) => section.id === sectionId
     );
-    const module = section[0].modules[section[0].modules.length - 1];
-    setModuleId(module.id)
-    if (module?.videos.length === 0) {
+    const Module = section[0].modules[section[0].modules.length - 1];
+    setModuleId(Module.id)
+    if (Module?.videos.length === 0) {
      newVideo();
     }
   };
@@ -704,17 +704,17 @@ setChangeEditQuizQuestionContent(false);
  
 
     const section = _courseFromState.sections.filter((section:ISection) => section.id === sectionId);
-    const module = section[0].modules[section[0].modules.length - 1];
-    setModuleId(module.id)
-    const video = module.videos[module.videos.length - 1];
+    const Module = section[0].modules[section[0].modules.length - 1];
+    setModuleId(Module.id)
+    const video = Module.videos[Module.videos.length - 1];
     setVideoId(video?.id)
     setVideoReference(video?.reference)
    
     console.log("Section-Id", section[0])
-    if (module.id && module.videos?.length < 1) {
+    if (Module.id && Module.videos?.length < 1) {
       newVideo();
     }else if(section){
-      setVideos( module?.videos);
+      setVideos( Module?.videos);
     }
 
   }, [sectionId, _courseFromState.sections, ]);
@@ -860,7 +860,7 @@ setChangeEditQuizQuestionContent(false);
           <div
             className="accordion__menu collapse show"
             
-            id={`course-toc-${module.id}`}
+            id={`course-toc-${video.id}`}
           >
             <div className="accordion__menu-link" key={video.id}>
               <FaVideo className="video-icon" /> {/* Video icon */}

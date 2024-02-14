@@ -436,8 +436,9 @@ setChangeEditQuizQuestionContent(false);
   //Quiz Functions ends here
 
   //Dcoument functions start here
-  const formData = new FormData();
-  const handleDocument = (e: any) => {
+
+  const handleDocument = (e: any) => {  
+    const formData = new FormData();
     const file = e.target.files[0];
 
     if (file) {
@@ -603,9 +604,9 @@ setChangeEditQuizQuestionContent(false);
       (section) => section.id === sectionId
     )!;
 
-    const module = section[0].modules.filter((module:IModule) => module.id === moduleId);
+    const Module = section[0].modules.filter((Module:IModule) => Module.id === moduleId);
 
-    const video = module[0]?.videos.filter((video:IVideo) => video.id === videoId)!;
+    const video = Module[0]?.videos.filter((video:IVideo) => video.id === videoId)!;
       if(video && video.length > 0) {
         setVideoTitle(video[0]?.title);
         setVideoDescription(video[0]?.description);
