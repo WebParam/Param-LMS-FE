@@ -1,6 +1,5 @@
 "use client"
 import Image from 'next/image'
-import styles from './page.module.css'
 import './globals.css'
 import './css/app.css'
 import './vendor/perfect-scrollbar.css'
@@ -9,8 +8,6 @@ import './css/fontawesome.css'
 import './vendor/spinkit.css'
 import './css/preloader.css'
 import './css/dark-mode.css'
-import {  Routes, Route, BrowserRouter } from "react-router-dom";
-import Login from './auth/login/page'
 export default function Home() {
   return (
 

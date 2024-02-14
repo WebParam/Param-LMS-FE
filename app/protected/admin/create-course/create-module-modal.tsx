@@ -408,8 +408,9 @@ setChangeEditQuizQuestionContent(false);
   //Quiz Functions ends here
 
   //Dcoument functions start here
-  const formData = new FormData();
-  const handleDocument = (e: any) => {
+
+  const handleDocument = (e: any) => { 
+     const formData = new FormData();
     const file = e.target.files[0];
 
     if (file) {

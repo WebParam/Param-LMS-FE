@@ -6,7 +6,6 @@ import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';
 import { ICourse } from '@/app/interfaces/courses';
 import {useEffect} from 'react'
-import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedCourseForEdit } from '@/app/redux/courseSlice';
 import MyCoursesChart from '@/app/components/CoursesChart';
@@ -17,7 +16,7 @@ const cookies = new Cookies();
 export default function StudentDashboard() {
   const dispatch = useDispatch();
    const [allCourses, setCourses] = useState<ICourse[]>(); 
-   const [enrolledCourses, setEnrolledCourses] = useState<any[]>(); 
+   const [enrolledCourses, setEnrolledCourses] = useState<any[]>([]); 
    const [highScore,setHighScore] = useState<Number> (0);
 
    const [courseScores, setCourseScores] = useState(['Angular', 'Nodejs', 'Python', 'Javascript', 'Java', 'Databases'])
@@ -289,7 +288,7 @@ useEffect(() => {
         <div className="page-separator__text">Learning Paths</div>
       </div>
       {
-        enrolledCourses?.map((enrolledCourse, i) => (
+       enrolledCourses?.length > 0 && enrolledCourses?.map((enrolledCourse, i) => (
       <div
         className="card js-overlay card-sm overlay--primary-dodger-blue stack stack--1 mb-16pt"
         data-toggle="popover"

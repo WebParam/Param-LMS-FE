@@ -6,7 +6,6 @@ import { useState } from "react";
 import { FaPlus, FaVideo } from "react-icons/fa";
 import {
   addSection,
-  addVideoToModule,
   deleteSection,
   getSelectedCourseForEdit,
   createCourseDetail,
@@ -15,6 +14,7 @@ import {
   addModuleToSection,
   deleteVideoFromModule,
 } from "@/app/redux/courseSlice";
+import dynamic from "next/dynamic";
 import {
   ICourse,
   IModule,
@@ -34,15 +34,14 @@ import "react-toastify/dist/ReactToastify.css";
 import Cookies from "universal-cookie"; // Import the library
 import Dropdown from "react-bootstrap/Dropdown";
 import "react-quill/dist/quill.snow.css";
-import Sidebar from "@/app/components/Sidebar";
 import { IQuiz } from "@/app/interfaces/quiz";
 import {
   getSelectedQuizForEdit,
-  updateQuizVideoId,
 } from "@/app/redux/quizSlice";
 import CreateCourseSidebar from "@/app/components/createCourseSidebar";
+import MyEditor from "../edit-course/CourseDesc";
 
-export default function EditCourse() {
+ function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [editModuleModalOpen, setEditModuleModalOpen] =
     useState<boolean>(false);
@@ -79,13 +78,13 @@ export default function EditCourse() {
 
   console.log("UserData", userData?.id);
 
-  const descriptionToolbar = {
-    toolbar: [
-      [{ header: "1" }, { header: "2" }],
-      ["bold", "italic", "link", "blockquote", "code", "image"],
-      [{ list: "ordered" }, { list: "bullet" }],
-    ],
-  };
+  // const descriptionToolbar = {
+  //   toolbar: [
+  //     [{ header: "1" }, { header: "2" }],
+  //     ["bold", "italic", "link", "blockquote", "code", "image"],
+  //     [{ list: "ordered" }, { list: "bullet" }],
+  //   ],
+  // };
 
   const payload = {
     creatingUser: userData?.id,
@@ -174,9 +173,10 @@ export default function EditCourse() {
     }
   };
 
-  const formData: any = new FormData();
 
   async function createCourse() {
+    
+  const formData: any = new FormData();
     setImgError(false);
     setDisableCreateCourseBtn(true);
     if(!imageUrl){
@@ -240,9 +240,9 @@ export default function EditCourse() {
             }
           })
         );
-debugger;
+
         const uploadQuizzes = await Api.POST_Quiz(updatedQuizzes);
-debugger
+
         toast.update(_id, {
           render: "Successfully saved course",
           type: "success",
@@ -320,8 +320,8 @@ debugger
   });
 
   useEffect(() => {
-    formData.append("file", imageUrl);
-    console.log("File from formdata", formData?.logoImageFile);
+    // formData.append("file", imageUrl);
+    // console.log("File from formdata", formData?.logoImageFile);
   }, [imageUrl]);
 
   const clearSectionContent = () => {
@@ -351,6 +351,11 @@ debugger
     },
   };
 
+  useEffect(() => {
+    // Update the document title using the browser API
+  //  document !=undefined? document.title = 'Khumla':"";
+  });
+
   return (
     <div
       id="test"
@@ -361,39 +366,7 @@ debugger
     >
       <ToastContainer />
 
-      <div>
-        <Modal
-          styles={customModalStyles}
-          open={editModuleModalOpen}
-          onClose={() => {
-            setEditModuleModalOpen(false);
-            setNewSection(true);
-            setUpdateSection(false);
-            clearSectionContent();
-          }}
-          center
-        >
-          <EditCourseModal
-          videoId = {videoId}
-         moduleId={moduleId}
-            sectionId={sectionId}
-            onClose={saveAndCloseEditModuleModal}
-          />
-          {/* <EditCourseModal /> */}
-        </Modal>
-        <Modal
-          styles={customModalStyles}
-          open={editModalOpen}
-          onClose={() => setEditModalOpen(false)}
-          center
-        >
-          <CreateCourseModal
-            sectionId={sectionId}
-            onClose={saveAndCloseEditModal}
-          />
-          {/* <EditCourseModal /> */}
-        </Modal>
-      </div>
+      
       <div
         className="mdk-drawer-layout__content page-content"
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
@@ -723,13 +696,8 @@ debugger
 
                 <div style={{ height: "150px" }}>
                   <div style={{ height: "200px", overflow: "auto" }}>
-                    <ReactQuill
-                      style={{ height: "100px" }}
-                      value={courseDescription}
-                      onChange={handleDescriptionChange}
-                      placeholder="Course description..."
-                      modules={descriptionToolbar}
-                    />
+                  <MyEditor value ={courseDescription} onChange={handleDescriptionChange} />
+
                   </div>
                 </div>
 
@@ -813,8 +781,8 @@ debugger
                         }`}
                         id={`course-toc-${section.id}`}
                       >
-                        {section.modules?.map((module) => 
-                          module.videos.map((video:IVideo) => (
+                        {section.modules?.map((Module) => 
+                          Module.videos.map((video:IVideo) => (
                             <div
                             style={{ cursor: "pointer" }}
                             className="accordion__menu-link"
@@ -823,7 +791,7 @@ debugger
                              <FaVideo
                              
                                         onClick={() => {
-                                          setModuleId(module.id)
+                                          setModuleId(Module.id)
                                 setEditModuleModalOpen(true);
                                 setSectionId(section.id);
                                 setVideoId(video.id);
@@ -834,7 +802,7 @@ debugger
                               style={{marginLeft:"8px"}}
                               className="flex"
                               onClick={() => {
-                                setModuleId(module.id)
+                                setModuleId(Module.id)
                                 setEditModuleModalOpen(true);
                                 setSectionId(section.id);
                                 setVideoId(video.id);
@@ -1116,3 +1084,4 @@ debugger
 }
 
 
+export default dynamic (() => Promise.resolve(EditCourse), {ssr: false})
