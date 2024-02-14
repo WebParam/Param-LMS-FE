@@ -3,12 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppStore } from "../interfaces/store";
 import { ICourse, ICourseState, IModule, ISection, IUpdateCourse, IUpdateCourseDetailState, IUpdateModuleDetailState, IUpdateSectionDetailState, IVideo } from "../interfaces/courses";
 import { useState } from "react";
+import Cookies from "universal-cookie";
 
 const generateUniqueId = () => {
     return Math.random().toString(36).substring(7);
 };
 
-
+const cookies = new Cookies();
+const loogedInUser = cookies.get('param-lms-user');
 
 
 function sortSectionByOrder(a: ISection, b: ISection) {
@@ -33,7 +35,7 @@ const initialState: ICourseState = {
         instructor:"John Smith",
         courseImage: "course_image.jpg",
         bannerImage: "banner_image.jpg",
-        modifyingUser: "user-789",
+        modifyingUser: loogedInUser,
         creatingUserName:"Kwanele"
 
     } as ICourse

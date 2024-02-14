@@ -13,13 +13,16 @@ import "../../../assets/css/preloader.css";
 import dynamic from 'next/dynamic';
 import Sidebar from "@/app/components/Sidebar";
 import { IQuiz } from "@/app/interfaces/quiz";
-
+import { updateCourseFromDataBase } from "@/app/redux/courseSlice";
+import { useDispatch, useSelector } from "react-redux";
 function ManageCourses() {
 
   const [courseHover, setCourseHover] = useState<boolean>(false);
   const [courses, setCourses] = useState<ICourse[] | any>()
   const [quizzes, setQuizzes] = useState<any>([])
   const cookies = new Cookies();
+
+  const dispatch = useDispatch();
 
   const userData = cookies.get("param-lms-user");
   console.log(userData);
@@ -67,8 +70,7 @@ function ManageCourses() {
   
 
   const editCourse = (course: any) => {
-    localStorage.setItem('course', JSON.stringify(course.data));
-
+    dispatch(updateCourseFromDataBase(course?.data));
   };
 
   useEffect(() => {

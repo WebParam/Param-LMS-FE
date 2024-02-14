@@ -39,6 +39,7 @@ import {
   getSelectedQuizForEdit,
 } from "@/app/redux/quizSlice";
 import CreateCourseSidebar from "@/app/components/createCourseSidebar";
+import Sidebar from "@/app/components/Sidebar";
 
 
 // Define interface for ReactQuill props
@@ -104,10 +105,11 @@ const ReactQuillWrapper = ({
   const [updateSection, setUpdateSection] = useState<boolean>(true);
   const [newSection, setNewSection] = useState<boolean>(true);
   const [sectionBtn, setSectionBtn] = useState<boolean>(true);
-  const [imageUrl, setImageUrl] = useState<File>();
+  const [imageUrl, setImageUrl] = useState<any>();
   const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit);
   const [imgError, setImgError] = useState(false);
   const [moduleId, setModuleId] = useState<string>("")
+  const [formData, setFormData] = useState(new FormData());
 
   const [videoId, setVideoId] = useState<string>("")
 
@@ -219,7 +221,6 @@ const ReactQuillWrapper = ({
 
   async function createCourse() {
     
-  const formData: any = new FormData();
     setImgError(false);
     setDisableCreateCourseBtn(true);
     if(!imageUrl){
@@ -363,8 +364,7 @@ const ReactQuillWrapper = ({
   });
 
   useEffect(() => {
-    // formData.append("file", imageUrl);
-    // console.log("File from formdata", formData?.logoImageFile);
+    formData.append("file", imageUrl);
   }, [imageUrl]);
 
   const clearSectionContent = () => {
@@ -394,11 +394,7 @@ const ReactQuillWrapper = ({
     },
   };
 
-  useEffect(() => {
-    // Update the document title using the browser API
-  //  document !=undefined? document.title = 'Khumla':"";
-  });
-
+  
   return (
     <div
       id="test"
@@ -409,7 +405,39 @@ const ReactQuillWrapper = ({
     >
       <ToastContainer />
 
-      
+        <div>
+        <Modal
+          styles={customModalStyles}
+          open={editModuleModalOpen}
+          onClose={() => {
+            setEditModuleModalOpen(false);
+            setNewSection(true);
+            setUpdateSection(false);
+            clearSectionContent();
+          }}
+          center
+        >
+          <EditCourseModal
+          videoId = {videoId}
+         moduleId={moduleId}
+            sectionId={sectionId}
+            onClose={saveAndCloseEditModuleModal}
+          />
+          {/* <EditCourseModal /> */}
+        </Modal>
+        <Modal
+          styles={customModalStyles}
+          open={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          center
+        >
+          <CreateCourseModal
+            sectionId={sectionId}
+            onClose={saveAndCloseEditModal}
+          />
+          {/* <EditCourseModal /> */}
+        </Modal>
+      </div>
       <div
         className="mdk-drawer-layout__content page-content"
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
@@ -1126,7 +1154,7 @@ const ReactQuillWrapper = ({
       </div>
 
       {}
-    <CreateCourseSidebar/>
+    <Sidebar/>
       {/* // END drawer */}
     </div>
   );
