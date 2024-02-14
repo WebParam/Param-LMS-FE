@@ -39,7 +39,52 @@ import {
   getSelectedQuizForEdit,
 } from "@/app/redux/quizSlice";
 import CreateCourseSidebar from "@/app/components/createCourseSidebar";
-import MyEditor from "../edit-course/CourseDesc";
+
+
+// Define interface for ReactQuill props
+interface ReactQuillProps {
+  style?: React.CSSProperties;
+  value?: string;
+  onChange?: any;
+  placeholder?: string;
+  modules?: any; 
+}
+
+const ReactQuillWrapper = ({
+  style,
+  value,
+  onChange,
+  placeholder,
+  modules
+}: ReactQuillProps) => {
+  const [ReactQuillComponent, setReactQuillComponent] = useState<any>(() => () => null); 
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('react-quill').then(module => {
+        console.log("ReactQuill module loaded:", module);
+        setReactQuillComponent(() => module.default);
+      }).catch(error => {
+        console.error("Error loading ReactQuill module:", error);
+      });
+    }
+  }, []);
+
+  console.log("ReactQuillComponent:", ReactQuillComponent);
+
+  if (!ReactQuillComponent) return null; 
+
+  return (
+    <ReactQuillComponent
+      style={style}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      modules={modules}
+    />
+  );
+};
+
 
  function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -51,9 +96,7 @@ import MyEditor from "../edit-course/CourseDesc";
     useState<boolean>(false);
   const [changeBtn, setChangeBtn] = useState<boolean>(false);
   const [sectionId, setSectionId] = useState("");
-  const _courseFromState: ICourse = useSelector(
-    getSelectedCourseForEdit
-  ).course;
+  const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
   const [courseTitle, setCourseTitle] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
   const [disableCreateCourseBtn, setDisableCreateCourseBtn] =
@@ -78,13 +121,13 @@ import MyEditor from "../edit-course/CourseDesc";
 
   console.log("UserData", userData?.id);
 
-  // const descriptionToolbar = {
-  //   toolbar: [
-  //     [{ header: "1" }, { header: "2" }],
-  //     ["bold", "italic", "link", "blockquote", "code", "image"],
-  //     [{ list: "ordered" }, { list: "bullet" }],
-  //   ],
-  // };
+  const descriptionToolbar = {
+    toolbar: [
+      [{ header: "1" }, { header: "2" }],
+      ["bold", "italic", "link", "blockquote", "code", "image"],
+      [{ list: "ordered" }, { list: "bullet" }],
+    ],
+  };
 
   const payload = {
     creatingUser: userData?.id,
@@ -696,7 +739,13 @@ import MyEditor from "../edit-course/CourseDesc";
 
                 <div style={{ height: "150px" }}>
                   <div style={{ height: "200px", overflow: "auto" }}>
-                  <MyEditor value ={courseDescription} onChange={handleDescriptionChange} />
+                  <ReactQuillWrapper
+        style={{ height: "100px" }}
+        value={courseDescription}
+        onChange={handleDescriptionChange}
+        placeholder="Module description..."
+        modules={descriptionToolbar}
+      />
 
                   </div>
                 </div>

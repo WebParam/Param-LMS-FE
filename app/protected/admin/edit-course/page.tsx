@@ -43,23 +43,54 @@ import Sidebar from "@/app/components/Sidebar";
 import { IQuiz } from "@/app/interfaces/quiz";
 import { getSelectedQuizForEdit, updateQuizzes } from "@/app/redux/quizSlice";
 import dynamic from "next/dynamic";
-import MyEditor from "./CourseDesc";
-const ReactQuill = dynamic(import("react-quill"), { ssr: false });
+
+// Define interface for ReactQuill props
+interface ReactQuillProps {
+  style?: React.CSSProperties;
+  value?: string;
+  onChange?: any;
+  placeholder?: string;
+  modules?: any; 
+}
 
 
+const ReactQuillWrapper = ({
+  style,
+  value,
+  onChange,
+  placeholder,
+  modules
+}: ReactQuillProps) => {
+  const [ReactQuillComponent, setReactQuillComponent] = useState<any>(() => () => null);
 
-const QuillNoSSRWrapper = dynamic(
-  async () => {
-    const { default: RQ } = await import('react-quill');
-    return forwardRef((props, ref) => <RQ ref={ref} {...props} />);
-  },
-  {
-    ssr: false,
-  }
-);
-export default function EditCourse() {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('react-quill').then(module => {
+        console.log("ReactQuill module loaded:", module);
+        setReactQuillComponent(() => module.default);
+      }).catch(error => {
+        console.error("Error loading ReactQuill module:", error);
+      });
+    }
+  }, []);
 
-  const qRef = useRef(null);
+  console.log("ReactQuillComponent:", ReactQuillComponent);
+
+  if (!ReactQuillComponent) return null; 
+
+  return (
+    <ReactQuillComponent
+      style={style}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      modules={modules}
+    />
+  );
+};
+
+function EditCourse() {
+
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [editModuleModalOpen, setEditModuleModalOpen] =
     useState<boolean>(false);
@@ -708,8 +739,15 @@ export default function EditCourse() {
                 <label className="form-label">Course Description</label>
 
                 <div style={{ height: "200px", overflow: "auto" }}>
-                <MyEditor value ={courseDescription} onChange={handleDescriptionChange} />
-                </div>
+          
+                <ReactQuillWrapper
+        style={{ height: "100px" }}
+        value={courseDescription}
+        onChange={handleDescriptionChange}
+        placeholder="Module description..."
+        modules={descriptionToolbar}
+      />
+                    </div>
 
                 <div
                   style={{
@@ -2500,3 +2538,4 @@ export default function EditCourse() {
     </div>
   );
 }
+export default dynamic (() => Promise.resolve(EditCourse), {ssr: false})
