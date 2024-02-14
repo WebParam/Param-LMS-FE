@@ -13,7 +13,7 @@ import { Inter } from 'next/font/google'
 import { ReduxProvider } from './provider'
 
 const inter = Inter({ subsets: ['latin'] })
-const Sentry = require('@sentry/node');
+// const Sentry = require('@sentry/node');
 export const metadata: Metadata = {
   title: 'Param LMS',
   description: 'Param LMS |  A new way to learn',

@@ -1,188 +1,43 @@
 "use client"
-import { IChoice } from '@/app/interfaces/quiz'
-import React, { useState } from 'react'
+import { IChoice, IQuiz } from '@/app/interfaces/quiz'
+import { Api } from '@/app/lib/restapi/endpoints';
+import React, { useEffect, useState } from 'react'
 
 function  Page() {
 
-  const [questionNumber, setQuestionNumber] = useState<number>(1)
+  const [questionNumber, setQuestionNumber] = useState<number>(1);
+  const [quiz, setQuiz] = useState<IQuiz>()
+  const [questionsLength, setQuestionsLength] = useState<number>(0)
 
   const nextQuestion = () => {
-    if (questionNumber < 4) {
+    if (questionNumber < questionsLength) {
       setQuestionNumber(questionNumber + 1);
     }
   }
 
-  const quiz = {
-    "id": "c377a6c4d863ab3205e63334",
-    "reference": "r90n9e",
-    "createdByUserId": "64faf82a2a324927dea4e6df",
-    "modifiedByUserId": "64faf82a2a324927dea4e6df",
-    "createdDate": "2024-02-08",
-    "questions": [
-      {
-        "id": "499676279642fd76373e5173",
-        "order": 1,
-        "questionDescription": "What is the capital of France?",
-        "choices": [
-          {
-            "id": "5dacfae2442cdb7054e91132",
-            "order": 1,
-            "choiceDescription": "Paris",
-            "isCorrect": true
-          },
-          {
-            "id": "4fe2e7311aaef5d625f1e3e1",
-            "order": 2,
-            "choiceDescription": "London",
-            "isCorrect": false
-          },
-          {
-            "id": "ee79e9b5b667bc6e6ab819ef",
-            "order": 3,
-            "choiceDescription": "Berlin",
-            "isCorrect": false
-          },
-          {
-            "id": "0c70b6d2451b90b30f86e20a",
-            "order": 4,
-            "choiceDescription": "Rome",
-            "isCorrect": false
-          }
-        ],
-        "points": "10"
-      },
-      {
-        "id": "9e6fd60b1a95c194ffaaaf20",
-        "order": 2,
-        "questionDescription": "What is the largest mammal in the world?",
-        "choices": [
-          {
-            "id": "9a4e180b2fe48e27f0bcf5cc",
-            "order": 1,
-            "choiceDescription": "Elephant",
-            "isCorrect": false
-          },
-          {
-            "id": "ff33fe65d4f978ebf3b5a92d",
-            "order": 2,
-            "choiceDescription": "Blue whale",
-            "isCorrect": true
-          },
-          {
-            "id": "26b2389abbe6d6545b738e3b",
-            "order": 3,
-            "choiceDescription": "Giraffe",
-            "isCorrect": false
-          },
-          {
-            "id": "d420650631f5a64e66de3c07",
-            "order": 4,
-            "choiceDescription": "Hippopotamus",
-            "isCorrect": false
-          }
-        ],
-        "points": "10"
-      },
-      {
-        "id": "5f866f7dfef6eb92e06e09b9",
-        "order": 3,
-        "questionDescription": "Who wrote 'Romeo and Juliet'?",
-        "choices": [
-          {
-            "id": "10be29cf23c5d22cf745df7a",
-            "order": 1,
-            "choiceDescription": "William Shakespeare",
-            "isCorrect": true
-          },
-          {
-            "id": "e7e5be3e890a5b94aa915014",
-            "order": 2,
-            "choiceDescription": "Charles Dickens",
-            "isCorrect": false
-          },
-          {
-            "id": "aae1a1086abdf60a04c5be79",
-            "order": 3,
-            "choiceDescription": "Jane Austen",
-            "isCorrect": false
-          },
-          {
-            "id": "0f352187535a5bce3b7ef47a",
-            "order": 4,
-            "choiceDescription": "Mark Twain",
-            "isCorrect": false
-          }
-        ],
-        "points": "10"
-      },
-      {
-        "id": "067c2f19816db22d7f65c6d3",
-        "order": 4,
-        "questionDescription": "What is the chemical symbol for water?",
-        "choices": [
-          {
-            "id": "9ef1812e28d33e48567a9c28",
-            "order": 1,
-            "choiceDescription": "H2O",
-            "isCorrect": true
-          },
-          {
-            "id": "1197d12b758f370c8fe3c6ab",
-            "order": 2,
-            "choiceDescription": "CO2",
-            "isCorrect": false
-          },
-          {
-            "id": "6baffb83dc80c4223e2c0eab",
-            "order": 3,
-            "choiceDescription": "H2SO4",
-            "isCorrect": false
-          },
-          {
-            "id": "5c0e25ef315f7cd08768ed18",
-            "order": 4,
-            "choiceDescription": "NaCl",
-            "isCorrect": false
-          }
-        ],
-        "points": "10"
-      },
-      {
-        "id": "b5a275019f36f46202a11027",
-        "order": 5,
-        "questionDescription": "Who painted the Mona Lisa?",
-        "choices": [
-          {
-            "id": "527fb7ac9c73331d6bdf292b",
-            "order": 1,
-            "choiceDescription": "Leonardo da Vinci",
-            "isCorrect": true
-          },
-          {
-            "id": "edb6b8c883ea92b013dd405e",
-            "order": 2,
-            "choiceDescription": "Pablo Picasso",
-            "isCorrect": false
-          },
-          {
-            "id": "4fa3c155c78f64f7ee08a196",
-            "order": 3,
-            "choiceDescription": "Vincent van Gogh",
-            "isCorrect": false
-          },
-          {
-            "id": "f7c77b801d23802fe52a6a44",
-            "order": 4,
-            "choiceDescription": "Michelangelo",
-            "isCorrect": false
-          }
-        ],
-        "points": "10"
+  async function getAllQuizzes() {
+    try {
+      const getQuizzes = await Api.GET_AllQuizzes();
+  
+      if (getQuizzes && getQuizzes.length > 0) {
+        const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
+
+        const quizByVideoId = mappedQuizzes.filter((quiz:IQuiz) => quiz.videoId === "0d5f06ac-4431-452c-bc8f-cf8df3d954bc")[0]//videoId here
+        setQuiz(quizByVideoId)
+        setQuestionsLength(quizByVideoId?.questions?.length)
+      } else {
+        console.log("No quizzes found");
       }
-    ],
-    "videoId": "b11de57f-5dfb-4705-a90b-39079a95e67f"
+    } catch (error) {
+      console.error("Error fetching quizzes:", error);
+    }
   }
   
+  useEffect(() => {
+    getAllQuizzes();
+  },[])
+
+
 
   return (
     <div>
@@ -221,10 +76,10 @@ function  Page() {
               <a href="student-take-quiz.html" data-toggle="tooltip" data-placement="bottom" data-title="Quiz: Getting Started with Angular" data-original-title ><span className="material-icons text-primary">account_circle</span></a>
             </nav>
             <div className="d-flex flex-wrap align-items-end justify-content-end mb-16pt">
-              <h1 className="text-white flex m-0">Question {questionNumber} of 4</h1>
+              <h1 className="text-white flex m-0">Question {questionNumber} of {questionsLength}</h1>
               <p className="h1 text-white-50 font-weight-light m-0">00:14</p>
             </div>
-            <p className="hero__lead measure-hero-lead text-white-50">{quiz.questions[questionNumber]?.questionDescription}?</p>
+            <p className="hero__lead measure-hero-lead text-white-50">{quiz?.questions[questionNumber - 1]?.questionDescription}</p>
           </div>
         </div>
         <div className="navbar navbar-expand-md navbar-list navbar-light bg-white border-bottom-2 " style={{whiteSpace: 'nowrap'}}>
@@ -249,7 +104,7 @@ function  Page() {
             <div className="page-separator">
               <div className="page-separator__text">Your Answer</div>
             </div>
-              {quiz.questions[questionNumber]?.choices.map((choice:IChoice) =>   <div className="form-group mb-32pt mb-lg-48pt">
+              {quiz?.questions[questionNumber - 1]?.choices.map((choice:IChoice) =>   <div className="form-group mb-32pt mb-lg-48pt">
               <div className="custom-control custom-checkbox">
                 <input id="customCheck03" type="checkbox" className="custom-control-input" />
                 <label htmlFor="customCheck03" className="custom-control-label">{choice?.choiceDescription}</label>
