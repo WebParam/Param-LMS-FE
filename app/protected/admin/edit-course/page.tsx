@@ -34,8 +34,6 @@ import { Api } from "@/app/lib/restapi/endpoints";
 import { Link } from "@mui/material";
 import { FaTrash } from "react-icons/fa";
 import { EditCourseModal } from "./edit-module-modal";
-import Cookies from "universal-cookie";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -43,6 +41,7 @@ import Sidebar from "@/app/components/Sidebar";
 import { IQuiz } from "@/app/interfaces/quiz";
 import { getSelectedQuizForEdit, updateQuizzes } from "@/app/redux/quizSlice";
 import dynamic from "next/dynamic";
+import Cookies from "universal-cookie";
 
 // Define interface for ReactQuill props
 interface ReactQuillProps {
@@ -91,6 +90,10 @@ const ReactQuillWrapper = ({
 
 function EditCourse() {
 
+  const cookies = new Cookies();
+  const loogedInUser = cookies.get('param-lms-user');
+
+  const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [editModuleModalOpen, setEditModuleModalOpen] =
     useState<boolean>(false);
@@ -100,9 +103,10 @@ function EditCourse() {
     useState<boolean>(false);
   const [changeBtn, setChangeBtn] = useState<boolean>(false);
   const [sectionId, setSectionId] = useState("");
-  const [courseTitle, setCourseTitle] = useState<any>("");
+  const [courseTitle, setCourseTitle] = useState<any>(_courseFromState.title);
   const [videoId, setVideoId] = useState<string>("");
-  const [courseDescription, setCourseDescription] = useState<any>("");
+  const [imageUrl, setImageUrl] = useState<any>();
+  const [courseDescription, setCourseDescription] = useState<any>(_courseFromState.description);
   const [disableCreateCourseBtn, setDisableCreateCourseBtn] =
     useState<boolean>(false);
   const [updateSection, setUpdateSection] = useState<boolean>(true);
@@ -110,34 +114,14 @@ function EditCourse() {
   const [moduleId, setModuleId] = useState<string>();
   const [courseId, setCourseId] = useState<string>("");
   const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
+  const [formData, setFormData] = useState(new FormData());
+
+  const [imgError, setImgError] = useState<boolean>(false)
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const courseDataString = localStorage.getItem("course");
-    if (courseDataString) {
-      const course = JSON.parse(courseDataString);
-      setCourseId(course.id);
-      const payload = {
-        id: course.id,
-        title: course?.title,
-        description: course?.description,
-        sections: course?.sections,
-        createdDate: course?.createdDate,
-        creatingUser: course?.creatingUser,
-        state: course?.state,
-        logo: course?.logo,
-        courseImage: course?.courseImage,
-        bannerImage: course?.bannerImage,
-        modifyingUser: course?.modifyingUser,
-      } as IUpdateCourse;
-      dispatch(updateCourseFromDataBase(payload));
-      setCourseTitle(payload.title);
-      setCourseDescription(payload.description);
-    } else {
-      console.log("No 'course' data found in localStorage");
-    }
-
+    
     let getAllQuizzes: IQuiz[] = [];
     const quizzesFromStorage = localStorage.getItem("quizzes");
     console.log("Quiz", quizzesFromStorage);
@@ -151,14 +135,11 @@ function EditCourse() {
         // Optionally handle the error here
       }
     }
-    debugger;
+
   }, []);
 
   console.log("Quizzes from localStorage", _quizzesFromState);
 
-  const _courseFromState: ICourse = useSelector(
-    getSelectedCourseForEdit
-  ).course;
 
   const descriptionToolbar = {
     toolbar: [
@@ -180,11 +161,12 @@ function EditCourse() {
   const payload = {
     title: courseTitle ?? _courseFromState.title,
     description: courseDescription,
+    creatingUser:_courseFromState.creatingUser,
   } as IUpdateCourseDetailState;
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCourseTitle(e.target.value);
-    dispatch(createCourseDetail(payload));
+    dispatch(updateCourseFromDataBase({..._courseFromState,title: payload.title,description:payload.description}));
   };
 
   const handleDescriptionChange = (content: string, _: any, source: string) => {
@@ -192,10 +174,19 @@ function EditCourse() {
       const plainDescription = content.replace(/<\/?p>/gi, "");
 
       setCourseDescription(plainDescription);
+      dispatch(updateCourseFromDataBase({..._courseFromState,title: payload.title, description:payload.description}));
 
-      dispatch(createCourseDetail(payload));
     }
   };
+
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImageUrl(file);
+      console.log("Image selected: " + file);
+    }
+  };
+
 
   const updateCourseSection = function () {
     const payload = {
@@ -254,9 +245,13 @@ function EditCourse() {
       theme: "light",
     });
 
+
     try {
       const updateCoursedata = await Api.PUT_UpdateCourse(_courseFromState);
       if (updateCoursedata.data.id) {
+        
+        const uploadImageResponse = await Api.POST_Image(updateCoursedata.data.id, formData);
+
         const extractedVideo = updateCoursedata?.data?.sections.reduce(
           (accumulator: IVideo[], section: any) => {
             // Iterate through modules within the section
@@ -290,6 +285,8 @@ function EditCourse() {
             }
           })
         );
+
+
 
         const updateQuizzes = await Api.PUT_UpdateQuizzes(updatedQuizzes);
 
@@ -406,6 +403,10 @@ function EditCourse() {
     },
   };
 
+  
+  useEffect(() => {
+    formData.append("file", imageUrl);
+  }, [imageUrl]);
   return (
     <div
       id="test"
@@ -415,7 +416,34 @@ function EditCourse() {
       data-domfactory-upgraded="mdk-cdrawer-layout"
     >
       <ToastContainer />
-    
+      <div>
+        <Modal
+          styles={customModalStyles}
+          open={editModuleModalOpen}
+          onClose={() => setEditModuleModalOpen(false)}
+          center
+        >
+          <EditCourseModal
+            videoId={videoId}
+            moduleId={moduleId}
+            sectionId={sectionId}
+            onClose={saveAndCloseEditModuleModal}
+          />
+          {/* <EditCourseModal /> */}
+        </Modal>
+        <Modal
+          styles={customModalStyles}
+          open={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          center
+        >
+          <CreateCourseModal
+            sectionId={sectionId}
+            onClose={saveAndCloseEditModal}
+          />
+          {/* <EditCourseModal /> */}
+        </Modal>
+      </div>
       <div
         className="mdk-drawer-layout__content page-content"
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
@@ -1051,61 +1079,32 @@ function EditCourse() {
                     </div>
                   </div>
                 </div>
+                
                 <div className="page-separator">
                   <div className="page-separator__text">Course Logo</div>
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="form-group">
-                        <label className="form-label">
-                          Image url{" "}
-                          {false && (
-                            <span
-                              style={{ color: "tomato", fontWeight: "500px" }}
-                            >
-                              * required
-                            </span>
-                          )}
-                        </label>
-                        {/* <div className="form-group m-0"> */}
-                        <div className="custom-file">
-                          <input
-                            type="file"
-                            id="file"
-                            style={{
-                              border: "2px solid tomato",
-                            }}
-                            onChange={() => {}}
-                            className="custom-file-input"
-                          />
-                          <label className="custom-file-label">
-                            Choose file
-                          </label>
-                          {/* </div> */}
-                        </div>
+                </div>
+
+                <div className="card">
+                  <div className="card-body">
+                    <div className="form-group">
+                      <label className="form-label">Image url {imgError && <span style={{color : "tomato" , fontWeight : "500px"}}>* required</span>}</label>
+                      {/* <div className="form-group m-0"> */}
+                      <div className="custom-file"
+                      
+                      >
+                        <input
+                          type="file"
+                          id="file"
+                          style={{
+                            border: "2px solid tomato" ,
+                          }}
+                          onChange={handleImageChange}
+                          className="custom-file-input"
+                        />
+                        <label className="custom-file-label">Choose file</label>
+                        {/* </div> */}
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className="card">
-                  <div className="embed-responsive embed-responsive-16by9">
-                    <iframe
-                      className="embed-responsive-item"
-                      src="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
-                      //   allowFullScreen=""
-                    />
-                  </div>
-                  <div className="card-body">
-                    <label className="form-label">URL</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      defaultValue="https://player.vimeo.com/video/97243285?title=0&byline=0&portrait=0"
-                      placeholder="Enter Video URL"
-                    />
-
-                    <small className="form-text text-muted">
-                      Enter a valid video URL.
-                    </small>
                   </div>
                 </div>
                 <div className="page-separator">
@@ -1119,125 +1118,15 @@ function EditCourse() {
                         name="category"
                         className="form-control custom-select"
                       >
-                        <option value="vuejs">VueJs</option>
-                        <option value="vuejs">Angular</option>
-                        <option value="vuejs">React</option>
+                        <option value="vuejs">Information Technology</option>
+                        <option value="vuejs">Project Management</option>
+                        <option value="vuejs">Skill Development</option>
                       </select>
-                      <small className="form-text text-muted">
-                        Select a category.
-                      </small>
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Price</label>
-                      <div className="row">
-                        <div className="col-md-6">
-                          <div className="input-group form-inline">
-                            <span className="input-group-prepend">
-                              <span className="input-group-text">$</span>
-                            </span>
-                            <input
-                              type="text"
-                              className="form-control"
-                              defaultValue={24}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <small className="form-text text-muted">
-                        The recommended price is between $17 and $24
-                      </small>
-                    </div>
-                    <div className="form-group mb-0">
-                      <label className="form-label" htmlFor="select03">
-                        Tags
-                      </label>
-                      <select
-                        id="select03"
-                        data-toggle="select"
-                        // multiple=""
-                        className="form-control select2-hidden-accessible"
-                        data-select2-id="select03"
-                        tabIndex={-1}
-                        aria-hidden="true"
-                      >
-                        <option selected={true} data-select2-id={2}>
-                          JavaScript
-                        </option>
-                        <option selected={true} data-select2-id={3}>
-                          Angular
-                        </option>
-                        <option>Bootstrap</option>
-                        <option>CSS</option>
-                        <option>HTML</option>
-                      </select>
-                      <span
-                        className="select2 select2-container select2-container--bootstrap4"
-                        dir="ltr"
-                        data-select2-id={1}
-                        style={{ width: "245.992px" }}
-                      >
-                        <span className="selection">
-                          <span
-                            className="select2-selection select2-selection--multiple"
-                            role="combobox"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                            tabIndex={-1}
-                            aria-disabled="false"
-                          >
-                            <ul className="select2-selection__rendered">
-                              <li
-                                className="select2-selection__choice"
-                                title="JavaScript"
-                                data-select2-id={4}
-                              >
-                                <span
-                                  className="select2-selection__choice__remove"
-                                  role="presentation"
-                                >
-                                  ×
-                                </span>
-                                JavaScript
-                              </li>
-                              <li
-                                className="select2-selection__choice"
-                                title="Angular"
-                                data-select2-id={5}
-                              >
-                                <span
-                                  className="select2-selection__choice__remove"
-                                  role="presentation"
-                                >
-                                  ×
-                                </span>
-                                Angular
-                              </li>
-                              <li className="select2-search select2-search--inline">
-                                <input
-                                  className="select2-search__field"
-                                  type="search"
-                                  tabIndex={0}
-                                  autoComplete="off"
-                                  autoCorrect="off"
-                                  autoCapitalize="none"
-                                  spellCheck="false"
-                                  role="searchbox"
-                                  aria-autocomplete="list"
-                                  placeholder=""
-                                  style={{ width: "0.75em" }}
-                                />
-                              </li>
-                            </ul>
-                          </span>
-                        </span>
-                        <span className="dropdown-wrapper" aria-hidden="true" />
-                      </span>
-                      <small className="form-text text-muted">
-                        Select one or more tags.
-                      </small>
                     </div>
                   </div>
                 </div>
+
+                
               </div>
             </div>
           </div>
@@ -1273,1267 +1162,7 @@ function EditCourse() {
       </div>
 
       {}
-      <div
-        className="mdk-drawer js-mdk-drawer layout-mini-secondary__drawer"
-        id="default-drawer"
-        data-align="start"
-        data-position="left"
-        data-domfactory-upgraded="mdk-drawer"
-        data-persistent=""
-        data-opened=""
-      >
-        <div className="mdk-drawer__scrim" style={{}} />
-        <div
-          className="mdk-drawer__content js-sidebar-mini"
-          data-responsive-width="992px"
-          data-layout="mini-secondary"
-          style={{}}
-        >
-          <div className="sidebar sidebar-mini sidebar-dark-pickled-bluewood sidebar-left d-flex flex-column">
-            {/* Brand */}
-            <a
-              href="index.html"
-              className="sidebar-brand p-0 navbar-height d-flex justify-content-center"
-            >
-              <span className="avatar avatar-sm ">
-                <span className="avatar-title rounded bg-primary">
-                  <img
-                    src="../../public/images/illustration/teacher/128/white.svg"
-                    className="img-fluid"
-                    alt="logo"
-                  />
-                </span>
-              </span>
-            </a>
-            <div
-              className="flex d-flex flex-column justify-content-start ps"
-              data-perfect-scrollbar=""
-            >
-              <ul
-                className="nav flex-shrink-0 flex-nowrap flex-column sidebar-menu mb-0 js-sidebar-mini-tabs"
-                role="tablist"
-              >
-                <li
-                  className="sidebar-menu-item"
-                  data-toggle="tooltip"
-                  data-title="Student"
-                  data-placement="right"
-                  data-boundary="window"
-                  data-original-title=""
-                  title=""
-                >
-                  <a
-                    className="sidebar-menu-button"
-                    href="#sm_student"
-                    data-toggle="tab"
-                    role="tab"
-                    aria-controls="sm_student"
-                    aria-selected="true"
-                  >
-                    <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
-                      school
-                    </i>
-                    <span className="sidebar-menu-text">Student</span>
-                  </a>
-                </li>
-                <li
-                  className="sidebar-menu-item active"
-                  data-toggle="tooltip"
-                  data-title="Instructor"
-                  data-placement="right"
-                  data-container="body"
-                  data-boundary="window"
-                  data-original-title=""
-                  title=""
-                >
-                  <a
-                    className="sidebar-menu-button"
-                    href="#sm_instructor"
-                    data-toggle="tab"
-                    role="tab"
-                    aria-controls="sm_instructor"
-                    aria-selected="false"
-                  >
-                    <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
-                      format_shapes
-                    </i>
-                    <span className="sidebar-menu-text">Instructor</span>
-                  </a>
-                </li>
-                <li
-                  className="sidebar-menu-item "
-                  data-toggle="tooltip"
-                  data-title="Apps"
-                  data-placement="right"
-                  data-container="body"
-                  data-boundary="window"
-                  data-original-title=""
-                  title=""
-                >
-                  <a
-                    className="sidebar-menu-button"
-                    href="#sm_apps"
-                    data-toggle="tab"
-                    role="tab"
-                    aria-controls="sm_apps"
-                  >
-                    <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
-                      apps
-                    </i>
-                    <span className="sidebar-menu-text">Apps</span>
-                  </a>
-                </li>
-                <li
-                  className="sidebar-menu-item "
-                  data-toggle="tooltip"
-                  data-title="Account"
-                  data-placement="right"
-                  data-container="body"
-                  data-boundary="window"
-                  data-original-title=""
-                  title=""
-                >
-                  <a
-                    className="sidebar-menu-button"
-                    href="#sm_account"
-                    data-toggle="tab"
-                    role="tab"
-                    aria-controls="sm_account"
-                  >
-                    <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
-                      account_box
-                    </i>
-                    <span className="sidebar-menu-text">Account</span>
-                  </a>
-                </li>
-                <li
-                  className="sidebar-menu-item "
-                  data-toggle="tooltip"
-                  data-title="Messaging"
-                  data-placement="right"
-                  data-container="body"
-                  data-boundary="window"
-                  data-original-title=""
-                  title=""
-                >
-                  <a
-                    className="sidebar-menu-button"
-                    href="#sm_messaging"
-                    data-toggle="tab"
-                    role="tab"
-                    aria-controls="sm_messaging"
-                  >
-                    <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
-                      message
-                    </i>
-                    <span className="sidebar-menu-text">Messaging</span>
-                  </a>
-                </li>
-                <li
-                  className="sidebar-menu-item"
-                  data-toggle="tooltip"
-                  data-title="Components"
-                  data-placement="right"
-                  data-container="body"
-                  data-boundary="window"
-                  data-original-title=""
-                  title=""
-                >
-                  <a
-                    className="sidebar-menu-button"
-                    href="#sm_components"
-                    data-toggle="tab"
-                    role="tab"
-                    aria-controls="sm_components"
-                  >
-                    <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
-                      tune
-                    </i>
-                    <span className="sidebar-menu-text">Components</span>
-                  </a>
-                </li>
-                <li
-                  className="sidebar-menu-item"
-                  data-toggle="tooltip"
-                  data-title="Layouts"
-                  data-placement="right"
-                  data-boundary="window"
-                  data-original-title=""
-                  title=""
-                >
-                  <a
-                    className="sidebar-menu-button"
-                    href="#sm_layouts"
-                    data-toggle="tab"
-                    role="tab"
-                    aria-controls="sm_layouts"
-                    aria-selected="false"
-                  >
-                    <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
-                      view_compact
-                    </i>
-                    <span className="sidebar-menu-text">Layouts</span>
-                  </a>
-                </li>
-              </ul>
-              <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                <div
-                  className="ps__thumb-x"
-                  tabIndex={0}
-                  style={{ left: 0, width: 0 }}
-                />
-              </div>
-              <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-                <div
-                  className="ps__thumb-y"
-                  tabIndex={0}
-                  style={{ top: 0, height: 0 }}
-                />
-              </div>
-            </div>
-            <ul
-              className="nav flex-column sidebar-menu align-items-center mb-12pt js-sidebar-mini-tabs"
-              role="tablist"
-            >
-              <li className="sidebar-account" style={{ width: 40 }}>
-                <a
-                  href="#sm_account_1"
-                  className="p-4pt d-flex align-items-center justify-content-center"
-                  data-toggle="tab"
-                  role="tab"
-                  aria-controls="sm_account_1"
-                  aria-selected="true"
-                >
-                  <img
-                    width={32}
-                    height={32}
-                    className="rounded-circle"
-                    src="../../public/images/people/50/guy-3.jpg"
-                    alt="account"
-                  />
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div
-            className="sidebar sidebar-light sidebar-left flex sidebar-secondary ps"
-            data-perfect-scrollbar=""
-          >
-            <div className="navbar navbar-light navbar-expand mb-12pt">
-              <span className="d-none d-md-flex align-items-center mr-16pt">
-                <span className="avatar avatar-sm mr-12pt">
-                  <span className="avatar-title rounded navbar-avatar">
-                    <i className="material-icons">trending_up</i>
-                  </span>
-                </span>
-                <small className="flex d-flex flex-column">
-                  <strong className="navbar-text-100">Earnings</strong>
-                  <span className="navbar-text-50">$12.3k</span>
-                </small>
-              </span>
-              <span className="d-none d-md-flex align-items-center mr-16pt">
-                <span className="avatar avatar-sm mr-12pt">
-                  <span className="avatar-title rounded navbar-avatar">
-                    <i className="material-icons">receipt</i>
-                  </span>
-                </span>
-                <small className="flex d-flex flex-column">
-                  <strong className="navbar-text-100">Sales</strong>
-                  <span className="navbar-text-50">264</span>
-                </small>
-              </span>
-            </div>
-            <div className="tab-content">
-              <div className="tab-pane" id="sm_account_1">
-                <div className="sidebar-heading">Account</div>
-                <ul className="sidebar-menu">
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="edit-account.html">
-                      <span className="sidebar-menu-text">Edit Account</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="billing.html">
-                      Billing
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="billing-history.html"
-                    >
-                      Payments
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="/auth/login">
-                      Logout
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="tab-pane " id="sm_apps">
-                <div className="sidebar-heading">Apps</div>
-                <ul className="sidebar-menu">
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button js-sidebar-collapse"
-                      data-toggle="collapse"
-                      href="#enterprise_menu"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        donut_large
-                      </span>
-                      Enterprise
-                      <span className="ml-auto sidebar-menu-toggle-icon" />
-                    </a>
-                    <ul
-                      className="sidebar-submenu collapse sm-indent"
-                      id="enterprise_menu"
-                    >
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="erp-dashboard.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            ERP Dashboard
-                          </span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="crm-dashboard.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            CRM Dashboard
-                          </span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="hr-dashboard.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            HR Dashboard
-                          </span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="employees.html"
-                        >
-                          <span className="sidebar-menu-text">Employees</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="staff.html">
-                          <span className="sidebar-menu-text">Staff</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="leaves.html">
-                          <span className="sidebar-menu-text">Leaves</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button disabled"
-                          href="departments.html"
-                        >
-                          <span className="sidebar-menu-text">Departments</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      data-toggle="collapse"
-                      href="#community_menu"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        people_outline
-                      </span>
-                      Community
-                      <span className="ml-auto sidebar-menu-toggle-icon" />
-                    </a>
-                    <ul
-                      className="sidebar-submenu collapse sm-indent"
-                      id="community_menu"
-                    >
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="teachers.html">
-                          <span className="sidebar-menu-text">
-                            Browse Teachers
-                          </span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="student-profile.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            Student Profile
-                          </span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="teacher-profile.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            Teacher Profile
-                          </span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="blog.html">
-                          <span className="sidebar-menu-text">Blog</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="blog-post.html"
-                        >
-                          <span className="sidebar-menu-text">Blog Post</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="faq.html">
-                          <span className="sidebar-menu-text">FAQ</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="help-center.html"
-                        >
-                          {/*  */}
-                          <span className="sidebar-menu-text">Help Center</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="discussions.html"
-                        >
-                          <span className="sidebar-menu-text">Discussions</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="discussion.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            Discussion Details
-                          </span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="discussions-ask.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            Ask Question
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      data-toggle="collapse"
-                      href="#productivity_menu"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        access_time
-                      </span>
-                      Productivity
-                      <span className="ml-auto sidebar-menu-toggle-icon" />
-                    </a>
-                    <ul
-                      className="sidebar-submenu collapse sm-indent"
-                      id="productivity_menu"
-                    >
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="projects.html">
-                          <span className="sidebar-menu-text">Projects</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="tasks-board.html"
-                        >
-                          <span className="sidebar-menu-text">Tasks Board</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="tasks-list.html"
-                        >
-                          <span className="sidebar-menu-text">Tasks List</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button disabled"
-                          href="kanban.html"
-                        >
-                          <span className="sidebar-menu-text">Kanban</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      data-toggle="collapse"
-                      href="#cms_menu"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        content_copy
-                      </span>
-                      CMS
-                      <span className="ml-auto sidebar-menu-toggle-icon" />
-                    </a>
-                    <ul
-                      className="sidebar-submenu collapse sm-indent"
-                      id="cms_menu"
-                    >
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="cms-dashboard.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            CMS Dashboard
-                          </span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="posts.html">
-                          <span className="sidebar-menu-text">Posts</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      data-toggle="collapse"
-                      href="#ecommerce_menu"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        shopping_cart
-                      </span>
-                      eCommerce
-                      <span className="ml-auto sidebar-menu-toggle-icon" />
-                    </a>
-                    <ul
-                      className="sidebar-submenu collapse sm-indent"
-                      id="ecommerce_menu"
-                    >
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ecommerce.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            Shop Dashboard
-                          </span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button disabled"
-                          href="edit-product.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            Edit Product
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-              <div className="tab-pane " id="sm_student">
-                <div className="sidebar-heading">Student</div>
-                <ul className="sidebar-menu">
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="index.html">
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        home
-                      </span>
-                      <span className="sidebar-menu-text">Home</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="courses.html">
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        local_library
-                      </span>
-                      <span className="sidebar-menu-text">Browse Courses</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="paths.html">
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        style
-                      </span>
-                      <span className="sidebar-menu-text">Browse Paths</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-dashboard.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        account_box
-                      </span>
-                      <span className="sidebar-menu-text">
-                        Student Dashboard
-                      </span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-my-courses.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        search
-                      </span>
-                      <span className="sidebar-menu-text">My Courses</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-paths.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        timeline
-                      </span>
-                      <span className="sidebar-menu-text">My Paths</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="student-path.html">
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        change_history
-                      </span>
-                      <span className="sidebar-menu-text">Path Details</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-course.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        face
-                      </span>
-                      <span className="sidebar-menu-text">Course Preview</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-lesson.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        panorama_fish_eye
-                      </span>
-                      <span className="sidebar-menu-text">Lesson Preview</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-take-course.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        class
-                      </span>
-                      <span className="sidebar-menu-text">Take Course</span>
-                      <span className="sidebar-menu-badge badge badge-accent badge-notifications ml-auto">
-                        PRO
-                      </span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-take-lesson.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        import_contacts
-                      </span>
-                      <span className="sidebar-menu-text">Take Lesson</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-take-quiz.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        dvr
-                      </span>
-                      <span className="sidebar-menu-text">Take Quiz</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-quiz-results.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        poll
-                      </span>
-                      <span className="sidebar-menu-text">My Quizzes</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-quiz-result-details.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        live_help
-                      </span>
-                      <span className="sidebar-menu-text">Quiz Result</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-path-assessment.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        layers
-                      </span>
-                      <span className="sidebar-menu-text">
-                        Skill Assessment
-                      </span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="student-path-assessment-result.html"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        assignment_turned_in
-                      </span>
-                      <span className="sidebar-menu-text">Skill Result</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <Sidebar />
-              <div className="tab-pane " id="sm_account">
-                <div className="sidebar-heading">Account</div>
-                <ul className="sidebar-menu">
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="pricing.html">
-                      <span className="sidebar-menu-text">Pricing</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="login.html">
-                      <span className="sidebar-menu-text">Login</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="signup.html">
-                      <span className="sidebar-menu-text">Signup</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="signup-payment.html"
-                    >
-                      <span className="sidebar-menu-text">Payment</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="reset-password.html"
-                    >
-                      <span className="sidebar-menu-text">Reset Password</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="change-password.html"
-                    >
-                      <span className="sidebar-menu-text">Change Password</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="edit-account.html">
-                      <span className="sidebar-menu-text">Edit Account</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="edit-account-profile.html"
-                    >
-                      <span className="sidebar-menu-text">
-                        Profile &amp; Privacy
-                      </span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="edit-account-notifications.html"
-                    >
-                      <span className="sidebar-menu-text">
-                        Email Notifications
-                      </span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="edit-account-password.html"
-                    >
-                      <span className="sidebar-menu-text">
-                        Account Password
-                      </span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="billing.html">
-                      <span className="sidebar-menu-text">Subscription</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="billing-upgrade.html"
-                    >
-                      <span className="sidebar-menu-text">Upgrade Account</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="billing-payment.html"
-                    >
-                      <span className="sidebar-menu-text">
-                        Payment Information
-                      </span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="billing-history.html"
-                    >
-                      <span className="sidebar-menu-text">Payment History</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="billing-invoice.html"
-                    >
-                      <span className="sidebar-menu-text">Invoice</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="tab-pane " id="sm_messaging">
-                <div className="sidebar-heading">Messaging</div>
-                <ul className="sidebar-menu">
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="messages.html">
-                      <span className="sidebar-menu-text">Messages</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a className="sidebar-menu-button" href="email.html">
-                      <span className="sidebar-menu-text">Email</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="tab-pane" id="sm_components">
-                <div className="sidebar-heading">UI Components</div>
-                <ul className="sidebar-menu">
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      data-toggle="collapse"
-                      href="#components_menu"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        tune
-                      </span>
-                      Components
-                      <span className="ml-auto sidebar-menu-toggle-icon" />
-                    </a>
-                    <ul
-                      className="sidebar-submenu collapse sm-indent"
-                      id="components_menu"
-                    >
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-buttons.html"
-                        >
-                          <span className="sidebar-menu-text">Buttons</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-avatars.html"
-                        >
-                          <span className="sidebar-menu-text">Avatars</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ui-forms.html">
-                          <span className="sidebar-menu-text">Forms</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-loaders.html"
-                        >
-                          <span className="sidebar-menu-text">Loaders</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-tables.html"
-                        >
-                          <span className="sidebar-menu-text">Tables</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ui-cards.html">
-                          <span className="sidebar-menu-text">Cards</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ui-icons.html">
-                          <span className="sidebar-menu-text">Icons</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button" href="ui-tabs.html">
-                          <span className="sidebar-menu-text">Tabs</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-alerts.html"
-                        >
-                          <span className="sidebar-menu-text">Alerts</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-badges.html"
-                        >
-                          <span className="sidebar-menu-text">Badges</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-progress.html"
-                        >
-                          <span className="sidebar-menu-text">Progress</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-pagination.html"
-                        >
-                          <span className="sidebar-menu-text">Pagination</span>
-                        </a>
-                      </li>
-                      {/* <li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-typography.html">
-    <span class="sidebar-menu-text">Typography</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-colors.html">
-    <span class="sidebar-menu-text">Colors</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-breadcrumb.html">
-    <span class="sidebar-menu-text">Breadcrumb</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-accordions.html">
-    <span class="sidebar-menu-text">Accordions</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-modals.html">
-    <span class="sidebar-menu-text">Modals</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-chips.html">
-    <span class="sidebar-menu-text">Chips</span>
-  </a>
-</li> */}
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button disabled" href="">
-                          <span className="sidebar-menu-text">Disabled</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      data-toggle="collapse"
-                      href="#plugins_menu"
-                    >
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        folder
-                      </span>
-                      Plugins
-                      <span className="ml-auto sidebar-menu-toggle-icon" />
-                    </a>
-                    <ul
-                      className="sidebar-submenu collapse sm-indent"
-                      id="plugins_menu"
-                    >
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-charts.html"
-                        >
-                          <span className="sidebar-menu-text">Charts</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-flatpickr.html"
-                        >
-                          <span className="sidebar-menu-text">Flatpickr</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-daterangepicker.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            Date Range Picker
-                          </span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-dragula.html"
-                        >
-                          <span className="sidebar-menu-text">Dragula</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-dropzone.html"
-                        >
-                          <span className="sidebar-menu-text">Dropzone</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-range-sliders.html"
-                        >
-                          <span className="sidebar-menu-text">
-                            Range Sliders
-                          </span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-quill.html"
-                        >
-                          <span className="sidebar-menu-text">Quill</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-select2.html"
-                        >
-                          <span className="sidebar-menu-text">Select2</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-nestable.html"
-                        >
-                          <span className="sidebar-menu-text">Nestable</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-fancytree.html"
-                        >
-                          <span className="sidebar-menu-text">Fancy Tree</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-maps-vector.html"
-                        >
-                          <span className="sidebar-menu-text">Vector Maps</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-sweet-alert.html"
-                        >
-                          <span className="sidebar-menu-text">Sweet Alert</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a
-                          className="sidebar-menu-button"
-                          href="ui-plugin-toastr.html"
-                        >
-                          <span className="sidebar-menu-text">Toastr</span>
-                        </a>
-                      </li>
-                      <li className="sidebar-menu-item">
-                        <a className="sidebar-menu-button disabled" href="">
-                          <span className="sidebar-menu-text">Disabled</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-              <div className="tab-pane" id="sm_layouts">
-                <div className="sidebar-heading">Layouts</div>
-                <ul className="sidebar-menu">
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="../Compact_App_Layout/instructor-edit-course.html"
-                    >
-                      <span className="sidebar-menu-text">Compact</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="../Mini_App_Layout/instructor-edit-course.html"
-                    >
-                      <span className="sidebar-menu-text">Mini</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item active">
-                    <a
-                      className="sidebar-menu-button"
-                      href="../Mini_Secondary_Layout/instructor-edit-course.html"
-                    >
-                      <span className="sidebar-menu-text">
-                        Mini + Secondary
-                      </span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="../App_Layout/instructor-edit-course.html"
-                    >
-                      <span className="sidebar-menu-text">App</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="../Boxed_App_Layout/instructor-edit-course.html"
-                    >
-                      <span className="sidebar-menu-text">Boxed</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="../Sticky_App_Layout/instructor-edit-course.html"
-                    >
-                      <span className="sidebar-menu-text">Sticky</span>
-                    </a>
-                  </li>
-                  <li className="sidebar-menu-item">
-                    <a
-                      className="sidebar-menu-button"
-                      href="../Fixed_Layout/instructor-edit-course.html"
-                    >
-                      <span className="sidebar-menu-text">Fixed</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-              <div
-                className="ps__thumb-x"
-                tabIndex={0}
-                style={{ left: 0, width: 0 }}
-              />
-            </div>
-            <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-              <div
-                className="ps__thumb-y"
-                tabIndex={0}
-                style={{ top: 0, height: 0 }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <Sidebar/>
       {/* // END drawer */}
     </div>
   );

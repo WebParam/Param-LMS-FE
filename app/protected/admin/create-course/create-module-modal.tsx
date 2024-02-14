@@ -40,6 +40,54 @@ interface CreateCourseModalProps {
   sectionId: string;
 }
 
+
+// Define interface for ReactQuill props
+interface ReactQuillProps {
+  style?: React.CSSProperties;
+  value?: string;
+  onChange?: any;
+  placeholder?: string;
+  modules?: any; 
+  readOnly:any
+}
+
+const ReactQuillWrapper = ({
+  style,
+  value,
+  onChange,
+  placeholder,
+  modules,
+  readOnly
+}: ReactQuillProps) => {
+  const [ReactQuillComponent, setReactQuillComponent] = useState<any>(() => () => null); 
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('react-quill').then(module => {
+        console.log("ReactQuill module loaded:", module);
+        setReactQuillComponent(() => module.default);
+      }).catch(error => {
+        console.error("Error loading ReactQuill module:", error);
+      });
+    }
+  }, []);
+
+  console.log("ReactQuillComponent:", ReactQuillComponent);
+
+  if (!ReactQuillComponent) return null; 
+
+  return (
+    <ReactQuillComponent
+    readOnly={readOnly}
+      style={style}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      modules={modules}
+    />
+  );
+};
+
 export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   onClose,
 
@@ -104,6 +152,15 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [videoUrlError, setVideoUrlError] = useState(false);
 
 
+  // const handleDescriptionChange = (content: string, _: any, source: string) => {
+  //   if (source === "user") {
+  //     const plainDescription = content.replace(/<\/?p>/gi, "");
+
+  //     setCourseDescription(plainDescription);
+
+  //     dispatch(createCourseDetail(payload));
+  //   }
+  // };
 
   const onChange = (isChecked: boolean , id : string) => {
 
@@ -952,18 +1009,21 @@ setChangeEditQuizQuestionContent(false);
                             }
                     </label>
                     <div style={{ height: "200px", overflow: "auto" }}>
-                      <ReactQuill
+                     
+                    <ReactQuillWrapper
                       readOnly={disableModuleInputs}
-                        style={{ height: "100px" }}
-                        value={videoDescription}
-                        onChange={(value: string) => {
+        style={{ height: "100px" }}
+        onChange={(value: string) => {
 
-                          setVideoDescription(value); // Pass the new description
-                          saveChangeBtn();
-                        }}
-                        placeholder="Video description..."
-                        modules={moduleToolbar}
-                      />
+          setVideoDescription(value); // Pass the new description
+          saveChangeBtn();
+        }}
+        value={videoDescription}
+        placeholder="Video description..."
+        modules={moduleToolbar}
+      />
+                     
+                    
                       
                     </div>
                    <div style={{position:"relative", bottom :"2.5em"}}>

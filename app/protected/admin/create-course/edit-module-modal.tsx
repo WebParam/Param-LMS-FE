@@ -53,6 +53,55 @@ interface EditCourseModalProps {
   videoId:string
 }
 
+
+// Define interface for ReactQuill props
+interface ReactQuillProps {
+  style?: React.CSSProperties;
+  value?: string;
+  onChange?: any;
+  placeholder?: string;
+  modules?: any; 
+  readOnly:any
+}
+
+const ReactQuillWrapper = ({
+  style,
+  value,
+  onChange,
+  placeholder,
+  modules,
+  readOnly
+}: ReactQuillProps) => {
+  const [ReactQuillComponent, setReactQuillComponent] = useState<any>(() => () => null); 
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('react-quill').then(module => {
+        console.log("ReactQuill module loaded:", module);
+        setReactQuillComponent(() => module.default);
+      }).catch(error => {
+        console.error("Error loading ReactQuill module:", error);
+      });
+    }
+  }, []);
+
+  console.log("ReactQuillComponent:", ReactQuillComponent);
+
+  if (!ReactQuillComponent) return null; 
+
+  return (
+    <ReactQuillComponent
+      readOnly = {readOnly}
+      style={style}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      modules={modules}
+    />
+  );
+};
+
+
 export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   onClose,
   sectionId,
@@ -748,17 +797,20 @@ setChangeEditQuizQuestionContent(false);
                             )}
                     </label>
                     <div style={{ height: "200px", overflow: "auto" }}>
-                      <ReactQuill
-                      readOnly={disableModuleInputs}
-                        style={{ height: "100px" }}
-                        value={videoDescription}
-                        onChange={(value: string) => {
-                          setVideoDescription(value); // Pass the new description
-                        
-                        }}
-                        placeholder="Video description..."
-                        modules={moduleToolbar}
-                      />
+                   
+                    <ReactQuillWrapper
+                     readOnly={disableModuleInputs}
+                     style={{ height: "100px" }}
+                     value={videoDescription}
+                     onChange={(value: string) => {
+                       setVideoDescription(value); // Pass the new description
+                     
+                     }}
+                     placeholder="Video description..."
+                     modules={moduleToolbar}
+      />
+           
+                     
                       
                     </div>
                    <div style={{position:"relative", bottom :"2.5em"}}>
