@@ -1056,8 +1056,8 @@ setChangeEditQuizQuestionContent(false);
                             data-toggle="quill"
                             data-quill-placeholder="Question"
                           >
-                            <ReactQuill
-                              readOnly={enableEditQuestion}
+
+<ReactQuillWrapper         readOnly={enableEditQuestion}
                               style={{ height: "100px" }}
                               value={questionDescription}
                               onChange={(value: string) => {
@@ -1065,7 +1065,7 @@ setChangeEditQuizQuestionContent(false);
                                 // placeholder="Enter your question description here..."
 
                               }}
-                            />
+      />
                           </div>
                         </div>
                         <div className="form-group">
@@ -1330,8 +1330,7 @@ setChangeEditQuizQuestionContent(false);
                             data-toggle="quill"
                             data-quill-placeholder="Question"
                           >
-                            <ReactQuill
-                              readOnly={enableEditQuestion}
+                            <ReactQuillWrapper         readOnly={enableEditQuestion}
                               style={{ height: "100px" }}
                               value={questionDescription}
                               onChange={(value: string) => {
@@ -1339,7 +1338,8 @@ setChangeEditQuizQuestionContent(false);
                            
                               }}
                               placeholder="Enter your question description here..."
-                            />
+      />
+                           
                           </div>
                         </div>
                         <div className="form-group">

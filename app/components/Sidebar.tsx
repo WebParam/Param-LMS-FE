@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { FaBars, FaHome, FaUser } from "react-icons/fa";
 import "./style.css";
@@ -11,43 +13,49 @@ const Sidebar = () => {
   };
 
   const openSidebar = () => {
-    setExpandSidebar(true)
-  }
+    setExpandSidebar(true);
+  };
 
   const closeSidebar = () => {
-    setExpandSidebar(false)
-  }
+    setExpandSidebar(false);
+  };
 
   return (
-    <div className="sidebar "
-    style={expandSidebar ? { width:"160px", justifyContent:"flex-start", alignItems: "flex-end" } : {}}
+    <div
+      className="sidebar "
+      style={
+        expandSidebar
+          ? {
+              width: "160px",
+              justifyContent: "flex-start",
+              alignItems: "flex-end",
+            }
+          : {}
+      }
     >
-     
-
       <div
-         style={{position:"fixed"}}
-    
+        style={{ position: "fixed" }}
         className="flex d-flex flex-column justify-content-start ps"
         data-perfect-scrollbar=""
       >
-         <div className="bar" onClick={() => handleTabClick("home")}>
-        <a
-        onClick={() => setExpandSidebar(!expandSidebar)} style={{ cursor: "pointer" }} 
-          className="sidebar-brand p-0 navbar-height d-flex justify-content-center"
-        >
-          <small className="avatar avatar-sm">
-            <small className="avatar-title rounded bg-primary">
-              <FaBars />
+        <div className="bar" onClick={() => handleTabClick("home")}>
+          <a
+            onClick={() => setExpandSidebar(!expandSidebar)}
+            style={{ cursor: "pointer" }}
+            className="sidebar-brand p-0 navbar-height d-flex justify-content-center"
+          >
+            <small className="avatar avatar-sm">
+              <small className="avatar-title rounded bg-primary">
+                <FaBars />
+              </small>
             </small>
-          </small>
-        </a>
-      </div>
+          </a>
+        </div>
         <ul
           className="nav flex-shrink-0 flex-nowrap flex-column sidebar-menu mb-0 js-sidebar-mini-tabs"
           role="tablist"
         >
-          <li
-           
+              <li
             className="sidebar-menu-item active"
             data-toggle="tooltip"
             data-title="Instructor"
@@ -58,7 +66,6 @@ const Sidebar = () => {
             title=""
           >
             <a
-            
               className="sidebar-menu-button"
               href="#sm_instructor"
               data-toggle="tab"
@@ -66,47 +73,54 @@ const Sidebar = () => {
               aria-controls="sm_instructor"
               aria-selected="false"
             >
-              <i
-        
-              className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
-                school
-              </i>
-              <span 
-              className = {expandSidebar ? "sidebar-menu-text view-text": "sidebar-menu-text hide-text"}
-              >Student</span>
-            </a>
-          </li>
-          <li
-          
-            className="sidebar-menu-item active"
-            data-toggle="tooltip"
-            data-title="Instructor"
-            data-placement="right"
-            data-container="body"
-            data-boundary="window"
-            data-original-title=""
-            title=""
-          >
-            <a
-             
-              className="sidebar-menu-button"
-              href="#sm_instructor"
-              data-toggle="tab"
-              role="tab"
-              aria-controls="sm_instructor"
-              aria-selected="false"
-            >
-              <i
-       
-              className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
+              <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
                 format_shapes
               </i>
-              <span               className = {expandSidebar ? "sidebar-menu-text view-text": "sidebar-menu-text hide-text"}
->Instructor</span>
+              <span
+                className={
+                  expandSidebar
+                    ? "sidebar-menu-text view-text"
+                    : "sidebar-menu-text hide-text"
+                }
+              >
+                Home
+              </span>
             </a>
           </li>
           <li
-           
+            className="sidebar-menu-item active"
+            data-toggle="tooltip"
+            data-title="Instructor"
+            data-placement="right"
+            data-container="body"
+            data-boundary="window"
+            data-original-title=""
+            title=""
+          >
+            <a
+              className="sidebar-menu-button"
+              href="#sm_instructor"
+              data-toggle="tab"
+              role="tab"
+              aria-controls="sm_instructor"
+              aria-selected="false"
+            >
+              <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
+                school
+              </i>
+              <span
+                className={
+                  expandSidebar
+                    ? "sidebar-menu-text view-text"
+                    : "sidebar-menu-text hide-text"
+                }
+              >
+                Student
+              </span>
+            </a>
+          </li>
+      
+          <li
             className="sidebar-menu-item "
             data-toggle="tooltip"
             data-title="Apps"
@@ -118,22 +132,26 @@ const Sidebar = () => {
           >
             <a
               className="sidebar-menu-button"
-              href="#sm_apps"
+              href="/protected/admin/manage-courses"
               data-toggle="tab"
               role="tab"
               aria-controls="sm_apps"
             >
-              <i
-          
-              className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
+              <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
                 apps
               </i>
-              <span               className = {expandSidebar ? "sidebar-menu-text view-text": "sidebar-menu-text hide-text"}
->Apps</span>
+              <span
+                className={
+                  expandSidebar
+                    ? "sidebar-menu-text view-text"
+                    : "sidebar-menu-text hide-text"
+                }
+              >
+                Courses
+              </span>
             </a>
           </li>
           <li
-          
             className="sidebar-menu-item "
             data-toggle="tooltip"
             data-title="Account"
@@ -144,24 +162,27 @@ const Sidebar = () => {
             title=""
           >
             <a
-             
               className="sidebar-menu-button"
               href="#sm_account"
               data-toggle="tab"
               role="tab"
               aria-controls="sm_account"
             >
-              <i
-           
-               className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
+              <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
                 account_box
               </i>
-              <span               className = {expandSidebar ? "sidebar-menu-text view-text": "sidebar-menu-text hide-text"}
->Account</span>
+              <span
+                className={
+                  expandSidebar
+                    ? "sidebar-menu-text view-text"
+                    : "sidebar-menu-text hide-text"
+                }
+              >
+                Account
+              </span>
             </a>
           </li>
           <li
-           
             className="sidebar-menu-item "
             data-toggle="tooltip"
             data-title="Messaging"
@@ -172,24 +193,27 @@ const Sidebar = () => {
             title=""
           >
             <a
-            
               className="sidebar-menu-button"
               href="#sm_messaging"
               data-toggle="tab"
               role="tab"
               aria-controls="sm_messaging"
             >
-              <i
-          
-               className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
+              <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
                 message
               </i>
-              <span               className = {expandSidebar ? "sidebar-menu-text view-text": "sidebar-menu-text hide-text"}
->Messaging</span>
+              <span
+                className={
+                  expandSidebar
+                    ? "sidebar-menu-text view-text"
+                    : "sidebar-menu-text hide-text"
+                }
+              >
+                Messaging
+              </span>
             </a>
           </li>
           <li
-          
             className="sidebar-menu-item"
             data-toggle="tooltip"
             data-title="Components"
@@ -200,24 +224,27 @@ const Sidebar = () => {
             title=""
           >
             <a
-            
               className="sidebar-menu-button"
               href="#sm_components"
               data-toggle="tab"
               role="tab"
               aria-controls="sm_components"
             >
-              <i 
-         
-              className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
+              <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
                 tune
               </i>
-              <span               className = {expandSidebar ? "sidebar-menu-text view-text": "sidebar-menu-text hide-text"}
->Components</span>
+              <span
+                className={
+                  expandSidebar
+                    ? "sidebar-menu-text view-text"
+                    : "sidebar-menu-text hide-text"
+                }
+              >
+                Components
+              </span>
             </a>
           </li>
           <li
-            
             className="sidebar-menu-item"
             data-toggle="tooltip"
             data-title="Layouts"
@@ -227,7 +254,6 @@ const Sidebar = () => {
             title=""
           >
             <a
-           
               className="sidebar-menu-button"
               href="#sm_layouts"
               data-toggle="tab"
@@ -235,13 +261,18 @@ const Sidebar = () => {
               aria-controls="sm_layouts"
               aria-selected="false"
             >
-              <i
-      
-               className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
+              <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
                 view_compact
               </i>
-              <span               className = {expandSidebar ? "sidebar-menu-text view-text": "sidebar-menu-text hide-text"}
->Layouts</span>
+              <span
+                className={
+                  expandSidebar
+                    ? "sidebar-menu-text view-text"
+                    : "sidebar-menu-text hide-text"
+                }
+              >
+                Layouts
+              </span>
             </a>
           </li>
         </ul>
