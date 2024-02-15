@@ -147,7 +147,38 @@ const Sidebar = () => {
                     : "sidebar-menu-text hide-text"
                 }
               >
-                Courses
+              Courses
+              </span>
+            </a>
+          </li>
+          <li
+            className="sidebar-menu-item"
+            data-toggle="tooltip"
+            data-title="Components"
+            data-placement="right"
+            data-container="body"
+            data-boundary="window"
+            data-original-title=""
+            title=""
+          >
+            <a
+              className="sidebar-menu-button"
+              href="/protected/admin/create-course"
+              data-toggle="tab"
+              role="tab"
+              aria-controls="sm_components"
+            >
+              <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
+                tune
+              </i>
+              <span
+                className={
+                  expandSidebar
+                    ? "sidebar-menu-text view-text"
+                    : "sidebar-menu-text hide-text"
+                }
+              >
+                Create Course
               </span>
             </a>
           </li>
@@ -213,37 +244,7 @@ const Sidebar = () => {
               </span>
             </a>
           </li>
-          <li
-            className="sidebar-menu-item"
-            data-toggle="tooltip"
-            data-title="Components"
-            data-placement="right"
-            data-container="body"
-            data-boundary="window"
-            data-original-title=""
-            title=""
-          >
-            <a
-              className="sidebar-menu-button"
-              href="#sm_components"
-              data-toggle="tab"
-              role="tab"
-              aria-controls="sm_components"
-            >
-              <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
-                tune
-              </i>
-              <span
-                className={
-                  expandSidebar
-                    ? "sidebar-menu-text view-text"
-                    : "sidebar-menu-text hide-text"
-                }
-              >
-                Components
-              </span>
-            </a>
-          </li>
+          
           <li
             className="sidebar-menu-item"
             data-toggle="tooltip"
