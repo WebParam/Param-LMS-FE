@@ -1165,16 +1165,19 @@ setChangeEditQuizQuestionContent(false);
                             }
                     </label>
                     <div style={{ height: "200px", overflow: "auto" }}>
-                      <ReactQuill
-                      readOnly={disableModuleInputs}
-                        style={{ height: "100px" }}
-                        value={videoDescription}
-                        onChange={(value: string) => {
-                          setVideoDescription(value); 
-                        }}
-                        placeholder="Video description..."
-                        modules={moduleToolbar}
-                      />
+                    <ReactQuillWrapper
+                     readOnly={disableModuleInputs}
+                     style={{ height: "100px" }}
+                     value={videoDescription}
+                     onChange={(value: string) => {
+                       setVideoDescription(value); 
+                     }}
+                     placeholder="Video description..."
+                     modules={moduleToolbar}
+      />
+                     
+                     
+                     
                       
                     </div>
                    <div style={{position:"relative", bottom :"2.5em"}}>
@@ -1424,15 +1427,18 @@ setChangeEditQuizQuestionContent(false);
                             data-toggle="quill"
                             data-quill-placeholder="Question"
                           >
-                            <ReactQuill
-                              readOnly={enableEditQuestion}
-                              style={{ height: "100px" }}
-                              value={questionDescription}
-                              onChange={(value: string) => {
-                                setQuestionDescription(value);
-                              }}
-                              placeholder="Enter your question description here..."
-                            />
+
+<ReactQuillWrapper
+                     readOnly={enableEditQuestion}
+                     style={{ height: "100px" }}
+                     value={questionDescription}
+                     onChange={(value: string) => {
+                       setQuestionDescription(value);
+                     }}
+                     placeholder="Enter your question description here..."
+      />
+              
+                           
                           </div>
                         </div>
                         <div className="form-group">
@@ -1698,15 +1704,16 @@ setChangeEditQuizQuestionContent(false);
                             data-toggle="quill"
                             data-quill-placeholder="Question"
                           >
-                            <ReactQuill
-                              readOnly={enableEditQuestion}
-                              style={{ height: "100px" }}
-                              value={questionDescription}
-                              onChange={(value: string) => {
-                                setQuestionDescription(value);
-                              }}
-                              placeholder="Enter your question description here..."
-                            />
+                            <ReactQuillWrapper
+                    readOnly={enableEditQuestion}
+                    style={{ height: "100px" }}
+                    value={questionDescription}
+                    onChange={(value: string) => {
+                      setQuestionDescription(value);
+                    }}
+                    placeholder="Enter your question description here..."
+      />
+                            
                           </div>
                         </div>
                         <div className="form-group">
