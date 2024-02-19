@@ -15,6 +15,8 @@ import IComment from '@/app/interfaces/comment';
 import { formatTimeDifference } from '@/app/lib/formatTimeDifference';
 import { getInitials } from '@/app/lib/getInitials';
 import CourseInfoPanel from './about-panel/page';
+import VideoGrid from './video-grid/page';
+import AccordionSidebar from './accordion-sidebar/page';
 const cookies = new Cookies();
 
 
@@ -127,7 +129,7 @@ export default function CourseDetail() {
       </div>
       <div className="mdk-box__content">
         <div className="hero py-64pt text-center text-sm-left">
-          <div className="container page__container">
+          <div className="page__container">
             <h1 className="text-white">{data ? data.title ?? "" : ""}
 </h1>
             <p className="lead text-white-50 measure-hero-lead">
@@ -208,17 +210,12 @@ export default function CourseDetail() {
     </div> */}
     <CourseInfoPanel  course={data} isLoading={isLoading}/>
     <div className="page-section border-bottom-2">
-      <div className="container page__container">
+      <div className="page__container">
         <div className="page-separator">
           <div className="page-separator__text">Table of Contents</div>
         </div>
         <div className="row mb-0">
           <div className="col-lg-12">
-            <div
-              className="accordion js-accordion accordion--boxed list-group-flush"
-              id="parent"
-              data-domfactory-upgraded="accordion"
-            >
               {/* <div onClick={(e)=>{e.preventDefault(); }} className={  "accordion__item"}>
                 <a
                   href="#"
@@ -306,79 +303,11 @@ export default function CourseDetail() {
         </div>   */}
               
               {sections.length > 0 && (
-  <>
-    {sections.map((section,i) => (
-      <div  
-        onClick={(e)=>{ _SetOpenSections(i);e.preventDefault();}}
-        className= { openSections.includes(i)? "accordion__item open": "accordion__item"} 
-         key={section.id}
-        >
+ 
+    // <VideoGrid  videos = {sections}/>
 
-        <a
-         
-          className="accordion__toggle"
-          data-toggle="collapse"
-          data-target={`#course-toc-${section.id}`}
-          data-parent="#parent"
-        >
-          <span className="flex">
-            {section.title ?? "Section title"}
-          </span>
-          <span className="accordion__toggle-icon material-icons">
-            keyboard_arrow_down
-          </span>
-        </a>
+              <AccordionSidebar  videos = {sections}/>
 
-
-        {/* {
-          section.modules.map((
-
-          ))
-        } */}
-
-
-        <div className={openSections.includes(i)? "accordion__menu collapse show": "accordion__menu collapse"} id={`course-toc-${section.id}`}>
-          {/* <div className="accordion__menu-link">
-            <span className="icon-holder icon-holder--small icon-holder--light rounded-circle d-inline-flex icon--left">
-              <i className="material-icons icon-16pt">lock</i>
-            </span>
-            <span className="text-muted">Lance</span> */}
-            <div className="accordion__menu-link">
-                    <span className="icon-holder icon-holder--small icon-holder--light rounded-circle d-inline-flex icon--left">
-                      <i className="material-icons icon-16pt">
-                        hourglass_empty
-                      </i>
-                    </span>
-                   
-                    {section.modules.map(module=>(
-                      <div>
-                        {
-                       
-                          
-                            module.videos.map(video => (
-                              <>
-                            <span className="text-muted">{video.duration}</span> 
-                            <a className="flex" style={{cursor:"pointer", paddingLeft:"1em"}}  onClick={()=>goToSectionModule(module)}>
-                          {video.title}
-                         </a>
-                              </>
-                      
-                          ))
-                        
-                          
-                    
-                        }
-                     
-                      </div>
-                   
-                    ))}
-                   
-                  </div>
-          {/* </div> */}
-        </div>
-      </div>
-    ))}
-  </>
 )}
 
               {/* <div className="accordion__item">
@@ -431,11 +360,11 @@ export default function CourseDetail() {
               </div>
             </div>
           </div> */}
-        </div>
+      
       </div>
     </div>
     <div className="page-section bg-white border-bottom-2">
-      <div className="container page__container">
+      <div className=" page__container">
         <div className="row ">
           <div className="col-md-7">
             <div className="page-separator">
