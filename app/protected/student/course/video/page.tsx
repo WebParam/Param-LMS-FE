@@ -41,8 +41,9 @@ export default function CourseVideo() {
  
   const openQuiz = () => {
     setOpen(false);
-    console.log("open quiz")
-    onOpenModal();
+    console.log("open quiz");
+    goToQuiz()
+   // onOpenModal();
   }
 
  function toggleAside() {
@@ -77,6 +78,10 @@ const handlePlayClick = useCallback((event:React.MouseEvent<HTMLAnchorElement, M
   console.log("play", play)
   event.preventDefault();
 }, []);
+
+const goToQuiz = () => {
+  window.location.href = '/protected/student/course/quiz';
+}
 
 
 
@@ -187,7 +192,7 @@ const getComments=async (id:string)=>{
       >
         Thank you for completing the module, We have attached a quiz to rate your understading of the module. Please click Take Quiz or cancel.
       </ConfirmationModal>
-      <Modal open={openNew} onClose={onCloseModal} center
+      {/* <Modal open={openNew} onClose={onCloseModal} center
       closeOnOverlayClick={false}
       classNames={{
         overlay: 'customOverlay',
@@ -195,7 +200,7 @@ const getComments=async (id:string)=>{
       }}
       >
         <Quiz />
-      </Modal>
+      </Modal> */}
       <div className="d-flex flex-wrap align-items-end mb-16pt">
         <h1 className="text-white flex m-0">{module?.title}</h1>
         <p className="h1 text-white-50 font-weight-light m-0">{video?.length}</p>
