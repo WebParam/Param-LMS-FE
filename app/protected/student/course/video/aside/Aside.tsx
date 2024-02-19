@@ -12,10 +12,8 @@ export default function Aside(props:any) {
             <ol>
                 {props.videos?.videos?.map((item:any, i:number) => (
                     <li key={i}>
-                    <p>
-                        <span className='material-icons'>play_circle_outline</span>
-                    </p>
-                    <div >
+              
+                    <div>
                         <p>{item.title}</p>
                         
                         <div>

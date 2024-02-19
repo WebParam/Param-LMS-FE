@@ -4,7 +4,7 @@ import { IModule } from '@/app/interfaces/courses';
 const collapseMenu = require('../../../../../../public/collapse.png')
 
 const AccordionSidebar = (videosProps:any) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState('Option 1');
 
   const handleOptionClick = (option:any) => {
     setSelectedOption(option);
