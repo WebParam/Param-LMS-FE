@@ -13,7 +13,7 @@ const AccordionSidebar = (videosProps:any) => {
   const goToSectionModule=(module:IModule)=>{
     console.log("passed video", module)
     localStorage.setItem("module",JSON.stringify(module));
-    //window.location.href = '/protected/student/course/video'; 
+    window.location.href = '/protected/student/course/video'; 
    }
 
   return (
@@ -45,7 +45,7 @@ const AccordionSidebar = (videosProps:any) => {
                         vid?.videos.map((video: any, j: number) => (
                             <div style={{ display: 'block', flexWrap: 'wrap',justifyContent:'flex-end'}}>
                             <div className="video-detail-card"  onClick={()=>goToSectionModule(vid)}>
-                            <a className="flex" style={{ cursor: "pointer", paddingLeft: "1em" }} onClick={() => {}}>
+                            <a className="flex" style={{ cursor: "pointer", paddingLeft: "1em" }}>
                               {video.title}
                             </a>
                             <span className="text-muted">{video.duration}</span> 
