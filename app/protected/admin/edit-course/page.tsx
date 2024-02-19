@@ -453,7 +453,7 @@ function EditCourse() {
         <div
           style={{
             position: "relative",
-            left: "20em",
+          
             width: "1200px",
           }}
           className="navbar navbar-expand pr-0 navbar-light border-bottom-2"

@@ -33,6 +33,9 @@ import {
 import Cookies from "universal-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { createDocumentDetail, getSelectedDocumentForEdit } from "@/app/redux/documentSice";
+import { IDocument } from "@/app/interfaces/document";
+
 
 
 interface CreateCourseModalProps {
@@ -106,7 +109,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [questionDescription, setQuestionDescription] = useState<string>("");
   const [choiceDescription, setChoiceDescription] = useState<string>("");
   const [points, setPoints] = useState<number>(0);
-  const [documentName, setDocumentName] = useState<string>();
+  const [document, setDocument] = useState<any>();
   const [countChoice, setCountChoices] = useState<number>(0);
   const [moduleId, setModuleId] = useState<string>("")
   const [date, setDate] = useState<string>("");
@@ -150,6 +153,13 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [videoTitleError, setVideoTitleError] = useState(false);
   const [videoDescError, setVideoDescError] = useState(false);
   const [videoUrlError, setVideoUrlError] = useState(false);
+  const [formData, setFormData] = useState(new FormData());
+  const _documentFromState: IDocument = useSelector(
+    getSelectedDocumentForEdit
+  ).document;
+
+  
+  console.log("Document from state", _documentFromState);
 
 
   // const handleDescriptionChange = (content: string, _: any, source: string) => {
@@ -190,8 +200,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     e.preventDefault();
   };
 
-  const cursorStyle = (predicate: boolean) =>
-    predicate ? "pointer" : "not-allowed";
+
 
   function getTodaysDate() {
     const today = new Date();
@@ -466,15 +475,7 @@ setChangeEditQuizQuestionContent(false);
 
   //Dcoument functions start here
 
-  const handleDocument = (e: any) => { 
-     const formData = new FormData();
-    const file = e.target.files[0];
-
-    if (file) {
-      formData.append("document", file);
-      setDocumentName(file.name);
-    }
-  };
+ 
   const addDocument = (e: any) => {
     setIncludeDocument(false);
     if (!videoId) {
@@ -499,6 +500,7 @@ setChangeEditQuizQuestionContent(false);
       setTimeout(() => {
         toast.dismiss(_id);
       }, 2000);
+      return false;
     } else {
       if (includeDocument) {
         tabSelect(3, e);
@@ -509,6 +511,27 @@ setChangeEditQuizQuestionContent(false);
       setToggler(3);
     }
   };
+
+  const handleChangeDocument = (e:any) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      setDocument(file);
+      console.log("Selected file", file)
+    }
+
+    const payload = {
+      title: file ? file.name : "",
+      modifyingUser: userData.id,
+      reference:videoReference,
+       url :"",
+      document: file ? file : null 
+    }
+
+    dispatch(createDocumentDetail(payload));
+
+
+}
   //Document functions ends here
 
   //Video functions start here
@@ -1951,7 +1974,7 @@ setChangeEditQuizQuestionContent(false);
                     <input
                       type="file"
                       id="file"
-                      onChange={handleDocument}
+                      onChange={handleChangeDocument}
                       className="custom-file-input"
                     />
                     <label className="custom-file-label">Choose file</label>
@@ -1959,7 +1982,7 @@ setChangeEditQuizQuestionContent(false);
                 </div>
 
                 <p style={{ color: "rgba(39,44,51,.35)", paddingTop: "10px" }}>
-                  {documentName}
+                  {document && document?.name}
                 </p>
               </div>
 
