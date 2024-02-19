@@ -115,7 +115,7 @@ const getComments=async (id:string)=>{
 >
 <i className="material-icons icon--left" style={{transform: 'scale(1.3)'}}>arrow_back_ios_new</i>
 </button>
-{asideToggler && <Aside />}
+{asideToggler && <Aside videos={JSON.parse(localStorage.getItem("module")as any)}/>}
 </div>
 <div>
   <div className="navbar navbar-list navbar-light bg-white border-bottom-2 border-bottom navbar-expand-sm" style={{whiteSpace: 'nowrap'}}>

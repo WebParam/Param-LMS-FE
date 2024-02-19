@@ -1,6 +1,7 @@
 import './aside.css'
 
-export default function Aside() {
+export default function Aside(props:any) {
+    console.log("course content", props)
     return (
         <div className='aside'>
             <div>
@@ -9,23 +10,21 @@ export default function Aside() {
             </div>
 
             <ol>
-                {[1,2].map((item => (
-                    <li>
+                {props.videos?.videos?.map((item:any, i:number) => (
+                    <li key={i}>
                     <p>
                         <span className='material-icons'>play_circle_outline</span>
                     </p>
                     <div >
-                        <p> Security Groups & Classic Ports Overview</p>
+                        <p>{item.title}</p>
                         
                         <div>
                         <span className='material-icons' style={{transform: 'scale(.7)'}}>ondemand_video</span>
-                        <p>7 min</p>
+                        <p>{item.duration}</p>
                         </div>
                     </div>
                 </li>
-                ))
-
-                )}
+                ))}
                 
             </ol>
         </div>
