@@ -80,7 +80,10 @@ const handlePlayClick = useCallback((event:React.MouseEvent<HTMLAnchorElement, M
 }, []);
 
 const goToQuiz = () => {
+
   window.location.href = '/protected/student/course/quiz';
+  
+
 }
 
 
