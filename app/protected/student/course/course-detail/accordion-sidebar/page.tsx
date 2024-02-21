@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import './accordion-sidebar.css'; // Import your CSS file
 import { IModule } from '@/app/interfaces/courses';

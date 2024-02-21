@@ -33,7 +33,7 @@ import {
 import Cookies from "universal-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createDocumentDetail, getSelectedDocumentForEdit } from "@/app/redux/documentSice";
+import {  createDocumentDetails, getSelectedDocumentForEdit } from "@/app/redux/documentSice";
 import { IDocument } from "@/app/interfaces/document";
 
 
@@ -75,7 +75,6 @@ const ReactQuillWrapper = ({
     }
   }, []);
 
-  console.log("ReactQuillComponent:", ReactQuillComponent);
 
   if (!ReactQuillComponent) return null; 
 
@@ -154,13 +153,12 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [videoDescError, setVideoDescError] = useState(false);
   const [videoUrlError, setVideoUrlError] = useState(false);
   const [formData, setFormData] = useState(new FormData());
-  const _documentFromState: IDocument = useSelector(
-    getSelectedDocumentForEdit
-  ).document;
+
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentFromState: IDocument  = _documentsFromState[_documentsFromState.length - 1];
 
   
-  console.log("Document from state", _documentFromState);
-
+  console.log("Documents from state", _documentsFromState);
 
   // const handleDescriptionChange = (content: string, _: any, source: string) => {
   //   if (source === "user") {
@@ -186,7 +184,10 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     
 
     dispatch(updateChoiceDetail(payload));
+
   };
+
+
   console.log("isChecked",_quizzesFromState);
   const moduleToolbar = {
     toolbar: [
@@ -418,6 +419,18 @@ setChoiceError(false)
 
   }
 
+  const nextTab = (e:any) => {
+  addQuiz(e)
+  if(questions?.length > 0){
+    addDocument(e);
+  }
+
+  if(document){
+    clearInputs();
+  }
+
+  }
+
   const newQuestion = () => {
     if(choices.length === 0){
       let _id = toast.loading("Please add choices first..", {
@@ -522,14 +535,18 @@ setChangeEditQuizQuestionContent(false);
 
     const payload = {
       title: file ? file.name : "",
-      modifyingUser: userData.id,
       reference:videoReference,
        url :"",
-      document: file ? file : null 
+      file: file ? file : null 
     }
+    //   const formData = new FormData();
+    // Object.entries(payload).forEach(([key, value]) => {
+    //   formData.append(key, value);
+    //   console.log("Appended key:", key, "with value:", value);
+    // });
 
-    dispatch(createDocumentDetail(payload));
-
+    dispatch(createDocumentDetails(payload));
+    console.log("Document from state", _documentFromState);
 
 }
   //Document functions ends here
@@ -2065,26 +2082,30 @@ setChangeEditQuizQuestionContent(false);
         </div>
         {/* // END Page Content */}
 
- <div
- style={{alignSelf:"flex-end",marginRight:"6em",marginTop:"2em"}}
+{
+  !viewAddedVideos &&  <div
+  style={{alignSelf:"flex-end",marginRight:"6em",marginTop:"2em"}}
+  >
+  <button
+ 
+  onClick={nextTab}
+         style={{
+   backgroundColor: "transparent",
+   border: "none",
+   outline: "none",
+   width: "150px",
+ }}
  >
- <button
-        style={{
-  backgroundColor: "transparent",
-  border: "none",
-  outline: "none",
-  width: "150px",
-}}
->
-<a
-
-  href="#"
-  className={`btn ${disableModuleInputs ? "btn-accent" : "btn-outline-secondary"}`}
->
-  Next
-</a>
-</button>
-  </div> 
+ <a
+ 
+   href="#"
+   className={`btn ${disableModuleInputs ? "btn-accent" : "btn-outline-secondary"}`}
+ >
+   Next
+ </a>
+ </button>
+   </div> 
+}
       </div>  
     </div>
   );

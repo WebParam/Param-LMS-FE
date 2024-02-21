@@ -21,7 +21,7 @@ export const store = configureStore({
   reducer: {
     course: persistedCourseReducer, 
     quizzes: persistedQuizReducer,
-    document: persistedDocumentReducer
+    documents: persistedDocumentReducer
   },
   devTools: true,
 });

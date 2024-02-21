@@ -1,14 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppStore } from "../interfaces/store";
-import { IDocumentState, IUpdateDocumentDetailState } from "../interfaces/document";
+import { IDocument, IDocumentState, IUpdateDocumentDetailState } from "../interfaces/document";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 const loogedInUser = cookies.get('param-lms-user');
+
+const initialState: IDocumentState = {
+    documents: [] as IDocument[],
+};
+
 const generateUniqueId = () => {
     return Math.random().toString(36).substring(7);
 };
-
 
 const today = new Date();
 const year = today.getFullYear();
@@ -20,73 +24,54 @@ day = day < 10 ? `0${day}` : day;
 
 let todayDate = (`${year}-${month}-${day}`);
 
-
-
-const initialState: IDocumentState = {
-    document: {
-        creatingUser: loogedInUser?.id,
-        createdDate: todayDate,
-        modifyingUser: loogedInUser?.id,
-        reference: "",
-        title: "",
-        url: "",
-        document:"",
-        state: 0,
-
-    } 
-};
-
-
-
-
 export const documentSlice = createSlice({
     name: "document",
     initialState,
     reducers: {
         setSelectedDocumentForEdit(state, action) {
-            state.document = action.payload;
+            state.documents = action.payload;
         },
         
-        createDocumentDetail(state, action) {
-
-            const _action = action.payload as IUpdateDocumentDetailState
-            const newState = {
-                ...state.document,
-                title: _action.title,
-                modifyingUser: _action.modifyingUser,
+        createDocumentDetails(state, action: PayloadAction<IUpdateDocumentDetailState>) {
+            const _action = action.payload;
+            const newDocument = {
+                creatingUser: loogedInUser?.id,
+                createdDate: todayDate,
+                modifyingUser: loogedInUser?.id,
                 reference: _action.reference,
-                url: _action.url,
-                document: _action.document
-            }
-            state.document = newState;
+                title: _action.title,
+                url: "gugg",
+                file: _action.file,
+                modifiedDate: todayDate,
+                state: 0,
+            };
+  //   Object.entries(_documentsFromState[0]).map(([key, value]) => {
+  //     formData.append(key, value);
+  //     console.log("Appended key:", key, "with value:", value);
+  //   });
+            state.documents.push(newDocument);
         },
-        // updateCourseFromDataBase(state, action) {
-        //     const _action = action.payload as IUpdateCourse;
-          
-        //     const newState = {
-        //       id: _action.id,
-        //       title: _action.title,
-        //       description: _action.description,
-        //       sections: _action.sections,
-        //       createdDate: _action.createdDate,
-        //       creatingUser: _action.creatingUser,
-        //       state: 0,
-        //       logo: _action.logo,
-        //       courseImage: _action.courseImage,
-        //       bannerImage: _action.bannerImage,
-        //       modifyingUser: _action.modifyingUser
-        //     } as ICourse;
-        //     state.course = newState;
-          
-        //   }
-             
-}
+
+        updateDocumentDetail(state, action: PayloadAction<IUpdateDocumentDetailState>) {
+            const _action = action.payload;
+            const index = state.documents.findIndex(doc => doc.reference === _action.reference);
+            if (index !== -1) {
+                state.documents[index] = {
+                    ...state.documents[index],
+                    title: _action.title,
+                    modifyingUser:loogedInUser?.id,
+                    file: _action.file,
+                };
+            }
+        },
+    },
 });
 
 export const {
     setSelectedDocumentForEdit,
-    createDocumentDetail, 
-  } = documentSlice.actions;
+    createDocumentDetails,
+    updateDocumentDetail,
+} = documentSlice.actions;
 
-export const getSelectedDocumentForEdit = (state: AppStore) => state.document;
-export default documentSlice.reducer; 
+export const getSelectedDocumentForEdit = (state: AppStore) => state.documents.documents;
+export default documentSlice.reducer;

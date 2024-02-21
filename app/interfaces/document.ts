@@ -5,19 +5,20 @@ export interface IDocument {
     reference: string;
     title: string;
     url: string;
+    modifiedDate: string;
     state: number;
-    document:any
+    file:any
 }
 
 export interface IDocumentState{
-    document : IDocument
+    documents : IDocument[] 
 }
 
 export interface IUpdateDocumentDetailState {
     title: string, 
-    createdDate: string;
-    modifyingUser: string;
+    createdDate?: string;
+    modifyingUser?: string;
     reference: string;
     url: string;
-    document : any
+    file : any
 }

@@ -34,6 +34,8 @@ import { IChoice, IDeleteQuestion, IQuestion, IQuiz, IUpdateQuestionDetailState,
 import Cookies from "universal-cookie";
 import { Dropdown } from "react-bootstrap";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { IDocument } from "@/app/interfaces/document";
+import { getSelectedDocumentForEdit, setSelectedDocumentForEdit } from "@/app/redux/documentSice";
 
 
 interface CreateCourseModalProps {
@@ -167,6 +169,9 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
 
   const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
   const _quizFromState: IQuiz  = _quizzesFromState[_quizzesFromState.length - 1];
+
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentFromState: IDocument  = _documentsFromState[_documentsFromState.length - 1];
 
 
   const tabSelect = (id: Number, e: any) => {

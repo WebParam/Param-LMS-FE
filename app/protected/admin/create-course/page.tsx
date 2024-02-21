@@ -111,19 +111,20 @@ function EditCourse() {
   const [imgError, setImgError] = useState(false);
   const [moduleId, setModuleId] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
-  const [documentForm, setDocumentForm] = useState(new FormData());
+  const [arrayOfDocuments, setArrayOfDocuments] = useState<any[]>([]);
+
 
   const [videoId, setVideoId] = useState<string>("");
-  const _documentFromState: IDocument = useSelector(
-    getSelectedDocumentForEdit
-  ).document;
-
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
   console.log("Course", _courseFromState);
 
-  console.log("Document from state", _documentFromState);
+  console.log("Document from state", _documentsFromState);
 
   let cookies = new Cookies();
-
+  useEffect(() => {
+    console.log("Array of documents", arrayOfDocuments);
+  }, [arrayOfDocuments]);
+  
   const userData = cookies.get("param-lms-user");
   console.log("userDataID:", userData?.id);
   const dispatch = useDispatch();
@@ -137,6 +138,11 @@ function EditCourse() {
       [{ list: "ordered" }, { list: "bullet" }],
     ],
   };
+  useEffect(() => {
+    console.log("Array of documents:", arrayOfDocuments);
+  }, [arrayOfDocuments]);
+
+
 
   const payload = {
     creatingUser: userData?.id,
@@ -245,20 +251,41 @@ function EditCourse() {
     });
 
     try {
-      Object.entries(_documentFromState).forEach(([key, value]) => {
-        documentForm.append(key, value);
-        console.log("Appended key:", key, "with value:", value);
-      });
+  const convertDocumentToFormData = (documentObj: IDocument, i:number, formData:FormData) => {
+ 
+  
+    // formData.append(`${i}`, JSON.stringify(documentObj));
+    // Object.entries(_documentsFromState[0]).map(([key, value]) => {
+    //   formData.append(key, value);
+    //   console.log("Appended key:", key, "with value:", value);
+    // });
+    debugger;
+    // return formData;
+  };
+
+  // const formData = new FormData();
+  //   debugger;
+  //   Object.entries(_documentsFromState[0]).map(([key, value]) => {
+  //     formData.append(key, value);
+  //     console.log("Appended key:", key, "with value:", value);
+  //   });
+
+  const formData = new FormData();
+  const formDataArray = _documentsFromState.forEach((document,i) => {
+    console.log(`Appended key: ${JSON.stringify(document)} with value: ${document.file}`)
+    const req = {...document, file:""};
+    formData.append(JSON.stringify(req), document.file)});     
+ 
+debugger;
+  
 
       const createCourseResponse = await Api.POST_CreateCourse(
         _courseFromState
       )!;
 
       if (createCourseResponse?.data?.id) {
-        const uploadDocuments = await Api.POST_Document(
-          createCourseResponse?.data?.id,
-          documentForm
-        );
+        const uploadDocuments = await Api.POST_Document(formData);
+        debugger
         const courseId: string = createCourseResponse.data?.id!;
         const uploadImageResponse = await Api.POST_Image(courseId, formData);
         debugger;
@@ -305,6 +332,7 @@ function EditCourse() {
         });
 
         setTimeout(() => {
+          localStorage.removeItem("persist:root")
           dispatch(deleteAllSections());
           setCourseTitle("");
           setCourseDescription("");

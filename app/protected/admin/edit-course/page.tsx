@@ -43,7 +43,6 @@ import { getSelectedQuizForEdit, updateQuizzes } from "@/app/redux/quizSlice";
 import dynamic from "next/dynamic";
 import Cookies from "universal-cookie";
 
-// Define interface for ReactQuill props
 interface ReactQuillProps {
   style?: React.CSSProperties;
   value?: string;
@@ -73,7 +72,6 @@ const ReactQuillWrapper = ({
     }
   }, []);
 
-  console.log("ReactQuillComponent:", ReactQuillComponent);
 
   if (!ReactQuillComponent) return null; 
 
