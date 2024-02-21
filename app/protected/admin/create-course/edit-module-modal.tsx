@@ -53,6 +53,53 @@ interface EditCourseModalProps {
   videoId:string
 }
 
+
+// Define interface for ReactQuill props
+interface ReactQuillProps {
+  style?: React.CSSProperties;
+  value?: string;
+  onChange?: any;
+  placeholder?: string;
+  modules?: any; 
+  readOnly:any
+}
+
+const ReactQuillWrapper = ({
+  style,
+  value,
+  onChange,
+  placeholder,
+  modules,
+  readOnly
+}: ReactQuillProps) => {
+  const [ReactQuillComponent, setReactQuillComponent] = useState<any>(() => () => null); 
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('react-quill').then(module => {
+        setReactQuillComponent(() => module.default);
+      }).catch(error => {
+        console.error("Error loading ReactQuill module:", error);
+      });
+    }
+  }, []);
+
+
+  if (!ReactQuillComponent) return null; 
+
+  return (
+    <ReactQuillComponent
+      readOnly = {readOnly}
+      style={style}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      modules={modules}
+    />
+  );
+};
+
+
 export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   onClose,
   sectionId,
@@ -64,7 +111,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const cookies = new Cookies();
 
   const [videoTitle, setVideoTitle] = useState<string>("");
-  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [videoLink, setVideoLink] = useState<string>("");
   const [moduleTitle, setModuleTitle] = useState<string>("");
   const [toggler, setToggler] = useState<Number>(1);
   const [documentName, setDocumentName] = useState<string>();
@@ -499,7 +546,7 @@ setChangeEditQuizQuestionContent(false);
     setVideoUrlError(false);
     if (
       videoTitle &&
-      videoDescription && videoUrl 
+      videoDescription && videoLink 
      
     ) {
       const plainDescription = videoDescription
@@ -509,7 +556,7 @@ setChangeEditQuizQuestionContent(false);
         moduleId,
         videoId: videoId,
         sectionId: sectionId,
-        videoLink: videoUrl,
+        videoLink: videoLink,
         videoTitle: videoTitle,
         videoDescription: plainDescription,
       };
@@ -531,7 +578,7 @@ setChangeEditQuizQuestionContent(false);
         setVideoTitleError(true);
 
       }
-      if(videoUrl.length < 1){
+      if(videoLink.length < 1){
         setVideoUrlError(true);
 
       }
@@ -543,7 +590,7 @@ setChangeEditQuizQuestionContent(false);
     setVideoDescError(false);
     setVideoTitleError(false);
     setVideoUrlError(false);
-    if(videoUrl && videoTitle && videoDescription) {
+    if(videoLink && videoTitle && videoDescription) {
       
       onClose();
     }else{
@@ -554,7 +601,7 @@ setChangeEditQuizQuestionContent(false);
         setVideoTitleError(true);
 
       }
-      if(videoUrl.length < 1){
+      if(videoLink.length < 1){
         setVideoUrlError(true);
 
       }
@@ -611,7 +658,7 @@ setChangeEditQuizQuestionContent(false);
         setVideoTitle(video[0]?.title);
         setVideoDescription(video[0]?.description);
         
-        setVideoUrl(video[0]?.videoLink);
+        setVideoLink(video[0]?.videoLink);
         setDisableModuleInputs(true);
       }
 
@@ -748,17 +795,20 @@ setChangeEditQuizQuestionContent(false);
                             )}
                     </label>
                     <div style={{ height: "200px", overflow: "auto" }}>
-                      <ReactQuill
-                      readOnly={disableModuleInputs}
-                        style={{ height: "100px" }}
-                        value={videoDescription}
-                        onChange={(value: string) => {
-                          setVideoDescription(value); // Pass the new description
-                        
-                        }}
-                        placeholder="Video description..."
-                        modules={moduleToolbar}
-                      />
+                   
+                    <ReactQuillWrapper
+                     readOnly={disableModuleInputs}
+                     style={{ height: "100px" }}
+                     value={videoDescription}
+                     onChange={(value: string) => {
+                       setVideoDescription(value); // Pass the new description
+                     
+                     }}
+                     placeholder="Video description..."
+                     modules={moduleToolbar}
+      />
+           
+                     
                       
                     </div>
                    <div style={{position:"relative", bottom :"2.5em"}}>
@@ -781,10 +831,10 @@ setChangeEditQuizQuestionContent(false);
                         disabled={disableModuleInputs}
                         className="form-control form-control-lg"
                         placeholder="Video URL"
-                        value={videoUrl}
+                        value={videoLink}
                         onChange={(e) => {
                        
-                          setVideoUrl(e.target.value);
+                          setVideoLink(e.target.value);
                         }}
                       />
                   
@@ -1004,8 +1054,8 @@ setChangeEditQuizQuestionContent(false);
                             data-toggle="quill"
                             data-quill-placeholder="Question"
                           >
-                            <ReactQuill
-                              readOnly={enableEditQuestion}
+
+<ReactQuillWrapper         readOnly={enableEditQuestion}
                               style={{ height: "100px" }}
                               value={questionDescription}
                               onChange={(value: string) => {
@@ -1013,7 +1063,7 @@ setChangeEditQuizQuestionContent(false);
                                 // placeholder="Enter your question description here..."
 
                               }}
-                            />
+      />
                           </div>
                         </div>
                         <div className="form-group">
@@ -1278,8 +1328,7 @@ setChangeEditQuizQuestionContent(false);
                             data-toggle="quill"
                             data-quill-placeholder="Question"
                           >
-                            <ReactQuill
-                              readOnly={enableEditQuestion}
+                            <ReactQuillWrapper         readOnly={enableEditQuestion}
                               style={{ height: "100px" }}
                               value={questionDescription}
                               onChange={(value: string) => {
@@ -1287,7 +1336,8 @@ setChangeEditQuizQuestionContent(false);
                            
                               }}
                               placeholder="Enter your question description here..."
-                            />
+      />
+                           
                           </div>
                         </div>
                         <div className="form-group">
@@ -1590,7 +1640,7 @@ setChangeEditQuizQuestionContent(false);
               <div className="embed-responsive embed-responsive-16by9">
                 <iframe
                   className="embed-responsive-item"
-                  src={videoUrl}
+                  src={videoLink}
                   //   allowFullScreen=""
                 />
               </div>
@@ -1599,7 +1649,7 @@ setChangeEditQuizQuestionContent(false);
                 <input
                   type="text"
                   className="form-control"
-                    value ={videoUrl}
+                    value ={videoLink}
                   placeholder="Enter Video URL"
                 />
 

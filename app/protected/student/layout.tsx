@@ -840,21 +840,21 @@ export default function RootLayout({
               </a>
             </li>
             <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="courses.html">
+              <a className="sidebar-menu-button" href="/protected/student/course/all-courses">
                 <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                   local_library
                 </span>
                 <span className="sidebar-menu-text">Browse Courses</span>
               </a>
             </li>
-            <li className="sidebar-menu-item">
+            {/* <li className="sidebar-menu-item">
               <a className="sidebar-menu-button" href="paths.html">
                 <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                   style
                 </span>
                 <span className="sidebar-menu-text">Browse Paths</span>
               </a>
-            </li>
+            </li> */}
             <li className="sidebar-menu-item">
               <a className="sidebar-menu-button" href="student-dashboard.html">
                 <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
@@ -871,38 +871,38 @@ export default function RootLayout({
                 <span className="sidebar-menu-text">My Courses</span>
               </a>
             </li>
-            <li className="sidebar-menu-item">
+            {/* <li className="sidebar-menu-item">
               <a className="sidebar-menu-button" href="student-paths.html">
                 <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                   timeline
                 </span>
                 <span className="sidebar-menu-text">My Paths</span>
               </a>
-            </li>
-            <li className="sidebar-menu-item">
+            </li> */}
+            {/* <li className="sidebar-menu-item">
               <a className="sidebar-menu-button" href="student-path.html">
                 <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                   change_history
                 </span>
                 <span className="sidebar-menu-text">Path Details</span>
               </a>
-            </li>
-            <li className="sidebar-menu-item">
+            </li> */}
+            {/* <li className="sidebar-menu-item">
               <a className="sidebar-menu-button" href="student-course.html">
                 <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                   face
                 </span>
                 <span className="sidebar-menu-text">Course Preview</span>
               </a>
-            </li>
-            <li className="sidebar-menu-item">
+            </li> */}
+            {/* <li className="sidebar-menu-item">
               <a className="sidebar-menu-button" href="student-lesson.html">
                 <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                   panorama_fish_eye
                 </span>
                 <span className="sidebar-menu-text">Lesson Preview</span>
               </a>
-            </li>
+            </li> */}
             <li className="sidebar-menu-item active">
               <a
                 className="sidebar-menu-button"
@@ -917,7 +917,7 @@ export default function RootLayout({
                 </span>
               </a>
             </li>
-            <li className="sidebar-menu-item">
+            {/* <li className="sidebar-menu-item">
               <a
                 className="sidebar-menu-button"
                 href="student-take-lesson.html"
@@ -927,16 +927,16 @@ export default function RootLayout({
                 </span>
                 <span className="sidebar-menu-text">Take Lesson</span>
               </a>
-            </li>
-            <li className="sidebar-menu-item">
+            </li> */}
+            {/* <li className="sidebar-menu-item">
               <a className="sidebar-menu-button" href="student-take-quiz.html">
                 <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                   dvr
                 </span>
                 <span className="sidebar-menu-text">Take Quiz</span>
               </a>
-            </li>
-            <li className="sidebar-menu-item">
+            </li> */}
+            {/* <li className="sidebar-menu-item">
               <a
                 className="sidebar-menu-button"
                 href="student-quiz-results.html"
@@ -946,8 +946,8 @@ export default function RootLayout({
                 </span>
                 <span className="sidebar-menu-text">My Quizzes</span>
               </a>
-            </li>
-            <li className="sidebar-menu-item">
+            </li> */}
+            {/* <li className="sidebar-menu-item">
               <a
                 className="sidebar-menu-button"
                 href="student-quiz-result-details.html"
@@ -957,8 +957,8 @@ export default function RootLayout({
                 </span>
                 <span className="sidebar-menu-text">Quiz Result</span>
               </a>
-            </li>
-            <li className="sidebar-menu-item">
+            </li> */}
+            {/* <li className="sidebar-menu-item">
               <a
                 className="sidebar-menu-button"
                 href="student-path-assessment.html"
@@ -968,8 +968,8 @@ export default function RootLayout({
                 </span>
                 <span className="sidebar-menu-text">Skill Assessment</span>
               </a>
-            </li>
-            <li className="sidebar-menu-item">
+            </li> */}
+            {/* <li className="sidebar-menu-item">
               <a
                 className="sidebar-menu-button"
                 href="student-path-assessment-result.html"
@@ -979,510 +979,13 @@ export default function RootLayout({
                 </span>
                 <span className="sidebar-menu-text">Skill Result</span>
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
-        <div className="tab-pane " id="sm_instructor">
-          <div className="sidebar-heading">Instructor</div>
-          <ul className="sidebar-menu">
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="instructor-dashboard.html"
-              >
-                <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                  school
-                </span>
-                <span className="sidebar-menu-text">Instructor Dashboard</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="instructor-courses.html">
-                <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                  import_contacts
-                </span>
-                <span className="sidebar-menu-text">Manage Courses</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="instructor-quizzes.html">
-                <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                  help
-                </span>
-                <span className="sidebar-menu-text">Manage Quizzes</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="instructor-earnings.html"
-              >
-                <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                  trending_up
-                </span>
-                <span className="sidebar-menu-text">Earnings</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="instructor-statement.html"
-              >
-                <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                  receipt
-                </span>
-                <span className="sidebar-menu-text">Statement</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="instructor-edit-course.html"
-              >
-                <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                  post_add
-                </span>
-                <span className="sidebar-menu-text">Edit Course</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="instructor-edit-quiz.html"
-              >
-                <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                  format_shapes
-                </span>
-                <span className="sidebar-menu-text">Edit Quiz</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="tab-pane " id="sm_account">
-          <div className="sidebar-heading">Account</div>
-          <ul className="sidebar-menu">
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="pricing.html">
-                <span className="sidebar-menu-text">Pricing</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="login.html">
-                <span className="sidebar-menu-text">Login</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="signup.html">
-                <span className="sidebar-menu-text">Signup</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="signup-payment.html">
-                <span className="sidebar-menu-text">Payment</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="reset-password.html">
-                <span className="sidebar-menu-text">Reset Password</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="change-password.html">
-                <span className="sidebar-menu-text">Change Password</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="edit-account.html">
-                <span className="sidebar-menu-text">Edit Account</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="edit-account-profile.html"
-              >
-                <span className="sidebar-menu-text">Profile &amp; Privacy</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="edit-account-notifications.html"
-              >
-                <span className="sidebar-menu-text">Email Notifications</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="edit-account-password.html"
-              >
-                <span className="sidebar-menu-text">Account Password</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="billing.html">
-                <span className="sidebar-menu-text">Subscription</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="billing-upgrade.html">
-                <span className="sidebar-menu-text">Upgrade Account</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="billing-payment.html">
-                <span className="sidebar-menu-text">Payment Information</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="billing-history.html">
-                <span className="sidebar-menu-text">Payment History</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="billing-invoice.html">
-                <span className="sidebar-menu-text">Invoice</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="tab-pane " id="sm_messaging">
-          <div className="sidebar-heading">Messaging</div>
-          <ul className="sidebar-menu">
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="messages.html">
-                <span className="sidebar-menu-text">Messages</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a className="sidebar-menu-button" href="email.html">
-                <span className="sidebar-menu-text">Email</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="tab-pane" id="sm_components">
-          <div className="sidebar-heading">UI Components</div>
-          <ul className="sidebar-menu">
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                data-toggle="collapse"
-                href="#components_menu"
-              >
-                <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                  tune
-                </span>
-                Components
-                <span className="ml-auto sidebar-menu-toggle-icon" />
-              </a>
-              <ul
-                className="sidebar-submenu collapse sm-indent"
-                id="components_menu"
-              >
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-buttons.html">
-                    <span className="sidebar-menu-text">Buttons</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-avatars.html">
-                    <span className="sidebar-menu-text">Avatars</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-forms.html">
-                    <span className="sidebar-menu-text">Forms</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-loaders.html">
-                    <span className="sidebar-menu-text">Loaders</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-tables.html">
-                    <span className="sidebar-menu-text">Tables</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-cards.html">
-                    <span className="sidebar-menu-text">Cards</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-icons.html">
-                    <span className="sidebar-menu-text">Icons</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-tabs.html">
-                    <span className="sidebar-menu-text">Tabs</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-alerts.html">
-                    <span className="sidebar-menu-text">Alerts</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-badges.html">
-                    <span className="sidebar-menu-text">Badges</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-progress.html">
-                    <span className="sidebar-menu-text">Progress</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="ui-pagination.html">
-                    <span className="sidebar-menu-text">Pagination</span>
-                  </a>
-                </li>
-                {/* <li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-typography.html">
-    <span class="sidebar-menu-text">Typography</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-colors.html">
-    <span class="sidebar-menu-text">Colors</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-breadcrumb.html">
-    <span class="sidebar-menu-text">Breadcrumb</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-accordions.html">
-    <span class="sidebar-menu-text">Accordions</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-modals.html">
-    <span class="sidebar-menu-text">Modals</span>
-  </a>
-</li>
-<li class="sidebar-menu-item">
-  <a class="sidebar-menu-button disabled" href="ui-chips.html">
-    <span class="sidebar-menu-text">Chips</span>
-  </a>
-</li> */}
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button disabled" href="">
-                    <span className="sidebar-menu-text">Disabled</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                data-toggle="collapse"
-                href="#plugins_menu"
-              >
-                <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                  folder
-                </span>
-                Plugins
-                <span className="ml-auto sidebar-menu-toggle-icon" />
-              </a>
-              <ul
-                className="sidebar-submenu collapse sm-indent"
-                id="plugins_menu"
-              >
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-charts.html"
-                  >
-                    <span className="sidebar-menu-text">Charts</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-flatpickr.html"
-                  >
-                    <span className="sidebar-menu-text">Flatpickr</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-daterangepicker.html"
-                  >
-                    <span className="sidebar-menu-text">Date Range Picker</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-dragula.html"
-                  >
-                    <span className="sidebar-menu-text">Dragula</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-dropzone.html"
-                  >
-                    <span className="sidebar-menu-text">Dropzone</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-range-sliders.html"
-                  >
-                    <span className="sidebar-menu-text">Range Sliders</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-quill.html"
-                  >
-                    <span className="sidebar-menu-text">Quill</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-select2.html"
-                  >
-                    <span className="sidebar-menu-text">Select2</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-nestable.html"
-                  >
-                    <span className="sidebar-menu-text">Nestable</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-fancytree.html"
-                  >
-                    <span className="sidebar-menu-text">Fancy Tree</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-maps-vector.html"
-                  >
-                    <span className="sidebar-menu-text">Vector Maps</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-sweet-alert.html"
-                  >
-                    <span className="sidebar-menu-text">Sweet Alert</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a
-                    className="sidebar-menu-button"
-                    href="ui-plugin-toastr.html"
-                  >
-                    <span className="sidebar-menu-text">Toastr</span>
-                  </a>
-                </li>
-                <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button disabled" href="">
-                    <span className="sidebar-menu-text">Disabled</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        <div className="tab-pane" id="sm_layouts">
-          <div className="sidebar-heading">Layouts</div>
-          <ul className="sidebar-menu">
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="../Compact_App_Layout/student-take-course.html"
-              >
-                <span className="sidebar-menu-text">Compact</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="../Mini_App_Layout/student-take-course.html"
-              >
-                <span className="sidebar-menu-text">Mini</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item active">
-              <a
-                className="sidebar-menu-button"
-                href="../Mini_Secondary_Layout/student-take-course.html"
-              >
-                <span className="sidebar-menu-text">Mini + Secondary</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="../App_Layout/student-take-course.html"
-              >
-                <span className="sidebar-menu-text">App</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="../Boxed_App_Layout/student-take-course.html"
-              >
-                <span className="sidebar-menu-text">Boxed</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="../Sticky_App_Layout/student-take-course.html"
-              >
-                <span className="sidebar-menu-text">Sticky</span>
-              </a>
-            </li>
-            <li className="sidebar-menu-item">
-              <a
-                className="sidebar-menu-button"
-                href="../Fixed_Layout/student-take-course.html"
-              >
-                <span className="sidebar-menu-text">Fixed</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-        <div
-          className="ps__thumb-x"
-          tabIndex={0}
-          style={{ left: 0, width: 0 }}
-        />
-      </div>
-      <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-        <div
-          className="ps__thumb-y"
-          tabIndex={0}
-          style={{ top: 0, height: 0 }}
-        />
-      </div>
+     
+  
+       </div>
+    
     </div>
   </div>
 </div>

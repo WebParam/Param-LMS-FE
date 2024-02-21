@@ -8,7 +8,7 @@ export interface ICourse {
         description: string;
         sections: ISection[];
         createdDate: string,
-        creatingUser: string,
+        creatingUser?: string,
         creatingUserName: string,
         state: number,
         logo: string,
