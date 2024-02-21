@@ -35,12 +35,10 @@ import Cookies from "universal-cookie"; // Import the library
 import Dropdown from "react-bootstrap/Dropdown";
 import "react-quill/dist/quill.snow.css";
 import { IQuiz } from "@/app/interfaces/quiz";
-import {
-  getSelectedQuizForEdit,
-} from "@/app/redux/quizSlice";
-import CreateCourseSidebar from "@/app/components/createCourseSidebar";
+import { getSelectedQuizForEdit } from "@/app/redux/quizSlice";
 import Sidebar from "@/app/components/Sidebar";
-
+import { IDocument } from "@/app/interfaces/document";
+import { getSelectedDocumentForEdit } from "@/app/redux/documentSice";
 
 // Define interface for ReactQuill props
 interface ReactQuillProps {
@@ -48,7 +46,7 @@ interface ReactQuillProps {
   value?: string;
   onChange?: any;
   placeholder?: string;
-  modules?: any; 
+  modules?: any;
 }
 
 const ReactQuillWrapper = ({
@@ -56,24 +54,26 @@ const ReactQuillWrapper = ({
   value,
   onChange,
   placeholder,
-  modules
+  modules,
 }: ReactQuillProps) => {
-  const [ReactQuillComponent, setReactQuillComponent] = useState<any>(() => () => null); 
+  const [ReactQuillComponent, setReactQuillComponent] = useState<any>(
+    () => () => null
+  );
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      import('react-quill').then(module => {
-        console.log("ReactQuill module loaded:", module);
-        setReactQuillComponent(() => module.default);
-      }).catch(error => {
-        console.error("Error loading ReactQuill module:", error);
-      });
+    if (typeof window !== "undefined") {
+      import("react-quill")
+        .then((module) => {
+          console.log("ReactQuill module loaded:", module);
+          setReactQuillComponent(() => module.default);
+        })
+        .catch((error) => {
+          console.error("Error loading ReactQuill module:", error);
+        });
     }
   }, []);
 
-  console.log("ReactQuillComponent:", ReactQuillComponent);
-
-  if (!ReactQuillComponent) return null; 
+  if (!ReactQuillComponent) return null;
 
   return (
     <ReactQuillComponent
@@ -86,8 +86,7 @@ const ReactQuillWrapper = ({
   );
 };
 
-
- function EditCourse() {
+function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [editModuleModalOpen, setEditModuleModalOpen] =
     useState<boolean>(false);
@@ -97,7 +96,9 @@ const ReactQuillWrapper = ({
     useState<boolean>(false);
   const [changeBtn, setChangeBtn] = useState<boolean>(false);
   const [sectionId, setSectionId] = useState("");
-  const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
+  const _courseFromState: ICourse = useSelector(
+    getSelectedCourseForEdit
+  ).course;
   const [courseTitle, setCourseTitle] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
   const [disableCreateCourseBtn, setDisableCreateCourseBtn] =
@@ -108,15 +109,22 @@ const ReactQuillWrapper = ({
   const [imageUrl, setImageUrl] = useState<any>();
   const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit);
   const [imgError, setImgError] = useState(false);
-  const [moduleId, setModuleId] = useState<string>("")
+  const [moduleId, setModuleId] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
+  const [arrayOfDocuments, setArrayOfDocuments] = useState<any[]>([]);
 
-  const [videoId, setVideoId] = useState<string>("")
 
+  const [videoId, setVideoId] = useState<string>("");
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
   console.log("Course", _courseFromState);
 
-  let cookies = new Cookies();
+  console.log("Document from state", _documentsFromState);
 
+  let cookies = new Cookies();
+  useEffect(() => {
+    console.log("Array of documents", arrayOfDocuments);
+  }, [arrayOfDocuments]);
+  
   const userData = cookies.get("param-lms-user");
   console.log("userDataID:", userData?.id);
   const dispatch = useDispatch();
@@ -130,6 +138,11 @@ const ReactQuillWrapper = ({
       [{ list: "ordered" }, { list: "bullet" }],
     ],
   };
+  useEffect(() => {
+    console.log("Array of documents:", arrayOfDocuments);
+  }, [arrayOfDocuments]);
+
+
 
   const payload = {
     creatingUser: userData?.id,
@@ -218,13 +231,11 @@ const ReactQuillWrapper = ({
     }
   };
 
-
   async function createCourse() {
-    
     setImgError(false);
     setDisableCreateCourseBtn(true);
-    if(!imageUrl){
-      setImgError(true)
+    if (!imageUrl) {
+      setImgError(true);
       return;
     }
 
@@ -240,17 +251,44 @@ const ReactQuillWrapper = ({
     });
 
     try {
-   
+  const convertDocumentToFormData = (documentObj: IDocument, i:number, formData:FormData) => {
+ 
+  
+    // formData.append(`${i}`, JSON.stringify(documentObj));
+    // Object.entries(_documentsFromState[0]).map(([key, value]) => {
+    //   formData.append(key, value);
+    //   console.log("Appended key:", key, "with value:", value);
+    // });
+    debugger;
+    // return formData;
+  };
+
+  // const formData = new FormData();
+  //   debugger;
+  //   Object.entries(_documentsFromState[0]).map(([key, value]) => {
+  //     formData.append(key, value);
+  //     console.log("Appended key:", key, "with value:", value);
+  //   });
+
+  const formData = new FormData();
+  const formDataArray = _documentsFromState.forEach((document,i) => {
+    console.log(`Appended key: ${JSON.stringify(document)} with value: ${document.file}`)
+    const req = {...document, file:""};
+    formData.append(JSON.stringify(req), document.file)});     
+ 
+debugger;
+  
+
       const createCourseResponse = await Api.POST_CreateCourse(
         _courseFromState
       )!;
 
       if (createCourseResponse?.data?.id) {
-      
-
+        const uploadDocuments = await Api.POST_Document(formData);
+        debugger
         const courseId: string = createCourseResponse.data?.id!;
         const uploadImageResponse = await Api.POST_Image(courseId, formData);
-
+        debugger;
         const extractedVideo = createCourseResponse?.data?.sections.reduce(
           (accumulator: IVideo[], section: any) => {
             // Iterate through modules within the section
@@ -266,7 +304,7 @@ const ReactQuillWrapper = ({
           },
           []
         );
-        
+
         const updatedQuizzes = await Promise.all(
           _quizzesFromState.map(async (quiz: IQuiz) => {
             try {
@@ -294,6 +332,7 @@ const ReactQuillWrapper = ({
         });
 
         setTimeout(() => {
+          localStorage.removeItem("persist:root")
           dispatch(deleteAllSections());
           setCourseTitle("");
           setCourseDescription("");
@@ -341,17 +380,13 @@ const ReactQuillWrapper = ({
   };
 
   const createModule = () => {
+    const payload = {
+      sectionId: sectionId,
+    };
 
-      const payload = {
-        sectionId: sectionId,
-    
-      };
-
-
-     if(sectionId){
+    if (sectionId) {
       dispatch(addModuleToSection(payload));
-     }
-
+    }
   };
 
   useEffect(() => {
@@ -376,8 +411,7 @@ const ReactQuillWrapper = ({
   };
   1;
   const handleDeleteVideo = (videoId: any) => {
- 
-  dispatch(deleteVideoFromModule({ moduleId, videoId }));
+    dispatch(deleteVideoFromModule({ moduleId, videoId }));
   };
 
   const handleDeleteSection = (sectionId: any) => {
@@ -394,7 +428,6 @@ const ReactQuillWrapper = ({
     },
   };
 
-  
   return (
     <div
       id="test"
@@ -405,7 +438,7 @@ const ReactQuillWrapper = ({
     >
       <ToastContainer />
 
-        <div>
+      <div>
         <Modal
           styles={customModalStyles}
           open={editModuleModalOpen}
@@ -418,8 +451,8 @@ const ReactQuillWrapper = ({
           center
         >
           <EditCourseModal
-          videoId = {videoId}
-         moduleId={moduleId}
+            videoId={videoId}
+            moduleId={moduleId}
             sectionId={sectionId}
             onClose={saveAndCloseEditModuleModal}
           />
@@ -445,11 +478,11 @@ const ReactQuillWrapper = ({
         {/* Header */}
         {/* Navbar */}
         <div
-              style={{
-                "position": "relative",
-          "left": "6em",
-          "width": "1200px" 
-              }}
+          style={{
+            position: "relative",
+
+            width: "1200px",
+          }}
           className="navbar navbar-expand pr-0 navbar-light border-bottom-2"
           id="default-navbar"
           data-primary=""
@@ -767,14 +800,13 @@ const ReactQuillWrapper = ({
 
                 <div style={{ height: "150px" }}>
                   <div style={{ height: "200px", overflow: "auto" }}>
-                  <ReactQuillWrapper
-        style={{ height: "100px" }}
-        value={courseDescription}
-        onChange={handleDescriptionChange}
-        placeholder="Module description..."
-        modules={descriptionToolbar}
-      />
-
+                    <ReactQuillWrapper
+                      style={{ height: "100px" }}
+                      value={courseDescription}
+                      onChange={handleDescriptionChange}
+                      placeholder="Module description..."
+                      modules={descriptionToolbar}
+                    />
                   </div>
                 </div>
 
@@ -858,49 +890,46 @@ const ReactQuillWrapper = ({
                         }`}
                         id={`course-toc-${section.id}`}
                       >
-                        {section.modules?.map((Module) => 
-                          Module.videos.map((video:IVideo) => (
+                        {section.modules?.map((Module) =>
+                          Module.videos.map((video: IVideo) => (
                             <div
-                            style={{ cursor: "pointer" }}
-                            className="accordion__menu-link"
-                            key={video.id}
+                              style={{ cursor: "pointer" }}
+                              className="accordion__menu-link"
+                              key={video.id}
                             >
-                             <FaVideo
-                             
-                                        onClick={() => {
-                                          setModuleId(Module.id)
-                                setEditModuleModalOpen(true);
-                                setSectionId(section.id);
-                                setVideoId(video.id);
-                              }}
-                                       
-                                       className="video-icon" /> 
-                            <a
-                              style={{marginLeft:"8px"}}
-                              className="flex"
-                              onClick={() => {
-                                setModuleId(Module.id)
-                                setEditModuleModalOpen(true);
-                                setSectionId(section.id);
-                                setVideoId(video.id);
-                              }}
-                            >
-                              {video.title}
-                            </a>
-                            <span className="text-muted">
-                              <button
-                                onClick={() =>
-                                  handleDeleteVideo(video.id)
-                                }
-                                style={{
-                                  backgroundColor: "white",
-                                  border: "none",
-                                  outline: "none",
+                              <FaVideo
+                                onClick={() => {
+                                  setModuleId(Module.id);
+                                  setEditModuleModalOpen(true);
+                                  setSectionId(section.id);
+                                  setVideoId(video.id);
+                                }}
+                                className="video-icon"
+                              />
+                              <a
+                                style={{ marginLeft: "8px" }}
+                                className="flex"
+                                onClick={() => {
+                                  setModuleId(Module.id);
+                                  setEditModuleModalOpen(true);
+                                  setSectionId(section.id);
+                                  setVideoId(video.id);
                                 }}
                               >
-                                <FaTrash />
-                              </button>
-                            </span>
+                                {video.title}
+                              </a>
+                              <span className="text-muted">
+                                <button
+                                  onClick={() => handleDeleteVideo(video.id)}
+                                  style={{
+                                    backgroundColor: "white",
+                                    border: "none",
+                                    outline: "none",
+                                  }}
+                                >
+                                  <FaTrash />
+                                </button>
+                              </span>
                             </div>
                           ))
                         )}
@@ -1076,16 +1105,23 @@ const ReactQuillWrapper = ({
                 <div className="card">
                   <div className="card-body">
                     <div className="form-group">
-                      <label className="form-label">Image url {imgError && <span style={{color : "tomato" , fontWeight : "500px"}}>* required</span>}</label>
+                      <label className="form-label">
+                        Image url{" "}
+                        {imgError && (
+                          <span
+                            style={{ color: "tomato", fontWeight: "500px" }}
+                          >
+                            * required
+                          </span>
+                        )}
+                      </label>
                       {/* <div className="form-group m-0"> */}
-                      <div className="custom-file"
-                      
-                      >
+                      <div className="custom-file">
                         <input
                           type="file"
                           id="file"
                           style={{
-                            border: "2px solid tomato" ,
+                            border: "2px solid tomato",
                           }}
                           onChange={handleImageChange}
                           className="custom-file-input"
@@ -1154,11 +1190,10 @@ const ReactQuillWrapper = ({
       </div>
 
       {}
-    <Sidebar/>
+      <Sidebar />
       {/* // END drawer */}
     </div>
   );
 }
 
-
-export default dynamic (() => Promise.resolve(EditCourse), {ssr: false})
+export default dynamic(() => Promise.resolve(EditCourse), { ssr: false });

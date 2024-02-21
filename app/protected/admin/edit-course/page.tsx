@@ -43,7 +43,6 @@ import { getSelectedQuizForEdit, updateQuizzes } from "@/app/redux/quizSlice";
 import dynamic from "next/dynamic";
 import Cookies from "universal-cookie";
 
-// Define interface for ReactQuill props
 interface ReactQuillProps {
   style?: React.CSSProperties;
   value?: string;
@@ -73,7 +72,6 @@ const ReactQuillWrapper = ({
     }
   }, []);
 
-  console.log("ReactQuillComponent:", ReactQuillComponent);
 
   if (!ReactQuillComponent) return null; 
 
@@ -453,7 +451,7 @@ function EditCourse() {
         <div
           style={{
             position: "relative",
-            left: "20em",
+          
             width: "1200px",
           }}
           className="navbar navbar-expand pr-0 navbar-light border-bottom-2"

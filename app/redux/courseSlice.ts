@@ -21,7 +21,6 @@ function sortModuleByOrder(a: IModule, b: IModule) {
     return a.order - b.order;
 }
 
-// ## Define the initial state  
 const initialState: ICourseState = {
     course: {
         id: generateUniqueId(),
@@ -85,8 +84,7 @@ export const courseSlice = createSlice({
             state.course = newState;
           
           }
-,          
-
+              ,          
 
         updateSectionDetail(state, action) {
             const _action = action.payload as IUpdateSectionDetailState;
@@ -275,15 +273,8 @@ export const courseSlice = createSlice({
             }
         },
     },
-
-
-
-
-
 }
 );
-
-
 
   export const {
     setSelectedCourseForEdit,

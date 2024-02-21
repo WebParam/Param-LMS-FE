@@ -17,9 +17,9 @@ const CourseInfoPanel = (course:any) => {
         let totalDuration = 0;
 
         // Iterate through sections using forEach
-        data.sections.forEach((section) => {
+        data?.sections?.forEach((section) => {
             // Iterate through modules using forEach
-            section.modules.forEach((module) => {
+            section?.modules.forEach((module) => {
                 // Iterate through videos using forEach
                 module.videos.forEach((video) => {
                     // Extract duration in seconds (assuming it's in the format '5:30')
