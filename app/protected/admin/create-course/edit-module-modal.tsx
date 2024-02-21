@@ -77,7 +77,6 @@ const ReactQuillWrapper = ({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       import('react-quill').then(module => {
-        console.log("ReactQuill module loaded:", module);
         setReactQuillComponent(() => module.default);
       }).catch(error => {
         console.error("Error loading ReactQuill module:", error);
@@ -85,7 +84,6 @@ const ReactQuillWrapper = ({
     }
   }, []);
 
-  console.log("ReactQuillComponent:", ReactQuillComponent);
 
   if (!ReactQuillComponent) return null; 
 
@@ -113,7 +111,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const cookies = new Cookies();
 
   const [videoTitle, setVideoTitle] = useState<string>("");
-  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [videoLink, setVideoLink] = useState<string>("");
   const [moduleTitle, setModuleTitle] = useState<string>("");
   const [toggler, setToggler] = useState<Number>(1);
   const [documentName, setDocumentName] = useState<string>();
@@ -548,7 +546,7 @@ setChangeEditQuizQuestionContent(false);
     setVideoUrlError(false);
     if (
       videoTitle &&
-      videoDescription && videoUrl 
+      videoDescription && videoLink 
      
     ) {
       const plainDescription = videoDescription
@@ -558,7 +556,7 @@ setChangeEditQuizQuestionContent(false);
         moduleId,
         videoId: videoId,
         sectionId: sectionId,
-        videoLink: videoUrl,
+        videoLink: videoLink,
         videoTitle: videoTitle,
         videoDescription: plainDescription,
       };
@@ -580,7 +578,7 @@ setChangeEditQuizQuestionContent(false);
         setVideoTitleError(true);
 
       }
-      if(videoUrl.length < 1){
+      if(videoLink.length < 1){
         setVideoUrlError(true);
 
       }
@@ -592,7 +590,7 @@ setChangeEditQuizQuestionContent(false);
     setVideoDescError(false);
     setVideoTitleError(false);
     setVideoUrlError(false);
-    if(videoUrl && videoTitle && videoDescription) {
+    if(videoLink && videoTitle && videoDescription) {
       
       onClose();
     }else{
@@ -603,7 +601,7 @@ setChangeEditQuizQuestionContent(false);
         setVideoTitleError(true);
 
       }
-      if(videoUrl.length < 1){
+      if(videoLink.length < 1){
         setVideoUrlError(true);
 
       }
@@ -660,7 +658,7 @@ setChangeEditQuizQuestionContent(false);
         setVideoTitle(video[0]?.title);
         setVideoDescription(video[0]?.description);
         
-        setVideoUrl(video[0]?.videoLink);
+        setVideoLink(video[0]?.videoLink);
         setDisableModuleInputs(true);
       }
 
@@ -833,10 +831,10 @@ setChangeEditQuizQuestionContent(false);
                         disabled={disableModuleInputs}
                         className="form-control form-control-lg"
                         placeholder="Video URL"
-                        value={videoUrl}
+                        value={videoLink}
                         onChange={(e) => {
                        
-                          setVideoUrl(e.target.value);
+                          setVideoLink(e.target.value);
                         }}
                       />
                   
@@ -1642,7 +1640,7 @@ setChangeEditQuizQuestionContent(false);
               <div className="embed-responsive embed-responsive-16by9">
                 <iframe
                   className="embed-responsive-item"
-                  src={videoUrl}
+                  src={videoLink}
                   //   allowFullScreen=""
                 />
               </div>
@@ -1651,7 +1649,7 @@ setChangeEditQuizQuestionContent(false);
                 <input
                   type="text"
                   className="form-control"
-                    value ={videoUrl}
+                    value ={videoLink}
                   placeholder="Enter Video URL"
                 />
 

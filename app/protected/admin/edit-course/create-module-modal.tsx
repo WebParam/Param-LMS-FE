@@ -34,6 +34,8 @@ import { IChoice, IDeleteQuestion, IQuestion, IQuiz, IUpdateQuestionDetailState,
 import Cookies from "universal-cookie";
 import { Dropdown } from "react-bootstrap";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { IDocument } from "@/app/interfaces/document";
+import { getSelectedDocumentForEdit, setSelectedDocumentForEdit } from "@/app/redux/documentSice";
 
 
 interface CreateCourseModalProps {
@@ -98,7 +100,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const userData = cookies.get("param-lms-user");
   const [showVideoInputs, setShowVideoInputs] = useState(false);
   const [videoTitle, setVideoTitle] = useState<string>("");
-  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [videoLink, setVideoLink] = useState<string>("");
   const [videos, setVideos] = useState<any>([]);
 
   const [moduleId, setModuleId] = useState("");
@@ -167,6 +169,9 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
 
   const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
   const _quizFromState: IQuiz  = _quizzesFromState[_quizzesFromState.length - 1];
+
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentFromState: IDocument  = _documentsFromState[_documentsFromState.length - 1];
 
 
   const tabSelect = (id: Number, e: any) => {
@@ -525,7 +530,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
     //Document functions ends here
 
   const saveChangeBtn = () => {
-    if (videoDescription && videoTitle  && videoUrl) {
+    if (videoDescription && videoTitle  && videoLink) {
       setDisableSaveChanges(false);
     }
   };
@@ -535,7 +540,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
     setVideoTitleError(false);
     setVideoUrlError(false);
     setDisableSaveChanges(false);
-    if (videoDescription && videoTitle  && videoUrl ) {
+    if (videoDescription && videoTitle  && videoLink ) {
    
       const plainDescription = videoDescription
       && videoDescription.replace(/<\/?p>/gi, "");
@@ -543,7 +548,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
       const payload = {
         moduleId: moduleId,
         videoTitle: videoTitle,
-        videoLink: videoUrl,
+        videoLink: videoLink,
         description: plainDescription,
       };
       dispatch(addVideoToModule(payload));
@@ -558,7 +563,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
         setVideoTitleError(true);
 
       }
-      if(!videoUrl){
+      if(!videoLink){
         setVideoUrlError(true);
 
       }
@@ -593,7 +598,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
   const video = videos.filter((video:IVideo) => video.id === id);
   setVideoTitle(video[0]?.title);
   setVideoDescription(video[0]?.description);
-  setVideoUrl(video[0]?.videoLink);
+  setVideoLink(video[0]?.videoLink);
   setVideoId(video[0]?.id)
   setVideoReference(video[0]?.reference)
 
@@ -604,9 +609,9 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
     setVideoDescError(false);
     setVideoTitleError(false);
     setVideoUrlError(false);
-    if(videoUrl && videoTitle && videoDescription) {
+    if(videoLink && videoTitle && videoDescription) {
       setQuestions([]);
-      setVideoUrl("");
+      setVideoLink("");
       setEditQuizQuestion(false);
       setVideoTitle("");
       setVideoDescription("")
@@ -635,7 +640,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
         setVideoTitleError(true);
 
       }
-      if(!videoUrl){
+      if(!videoLink){
         setVideoUrlError(true);
 
       }
@@ -650,7 +655,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
     setVideoUrlError(false);
     if (
       videoTitle &&
-      videoDescription && videoUrl 
+      videoDescription && videoLink 
      
     ) {
       const plainDescription = videoDescription
@@ -659,7 +664,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
       const payload = {
         videoId: videoId,
         moduleId: moduleId,
-        videoLink: videoUrl,
+        videoLink: videoLink,
         videoTitle: videoTitle,
         description: plainDescription,
       };
@@ -679,7 +684,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
         setVideoTitleError(true);
 
       }
-      if(!videoUrl){
+      if(!videoLink){
         setVideoUrlError(true);
 
       }
@@ -1023,10 +1028,10 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
                         disabled={disableModuleInputs}
                         className="form-control form-control-lg"
                         placeholder="Video URL"
-                        value={videoUrl}
+                        value={videoLink}
                         onChange={(e) => {
                           saveChangeBtn();
-                          setVideoUrl(e.target.value);
+                          setVideoLink(e.target.value);
                         }}
                       />
                   
@@ -1178,9 +1183,9 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
                         disabled={disableModuleInputs}
                         className="form-control form-control-lg"
                         placeholder="Video URL"
-                        value={videoUrl}
+                        value={videoLink}
                         onChange={(e) => {
-                          setVideoUrl(e.target.value);
+                          setVideoLink(e.target.value);
                         }}
                       />
                   
@@ -1993,7 +1998,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
               <div className="embed-responsive embed-responsive-16by9">
                 <iframe
                   className="embed-responsive-item"
-                  src={videoUrl}
+                  src={videoLink}
                   //   allowFullScreen=""
                 />
               </div>
@@ -2002,7 +2007,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
                 <input
                   type="text"
                   className="form-control"
-                    value ={videoUrl}
+                    value ={videoLink}
                   placeholder="Enter Video URL"
                 />
 

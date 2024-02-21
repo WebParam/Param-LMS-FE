@@ -33,6 +33,9 @@ import {
 import Cookies from "universal-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {  createDocumentDetails, getSelectedDocumentForEdit } from "@/app/redux/documentSice";
+import { IDocument } from "@/app/interfaces/document";
+
 
 
 interface CreateCourseModalProps {
@@ -64,7 +67,6 @@ const ReactQuillWrapper = ({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       import('react-quill').then(module => {
-        console.log("ReactQuill module loaded:", module);
         setReactQuillComponent(() => module.default);
       }).catch(error => {
         console.error("Error loading ReactQuill module:", error);
@@ -72,7 +74,6 @@ const ReactQuillWrapper = ({
     }
   }, []);
 
-  console.log("ReactQuillComponent:", ReactQuillComponent);
 
   if (!ReactQuillComponent) return null; 
 
@@ -98,7 +99,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const dispatch = useDispatch();
 
   const [videoTitle, setVideoTitle] = useState<string>("");
-  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [videoLink, setVideoLink] = useState<string>("");
   const [videoDescription, setVideoDescription] = useState<string>("");
 
   const [videoId, setVideoId] = useState<string>("");
@@ -106,7 +107,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [questionDescription, setQuestionDescription] = useState<string>("");
   const [choiceDescription, setChoiceDescription] = useState<string>("");
   const [points, setPoints] = useState<number>(0);
-  const [documentName, setDocumentName] = useState<string>();
+  const [document, setDocument] = useState<any>();
   const [countChoice, setCountChoices] = useState<number>(0);
   const [moduleId, setModuleId] = useState<string>("")
   const [date, setDate] = useState<string>("");
@@ -150,7 +151,13 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [videoTitleError, setVideoTitleError] = useState(false);
   const [videoDescError, setVideoDescError] = useState(false);
   const [videoUrlError, setVideoUrlError] = useState(false);
+  const [formData, setFormData] = useState(new FormData());
 
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentFromState: IDocument  = _documentsFromState[_documentsFromState.length - 1];
+
+  
+  console.log("Documents from state", _documentsFromState);
 
   // const handleDescriptionChange = (content: string, _: any, source: string) => {
   //   if (source === "user") {
@@ -176,7 +183,10 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     
 
     dispatch(updateChoiceDetail(payload));
+
   };
+
+
   console.log("isChecked",_quizzesFromState);
   const moduleToolbar = {
     toolbar: [
@@ -190,8 +200,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     e.preventDefault();
   };
 
-  const cursorStyle = (predicate: boolean) =>
-    predicate ? "pointer" : "not-allowed";
+
 
   function getTodaysDate() {
     const today = new Date();
@@ -409,6 +418,18 @@ setChoiceError(false)
 
   }
 
+  const nextTab = (e:any) => {
+  addQuiz(e)
+  if(questions?.length > 0){
+    addDocument(e);
+  }
+
+  if(document){
+    clearInputs();
+  }
+
+  }
+
   const newQuestion = () => {
     if(choices.length === 0){
       let _id = toast.loading("Please add choices first..", {
@@ -466,15 +487,7 @@ setChangeEditQuizQuestionContent(false);
 
   //Dcoument functions start here
 
-  const handleDocument = (e: any) => { 
-     const formData = new FormData();
-    const file = e.target.files[0];
-
-    if (file) {
-      formData.append("document", file);
-      setDocumentName(file.name);
-    }
-  };
+ 
   const addDocument = (e: any) => {
     setIncludeDocument(false);
     if (!videoId) {
@@ -499,6 +512,7 @@ setChangeEditQuizQuestionContent(false);
       setTimeout(() => {
         toast.dismiss(_id);
       }, 2000);
+      return false;
     } else {
       if (includeDocument) {
         tabSelect(3, e);
@@ -509,6 +523,31 @@ setChangeEditQuizQuestionContent(false);
       setToggler(3);
     }
   };
+
+  const handleChangeDocument = (e:any) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      setDocument(file);
+      console.log("Selected file", file)
+    }
+
+    const payload = {
+      title: file ? file.name : "",
+      reference:videoReference,
+       url :"",
+      file: file ? file : null 
+    }
+    //   const formData = new FormData();
+    // Object.entries(payload).forEach(([key, value]) => {
+    //   formData.append(key, value);
+    //   console.log("Appended key:", key, "with value:", value);
+    // });
+
+    dispatch(createDocumentDetails(payload));
+    console.log("Document from state", _documentFromState);
+
+}
   //Document functions ends here
 
   //Video functions start here
@@ -528,7 +567,7 @@ setChangeEditQuizQuestionContent(false);
   //Video functions ends here
   const saveChangeBtn = () => {
   
-    if (videoDescription.length > 0 && videoTitle.length > 0 && videoUrl.length > 0) {
+    if (videoDescription.length > 0 && videoTitle.length > 0 && videoLink.length > 0) {
       setDisableSaveChanges(false);
     }
   };
@@ -540,14 +579,14 @@ setChangeEditQuizQuestionContent(false);
     setVideoTitleError(false);
     setVideoUrlError(false);
     setDisableSaveChanges(false);
-    if (videoDescription.length > 0 && videoTitle.length > 0  && videoUrl.length > 0) {
+    if (videoDescription.length > 0 && videoTitle.length > 0  && videoLink.length > 0) {
       const plainDescription = videoDescription
       && videoDescription.replace(/<\/?p>/gi, "");
 
       const payload = {
         moduleId: moduleId,
         videoTitle: videoTitle,
-        videoLink: videoUrl,
+        videoLink: videoLink,
         description: plainDescription,
       };
 
@@ -575,7 +614,7 @@ setChangeEditQuizQuestionContent(false);
         setVideoTitleError(true);
 
       }
-      if(!videoUrl){
+      if(!videoLink){
         setVideoUrlError(true);
 
       }
@@ -590,7 +629,7 @@ setChangeEditQuizQuestionContent(false);
     setVideoUrlError(false);
     if (
       videoTitle &&
-      videoDescription && videoUrl 
+      videoDescription && videoLink 
      
     ) {
       const plainDescription = videoDescription
@@ -599,7 +638,7 @@ setChangeEditQuizQuestionContent(false);
       const payload = {
         videoId: videoId,
         moduleId: moduleId,
-        videoLink: videoUrl,
+        videoLink: videoLink,
         videoTitle: videoTitle,
         description: plainDescription,
       };
@@ -621,7 +660,7 @@ setChangeEditQuizQuestionContent(false);
         setVideoTitleError(true);
 
       }
-      if(!videoUrl){
+      if(!videoLink){
         setVideoUrlError(true);
 
       }
@@ -642,7 +681,7 @@ setChangeEditQuizQuestionContent(false);
   const video = videos.filter((video:IVideo) => video.id === id);
   setVideoTitle(video[0]?.title);
   setVideoDescription(video[0]?.description);
-  setVideoUrl(video[0]?.videoLink);
+  setVideoLink(video[0]?.videoLink);
   setVideoId(video[0]?.id)
   setVideoReference(video[0]?.reference)
 
@@ -662,9 +701,9 @@ setChangeEditQuizQuestionContent(false);
     setVideoDescError(false);
     setVideoTitleError(false);
     setVideoUrlError(false);
-    if(videoUrl && videoTitle && videoDescription) {
+    if(videoLink && videoTitle && videoDescription) {
       setQuestions([]);
-      setVideoUrl("");
+      setVideoLink("");
       setEditQuizQuestion(false);
       setVideoTitle("");
       setVideoDescription("")
@@ -693,7 +732,7 @@ setChangeEditQuizQuestionContent(false);
         setVideoTitleError(true);
 
       }
-      if(!videoUrl){
+      if(!videoLink){
         setVideoUrlError(true);
 
       }
@@ -1048,10 +1087,10 @@ setChangeEditQuizQuestionContent(false);
                         disabled={disableModuleInputs}
                         className="form-control form-control-lg"
                         placeholder="Video URL"
-                        value={videoUrl}
+                        value={videoLink}
                         onChange={(e) => {
                           saveChangeBtn();
-                          setVideoUrl(e.target.value);
+                          setVideoLink(e.target.value);
                         }}
                       />
                   
@@ -1200,9 +1239,9 @@ setChangeEditQuizQuestionContent(false);
                         disabled={disableModuleInputs}
                         className="form-control form-control-lg"
                         placeholder="Video URL"
-                        value={videoUrl}
+                        value={videoLink}
                         onChange={(e) => {
-                          setVideoUrl(e.target.value);
+                          setVideoLink(e.target.value);
                         }}
                       />
                   
@@ -1951,7 +1990,7 @@ setChangeEditQuizQuestionContent(false);
                     <input
                       type="file"
                       id="file"
-                      onChange={handleDocument}
+                      onChange={handleChangeDocument}
                       className="custom-file-input"
                     />
                     <label className="custom-file-label">Choose file</label>
@@ -1959,7 +1998,7 @@ setChangeEditQuizQuestionContent(false);
                 </div>
 
                 <p style={{ color: "rgba(39,44,51,.35)", paddingTop: "10px" }}>
-                  {documentName}
+                  {document && document?.name}
                 </p>
               </div>
 
@@ -2016,7 +2055,7 @@ setChangeEditQuizQuestionContent(false);
               <div className="embed-responsive embed-responsive-16by9">
                 <iframe
                   className="embed-responsive-item"
-                  src={videoUrl}
+                  src={videoLink}
                   //   allowFullScreen=""
                 />
               </div>
@@ -2025,7 +2064,7 @@ setChangeEditQuizQuestionContent(false);
                 <input
                   type="text"
                   className="form-control"
-                    value ={videoUrl}
+                    value ={videoLink}
                   placeholder="Enter Video URL"
                 />
 
@@ -2042,26 +2081,30 @@ setChangeEditQuizQuestionContent(false);
         </div>
         {/* // END Page Content */}
 
- <div
- style={{alignSelf:"flex-end",marginRight:"6em",marginTop:"2em"}}
+{
+  !viewAddedVideos &&  <div
+  style={{alignSelf:"flex-end",marginRight:"6em",marginTop:"2em"}}
+  >
+  <button
+ 
+  onClick={nextTab}
+         style={{
+   backgroundColor: "transparent",
+   border: "none",
+   outline: "none",
+   width: "150px",
+ }}
  >
- <button
-        style={{
-  backgroundColor: "transparent",
-  border: "none",
-  outline: "none",
-  width: "150px",
-}}
->
-<a
-
-  href="#"
-  className={`btn ${disableModuleInputs ? "btn-accent" : "btn-outline-secondary"}`}
->
-  Next
-</a>
-</button>
-  </div> 
+ <a
+ 
+   href="#"
+   className={`btn ${disableModuleInputs ? "btn-accent" : "btn-outline-secondary"}`}
+ >
+   Next
+ </a>
+ </button>
+   </div> 
+}
       </div>  
     </div>
   );
