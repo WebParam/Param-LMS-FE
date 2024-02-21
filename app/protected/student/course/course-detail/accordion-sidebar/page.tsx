@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import './accordion-sidebar.css'; // Import your CSS file
 import { IModule } from '@/app/interfaces/courses';
-const collapseMenu = require('../../../../../../public/collapse.png')
+//const collapseMenu = require('../../../../../../public/collapse.png')
 
 const AccordionSidebar = (videosProps:any) => {
-  const [selectedOption, setSelectedOption] = useState('Option 1');
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOptionClick = (option:any) => {
     setSelectedOption(option);
@@ -23,7 +23,7 @@ const AccordionSidebar = (videosProps:any) => {
       <div className="Sidebar">
         <div onClick={() => handleOptionClick('Option 1')}>
             Lessons
-            <span><img src={collapseMenu} alt="" /></span>
+            {/* <span><img src={collapseMenu} alt="" /></span> */}
             </div>
         <div onClick={() => handleOptionClick('Option 2')}>Discussions</div>
         <div onClick={() => handleOptionClick('Option 3')}>Notes</div>

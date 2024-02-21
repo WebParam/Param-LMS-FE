@@ -12,9 +12,8 @@ const generateUniqueId = () => {
 const cookies = new Cookies();
 const loogedInUser = cookies.get('param-lms-user');
 
-
 function sortSectionByOrder(a: ISection, b: ISection) {
-    return a.order - b.order;
+  return a.order - b.order;
 }
 
 function sortModuleByOrder(a: IModule, b: IModule) {
@@ -86,24 +85,32 @@ export const courseSlice = createSlice({
           }
               ,          
 
-        updateSectionDetail(state, action) {
-            const _action = action.payload as IUpdateSectionDetailState;
-            const targetSection = state.course.sections.filter(section => section.id == _action.sectionId)[0];
-            const newSection = {
-                ...targetSection,
-                title: _action.title,
-             
-                competency: action.payload.competency,
-            };
-            const existingSections = state.course.sections.filter(x => x.id != action.payload.sectionId);
-            const newSections = [...existingSections, newSection];
-            const sortedSections = newSections.sort(sortSectionByOrder);
-            const newState = { ...state.course, sections: sortedSections };
-
-            state.course = newState;
-
-
-        },
+          
+            updateSectionDetail(state, action) {
+                const _action = action.payload as IUpdateSectionDetailState;
+                const targetSection = state.course.sections.find(section => section.id === _action.sectionId);
+                
+                if (!targetSection) {
+                    // Handle case when section is not found
+                    return state;
+                }
+            
+                const updatedSection = {
+                    ...targetSection,
+                    title: _action.title,
+                    competency: _action.competency, // Fixed: used _action.competency instead of action.payload.competency
+                };
+            
+                const updatedSections = state.course.sections.map(section => 
+                    section.id === _action.sectionId ? updatedSection : section
+                );
+            
+                const sortedSections = updatedSections.sort(sortSectionByOrder);
+                const newState = { ...state.course, sections: sortedSections };
+            
+                return { ...state, course: newState };
+            },
+            
         deleteSection(state, action) {
             const sectionIdToDelete = action.payload;
 
@@ -178,31 +185,33 @@ export const courseSlice = createSlice({
             }
         },
         editVideoDetails: (state, action) => {
-      const { moduleId, videoId, videoTitle, videoUrl } = action.payload;
-      // Find the section, module, and video to update
-      const sectionIndex = state.course.sections.findIndex(section =>
-        section.modules.some(module => module.id === moduleId)
-      );
-      if (sectionIndex !== -1) {
-        const moduleIndex = state.course.sections[sectionIndex].modules.findIndex(
-          module => module.id === moduleId
-        );
-        if (moduleIndex !== -1) {
-          const videoIndex = state.course.sections[sectionIndex].modules[
-            moduleIndex
-          ].videos.findIndex(video => video.id === videoId);
-          if (videoIndex !== -1) {
-            // Update the video title and URL
-            state.course.sections[sectionIndex].modules[moduleIndex].videos[
-              videoIndex
-            ].title = videoTitle;
-            state.course.sections[sectionIndex].modules[moduleIndex].videos[
-              videoIndex
-            ].videoLink = videoUrl;
+          const { moduleId, videoId, videoTitle, videoLink } = action.payload;
+          // Find the section, module, and video to update
+          const sectionIndex = state.course.sections.findIndex(section =>
+            section.modules.some(module => module.id === moduleId)
+          );
+          if (sectionIndex !== -1) {
+            const moduleIndex = state.course.sections[sectionIndex].modules.findIndex(
+              module => module.id === moduleId
+            );
+            if (moduleIndex !== -1) {
+              const videoIndex = state.course.sections[sectionIndex].modules[
+                moduleIndex
+              ].videos.findIndex(video => video.id === videoId);
+              if (videoIndex !== -1) {
+                // Update the video title and URL
+                state.course.sections[sectionIndex].modules[moduleIndex].videos[
+                  videoIndex
+                ].title = videoTitle;
+                state.course.sections[sectionIndex].modules[moduleIndex].videos[
+                  videoIndex
+                ].videoLink = videoLink;
+              }
+            }
           }
         }
-      }
-    },
+      
+,      
         deleteModuleFromSection(state, action) {
             const { sectionId, moduleId } = action.payload;
       

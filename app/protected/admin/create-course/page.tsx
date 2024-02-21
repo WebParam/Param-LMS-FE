@@ -64,7 +64,6 @@ const ReactQuillWrapper = ({
     if (typeof window !== "undefined") {
       import("react-quill")
         .then((module) => {
-          console.log("ReactQuill module loaded:", module);
           setReactQuillComponent(() => module.default);
         })
         .catch((error) => {
@@ -112,7 +111,7 @@ function EditCourse() {
   const [moduleId, setModuleId] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
   const [arrayOfDocuments, setArrayOfDocuments] = useState<any[]>([]);
-
+  const [isDescSet, setIsDescSet] = useState<boolean>(false);
 
   const [videoId, setVideoId] = useState<string>("");
   const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
@@ -147,7 +146,7 @@ function EditCourse() {
   const payload = {
     creatingUser: userData?.id,
     title: courseTitle ?? _courseFromState.title,
-    description: courseDescription,
+    description: courseDescription 
   };
 
   const logOut = () => {
@@ -221,17 +220,14 @@ function EditCourse() {
     dispatch(createCourseDetail(payload));
   };
 
-  const handleDescriptionChange = (content: string, _: any, source: string) => {
-    if (source === "user") {
-      const plainDescription = content.replace(/<\/?p>/gi, "");
-
-      setCourseDescription(plainDescription);
-
-      dispatch(createCourseDetail(payload));
-    }
-  };
+  const handleDescriptionChange = () => {
+    dispatch(createCourseDetail(payload))
+};
 
   async function createCourse() {
+   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+
+    dispatch(createCourseDetail({...payload,description: plainDescription}))
     setImgError(false);
     setDisableCreateCourseBtn(true);
     if (!imageUrl) {
@@ -251,55 +247,28 @@ function EditCourse() {
     });
 
     try {
-  const convertDocumentToFormData = (documentObj: IDocument, i:number, formData:FormData) => {
- 
-  
-    // formData.append(`${i}`, JSON.stringify(documentObj));
-    // Object.entries(_documentsFromState[0]).map(([key, value]) => {
-    //   formData.append(key, value);
-    //   console.log("Appended key:", key, "with value:", value);
-    // });
-    debugger;
-    // return formData;
-  };
 
-  // const formData = new FormData();
-  //   debugger;
-  //   Object.entries(_documentsFromState[0]).map(([key, value]) => {
-  //     formData.append(key, value);
-  //     console.log("Appended key:", key, "with value:", value);
-  //   });
-
-  const formData = new FormData();
+  const _formData = new FormData();
   const formDataArray = _documentsFromState.forEach((document,i) => {
     console.log(`Appended key: ${JSON.stringify(document)} with value: ${document.file}`)
     const req = {...document, file:""};
-    formData.append(JSON.stringify(req), document.file)});     
- 
-debugger;
-  
-
-      const createCourseResponse = await Api.POST_CreateCourse(
+    _formData.append(JSON.stringify(req), document.file)});     
+       const createCourseResponse = await Api.POST_CreateCourse(
         _courseFromState
       )!;
 
       if (createCourseResponse?.data?.id) {
-        const uploadDocuments = await Api.POST_Document(formData);
-        debugger
+        const uploadDocuments = await Api.POST_Document(_formData);
         const courseId: string = createCourseResponse.data?.id!;
         const uploadImageResponse = await Api.POST_Image(courseId, formData);
-        debugger;
         const extractedVideo = createCourseResponse?.data?.sections.reduce(
           (accumulator: IVideo[], section: any) => {
-            // Iterate through modules within the section
             const videosInModules = section.modules.reduce(
               (moduleAccumulator: IVideo[], module: any) => {
-                // Concatenate videos within the module to the accumulator
-                return moduleAccumulator.concat(module.videos);
+              return moduleAccumulator.concat(module.videos);
               },
               []
             );
-            // Concatenate videos from all modules in the section to the accumulator
             return accumulator.concat(videosInModules);
           },
           []
@@ -389,18 +358,7 @@ debugger;
     }
   };
 
-  useEffect(() => {
-    const sectionIds = _courseFromState?.sections?.map((section) => section.id);
-    const lastSectionId = sectionIds[sectionIds?.length - 1];
-    setSectionId(lastSectionId);
-    if (sectionId?.length > 0) {
-      setDisableCreateCourseBtn(false);
-    }
-  });
 
-  useEffect(() => {
-    formData.append("file", imageUrl);
-  }, [imageUrl]);
 
   const clearSectionContent = () => {
     setSectionTitle("");
@@ -420,6 +378,27 @@ debugger;
     setDisableSectionInput(false);
     setNewSection(true);
   };
+
+
+  useEffect(() => {
+    const sectionIds = _courseFromState?.sections?.map((section) => section.id);
+    const lastSectionId = sectionIds[sectionIds?.length - 1];
+   setSectionId(lastSectionId);
+    if (sectionId?.length > 0) {
+      setDisableCreateCourseBtn(false);
+    }
+  },[_courseFromState?.sections]);
+
+  useEffect(() => {
+    formData.append("file", imageUrl);
+  }, [imageUrl]);
+
+  // useEffect(() => {
+  //   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+  //   setCourseDescription(plainDescription);
+  //   dispatch(createCourseDetail(payload))
+  //   console.log("Course Description: " + plainDescription);
+  // },[])
 
   const customModalStyles = {
     modal: {
@@ -798,14 +777,17 @@ debugger;
 
                 <label className="form-label">Course Description</label>
 
-                <div style={{ height: "150px" }}>
-                  <div style={{ height: "200px", overflow: "auto" }}>
+                <div style={{ height: "140px" ,    backgroundColor: "white", marginBottom:"2em"}}>
+                  <div style={{ height: "200px", overflow: "auto",  }}>
                     <ReactQuillWrapper
                       style={{ height: "100px" }}
                       value={courseDescription}
-                      onChange={handleDescriptionChange}
+                      onChange={(value:string) => {
+                        setCourseDescription(value)
+                      }}
                       placeholder="Module description..."
                       modules={descriptionToolbar}
+
                     />
                   </div>
                 </div>
@@ -1126,9 +1108,10 @@ debugger;
                           onChange={handleImageChange}
                           className="custom-file-input"
                         />
-                        <label className="custom-file-label">Choose file</label>
+                        <label className="custom-file-label">{!imageUrl ? "Choose File" : imageUrl?.name}</label>
                         {/* </div> */}
                       </div>
+
                     </div>
                   </div>
                 </div>

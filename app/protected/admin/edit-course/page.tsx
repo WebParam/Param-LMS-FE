@@ -167,15 +167,15 @@ function EditCourse() {
     dispatch(updateCourseFromDataBase({..._courseFromState,title: payload.title,description:payload.description}));
   };
 
-  const handleDescriptionChange = (content: string, _: any, source: string) => {
-    if (source === "user") {
-      const plainDescription = content.replace(/<\/?p>/gi, "");
+  // const handleDescriptionChange = (content: string, _: any, source: string) => {
+  //   if (source === "user") {
+  //     const plainDescription = content.replace(/<\/?p>/gi, "");
 
-      setCourseDescription(plainDescription);
-      dispatch(updateCourseFromDataBase({..._courseFromState,title: payload.title, description:payload.description}));
+  //     setCourseDescription(plainDescription);
+  //     dispatch(updateCourseFromDataBase({..._courseFromState,title: payload.title, description:payload.description}));
 
-    }
-  };
+  //   }
+  // };
 
   const handleImageChange = (event: any) => {
     const file = event.target.files[0];
@@ -232,6 +232,10 @@ function EditCourse() {
   };
 
   async function UpdateCourse() {
+    const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+
+    dispatch(updateCourseFromDataBase({..._courseFromState,title: payload.title,description:plainDescription}));
+
     let _id = toast.loading("Please wait..", {
       position: "top-center",
       autoClose: 1000,
@@ -769,7 +773,7 @@ function EditCourse() {
                 <ReactQuillWrapper
         style={{ height: "100px" }}
         value={courseDescription}
-        onChange={handleDescriptionChange}
+        onChange={(value :string) => setCourseDescription(value)}
         placeholder="Module description..."
         modules={descriptionToolbar}
       />
@@ -1099,7 +1103,7 @@ function EditCourse() {
                           onChange={handleImageChange}
                           className="custom-file-input"
                         />
-                        <label className="custom-file-label">Choose file</label>
+                        <label className="custom-file-label">{!imageUrl ? "Choose file" : imageUrl.name}</label>
                         {/* </div> */}
                       </div>
                     </div>
