@@ -40,12 +40,6 @@ export default function CourseVideo() {
  const [videoId, setVideoId] = useState<string>("")
 
 
- const [openNew, setOpenNew] = useState(false);
-
-  const onOpenModal = () => setOpenNew(true);
-  const onCloseModal = () => setOpenNew(false);
-
- 
   const openQuiz = (id:any) => {
     setOpen(false);
     console.log("open quiz");
