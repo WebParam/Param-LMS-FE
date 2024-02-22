@@ -1,13 +1,16 @@
+"use client"
 import React , {useState, useEffect}from 'react';
 import './course-preview.css';
 import ReactPlayer from 'react-player';
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
+import { ICourse, IVideo } from '@/app/interfaces/courses';
 
-const CoursePreview = ({ previewVideoUrl, course } : {previewVideoUrl:any, course:any}) => {
+const CoursePreview = ({ previewVideoUrl, course } : {previewVideoUrl:IVideo, course:ICourse}) => {
     const [open, setOpen] = useState(false);
     const [selectedVideo,setSelectedVideo] = useState(course?.sections[0]?.modules[0]?.videos[0]?.videoLink)
     useEffect(() => {
       console.log("course", course)
+      setSelectedVideo(course?.sections[0]?.modules[0]?.videos[0]?.videoLink)
       if(previewVideoUrl?.videoLink === undefined){
        // setSelectedVideo(course?.modules[0]?.videos[0]?.videoLink)
       }
@@ -34,17 +37,14 @@ const CoursePreview = ({ previewVideoUrl, course } : {previewVideoUrl:any, cours
    
 
     const goToQuiz = () => {
-
       window.location.href = '/protected/student/course/quiz';
-      
-    
     }
 
   return (
 <div className="course-detail">
     <div className="player-wrapper">
        <ReactPlayer
-        url={previewVideoUrl?.videoLink}
+        url={previewVideoUrl?.videoLink === undefined ? course?.sections[0]?.modules[0]?.videos[0]?.videoLink : previewVideoUrl?.videoLink}
         controls={true}
         autoPlay={true}
         className="react-player"
