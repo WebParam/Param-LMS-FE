@@ -5,7 +5,7 @@ import ReactPlayer from 'react-player';
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
 import { ICourse, IVideo } from '@/app/interfaces/courses';
 
-const CoursePreview = ({ previewVideoUrl, course } : {previewVideoUrl:IVideo, course:ICourse}) => {
+const CoursePreview = ({ previewVideoUrl, course } : {previewVideoUrl:any, course:ICourse}) => {
     const [open, setOpen] = useState(false);
     const [selectedVideo,setSelectedVideo] = useState(course?.sections[0]?.modules[0]?.videos[0]?.videoLink)
     useEffect(() => {
