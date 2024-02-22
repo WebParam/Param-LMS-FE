@@ -3,13 +3,13 @@ import './course-preview.css';
 import ReactPlayer from 'react-player';
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
 
-const CoursePreview = ({ video, previewVideoUrl } : {video:any, previewVideoUrl:any}) => {
+const CoursePreview = ({ previewVideoUrl, course } : {previewVideoUrl:any, course:any}) => {
     const [open, setOpen] = useState(false);
-    const [selectedVideo,setSelectedVideo] = useState(video?.modules[0]?.videos[0]?.videoLink)
+    const [selectedVideo,setSelectedVideo] = useState(course?.sections[0]?.modules[0]?.videos[0]?.videoLink)
     useEffect(() => {
-      console.log("videourl", previewVideoUrl?.videoLink)
+      console.log("course", course)
       if(previewVideoUrl?.videoLink === undefined){
-        setSelectedVideo(video?.modules[0]?.videos[0]?.videoLink)
+       // setSelectedVideo(course?.modules[0]?.videos[0]?.videoLink)
       }
       if(previewVideoUrl?.videoLink){
         console.log("selected video", selectedVideo)
@@ -61,9 +61,9 @@ const CoursePreview = ({ video, previewVideoUrl } : {video:any, previewVideoUrl:
         Thank you for completing the module, We have attached a quiz to rate your understading of the module. Please click Take Quiz or cancel.
       </ConfirmationModal>
       <div className="details">
-        {<h2>{video?.competency}</h2>}
-        { <p className="instructor">Instructor: {video?.instructor}</p> }
-        { <p className="description">{video?.description}</p> }
+        {<h2>{course?.title}</h2>}
+        { <p className="instructor">Instructor: {course?.instructor}</p> }
+        { <p className="description">{course?.description}</p> }
       </div>
     </div>
   );

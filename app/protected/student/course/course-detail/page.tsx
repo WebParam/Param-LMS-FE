@@ -84,7 +84,7 @@ export default function CourseDetail() {
 
   return (
     <div className="main">
-      <CoursePreview video={sections[0]} previewVideoUrl={selectedVideo}/>
+      <CoursePreview previewVideoUrl={selectedVideo} course={state}/>
       <VideoSidebar sections={sections} onVideoSelect={handleVideoSelect} />
     </div>
   )
