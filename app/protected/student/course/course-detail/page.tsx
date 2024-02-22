@@ -20,7 +20,7 @@ import AccordionSidebar from './accordion-sidebar/page';
  import './main.css'
 
 import CoursePreview from "./course-preview/page";
-import VideoSidebar from "./video-sidebar/page";
+//import VideoSidebar from "./video-sidebar/page";
 
 const cookies = new Cookies();
 
@@ -84,8 +84,8 @@ export default function CourseDetail() {
 
   return (
     <div className="main">
-      <CoursePreview section={sections[0]}/>
-      <VideoSidebar sections={sections} onVideoSelect={handleVideoSelect} />
+      <CoursePreview />
+      {/* <VideoSidebar sections={sections} onVideoSelect={handleVideoSelect} /> */}
     </div>
   )
 

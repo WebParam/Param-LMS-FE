@@ -5,10 +5,10 @@ import ReactPlayer from 'react-player';
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
 import { ISection } from '@/app/interfaces/courses';
 
-interface CoursePreviewProps {
-  section : ISection
-}
-const CoursePreview: React.FC<CoursePreviewProps> = ({ section}) => {
+// interface CoursePreviewProps {
+//   section : ISection
+// }
+const CoursePreview = () => {
     // const [open, setOpen] = useState(false);
     // const [selectedVideoLink,setSelectedVideoLink] = useState(section?.modules[0]?.videos[0]?.videoLink)
     // useEffect(() => {
