@@ -39,26 +39,15 @@ const CoursePreview: React.FC<CoursePreviewProps> = ({ section}) => {
 
   return (
 <div className="course-detail">
-     
+    <div className="player-wrapper">
        <ReactPlayer
-        width='100%'
-        height='100%'
-        url={selectedVideoLink}
+        url={previewVideoUrl?.videoLink}
         controls={true}
         autoPlay={true}
-        config={{
-          vimeo: {
-            playerOptions: {
-              width: '100%',
-              height: '100%',
-              byline: false,
-              portrait: false,
-              title: false,
-            },
-          },
-        }}
+        className="react-player"
         onEnded={() => handleVideoEnd()}
         />
+        </div>
          <ConfirmationModal
         open={open}
         onConfirm={() => openQuiz()}

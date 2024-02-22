@@ -14,7 +14,7 @@ const VideoSidebar = ({ sections, onVideoSelect }: { sections: any, onVideoSelec
               sec?.modules.map((module:any,ind:number) => {
                 return (
                   <div key={ind}>
-                    <h3>{module.title}</h3>
+                    <h3>{sec?.title}</h3>
                     <ul>
                       {module?.videos.map((video: any, videoIndex:number) => (
                         <li key={videoIndex}>
@@ -22,7 +22,7 @@ const VideoSidebar = ({ sections, onVideoSelect }: { sections: any, onVideoSelec
                             {/* <img src={video.thumbnailImage} alt={`Thumbnail for ${video.thumbnailImage}`} /> */}
                             <i className="material-icons">format_indent_increase</i>
                             <div className="video-info">
-                              <a href={video.url}>{video.title}</a>
+                              <a href={video?.url}>{video?.title}</a>
                             </div>
                           </div>
                         </li>
