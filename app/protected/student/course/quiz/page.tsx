@@ -15,7 +15,7 @@ export default function QuizData() {
   const [totalPoints, setTotalPoints] = useState<number>(0)
   const [viewSaveMarksBtn, setViewSaveMarksBtn] = useState<boolean>(false)
   const [isMarksSaved, setIsMarksSaved] = useState<boolean>(false);
-  const [selectedOptions, setSelectedOptions] = useState(Array(quiz?.questions.length).fill(null));
+  const [selectedOptions, setSelectedOptions] = useState(Array(quiz?.questions?.length).fill(null));
   
 
   const router = useRouter();
@@ -50,11 +50,12 @@ export default function QuizData() {
 
   useEffect(() => {
     const quizFromStorage = localStorage.getItem("quiz");
-
+    console.log("selected", quizFromStorage)
     if (quizFromStorage) {
       try {
         setQuiz(JSON.parse(quizFromStorage));
         setQuestionsLength(quiz?.questions.length!);
+        console.log("selected", quizFromStorage)
       } catch (error) {
         console.error("Error parsing quizzes from localStorage:", error);
 
@@ -206,7 +207,7 @@ useEffect(() => {
             <p className="h1 text-white-50 font-weight-light m-0">00:14</p>
           </div>
           <p className="hero__lead measure-hero-lead text-white-50">
-            {quiz?.questions[questionNumber]?.questionDescription}
+            {quiz?.questions[0]?.questionDescription}
           </p>
 </>
 }

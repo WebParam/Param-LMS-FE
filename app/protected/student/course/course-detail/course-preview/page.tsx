@@ -4,12 +4,14 @@ import './course-preview.css';
 import ReactPlayer from 'react-player';
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
 import { ICourse, IVideo } from '@/app/interfaces/courses';
+import { Api } from '@/app/lib/restapi/endpoints';
+import { IQuiz } from '@/app/interfaces/quiz';
 
 const CoursePreview = ({ previewVideoUrl, course } : {previewVideoUrl:any, course:ICourse}) => {
     const [open, setOpen] = useState(false);
     const [selectedVideo,setSelectedVideo] = useState(course?.sections[0]?.modules[0]?.videos[0]?.videoLink)
     useEffect(() => {
-      console.log("course", course)
+      console.log("course", previewVideoUrl)
       setSelectedVideo(course?.sections[0]?.modules[0]?.videos[0]?.videoLink)
       if(previewVideoUrl?.videoLink === undefined){
        // setSelectedVideo(course?.modules[0]?.videos[0]?.videoLink)
@@ -19,6 +21,7 @@ const CoursePreview = ({ previewVideoUrl, course } : {previewVideoUrl:any, cours
         setSelectedVideo(previewVideoUrl?.videoLink)
         console.log("after selected video", selectedVideo, previewVideoUrl.videoLink)
       }
+      getAllQuizzes()
     }, []);
 
     const handleVideoEnd = () => {
@@ -34,7 +37,27 @@ const CoursePreview = ({ previewVideoUrl, course } : {previewVideoUrl:any, cours
      // onOpenModal();
     }
 
-   
+    async function getAllQuizzes() {
+      try {
+        const getQuizzes = await Api.GET_AllQuizzes();
+    
+        if (getQuizzes && getQuizzes.length > 0) {
+          const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
+          console.log("quizes",mappedQuizzes)
+          const quizByVideoId = mappedQuizzes.filter((quiz:IQuiz) => quiz.videoId === course?.sections[0]?.modules[0]?.videos[0]?.id)//videoId here
+          console.log("quiz", quizByVideoId)
+          localStorage.setItem("quiz", JSON.stringify(quizByVideoId))
+    ;     
+        } else {
+          console.log("No quizzes found");
+        }
+      } catch (error) {
+        console.error("Error fetching quizzes:", error);
+      }
+    }
+
+
+
 
     const goToQuiz = () => {
       window.location.href = '/protected/student/course/quiz';
