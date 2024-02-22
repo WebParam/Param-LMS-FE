@@ -58,12 +58,6 @@ const CourseInfoPanel = (course:any) => {
             <div className="media align-items-center">
               <span className="media-left mr-16pt">
               <span className="material-icons text-primary">account_circle</span>
-                {/* <img
-                  src="../../public/images/people/50/guy-6.jpg"
-                  width={40}
-                  alt="avatar"
-                  className="rounded-circle"
-                /> */}
               </span>
               <div className="media-body">
                 <a className="card-title m-0" href="teacher-profile.html">
@@ -73,35 +67,13 @@ const CourseInfoPanel = (course:any) => {
               </div>
             </div>
           </li>
-          <li className="nav-item navbar-list__item">
-            <i className="material-icons text-muted icon--left">schedule</i>
-            {duration}
-          </li>
+    
           <li className="nav-item navbar-list__item">
             <i className="material-icons text-muted icon--left">assessment</i>
             Beginner
           </li>
           <li className="nav-item ml-sm-auto text-sm-center flex-column navbar-list__item">
-            <div className="rating rating-24">
-              <div className="rating__item">
-                <i className="material-icons">star</i>
-              </div>
-              <div className="rating__item">
-                <i className="material-icons">star</i>
-              </div>
-              <div className="rating__item">
-                <i className="material-icons">star</i>
-              </div>
-              <div className="rating__item">
-                <i className="material-icons">star</i>
-              </div>
-              <div className="rating__item">
-                <i className="material-icons">star_border</i>
-              </div>
-            </div>
-            <p className="lh-1 mb-0">
-              <small className="text-muted">20 ratings</small>
-            </p>
+          {duration}
           </li>
         </ul>
       </div>

@@ -16,7 +16,7 @@ export const uploadImage = ""
 
 export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api";
  
-export const userReadUrl="https://khumla-dev-user-read.azurewebsites.net/api";
+export const userReadUrl="https://khmla-dev-user-read.azurewebsites.net/api";
 
 export const commentReadUrl="https://localhost:61280/api";
 
