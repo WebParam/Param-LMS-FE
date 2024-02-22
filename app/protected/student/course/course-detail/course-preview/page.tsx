@@ -1,21 +1,18 @@
+"use client"
 import React , {useState, useEffect}from 'react';
 import './course-preview.css';
 import ReactPlayer from 'react-player';
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
+import { ISection } from '@/app/interfaces/courses';
 
-const CoursePreview = ({ video, previewVideoUrl } : {video:any, previewVideoUrl:any}) => {
+interface CoursePreviewProps {
+  section : ISection
+}
+const CoursePreview: React.FC<CoursePreviewProps> = ({ section}) => {
     const [open, setOpen] = useState(false);
-    const [selectedVideo,setSelectedVideo] = useState(video?.modules[0]?.videos[0]?.videoLink)
+    const [selectedVideoLink,setSelectedVideoLink] = useState(section?.modules[0]?.videos[0]?.videoLink)
     useEffect(() => {
-      console.log("videourl", previewVideoUrl?.videoLink)
-      if(previewVideoUrl?.videoLink === undefined){
-        setSelectedVideo(video?.modules[0]?.videos[0]?.videoLink)
-      }
-      if(previewVideoUrl?.videoLink){
-        console.log("selected video", selectedVideo)
-        setSelectedVideo(previewVideoUrl?.videoLink)
-        console.log("after selected video", selectedVideo, previewVideoUrl.videoLink)
-      }
+      setSelectedVideoLink(section?.modules[0]?.videos[0]?.videoLink)
     }, []);
 
     const handleVideoEnd = () => {
@@ -46,7 +43,7 @@ const CoursePreview = ({ video, previewVideoUrl } : {video:any, previewVideoUrl:
        <ReactPlayer
         width='100%'
         height='100%'
-        url={previewVideoUrl?.videoLink}
+        url={selectedVideoLink}
         controls={true}
         autoPlay={true}
         config={{
@@ -72,9 +69,9 @@ const CoursePreview = ({ video, previewVideoUrl } : {video:any, previewVideoUrl:
         Thank you for completing the module, We have attached a quiz to rate your understading of the module. Please click Take Quiz or cancel.
       </ConfirmationModal>
       <div className="details">
-        {<h2>{video?.competency}</h2>}
-        { <p className="instructor">Instructor: {video?.instructor}</p> }
-        { <p className="description">{video?.description}</p> }
+        {<h2>{section?.competency}</h2>}
+        { <p className="instructor">Instructor:John Smith</p> }
+        { <p className="description">{section.modules[0]?.videos[0].description}</p> }
       </div>
     </div>
   );
