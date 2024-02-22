@@ -24,7 +24,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
   }
   
   .video-item img {
@@ -33,7 +33,10 @@
     margin-right: 10px;
     object-fit: cover;
   }
-  
+  .video-info{
+    font-size: larger;
+    text-transform: capitalize;
+  }
   .video-info a {
     color: #555;
     text-decoration: none;
