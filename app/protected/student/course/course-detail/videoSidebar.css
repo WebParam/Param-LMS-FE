@@ -1,15 +1,18 @@
 /* src/components/VideoSidebar.css */
 
 .video-sidebar {
-    width: 400px;
+    width: 30%;
     padding: 20px;
     border-left: 1px solid #ddd;
+
   }
   
   .section {
     margin-bottom: 20px;
   }
   
+
+ 
   .video-sidebar h3 {
     color: #333;
     margin-bottom: 10px;
@@ -36,12 +39,21 @@
   .video-info{
     font-size: larger;
     text-transform: capitalize;
+   
   }
   .video-info a {
     color: #555;
     text-decoration: none;
+  }
+  
+  .video-info a {
+    display: block;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
   
+.course-detail{
+  align-self: flex-start;
+  padding-right: 10px;
+}

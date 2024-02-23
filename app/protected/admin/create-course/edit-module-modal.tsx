@@ -538,7 +538,15 @@ setChangeEditQuizQuestionContent(false);
     ],
   };
 
-
+  const nextTab = (e:any) => {
+    addQuiz(e)
+    if(questions?.length > 0){
+      addDocument(e);
+    }
+  
+  
+  
+    }
 
   const editVideo = () => {
     setVideoDescError(false);
@@ -1663,6 +1671,28 @@ setChangeEditQuizQuestionContent(false);
           </div>
         </div>
         {/* // END Page Content */}
+        <div
+  style={{alignSelf:"flex-end",marginRight:"6em",marginTop:"2em"}}
+  >
+  <button
+ 
+  onClick={nextTab}
+         style={{
+   backgroundColor: "transparent",
+   border: "none",
+   outline: "none",
+   width: "150px",
+ }}
+ >
+ <a
+ 
+   href="#"
+   className={`btn ${disableModuleInputs ? "btn-accent" : "btn-outline-secondary"}`}
+ >
+   Next
+ </a>
+ </button>
+   </div> 
       </div>
     </div>
   );

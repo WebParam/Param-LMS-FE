@@ -1,21 +1,37 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistStore, persistReducer ,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { courseSlice } from "../redux/courseSlice";
 import { quizSlice } from "../redux/quizSlice";
 import {documentSlice } from "../redux/documentSice";
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  whitelist: ['course','quiz'], 
+const persistCourse = {
+  key: 'course',
+  storage: storage, // Change this to localStorage
+  whitelist: ['course'], 
 };
 
-const persistedCourseReducer = persistReducer(persistConfig, courseSlice.reducer);
+const persistQuiz = {
+  key: 'quiz',
+  storage: storage, // Change this to localStorage
+  whitelist: ['quiz'], 
+};
 
-const persistedQuizReducer = persistReducer(persistConfig, quizSlice.reducer);
+const persistDocument = {
+  key: 'document',
+  storage: storage, // Change this to localStorage
+  whitelist: ['document'],  
+};
 
-const persistedDocumentReducer = persistReducer(persistConfig, documentSlice.reducer);
+const persistedCourseReducer = persistReducer(persistCourse, courseSlice.reducer);
+const persistedQuizReducer = persistReducer(persistQuiz, quizSlice.reducer);
+const persistedDocumentReducer = persistReducer(persistDocument, documentSlice.reducer);
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +40,13 @@ export const store = configureStore({
     documents: persistedDocumentReducer
   },
   devTools: true,
+  middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      ignoredPaths: ['quiz'] 
+    },
+  }),
 });
 
 export const persistor = persistStore(store);

@@ -9,6 +9,8 @@ import {useEffect} from 'react'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedCourseForEdit } from '@/app/redux/courseSlice';
+import { updateQuizzes } from '@/app/redux/quizSlice';
+import { IQuiz } from '@/app/interfaces/quiz';
 const cookies = new Cookies();
 
 
@@ -25,10 +27,28 @@ export default function AllCourses() {
     window.location.href = '/protected/student/course/course-detail'; 
    }
    
+   async function getAllQuizzes() {
+    try {
+      const getQuizzes = await Api.GET_AllQuizzes();
+  
+      if (getQuizzes && getQuizzes.length > 0) {
+        const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
+  
+        localStorage.setItem("student-quizzes", JSON.stringify(mappedQuizzes));
+    
+      } else {
+        console.log("No quizzes found");
+      }
+    } catch (error) {
+      console.error("Error fetching quizzes:", error);
+    }
+  }
+  
+
   
 useEffect(() => {
    getStudentCourses();
-   
+   getAllQuizzes()
   }, []);
 
 

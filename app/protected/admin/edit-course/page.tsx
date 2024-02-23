@@ -330,7 +330,7 @@ function EditCourse() {
     });
 
     try {
-      const data = await Api.DELETE_CourseById(courseId);
+      const data = await Api.DELETE_CourseById(_courseFromState?.id);
 
       if (data == "Successfully deleted the course") {
         toast.update(_id, {

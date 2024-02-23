@@ -117,7 +117,7 @@ function EditCourse() {
   const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
   console.log("Course", _courseFromState);
 
-  console.log("Document from state", _documentsFromState);
+  console.log("Quizzes from state", _quizzesFromState);
 
   let cookies = new Cookies();
   useEffect(() => {

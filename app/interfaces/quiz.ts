@@ -36,12 +36,12 @@ export interface IUpdateQuestionDetail {
 export interface IQuiz {
     id: string;
     questions: IQuestion[];
-    reference?: string;
+    reference: string;
     createdByUserId: string;
     modifiedByUserId: string;
     createdDate: string;
     modifiedDate: string;
-    videoId?: string;
+    videoId: string;
 }
 
 
@@ -50,12 +50,13 @@ export interface IQuizState {
 }
 
 export interface IUpdateQuizDetailState {
-    reference?: string;
+    reference: string;
     createdByUserId: string;
     modifiedByUserId: string;
     createdDate: string;
-    videoId?: string;
+    videoId: string;
     modifiedDate: string;
+    
 }
 
 
