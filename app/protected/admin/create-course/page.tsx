@@ -275,7 +275,9 @@ function EditCourse() {
         );
 
         const updatedQuizzes = await Promise.all(
-          _quizzesFromState.map(async (quiz: IQuiz) => {
+          _quizzesFromState
+          .filter((quiz: IQuiz) => quiz.questions.length > 0) 
+          .map(async (quiz: IQuiz) => {
             try {
               const matchingVideo = extractedVideo?.find(
                 (video: IVideo) => video.reference === quiz.reference
@@ -293,7 +295,7 @@ function EditCourse() {
         );
 
         const uploadQuizzes = await Api.POST_Quiz(updatedQuizzes);
-
+debugger;
         toast.update(_id, {
           render: "Successfully saved course",
           type: "success",

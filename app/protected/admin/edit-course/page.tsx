@@ -271,7 +271,9 @@ function EditCourse() {
         );
 
         const updatedQuizzes = await Promise.all(
-          _quizzesFromState.map(async (quiz: IQuiz) => {
+          _quizzesFromState
+          .filter((quiz: IQuiz) => quiz.questions.length > 0)
+          .map(async (quiz: IQuiz) => {
             try {
               const matchingVideo = extractedVideo?.find(
                 (video: IVideo) => video.reference === quiz.reference
@@ -288,7 +290,7 @@ function EditCourse() {
           })
         );
 
-
+          console.log("Updated quizzes",updatedQuizzes);
 
         const updateQuizzes = await Api.PUT_UpdateQuizzes(updatedQuizzes);
 
@@ -301,7 +303,7 @@ function EditCourse() {
         setTimeout(() => {
           toast.dismiss(_id);
         }, 2000);
-        window.location.href = "/protected/admin/manage-courses";
+      //  window.location.href = "/protected/admin/manage-courses";
       }
     } catch (error) {
       toast.update(_id, {

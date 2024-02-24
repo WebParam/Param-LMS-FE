@@ -299,12 +299,12 @@ href = "/protected/student/course/course-detail">
 
 
            }
-              <Link
+              {/* <Link
                 href="/protected/student/course/video"
                 className="btn justify-content-center btn-outline-secondary w-100 w-sm-auto mb-16pt mb-sm-0 ml-sm-16pt"
               >
                 Review Video
-              </Link>
+              </Link> */}
 
              {
               start !== "Finish" ?  <a

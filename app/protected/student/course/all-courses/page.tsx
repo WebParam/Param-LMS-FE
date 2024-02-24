@@ -33,7 +33,7 @@ export default function AllCourses() {
   
       if (getQuizzes && getQuizzes.length > 0) {
         const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
-  
+        console.log("Quizzes",mappedQuizzes)
         localStorage.setItem("student-quizzes", JSON.stringify(mappedQuizzes));
     
       } else {

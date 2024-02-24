@@ -316,7 +316,8 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
         return;
       }
       const plainDescription =
-        questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+        questionDescription && questionDescription.replace(/<span[^>]*>.*?<\/span>/g, '');
+
       if (isNaN(points) || points === 0) {
         setPointsError(true);
         return;
@@ -349,7 +350,8 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
   
       setEnableEditQuestion(true);
       const plainDescription =
-        questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+        questionDescription && questionDescription.replace(/<span[^>]*>.*?<\/span>/g, '');
+
       const payload = {
         quizId : quizId,
         questionId: questionId,
@@ -659,7 +661,8 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
      
     ) {
       const plainDescription = videoDescription
-        && videoDescription.replace(/<\/?p>/gi, "")
+        && videoDescription.replace(/<span[^>]*>.*?<\/span>/g, '');
+
         
       const payload = {
         videoId: videoId,

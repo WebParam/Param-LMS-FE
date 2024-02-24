@@ -30,9 +30,11 @@ export default function CourseDetail() {
   const [selectedVideo, setSelectedVideo] = useState<string>("");
   const [quizId, setQuizId] = useState<string>("")
   const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
+  const [videoId, setVideoId] = useState<string>("")
   console.log("Quizzes from state",_quizzesFromState)
   const [open, setOpen] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+
   const playerRef = useRef(null);
 
   const router = useRouter();
@@ -42,6 +44,7 @@ const cancelQuiz = () => {
   setOpen(false);
   if (currentVideoIndex < allVideos.length - 1) {
     setCurrentVideoIndex(currentVideoIndex + 1);
+    setQuizId("");
   }
 }
 
@@ -53,40 +56,37 @@ const cancelQuiz = () => {
   }, [allVideos, currentVideoIndex]);
 
   const handleVideoEnd = () => {
-    setOpen(false)
-    const quizFromStorage = localStorage.getItem("student-quizzes") ;
-
-
-    if (quizFromStorage) {
+    setOpen(false);
+    const quizFromStorage = localStorage.getItem("student-quizzes");
   
+    if (quizFromStorage) {
       try {
-        const quizzes = JSON.parse(quizFromStorage);
-        console.log("Quizzes loaded", quizzes);
-       const getQuiz:IQuiz = quizzes?.filter((quiz:IQuiz) => quiz.videoId === allVideos[currentVideoIndex].id)[0]
-       console.log("My Quiz",getQuiz);
-        if(getQuiz?.id) {
-          setQuizId(getQuiz?.id)
-          setOpen(!open)
-        }else{
-          console.log('Video has completed.');
-          // Play the next video if available
+        const quizzes = JSON.parse(quizFromStorage)
+        .filter((quiz: IQuiz) => quiz.questions.length > 0);
+      
+        const currentVideoId = allVideos[currentVideoIndex].id;
+        console.log("ID",currentVideoId)
+        const getQuiz: IQuiz = quizzes.find((quiz: IQuiz) => quiz.videoId === currentVideoId);
+        console.log("Opened Quiz", getQuiz);
+        if (getQuiz?.id) {
+          setQuizId(getQuiz.id);
+          setOpen(!open);
+        } else {
           if (currentVideoIndex < allVideos.length - 1) {
             setCurrentVideoIndex(currentVideoIndex + 1);
           }
-         
         }
       } catch (error) {
         console.error("Error parsing quizzes from localStorage:", error);
-
       }
     }
-   
   };
-
+  
   const state: ICourse = useSelector(getSelectedCourseForEdit).course;
   useEffect(() => {
     setSection(state?.sections);
-    setSelectedVideo(sections[0]?.modules[0]?.videos[0].videoLink);
+    setVideoId(sections[0]?.modules[0]?.videos[0]?.id)
+  
     console.log("Link",sections[0]?.modules[0]?.videos[0].videoLink)
     state.sections.forEach((section:ISection) => {
         section.modules.forEach((Module:IModule) => {
@@ -125,20 +125,20 @@ console.log("Vidoes",allVideos)
     console.log("Author courses", userCourses?.data);
   }
 
-  const handleVideoSelect = (video:IVideo, index:number) => {
-    alert(currentVideoIndex)
-    alert(index)
+  const handleVideoSelect = (video: IVideo) => {
+    const index = allVideos.findIndex((v: IVideo) => v.id === video.id);
     setSelectedVideo(video.videoLink);
     setCurrentVideoIndex(index);
   };
   
-
 
   const openQuiz = () => {
     setOpen(false);
     console.log("open quiz");
     goToQuiz()
   }
+
+  console.log("VideoId", videoId);
 
   const goToQuiz = () => {
 
@@ -154,7 +154,7 @@ console.log("Vidoes",allVideos)
       
 {/*IFrame start here*/}
    <div className="course-detail">
-    <div className="player-wrapper">
+    <div className="player-wrapper" >
     <ReactPlayer
             ref={playerRef}
             url={selectedVideo}
@@ -196,12 +196,14 @@ console.log("Vidoes",allVideos)
                       {section.modules?.map((Module:IModule, moduleIndex:number) => (
                         <>
                         {
-                          Module?.videos.map((video:IVideo, videoIndex:any) => (
+                          Module?.videos.map((video:IVideo, videoIndex:number) => (
                             <li key={moduleIndex}>
-                            <div className="video-item" onClick={() => handleVideoSelect(video, videoIndex)}>
+                            <div className="video-item" >
                               <i className="material-icons">format_indent_increase</i>
                               <div className="video-info">
-                                <a>{video?.title}</a>
+                                <a onClick={()=>
+                                {handleVideoSelect(video)}
+                                }>{video?.title}</a>
                               </div>
                             </div>
                           </li>

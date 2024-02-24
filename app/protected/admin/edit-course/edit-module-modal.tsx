@@ -319,7 +319,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
       return;
     }
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<span[^>]*>.*?<\/span>/g, '');
+
     if (isNaN(points) || points === 0) {
       setPointsError(true);
       return;
@@ -357,7 +358,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
     setEnableEditQuestion(true);
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<span[^>]*>.*?<\/span>/g, '');
+
     const payload = {
       quizId : quizId,
       questionId: questionId,
@@ -553,7 +555,7 @@ setChangeEditQuizQuestionContent(false);
      
     ) {
       const plainDescription = videoDescription
-        && videoDescription.replace(/<\/?p>/gi, "")
+        && videoDescription.replace(/<span[^>]*>.*?<\/span>/g, '');
         
       const payload = {
         moduleId,

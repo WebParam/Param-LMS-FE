@@ -59,6 +59,7 @@ function ManageCourses() {
   
       if (getQuizzes && getQuizzes.length > 0) {
         const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
+        console.log("Mapped Quizzes", mappedQuizzes);
         localStorage.setItem('quizzes', JSON.stringify(mappedQuizzes));
       } else {
         console.log("No quizzes found");
