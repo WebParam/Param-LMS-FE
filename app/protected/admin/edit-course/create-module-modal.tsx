@@ -98,7 +98,6 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
 }) => {
   const cookies = new Cookies();
   const userData = cookies.get("param-lms-user");
-  const [showVideoInputs, setShowVideoInputs] = useState(false);
   const [videoTitle, setVideoTitle] = useState<string>("");
   const [videoLink, setVideoLink] = useState<string>("");
   const [videos, setVideos] = useState<any>([]);
@@ -112,10 +111,8 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [modules, setModules] = useState<string[]>([]);
   const [isModuleSaved, setIsModuleSaved] = useState<boolean>(false);
 
-  const [changeModulBtn, setChangeModulBtn] = useState<boolean>(false);
   const [disableSaveChanges, setDisableSaveChanges] = useState<boolean>(true);
   const [lastSection, setLastSection] = useState<number>(-1);
-  const [changeVidBtn, setChangeVidBtn] = useState<boolean>(true);
   const [videoId, setVideoId] = useState<string>("");
 
   const [toggler, setToggler] = useState<Number>(1);
@@ -136,7 +133,6 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
 
   const [choices, setChoices] = useState<any>([]);
   const [questions, setQuestions] = useState<IQuestion[]>([]);
-  const [choicesToEdit, setChoicesToEdit] = useState<any>([]);
 
  const [choiceError, setChoiceError] = useState(false);
   const [questionError, setQuestionError] = useState(false);
@@ -315,8 +311,8 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
   
         return;
       }
-      const plainDescription =
-        questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      const plainDescription = questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+
       if (isNaN(points) || points === 0) {
         setPointsError(true);
         return;
@@ -349,7 +345,8 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
   
       setEnableEditQuestion(true);
       const plainDescription =
-        questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+        questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+
       const payload = {
         quizId : quizId,
         questionId: questionId,
@@ -542,8 +539,8 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
     setDisableSaveChanges(false);
     if (videoDescription && videoTitle  && videoLink ) {
    
-      const plainDescription = videoDescription
-      && videoDescription.replace(/<\/?p>/gi, "");
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
 
       const payload = {
         moduleId: moduleId,
@@ -658,8 +655,9 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
       videoDescription && videoLink 
      
     ) {
-      const plainDescription = videoDescription
-        && videoDescription.replace(/<\/?p>/gi, "")
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+
         
       const payload = {
         videoId: videoId,

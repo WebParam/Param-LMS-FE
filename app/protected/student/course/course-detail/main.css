@@ -8,9 +8,6 @@ body {
   .main {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 20px;
   }
   
   /* Add media queries for responsiveness */

@@ -311,7 +311,8 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
       return;
     }
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+
     if (isNaN(points) || points === 0) {
       setPointsError(true);
       return;
@@ -345,7 +346,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
 
     setEnableEditQuestion(true);
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
     const payload = {
       quizId : quizId,
       questionId: questionId,
@@ -580,8 +581,8 @@ setChangeEditQuizQuestionContent(false);
     setVideoUrlError(false);
     setDisableSaveChanges(false);
     if (videoDescription.length > 0 && videoTitle.length > 0  && videoLink.length > 0) {
-      const plainDescription = videoDescription
-      && videoDescription.replace(/<\/?p>/gi, "");
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');;
 
       const payload = {
         moduleId: moduleId,
@@ -632,8 +633,8 @@ setChangeEditQuizQuestionContent(false);
       videoDescription && videoLink 
      
     ) {
-      const plainDescription = videoDescription
-        && videoDescription.replace(/<\/?p>/gi, "")
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
         
       const payload = {
         videoId: videoId,

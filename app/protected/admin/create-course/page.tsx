@@ -117,7 +117,7 @@ function EditCourse() {
   const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
   console.log("Course", _courseFromState);
 
-  console.log("Document from state", _documentsFromState);
+  console.log("Quizzes from state", _quizzesFromState);
 
   let cookies = new Cookies();
   useEffect(() => {
@@ -225,9 +225,10 @@ function EditCourse() {
 };
 
   async function createCourse() {
-   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+   const plainDescription = courseDescription ? courseDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '') : _courseFromState.description.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
 
     dispatch(createCourseDetail({...payload,description: plainDescription}))
+    debugger;
     setImgError(false);
     setDisableCreateCourseBtn(true);
     if (!imageUrl) {
@@ -275,7 +276,9 @@ function EditCourse() {
         );
 
         const updatedQuizzes = await Promise.all(
-          _quizzesFromState.map(async (quiz: IQuiz) => {
+          _quizzesFromState
+          .filter((quiz: IQuiz) => quiz.questions.length > 0) 
+          .map(async (quiz: IQuiz) => {
             try {
               const matchingVideo = extractedVideo?.find(
                 (video: IVideo) => video.reference === quiz.reference
@@ -293,7 +296,7 @@ function EditCourse() {
         );
 
         const uploadQuizzes = await Api.POST_Quiz(updatedQuizzes);
-
+debugger;
         toast.update(_id, {
           render: "Successfully saved course",
           type: "success",

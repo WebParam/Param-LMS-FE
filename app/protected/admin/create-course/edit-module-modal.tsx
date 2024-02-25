@@ -130,7 +130,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [videoDescription, setVideoDescription] = useState<string>("");
   const [date, setDate] = useState<string>("");
 
-  const [moduleReference, setModuleReference] = useState<any>("")
+  const [videoReference, setVideoReference] = useState<any>("")
   const [hideSaveChangesBtn, setHideSaveChangesBtn] = useState(false)
   const [disableModuleInputs, setDisableModuleInputs] = useState<boolean>(false)  
 
@@ -297,7 +297,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
   const handleCreateQuiz = () => {
     const payload = {
-      reference: moduleReference,
+      reference: videoReference,
       createdByUserId: userData?.id,
       modifiedByUserId: userData?.id,
       createdDate: date,
@@ -316,7 +316,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
       return;
     }
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
     if (isNaN(points) || points === 0) {
       setPointsError(true);
       return;
@@ -354,7 +354,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
     setEnableEditQuestion(true);
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
     const payload = {
       quizId : quizId,
       questionId: questionId,
@@ -549,9 +549,9 @@ setChangeEditQuizQuestionContent(false);
       videoDescription && videoLink 
      
     ) {
-      const plainDescription = videoDescription
-        && videoDescription.replace(/<\/?p>/gi, "")
-        
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+        alert(plainDescription);
       const payload = {
         moduleId,
         videoId: videoId,
@@ -560,7 +560,6 @@ setChangeEditQuizQuestionContent(false);
         videoTitle: videoTitle,
         videoDescription: plainDescription,
       };
-
       console.log("payload: ", payload);
 
       dispatch(editVideoDetails(payload));
@@ -657,7 +656,7 @@ setChangeEditQuizQuestionContent(false);
       if(video && video.length > 0) {
         setVideoTitle(video[0]?.title);
         setVideoDescription(video[0]?.description);
-        
+        setVideoReference(video[0]?.reference);
         setVideoLink(video[0]?.videoLink);
         setDisableModuleInputs(true);
       }
@@ -796,8 +795,7 @@ setChangeEditQuizQuestionContent(false);
                     </label>
                     <div style={{ height: "200px", overflow: "auto" }}>
                    
-                    <ReactQuillWrapper
-                     readOnly={disableModuleInputs}
+                    <ReactQuillWrapper        readOnly={disableModuleInputs}
                      style={{ height: "100px" }}
                      value={videoDescription}
                      onChange={(value: string) => {
@@ -805,8 +803,8 @@ setChangeEditQuizQuestionContent(false);
                      
                      }}
                      placeholder="Video description..."
-                     modules={moduleToolbar}
       />
+             
            
                      
                       
