@@ -19,7 +19,7 @@ function VideoPlayer({selectedVideo,sections,cancelQuiz,openQuiz,open,handleVide
 
         <div>
 
-<div  className="player-wrapper " style={{ width: '100%' }}>
+<div  className="player-wrapper " style={{ width: '100%',  }}>
       <ReactPlayer
         url={selectedVideo}
         playing={true}
@@ -31,7 +31,8 @@ function VideoPlayer({selectedVideo,sections,cancelQuiz,openQuiz,open,handleVide
         height='100%'
       />
 
-<div className="details">
+<div className="details" 
+style={{fontSize:"large"}}>
         {<h2>{sections[0]?.competency}</h2>}
         { <p className="instructor">Instructor:John Smith</p> }
         { <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p> }
@@ -46,7 +47,7 @@ function VideoPlayer({selectedVideo,sections,cancelQuiz,openQuiz,open,handleVide
         title="Congratulations"
         buttonText="Take Quiz"
       >
-        Thank you for completing the module, We have attached a quiz to rate your understading of the module. Please click Take Quiz or cancel.
+        Thank you for completing the video, We have attached a quiz to rate your understading of the module. Please click Take Quiz or cancel.
       </ConfirmationModal>
     
     </div>
