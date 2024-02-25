@@ -185,8 +185,8 @@ export const courseSlice = createSlice({
             }
         },
         editVideoDetails: (state, action) => {
-          const { moduleId, videoId, videoTitle, videoLink } = action.payload;
-          // Find the section, module, and video to update
+      
+          const { moduleId, videoId, videoTitle, videoLink,videoDescription } = action.payload;
           const sectionIndex = state.course.sections.findIndex(section =>
             section.modules.some(module => module.id === moduleId)
           );
@@ -197,7 +197,7 @@ export const courseSlice = createSlice({
             if (moduleIndex !== -1) {
               const videoIndex = state.course.sections[sectionIndex].modules[
                 moduleIndex
-              ].videos.findIndex(video => video.id === videoId);
+              ].videos.findIndex((video:IVideo) => video.id === videoId);
               if (videoIndex !== -1) {
                 // Update the video title and URL
                 state.course.sections[sectionIndex].modules[moduleIndex].videos[
@@ -206,6 +206,9 @@ export const courseSlice = createSlice({
                 state.course.sections[sectionIndex].modules[moduleIndex].videos[
                   videoIndex
                 ].videoLink = videoLink;
+                state.course.sections[sectionIndex].modules[moduleIndex].videos[
+                  videoIndex
+                ].description = videoDescription;
               }
             }
           }

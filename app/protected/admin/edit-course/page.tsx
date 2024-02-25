@@ -232,7 +232,7 @@ function EditCourse() {
   };
 
   async function UpdateCourse() {
-    const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+    const plainDescription = courseDescription ? courseDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '') : _courseFromState.description.replace(/<(?:\/)?[sp]+[^>]*>/g, '');;
 
     dispatch(updateCourseFromDataBase({..._courseFromState,title: payload.title,description:plainDescription}));
 

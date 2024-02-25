@@ -1,16 +1,31 @@
 "use client";
-
-import React, { useState } from "react";
-import { FaBars, FaHome, FaUser } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { FaBars} from "react-icons/fa";
 import "./style.css";
+import { usePathname } from 'next/navigation'
+
+
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState("home"); // State to track active tab
   const [expandSidebar, setExpandSidebar] = useState<boolean>(false);
+  const [isStudentPathName, setIsStudentPathName] = useState<boolean>(false)
 
   const handleTabClick = (tab: any) => {
     setActiveTab(tab);
     // Add logic here to handle tab change if needed
   };
+
+
+  const pathname = usePathname()
+
+  useEffect(() => {
+    if (pathname.includes("/protected/student")) {
+      setIsStudentPathName(true);
+    } else {
+      setIsStudentPathName(false);
+    }
+  }, [pathname]);
+
 
   const openSidebar = () => {
     setExpandSidebar(true);
@@ -51,10 +66,48 @@ const Sidebar = () => {
             </small>
           </a>
         </div>
+
         <ul
           className="nav flex-shrink-0 flex-nowrap flex-column sidebar-menu mb-0 js-sidebar-mini-tabs"
           role="tablist"
         >
+            {
+              isStudentPathName && expandSidebar &&
+              <li
+                          className="sidebar-menu-item active"
+                          data-toggle="tooltip"
+                          data-title="Instructor"
+                          data-placement="right"
+                          data-container="body"
+                          data-boundary="window"
+                          data-original-title=""
+                          title=""
+                        >
+                          <a
+                            className="sidebar-menu-button"
+                            href="#sm_instructor"
+                            data-toggle="tab"
+                            role="tab"
+                            aria-controls="sm_instructor"
+                            aria-selected="false"
+                          >
+                            <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
+                            </i>
+                            <span
+                            style={{color :"white", fontWeight:"600"}}
+                              className={
+                                expandSidebar
+                                  ? "sidebar-menu-text view-text"
+                                  : "sidebar-menu-text hide-text"
+                              }
+                            >
+                              Student 
+                            </span>
+                          </a>
+                        </li>
+              
+            }
+
               <li
             className="sidebar-menu-item active"
             data-toggle="tooltip"
@@ -73,8 +126,8 @@ const Sidebar = () => {
               aria-controls="sm_instructor"
               aria-selected="false"
             >
-              <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
-                format_shapes
+             <i className="sidebar-menu-icon sidebar-menu-icon--left material-icons">
+                school
               </i>
               <span
                 className={
@@ -83,7 +136,7 @@ const Sidebar = () => {
                     : "sidebar-menu-text hide-text"
                 }
               >
-                Home
+                Home 
               </span>
             </a>
           </li>

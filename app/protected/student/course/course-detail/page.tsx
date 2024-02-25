@@ -17,6 +17,8 @@ import {useRouter} from "next/navigation";
 import { IQuiz } from '@/app/interfaces/quiz';
 import { getSelectedQuizForEdit } from '@/app/redux/quizSlice';
 import { FaVideo } from 'react-icons/fa';
+import VideoSibar from './video-sidebarr/page';
+import VideoPlayer from './react-player/page';
 
 
 export default function CourseDetail() {
@@ -36,14 +38,17 @@ export default function CourseDetail() {
   const [open, setOpen] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [expandedSection, setExpandedSection] = useState<any>(null);
+  const [duration, setDuration] = useState(0);
 
-  const handleSectionClick = (section: any) => {
-    if (expandedSection === section.id) {
-      setExpandedSection(null);
-    } else {
-      setExpandedSection(section.id);
-    }
+  const handleDuration = (duration:any) => {
+    setDuration(duration);
   };
+  const formatDurationToMinutes = (durationInSeconds:any) => {
+    const minutes = Math.floor(durationInSeconds / 60);
+    const seconds = Math.floor(durationInSeconds % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
 
 
   const playerRef = useRef(null);
@@ -160,125 +165,29 @@ console.log("Vidoes",allVideos)
   }
 
     return (
-      <Suspense>
-    <div className="main"
-    >
-      
-{/*IFrame start here*/}
-   <div className="course-detail">
-    <div className="player-wrapper" >
-    <ReactPlayer
-            ref={playerRef}
-            url={selectedVideo}
-            controls={true}
-            autoPlay={true}
-            
-            className="react-player"
-            onEnded={handleVideoEnd}
-          />
-        </div>
-         <ConfirmationModal
-        open={open}
-        onConfirm={() => openQuiz()}
-        onCancel={cancelQuiz}
-        title="Congratulations"
-        buttonText="Take Quiz"
-      >
-        Thank you for completing the module, We have attached a quiz to rate your understading of the module. Please click Take Quiz or cancel.
-      </ConfirmationModal>
-      <div className="details">
-        {<h2>{sections[0]?.competency}</h2>}
-        { <p className="instructor">Instructor:John</p> }
-        { <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p> }
-      </div>
-    </div>
-{/*IFrame ends here*/}
-
-{/*sidebar start here*/}
-
-
-
-<div className="video-sidebar">
+   
+<div className="main">
+  <div className='react-player-container'>
+  <VideoPlayer
+      selectedVideo = {selectedVideo}
+      sections = {sections}
+      cancelQuiz = {cancelQuiz}
+      openQuiz = {openQuiz}
+      handleVideoEnd= {handleVideoEnd}
+      open= {open}
+      handleDuration={handleDuration}
+      />
+  </div>
     
        
-    <div  className="section">
-
-    <h3 style={{marginLeft:"20px", backgroundColor:"white", padding:"10px 0px 10px 0px"}}>Course Content <span style={{fontSize:"medium", paddingLeft:"60px", fontWeight:"600", cursor:"pointer"}}>X</span></h3>
-    {sections.map((section: ISection) => (
-<div
-                className={`accordion__item sidebar-content ${
-                  expandedSection === section.id ? "open" : ""
-                }`}
-                key={section.id}
-              >
-                <a
-                  style={{ cursor: "pointer" }}
-                  className="accordion__toggle"
-                  data-toggle="collapse"
-                  data-target={`#course-toc-${section.id}`}
-                  data-parent="#parent"
-              
-                >
-                  <span
-                  onClick={() => handleSectionClick(section)}
-                    style={{ cursor: "pointer", width:"100vh", fontSize: "large", fontWeight:"600"}}
-                    
-                  >
-                    {section.title}
-                  </span>
-                
-
-                  <span className="accordion__toggle-icon material-icons">
-                    keyboard_arrow_down
-                  </span>
-                </a>
-                <div
-                  className={`accordion__menu collapse ${
-                    expandedSection === section.id ? "show" : ""
-                  }`}
-                  id={`course-toc-${section.id}`}
-                >
-                  {section.modules?.map((Module) =>
-                    Module.videos.map((video: IVideo) => (
-                      <div
-                        style={{ cursor: "pointer" }}
-                        className="accordion__menu-link video-item"
-                        key={video.id}
-                      >
-                        <FaVideo
-                    
-                          className="video-icon"
-                        />
-                       <div className='video-info'>
-                       <a
-                       onClick={()=>
-                        {handleVideoSelect(video)}
-                        }
-                          style={{ marginLeft: "8px" }}
-                          className="flex "
-                      
-                        >
-                          {video.title}
-                        </a>
-
-                       </div>
-                       
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            ))}
-
-
-    </div>
-  
-
+<div style={{width:"300px"}}>
+<VideoSibar duration = {formatDurationToMinutes(duration)} sections={sections} handleVideoSelect={handleVideoSelect}/>
 
 </div>
-{/*sidebar ends here*/}
 
-    </div>
-    </Suspense>
+ </div>
+
+
+   
   )
 }

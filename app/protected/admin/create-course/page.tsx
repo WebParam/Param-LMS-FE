@@ -225,9 +225,10 @@ function EditCourse() {
 };
 
   async function createCourse() {
-   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+   const plainDescription = courseDescription ? courseDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '') : _courseFromState.description.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
 
     dispatch(createCourseDetail({...payload,description: plainDescription}))
+    debugger;
     setImgError(false);
     setDisableCreateCourseBtn(true);
     if (!imageUrl) {

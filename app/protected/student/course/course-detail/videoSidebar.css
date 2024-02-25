@@ -1,18 +1,30 @@
 /* src/components/VideoSidebar.css */
 
 .video-sidebar {
-    width: 30%;
     border-left: 1px solid #ddd;
-    flex-wrap: wrap;
+    width: 300px;
+    position: absolute;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 
+  .player-wrapper {
+    position: relative;
+    padding-top: 56.25%; /* 720 / 1280 = 0.5625 */
+    width: 100vh;
   }
   
-  .section {
-    margin-bottom: 20px;
+  .react-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: auto !important;
+    object-fit: fill;
+    aspect-ratio: 16/9;
   }
-  
 
- 
   .video-sidebar h3 {
     color: #333;
     margin-bottom: 10px;
@@ -54,24 +66,18 @@
   }
   
 .course-detail{
-  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding-right: 10px;
 }
 
 .section{
-  background-color: #f5f7fa;
-  height: auto;
+
   width: 100vh;
-  align-self:flex-start;
+ 
 }
 
-.player-wrapper{
-  width: 100%;
-  background-color: #333;
-  margin: auto;
-}
-
-.react-player{
-  width: 100vh;
-  margin: auto;
+.react-player-container{
+  padding-left: 15px;
 }

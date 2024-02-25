@@ -130,7 +130,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [videoDescription, setVideoDescription] = useState<string>("");
   const [date, setDate] = useState<string>("");
 
-  const [moduleReference, setModuleReference] = useState<any>("")
+  const [videoReference, setVideoReference] = useState<any>("")
   const [hideSaveChangesBtn, setHideSaveChangesBtn] = useState(false)
   const [disableModuleInputs, setDisableModuleInputs] = useState<boolean>(false)  
 
@@ -297,7 +297,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
   const handleCreateQuiz = () => {
     const payload = {
-      reference: moduleReference,
+      reference: videoReference,
       createdByUserId: userData?.id,
       modifiedByUserId: userData?.id,
       createdDate: date,
@@ -316,7 +316,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
       return;
     }
     const plainDescription =
-      questionDescription && questionDescription.replace(/<span[^>]*>.*?<\/span>/g, '');
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
     if (isNaN(points) || points === 0) {
       setPointsError(true);
       return;
@@ -354,8 +354,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
     setEnableEditQuestion(true);
     const plainDescription =
-      questionDescription && questionDescription.replace(/<span[^>]*>.*?<\/span>/g, '');
-
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
     const payload = {
       quizId : quizId,
       questionId: questionId,
@@ -539,15 +538,7 @@ setChangeEditQuizQuestionContent(false);
     ],
   };
 
-  const nextTab = (e:any) => {
-    addQuiz(e)
-    if(questions?.length > 0){
-      addDocument(e);
-    }
-  
-  
-  
-    }
+
 
   const editVideo = () => {
     setVideoDescError(false);
@@ -558,9 +549,9 @@ setChangeEditQuizQuestionContent(false);
       videoDescription && videoLink 
      
     ) {
-      const plainDescription = videoDescription
-        && videoDescription.replace(/<span[^>]*>.*?<\/span>/g, '');
-        
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+        alert(plainDescription);
       const payload = {
         moduleId,
         videoId: videoId,
@@ -569,7 +560,6 @@ setChangeEditQuizQuestionContent(false);
         videoTitle: videoTitle,
         videoDescription: plainDescription,
       };
-
       console.log("payload: ", payload);
 
       dispatch(editVideoDetails(payload));
@@ -666,7 +656,7 @@ setChangeEditQuizQuestionContent(false);
       if(video && video.length > 0) {
         setVideoTitle(video[0]?.title);
         setVideoDescription(video[0]?.description);
-        
+        setVideoReference(video[0]?.reference);
         setVideoLink(video[0]?.videoLink);
         setDisableModuleInputs(true);
       }
@@ -805,8 +795,7 @@ setChangeEditQuizQuestionContent(false);
                     </label>
                     <div style={{ height: "200px", overflow: "auto" }}>
                    
-                    <ReactQuillWrapper
-                     readOnly={disableModuleInputs}
+                    <ReactQuillWrapper        readOnly={disableModuleInputs}
                      style={{ height: "100px" }}
                      value={videoDescription}
                      onChange={(value: string) => {
@@ -814,8 +803,8 @@ setChangeEditQuizQuestionContent(false);
                      
                      }}
                      placeholder="Video description..."
-                     modules={moduleToolbar}
       />
+             
            
                      
                       
@@ -1672,28 +1661,6 @@ setChangeEditQuizQuestionContent(false);
           </div>
         </div>
         {/* // END Page Content */}
-        <div
-  style={{alignSelf:"flex-end",marginRight:"6em",marginTop:"2em"}}
-  >
-  <button
- 
-  onClick={nextTab}
-         style={{
-   backgroundColor: "transparent",
-   border: "none",
-   outline: "none",
-   width: "150px",
- }}
- >
- <a
- 
-   href="#"
-   className={`btn ${disableModuleInputs ? "btn-accent" : "btn-outline-secondary"}`}
- >
-   Next
- </a>
- </button>
-   </div> 
       </div>
     </div>
   );
