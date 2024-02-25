@@ -351,7 +351,7 @@ const Sidebar = () => {
           >
             <a
               className="sidebar-menu-button"
-              href="/protected/student/course/all-courses"
+              href="/protected/admin/manage-courses"
               data-toggle="tab"
               role="tab"
               aria-controls="sm_apps"
