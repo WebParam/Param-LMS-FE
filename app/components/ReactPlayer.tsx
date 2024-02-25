@@ -1,8 +1,19 @@
+"use client"
+import { ISection } from '@/app/interfaces/courses'
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal'
 import React from 'react'
 import ReactPlayer from 'react-player'
 
-function VideoPlayer({selectedVideo,sections,cancelQuiz,openQuiz,open,handleVideoEnd,handleDuration}:any) {
+interface ReactPlayerProps {
+  selectedVideo:string
+  sections : ISection[]
+  cancelQuiz:() => void
+  openQuiz :any
+  open :any
+  handleVideoEnd :() => void
+  handleDuration :any
+}
+function VideoPlayer({selectedVideo,sections,cancelQuiz,openQuiz,open,handleVideoEnd,handleDuration}:ReactPlayerProps) {
  
   return (
 

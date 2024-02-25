@@ -9,7 +9,7 @@ import { IUser } from '@/app/interfaces/user';
 import { getSelectedCourseForEdit } from '@/app/redux/courseSlice';
 import { getAuthor } from '@/app/lib/getAuthor';
 import IComment from '@/app/interfaces/comment';
-import './videoSidebar.css';
+import "../../../../components/videoSidebar.css";
 import './main.css'
 import ReactPlayer from 'react-player';
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
@@ -17,8 +17,8 @@ import {useRouter} from "next/navigation";
 import { IQuiz } from '@/app/interfaces/quiz';
 import { getSelectedQuizForEdit } from '@/app/redux/quizSlice';
 import { FaVideo } from 'react-icons/fa';
-import VideoSibar from './video-sidebarr/page';
-import VideoPlayer from './react-player/page';
+import VideoSibar from '../../../../components/VideoSidebar';
+import VideoPlayer from '../../../../components/ReactPlayer';
 
 
 export default function CourseDetail() {

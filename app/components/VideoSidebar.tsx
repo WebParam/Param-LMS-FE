@@ -1,3 +1,4 @@
+"use client"
 import { ISection, IVideo } from '@/app/interfaces/courses'
 import React, { useState } from 'react'
 import { FaVideo } from 'react-icons/fa'
