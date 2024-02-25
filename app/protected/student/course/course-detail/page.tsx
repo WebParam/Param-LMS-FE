@@ -16,6 +16,7 @@ import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
 import {useRouter} from "next/navigation";
 import { IQuiz } from '@/app/interfaces/quiz';
 import { getSelectedQuizForEdit } from '@/app/redux/quizSlice';
+import { FaVideo } from 'react-icons/fa';
 
 
 export default function CourseDetail() {
@@ -34,6 +35,16 @@ export default function CourseDetail() {
   console.log("Quizzes from state",_quizzesFromState)
   const [open, setOpen] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [expandedSection, setExpandedSection] = useState<any>(null);
+
+  const handleSectionClick = (section: any) => {
+    if (expandedSection === section.id) {
+      setExpandedSection(null);
+    } else {
+      setExpandedSection(section.id);
+    }
+  };
+
 
   const playerRef = useRef(null);
 
@@ -126,11 +137,12 @@ console.log("Vidoes",allVideos)
   }
 
   const handleVideoSelect = (video: IVideo) => {
+
     const index = allVideos.findIndex((v: IVideo) => v.id === video.id);
     setSelectedVideo(video.videoLink);
     setCurrentVideoIndex(index);
   };
-  
+
 
   const openQuiz = () => {
     setOpen(false);
@@ -176,52 +188,94 @@ console.log("Vidoes",allVideos)
       </ConfirmationModal>
       <div className="details">
         {<h2>{sections[0]?.competency}</h2>}
-        { <p className="instructor">Instructor:{state.instructor}</p> }
+        { <p className="instructor">Instructor:John</p> }
         { <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p> }
       </div>
     </div>
 {/*IFrame ends here*/}
 
 {/*sidebar start here*/}
-    <div className="video-sidebar">
+
+
+
+<div className="video-sidebar">
     
        
-          <div  className="section">
-            {
-              sections?.map((section:ISection,ind:number) => {
-                return (
-                  <div className = "sidebar-content" key={ind}>
-                    <h3>{section?.title}</h3>
-                    <ul>
-                      {section.modules?.map((Module:IModule, moduleIndex:number) => (
-                        <>
-                        {
-                          Module?.videos.map((video:IVideo, videoIndex:number) => (
-                            <li key={moduleIndex}>
-                            <div className="video-item" >
-                              <i className="material-icons">format_indent_increase</i>
-                              <div className="video-info">
-                                <a onClick={()=>
-                                {handleVideoSelect(video)}
-                                }>{video?.title}</a>
-                              </div>
-                            </div>
-                          </li>
-                          ))
-                        }
-                        </>
-                      ))}
-                    </ul>
-                  </div>
-                )
-              })
-            }
+    <div  className="section">
 
-          </div>
-        
-      
-    
+    <h3 style={{marginLeft:"20px", backgroundColor:"white", padding:"10px 0px 10px 0px"}}>Course Content <span style={{fontSize:"medium", paddingLeft:"60px", fontWeight:"600", cursor:"pointer"}}>X</span></h3>
+    {sections.map((section: ISection) => (
+<div
+                className={`accordion__item sidebar-content ${
+                  expandedSection === section.id ? "open" : ""
+                }`}
+                key={section.id}
+              >
+                <a
+                  style={{ cursor: "pointer" }}
+                  className="accordion__toggle"
+                  data-toggle="collapse"
+                  data-target={`#course-toc-${section.id}`}
+                  data-parent="#parent"
+              
+                >
+                  <span
+                  onClick={() => handleSectionClick(section)}
+                    style={{ cursor: "pointer", width:"100vh", fontSize: "large", fontWeight:"600"}}
+                    
+                  >
+                    {section.title}
+                  </span>
+                
+
+                  <span className="accordion__toggle-icon material-icons">
+                    keyboard_arrow_down
+                  </span>
+                </a>
+                <div
+                  className={`accordion__menu collapse ${
+                    expandedSection === section.id ? "show" : ""
+                  }`}
+                  id={`course-toc-${section.id}`}
+                >
+                  {section.modules?.map((Module) =>
+                    Module.videos.map((video: IVideo) => (
+                      <div
+                        style={{ cursor: "pointer" }}
+                        className="accordion__menu-link video-item"
+                        key={video.id}
+                      >
+                        <FaVideo
+                    
+                          className="video-icon"
+                        />
+                       <div className='video-info'>
+                       <a
+                       onClick={()=>
+                        {handleVideoSelect(video)}
+                        }
+                          style={{ marginLeft: "8px" }}
+                          className="flex "
+                      
+                        >
+                          {video.title}
+                        </a>
+
+                       </div>
+                       
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            ))}
+
+
     </div>
+  
+
+
+</div>
 {/*sidebar ends here*/}
 
     </div>

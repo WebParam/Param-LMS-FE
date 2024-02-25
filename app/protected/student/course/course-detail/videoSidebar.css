@@ -2,8 +2,8 @@
 
 .video-sidebar {
     width: 30%;
-    padding: 20px;
     border-left: 1px solid #ddd;
+    flex-wrap: wrap;
 
   }
   
@@ -56,4 +56,22 @@
 .course-detail{
   align-self: flex-start;
   padding-right: 10px;
+}
+
+.section{
+  background-color: #f5f7fa;
+  height: auto;
+  width: 100vh;
+  align-self:flex-start;
+}
+
+.player-wrapper{
+  width: 100%;
+  background-color: #333;
+  margin: auto;
+}
+
+.react-player{
+  width: 100vh;
+  margin: auto;
 }
