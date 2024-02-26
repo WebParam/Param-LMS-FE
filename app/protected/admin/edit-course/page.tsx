@@ -270,26 +270,31 @@ function EditCourse() {
           []
         );
 
-        const updatedQuizzes = await Promise.all(
-          _quizzesFromState
-          .filter((quiz: IQuiz) => quiz.questions.length > 0)
-          .map(async (quiz: IQuiz) => {
-            try {
-              const matchingVideo = extractedVideo?.find(
-                (video: IVideo) => video.reference === quiz.reference
-              );
-              if (matchingVideo) {
-                const newQuiz = { ...quiz, videoId: matchingVideo.id };
-                return newQuiz;
-              }
-              return quiz;
-            } catch (error) {
-              console.error("Error updating quiz:", error);
-              return quiz;
-            }
-          })
-        );
+        
 
+
+        const updatedQuizzes = await Promise.all(
+          _quizzesFromState.map(async (quiz: IQuiz) => {
+              try {
+                  if (quiz.questions.length === 0) {
+                      const newQuiz = { ...quiz, state: 1 };
+                      return newQuiz;
+                  }
+                  const matchingVideo = extractedVideo?.find(
+                      (video: IVideo) => video.reference === quiz.reference
+                  );
+                  if (matchingVideo) {
+                      const newQuiz = { ...quiz, videoId: matchingVideo.id };
+                      return newQuiz;
+                  }
+                  return quiz;
+              } catch (error) {
+                  console.error("Error updating quiz:", error);
+                  return quiz;
+              }
+          })
+      );
+      
           console.log("Updated quizzes",updatedQuizzes);
 
         const updateQuizzes = await Api.PUT_UpdateQuizzes(updatedQuizzes);

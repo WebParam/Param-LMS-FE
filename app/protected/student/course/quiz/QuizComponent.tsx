@@ -5,6 +5,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import {  useRouter, useSearchParams} from "next/navigation";
 import Link from 'next/link';
 import { ViewAgenda } from "@mui/icons-material";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 export default function QuizData() {
   const [questionNumber, setQuestionNumber] = useState<number>(0);
   const [quiz, setQuiz] = useState<IQuiz>();
@@ -424,25 +425,41 @@ href = "/protected/student/course/course-detail">
             Note: There can be multiple correct answers to this question.
           </p>
               {
-                viewResults &&        <p
-   
-        
+                viewResults &&    
+                    <div
+
+                style={{width: "20% !important", display: "flex", justifyContent:"space-around"}}
+              
                 >
-                <a
-                 
-                   onClick={() =>{
+       <span
+
+onClick={() => {
+  if (questionNumber + 1 > 1) {
+    setQuestionNumber(questionNumber - 1);
+  }
+}}
+                   style={{marginRight:"10px"}}
+                   className="btn d-flex justify-content-center btn-accent"
+
+       >
+       <FaArrowLeft/>
+       </span>
+                <span
+                  onClick={() => {
                     if (questionNumber + 1 < questionsLength) {
                       setQuestionNumber(questionNumber + 1);
                     }
-                   }}
-                   className="btn justify-content-center btn-accent w-100 w-sm-auto mb-16pt mb-sm-0 ml-sm-16pt"
-                 >
-                   Next Question
-                   <i className="material-icons icon--right">
-                     keyboard_arrow_right
-                   </i>
-                 </a>
-                </p>
+                  }}
+                                className="btn d-flex justify-content-center btn-accent"
+
+                >
+                <FaArrowRight />
+
+                </span>
+                </div>
+
+                
+                
               }
             </div>
         </div>
