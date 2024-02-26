@@ -1,4 +1,4 @@
- "use client"
+"use client"
 import { Suspense, useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';

@@ -42,6 +42,7 @@ export const quizSlice = createSlice({
         questions: [],
         modifiedDate: _action.modifiedDate,
         videoId: _action.videoId,
+        state:0
       };
 
       state.quizzes.push(newQuiz);

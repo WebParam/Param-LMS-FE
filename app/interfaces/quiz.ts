@@ -42,6 +42,7 @@ export interface IQuiz {
     createdDate: string;
     modifiedDate: string;
     videoId: string;
+    state:number
 }
 
 
