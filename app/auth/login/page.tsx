@@ -43,6 +43,7 @@ export default function Login() {
   
 
 async function LoginUser (event:any){
+  cookies.remove('param-lms-user')
  
   setDisable(true)
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -239,7 +240,7 @@ async function LoginUser (event:any){
   </a>
 </div>
 
-        <div className="page-separator__text mt-3">Do not have an account? <span style={{cursor:"pointer"}} onClick = {navigateToRegister}>sign-up</span></div>
+        <div className="page-separator__text mt-3">Do not have an account? <span style={{cursor:"pointer", color:"blue"}} onClick = {navigateToRegister}>sign-up</span></div>
       </div>
       </>
   

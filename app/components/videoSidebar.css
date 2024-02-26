@@ -22,7 +22,7 @@
     left: 0;
     height: auto !important;
     object-fit: fill;
-    aspect-ratio: 16/9;
+    aspect-ratio: 16/8.5;
   }
 
   .video-sidebar h3 {
@@ -74,7 +74,7 @@
 
 .section{
 
-  width: 100vh;
+  width: 80%;
  
 }
 
