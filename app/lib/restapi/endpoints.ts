@@ -6,7 +6,6 @@ import  IComment, { ICommentReply }  from "@/app/interfaces/comment";
 import { IRating } from "@/app/interfaces/Rating";
 import { get } from "http";
 import { IMarks, IQuiz } from "@/app/interfaces/quiz";
-import { IDocument } from "@/app/interfaces/document";
 
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
@@ -235,16 +234,36 @@ DELETE_CourseById: async (
     }
   },
   
+  PUT_UpdateMarks: async (payload: IMarks): Promise<IResponseObject<IQuiz[]>> => {
+    try {
+      const response = await PUT(`${quizWriteUrl}/Marks/UpdateMark`,payload);
+      return response;
+    } catch (error) {
+      console.error("Error updating quizzes:", error);
+      throw error;
+    }
+  },
+  
+
 POST_Image: async (courseId :string , imageFile:any)
 :Promise<IResponseObject<ICourse>> => {
   const _course:any = await POST(`${courseWriteUrl}/Courses/UploadImage/${courseId}`,imageFile);
   return _course;
 },
+
 POST_Marks: async (payload:IMarks)
 :Promise<IResponseObject<IMarks>> => {
   const _marks:any = await POST(`${quizWriteUrl}//Marks/AddMark`,payload);
   return _marks;
 },
+
+GET_AllStudentMarks: async (
+  ) => {
+  const response:IMarks[] = await GET(`${quizReadUrl}/Marks/getMarks`);
+  return response;
+},
+
+
 
 POST_Document: async ( payload:any)
 :Promise<IResponseObject<any>> => {

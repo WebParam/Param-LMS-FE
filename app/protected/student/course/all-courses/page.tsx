@@ -18,11 +18,9 @@ export default function AllCourses() {
   const dispatch = useDispatch();
    const [allCourses, setCourses] = useState<ICourse[]>([]); 
    const [enrolledCourses, setEnrolledCourses] = useState<ICourse[]>([]); 
-   const [studentEnrolledCourses, setStudentEnrolledCourses] = useState<IStudentCourses[]>([]);
 
    const goToCourseDetails=(course:ICourse)=>{
-    
-   
+
     dispatch(setSelectedCourseForEdit(course));
     window.location.href = '/protected/student/course/course-detail'; 
    }
@@ -44,17 +42,22 @@ export default function AllCourses() {
     }
   }
   
+    
+  async function getMarks () {
+    const getMarks = await Api.GET_AllStudentMarks();
+    const mappedMarks = getMarks.map((quiz: any) => quiz.data);
+    localStorage.setItem("student-marks", JSON.stringify(mappedMarks));
+
+  }
+  
+
 
   
 useEffect(() => {
    getStudentCourses();
    getAllQuizzes()
+   getMarks()
   }, []);
-
-
-  const getEnrolled = () => {
-
-  }
 
   console.log("courses",allCourses);
   console.log("enrolledCourses",enrolledCourses);

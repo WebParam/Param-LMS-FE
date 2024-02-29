@@ -71,11 +71,11 @@ export interface IUpdateQuestionDetailState {
 
 
 export interface IMarks {
-    StudentId: string
-    Points: number
-    CourseId: string
-    QuizId: string
-    CreatedAt: string
-    Reference: string
-    Status: number
+    studentId: string
+    points: number
+    courseId: string
+    quizId: string
+    createdAt: string
+    reference: string
+    status: number
 }

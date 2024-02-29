@@ -16,10 +16,6 @@ function sortSectionByOrder(a: ISection, b: ISection) {
   return a.order - b.order;
 }
 
-function sortModuleByOrder(a: IModule, b: IModule) {
-    return a.order - b.order;
-}
-
 const initialState: ICourseState = {
     course: {
         id: generateUniqueId(),
@@ -91,14 +87,13 @@ export const courseSlice = createSlice({
                 const targetSection = state.course.sections.find(section => section.id === _action.sectionId);
                 
                 if (!targetSection) {
-                    // Handle case when section is not found
                     return state;
                 }
             
                 const updatedSection = {
                     ...targetSection,
                     title: _action.title,
-                    competency: _action.competency, // Fixed: used _action.competency instead of action.payload.competency
+                    competency: _action.competency, 
                 };
             
                 const updatedSections = state.course.sections.map(section => 
@@ -146,7 +141,7 @@ export const courseSlice = createSlice({
                 id: generateUniqueId(),
                 title: sectionTitle,
                 courseId: state.course.id,
-                order: 1,
+                order: state.course.sections.length+1,
                 state: 0,
                 competency: sectionCompetency,
                 createdDate: "2023-08-07T11:28:14.632Z",
