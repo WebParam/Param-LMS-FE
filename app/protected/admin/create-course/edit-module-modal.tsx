@@ -12,18 +12,14 @@ import {
   FaVideo,
 } from "react-icons/fa";
 import {
-  addModuleToSection,
-  addVideoToModule,
-  deleteVideoFromModule,
-  editVideoDetails,
-  getSelectedCourseForEdit,
-  updateModuleDetail,
+  addVideoToModule, deleteVideoFromModule, getSelectedCourseForEdit, editVideoDetails,
 } from "@/app/redux/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ICourse,
   IModule,
   IUpdateModuleDetailState,
+  IVideo,
 } from "@/app/interfaces/courses";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Dropdown } from "react-bootstrap";
@@ -49,33 +45,83 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "universal-cookie";
+import { createDocumentDetails, getSelectedDocumentForEdit, updateDocumentDetail } from "@/app/redux/documentSice";
+import { IDocument } from "@/app/interfaces/document";
 
 interface EditCourseModalProps {
   onClose: () => any;
   sectionId: string;
-  ModuleId: any;
+  moduleId: any;
+  videoId:string
 }
+
+
+// Define interface for ReactQuill props
+interface ReactQuillProps {
+  style?: React.CSSProperties;
+  value?: string;
+  onChange?: any;
+  placeholder?: string;
+  modules?: any; 
+  readOnly:any
+}
+
+const ReactQuillWrapper = ({
+  style,
+  value,
+  onChange,
+  placeholder,
+  modules,
+  readOnly
+}: ReactQuillProps) => {
+  const [ReactQuillComponent, setReactQuillComponent] = useState<any>(() => () => null); 
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('react-quill').then(module => {
+        setReactQuillComponent(() => module.default);
+      }).catch(error => {
+        console.error("Error loading ReactQuill module:", error);
+      });
+    }
+  }, []);
+
+
+  if (!ReactQuillComponent) return null; 
+
+  return (
+    <ReactQuillComponent
+      readOnly = {readOnly}
+      style={style}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      modules={modules}
+    />
+  );
+};
+
 
 export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   onClose,
   sectionId,
-  ModuleId,
+  videoId,
+  moduleId
 }) => {
 
   const dispatch = useDispatch();
   const cookies = new Cookies();
 
   const [videoTitle, setVideoTitle] = useState<string>("");
-  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [videoLink, setVideoLink] = useState<string>("");
   const [moduleTitle, setModuleTitle] = useState<string>("");
-  const [moduleDescription, setModuleDescription] = useState<string>("");
-  const [videoId, setVideoId] = useState<string>("");
-  const [toggler, setToggler] = useState<Number>(3);
+  const [toggler, setToggler] = useState<Number>(1);
   const [documentName, setDocumentName] = useState<string>();
   const [questionDescription, setQuestionDescription] = useState<string>("");
   const [choiceDescription, setChoiceDescription] = useState<string>("");
   const [choiceAnswer, setChoiceAnswer] = useState<string>("");
   const [points, setPoints] = useState<number>(0);
+  const [video, setVideo] = useState<IVideo>()
   const [countChoice, setCountChoices] = useState<number>(0);
   const [questionId, setQuestionId] = useState<any>(0);
   const [questionNumber, setQuestionNumber] = useState<number>(1);
@@ -83,30 +129,31 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [choiceId, setChoiceId] = useState<string>("");
   const userData = cookies.get("param-lms-user");
   const [quizId, setQuizId] = useState<string>("")
-  const [moduleId, setModuleId] = useState("");
+  const [videoDescription, setVideoDescription] = useState<string>("");
   const [date, setDate] = useState<string>("");
-  const [moduleReference, setModuleReference] = useState<any>("")
+  const [document, setDocument] = useState<any>()
+
+  const [videoReference, setVideoReference] = useState<any>("")
+  const [hideSaveChangesBtn, setHideSaveChangesBtn] = useState(false)
+  const [disableModuleInputs, setDisableModuleInputs] = useState<boolean>(false)  
 
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
   const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit);
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+
 
   console.log("Quizzes to Edit", _quizzesFromState)
 
   const [_quizFromState, set_QuizFromState] = useState<IQuiz>()  
 
-  const [selectedVideos, setSelectedVideo] = useState<any>([]);
 
-  const [videos, setVideos] = useState<any>([]);
 
   const [choices, setChoices] = useState<any>([]);
 
   const [modules, setModules] = useState<IModule[]>([]);
 
-  const [choicesToEdit, setChoicesToEdit] = useState<any>([]);
 
-  const [showVideoInputs, setShowVideoInputs] = useState(false);
 
-  const [changeVidBtn, setChangeVidBtn] = useState<boolean>(true);
 
   const [enableEditQuestion, setEnableEditQuestion] = useState<boolean>(false);
 
@@ -129,24 +176,42 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
   const [openChoices, setOpenChoices] = useState(false);
 
-  const [viewCreatedQuestion, setViewCreatedQuestion] = useState(true);
-
   const [enableUpdateChoice, setEnableUpdateChoice] = useState(false);
+
+  const [videoTitleError, setVideoTitleError] = useState(false);
+  const [videoDescError, setVideoDescError] = useState(false);
+  const [videoUrlError, setVideoUrlError] = useState(false);
 
 
   const [changeEditQuizQuestionContent, setChangeEditQuizQuestionContent] =
     useState(false);
 
   const [editQuizQuestion, setEditQuizQuestion] = useState<boolean>(false);
+  const [viewCreatedQuestion, setViewCreatedQuestion] = useState(true);
 
+
+  
+  const onChange = (isChecked: boolean , id : string) => {
+
+    const choiceDetails = choices.filter((choice:IChoice) => choice.id === id)[0];
+  
+      const payload = {
+        quizId : quizId,
+        questionId:questionId,
+        choiceId: id,
+        choiceDescription: choiceDetails.choiceDescription,
+        isCorrect: isChecked
+      };
+      
+  
+      dispatch(updateChoiceDetail(payload));
+    };
 
   const tabSelect = (id: Number, e: any) => {
     setToggler(id);
     e.preventDefault();
   };
 
-  const cursorStyle = (predicate: boolean) =>
-    predicate ? "pointer" : "not-allowed";
 
   function getTodaysDate() {
     const today = new Date();
@@ -163,39 +228,19 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   //Quiz Functions starts here
   const addQuiz = (e: any) => {
     setIncludeQuiz(false);
-    if(hasQuiz){
-      if (modules.length === 0) {
-        let _id = toast.loading("Please add module first..", {
-          //loader
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          theme: "light",
-        });
-        setIncludeQuiz(false);
-  
-        toast.update(_id, {
-          render: "Please add module first",
-          type: "error",
-          isLoading: false,
-        });
-        setTimeout(() => {
-          toast.dismiss(_id);
-        }, 2000);
-      } else {
-        setIncludeQuiz(e.target.checked);
-        setIncludeQuiz(true);
-        handleCreateQuiz();
-        setToggler(2);
-      }
+
+    const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz.videoId === videoId);
+    if(hasQuiz?.length === 1 ){
+      setIncludeQuiz(e.target.checked);
+
+      setIncludeQuiz(true);
+
+      setToggler(2);
+
       return
     }
-    if (modules.length === 0) {
-      let _id = toast.loading("Please add module first..", {
+    if (!videoId) {
+      let _id = toast.loading("Please add video first..", {
         //loader
         position: "top-center",
         autoClose: 1000,
@@ -209,7 +254,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
       setIncludeQuiz(false);
 
       toast.update(_id, {
-        render: "Please add module first",
+        render: "Please add video first",
         type: "error",
         isLoading: false,
       });
@@ -217,6 +262,11 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
         toast.dismiss(_id);
       }, 2000);
     } else {
+      if (includeQuiz) {
+        tabSelect(2, e);
+      } else {
+        e.preventDefault();
+      }
       setIncludeQuiz(e.target.checked);
       setIncludeQuiz(true);
       handleCreateQuiz();
@@ -225,11 +275,12 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   };
 
   const selectQuestionForEdit = (id: string) => {
+
     setViewCreatedQuestion(true);
     setEnableEditQuestion(!enableEditQuestion);
     setChangeEditQuizQuestionContent(true)
 
-    const hasQuestion = questions.filter(
+    const hasQuestion:IQuestion[] = questions.filter(
       (question: IQuestion) => question.id === id
     );
     setQuestionDescription(hasQuestion[0].questionDescription);
@@ -240,7 +291,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
   const selectChoiceForEdit = (id: string) => {
     setEnableUpdateChoice(true);
-    const hasChoice = choicesToEdit.filter(
+    const hasChoice = choices.filter(
       (choice: IChoice) => choice.id === id
     );
     setChoiceDescription(hasChoice[0].choiceDescription);
@@ -251,11 +302,11 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
   const handleCreateQuiz = () => {
     const payload = {
-      reference: moduleReference,
+      reference: videoReference,
       createdByUserId: userData?.id,
       modifiedByUserId: userData?.id,
       createdDate: date,
-      moduleId: moduleId,
+      videoId: videoId,
     } as IUpdateQuizDetailState;
 
     dispatch(createQuizDetail(payload));
@@ -270,7 +321,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
       return;
     }
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
     if (isNaN(points) || points === 0) {
       setPointsError(true);
       return;
@@ -292,8 +343,14 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
  
     } 
     if(payload.questionId &&  payload.quizId ){
-      dispatch(deleteQuestion(payload))
-    
+        dispatch(deleteQuestion(payload))
+        setQuestionDescription("");
+        setIsQuestionCreated(false);
+        setChangeEditQuizQuestionContent(false)
+        setEditQuizQuestion(false);
+        setEnableEditQuestion(false)
+        
+        setPoints(0);
     }
   }
 
@@ -302,7 +359,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
     setEnableEditQuestion(true);
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
     const payload = {
       quizId : quizId,
       questionId: questionId,
@@ -323,10 +380,6 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
       return;
     }
 
-    if (!choiceAnswer) {
-      setChoiceAnswerError(true);
-      return;
-    }
     const payload = {
       quizId : quizId,
       questionId:questionId,
@@ -350,10 +403,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
       setChoiceError(true);
       return;
     }
-    if (!choiceAnswer) {
-      setChoiceAnswerError(true);
-      return;
-    }
+ 
 
     const payload  = {
       quizId: quizId!,
@@ -438,19 +488,12 @@ setChangeEditQuizQuestionContent(false);
   //Quiz Functions ends here
 
   //Dcoument functions start here
-  const formData = new FormData();
-  const handleDocument = (e: any) => {
-    const file = e.target.files[0];
 
-    if (file) {
-      formData.append("document", file);
-      setDocumentName(file.name);
-    }
-  };
+
   const addDocument = (e: any) => {
     setIncludeDocument(false);
-    if (modules.length === 0) {
-      let _id = toast.loading("Please add module first..", {
+    if (!videoId) {
+      let _id = toast.loading("Please add video first..", {
         //loader
         position: "top-center",
         autoClose: 1000,
@@ -464,7 +507,7 @@ setChangeEditQuizQuestionContent(false);
       setIncludeDocument(false);
 
       toast.update(_id, {
-        render: "Please add module first",
+        render: "Please add video first",
         type: "error",
         isLoading: false,
       });
@@ -472,14 +515,45 @@ setChangeEditQuizQuestionContent(false);
         toast.dismiss(_id);
       }, 2000);
     } else {
+      if (includeDocument) {
+        tabSelect(3, e);
+      } else {
+        e.preventDefault();
+      }
       setIncludeDocument(true);
       setToggler(3);
-      setIncludeDocument(e.target.checked);
     }
   };
   //Document functions ends here
 
-
+  const handleChangeDocument = (e:any) => {
+    if(document){
+     const file = e.target.files[0];
+     if (file) {
+       setDocument(file);
+     }
+     const payload = {
+       title: file ? file.name : "",
+       reference:videoReference,
+        url :"",
+       file: file ? file : null 
+     }
+     dispatch(updateDocumentDetail(payload));
+    }else{
+     const file = e.target.files[0];
+     if (file) {
+       setDocument(file);
+     }
+     const payload = {
+       title: file ? file.name : "",
+       reference:videoReference,
+        url :"",
+       file: file ? file : null 
+     }
+     dispatch(createDocumentDetails(payload));
+    }
+ 
+ }
   const moduleToolbar = {
     toolbar: [
       [{ header: "1" }, { header: "2" }],
@@ -488,127 +562,91 @@ setChangeEditQuizQuestionContent(false);
     ],
   };
 
-  const deleteVideoHandler = (moduleId: any, videoId: any) => {
-    dispatch(deleteVideoFromModule({ moduleId, videoId }));
-  };
 
-  const editModule = () => {
+
+  const editVideo = () => {
+    setVideoDescError(false);
+    setVideoTitleError(false);
+    setVideoUrlError(false);
     if (
-      moduleTitle &&
-      moduleDescription &&
-      (selectedVideos.length > 0 || videos.length > 0)
+      videoTitle &&
+      videoDescription && videoLink 
+     
     ) {
-      const plainDescription = moduleDescription
-        ? moduleDescription.replace(/<\/?p>/gi, "")
-        : _courseFromState.description;
-
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+        alert(plainDescription);
       const payload = {
-        moduleId: ModuleId,
+        moduleId,
+        videoId: videoId,
         sectionId: sectionId,
-        title: moduleTitle,
-
-        description: plainDescription,
+        videoLink: videoLink,
+        videoTitle: videoTitle,
+        videoDescription: plainDescription,
       };
-
       console.log("payload: ", payload);
 
-      dispatch(updateModuleDetail(payload));
+      dispatch(editVideoDetails(payload));
 
       console.log("COURSE", _courseFromState);
       console.log(sectionId);
+     setDisableModuleInputs(true);
+   //  setUpdateVideo(true)
+     setHideSaveChangesBtn(true)
+    }else{
+      if(videoDescription.length < 1){
+        setVideoDescError(true);
+      }
+      if(videoTitle.length < 1){
+        setVideoTitleError(true);
+
+      }
+      if(videoLink.length < 1){
+        setVideoUrlError(true);
+
+      }
+    }
+  };
+
+
+  const exitModal = () => {
+    setVideoDescError(false);
+    setVideoTitleError(false);
+    setVideoUrlError(false);
+    if(videoLink && videoTitle && videoDescription) {
+      
       onClose();
+    }else{
+      if(videoDescription.length < 1){
+        setVideoDescError(true);
+      }
+      if(videoTitle.length < 1){
+        setVideoTitleError(true);
+
+      }
+      if(videoLink.length < 1){
+        setVideoUrlError(true);
+
+      }
     }
   };
-  const handleEditVideoDetails = (e: any, videoId: any) => {
-    setVideoUrl(e.target?.value);
-    dispatch(
-      editVideoDetails({
-        moduleId: ModuleId,
-        videoId,
-        videoTitle,
-        videoUrl,
-      })
-    );
-  };
-
-  const handleEditVideotitle = (e: any, videoId: any) => {
-    setVideoTitle(e.target?.value);
-    dispatch(
-      editVideoDetails({
-        moduleId: ModuleId,
-        videoId,
-        videoTitle,
-        videoUrl,
-      })
-    );
-  };
-
-  const AddVideo = () => {
-    if (videoTitle && videoUrl) {
-      const payload = {
-        moduleId: ModuleId,
-        videoTitle: videoTitle,
-        videoLink: videoUrl,
-      };
-
-      dispatch(addVideoToModule(payload));
-
-      setVideos([...videos, payload]);
-      setShowVideoInputs(!showVideoInputs);
-      setVideoTitle("");
-      setVideoUrl("");
-      console.log("COURSE", _courseFromState);
-    
-    }
-  };
-
-  const editVideo = (id: string) => {
-    const payload = {
-      moduleId: ModuleId,
-      videoId: id,
-      videoTitle: videoTitle,
-      videoUrl: videoUrl,
-    };
-    dispatch(editVideoDetails(payload));
-    setShowVideoInputs(false);
-    setVideoTitle("");
-    setVideoUrl("");
-    setChangeVidBtn(true);
-  };
-
-
-
 
 
   useEffect(() => {
-    const section = _courseFromState.sections.find(
-      (section) => section.id === sectionId
-    );
-
-    if (section) {
-      const module = section.modules.find((module) => module.id === ModuleId);
-
-      if (module) {
-        setModuleTitle(module.title);
-        setModuleDescription(module.description);
-        setSelectedVideo(module.videos);
-        setModules([...modules, module]);
-        setModuleId(module.id);
-        setModuleReference(module?.reference);
-         }
+    const videoDoc = _documentsFromState.filter((doc:IDocument) => doc.reference ===videoReference)[0];
+    console.log("documents",videoDoc);
+    if(videoDoc){
+      setDocument(videoDoc.file);
     }
-  }, [sectionId,_courseFromState.sections]);
-
-  useEffect(() => {
-    const quiz:IQuiz[] = _quizzesFromState.filter(quiz => quiz.moduleId === moduleId);
+    const quiz:IQuiz[] = _quizzesFromState.filter((quiz:IQuiz) => quiz.videoId === videoId);
     if(quiz.length > 0){
       setHasQuiz(true);
       setIncludeQuiz(true)
       setIncludeDocument(true)
       set_QuizFromState(quiz[0])
-      setQuestions(quiz[0]?.questions);
+      const addQuestions =quiz[0]?.questions.filter(question => question.choices.length > 0 );
+      setQuestions(addQuestions)
       setQuizId(quiz[0].id);
-      console.log("Questions: " + questions?.length)
       setViewCreatedQuestion(false)
     }
   })
@@ -632,9 +670,27 @@ setChangeEditQuizQuestionContent(false);
     const hasQuestion = _quizFromState?.questions?.filter(
       (question: IQuestion) => question.id === questionId
     )!;
-    setChoicesToEdit(hasQuestion?.length > 0 && hasQuestion[0]?.choices);
     setChoices(hasQuestion?.length > 0 && hasQuestion[0]?.choices);
   });
+
+  useEffect(() => {
+    getTodaysDate();
+    const section = _courseFromState.sections.filter(
+      (section) => section.id === sectionId
+    )!;
+
+    const Module = section[0].modules.filter((Module:IModule) => Module.id === moduleId);
+
+    const video = Module[0]?.videos.filter((video:IVideo) => video.id === videoId)!;
+      if(video && video.length > 0) {
+        setVideoTitle(video[0]?.title);
+        setVideoDescription(video[0]?.description);
+        setVideoReference(video[0]?.reference);
+        setVideoLink(video[0]?.videoLink);
+        setDisableModuleInputs(true);
+      }
+
+  },[]);
 
   return (
     <div
@@ -664,7 +720,7 @@ setChangeEditQuizQuestionContent(false);
               >
                 <span className="h2 mb-0 mr-3">1</span>
                 <span className="flex d-flex flex-column">
-                  <strong className="card-title">Edit Module</strong>
+                  <strong className="card-title">Edit Video</strong>
                   {/* <small className="card-subtitle text-50">Ongoing Projects</small> */}
                 </span>
               </a>
@@ -673,14 +729,8 @@ setChangeEditQuizQuestionContent(false);
               <a
                 href="#"
                 data-toggle="tab"
-                style={{ cursor: cursorStyle(includeQuiz) }}
-                onClick={(e) => {
-                  if (includeQuiz) {
-                    tabSelect(2, e);
-                  } else {
-                    e.preventDefault();
-                  }
-                }}
+                style={{cursor:"pointer"}}
+                onClick={addQuiz}
                 role="tab"
                 aria-selected="true"
                 className={
@@ -699,15 +749,9 @@ setChangeEditQuizQuestionContent(false);
             <div className="col-auto border-left border-right">
               <a
                 href="#"
-                style={{ cursor: cursorStyle(includeDocument) }}
+                style={{cursor:"pointer"}}
                 data-toggle="tab"
-                onClick={(e) => {
-                  if (includeDocument) {
-                    tabSelect(3, e);
-                  } else {
-                    e.preventDefault();
-                  }
-                }}
+                onClick={addDocument}
                 role="tab"
                 aria-selected="true"
                 className={
@@ -728,233 +772,132 @@ setChangeEditQuizQuestionContent(false);
         <div style={{ width: "100%" }} className="page-section border-bottom-2">
           <div className="container page__container">
             <div className="row">
-              <div
+            <div
                 className={toggler === 1 ? "col-md-8" : "col-md-8 d-md-none"}
               >
-                {" "}
                 <div className="page-separator">
                   <div className="page-separator__text">Basic information</div>
                 </div>
-                <label className="form-label">Module title</label>
-                <div className="form-group mb-24pt">
-                  <input
-                    type="text"
-                    className="form-control form-control-lg"
-                    placeholder="Module Title"
-                    value={moduleTitle}
-                    onChange={(e) => {
-                      setModuleTitle(e.target.value);
-                    }}
-                  />
-                  <small className="form-text text-muted">
-                    Please see our <a href="">module title guideline</a>
-                  </small>
-                </div>
-                <label className="form-label">Module Description</label>
-                <div style={{ height: "200px", overflow: "auto" }}>
-                  <ReactQuill
-                    style={{ height: "100px" }}
-                    value={moduleDescription}
-                    onChange={(value: any) => {
-                      setModuleDescription(value); // Pass the new description
-                    }}
-                    placeholder="Module description..."
-                    modules={moduleToolbar}
-                  />
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                  className="page-separator"
-                >
-                  <div className="page-separator__text">Videos</div>
-                  <div>
-                    {showVideoInputs ? null : (
-                      <FaPlus
-                        style={{ cursor: "pointer" }}
-                        onClick={() => setShowVideoInputs(!showVideoInputs)}
-                      />
-                    )}
-                  </div>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                  className="accordion js-accordion accordion--boxed mb-24pt"
-                  id="parent"
-                  data-domfactory-upgraded="accordion"
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      flexWrap: "wrap",
-                      width: "150%",
-                    }}
-                  >
-                    {selectedVideos.map((video: any, index: number) => (
-                      <>
-                        <div
-                          style={{
-                            marginLeft: "10px",
-                            flexBasis: "30%",
-                            maxWidth: "100% !important",
-                          }}
-                          className="card"
-                        >
-                          <div className="embed-responsive embed-responsive-16by9">
-                            <iframe
-                              className="embed-responsive-item"
-                              src={video.videoLink}
-                              //   allowFullScreen=""
-                            />
-                          </div>
-                          <div className="card-body">
-                            <label className="form-label">Title</label>
-                            <input
-                              disabled={true}
-                              type="text"
-                              className="form-control"
-                              placeholder="Enter Video Title"
-                              value={video.title}
-                              onChange={(e) =>
-                                handleEditVideotitle(e, video.id)
-                              }
-                            />
-                            <small className="form-text text-muted">
-                              Enter a valid video title.
-                            </small>
-                          </div>
-                          <div className="card-body">
-                            <label className="form-label">URL</label>
-                            <input
-                              disabled={true}
-                              onChange={(e) =>
-                                handleEditVideoDetails(e, video.id)
-                              }
-                              type="text"
-                              className="form-control"
-                              placeholder="Enter Video URL"
-                              value={video.videoLink}
-                            />
-
-                            <small className="form-text text-muted">
-                              Enter a valid video URL.
-                            </small>
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent: "flex-end",
-                                alignItems: "center",
-                              }}
-                            >
-                              <FaTrash
-                                onClick={() =>
-                                  deleteVideoHandler(ModuleId, video.id)
-                                }
+          
+                    <label className="form-label">Video title
+                    {videoTitleError && (
+                              <span
                                 style={{
-                                  cursor: "pointer",
-                                  marginRight: "5px",
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
                                 }}
-                              />
-                              <FaPencilAlt
-                                onClick={() => {
-                                  setVideoId(video.id);
-                                  setChangeVidBtn(false);
-                                  setShowVideoInputs(!showVideoInputs);
-                                }}
-                                style={{ cursor: "pointer" }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  {showVideoInputs && (
-                    <>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <label className="form-label">Title</label>
-                      </div>
-
+                              >
+                                *required field
+                              </span>
+                            )}
+                    </label>
+                    <div className="form-group mb-24pt">
                       <input
-                        onChange={(e) => setVideoTitle(e.target.value)}
-                        id="flatpickrSample04"
                         type="text"
-                        className="form-control"
-                        placeholder="video title"
-                        data-toggle="flatpickr"
-                        data-flatpickr-enable-time="true"
-                        data-flatpickr-alt-format="F j, Y at H:i"
+                        disabled={disableModuleInputs}
+                        className="form-control form-control-lg"
+                        placeholder="Video Title"
                         value={videoTitle}
-                        data-flatpickr-date-format="Y-m-d H:i"
-                      />
-
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
+                        onChange={(e) => {
+                
+                          setVideoTitle(e.target.value);
                         }}
-                      >
-                        <label className="form-label">URL</label>
-                      </div>
-
-                      <input
-                        onChange={(e) => setVideoUrl(e.target.value)}
-                        id="flatpickrSample04"
-                        type="text"
-                        className="form-control"
-                        placeholder="video url"
-                        data-toggle="flatpickr"
-                        data-flatpickr-enable-time="true"
-                        data-flatpickr-alt-format="F j, Y at H:i"
-                        data-flatpickr-date-format="Y-m-d H:i"
-                        value={videoUrl}
                       />
-                    </>
-                  )}
-                </div>
-                {showVideoInputs && (
-                  <>
-                    {changeVidBtn ? (
-                      <a
-                        style={{ marginTop: "10px" }}
-                        onClick={AddVideo}
-                        href="#"
-                        className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                      >
-                        save Video
-                      </a>
-                    ) : (
-                      <a
-                        style={{ marginTop: "10px" }}
-                        onClick={() => editVideo(videoId)}
-                        href="#"
-                        className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                      >
-                        update Video
-                      </a>
-                    )}
-                  </>
-                )}
+                      <small className="form-text text-muted">
+                        Please see our <a href="">video title guideline</a>
+                      </small>
+                    </div>
+                    <label className="form-label">Video Description
+                    
+                    {videoDescError && (
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *required field
+                              </span>
+                            )}
+                    </label>
+                    <div style={{ height: "200px", overflow: "auto" }}>
+                   
+                    <ReactQuillWrapper        readOnly={disableModuleInputs}
+                     style={{ height: "100px" }}
+                     value={videoDescription}
+                     onChange={(value: string) => {
+                       setVideoDescription(value); // Pass the new description
+                     
+                     }}
+                     placeholder="Video description..."
+      />
+             
+           
+                     
+                      
+                    </div>
+                   <div style={{position:"relative", bottom :"2.5em"}}>
+                   <label className="form-label">Video URL
+                   {videoUrlError && 
+                              <span
+                                style={{
+                                  color: "tomato",
+                                  fontWeight: "600",
+                                  fontSize: "small",
+                                }}
+                              >
+                                *required field
+                              </span>
+                            }
+                   </label>
+                    <div className="form-group mb-24pt">
+                      <input
+                        type="text"
+                        disabled={disableModuleInputs}
+                        className="form-control form-control-lg"
+                        placeholder="Video URL"
+                        value={videoLink}
+                        onChange={(e) => {
+                       
+                          setVideoLink(e.target.value);
+                        }}
+                      />
+                  
+                    </div>
+                   </div>
+                   <button
+                style={{
+                  backgroundColor: "transparent",
+                  border: "none",
+                  outline: "none",
+                  width: "150px",
+                  position:"relative",
+                  bottom:"2em"
+
+                }}
+              >
+               { !disableModuleInputs ?
+                 <a
+                 onClick={editVideo}
+                 href="#"
+                 className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                 >
+                 Update Details
+               </a>:
+               <a
+                 onClick={() => setDisableModuleInputs(false)}
+                 href="#"
+                 className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                 >
+                 edit Details
+               </a>
+               }
+              </button>
+
+                  
+              
               </div>
 
         
@@ -1138,8 +1081,8 @@ setChangeEditQuizQuestionContent(false);
                             data-toggle="quill"
                             data-quill-placeholder="Question"
                           >
-                            <ReactQuill
-                              readOnly={enableEditQuestion}
+
+<ReactQuillWrapper         readOnly={enableEditQuestion}
                               style={{ height: "100px" }}
                               value={questionDescription}
                               onChange={(value: string) => {
@@ -1147,7 +1090,7 @@ setChangeEditQuizQuestionContent(false);
                                 // placeholder="Enter your question description here..."
 
                               }}
-                            />
+      />
                           </div>
                         </div>
                         <div className="form-group">
@@ -1258,25 +1201,7 @@ setChangeEditQuizQuestionContent(false);
                                 className="form-control mb-3"
                                 placeholder="Enter your choice here..."
                               />
-                              <select
-                                value={choiceAnswer}
-                                style={{
-                                  border: `${
-                                    choiceAnswerError
-                                      ? "2px solid tomato"
-                                      : "none"
-                                  }`,
-                                }}
-                                onChange={(e: any) =>
-                                  setChoiceAnswer(e.target.value)
-                                }
-                                name="category"
-                                className="form-control custom-select mb-3"
-                              >
-                                <option value="">Select an answer</option>
-                                <option value="true">Correct</option>
-                                <option value="false">Incorrect</option>
-                              </select>
+                           
                               <div>
                                 {!enableUpdateChoice ? (
                                   <button
@@ -1327,9 +1252,7 @@ setChangeEditQuizQuestionContent(false);
 {choices?.length > 0 && choices?.map((option: IChoice, index: any) => (
                                    <a
                                    
-                                   onClick={() =>
-                                    selectChoiceForEdit(option?.id)
-                                  }
+                                
                                   key={index}
                                    style={{ cursor: "pointer" ,backgroundColor: '#e9ecef',padding:"8px",marginTop:"5px",borderRadius:"5px"}}
                                    className="accordion__toggle"
@@ -1338,12 +1261,20 @@ setChangeEditQuizQuestionContent(false);
                                    data-parent="#parent"
                                  >
                                    <span
-                                 
+                                    onClick={() =>
+                                      selectChoiceForEdit(option?.id)
+                                    }
                                      style={{ cursor: "pointer" }}
                                      className="flex"
                                    >
                                      {option?.choiceDescription}
                                    </span>
+                                   <input
+        type="checkbox"
+        checked={option?.isCorrect}
+        onChange={(e) => onChange(e.target.checked, option?.id)}
+      />
+              
                                    <button
                                      style={{
                                        backgroundColor: "transparent",
@@ -1424,8 +1355,7 @@ setChangeEditQuizQuestionContent(false);
                             data-toggle="quill"
                             data-quill-placeholder="Question"
                           >
-                            <ReactQuill
-                              readOnly={enableEditQuestion}
+                            <ReactQuillWrapper         readOnly={enableEditQuestion}
                               style={{ height: "100px" }}
                               value={questionDescription}
                               onChange={(value: string) => {
@@ -1433,7 +1363,8 @@ setChangeEditQuizQuestionContent(false);
                            
                               }}
                               placeholder="Enter your question description here..."
-                            />
+      />
+                           
                           </div>
                         </div>
                         <div className="form-group">
@@ -1544,25 +1475,7 @@ setChangeEditQuizQuestionContent(false);
                                 className="form-control mb-3"
                                 placeholder="Enter your choice here..."
                               />
-                              <select
-                                value={choiceAnswer}
-                                style={{
-                                  border: `${
-                                    choiceAnswerError
-                                      ? "2px solid tomato"
-                                      : "none"
-                                  }`,
-                                }}
-                                onChange={(e: any) =>
-                                  setChoiceAnswer(e.target.value)
-                                }
-                                name="category"
-                                className="form-control custom-select mb-3"
-                              >
-                                <option value="">Select an answer</option>
-                                <option value="true">Correct</option>
-                                <option value="false">Incorrect</option>
-                              </select>
+                              
                               <div>
                                 {!enableUpdateChoice ? (
                                   <button
@@ -1612,12 +1525,9 @@ setChangeEditQuizQuestionContent(false);
                       key={"section.id"}
                     >
 
-{choicesToEdit?.length > 0 && choicesToEdit?.map((option: IChoice, index: any) => (
+{choices?.length > 0 && choices?.map((option: IChoice, index: any) => (
                                    <a
-                                   
-                                   onClick={() =>
-                                    selectChoiceForEdit(option?.id)
-                                  }
+                                 
                                   key={index}
                                    style={{ cursor: "pointer" ,backgroundColor: '#e9ecef',padding:"8px",marginTop:"5px",borderRadius:"5px"}}
                                    className="accordion__toggle"
@@ -1626,12 +1536,20 @@ setChangeEditQuizQuestionContent(false);
                                    data-parent="#parent"
                                  >
                                    <span
-                                 
+                                   
+                                   onClick={() =>
+                                    selectChoiceForEdit(option?.id)
+                                  }
                                      style={{ cursor: "pointer" }}
                                      className="flex"
                                    >
                                      {option?.choiceDescription}
                                    </span>
+                                   <input
+        type="checkbox"
+        checked={option?.isCorrect}
+        onChange={(e) => onChange(e.target.checked, option?.id)}
+      />
                                    <button
                                      style={{
                                        backgroundColor: "transparent",
@@ -1686,7 +1604,7 @@ setChangeEditQuizQuestionContent(false);
                     <input
                       type="file"
                       id="file"
-                      onChange={handleDocument}
+                      onChange={handleChangeDocument}
                       className="custom-file-input"
                     />
                     <label className="custom-file-label">Choose file</label>
@@ -1694,7 +1612,7 @@ setChangeEditQuizQuestionContent(false);
                 </div>
 
                 <p style={{ color: "rgba(39,44,51,.35)", paddingTop: "10px" }}>
-                  {documentName}
+                  {document.name}
                 </p>
               </div>
 
@@ -1702,6 +1620,7 @@ setChangeEditQuizQuestionContent(false);
                 <div className="card" style={{ width: "auto" }}>
                   <div className="card-header text-center">
                   <button
+                  onClick={exitModal}
                         style={{
                           backgroundColor: "transparent",
                           border: "none",
@@ -1710,11 +1629,11 @@ setChangeEditQuizQuestionContent(false);
                         }}
                       >
                         <a
-                          onClick={editModule}
+                      
                           href="#"
                           className="btn btn-accent"
                         >
-                          save module
+                          save video
                         </a>
                       </button>
                   </div>
@@ -1744,6 +1663,28 @@ setChangeEditQuizQuestionContent(false);
                     </div>
                   </div>
                 </div>
+                <div className="card">
+              <div className="embed-responsive embed-responsive-16by9">
+                <iframe
+                  className="embed-responsive-item"
+                  src={videoLink}
+                  //   allowFullScreen=""
+                />
+              </div>
+              <div className="card-body">
+                <label className="form-label">URL</label>
+                <input
+                  type="text"
+                  className="form-control"
+                    value ={videoLink}
+                  placeholder="Enter Video URL"
+                />
+
+                <small className="form-text text-muted">
+                  Enter a valid video URL.
+                </small>
+              </div>
+            </div>
               </div>
             </div>
           </div>

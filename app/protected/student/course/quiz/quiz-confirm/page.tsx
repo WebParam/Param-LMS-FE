@@ -1,7 +1,8 @@
+"use client"
 import React, { useState } from 'react';
 import './modal.css'
 
-const Popup = ({ show, onYes, onNo }) => {
+const Popup = ({ show, onYes, onNo }:any) => {
   if (!show) {
     return null;
   }

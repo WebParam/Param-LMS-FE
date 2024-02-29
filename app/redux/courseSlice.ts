@@ -3,23 +3,19 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppStore } from "../interfaces/store";
 import { ICourse, ICourseState, IModule, ISection, IUpdateCourse, IUpdateCourseDetailState, IUpdateModuleDetailState, IUpdateSectionDetailState, IVideo } from "../interfaces/courses";
 import { useState } from "react";
+import Cookies from "universal-cookie";
 
 const generateUniqueId = () => {
     return Math.random().toString(36).substring(7);
 };
 
-
-
+const cookies = new Cookies();
+const loogedInUser = cookies.get('param-lms-user');
 
 function sortSectionByOrder(a: ISection, b: ISection) {
-    return a.order - b.order;
+  return a.order - b.order;
 }
 
-function sortModuleByOrder(a: IModule, b: IModule) {
-    return a.order - b.order;
-}
-
-// ## Define the initial state  
 const initialState: ICourseState = {
     course: {
         id: generateUniqueId(),
@@ -30,10 +26,10 @@ const initialState: ICourseState = {
         creatingUser: "",
         state: 0,
         logo:"",
-
+        instructor:"John Smith",
         courseImage: "course_image.jpg",
         bannerImage: "banner_image.jpg",
-        modifyingUser: "user-789",
+        modifyingUser: loogedInUser,
         creatingUserName:"Kwanele"
 
     } as ICourse
@@ -83,27 +79,33 @@ export const courseSlice = createSlice({
             state.course = newState;
           
           }
-,          
+              ,          
 
-
-        updateSectionDetail(state, action) {
-            const _action = action.payload as IUpdateSectionDetailState;
-            const targetSection = state.course.sections.filter(section => section.id == _action.sectionId)[0];
-            const newSection = {
-                ...targetSection,
-                title: _action.title,
-             
-                competency: action.payload.competency,
-            };
-            const existingSections = state.course.sections.filter(x => x.id != action.payload.sectionId);
-            const newSections = [...existingSections, newSection];
-            const sortedSections = newSections.sort(sortSectionByOrder);
-            const newState = { ...state.course, sections: sortedSections };
-
-            state.course = newState;
-
-
-        },
+          
+            updateSectionDetail(state, action) {
+                const _action = action.payload as IUpdateSectionDetailState;
+                const targetSection = state.course.sections.find(section => section.id === _action.sectionId);
+                
+                if (!targetSection) {
+                    return state;
+                }
+            
+                const updatedSection = {
+                    ...targetSection,
+                    title: _action.title,
+                    competency: _action.competency, 
+                };
+            
+                const updatedSections = state.course.sections.map(section => 
+                    section.id === _action.sectionId ? updatedSection : section
+                );
+            
+                const sortedSections = updatedSections.sort(sortSectionByOrder);
+                const newState = { ...state.course, sections: sortedSections };
+            
+                return { ...state, course: newState };
+            },
+            
         deleteSection(state, action) {
             const sectionIdToDelete = action.payload;
 
@@ -139,7 +141,7 @@ export const courseSlice = createSlice({
                 id: generateUniqueId(),
                 title: sectionTitle,
                 courseId: state.course.id,
-                order: 1,
+                order: state.course.sections.length+1,
                 state: 0,
                 competency: sectionCompetency,
                 createdDate: "2023-08-07T11:28:14.632Z",
@@ -153,19 +155,19 @@ export const courseSlice = createSlice({
         },
 
         addModuleToSection(state, action) {
-            const { sectionId, moduleTitle,  moduleDescription } = action.payload;
+            const { sectionId } = action.payload;
 
             const newModule: IModule = {
                 id: generateUniqueId(),
-                title: moduleTitle,
-                description: moduleDescription,
+                title: "",
+                description: "",
                 notes: "These are some additional notes for Module 1.",
                 creatingUser: "user-456",
                 creatingDate: "2023-08-07T11:28:14.632Z",
                 modifyingUser: "user-789",
                 modifiedDate: "2023-08-07T11:28:14.632Z",
                 sectionId: sectionId,
-                reference:generateUniqueId(),
+              
                 order: 1,
                 state: 0,
                 videos: [],
@@ -178,31 +180,36 @@ export const courseSlice = createSlice({
             }
         },
         editVideoDetails: (state, action) => {
-      const { moduleId, videoId, videoTitle, videoUrl } = action.payload;
-      // Find the section, module, and video to update
-      const sectionIndex = state.course.sections.findIndex(section =>
-        section.modules.some(module => module.id === moduleId)
-      );
-      if (sectionIndex !== -1) {
-        const moduleIndex = state.course.sections[sectionIndex].modules.findIndex(
-          module => module.id === moduleId
-        );
-        if (moduleIndex !== -1) {
-          const videoIndex = state.course.sections[sectionIndex].modules[
-            moduleIndex
-          ].videos.findIndex(video => video.id === videoId);
-          if (videoIndex !== -1) {
-            // Update the video title and URL
-            state.course.sections[sectionIndex].modules[moduleIndex].videos[
-              videoIndex
-            ].title = videoTitle;
-            state.course.sections[sectionIndex].modules[moduleIndex].videos[
-              videoIndex
-            ].videoLink = videoUrl;
+      
+          const { moduleId, videoId, videoTitle, videoLink,videoDescription } = action.payload;
+          const sectionIndex = state.course.sections.findIndex(section =>
+            section.modules.some(module => module.id === moduleId)
+          );
+          if (sectionIndex !== -1) {
+            const moduleIndex = state.course.sections[sectionIndex].modules.findIndex(
+              module => module.id === moduleId
+            );
+            if (moduleIndex !== -1) {
+              const videoIndex = state.course.sections[sectionIndex].modules[
+                moduleIndex
+              ].videos.findIndex((video:IVideo) => video.id === videoId);
+              if (videoIndex !== -1) {
+                // Update the video title and URL
+                state.course.sections[sectionIndex].modules[moduleIndex].videos[
+                  videoIndex
+                ].title = videoTitle;
+                state.course.sections[sectionIndex].modules[moduleIndex].videos[
+                  videoIndex
+                ].videoLink = videoLink;
+                state.course.sections[sectionIndex].modules[moduleIndex].videos[
+                  videoIndex
+                ].description = videoDescription;
+              }
+            }
           }
         }
-      }
-    },
+      
+,      
         deleteModuleFromSection(state, action) {
             const { sectionId, moduleId } = action.payload;
       
@@ -238,7 +245,7 @@ export const courseSlice = createSlice({
             state.course.sections = [];
         },
         addVideoToModule(state, action) {
-            const { moduleId, videoTitle, videoLink,  } = action.payload;
+            const { moduleId, videoTitle, videoLink, description } = action.payload;
 
             const newVideo: IVideo = {
                 id: generateUniqueId(),
@@ -258,7 +265,8 @@ export const courseSlice = createSlice({
                 length: "5 minutes",
                 format: "mp4",
                 size: "50 MB",
-                description:""
+                description:description,
+                reference:generateUniqueId(),
 
             };
 
@@ -272,15 +280,8 @@ export const courseSlice = createSlice({
             }
         },
     },
-
-
-
-
-
 }
 );
-
-
 
   export const {
     setSelectedCourseForEdit,

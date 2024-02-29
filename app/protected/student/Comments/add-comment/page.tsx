@@ -265,7 +265,10 @@ const handleNewComment=async ()=>{
                           <input id="notify" type="checkbox" className="custom-control-input" defaultChecked />
                           <label htmlFor="notify" className="custom-control-label">Notify me on email when someone replies to my question</label>
                         </div>
-                        <small id="description-notify" className="form-text text-muted">If unchecked, you'll still recieve notifications on our website.</small>
+                        <small id="description-notify" className="form-text text-muted">
+  If unchecked, you&rsquo;ll still receive notifications on our website.
+</small>
+
                       </div>
                       <div className="list-group-item">
                         <button type="button" onClick={handleNewComment} className="btn btn-accent">Post Question</button>

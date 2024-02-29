@@ -135,7 +135,7 @@ debugger;
             // Set cookies here after successful login
     
             // Optionally, you can redirect the user to another page
-            navigateToLogin()
+            router.push('/protected/admin/manage-courses');
       
           }
           
@@ -166,10 +166,8 @@ debugger;
                 type: "success",
                 isLoading: false,
               });
-              // Set cookies here after successful login
-      
-              // Optionally, you can redirect the user to another page
-              navigateToLogin()
+         
+              router.push('/protected/student/course/all-courses');
             }
             else if(user.error){
               console.log("response", user);
@@ -396,7 +394,7 @@ debugger;
   </a>
 </div>
 
-        <div  onClick = {navigateToLogin} className="page-separator__text mt-3">Already have an account? <span style={{cursor:"pointer"}}>sign-in</span></div>
+        <div  onClick = {navigateToLogin} className="page-separator__text mt-3">Already have an account? <span style={{cursor:"pointer", color:"blue"}}>sign-in</span></div>
 
       </div>
     </>

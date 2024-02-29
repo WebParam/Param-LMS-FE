@@ -1,6 +1,5 @@
 "use client"
 import Image from 'next/image'
-import styles from './page.module.css'
 import './globals.css'
 import './css/app.css'
 import './vendor/perfect-scrollbar.css'
@@ -9,8 +8,6 @@ import './css/fontawesome.css'
 import './vendor/spinkit.css'
 import './css/preloader.css'
 import './css/dark-mode.css'
-import {  Routes, Route, BrowserRouter } from "react-router-dom";
-import Login from './auth/login/page'
 export default function Home() {
   return (
 
@@ -95,7 +92,7 @@ export default function Home() {
               className="nav-link d-flex align-items-center dropdown-toggle"
               data-toggle="dropdown"
             >
-              <img
+              <Image
                 width={32}
                 height={32}
                 className="rounded-circle mr-8pt"

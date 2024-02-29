@@ -5,30 +5,39 @@ import { IUser, IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/use
 import  IComment, { ICommentReply }  from "@/app/interfaces/comment";
 import { IRating } from "@/app/interfaces/Rating";
 import { get } from "http";
-import { IQuiz } from "@/app/interfaces/quiz";
+import { IMarks, IQuiz } from "@/app/interfaces/quiz";
 
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
 export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api";
 
+export const uploadImage = ""
+
 export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api";
  
-export const userReadUrl="https://khumla-dev-user-read.azurewebsites.net/api";
+export const userReadUrl="https://khmla-dev-user-read.azurewebsites.net/api";
 
 export const commentReadUrl="https://localhost:61280/api";
 
 export const commentWriteUrl="https://localhost:61275/api";
 
-export const quizReadUrl = "https://localhost:53137/api";
+export const quizReadUrl = "https://khumla-dev-quiz-read.azurewebsites.net/api";
 
 export const quizWriteUrl ="https://khumla-dev-quiz-write.azurewebsites.net/api";
+
+export const documentWrite = "https://e4e7-154-0-14-142.ngrok-free.app/api"
+
+
+export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
+
+
 
 export const Api = {
   Base: courseWriteUrl,
 
   GET_Courses: async (): Promise<any> => {
     const response = await GET(`${courseReadUrl}/Courses/GetCourses`);
-    return response;s
+    return response;
   },
 
   POST_CreateCourse: async (
@@ -215,13 +224,57 @@ DELETE_CourseById: async (
     return _quiz;
   },
 
+  PUT_UpdateQuizzes: async (payload: IQuiz[]): Promise<IResponseObject<IQuiz[]>> => {
+    try {
+      const response = await PUT(`${quizWriteUrl}/Quizzes/UpdateQuizzes`,payload);
+      return response;
+    } catch (error) {
+      console.error("Error updating quizzes:", error);
+      throw error;
+    }
+  },
   
+  PUT_UpdateMarks: async (payload: IMarks): Promise<IResponseObject<IQuiz[]>> => {
+    try {
+      const response = await PUT(`${quizWriteUrl}/Marks/UpdateMark`,payload);
+      return response;
+    } catch (error) {
+      console.error("Error updating quizzes:", error);
+      throw error;
+    }
+  },
+  
+
 POST_Image: async (courseId :string , imageFile:any)
 :Promise<IResponseObject<ICourse>> => {
   const _course:any = await POST(`${courseWriteUrl}/Courses/UploadImage/${courseId}`,imageFile);
   return _course;
-}
+},
+
+POST_Marks: async (payload:IMarks)
+:Promise<IResponseObject<IMarks>> => {
+  const _marks:any = await POST(`${quizWriteUrl}//Marks/AddMark`,payload);
+  return _marks;
+},
+
+GET_AllStudentMarks: async (
+  ) => {
+  const response:IMarks[] = await GET(`${quizReadUrl}/Marks/getMarks`);
+  return response;
+},
 
 
+
+POST_Document: async ( payload:any)
+:Promise<IResponseObject<any>> => {
+  const _document:any = await POST(`${documentWrite}/Documents/AddDocuments`,payload);
+  return _document;
+},
+
+GET_AllQuizzes: async (
+  ) => {
+  const response:IQuiz[] = await GET(`${quizReadUrl}/Quizzes/getQuizzes`);
+  return response;
+},
 };
 

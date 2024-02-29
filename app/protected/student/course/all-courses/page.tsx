@@ -4,37 +4,60 @@ import styles from './page.module.css'
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';
-import { ICourse } from '@/app/interfaces/courses';
+import { ICourse, IStudentCourses } from '@/app/interfaces/courses';
 import {useEffect} from 'react'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedCourseForEdit } from '@/app/redux/courseSlice';
+import { updateQuizzes } from '@/app/redux/quizSlice';
+import { IQuiz } from '@/app/interfaces/quiz';
 const cookies = new Cookies();
 
 
 export default function AllCourses() {
   const dispatch = useDispatch();
-   const [allCourses, setCourses] = useState<ICourseResponseModel[]>([]); 
-   const [enrolledCourses, setEnrolledCourses] = useState<ICourseResponseModel[]>([]); 
-   const [studentEnrolledCourses, setStudentEnrolledCourses] = useState<IStudentCourses[]>([]);
+   const [allCourses, setCourses] = useState<ICourse[]>([]); 
+   const [enrolledCourses, setEnrolledCourses] = useState<ICourse[]>([]); 
 
    const goToCourseDetails=(course:ICourse)=>{
-    
-   
+
     dispatch(setSelectedCourseForEdit(course));
     window.location.href = '/protected/student/course/course-detail'; 
    }
    
+   async function getAllQuizzes() {
+    try {
+      const getQuizzes = await Api.GET_AllQuizzes();
+  
+      if (getQuizzes && getQuizzes.length > 0) {
+        const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
+        console.log("Quizzes",mappedQuizzes)
+        localStorage.setItem("student-quizzes", JSON.stringify(mappedQuizzes));
+    
+      } else {
+        console.log("No quizzes found");
+      }
+    } catch (error) {
+      console.error("Error fetching quizzes:", error);
+    }
+  }
+  
+    
+  async function getMarks () {
+    const getMarks = await Api.GET_AllStudentMarks();
+    const mappedMarks = getMarks.map((quiz: any) => quiz.data);
+    localStorage.setItem("student-marks", JSON.stringify(mappedMarks));
+
+  }
+  
+
+
   
 useEffect(() => {
    getStudentCourses();
-   
+   getAllQuizzes()
+   getMarks()
   }, []);
-
-
-  const getEnrolled = () => {
-
-  }
 
   console.log("courses",allCourses);
   console.log("enrolledCourses",enrolledCourses);

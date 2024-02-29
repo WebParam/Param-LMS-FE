@@ -2,9 +2,15 @@
 
 # dependencies
 /node_modules
+<<<<<<< HEAD
 /dist
 /.pnp
 .pnp.js
+=======
+/.pnp
+.pnp.js
+/dist
+>>>>>>> e2c85101fad9a75175b1bca4b0389934d6a4aa75
 
 # testing
 /coverage

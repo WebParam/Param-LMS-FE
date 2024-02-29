@@ -8,12 +8,13 @@ export interface ICourse {
         description: string;
         sections: ISection[];
         createdDate: string,
-        creatingUser: string,
+        creatingUser?: string,
         creatingUserName: string,
         state: number,
         logo: string,
         courseImage: string,
         bannerImage: string,
+        instructor : string,
         modifyingUser: string
 
 }
@@ -49,7 +50,7 @@ export interface IModule {
         notes: string;
         modifyingUser: string,
         modifiedDate: string,
-        reference?: string;
+  
 
 
 
@@ -73,7 +74,8 @@ export interface IVideo {
         length: string,
         format: string,
         size: string,
-        description: string
+        description: string;
+        reference: string
 }
 
 export interface Comment {

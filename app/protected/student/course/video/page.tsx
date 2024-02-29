@@ -20,6 +20,11 @@ import 'react-responsive-modal/styles.css';
 import './modal.css'
 import { Modal } from 'react-responsive-modal';
 import Quiz from '../quiz/page';
+import Link from 'next/link';
+import { useRouter  } from 'next/navigation'
+import { IQuiz } from '@/app/interfaces/quiz';
+
+
 const cookies = new Cookies();
 
 
@@ -32,17 +37,13 @@ export default function CourseVideo() {
  const [comments,setComments]=useState<IComment[]>();
  const [asideToggler, setAsideToggler] = useState(false);
  const [open, setOpen] = useState(false);
+ const [videoId, setVideoId] = useState<string>("")
 
- const [openNew, setOpenNew] = useState(false);
 
-  const onOpenModal = () => setOpenNew(true);
-  const onCloseModal = () => setOpenNew(false);
-
- 
-  const openQuiz = () => {
+  const openQuiz = (id:any) => {
     setOpen(false);
-    console.log("open quiz")
-    onOpenModal();
+    console.log("open quiz");
+
   }
 
  function toggleAside() {
@@ -58,11 +59,6 @@ export default function CourseVideo() {
   getComments(first.id); 
   console.log("first",first.id);
 
-
-
-
-
-  
 },[]);
 
 const goToCommentDetails=(Comment:IComment)=> {
@@ -71,12 +67,20 @@ const goToCommentDetails=(Comment:IComment)=> {
   window.location.href="/protected/student/Comments/comment-details";
  }
  
-const handlePlayClick = useCallback((event:React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+const handlePlayClick = useCallback((event:React.MouseEvent<HTMLAnchorElement, MouseEvent>, videoId:any) => {
   //setPlay(true);
+  setVideoId(videoId);
   setPlay(!play);
   console.log("play", play)
   event.preventDefault();
 }, []);
+
+const goToQuiz = () => {
+
+  window.location.href = '/protected/student/course/quiz';
+  
+
+}
 
 
 
@@ -105,6 +109,11 @@ const getComments=async (id:string)=>{
   setComments(data);
 }
 
+
+
+
+
+
   return (
 <>
 <div className='asideToggler' onClick={toggleAside} style={{position: 'fixed', top: '50vh', right: '0', zIndex: '10', width: '20px'}}>
@@ -115,7 +124,7 @@ const getComments=async (id:string)=>{
 >
 <i className="material-icons icon--left" style={{transform: 'scale(1.3)'}}>arrow_back_ios_new</i>
 </button>
-{asideToggler && <Aside />}
+{asideToggler && <Aside videos={JSON.parse(localStorage.getItem("module")as any)}/>}
 </div>
 <div>
   <div className="navbar navbar-list navbar-light bg-white border-bottom-2 border-bottom navbar-expand-sm" style={{whiteSpace: 'nowrap'}}>
@@ -156,7 +165,7 @@ const getComments=async (id:string)=>{
         <div className="player embed-responsive-item">
           <div className="player__content">
             <div className="player__image" />
-            <a onClick={handlePlayClick} href="" className="player__play bg-primary">
+            <a onClick={(event:React.MouseEvent<HTMLAnchorElement, MouseEvent>) => handlePlayClick(event,video?.id)} href="" className="player__play bg-primary">
               <span className="material-icons">play_arrow</span>
             </a>
           </div>
@@ -178,16 +187,21 @@ const getComments=async (id:string)=>{
           </div>
         </div>
       </div>
-      <ConfirmationModal
-        open={open}
-        onConfirm={() => openQuiz()}
-        onCancel={() => setOpen(false)}
-        title="Congratulations"
-        buttonText="Take Quiz"
-      >
-        Thank you for completing the module, We have attached a quiz to rate your understading of the module. Please click Take Quiz or cancel.
-      </ConfirmationModal>
-      <Modal open={openNew} onClose={onCloseModal} center
+      
+<Link href="/protected/student/course/quiz">
+<ConfirmationModal
+    open={open}
+    onConfirm={() => openQuiz(video?.id)}
+    onCancel={() => setOpen(false)}
+    title="Congratulations"
+    buttonText="Take Quiz"
+  >
+    Thank you for completing the module, We have attached a quiz to rate your understanding of the module. Please click Take Quiz or cancel.
+  </ConfirmationModal>
+</Link>
+
+
+      {/* <Modal open={openNew} onClose={onCloseModal} center
       closeOnOverlayClick={false}
       classNames={{
         overlay: 'customOverlay',
@@ -195,15 +209,18 @@ const getComments=async (id:string)=>{
       }}
       >
         <Quiz />
-      </Modal>
+      </Modal> */}
       <div className="d-flex flex-wrap align-items-end mb-16pt">
         <h1 className="text-white flex m-0">{module?.title}</h1>
-        <p className="h1 text-white-50 font-weight-light m-0">{video?.length}</p>
+        <p className="h1 text-white-50 font-weight-light m-0" >{video?.length}</p>
       </div>
-      <p className="hero__lead measure-hero-lead text-white-50 mb-24pt">{video?.description}</p>
+      <p 
+      onClick={() =>  alert(`VideoId ",${video?.id}`)}
+      className="hero__lead measure-hero-lead text-white-50 mb-24pt">{video?.description}</p>
       <a
         onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-          handlePlayClick(e);
+         
+          handlePlayClick(e,video?.id);
           window.scrollTo({
             top: 0,
             behavior: 'smooth',
