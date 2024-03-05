@@ -45,6 +45,8 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "universal-cookie";
+import { createDocumentDetails, getSelectedDocumentForEdit, updateDocumentDetail } from "@/app/redux/documentSice";
+import { IDocument } from "@/app/interfaces/document";
 
 interface EditCourseModalProps {
   onClose: () => any;
@@ -129,6 +131,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [quizId, setQuizId] = useState<string>("")
   const [videoDescription, setVideoDescription] = useState<string>("");
   const [date, setDate] = useState<string>("");
+  const [document, setDocument] = useState<any>()
 
   const [videoReference, setVideoReference] = useState<any>("")
   const [hideSaveChangesBtn, setHideSaveChangesBtn] = useState(false)
@@ -136,6 +139,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
   const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit);
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+
 
   console.log("Quizzes to Edit", _quizzesFromState)
 
@@ -484,15 +489,7 @@ setChangeEditQuizQuestionContent(false);
 
   //Dcoument functions start here
 
-  const handleDocument = (e: any) => {  
-    const formData = new FormData();
-    const file = e.target.files[0];
 
-    if (file) {
-      formData.append("document", file);
-      setDocumentName(file.name);
-    }
-  };
   const addDocument = (e: any) => {
     setIncludeDocument(false);
     if (!videoId) {
@@ -529,7 +526,34 @@ setChangeEditQuizQuestionContent(false);
   };
   //Document functions ends here
 
-
+  const handleChangeDocument = (e:any) => {
+    if(document){
+     const file = e.target.files[0];
+     if (file) {
+       setDocument(file);
+     }
+     const payload = {
+       title: file ? file.name : "",
+       reference:videoReference,
+        url :"",
+       file: file ? file : null 
+     }
+     dispatch(updateDocumentDetail(payload));
+    }else{
+     const file = e.target.files[0];
+     if (file) {
+       setDocument(file);
+     }
+     const payload = {
+       title: file ? file.name : "",
+       reference:videoReference,
+        url :"",
+       file: file ? file : null 
+     }
+     dispatch(createDocumentDetails(payload));
+    }
+ 
+ }
   const moduleToolbar = {
     toolbar: [
       [{ header: "1" }, { header: "2" }],
@@ -609,6 +633,11 @@ setChangeEditQuizQuestionContent(false);
 
 
   useEffect(() => {
+    const videoDoc = _documentsFromState.filter((doc:IDocument) => doc.reference ===videoReference)[0];
+    console.log("documents",videoDoc);
+    if(videoDoc){
+      setDocument(videoDoc.file);
+    }
     const quiz:IQuiz[] = _quizzesFromState.filter((quiz:IQuiz) => quiz.videoId === videoId);
     if(quiz.length > 0){
       setHasQuiz(true);
@@ -698,12 +727,10 @@ setChangeEditQuizQuestionContent(false);
             </div>
             <div className="col-auto border-left border-right">
               <a
-                href="#"
-                data-toggle="tab"
+               
                 style={{cursor:"pointer"}}
                 onClick={addQuiz}
-                role="tab"
-                aria-selected="true"
+               
                 className={
                   toggler === 2
                     ? "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
@@ -1575,7 +1602,7 @@ setChangeEditQuizQuestionContent(false);
                     <input
                       type="file"
                       id="file"
-                      onChange={handleDocument}
+                      onChange={handleChangeDocument}
                       className="custom-file-input"
                     />
                     <label className="custom-file-label">Choose file</label>
@@ -1583,7 +1610,7 @@ setChangeEditQuizQuestionContent(false);
                 </div>
 
                 <p style={{ color: "rgba(39,44,51,.35)", paddingTop: "10px" }}>
-                  {documentName}
+                  {document?.name}
                 </p>
               </div>
 

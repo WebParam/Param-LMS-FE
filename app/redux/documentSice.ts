@@ -10,9 +10,6 @@ const initialState: IDocumentState = {
     documents: [] as IDocument[],
 };
 
-const generateUniqueId = () => {
-    return Math.random().toString(36).substring(7);
-};
 
 const today = new Date();
 const year = today.getFullYear();
@@ -40,15 +37,12 @@ export const documentSlice = createSlice({
                 modifyingUser: loogedInUser?.id,
                 reference: _action.reference,
                 title: _action.title,
-                url: "gugg",
+                url: "",
                 file: _action.file,
                 modifiedDate: todayDate,
                 state: 0,
             };
-  //   Object.entries(_documentsFromState[0]).map(([key, value]) => {
-  //     formData.append(key, value);
-  //     console.log("Appended key:", key, "with value:", value);
-  //   });
+
             state.documents.push(newDocument);
         },
 
@@ -61,6 +55,7 @@ export const documentSlice = createSlice({
                     title: _action.title,
                     modifyingUser:loogedInUser?.id,
                     file: _action.file,
+                    url:""
                 };
             }
         },

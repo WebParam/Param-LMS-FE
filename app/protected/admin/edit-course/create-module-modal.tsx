@@ -35,7 +35,7 @@ import Cookies from "universal-cookie";
 import { Dropdown } from "react-bootstrap";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IDocument } from "@/app/interfaces/document";
-import { getSelectedDocumentForEdit, setSelectedDocumentForEdit } from "@/app/redux/documentSice";
+import { createDocumentDetails, getSelectedDocumentForEdit, setSelectedDocumentForEdit, updateDocumentDetail } from "@/app/redux/documentSice";
 
 
 interface CreateCourseModalProps {
@@ -159,6 +159,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [videoDescError, setVideoDescError] = useState(false);
   const [videoUrlError, setVideoUrlError] = useState(false);
 const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
+const [document, setDocument] = useState<any>("")
 
   const [videoReference, setVideoReference] = useState<string>("")
 
@@ -485,19 +486,41 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
   
     //Dcoument functions start here
 
-    const handleDocument = (e: any) => {
-      const formData = new FormData();
+
+
+    const handleChangeDocument = (e:any) => {
+     if(document){
       const file = e.target.files[0];
-  
       if (file) {
-        formData.append("document", file);
-        setDocumentName(file.name);
+        setDocument(file);
       }
-    };
+      const payload = {
+        title: file ? file.name : "",
+        reference:videoReference,
+         url :"",
+        file: file ? file : null 
+      }
+      dispatch(updateDocumentDetail(payload));
+     }else{
+      const file = e.target.files[0];
+      if (file) {
+        setDocument(file);
+      }
+      const payload = {
+        title: file ? file.name : "",
+        reference:videoReference,
+         url :"",
+        file: file ? file : null 
+      }
+      dispatch(createDocumentDetails(payload));
+     }
+  
+  }
+ 
     const addDocument = (e: any) => {
       setIncludeDocument(false);
-      if (modules.length === 0) {
-        let _id = toast.loading("Please add module first..", {
+      if (!videoId) {
+        let _id = toast.loading("Please add video first..", {
           //loader
           position: "top-center",
           autoClose: 1000,
@@ -598,6 +621,11 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
   setVideoLink(video[0]?.videoLink);
   setVideoId(video[0]?.id)
   setVideoReference(video[0]?.reference)
+  const videoDoc = _documentsFromState.filter((doc:IDocument) => doc.reference === video[0]?.reference)[0];
+  console.log("documents",videoDoc);
+  if(videoDoc){
+    setDocument(videoDoc.file);
+  }
 
   }
 
@@ -1931,7 +1959,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
                     <input
                       type="file"
                       id="file"
-                      onChange={handleDocument}
+                      onChange={handleChangeDocument}
                       className="custom-file-input"
                     />
                     <label className="custom-file-label">Choose file</label>
@@ -1939,7 +1967,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
                 </div>
 
                 <p style={{ color: "rgba(39,44,51,.35)", paddingTop: "10px" }}>
-                  {documentName}
+                  {document?.name}
                 </p>
               </div>
 

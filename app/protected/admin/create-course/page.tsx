@@ -39,6 +39,10 @@ import { getSelectedQuizForEdit } from "@/app/redux/quizSlice";
 import Sidebar from "@/app/components/Sidebar";
 import { IDocument } from "@/app/interfaces/document";
 import { getSelectedDocumentForEdit } from "@/app/redux/documentSice";
+import { CreateCourseAssessmentModal } from "./create-assessment";
+import { IAssessment } from "@/app/interfaces/assessment";
+import { createAssessmentDetail, getSelectedAssessmentForEdit } from "@/app/redux/assessmentSlice";
+
 
 // Define interface for ReactQuill props
 interface ReactQuillProps {
@@ -89,6 +93,8 @@ function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [editModuleModalOpen, setEditModuleModalOpen] =
     useState<boolean>(false);
+    const [createAssessmentModalOpen, setCreateAssessmentModuleModalOpen] =
+    useState<boolean>(false);
   const [competency, setCompetency] = useState<string>("");
   const [sectionTitle, setSectionTitle] = useState<string>("");
   const [disableSectionInput, setDisableSectionInput] =
@@ -115,7 +121,9 @@ function EditCourse() {
 
   const [videoId, setVideoId] = useState<string>("");
   const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _assessmentFromState : IAssessment = useSelector(getSelectedAssessmentForEdit).assessment
   console.log("Course", _courseFromState);
+    console.log("Assessment", _assessmentFromState);
 
   console.log("Quizzes from state", _quizzesFromState);
 
@@ -160,6 +168,9 @@ function EditCourse() {
   }
 
   function saveAndCloseEditModuleModal() {
+    setEditModuleModalOpen(false);
+  }
+  function saveAndCloseCreateAssessmentModuleModal() {
     setEditModuleModalOpen(false);
   }
 
@@ -220,9 +231,7 @@ function EditCourse() {
     dispatch(createCourseDetail(payload));
   };
 
-  const handleDescriptionChange = () => {
-    dispatch(createCourseDetail(payload))
-};
+
 
   async function createCourse() {
    const plainDescription = courseDescription ? courseDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '') : _courseFromState.description.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
@@ -259,6 +268,18 @@ function EditCourse() {
       )!;
 
       if (createCourseResponse?.data?.id) {
+        const assessment = {
+          courseId : createCourseResponse?.data?.id, 
+      questions  :_assessmentFromState.questions,
+      createdByUserId  : _assessmentFromState.createdByUserId,
+      createdDate  : _assessmentFromState.createdDate,
+      modifiedByUserId  : _assessmentFromState.modifiedByUserId, 
+      modifiedAt  : _assessmentFromState.modifiedAt, 
+        dueDate  : _assessmentFromState.dueDate
+        }
+
+        const postAssessment = await Api.POST_AddAssessments(assessment);
+        debugger;
         const uploadDocuments = await Api.POST_Document(_formData);
         const courseId: string = createCourseResponse.data?.id!;
         const uploadImageResponse = await Api.POST_Image(courseId, formData);
@@ -382,6 +403,14 @@ debugger;
     setNewSection(true);
   };
 
+  const createAssessment = () => {
+    const payload = {
+      dueDate : "",
+    }
+    if(_assessmentFromState.courseId === ""){
+      dispatch(createAssessmentDetail(payload));
+    }
+  }
 
   useEffect(() => {
     const sectionIds = _courseFromState?.sections?.map((section) => section.id);
@@ -440,6 +469,23 @@ debugger;
           />
           {/* <EditCourseModal /> */}
         </Modal>
+
+        <Modal
+          styles={customModalStyles}
+          open={createAssessmentModalOpen}
+          onClose={() => {
+            setCreateAssessmentModuleModalOpen(false);
+          
+          }}
+          center
+        >
+          <CreateCourseAssessmentModal
+            onClose={saveAndCloseCreateAssessmentModuleModal}
+          />
+          {/* <EditCourseModal /> */}
+        </Modal>
+
+        
         <Modal
           styles={customModalStyles}
           open={editModalOpen}
@@ -1057,7 +1103,27 @@ debugger;
                     </div>
                   </div>
                 </div>
-              </div>
+           
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                  className="page-separator"
+                >
+                  <div className="page-separator__text">Assessments</div>
+                          <FaPlus
+                            onClick={() => {
+                              setCreateAssessmentModuleModalOpen(true);
+                              createAssessment();
+                            }}
+                            style={{ cursor: "pointer" }}
+                          />
+                        </div>     
+                    </div>
+              
               <div className="col-md-4">
                 <div className="card">
                   <div className="card-header text-center">
@@ -1091,7 +1157,7 @@ debugger;
                   <div className="card-body">
                     <div className="form-group">
                       <label className="form-label">
-                        Image url{" "}
+                        Image url
                         {imgError && (
                           <span
                             style={{ color: "tomato", fontWeight: "500px" }}
@@ -1142,42 +1208,11 @@ debugger;
         </div>
         {/* // END Page Content */}
         {/* Footer */}
-        <div className="bg-body border-top-2 mt-auto">
-          <div className="container page__container page-section d-flex flex-column">
-            <p className="text-70 brand mb-24pt">
-              <img
-                className="brand-icon"
-                src="../../public/images/logo/black-70@2x.png"
-                width={30}
-                alt="Luma"
-              />{" "}
-              Luma
-            </p>
-            <p className="measure-lead-max text-50 small mr-8pt">
-              Luma is a beautifully crafted user interface for modern Education
-              Platforms, including Courses &amp; Tutorials, Video Lessons,
-              Student and Teacher Dashboard, Curriculum Management, Earnings and
-              Reporting, ERP, HR, CMS, Tasks, Projects, eCommerce and more.
-            </p>
-            <p className="mb-8pt d-flex">
-              <a href="" className="text-70 text-underline mr-8pt small">
-                Terms
-              </a>
-              <a href="" className="text-70 text-underline small">
-                Privacy policy
-              </a>
-            </p>
-            <p className="text-50 small mt-n1 mb-0">
-              Copyright 2019 © All rights reserved.
-            </p>
-          </div>
-        </div>
-        {/* // END Footer */}
+       
       </div>
 
       {}
       <Sidebar />
-      {/* // END drawer */}
     </div>
   );
 }

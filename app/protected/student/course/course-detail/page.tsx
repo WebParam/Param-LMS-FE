@@ -38,6 +38,8 @@ export default function CourseDetail() {
   const [open, setOpen] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [expandedSection, setExpandedSection] = useState<any>(null);
+  const [hideSidebar, setHideSidebar] = useState<boolean>(true)
+  
   const [duration, setDuration] = useState(0);
 
   const handleDuration = (duration:any) => {
@@ -49,7 +51,9 @@ export default function CourseDetail() {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
-
+  const HideSidebar = () => {
+    setHideSidebar((prev) => !prev)
+  }
 
   const playerRef = useRef(null);
 
@@ -176,13 +180,15 @@ console.log("Vidoes",allVideos)
       handleVideoEnd= {handleVideoEnd}
       open= {open}
       handleDuration={handleDuration}
+      HideSidebar = {hideSidebar}
+      viewSidebar ={HideSidebar}
+
       />
   </div>
     
        
-<div style={{width:"300px"}}>
-<VideoSibar duration = {formatDurationToMinutes(duration)} sections={sections} handleVideoSelect={handleVideoSelect}/>
-
+<div  style={hideSidebar ? { width: "300px" , } : {display:"none"}}>
+<VideoSibar HideSidebar = {HideSidebar} duration = {formatDurationToMinutes(duration)} sections={sections} handleVideoSelect={handleVideoSelect}/>
 </div>
 
  </div>

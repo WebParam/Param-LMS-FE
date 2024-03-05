@@ -43,12 +43,22 @@ export default function AllCourses() {
       console.error("Error fetching quizzes:", error);
     }
   }
+
+      
+  async function getMarks () {
+    const getMarks = await Api.GET_AllStudentMarks();
+    const mappedMarks = getMarks.map((quiz: any) => quiz.data);
+    localStorage.setItem("student-marks", JSON.stringify(mappedMarks));
+
+  }
+  
   
 
   
 useEffect(() => {
    getStudentCourses();
    getAllQuizzes()
+   getMarks()
   }, []);
 
 

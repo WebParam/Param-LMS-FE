@@ -9,6 +9,7 @@ import { persistStore, persistReducer ,
 import storage from 'redux-persist/lib/storage';
 import { courseSlice } from "../redux/courseSlice";
 import { quizSlice } from "../redux/quizSlice";
+import { assessmentSlice } from "../redux/assessmentSlice";
 import {documentSlice } from "../redux/documentSice";
 
 const persistCourse = {
@@ -23,6 +24,13 @@ const persistQuiz = {
   whitelist: ['quiz'], 
 };
 
+
+const persistAssessment = {
+  key: 'assessment',
+  storage: storage, // Change this to localStorage
+  whitelist: ['assessment'], 
+};
+
 const persistDocument = {
   key: 'document',
   storage: storage, // Change this to localStorage
@@ -32,12 +40,14 @@ const persistDocument = {
 const persistedCourseReducer = persistReducer(persistCourse, courseSlice.reducer);
 const persistedQuizReducer = persistReducer(persistQuiz, quizSlice.reducer);
 const persistedDocumentReducer = persistReducer(persistDocument, documentSlice.reducer);
+const persistedAssessmentReducer = persistReducer(persistAssessment, assessmentSlice.reducer);
 
 export const store = configureStore({
   reducer: {
     course: persistedCourseReducer, 
     quizzes: persistedQuizReducer,
-    documents: persistedDocumentReducer
+    documents: persistedDocumentReducer,
+    assessment : persistedAssessmentReducer
   },
   devTools: true,
   middleware: (getDefaultMiddleware) =>

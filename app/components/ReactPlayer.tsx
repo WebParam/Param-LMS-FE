@@ -1,8 +1,10 @@
 "use client"
 import { ISection } from '@/app/interfaces/courses'
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal'
-import React from 'react'
+import React, { useState } from 'react'
+import { FaArrowLeft } from 'react-icons/fa'
 import ReactPlayer from 'react-player'
+import "./react-player.css"
 
 interface ReactPlayerProps {
   selectedVideo:string
@@ -12,14 +14,19 @@ interface ReactPlayerProps {
   open :any
   handleVideoEnd :() => void
   handleDuration :any
+  HideSidebar  : any
+  viewSidebar :() => void
 }
-function VideoPlayer({selectedVideo,sections,cancelQuiz,openQuiz,open,handleVideoEnd,handleDuration}:ReactPlayerProps) {
- 
+function VideoPlayer({selectedVideo,sections,cancelQuiz,openQuiz,open,handleVideoEnd,handleDuration,HideSidebar,viewSidebar}:ReactPlayerProps) {
+
   return (
 
         <div>
 
 <div  className="player-wrapper " style={{ width: '100%',  }}>
+    <div className='arrow'>
+    <FaArrowLeft onClick={viewSidebar} style={!HideSidebar ? {fontSize:"25px", cursor:"pointer"}  : {display:"none"}}/>
+    </div>
       <ReactPlayer
         url={selectedVideo}
         playing={true}

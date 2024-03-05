@@ -7,10 +7,11 @@ import { FaVideo } from 'react-icons/fa'
 interface VideoSidebarProps {
     sections:ISection[]
     duration:any
+    HideSidebar:  () => void
     handleVideoSelect: (video:IVideo) => void
 }
 
-function VideoSibar({sections,handleVideoSelect,duration}: VideoSidebarProps) {
+function VideoSibar({sections,handleVideoSelect,duration,HideSidebar}: VideoSidebarProps) {
     const [expandedSection, setExpandedSection] = useState(null)
   
     const handleSectionClick = (section: any) => {
@@ -25,16 +26,17 @@ function VideoSibar({sections,handleVideoSelect,duration}: VideoSidebarProps) {
     return (
     <div  className="section">
 <div className='video-sidebar'>
-    <h3 style={{ backgroundColor:"white", padding:"10px 0px 10px 20px"}}>Course Content <span style={{fontSize:"medium", paddingLeft:"80px", fontWeight:"600", cursor:"pointer"}}>X</span></h3>
+    <h3 style={{ backgroundColor:"white", padding:"10px 0px 10px 20px"}}>Course Content <span onClick={HideSidebar} style={{fontSize:"medium", paddingLeft:"80px", fontWeight:"600", cursor:"pointer"}}>X</span></h3>
     {sections.map((section: ISection, index:number) => (
 <div
                 className={`accordion__item sidebar-content ${
                   expandedSection === section.id ? "open" : ""
                 }`}
                 key={section.id}
+                style={{minHeight: '100px', overflowY:'scroll'}}
               >
                 <a
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", fontSize: '1px' }}
                   className="accordion__toggle"
                   data-toggle="collapse"
                   data-target={`#course-toc-${section.id}`}
@@ -42,7 +44,7 @@ function VideoSibar({sections,handleVideoSelect,duration}: VideoSidebarProps) {
               
                 >
                   <span
-                  onClick={() => handleSectionClick(section)}
+           
                     style={{ cursor: "pointer", width:"100vh", fontSize: "large", fontWeight:"600"}}
                     
                   >
@@ -50,7 +52,7 @@ function VideoSibar({sections,handleVideoSelect,duration}: VideoSidebarProps) {
                   </span>
                 
 
-                  <span className="accordion__toggle-icon material-icons">
+                  <span className="accordion__toggle-icon material-icons"        onClick={() => handleSectionClick(section)}>
                     keyboard_arrow_down
                   </span>
                 </a>

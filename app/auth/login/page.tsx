@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Api } from '../../lib/restapi/endpoints';
@@ -38,9 +38,7 @@ export default function Login() {
     router.push('/auth/register');
   };
 
- 
 
-  
 
 async function LoginUser (event:any){
   cookies.remove('param-lms-user')
@@ -96,15 +94,8 @@ async function LoginUser (event:any){
      console.log(user.data);
   
      console.log("Role",user?.data?.role);
-     if(user?.data?.role=="Admin")
-     {
-       window.location.href = '/protected/admin/manage-courses'; 
-     }
-     else{
-       window.location.href = '/protected/student/course/all-courses'; 
-       console.log(user.data);
-
-     }
+     router.push('/protected/student/course/all-courses')
+   
     }else{
       toast.update(_id, {
         render: "Invalid login credentials",

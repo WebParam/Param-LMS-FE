@@ -33,7 +33,7 @@ import {
 import Cookies from "universal-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {  createDocumentDetails, getSelectedDocumentForEdit } from "@/app/redux/documentSice";
+import {  createDocumentDetails, getSelectedDocumentForEdit, updateDocumentDetail } from "@/app/redux/documentSice";
 import { IDocument } from "@/app/interfaces/document";
 
 
@@ -159,15 +159,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   
   console.log("Documents from state", _documentsFromState);
 
-  // const handleDescriptionChange = (content: string, _: any, source: string) => {
-  //   if (source === "user") {
-  //     const plainDescription = content.replace(/<\/?p>/gi, "");
 
-  //     setCourseDescription(plainDescription);
-
-  //     dispatch(createCourseDetail(payload));
-  //   }
-  // };
 
   const onChange = (isChecked: boolean , id : string) => {
 
@@ -473,6 +465,8 @@ setChangeEditQuizQuestionContent(false);
     setChoiceDescription("");
 
   };
+
+  
   const nextQuestion = () => {
     if (questionNumber < questions.length) {
       setQuestionNumber(questionNumber + 1);
@@ -526,27 +520,31 @@ setChangeEditQuizQuestionContent(false);
   };
 
   const handleChangeDocument = (e:any) => {
+   if(document){
     const file = e.target.files[0];
-
     if (file) {
       setDocument(file);
-      console.log("Selected file", file)
     }
-
     const payload = {
       title: file ? file.name : "",
       reference:videoReference,
        url :"",
       file: file ? file : null 
     }
-    //   const formData = new FormData();
-    // Object.entries(payload).forEach(([key, value]) => {
-    //   formData.append(key, value);
-    //   console.log("Appended key:", key, "with value:", value);
-    // });
-
+    dispatch(updateDocumentDetail(payload));
+   }else{
+    const file = e.target.files[0];
+    if (file) {
+      setDocument(file);
+    }
+    const payload = {
+      title: file ? file.name : "",
+      reference:videoReference,
+       url :"",
+      file: file ? file : null 
+    }
     dispatch(createDocumentDetails(payload));
-    console.log("Document from state", _documentFromState);
+   }
 
 }
   //Document functions ends here
@@ -593,20 +591,10 @@ setChangeEditQuizQuestionContent(false);
 
 
       dispatch(addVideoToModule(payload));
-
-
-
-
-
       setDisableSaveChanges(true);
       setHideSaveChangesBtn(true)
       setDisableModuleInputs(true);
-    
   
-
-
-
-
     }else{
       if(!videoDescription){
         setVideoDescError(true);
@@ -685,7 +673,11 @@ setChangeEditQuizQuestionContent(false);
   setVideoLink(video[0]?.videoLink);
   setVideoId(video[0]?.id)
   setVideoReference(video[0]?.reference)
-
+  const videoDoc = _documentsFromState.filter((doc:IDocument) => doc.reference === video[0]?.reference)[0];
+  console.log("documents",videoDoc);
+  if(videoDoc){
+    setDocument(videoDoc.file);
+  }
   }
 
   const newVideo = () => {
@@ -712,6 +704,7 @@ setChangeEditQuizQuestionContent(false);
       setVideoReference("");
       setIsQuestionCreated(false);
       setQuestionDescription("");
+      setDocument("");
       setPoints(0);
       setQuizId("");
       setVideoIdForEdit("")
