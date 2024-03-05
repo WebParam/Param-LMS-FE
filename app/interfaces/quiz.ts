@@ -7,12 +7,31 @@ export interface IChoice {
     isCorrect: boolean;
 }
 
+
 export interface IQuestion {
     id: string;
     questionDescription: string;
     choices: IChoice[];
     points: number
+    order: number
+    criteria?: string
+
+}
+
+export interface IAssessmentChoice {
     order: number;
+    choiseDescription: string;
+    isCorrect: boolean;
+}
+
+
+export interface IAssessmentQuestion {
+    id: string;
+    questionDescription: string;
+    choices: [];
+    points: number
+    order: number
+    criteria: string
 
 }
 
@@ -78,4 +97,18 @@ export interface IMarks {
     createdAt: string
     reference: string
     status: number
+}
+
+
+
+export interface IAssessment{
+    id:string
+    CourseId:string
+    Questions: IQuestion[]
+    createdByUserId: string
+    createdDate: string
+    modifiedByUser: string
+    modifiedAt: string
+    dueDate: string
+    duration: string
 }

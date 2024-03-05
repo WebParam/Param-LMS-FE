@@ -1,6 +1,4 @@
 "use client"
-import Image from 'next/image'
-import styles from './page.module.css'
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';

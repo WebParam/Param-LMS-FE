@@ -5,6 +5,7 @@ import { IUser, IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/use
 import  IComment, { ICommentReply }  from "@/app/interfaces/comment";
 import { IRating } from "@/app/interfaces/Rating";
 import { get } from "http";
+import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import { IMarks, IQuiz } from "@/app/interfaces/quiz";
 import { IAssessment } from "@/app/interfaces/assessment";
 
@@ -23,6 +24,10 @@ export const commentReadUrl="https://localhost:61280/api";
 export const commentWriteUrl="https://localhost:61275/api";
 
 export const quizReadUrl = "https://khumla-dev-quiz-read.azurewebsites.net/api";
+
+export const assessmentWriteUrl = "https://khumla-dev-assessment-write.azurewebsites.net/api";
+
+export const assessmentReadUrl = "https://khumla-dev-assessment-read.azurewebsites.net/api";
 
 export const quizWriteUrl ="https://khumla-dev-quiz-write.azurewebsites.net/api";
 
@@ -277,6 +282,18 @@ GET_AllStudentMarks: async (
   return response;
 },
 
+
+GET_CourseAssessment: async (courseId:string) => {
+  const response = await GET(`${assessmentReadUrl}/Assessments/GetAssessment?id=${courseId}`);
+  return response.data;
+},
+
+POST_StudentAnswers: async (
+  payload: IStudentAnswer
+): Promise<IResponseObject<IStudentAnswer>> => {
+  const response = await POST(`${assessmentWriteUrl}/StudentAnswers/AddStudentAnswer`, payload);
+  return response;
+},
 
 
 POST_Document: async ( payload:any)
