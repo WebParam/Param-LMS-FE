@@ -8,17 +8,22 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  /* border: red solid 2px ; */
+  overflow-y: scroll;
+  max-height: 500px; 
 }
 
 .player-wrapper {
   position: relative;
   padding-top: 56.25%; /* 720 / 1280 = 0.5625 */
   width: 100vh;
+
 }
 
 .react-player {
   position: absolute;
   top: 0;
+  z-index: 0;
   left: 0;
   height: auto !important;
   object-fit: fill;
@@ -80,4 +85,9 @@ width: 100vh;
 
 .react-player-container{
 padding-left: 15px;
+}
+
+.sidebar-content{
+  max-height:   200px;
+   overflow: auto
 }

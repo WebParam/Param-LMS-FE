@@ -727,12 +727,10 @@ setChangeEditQuizQuestionContent(false);
             </div>
             <div className="col-auto border-left border-right">
               <a
-                href="#"
-                data-toggle="tab"
+               
                 style={{cursor:"pointer"}}
                 onClick={addQuiz}
-                role="tab"
-                aria-selected="true"
+               
                 className={
                   toggler === 2
                     ? "dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
@@ -1612,7 +1610,7 @@ setChangeEditQuizQuestionContent(false);
                 </div>
 
                 <p style={{ color: "rgba(39,44,51,.35)", paddingTop: "10px" }}>
-                  {document.name}
+                  {document?.name}
                 </p>
               </div>
 

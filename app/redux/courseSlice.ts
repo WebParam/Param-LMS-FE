@@ -15,7 +15,7 @@ const loogedInUser = cookies.get('param-lms-user');
 function sortSectionByOrder(a: ISection, b: ISection) {
   return a.order - b.order;
 }
-
+                                          
 const initialState: ICourseState = {
     course: {
         id: generateUniqueId(),

@@ -6,6 +6,7 @@ import  IComment, { ICommentReply }  from "@/app/interfaces/comment";
 import { IRating } from "@/app/interfaces/Rating";
 import { get } from "http";
 import { IMarks, IQuiz } from "@/app/interfaces/quiz";
+import { IAssessment } from "@/app/interfaces/assessment";
 
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
@@ -27,8 +28,11 @@ export const quizWriteUrl ="https://khumla-dev-quiz-write.azurewebsites.net/api"
 
 export const documentWrite = "https://e4e7-154-0-14-142.ngrok-free.app/api"
 
-
 export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
+
+export const assessmentWrite = "https://khumla-dev-assessment-write.azurewebsites.net/api"
+
+
 
 
 
@@ -189,11 +193,21 @@ DELETE_CourseById: async (
             console.log("Author response:",user);
            return user;
           },
+
+
+          
   POST_AddComment:async (payload:IComment)
   :Promise<IResponseObject<IComment>>=>{
     const response = await POST(`${commentWriteUrl}/Comments/AddComment`,payload);
     return response;
   },
+
+  POST_AddAssessments:async (payload:IAssessment)
+  :Promise<IResponseObject<IAssessment>>=>{
+    const response = await POST(`${assessmentWrite}/Assessments/AddAssessment`,payload);
+    return response;
+  },
+
 
   POST_AddRating:async (payload:IRating)
   :Promise<IResponseObject<IRating>>=>{
@@ -236,7 +250,7 @@ DELETE_CourseById: async (
   
   PUT_UpdateMarks: async (payload: IMarks): Promise<IResponseObject<IQuiz[]>> => {
     try {
-      const response = await PUT(`${quizWriteUrl}/Marks/UpdateMark`,payload);
+      const response = await PUT(`${quizWriteUrl}/Marks/UpdateMarks`,payload);
       return response;
     } catch (error) {
       console.error("Error updating quizzes:", error);

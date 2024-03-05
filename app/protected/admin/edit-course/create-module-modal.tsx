@@ -519,8 +519,8 @@ const [document, setDocument] = useState<any>("")
  
     const addDocument = (e: any) => {
       setIncludeDocument(false);
-      if (modules.length === 0) {
-        let _id = toast.loading("Please add module first..", {
+      if (!videoId) {
+        let _id = toast.loading("Please add video first..", {
           //loader
           position: "top-center",
           autoClose: 1000,
