@@ -5,6 +5,8 @@ import React, { useState } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
 import ReactPlayer from 'react-player'
 import "./react-player.css"
+import { useSelector } from 'react-redux'
+import { getSelectedCourseForEdit } from '../redux/courseSlice'
 
 interface ReactPlayerProps {
   selectedVideo:string
@@ -18,6 +20,10 @@ interface ReactPlayerProps {
   viewSidebar :() => void
 }
 function VideoPlayer({selectedVideo,sections,cancelQuiz,openQuiz,open,handleVideoEnd,handleDuration,HideSidebar,viewSidebar}:ReactPlayerProps) {
+
+
+
+
 
   return (
 
