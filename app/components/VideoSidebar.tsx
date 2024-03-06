@@ -1,7 +1,9 @@
 "use client"
-import { ISection, IVideo } from '@/app/interfaces/courses'
+import { IModule, ISection, IVideo } from '@/app/interfaces/courses'
 import React, { useState } from 'react'
 import { FaVideo } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
+import { getSelectedCourseForEdit } from '../redux/courseSlice'
 
 
 interface VideoSidebarProps {
@@ -13,12 +15,30 @@ interface VideoSidebarProps {
 
 function VideoSibar({sections,handleVideoSelect,duration,HideSidebar}: VideoSidebarProps) {
     const [expandedSection, setExpandedSection] = useState(null)
-  
+    const _courseFromState= useSelector(getSelectedCourseForEdit).course;
+    const [height, setHeight] = useState<any>()
+
+    const findSection = (id: string) => {
+      const section = _courseFromState.sections.find((section: ISection) => section.id === id);
+    
+      const foundSection = _courseFromState.sections.find((section: ISection) => section.id === id);
+    
+      if (foundSection) {
+        const videosCount = foundSection.modules.reduce((acc:any, Module:IModule) => {
+          return acc + Module.videos.filter((video:IVideo) => parseInt(video.length) > 0).length;
+        }, 0);
+        const height = videosCount * 100;
+        setHeight(height);
+      }
+    };
+    
     const handleSectionClick = (section: any) => {
+      setExpandedSection(null);
         if (expandedSection === section.id) {
           setExpandedSection(null);
         } else {
           setExpandedSection(section.id);
+          findSection(section?.id)
         }
       };
   
@@ -33,7 +53,7 @@ function VideoSibar({sections,handleVideoSelect,duration,HideSidebar}: VideoSide
                   expandedSection === section.id ? "open" : ""
                 }`}
                 key={section.id}
-                style={{minHeight: '100px', overflowY:'scroll'}}
+             style={ expandedSection === section.id ? {minHeight: `${height}px`, overflowY:'scroll', scrollbarWidth: 'none',position:"relative" }:{minHeight: "100px", overflowY:'scroll', scrollbarWidth: 'none', }}
               >
                 <a
                   style={{ cursor: "pointer", fontSize: '1px' }}
@@ -57,7 +77,8 @@ function VideoSibar({sections,handleVideoSelect,duration,HideSidebar}: VideoSide
                   </span>
                 </a>
                 <div
-                  className={`accordion__menu collapse ${
+                  style={{position:"relative", zIndex:"10", marginBottom:"3em"}}
+className={`accordion__menu collapse ${
                     expandedSection === section.id ? "show" : ""
                   }`}
                   id={`course-toc-${section.id}`}
