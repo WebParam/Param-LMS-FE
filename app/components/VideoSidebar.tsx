@@ -47,87 +47,92 @@ function VideoSibar({sections,handleVideoSelect,duration,HideSidebar}: VideoSide
     <div  className="section">
 <div className='video-sidebar'>
     <h3 style={{ backgroundColor:"white", padding:"10px 0px 10px 20px"}}>Course Content <span onClick={HideSidebar} style={{fontSize:"medium", paddingLeft:"80px", fontWeight:"600", cursor:"pointer"}}>X</span></h3>
-    {sections.map((section: ISection, index:number) => (
-<div
-                className={`accordion__item sidebar-content ${
-                  expandedSection === section.id ? "open" : ""
-                }`}
-                key={section.id}
-             style={ expandedSection === section.id ? {minHeight: `${height}px`, overflowY:'scroll', scrollbarWidth: 'none',position:"relative" }:{minHeight: "100px", overflowY:'scroll', scrollbarWidth: 'none', }}
-              >
-                <a
-                  style={{ cursor: "pointer", fontSize: '1px' }}
-                  className="accordion__toggle"
-                  data-toggle="collapse"
-                  data-target={`#course-toc-${section.id}`}
-                  data-parent="#parent"
-              
+    <div
+                  className="accordion js-accordion accordion--boxed mb-24pt"
+                  id="parent"
                 >
-                  <span
-           
-                    style={{ cursor: "pointer", width:"100vh", fontSize: "large", fontWeight:"600"}}
-                    
-                  >
-                    Section {index+1} : {section.title}
-                  </span>
-                
-
-                  <span className="accordion__toggle-icon material-icons"        onClick={() => handleSectionClick(section)}>
-                    keyboard_arrow_down
-                  </span>
-                </a>
-                <div
-                  style={{position:"relative", zIndex:"10", marginBottom:"3em"}}
-className={`accordion__menu collapse ${
-                    expandedSection === section.id ? "show" : ""
-                  }`}
-                  id={`course-toc-${section.id}`}
-                >
-                  {section.modules?.map((Module) =>
-                    Module.videos.map((video: IVideo) => (
-                      <div
-                        style={{ cursor: "pointer",backgroundColor:"white" }}
-                        className="accordion__menu-link video-item"
-                        key={video.id}
+                  {_courseFromState.sections.map((section: ISection) => (
+                    <div
+                      className={`accordion__item ${
+                        expandedSection === section.id ? "open" : ""
+                      }`}
+                      key={section.id}
+                    >
+                      <a
+                        style={{ cursor: "pointer" }}
+                        className="accordion__toggle"
+                        data-toggle="collapse"
+                        data-target={`#course-toc-${section.id}`}
+                        data-parent="#parent"
+                        onClick={() => handleSectionClick(section)}
                       >
-
-                       
-                   
-                       <div className='video-info'>
-                       
-                    
-                       <a
-                       onClick={() => handleVideoSelect(video)}
-                         
-                    
-                      
+                        <span
+                          onClick={() => {
+                            // selectSection(section.id);
+                          }}
+                          style={{ cursor: "pointer" }}
+                          className="flex"
                         >
-                                        <input type="checkbox"   
-                         style={{paddingLeft:"5px"}}
-                        width="100px"
-                        height="100px"
- />
-                
-                     <span
-                     style={{paddingLeft:"5px", fontWeight:"600"}}
-                     >
+                          {section.title}
+                        </span>
+                        <button
+                          // onClick={() => handleDeleteSection(section.id)}
+                          style={{
+                            backgroundColor: "white",
+                            border: "none",
+                            outline: "none",
+                          }}
+                        >
+        
+                        </button>
 
-                     {video.title} 
-                     </span>
-                        </a>
-                        <div>
-                    
-                    <FaVideo/><span style={{fontSize:'small',paddingLeft:"5px"}}>{duration} min</span>
-                  
-                </div>
-                       </div>
-                  
+                        <span className="accordion__toggle-icon material-icons">
+                          keyboard_arrow_down
+                        </span>
+                      </a>
+                      <div
+                        className={`accordion__menu collapse ${
+                          expandedSection === section.id ? "show" : ""
+                        }`}
+                        id={`course-toc-${section.id}`}
+                      >
+                        {section.modules?.map((Module) =>
+                          Module.videos.map((video: IVideo) => (
+                            <div
+                              style={{ cursor: "pointer" }}
+                              className="accordion__menu-link"
+                              key={video.id}
+                            >
+                              <FaVideo
+                               
+                              
+                                className="video-icon"
+                              />
+                              <a
+                                style={{ marginLeft: "8px" }}
+                                className="flex"
+                             
+                              >
+                                {video.title}
+                              </a>
+                              <span className="text-muted">
+                                <button
+                                  style={{
+                                    backgroundColor: "white",
+                                    border: "none",
+                                    outline: "none",
+                                  }}
+                                >
+                               
+                                </button>
+                              </span>
+                            </div>
+                          ))
+                        )}
                       </div>
-                    ))
-                  )}
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
 
 </div>
     </div>

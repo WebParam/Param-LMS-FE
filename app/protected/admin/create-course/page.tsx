@@ -719,7 +719,6 @@ function EditCourse() {
                       </span>
                     </a>
                     <a
-                      href="javascript:void(0);"
                       className="list-group-item list-group-item-action"
                     >
                       <span className="d-flex align-items-center mb-1">
