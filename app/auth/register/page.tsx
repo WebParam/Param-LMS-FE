@@ -23,7 +23,7 @@ export default function Register() {
   const[ConfirmPassError, setConfirmPassError] = useState<boolean>(false)
   const[EmailError, setEmailError] = useState<boolean>(false)
   const[disable, setDisable] = useState<boolean>(false)
-const [role,setRole]=useState("Student")
+const [role,setRole]=useState("Admin")
 
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
