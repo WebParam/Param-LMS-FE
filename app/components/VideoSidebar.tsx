@@ -59,8 +59,7 @@ function VideoSibar({
 
   return (
     <div className="section">
-      <div className="video-sidebar">
-        <h3 style={{ backgroundColor: "white", padding: "10px 0px 10px 20px" }}>
+         <h3 style={{ backgroundColor: "white", padding: "10px 0px 10px 20px", borderBottom: "1px solid gray", }}>
           Course Content{" "}
           <span
             onClick={HideSidebar}
@@ -74,8 +73,9 @@ function VideoSibar({
             X
           </span>
         </h3>
-        {sections.map((section: ISection, index: number) => (
-          <div className="accordion js-accordion accordion--boxed " id="parent">
+      <div className="video-sidebar">
+     
+      <div className="accordion js-accordion accordion--boxed " id="parent">
             {_courseFromState.sections.map(
               (section: ISection, index: number) => (
                 <div className="" key={section.id}>
@@ -85,26 +85,28 @@ function VideoSibar({
                       backgroundColor: "#f5f7fa",
                       fontSize: "large",
                       borderBottom: "1px solid lightgrey",
-                      borderTop: "1px solid gray",
+                 
                     }}
                     className="accordion__toggle"
                     data-toggle="collapse"
                     data-target={`#course-toc-${section.id}`}
                     data-parent="#parent"
-                    onClick={() => handleSectionClick(section)}
                   >
                     <span
-                      onClick={() => {
-                        // selectSection(section.id);
-                      }}
+                    
                       style={{ cursor: "pointer" }}
                       className="flex"
                     >
                       Section {index + 1} : {section.title}
                     </span>
 
-                    <span className="accordion__toggle-icon material-icons">
-                      keyboard_arrow_down
+                    <span
+                                        onClick={() => handleSectionClick(section)}
+
+                    className="accordion__toggle-icon material-icons">
+                      {
+                        expandedSection === section.id ? "keyboard_arrow_up" : "    keyboard_arrow_down"
+                      }
                     </span>
                   </a>
                   <div
@@ -183,7 +185,6 @@ function VideoSibar({
               )
             )}
           </div>
-        ))}
       </div>
     </div>
   );

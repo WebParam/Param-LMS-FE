@@ -188,7 +188,7 @@ const Sidebar = () => {
   >
     <a
       className="sidebar-menu-button"
-      href="/protected/student/dashboard"
+      href="#"
       data-toggle="tab"
       role="tab"
       aria-controls="sm_apps"

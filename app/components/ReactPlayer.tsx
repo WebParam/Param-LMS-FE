@@ -47,7 +47,7 @@ function VideoPlayer({selectedVideo,sections,cancelQuiz,openQuiz,open,handleVide
 <div className="details" 
 style={{fontSize:"large"}}>
         {<h2>{sections[0]?.competency}</h2>}
-        { <p className="instructor">Instructor:John Smith</p> }
+        { <p className="instructor">{sections[0]?.modules[0]?.videos[0].description && "Instructor:John Smith"}</p> }
         { <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p> }
       </div>
       </div>
