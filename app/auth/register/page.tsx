@@ -168,7 +168,7 @@ debugger;
               });
               cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
 
-              router.push('/protected/student/course/all-courses');
+              router.push('/protected/admin/manage-courses');
 
             }
             else if(user.error){
