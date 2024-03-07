@@ -317,7 +317,7 @@ function EditCourse() {
         );
 
         const uploadQuizzes = await Api.POST_Quiz(updatedQuizzes);
-debugger;
+
         toast.update(_id, {
           render: "Successfully saved course",
           type: "success",
@@ -325,7 +325,7 @@ debugger;
         });
 
         setTimeout(() => {
-          localStorage.removeItem("persist:root")
+          localStorage.removeItem("persist:course")
           dispatch(deleteAllSections());
           setCourseTitle("");
           setCourseDescription("");

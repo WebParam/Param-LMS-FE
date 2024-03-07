@@ -166,8 +166,10 @@ debugger;
                 type: "success",
                 isLoading: false,
               });
-         
+              cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
+
               router.push('/protected/student/course/all-courses');
+
             }
             else if(user.error){
               console.log("response", user);
@@ -197,43 +199,6 @@ debugger;
         }
         
        
-      
-
-    
-        // axios
-        //   .post(
-        //     "https://86e8-154-0-14-142.ngrok-free.app/api/Users/AddUSer",
-        //     payload
-        //   )
-        //   .then((response: any) => {
-        //     console.log("response", response);
-    
-        //     toast.update(_id, {
-        //       render: "Successfully registered",
-        //       type: "success",
-        //       isLoading: false,
-        //     });
-    
-        //     // Set cookies here after successful login
-    
-        //     // Optionally, you can redirect the user to another page
-        //     navigateToLogin()
-        //   })
-        //   .catch((error: any) => {
-            
-        //     toast.update(_id, {
-        //       render: "Cannot register user with the supplied information",
-        //       type: "error",
-        //       isLoading: false,
-        //     });
-
-        //     setTimeout(() => {
-        //       setDisable(false)
-        //       toast.dismiss(_id);
-        //     }, 2000);
-
-        //     console.log(error);
-        //   });
     
       }
     }else{
