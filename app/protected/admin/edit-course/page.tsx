@@ -42,6 +42,7 @@ import { IQuiz } from "@/app/interfaces/quiz";
 import { getSelectedQuizForEdit, updateQuizzes } from "@/app/redux/quizSlice";
 import dynamic from "next/dynamic";
 import Cookies from "universal-cookie";
+import {useRouter} from "next/navigation"
 
 interface ReactQuillProps {
   style?: React.CSSProperties;
@@ -90,6 +91,7 @@ function EditCourse() {
 
   const cookies = new Cookies();
   const loogedInUser = cookies.get('param-lms-user');
+  const router = useRouter();
 
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -308,7 +310,7 @@ function EditCourse() {
         setTimeout(() => {
           toast.dismiss(_id);
         }, 2000);
-      //  window.location.href = "/protected/admin/manage-courses";
+        router.push("/protected/admin/manage-courses")
       }
     } catch (error) {
       toast.update(_id, {

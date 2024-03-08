@@ -94,7 +94,7 @@ async function LoginUser (event:any){
      console.log(user.data);
   
      console.log("Role",user?.data?.role);
-     router.push('/protected/admin/manage-courses')
+     router.push('/protected/student/course/all-courses')
    
     }else{
       toast.update(_id, {
@@ -121,42 +121,6 @@ async function LoginUser (event:any){
       console.log(error);
     }
 
-    // axios
-    // .post(
-    //   "https://86e8-154-0-14-142.ngrok-free.app/api/Users/Login",
-    //   payload
-    // )
-    // .then((response: any) => {
-    //   console.log("response", response);
-
-    
-    //   toast.update(_id, {
-    //     render: "Successfully logged in",
-    //     type: "success",
-    //     isLoading: false,
-    //   });
-
-    //   // Set cookies here after successful login
-    //   cookies.set('param-lms-user', response.data);
-
-    //   // Optionally, you can redirect the user to another page
-    //   window.location.href = '/protected/admin/manage-courses'; 
-
-    // })
-    // .catch((error: any) => {
-
- 
-    //   toast.update(_id, {
-    //     render: "error logging in.",
-    //     type: "error",
-    //     isLoading: false,
-    //   });
-    //   setTimeout(() => {
-    //     setDisable(false)
-    //     toast.dismiss(_id);
-    //   }, 2000);
-    //   console.log(error);
-    // });
 
   event?.preventDefault();
   }
