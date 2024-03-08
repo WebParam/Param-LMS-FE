@@ -1,5 +1,5 @@
 "use client"
-import { Suspense, useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';
 import { ICourse, ISection, IModule, IVideo } from '@/app/interfaces/courses';
@@ -11,15 +11,13 @@ import { getAuthor } from '@/app/lib/getAuthor';
 import IComment from '@/app/interfaces/comment';
 import "../../../../components/videoSidebar.css";
 import './main.css'
-import ReactPlayer from 'react-player';
+import ReactPlayer, { ReactPlayerProps } from 'react-player';
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
 import {useRouter} from "next/navigation";
 import { IQuiz } from '@/app/interfaces/quiz';
-import { getSelectedQuizForEdit } from '@/app/redux/quizSlice';
 import { FaVideo } from 'react-icons/fa';
 import VideoSibar from '../../../../components/VideoSidebar';
 import VideoPlayer from '../../../../components/ReactPlayer';
-
 
 export default function CourseDetail() {
 
@@ -32,19 +30,25 @@ export default function CourseDetail() {
   const [allVideos, setAllVideos] = useState<IVideo[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string>("");
   const [quizId, setQuizId] = useState<string>("")
-  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
   const [videoId, setVideoId] = useState<string>("")
-  console.log("Quizzes from state",_quizzesFromState)
   const [open, setOpen] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [expandedSection, setExpandedSection] = useState<any>(null);
   const [hideSidebar, setHideSidebar] = useState<boolean>(true)
-  
+  const [videoDurations, setVideoDurations] = useState<(number | null)[]>([]);
   const [duration, setDuration] = useState(0);
+  const playerRef = useRef(null);
+  const router = useRouter();
+
 
   const handleDuration = (duration:any) => {
-    setDuration(duration);
+    // Handle the duration only if it's a valid number
+    if (!isNaN(duration)) {
+      setDuration(duration);
+    }
   };
+  
+
+
   const formatDurationToMinutes = (durationInSeconds:any) => {
     const minutes = Math.floor(durationInSeconds / 60);
     const seconds = Math.floor(durationInSeconds % 60);
@@ -55,9 +59,6 @@ export default function CourseDetail() {
     setHideSidebar((prev) => !prev)
   }
 
-  const playerRef = useRef(null);
-
-  const router = useRouter();
 
 
 const cancelQuiz = () => {
@@ -69,7 +70,6 @@ const cancelQuiz = () => {
 }
 
   useEffect(() => {
-    // Set the initial video when the component mounts
     if (allVideos.length > 0) {
       setSelectedVideo(allVideos[currentVideoIndex].videoLink);
     }
@@ -85,9 +85,8 @@ const cancelQuiz = () => {
         .filter((quiz: IQuiz) => quiz.questions.length > 0);
       
         const currentVideoId = allVideos[currentVideoIndex].id;
-        console.log("ID",currentVideoId)
+   
         const getQuiz: IQuiz = quizzes.find((quiz: IQuiz) => quiz.videoId === currentVideoId);
-        console.log("Opened Quiz", getQuiz);
         if (getQuiz?.id) {
           setQuizId(getQuiz.id);
           setOpen(!open);
@@ -107,7 +106,7 @@ const cancelQuiz = () => {
     setSection(state?.sections);
     setVideoId(sections[0]?.modules[0]?.videos[0]?.id)
   
-    console.log("Link",sections[0]?.modules[0]?.videos[0].videoLink)
+ 
     state.sections.forEach((section:ISection) => {
         section.modules.forEach((Module:IModule) => {
             if (Module.videos.length > 0) {
@@ -118,31 +117,64 @@ const cancelQuiz = () => {
 
     setAllVideos(videos);
 
-    
+
+    console.log("Durations",videoDurations)
+
     setData(state);
     if (state) {
       setIsLoading(false);
     }
     getUserCourses(state?.creatingUser!);
     const fetchData = async () => {
-      console.log("sections", sections)
+
       setAuthor(await getAuthor(state?.creatingUser!));
 
       // Fetch comments
       var _comments = await Api.GET_CommentsByReference(state.id);
       if (_comments) {
         setComments(_comments?.map((comment) => comment.data) as any);
-        console.log("Comments", _comments);
       }
     }
     fetchData();
   }, []);
-console.log("Vidoes",allVideos)
+
+
+  useEffect(() => {
+    const fetchDurations = async () => {
+      const durations = await Promise.all(
+        allVideos.map(async (video:IVideo) => {
+          try {
+            const response = await fetch(video.videoLink);
+            const blob = await response.blob();
+            const objectURL = URL.createObjectURL(blob);
+
+            return new Promise<number>((resolve) => {
+              const player = React.createElement(ReactPlayer, {
+                url: objectURL,
+                controls: false, // Disable controls to prevent UI appearance
+                playing: false, // Not playing the video to avoid unnecessary network traffic
+                onDuration: (duration: number) => {
+                  resolve(duration);
+                },
+              });
+            });
+          } catch (error) {
+            console.error('Error fetching video duration:', error);
+            return null;
+          }
+        })
+      );
+      setVideoDurations(durations as (number | null)[]);
+      console.log("Durations", durations);
+    };
+
+    fetchDurations();
+  }, [allVideos]);
 
   async function getUserCourses(id: string) {
     var userCourses = await Api.GET_CoursesByUserId(id);
 
-    console.log("Author courses", userCourses?.data);
+  
   }
 
   const handleVideoSelect = (video: IVideo) => {
@@ -155,12 +187,10 @@ console.log("Vidoes",allVideos)
 
   const openQuiz = () => {
     setOpen(false);
-    console.log("open quiz");
     goToQuiz()
   }
 
-  console.log("VideoId", videoId);
-
+ 
   const goToQuiz = () => {
 
     router.push(`/protected/student/course/quiz?id=${quizId}`);
@@ -182,6 +212,7 @@ console.log("Vidoes",allVideos)
       handleDuration={handleDuration}
       HideSidebar = {hideSidebar}
       viewSidebar ={HideSidebar}
+      playerRef={playerRef}
 
       />
   </div>

@@ -59,20 +59,22 @@ function VideoSibar({
 
   return (
     <div className="section">
-         <h3 style={{ backgroundColor: "white", padding: "10px 0px 10px 20px", borderBottom: "1px solid gray", }}>
-          Course Content{" "}
-          <span
-            onClick={HideSidebar}
-            style={{
-              fontSize: "medium",
-              paddingLeft: "80px",
-              fontWeight: "600",
-              cursor: "pointer",
-            }}
-          >
-            X
-          </span>
-        </h3>
+      {
+        _courseFromState.sections[0].modules[0].videos.length > 0 &&     <h3 style={{ backgroundColor: "white", padding: "10px 0px 10px 20px", borderBottom: "1px solid gray", }}>
+        Course Content{" "}
+        <span
+          onClick={HideSidebar}
+          style={{
+            fontSize: "medium",
+            paddingLeft: "80px",
+            fontWeight: "600",
+            cursor: "pointer",
+          }}
+        >
+          X
+        </span>
+      </h3>
+      }
       <div className="video-sidebar">
      
       <div className="accordion js-accordion accordion--boxed " id="parent">
@@ -156,6 +158,7 @@ function VideoSibar({
                               }}
                             >
                               <a
+                                onClick={() => handleVideoSelect(video)}
                                 style={{
                                   fontSize: "medium",
                                   marginLeft: "0.5em",

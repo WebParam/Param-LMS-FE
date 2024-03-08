@@ -75,6 +75,7 @@ export interface IVideo {
         format: string,
         size: string,
         description: string;
+        viewed?: boolean;
         reference: string
 }
 
