@@ -53,6 +53,7 @@ function ManageCourses() {
   }
 
   async function getAllQuizzes() {
+    localStorage.removeItem("quizzes");
     try {
       const getQuizzes = await Api.GET_AllQuizzes();
       setQuizzes(getQuizzes);

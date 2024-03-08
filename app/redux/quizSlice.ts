@@ -42,7 +42,7 @@ export const quizSlice = createSlice({
         questions: [],
         modifiedDate: _action.modifiedDate,
         videoId: _action.videoId,
-        state:0
+        state:2
       };
 
       state.quizzes.push(newQuiz);
@@ -50,6 +50,16 @@ export const quizSlice = createSlice({
     updateQuizzes(state, action: PayloadAction<IQuiz[]>) {
       state.quizzes = action.payload;
     },
+
+    updateQuizState(state, action) {
+      const { quizState, quizId  } = action.payload;
+      const quizIndex = state.quizzes.findIndex((quiz:IQuiz) => quiz?.id === quizId);
+
+      if (quizIndex !== -1) {
+        state.quizzes[quizIndex].state = quizState;
+      }
+    },
+
    updateQuizVideoId(state, action: PayloadAction<IVideo[]>) {
       const videosData = action.payload;
       state.quizzes.forEach((quiz) => {
@@ -87,7 +97,7 @@ export const quizSlice = createSlice({
     addChoices(state, action: PayloadAction<{ quizId: string, questionId: string, choiceDescription: string, isCorrect: boolean }>) {
       const { quizId, questionId, choiceDescription, isCorrect } = action.payload;
 
-      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
+      const quizIndex = state.quizzes.findIndex((quiz:IQuiz) => quiz?.id === quizId);
 
       if (quizIndex !== -1) {
         const questionIndex = state.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
@@ -204,7 +214,8 @@ export const {
   deleteQuestion,
   updateQuizzes,
   updateQuizVideoId,
-  updateChoiceAnswer
+  updateChoiceAnswer,
+  updateQuizState
 } = quizSlice.actions;
 
 export const getSelectedQuizForEdit = (state: AppStore) => state.quizzes.quizzes;

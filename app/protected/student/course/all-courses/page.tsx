@@ -76,8 +76,10 @@ useEffect(() => {
       const course = await Api.GET_StudentCoursesById(student.id);
       //const enrolled = await Api.GET_EnrolledCoursesByStudentId(student.id)
       console.log("Student-Courses",course);
-      
-        setCourses(course.data!.allCourses);
+
+      const getReactCourse = course.data?.allCourses.filter(c => c.id === "65e5d75f6944453739f276c3")!
+      console.log(getReactCourse)
+        setCourses(getReactCourse);
         setEnrolledCourses(course.data!.enrolledCourses);
         //setStudentEnrolledCourses(enrolled)
        console.log("AllCourses",allCourses);

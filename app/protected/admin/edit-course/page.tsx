@@ -169,15 +169,6 @@ function EditCourse() {
     dispatch(updateCourseFromDataBase({..._courseFromState,title: payload.title,description:payload.description}));
   };
 
-  // const handleDescriptionChange = (content: string, _: any, source: string) => {
-  //   if (source === "user") {
-  //     const plainDescription = content.replace(/<\/?p>/gi, "");
-
-  //     setCourseDescription(plainDescription);
-  //     dispatch(updateCourseFromDataBase({..._courseFromState,title: payload.title, description:payload.description}));
-
-  //   }
-  // };
 
   const handleImageChange = (event: any) => {
     const file = event.target.files[0];
@@ -258,22 +249,18 @@ function EditCourse() {
 
         const extractedVideo = updateCoursedata?.data?.sections.reduce(
           (accumulator: IVideo[], section: any) => {
-            // Iterate through modules within the section
+           
             const videosInModules = section.modules.reduce(
               (moduleAccumulator: IVideo[], module: any) => {
-                // Concatenate videos within the module to the accumulator
+            
                 return moduleAccumulator.concat(module.videos);
               },
               []
             );
-            // Concatenate videos from all modules in the section to the accumulator
             return accumulator.concat(videosInModules);
           },
           []
         );
-
-        
-
 
         const updatedQuizzes = await Promise.all(
           _quizzesFromState.map(async (quiz: IQuiz) => {
@@ -299,7 +286,7 @@ function EditCourse() {
       
           console.log("Updated quizzes",updatedQuizzes);
 
-        const updateQuizzes = await Api.PUT_UpdateQuizzes(updatedQuizzes);
+        const _updateQuizzes = await Api.PUT_UpdateQuizzes(updatedQuizzes);
 
         debugger;
         toast.update(_id, {
