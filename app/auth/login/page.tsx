@@ -94,7 +94,7 @@ async function LoginUser (event:any){
      console.log(user.data);
   
      console.log("Role",user?.data?.role);
-     router.push('/protected/admin/manage-courses')
+     router.push('/protected/student/course/all-courses')
    
     }else{
       toast.update(_id, {
