@@ -60,7 +60,7 @@ function VideoSibar({
   return (
     <div className="section">
       {
-        _courseFromState.sections[0].modules[0].videos.length > 0 &&     <h3 style={{ backgroundColor: "white", padding: "10px 0px 10px 20px", borderBottom: "1px solid gray", }}>
+        _courseFromState?.sections[0]?.modules[0]?.videos.length > 0 &&     <h3 style={{ backgroundColor: "white", padding: "10px 0px 10px 20px", borderBottom: "1px solid gray", }}>
         Course Content{" "}
         <span
           onClick={HideSidebar}
