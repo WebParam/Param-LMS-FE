@@ -20,8 +20,15 @@
     transition: opacity .2s ease;
 }
 
+#default-drawer-mobi{
+    display: none;
+}
+
 @media (max-width: 768px) {
     #default-drawer{
+        display: none;
+    }
+    #default-drawer-mobi{
         display: none;
     }
     #default-drawer .mobi .open{
