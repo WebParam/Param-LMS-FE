@@ -1,5 +1,7 @@
+import { NextPage } from 'next';
 
-const HeadNav = () => {
+const HeadNav: NextPage<{setIsOpen: any, isOpen: boolean}> = ({setIsOpen, isOpen}) => {
+
   return (
       <>
           
@@ -8,9 +10,7 @@ const HeadNav = () => {
      data-primary>
 
 {/*     <!-- Navbar toggler --> */}
-    <button className="navbar-toggler d-block d-lg-none rounded-0"
-            type="button"
-            data-toggle="sidebar">
+              <button onClick={() => { setIsOpen(!isOpen) }} className="navbar-togger d-block d-lg-none rounded-0" >
         <span className="material-icons">menu</span>
     </button>
 
@@ -23,8 +23,6 @@ const HeadNav = () => {
              alt="Huma"/>
         <span className="d-none d-lg-block">Huma</span>
     </a>
-
-{/*     <!-- <button className="btn navbar-btn mr-16pt" data-toggle="modal" data-target="#apps">Apps <i className="material-icons">arrow_drop_down</i></button> --> */}
 
     <form className="search-form navbar-search d-none d-md-flex mr-16pt"
           action="index.html">

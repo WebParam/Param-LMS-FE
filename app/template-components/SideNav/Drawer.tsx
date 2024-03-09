@@ -1,23 +1,24 @@
-import NavApplications from "./NavApplications"
-import NavOverview from "./NavOverview"
-import NavToggler from "./NavToggler"
-import NavUI from "./NavUI"
+import { NextPage } from 'next';
+import SideNav from "./SideNav";
 
-const Drawer = () => {
-  return (
-    <div className="mdk-drawer js-mdk-drawer" id="default-drawer" data-align="start" data-position="left" data-domfactory-upgraded="mdk-drawer" data-persistent="" data-opened=""><div className="mdk-drawer__scrim" ></div>
-                <div className="mdk-drawer__content" >
-                    <div className="sidebar sidebar-left ps ps--active-y sidebar-dark-pickled-bluewood" data-perfect-scrollbar="">
+const Drawer: NextPage<{ setIsOpen: any, isOpen: boolean }> = ({ setIsOpen, isOpen }) => {
+  
+  const isMobi = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
 
-                        <NavToggler />
-                        <NavOverview  />
-                        <NavApplications />
-                        <NavUI />
-
-          <div className="ps__rail-x" style={{ left: '0px', bottom: '0px' }}><div className="ps__thumb-x" style={{ left: '0px', width: '0px' }}></div></div><div className="ps__rail-y" style={{ top: '0px', height: '826px', right: '0px' }}><div className="ps__thumb-y"  style={{ top: '0px', height: '676px' }}></div></div></div>
-                </div>
-            </div>
-  )
+  if (isMobi)
+    return (
+      <div style={isOpen ? { display: 'block' } : { display: 'none' }} className="mdk-drawer js-mdk-drawer" id="default-drawer" data-align="start" data-position="left" data-domfactory-upgraded="mdk-drawer" data-persistent="" data-opened="">
+        <div className={isOpen ? "mdk-drawer__scrim__open" : "mdk-drawer__scrim"} onClick={() => { setIsOpen(!isOpen) }} ></div>
+        <SideNav />
+      </div>
+    )
+  
+    return (
+      <div className="mdk-drawer js-mdk-drawer" id="default-drawer" data-align="start" data-position="left" data-domfactory-upgraded="mdk-drawer" data-persistent="" data-opened="">
+        <div className={isOpen ? "mdk-drawer__scrim__open" : "mdk-drawer__scrim"} onClick={() => { setIsOpen(!isOpen) }} ></div>
+        <SideNav />
+      </div>
+    )
 }
 
 export default Drawer
