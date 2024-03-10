@@ -41,6 +41,7 @@ import {
   getSelectedQuizForEdit,
   updateChoiceDetail,
   updateQuestionDetails,
+  updateQuizState,
 } from "@/app/redux/quizSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -232,6 +233,12 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
     const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.videoId === videoId);
     if(hasQuiz?.length === 1 ){
+      const payload = {
+        quizId: hasQuiz[0]?.id,
+        quizState :0
+      }
+      dispatch(updateQuizState(payload));
+
       setIncludeQuiz(e.target.checked);
 
       setIncludeQuiz(true);
