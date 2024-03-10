@@ -135,7 +135,7 @@ debugger;
             // Set cookies here after successful login
     
             // Optionally, you can redirect the user to another page
-            router.push('/protected/student/course/all-courses');
+            router.push('/protected/admin/manage-courses');
       
           }
           
