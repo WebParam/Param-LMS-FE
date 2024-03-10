@@ -19,6 +19,7 @@ import { getSelectedQuizForEdit } from '@/app/redux/quizSlice';
 import { FaVideo } from 'react-icons/fa';
 import VideoSibar from '../../../../components/VideoSidebar';
 import VideoPlayer from '../../../../components/ReactPlayer';
+import { stat } from 'fs';
 
 
 export default function CourseDetail() {
@@ -168,9 +169,30 @@ console.log("Vidoes",allVideos)
   
   }
 
+  const courseEnrollment = async (course:any) => {
+    const cookies = new Cookies();
+
+    const userData = cookies.get("param-lms-user");
+    //console.log("before", course, userData)
+    const payload = {
+      userId: userData?.id,
+      creatingUser: course?.creatingUser,
+      creatingDate: course?.creatingDate,
+      modifiedDate: course?.modifiedDate,
+      modifyingUser: course?.modifyingUser,
+      state: 0,
+      courses:[course?.id]
+    }
+    const enroll = await Api.POST_CourseEnrollment(payload);
+    console.log("Enrolled", enroll) 
+  }
+
     return (
+
+
    
 <div className="main">
+
   <div className='react-player-container'>
   <VideoPlayer
       selectedVideo = {selectedVideo}
@@ -184,16 +206,23 @@ console.log("Vidoes",allVideos)
       viewSidebar ={HideSidebar}
 
       />
+
+<div>
+  <button className="btn btn-primary" onClick={() => courseEnrollment(state)}>Enroll</button>
+</div>
   </div>
+
+
     
        
 <div  style={hideSidebar ? { width: "300px" , } : {display:"none"}}>
+
 <VideoSibar HideSidebar = {HideSidebar} duration = {formatDurationToMinutes(duration)} sections={sections} handleVideoSelect={handleVideoSelect}/>
 </div>
 
  </div>
 
 
-   
+
   )
 }

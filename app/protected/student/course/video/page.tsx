@@ -239,7 +239,10 @@ const getComments=async (id:string)=>{
             <span className="material-icons text-primary">account_circle</span>
             </p>
             <div className="media-body">
-              <a className="card-title m-0" href="teacher-profile.html">{author?.name} {author?.surname}</a>
+              <div>
+                <button className='class="btn btn-primary"'>Enroll</button>
+              </div>
+              {/* <a className="card-title m-0" href="teacher-profile.html">{author?.name} {author?.surname}</a> */}
               <p className="text-50 lh-1 mb-0">Instructor</p>
             </div>
           </div>

@@ -16,7 +16,9 @@ const QuestionType = {
     // Add more question types as needed
 };
 
-const CourseAssessment = () => {
+const CourseAssessment = (props:any) => {
+
+    console.log("props", props?.searchParams)
 
     const [courseAssessment, setAssessment] = useState<any>();
     const [loading, setLoading] = useState<any>(true);
@@ -42,11 +44,11 @@ const CourseAssessment = () => {
 
     async function getCourseAssessment(id: string) {
         const cookies = new Cookies();
-
+        console.log("searched", id);
         const userData = cookies.get("param-lms-user");
         try {
             const assessment = await Api.GET_CourseAssessment(id);
-            console.log("assessment", assessment);
+           
             if (assessment) {
                 setLoading(false)
                 setAssessment(assessment);
@@ -147,7 +149,7 @@ const CourseAssessment = () => {
     useEffect(() => {
 
         //getCourseAssessment('65cf2aa5604aec77fcf37a89');
-        getCourseAssessment('65e5c1f9382dc32044f7b1ac');
+        getCourseAssessment(`${props?.searchParams?.assessment}`);
         getSelectedCourse('65e5d75f6944453739f276c3')
 
     }, []);

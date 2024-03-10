@@ -117,34 +117,10 @@ export default function RootLayout({
           </div>
         </li>
         <li className="nav-item dropdown">
-          <a
-            href="#"
-            className="nav-link dropdown-toggle"
-            data-toggle="dropdown"
-            data-caret="false"
-          >
-            Paths
-          </a>
-          <div className="dropdown-menu">
-            <a href="paths.html" className="dropdown-item">
-              Browse Paths
-            </a>
-            <a href="student-path.html" className="dropdown-item">
-              Path Details
-            </a>
-            <a href="student-path-assessment.html" className="dropdown-item">
-              Skill Assessment
-            </a>
-            <a
-              href="student-path-assessment-result.html"
-              className="dropdown-item"
-            >
-              Skill Result
-            </a>
-            <a href="student-paths.html" className="dropdown-item">
-              My Paths
-            </a>
-          </div>
+       
+            <Link href="/protected/student/assessments" className="nav-link">
+              Assessment
+            </Link>
         </li>
         <li className="nav-item">
           <a href="pricing.html" className="nav-link">
