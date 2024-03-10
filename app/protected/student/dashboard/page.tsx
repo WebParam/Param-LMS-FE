@@ -72,23 +72,7 @@ useEffect(() => {
             <p className="card-title">Angular</p>
             <p className="card-subtitle text-50">Best score</p>
           </div>
-          {/* <div className="dropdown">
-            <a
-              href="#"
-              className="btn btn-sm btn-outline-secondary dropdown-toggle"
-              data-toggle="dropdown"
-            >
-              Popular Topics
-            </a>
-            <div className="dropdown-menu dropdown-menu-right">
-              <a href="" className="dropdown-item">
-                Popular Topics
-              </a>
-              <a href="" className="dropdown-item">
-                Web Design
-              </a>
-            </div>
-          </div> */}
+  
         </div>
         <div className="card-body p-24pt">
           <div className="chart" style={{ height: 344 }}>
@@ -101,17 +85,7 @@ useEffect(() => {
               </div>
             </div>
             <MyCoursesChart enrolled={enrolledCourses}/>
-            {/* <canvas
-              id="topicIqChart"
-              className="chart-canvas js-update-chart-line chartjs-render-monitor"
-              data-chart-hide-axes="true"
-              data-chart-points="true"
-              data-chart-suffix=" points"
-              data-chart-line-border-color="primary"
-              width={788}
-              height={688}
-              style={{ display: "block", height: 344, width: 394 }}
-            /> */}
+           
           </div>
         </div>
       </div>

@@ -1,5 +1,25 @@
-
+"use client"
+import Cookies from "universal-cookie"
+import { usePathname } from 'next/navigation'
+import { IoPerson } from "react-icons/io5";
+import { useEffect, useState } from "react";
 const HeadNav = () => {
+    const [isStudentPathName, setIsStudentPathName] = useState<boolean>(false)
+    const pathname = usePathname()
+  
+    useEffect(() => {
+      if (pathname.includes("/protected/student")) {
+        setIsStudentPathName(true);
+      } else {
+        setIsStudentPathName(false);
+      }
+    }, [pathname]);
+     
+const cookies = new Cookies();
+const loggedInUser = cookies.get("param-lms-user");
+console.log("User",loggedInUser)
+
+
   return (
       <>
           
@@ -36,7 +56,7 @@ const HeadNav = () => {
     </form>
 
     <div className="flex"></div>
-
+{/* 
                   <div className="nav navbar-nav flex-nowrap d-none d-lg-flex mr-16pt"
                       style={{ whiteSpace: 'nowrap' }}>
         <div className="nav-item dropdown d-none d-sm-flex">
@@ -55,33 +75,34 @@ const HeadNav = () => {
                    href="">Spanish</a>
             </div>
         </div>
-    </div>
+    </div> */}
 
     <div className="nav navbar-nav flex-nowrap d-flex ml-0 mr-16pt">
         <div className="nav-item dropdown d-none d-sm-flex">
             <a href="#"
                className="nav-link d-flex align-items-center dropdown-toggle"
                data-toggle="dropdown">
-                <img width="32"
-                     height="32"
-                     className="rounded-circle mr-8pt"
-                     src="/assets/images/people/50/guy-3.jpg"
-                     alt="account" />
+
+<IoPerson
+               style={{width:"32px",height:"32px"}}
+               className="rounded-circle mr-8pt"
+
+/>
                 <span className="flex d-flex flex-column mr-8pt">
-                    <span className="navbar-text-100">Laza Bogdan</span>
-                    <small className="navbar-text-50">Administrator</small>
+                    <span className="navbar-text-100">{loggedInUser?.firstName} {loggedInUser?.lastName}</span>
+                    <small className="navbar-text-50">{isStudentPathName ? "Student" : "Administrator"}</small>
                 </span>
             </a>
             <div className="dropdown-menu dropdown-menu-right">
                 <div className="dropdown-header"><strong>Account</strong></div>
                 <a className="dropdown-item"
-                   href="edit-account.html">Edit Account</a>
+                   href="#edit-account.html">Edit Account</a>
                 <a className="dropdown-item"
-                   href="billing.html">Billing</a>
+                   href="#billing.html">Billing</a>
                 <a className="dropdown-item"
-                   href="billing-history.html">Payments</a>
+                   href="#billing-history.html">Payments</a>
                 <a className="dropdown-item"
-                   href="login.html">Logout</a>
+                   href="/">Logout</a>
             </div>
         </div>
 

@@ -5,7 +5,7 @@ const NavOverview = () => {
           <div className="sidebar-heading">Overview</div>
                         <ul className="sidebar-menu">
                             <li className="sidebar-menu-item active">
-                                <a className="sidebar-menu-button" href="index.html">
+                                <a className="sidebar-menu-button" href="#index.html">
                                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">insert_chart_outlined</span>
                                     <span className="sidebar-menu-text">Dashboard</span>
                                 </a>
@@ -18,21 +18,21 @@ const NavOverview = () => {
                                 </a>
                                 <ul className="sidebar-submenu collapse sm-indent" id="dashboards_menu">
                                     <li className="sidebar-menu-item active">
-                                        <a className="sidebar-menu-button" href="index.html">
-                                            <span className="sidebar-menu-text">Analytics Dashboard</span>
+                                        <a className="sidebar-menu-button" >
+                                            <span className="sidebar-menu-text">Courses</span>
                                         </a>
                                     </li>
                                     <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button" href="analytics.html">
-                                            <span className="sidebar-menu-text">Analytics 2 Dashboard</span>
+                                        <a className="sidebar-menu-button" href="/protected/student/course/all-courses">
+                                            <span className="sidebar-menu-text">Browse Courses</span>
                                         </a>
                                     </li>
                                     <li className="sidebar-menu-item">
-                                        <a className="sidebar-menu-button" href="projects.html">
-                                            <span className="sidebar-menu-text">Projects Dashboard</span>
+                                        <a className="sidebar-menu-button" href="#">
+                                            <span className="sidebar-menu-text">My Courses</span>
                                         </a>
                                     </li>
-                                    <li className="sidebar-menu-item">
+                                    {/* <li className="sidebar-menu-item">
                                         <a className="sidebar-menu-button" href="tasks-board.html">
                                             <span className="sidebar-menu-text">Tasks Dashboard</span>
                                         </a>
@@ -71,7 +71,7 @@ const NavOverview = () => {
                                         <a className="sidebar-menu-button disabled" href="ui-card-metrics.html">
                                             <span className="sidebar-menu-text">Card Metrics</span>
                                         </a>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </li>
                         </ul>
