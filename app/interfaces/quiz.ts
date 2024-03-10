@@ -14,7 +14,7 @@ export interface IQuestion {
     choices: IChoice[];
     points: number
     order: number
-    criteria: string
+    criteria?: string
 
 }
 

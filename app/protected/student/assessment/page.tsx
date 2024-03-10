@@ -1,5 +1,4 @@
 "use client"
-
 import { IChoice } from '@/app/interfaces/assessment';
 import { Api } from '@/app/lib/restapi/endpoints';
 import { userInfo } from 'os';
@@ -19,11 +18,11 @@ const QuestionType = {
 
 const CourseAssessment = () => {
 
-    const [courseAssessment, setAssessment] = useState();
-    const [loading, setLoading] = useState(true);
-    const [status, setStatus] = useState('All questions answered. Submit the assessment.')
-    const [courseInfo, setCourse] = useState();
-    const [studentAnswer, setStudentAnswer] = useState({
+    const [courseAssessment, setAssessment] = useState<any>();
+    const [loading, setLoading] = useState<any>(true);
+    const [status, setStatus] = useState<any>('All questions answered. Submit the assessment.')
+    const [courseInfo, setCourse] = useState<any>();
+    const [studentAnswer, setStudentAnswer] = useState<any>({
         AssessmentId: 'yourAssessmentId', // Set your actual assessmentId here
         StudentId: 'yourStudentId', // Set your actual studentId here
         Answers: [],
@@ -111,7 +110,7 @@ const CourseAssessment = () => {
         console.log("student", studentAnswer)
     };
     const handleCheckboxChange = (questionId: string, choice: IChoice, isChecked: boolean) => {
-        const existingAnswers = studentAnswer.Answers.filter((answer) => answer.questionId === questionId);
+        const existingAnswers = studentAnswer.Answers.filter((answer:any) => answer.questionId === questionId);
         const selectedChoices = existingAnswers.length ? existingAnswers[0].selectedAnswer : null;
 
         let updatedChoices: IChoice[] = [];

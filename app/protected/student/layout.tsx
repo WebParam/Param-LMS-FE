@@ -266,31 +266,7 @@ export default function RootLayout({
    </>
     {/* // END Page Content */}
     {/* Footer */}
-    <div className="bg-white border-top-2 mt-auto">
-      <div className="container page__container page-section d-flex flex-column">
-        <p className="text-70 brand mb-24pt">
-          <img
-            className="brand-icon"
-            src="../../public/images/logo/black-70@2x.png"
-            width={30}
-            alt="Luma"
-          />{" "}
-          Luma
-        </p>
-        
-        <p className="mb-8pt d-flex">
-          <a href="" className="text-70 text-underline mr-8pt small">
-            Terms
-          </a>
-          <a href="" className="text-70 text-underline small">
-            Privacy policy
-          </a>
-        </p>
-        <p className="text-50 small mt-n1 mb-0">
-          Copyright 2019 © All rights reserved.
-        </p>
-      </div>
-    </div>
+   
     {/* // END Footer */}
   </div>
   {/* // END drawer-layout__content */}

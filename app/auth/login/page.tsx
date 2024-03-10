@@ -94,15 +94,8 @@ async function LoginUser (event:any){
      console.log(user.data);
   
      console.log("Role",user?.data?.role);
-     if(user?.data?.role=="Admin")
-     {
-       window.location.href = '/protected/admin/manage-courses'; 
-     }
-     else{
-       window.location.href = '/protected/student/course/all-courses'; 
-       console.log(user.data);
-
-     }
+     router.push('/protected/student/course/all-courses')
+   
     }else{
       toast.update(_id, {
         render: "Invalid login credentials",
