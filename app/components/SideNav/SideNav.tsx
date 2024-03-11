@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
 import NavToggler from './NavToggler'
 import NavOverview from './NavOverview'
+import SideTab from '@/app/interfaces/sideTabs';
 
-const SideNav: NextPage<{sideTabs: any[]}> = ({sideTabs}) => {
+const SideNav: NextPage<{sideTabs: SideTab[]}> = ({sideTabs}) => {
     return (
         <div className="mdk-drawer__content" >
             <div className="sidebar sidebar-left ps ps--active-y sidebar-dark-pickled-bluewood" data-perfect-scrollbar="">

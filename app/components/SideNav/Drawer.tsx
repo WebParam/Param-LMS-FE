@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
 import SideNav from "./SideNav";
 import { useEffect, useState } from 'react';
+import SideTab from '@/app/interfaces/sideTabs';
 
-const Drawer: NextPage<{ setIsOpen: any, isOpen: boolean, sideTabs: any[] }> = ({ setIsOpen, isOpen, sideTabs }) => {
+const Drawer: NextPage<{ setIsOpen: any, isOpen: boolean, sideTabs: SideTab[] }> = ({ setIsOpen, isOpen, sideTabs }) => {
   
   const [isMobi, setIsMobi] = useState(false);
   const checkIsMobile = () => {
