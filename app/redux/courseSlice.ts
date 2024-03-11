@@ -210,6 +210,32 @@ export const courseSlice = createSlice({
         }
       
 ,      
+udpateVideoViewState: (state, action) => {
+      
+  const { moduleId, videoId, viewed, } = action.payload;
+  const sectionIndex = state.course.sections.findIndex(section =>
+    section.modules.some(module => module.id === moduleId)
+  );
+  if (sectionIndex !== -1) {
+    const moduleIndex = state.course.sections[sectionIndex].modules.findIndex(
+      module => module.id === moduleId
+    );
+    if (moduleIndex !== -1) {
+      const videoIndex = state.course.sections[sectionIndex].modules[
+        moduleIndex
+      ].videos.findIndex((video:IVideo) => video.id === videoId);
+      if (videoIndex !== -1) {
+        // Update the video title and URL
+        state.course.sections[sectionIndex].modules[moduleIndex].videos[
+          videoIndex
+        ].viewed = viewed;
+  
+      }
+    }
+  }
+}
+
+,  
         deleteModuleFromSection(state, action) {
             const { sectionId, moduleId } = action.payload;
       
@@ -265,6 +291,7 @@ export const courseSlice = createSlice({
                 length: "5 minutes",
                 format: "mp4",
                 size: "50 MB",
+                viewed:false,
                 description:description,
                 reference:generateUniqueId(),
 

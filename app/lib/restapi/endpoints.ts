@@ -29,7 +29,7 @@ export const assessmentWriteUrl = "https://khumla-dev-assessment-write.azurewebs
 
 export const assessmentReadUrl = "https://khumla-dev-assessment-read.azurewebsites.net/api";
 
-export const quizWriteUrl ="https://khumla-dev-quiz-write.azurewebsites.net/api";
+export const quizWriteUrl ="https://a6cd-154-0-14-142.ngrok-free.app/api";
 
 export const documentWrite = "https://e4e7-154-0-14-142.ngrok-free.app/api"
 

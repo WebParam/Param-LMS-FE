@@ -27,6 +27,7 @@
   left: 0;
   height: auto !important;
   object-fit: fill;
+  background-color: #333;
   aspect-ratio: 16/9;
 }
 
