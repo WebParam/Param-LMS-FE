@@ -1,43 +1,46 @@
 import Link from 'next/link'
-const NavOverview = () => {
+import { NextPage } from 'next';
+
+const NavOverview: NextPage<{sideTabs: any[]}> = ({sideTabs}) => {
+
   return (
       <>
           <div className="sidebar-heading">Overview</div>
-                        <ul className="sidebar-menu">
-                            <li className="sidebar-menu-item active">
-                                <a className="sidebar-menu-button" href="#">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">insert_chart_outlined</span>
-                                    <span className="sidebar-menu-text">Dashboard</span>
-                                </a>
-                            </li>
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button" href="#">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">people_outline</span>
-                                    <span className="sidebar-menu-text">Students</span>
-                                </a>
-                            </li>
-                            <li className="sidebar-menu-item">
-                                <Link className="sidebar-menu-button" href="/protected/admin/courses">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">menu_book</span>
-                                    <span className="sidebar-menu-text">Courses</span>
-                                </Link>
-                            </li>
-                            <li className="sidebar-menu-item">
-                                <a className="sidebar-menu-button" data-toggle="collapse" href="#dashboards_menu">
-                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">assignment</span>
-                                    Assessments
+            <ul className="sidebar-menu">
+                            
+                {sideTabs && sideTabs.map((tab) => {
+                    if (tab.children) {
+                        const children = tab.children.map((l) => (<li key={l.name} className="sidebar-menu-item">
+                            <a className="sidebar-menu-button" href={l.url}>
+                                <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">{l.icon}</span>
+                                <span className="sidebar-menu-text">{l.name}</span>
+                            </a>
+                        </li>));
+                        
+                        return (
+                            <li key={tab.name} className="sidebar-menu-item">
+                                <a className="sidebar-menu-button" data-toggle="collapse" href={`#${tab.name}`}>
+                                    <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">{tab.icon}</span>
+                                    {tab.name}
                                     <span className="ml-auto sidebar-menu-toggle-icon"></span>
                                 </a>
-                                <ul className="sidebar-submenu collapse sm-indent" id="dashboards_menu">
-                                    <li className="sidebar-menu-item active">
-                                        <a className="sidebar-menu-button" href="#">
-                                            <span className="sidebar-menu-text">Grade Assessment</span>
-                                        </a>
-                                    </li>                                                                      
+                                <ul className="sidebar-submenu collapse sm-indent" id={tab.name}>
+                                    {children}
                                 </ul>
-                            </li>
-                        </ul>
-    </>
+                            </li>);
+                        
+                    } 
+                
+                    return (<li key={tab.url} className="sidebar-menu-item">
+                        <a className="sidebar-menu-button" href={tab.url}>
+                            <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">{tab.icon}</span>
+                            <span className="sidebar-menu-text">{tab.name}</span>
+                        </a>
+                    </li>);
+                })}    
+          </ul>
+          
+      </>
   )
 }
 

@@ -1,5 +1,4 @@
 "use client"
-
 import Drawer from '@/app/components/SideNav/Drawer'
 import HeadNav from '@/app/components/HeadNav/HeadNav';
 import { useState } from 'react';
@@ -12,6 +11,16 @@ export default function RootLayout({
 }) {
   
   const [isOpen, setIsOpen] = useState(false);
+  const sideTabs = [
+    { name: 'Dashboard', url: '#', icon: 'insert_chart_outlined' },
+    { name: 'Students', url: '#', icon: 'people_outline' },
+    { name: 'Courses', url: '/protected/admin/courses', icon: 'assignment' },
+    {
+      name: 'Assessments', url: '#', icon: 'assignment', children: [
+        { name: 'Grade Assessments', url: '#', icon: '' }
+      ]
+    }
+  ];
 
   return ( 
     <>
@@ -23,7 +32,7 @@ export default function RootLayout({
           
                       {children}
           </div>
-        <Drawer setIsOpen={setIsOpen} isOpen={isOpen} /> 
+        <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs}/> 
         </div>
     </>
   )
