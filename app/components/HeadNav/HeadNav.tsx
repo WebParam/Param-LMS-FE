@@ -1,7 +1,10 @@
 import { NextPage } from 'next';
+import Cookies from "universal-cookie"	
 
-const HeadNav: NextPage<{setIsOpen: any, isOpen: boolean}> = ({setIsOpen, isOpen}) => {
-
+const HeadNav: NextPage<{ setIsOpen: any, isOpen: boolean }> = ({ setIsOpen, isOpen }) => {
+    const cookies = new Cookies();	
+    const loggedInUser = cookies.get("param-lms-user");
+    
   return (
       <>
           
@@ -37,8 +40,8 @@ const HeadNav: NextPage<{setIsOpen: any, isOpen: boolean}> = ({setIsOpen, isOpen
                      src="/assets/images/people/50/guy-3.jpg"
                      alt="account" />
                 <span className="flex d-flex flex-column mr-8pt">
-                    <span className="navbar-text-100">Laza Bogdan</span>
-                    <small className="navbar-text-50">Administrator</small>
+                    <span className="navbar-text-100">{loggedInUser?.firstName} {loggedInUser?.lastName}</span>
+                    <small className="navbar-text-50">{loggedInUser?.role}</small>
                 </span>
             </a>
             <div className="dropdown-menu dropdown-menu-right">
