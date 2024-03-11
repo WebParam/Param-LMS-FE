@@ -39,6 +39,10 @@ import { getSelectedQuizForEdit } from "@/app/redux/quizSlice";
 import Sidebar from "@/app/components/Sidebar";
 import { IDocument } from "@/app/interfaces/document";
 import { getSelectedDocumentForEdit } from "@/app/redux/documentSice";
+import { CreateCourseAssessmentModal } from "./create-assessment";
+import { IAssessment } from "@/app/interfaces/assessment";
+import { createAssessmentDetail, getSelectedAssessmentForEdit } from "@/app/redux/assessmentSlice";
+
 
 // Define interface for ReactQuill props
 interface ReactQuillProps {
@@ -89,6 +93,8 @@ function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [editModuleModalOpen, setEditModuleModalOpen] =
     useState<boolean>(false);
+    const [createAssessmentModalOpen, setCreateAssessmentModuleModalOpen] =
+    useState<boolean>(false);
   const [competency, setCompetency] = useState<string>("");
   const [sectionTitle, setSectionTitle] = useState<string>("");
   const [disableSectionInput, setDisableSectionInput] =
@@ -115,9 +121,11 @@ function EditCourse() {
 
   const [videoId, setVideoId] = useState<string>("");
   const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _assessmentFromState : IAssessment = useSelector(getSelectedAssessmentForEdit).assessment
   console.log("Course", _courseFromState);
+    console.log("Assessment", _assessmentFromState);
 
-  console.log("Document from state", _documentsFromState);
+  console.log("Quizzes from state", _quizzesFromState);
 
   let cookies = new Cookies();
   useEffect(() => {
@@ -160,6 +168,9 @@ function EditCourse() {
   }
 
   function saveAndCloseEditModuleModal() {
+    setEditModuleModalOpen(false);
+  }
+  function saveAndCloseCreateAssessmentModuleModal() {
     setEditModuleModalOpen(false);
   }
 
@@ -220,14 +231,13 @@ function EditCourse() {
     dispatch(createCourseDetail(payload));
   };
 
-  const handleDescriptionChange = () => {
-    dispatch(createCourseDetail(payload))
-};
+
 
   async function createCourse() {
-   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+   const plainDescription = courseDescription ? courseDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '') : _courseFromState.description.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
 
     dispatch(createCourseDetail({...payload,description: plainDescription}))
+    debugger;
     setImgError(false);
     setDisableCreateCourseBtn(true);
     if (!imageUrl) {
@@ -258,6 +268,18 @@ function EditCourse() {
       )!;
 
       if (createCourseResponse?.data?.id) {
+        const assessment = {
+          courseId : createCourseResponse?.data?.id, 
+      questions  :_assessmentFromState.questions,
+      createdByUserId  : _assessmentFromState.createdByUserId,
+      createdDate  : _assessmentFromState.createdDate,
+      modifiedByUserId  : _assessmentFromState.modifiedByUserId, 
+      modifiedAt  : _assessmentFromState.modifiedAt, 
+        dueDate  : _assessmentFromState.dueDate
+        }
+
+        const postAssessment = await Api.POST_AddAssessments(assessment);
+        debugger;
         const uploadDocuments = await Api.POST_Document(_formData);
         const courseId: string = createCourseResponse.data?.id!;
         const uploadImageResponse = await Api.POST_Image(courseId, formData);
@@ -275,7 +297,9 @@ function EditCourse() {
         );
 
         const updatedQuizzes = await Promise.all(
-          _quizzesFromState.map(async (quiz: IQuiz) => {
+          _quizzesFromState
+          .filter((quiz: IQuiz) => quiz.questions.length > 0) 
+          .map(async (quiz: IQuiz) => {
             try {
               const matchingVideo = extractedVideo?.find(
                 (video: IVideo) => video.reference === quiz.reference
@@ -301,7 +325,7 @@ function EditCourse() {
         });
 
         setTimeout(() => {
-          localStorage.removeItem("persist:root")
+          localStorage.removeItem("persist:course")
           dispatch(deleteAllSections());
           setCourseTitle("");
           setCourseDescription("");
@@ -379,6 +403,14 @@ function EditCourse() {
     setNewSection(true);
   };
 
+  const createAssessment = () => {
+    const payload = {
+      dueDate : "",
+    }
+    if(_assessmentFromState.courseId === ""){
+      dispatch(createAssessmentDetail(payload));
+    }
+  }
 
   useEffect(() => {
     const sectionIds = _courseFromState?.sections?.map((section) => section.id);
@@ -393,12 +425,7 @@ function EditCourse() {
     formData.append("file", imageUrl);
   }, [imageUrl]);
 
-  // useEffect(() => {
-  //   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
-  //   setCourseDescription(plainDescription);
-  //   dispatch(createCourseDetail(payload))
-  //   console.log("Course Description: " + plainDescription);
-  // },[])
+
 
   const customModalStyles = {
     modal: {
@@ -437,6 +464,23 @@ function EditCourse() {
           />
           {/* <EditCourseModal /> */}
         </Modal>
+
+        <Modal
+          styles={customModalStyles}
+          open={createAssessmentModalOpen}
+          onClose={() => {
+            setCreateAssessmentModuleModalOpen(false);
+          
+          }}
+          center
+        >
+          <CreateCourseAssessmentModal
+            onClose={saveAndCloseCreateAssessmentModuleModal}
+          />
+          {/* <EditCourseModal /> */}
+        </Modal>
+
+        
         <Modal
           styles={customModalStyles}
           open={editModalOpen}
@@ -454,288 +498,7 @@ function EditCourse() {
         className="mdk-drawer-layout__content page-content"
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
       >
-        {/* Header */}
-        {/* Navbar */}
-        <div
-          style={{
-            position: "relative",
-
-            width: "1200px",
-          }}
-          className="navbar navbar-expand pr-0 navbar-light border-bottom-2"
-          id="default-navbar"
-          data-primary=""
-        >
-          {/* Navbar Toggler */}
-          <button
-            className="navbar-toggler w-auto mr-16pt d-block d-lg-none rounded-0"
-            type="button"
-            data-toggle="sidebar"
-          >
-            <span className="material-icons">short_text</span>
-          </button>
-          {/* // END Navbar Toggler */}
-          {/* Navbar Brand */}
-          <a href="index.html" className="navbar-brand mr-16pt d-lg-none">
-            <span className="avatar avatar-sm navbar-brand-icon mr-0 mr-lg-8pt">
-              <span className="avatar-title rounded bg-primary">
-                <img
-                  src="../../public/images/illustration/student/128/white.svg"
-                  alt="logo"
-                  className="img-fluid"
-                />
-              </span>
-            </span>
-            <span className="d-none d-lg-block">Luma</span>
-          </a>
-          {/* // END Navbar Brand */}
-          {/* Navbar Search */}
-          <form
-            className="search-form navbar-search d-none d-md-flex mr-16pt"
-            action="index.html"
-          >
-            <button className="btn" type="submit">
-              <i className="material-icons">search</i>
-            </button>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search ..."
-            />
-          </form>
-          {/* // END Navbar Search */}
-          <div className="flex" />
-          {/* Navbar Menu */}
-          <div className="nav navbar-nav flex-nowrap d-flex mr-16pt">
-            {/* Notifications dropdown */}
-            <div
-              className="nav-item dropdown dropdown-notifications dropdown-xs-down-full"
-              data-toggle="tooltip"
-              data-title="Messages"
-              data-placement="bottom"
-              data-boundary="window"
-              data-original-title=""
-              title=""
-            >
-              <button
-                className="nav-link btn-flush dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                data-caret="false"
-              >
-                <i className="material-icons icon-24pt">mail_outline</i>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <div data-perfect-scrollbar="" className="position-relative ps">
-                  <div className="dropdown-header">
-                    <strong>Messages</strong>
-                  </div>
-                  <div className="list-group list-group-flush mb-0">
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action unread"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">5 minutes ago</small>
-                        <span className="ml-auto unread-indicator bg-accent" />
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <img
-                            src="../../public/images/people/110/woman-5.jpg"
-                            alt="people"
-                            className="avatar-img rounded-circle"
-                          />
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <strong className="text-black-100">Michelle</strong>
-                          <span className="text-black-70">
-                            Clients loved the new design.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">5 minutes ago</small>
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <img
-                            src="../../public/images/people/110/woman-5.jpg"
-                            alt="people"
-                            className="avatar-img rounded-circle"
-                          />
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <strong className="text-black-100">Michelle</strong>
-                          <span className="text-black-70">🔥 Superb job..</span>
-                        </span>
-                      </span>
-                    </a>
-                  </div>
-                  <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                    <div
-                      className="ps__thumb-x"
-                      tabIndex={0}
-                      style={{ left: 0, width: 0 }}
-                    />
-                  </div>
-                  <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-                    <div
-                      className="ps__thumb-y"
-                      tabIndex={0}
-                      style={{ top: 0, height: 0 }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* // END Notifications dropdown */}
-            {/* Notifications dropdown */}
-            <div
-              className="nav-item ml-16pt dropdown dropdown-notifications dropdown-xs-down-full"
-              data-toggle="tooltip"
-              data-title="Notifications"
-              data-placement="bottom"
-              data-boundary="window"
-              data-original-title=""
-              title=""
-            >
-              <button
-                className="nav-link btn-flush dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                data-caret="false"
-              >
-                <i className="material-icons">notifications_none</i>
-                <span className="badge badge-notifications badge-accent">
-                  2
-                </span>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <div data-perfect-scrollbar="" className="position-relative ps">
-                  <div className="dropdown-header">
-                    <strong>System notifications</strong>
-                  </div>
-                  <div className="list-group list-group-flush mb-0">
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action unread"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">3 minutes ago</small>
-                        <span className="ml-auto unread-indicator bg-accent" />
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <span className="avatar-title rounded-circle bg-light">
-                            <i className="material-icons font-size-16pt text-accent">
-                              account_circle
-                            </i>
-                          </span>
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <span className="text-black-70">
-                            Your profile information has not been synced
-                            correctly.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">5 hours ago</small>
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <span className="avatar-title rounded-circle bg-light">
-                            <i className="material-icons font-size-16pt text-primary">
-                              group_add
-                            </i>
-                          </span>
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <strong className="text-black-100">Adrian. D</strong>
-                          <span className="text-black-70">
-                            Wants to join your private group.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">1 day ago</small>
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <span className="avatar-title rounded-circle bg-light">
-                            <i className="material-icons font-size-16pt text-warning">
-                              storage
-                            </i>
-                          </span>
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <span className="text-black-70">
-                            Your deploy was successful.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                  </div>
-                  <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                    <div
-                      className="ps__thumb-x"
-                      tabIndex={0}
-                      style={{ left: 0, width: 0 }}
-                    />
-                  </div>
-                  <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-                    <div
-                      className="ps__thumb-y"
-                      tabIndex={0}
-                      style={{ top: 0, height: 0 }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* // END Notifications dropdown */}
-            <Dropdown>
-              <Dropdown.Toggle id="accountDropdown" variant="link">
-                <span className="avatar avatar-sm mr-8pt2">
-                  <span className="avatar-title rounded-circle bg-primary">
-                    <i className="material-icons">account_box</i>
-                  </span>
-                </span>
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu style={{ textAlign: "right" }}>
-                <Dropdown.Header>Account</Dropdown.Header>
-                <Dropdown.Item href="/protected/admin/account">
-                  Edit Account
-                </Dropdown.Item>
-                <Dropdown.Item href="billing.html">Billing</Dropdown.Item>
-                <Dropdown.Item href="billing-history.html">
-                  Payments
-                </Dropdown.Item>
-                <Dropdown.Item onClick={logOut}>Logout</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          {/* // END Navbar Menu */}
-        </div>
-        {/* // END Navbar */}
-        {/* // END Header */}
+    
         <div className="pt-32pt">
           <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
             <div className="flex d-flex flex-column flex-sm-row align-items-center">
@@ -751,9 +514,7 @@ function EditCourse() {
             </div>
           </div>
         </div>
-        {/* BEFORE Page Content */}
-        {/* // END BEFORE Page Content */}
-        {/* Page Content */}
+
         <div className="page-section border-bottom-2">
           <div className="container page__container">
             <div className="row">
@@ -1054,7 +815,27 @@ function EditCourse() {
                     </div>
                   </div>
                 </div>
-              </div>
+           
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                  className="page-separator"
+                >
+                  <div className="page-separator__text">Assessments</div>
+                          <FaPlus
+                            onClick={() => {
+                              setCreateAssessmentModuleModalOpen(true);
+                              createAssessment();
+                            }}
+                            style={{ cursor: "pointer" }}
+                          />
+                        </div>     
+                    </div>
+              
               <div className="col-md-4">
                 <div className="card">
                   <div className="card-header text-center">
@@ -1088,7 +869,7 @@ function EditCourse() {
                   <div className="card-body">
                     <div className="form-group">
                       <label className="form-label">
-                        Image url{" "}
+                        Image url
                         {imgError && (
                           <span
                             style={{ color: "tomato", fontWeight: "500px" }}
@@ -1139,42 +920,11 @@ function EditCourse() {
         </div>
         {/* // END Page Content */}
         {/* Footer */}
-        <div className="bg-body border-top-2 mt-auto">
-          <div className="container page__container page-section d-flex flex-column">
-            <p className="text-70 brand mb-24pt">
-              <img
-                className="brand-icon"
-                src="../../public/images/logo/black-70@2x.png"
-                width={30}
-                alt="Luma"
-              />{" "}
-              Luma
-            </p>
-            <p className="measure-lead-max text-50 small mr-8pt">
-              Luma is a beautifully crafted user interface for modern Education
-              Platforms, including Courses &amp; Tutorials, Video Lessons,
-              Student and Teacher Dashboard, Curriculum Management, Earnings and
-              Reporting, ERP, HR, CMS, Tasks, Projects, eCommerce and more.
-            </p>
-            <p className="mb-8pt d-flex">
-              <a href="" className="text-70 text-underline mr-8pt small">
-                Terms
-              </a>
-              <a href="" className="text-70 text-underline small">
-                Privacy policy
-              </a>
-            </p>
-            <p className="text-50 small mt-n1 mb-0">
-              Copyright 2019 © All rights reserved.
-            </p>
-          </div>
-        </div>
-        {/* // END Footer */}
+       
       </div>
 
       {}
-      <Sidebar />
-      {/* // END drawer */}
+      {/* <Sidebar /> */}
     </div>
   );
 }

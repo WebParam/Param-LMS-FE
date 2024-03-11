@@ -112,27 +112,7 @@ const getComments=async (id:string)=>{
 
 
 
-async function getAllQuizzes() {
-  try {
-    const getQuizzes = await Api.GET_AllQuizzes();
 
-    if (getQuizzes && getQuizzes.length > 0) {
-      const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
-
-      const quizByVideoId = mappedQuizzes.filter((quiz:IQuiz) => quiz.videoId === videoId)[0]//videoId here
-      localStorage.setItem("quiz", JSON.stringify(quizByVideoId))
-;     
-    } else {
-      console.log("No quizzes found");
-    }
-  } catch (error) {
-    console.error("Error fetching quizzes:", error);
-  }
-}
-
-useEffect(() => {
-getAllQuizzes();
-},[videoId]);
 
   return (
 <>

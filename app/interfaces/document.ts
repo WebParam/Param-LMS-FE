@@ -19,6 +19,6 @@ export interface IUpdateDocumentDetailState {
     createdDate?: string;
     modifyingUser?: string;
     reference: string;
-    url: string;
+    url?: string;
     file : any
 }

@@ -102,7 +102,3 @@ export default function RootLayout({
 
   );
 }
-
-
-
-

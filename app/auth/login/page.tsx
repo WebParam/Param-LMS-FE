@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Api } from '../../lib/restapi/endpoints';
@@ -38,11 +38,10 @@ export default function Login() {
     router.push('/auth/register');
   };
 
- 
 
-  
 
 async function LoginUser (event:any){
+  cookies.remove('param-lms-user')
  
   setDisable(true)
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -95,15 +94,8 @@ async function LoginUser (event:any){
      console.log(user.data);
   
      console.log("Role",user?.data?.role);
-     if(user?.data?.role=="Admin")
-     {
-       window.location.href = '/protected/admin/manage-courses'; 
-     }
-     else{
-       window.location.href = '/protected/student/course/all-courses'; 
-       console.log(user.data);
-
-     }
+     router.push('/protected/student/course/all-courses')
+   
     }else{
       toast.update(_id, {
         render: "Invalid login credentials",
@@ -129,42 +121,6 @@ async function LoginUser (event:any){
       console.log(error);
     }
 
-    // axios
-    // .post(
-    //   "https://86e8-154-0-14-142.ngrok-free.app/api/Users/Login",
-    //   payload
-    // )
-    // .then((response: any) => {
-    //   console.log("response", response);
-
-    
-    //   toast.update(_id, {
-    //     render: "Successfully logged in",
-    //     type: "success",
-    //     isLoading: false,
-    //   });
-
-    //   // Set cookies here after successful login
-    //   cookies.set('param-lms-user', response.data);
-
-    //   // Optionally, you can redirect the user to another page
-    //   window.location.href = '/protected/admin/manage-courses'; 
-
-    // })
-    // .catch((error: any) => {
-
- 
-    //   toast.update(_id, {
-    //     render: "error logging in.",
-    //     type: "error",
-    //     isLoading: false,
-    //   });
-    //   setTimeout(() => {
-    //     setDisable(false)
-    //     toast.dismiss(_id);
-    //   }, 2000);
-    //   console.log(error);
-    // });
 
   event?.preventDefault();
   }
@@ -239,7 +195,7 @@ async function LoginUser (event:any){
   </a>
 </div>
 
-        <div className="page-separator__text mt-3">Do not have an account? <span style={{cursor:"pointer"}} onClick = {navigateToRegister}>sign-up</span></div>
+        <div className="page-separator__text mt-3">Do not have an account? <span style={{cursor:"pointer", color:"blue"}} onClick = {navigateToRegister}>sign-up</span></div>
       </div>
       </>
   
