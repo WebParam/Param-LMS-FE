@@ -1,16 +1,8 @@
-import Head from 'next/head';
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import JsScripts from '@/app/template-components/JsScripts'
-import Drawer from '@/app/template-components/SideNav/Drawer'
-import SearchNav from '@/app/template-components/HeadNav/HeadNav';
+"use client"
+import Drawer from '@/app/components/SideNav/Drawer'
+import HeadNav from '@/app/components/HeadNav/HeadNav';
+import { useState } from 'react';
 
-const inter = Inter({ subsets: ['latin'] })
-// const Sentry = require('@sentry/node');
-export const metadata: Metadata = {
-  title: 'Param LMS',
-  description: 'Param LMS |  A new way to learn',
-}
 
 export default function RootLayout({
   children,
@@ -18,6 +10,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   
+  const [isOpen, setIsOpen] = useState(false);
+  const sideTabs = [
+    { name: 'Dashboard', url: '#', icon: 'insert_chart_outlined' },
+    { name: 'Students', url: '#', icon: 'people_outline' },
+    { name: 'Courses', url: '/protected/admin/courses', icon: 'assignment' },
+    {
+      name: 'Assessments', url: '#', icon: 'assignment', children: [
+        { name: 'Grade Assessments', url: '#', icon: '' }
+      ]
+    }
+  ];
 
   return ( 
     <>
@@ -25,13 +28,12 @@ export default function RootLayout({
               data-push
               data-responsive-width="992px">
                   <div className="mdk-drawer-layout__content page-content">
-                  <SearchNav /> 
+                  <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} /> 
           
                       {children}
           </div>
-          <Drawer />
+        <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs}/> 
         </div>
-      <JsScripts />
     </>
   )
 }

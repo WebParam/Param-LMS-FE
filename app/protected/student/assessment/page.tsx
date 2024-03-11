@@ -16,7 +16,9 @@ const QuestionType = {
     // Add more question types as needed
 };
 
-const CourseAssessment = () => {
+const CourseAssessment = (props:any) => {
+
+    console.log("props", props?.searchParams)
 
     const [courseAssessment, setAssessment] = useState<any>();
     const [loading, setLoading] = useState<any>(true);
@@ -42,11 +44,11 @@ const CourseAssessment = () => {
 
     async function getCourseAssessment(id: string) {
         const cookies = new Cookies();
-
+        console.log("searched", id);
         const userData = cookies.get("param-lms-user");
         try {
             const assessment = await Api.GET_CourseAssessment(id);
-            console.log("assessment", assessment);
+           
             if (assessment) {
                 setLoading(false)
                 setAssessment(assessment);
@@ -147,8 +149,8 @@ const CourseAssessment = () => {
     useEffect(() => {
 
         //getCourseAssessment('65cf2aa5604aec77fcf37a89');
-        getCourseAssessment('65e5c1f9382dc32044f7b1ac');
-        getSelectedCourse('65db347a5b229e7d26e38048')
+        getCourseAssessment(`${props?.searchParams?.assessment}`);
+        getSelectedCourse('65e5d75f6944453739f276c3')
 
     }, []);
 
@@ -200,7 +202,7 @@ const CourseAssessment = () => {
                     <div key={question.id}>
                         {/* <p>{question.text}</p> */}
                         {question.options.map((option: string, index: number) => (
-                            <div className="form-group">
+                            <div className="form-group" key={index}>
                                 <div className="custom-control custom-checkbox">
                                     <input
                                         id="option.name"
@@ -235,7 +237,7 @@ const CourseAssessment = () => {
                     <div className="bg-primary pb-lg-64pt py-32pt">
                         <div className="container page__container">
                             <h2 className='header'>Course Assessment</h2>
-                            <h5 className='header'>{courseInfo?.description}</h5>
+                            <h5 className='subheader'>{courseInfo?.description}</h5>
                             <nav className="course-nav">
                                 {/* <a
                                     href="student-take-lesson.html"
@@ -247,21 +249,22 @@ const CourseAssessment = () => {
                                 >
                                     <span className="material-icons">check_circle</span>
                                 </a> */}
-                                {courseAssessment?.questions?.map((q: any) => (
+                                {courseAssessment?.questions?.map((q: any, i:number) => (
                                 <a
                                     data-toggle="tooltip"
                                     data-placement="bottom"
                                     data-title={q?.name}
                                     data-original-title
                                     title={q?.name}
+                                    key={i}
                                 >
                                     <span className="material-icons">check_circle</span>
                                 </a>
                                 ))}
                             </nav>
                             <div className="d-flex flex-wrap align-items-end justify-content-end mb-16pt">
-                                {/* <h1 className="text-white flex m-0">Question {currentQuestion} of {courseAssessment?.questions?.length}</h1>
-                                <p className="h1 text-white-50 font-weight-light m-0">00:14</p> */}
+                                <h1 className="text-white flex m-0">Question {currentQuestion} of {courseAssessment?.questions?.length}</h1>
+                                {/* <p className="h1 text-white-50 font-weight-light m-0">00:14</p> */}
                             </div>
                             <p className="hero__lead measure-hero-lead text-white-50">
                                 {/* An angular 2 project written in typescript is* transpiled to javascript
@@ -269,7 +272,7 @@ const CourseAssessment = () => {
                                 are provided to the developer while programming on typescript over
                                 javascript? */}
 
-                                {courseAssessment?.questions[currentQuestion]?.questionDescription} ?
+                                {courseAssessment?.questions[currentQuestion]?.questionDescription}
                             </p>
                         </div>
                     </div>
@@ -309,8 +312,8 @@ const CourseAssessment = () => {
                             </div>
                             {currentQuestion < courseAssessment?.questions?.length ? (
                                 <div>
-                                    {renderQuestion(courseAssessment.questions[currentQuestion])}
-                                    <button onClick={handleNextQuestion} className="btn justify-content-center btn-outline-secondary w-10 w-sm-auto mb-16pt mb-sm-0">Next Question</button>
+                                    {renderQuestion(courseAssessment?.questions[currentQuestion])}
+                                    <button onClick={handleNextQuestion} className="btn justify-content-center btn-outline-secondary w-10 w-sm-auto mb-16pt mb-sm-0">Submit</button>
                                 </div>
                             ) : (
                                 <div>

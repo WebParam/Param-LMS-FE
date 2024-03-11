@@ -1,24 +1,6 @@
-"use client"
-import Cookies from "universal-cookie"
-import { usePathname } from 'next/navigation'
-import { IoPerson } from "react-icons/io5";
-import { useEffect, useState } from "react";
-const HeadNav = () => {
-    const [isStudentPathName, setIsStudentPathName] = useState<boolean>(false)
-    const pathname = usePathname()
-  
-    useEffect(() => {
-      if (pathname.includes("/protected/student")) {
-        setIsStudentPathName(true);
-      } else {
-        setIsStudentPathName(false);
-      }
-    }, [pathname]);
-     
-const cookies = new Cookies();
-const loggedInUser = cookies.get("param-lms-user");
-console.log("User",loggedInUser)
+import { NextPage } from 'next';
 
+const HeadNav: NextPage<{setIsOpen: any, isOpen: boolean}> = ({setIsOpen, isOpen}) => {
 
   return (
       <>
@@ -28,9 +10,7 @@ console.log("User",loggedInUser)
      data-primary>
 
 {/*     <!-- Navbar toggler --> */}
-    <button className="navbar-toggler d-block d-lg-none rounded-0"
-            type="button"
-            data-toggle="sidebar">
+              <button onClick={() => { setIsOpen(!isOpen) }} className="navbar-togger d-block d-lg-none rounded-0" >
         <span className="material-icons">menu</span>
     </button>
 
@@ -44,8 +24,6 @@ console.log("User",loggedInUser)
         <span className="d-none d-lg-block">Huma</span>
     </a>
 
-{/*     <!-- <button className="btn navbar-btn mr-16pt" data-toggle="modal" data-target="#apps">Apps <i className="material-icons">arrow_drop_down</i></button> --> */}
-
     <form className="search-form navbar-search d-none d-md-flex mr-16pt"
           action="index.html">
         <button className="btn"
@@ -56,7 +34,7 @@ console.log("User",loggedInUser)
     </form>
 
     <div className="flex"></div>
-{/* 
+
                   <div className="nav navbar-nav flex-nowrap d-none d-lg-flex mr-16pt"
                       style={{ whiteSpace: 'nowrap' }}>
         <div className="nav-item dropdown d-none d-sm-flex">
@@ -75,34 +53,33 @@ console.log("User",loggedInUser)
                    href="">Spanish</a>
             </div>
         </div>
-    </div> */}
+    </div>
 
     <div className="nav navbar-nav flex-nowrap d-flex ml-0 mr-16pt">
         <div className="nav-item dropdown d-none d-sm-flex">
             <a href="#"
                className="nav-link d-flex align-items-center dropdown-toggle"
                data-toggle="dropdown">
-
-<IoPerson
-               style={{width:"32px",height:"32px"}}
-               className="rounded-circle mr-8pt"
-
-/>
+                <img width="32"
+                     height="32"
+                     className="rounded-circle mr-8pt"
+                     src="/assets/images/people/50/guy-3.jpg"
+                     alt="account" />
                 <span className="flex d-flex flex-column mr-8pt">
-                    <span className="navbar-text-100">{loggedInUser?.firstName} {loggedInUser?.lastName}</span>
-                    <small className="navbar-text-50">{isStudentPathName ? "Student" : "Administrator"}</small>
+                    <span className="navbar-text-100">Laza Bogdan</span>
+                    <small className="navbar-text-50">Administrator</small>
                 </span>
             </a>
             <div className="dropdown-menu dropdown-menu-right">
                 <div className="dropdown-header"><strong>Account</strong></div>
                 <a className="dropdown-item"
-                   href="#edit-account.html">Edit Account</a>
+                   href="edit-account.html">Edit Account</a>
                 <a className="dropdown-item"
-                   href="#billing.html">Billing</a>
+                   href="billing.html">Billing</a>
                 <a className="dropdown-item"
-                   href="#billing-history.html">Payments</a>
+                   href="billing-history.html">Payments</a>
                 <a className="dropdown-item"
-                   href="/">Logout</a>
+                   href="login.html">Logout</a>
             </div>
         </div>
 
