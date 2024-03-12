@@ -4,21 +4,23 @@ import { Api } from "@/app/lib/restapi/endpoints";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Link from 'next/link';
+import { IAssessment } from "@/app/interfaces/assessment";
+import { ICourse, IStudentCourses } from "@/app/interfaces/courses";
 
 const CourseAssessments = () => {
 
 
 
     const [student, setStudent] = useState();
-    const [studentEnrolledCourses,setStudentEnrolledCourses] = useState();
-    const [assessmentList, setAssessmentList] = useState();
-    const [courses, setCourses] = useState();
+    const [studentEnrolledCourses,setStudentEnrolledCourses] = useState<any>();
+    const [assessmentList, setAssessmentList] = useState<IAssessment[]>();
+    const [courses, setCourses] = useState<any>();
 
 
     const studentAssessmentsByCourses = async (ids:string) => {
         console.log("payload UI", ids)
-       const assessments = await Api.GET_StudentAssessmentsByCourses(ids);
-       setAssessmentList(assessments)
+       const assessments = await Api.GET_StudentAssessmentsByCourses(ids)!;
+       setAssessmentList(assessments.data)
        console.log("mase", assessments)
         console.log("courses", assessments)
         //setAssessmentList(assessments);
@@ -30,16 +32,13 @@ const CourseAssessments = () => {
           var student = cookies.get('param-lms-user');
           console.log("Id ", student.id)
           const course = await Api.GET_StudentCoursesById(student.id);
-            const enrolled = await Api.GET_EnrolledCoursesByStudentId(student.id)
-         // console.log("Student-Courses",course);
-            setStudentEnrolledCourses(course.data!.enrolledCourses)
+            const enrolled = await Api.GET_EnrolledCoursesByStudentId(student.id);
+            const enrolledCourses = course.data;
+           setStudentEnrolledCourses(course.data!.enrolledCourses)
             setCourses(course?.data?.allCourses)
-           console.log("enrolled courses",courses);
            const pluck = (property:any) => (element:any) => element[property]
            
-           //console.log("plucked",course.data!.enrolledCourses.map(pluck('id')))
             const arrayList = course.data!.enrolledCourses.map(pluck('id'))
-           // Create a new URLSearchParams object
             var params = new URLSearchParams();
 
             // Add each item in the list as a 'courses' parameter
@@ -268,7 +267,7 @@ const CourseAssessments = () => {
                       <div className="d-flex flex-column">
                         <small className="js-lists-values-budget">
                           <strong></strong>
-                          <button class="btn btn-primary">
+                          <button className="btn btn-primary">
                           <Link href={{ pathname: '/protected/student/assessment', query: {assessment: item?.data.id} }}>
                             
                             <span style={{color:'white'}}>Take Assessment</span>

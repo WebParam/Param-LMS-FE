@@ -41,15 +41,15 @@ const HeadNav: NextPage<{ setIsOpen: any, isOpen: boolean }> = ({ setIsOpen, isO
                      alt="account" />
                 <span className="flex d-flex flex-column mr-8pt">
                     <span className="navbar-text-100">{loggedInUser?.firstName} {loggedInUser?.lastName}</span>
-                    <small className="navbar-text-50">{loggedInUser?.role}</small>
+                    <small className="navbar-text-50">{loggedInUser?.role == "Customer" && "Student"}</small>
                 </span>
             </a>
             <div className="dropdown-menu dropdown-menu-right">
                 <div className="dropdown-header"><strong>Account</strong></div>
                 <a className="dropdown-item"
-                   href="edit-account.html">Edit Account</a>
+                   href="#edit-account.html">Edit Account</a>
                 <a className="dropdown-item"
-                   href="login.html">Logout</a>
+                   href="/">Logout</a>
             </div>
         </div>
     </div>

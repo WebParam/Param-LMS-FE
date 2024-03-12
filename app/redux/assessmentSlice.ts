@@ -36,7 +36,13 @@ const initialState: IAssessmentState = {
     createdDate: todayDate,
     modifiedByUserId: loogedInUser?.id,
     modifiedAt: todayDate,
-    dueDate: ""
+    dueDate: "",
+    courseTitle: "",
+    intructor: "",
+    instructorName:"",
+    fileUrl:"",
+    status: 0,
+    instructorId:"",
   } as IAssessment
 };
 
@@ -49,7 +55,7 @@ export const assessmentSlice = createSlice({
     },
 
     createAssessmentDetail(state, action) {
-      const { dueDate } = action.payload;
+      const { dueDate,courseTitle ,intructor} = action.payload;
       const newState = {
         courseId: generateUniqueId(),
         questions: [] as IAssessmentQuestion[],
@@ -58,6 +64,10 @@ export const assessmentSlice = createSlice({
         modifiedByUserId: loogedInUser?.id,
         modifiedAt: todayDate,
         dueDate: dueDate,
+        courseTitle: "",
+        instructorName:"",
+        instructorId:"",
+        status: 0,
       }
 
       state.assessment = newState;
@@ -72,7 +82,11 @@ export const assessmentSlice = createSlice({
         createdDate: _action.createdDate,
         modifiedByUserId: _action.modifiedByUserId,
         modifiedAt: _action.modifiedAt,
-        dueDate: _action.dueDate
+        dueDate: _action.dueDate,
+        courseTitle: _action.courseTitle,
+        instructorName: _action.instructorName,
+        instructorId: _action.instructorId,
+        status: 0,
 
       }
       state.assessment = newState;
@@ -131,15 +145,15 @@ export const assessmentSlice = createSlice({
       }
     },
     deleteChoiceFromQuestion(state, action) {
-      const {  questionId, choiceId } = action.payload;
+      const { questionId, choiceId } = action.payload;
 
 
-      const questionIndex = state.assessment.questions.findIndex((question:IAssessmentQuestion) => question.id === questionId);
+      const questionIndex = state.assessment.questions.findIndex((question: IAssessmentQuestion) => question.id === questionId);
 
-        if (questionIndex !== -1) {
-          const updatedChoices = state.assessment.questions[questionIndex].choices.filter((choice) => choice.id !== choiceId);
-          state.assessment.questions[questionIndex].choices = updatedChoices;
-        }
+      if (questionIndex !== -1) {
+        const updatedChoices = state.assessment.questions[questionIndex].choices.filter((choice) => choice.id !== choiceId);
+        state.assessment.questions[questionIndex].choices = updatedChoices;
+      }
     },
 
     deleteAssessmentQuestion(state, action) {
@@ -148,21 +162,21 @@ export const assessmentSlice = createSlice({
     },
 
     updateAssessmentQuestion(state, action) {
-      const {  questionId, questionDescription, points , questionType} = action.payload;
+      const { questionId, questionDescription, points, questionType } = action.payload;
 
-      const questionIndex = state.assessment.questions.findIndex((question:IAssessmentQuestion) => question.id === questionId);
+      const questionIndex = state.assessment.questions.findIndex((question: IAssessmentQuestion) => question.id === questionId);
 
-        if (questionIndex !== -1) {
-          state.assessment.questions[questionIndex] = {
-            ...state.assessment.questions[questionIndex],
-            questionDescription,
-            points,
-            questionType
-          };
+      if (questionIndex !== -1) {
+        state.assessment.questions[questionIndex] = {
+          ...state.assessment.questions[questionIndex],
+          questionDescription,
+          points,
+          questionType
+        };
 
-          // Sort the questions by order
-          state.assessment.questions.sort(sortQuestionsByOrder);
-        }
+        // Sort the questions by order
+        state.assessment.questions.sort(sortQuestionsByOrder);
+      }
     },
   },
 });

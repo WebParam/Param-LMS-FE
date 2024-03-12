@@ -48,7 +48,7 @@ function VideoSibar({
   };
 
   const handleSectionClick = (section: any) => {
-    setExpandedSection(null);
+    // setExpandedSection(null);
     if (expandedSection === section.id) {
       setExpandedSection(null);
     } else {

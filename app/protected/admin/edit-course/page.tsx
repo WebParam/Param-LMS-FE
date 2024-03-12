@@ -113,7 +113,7 @@ function EditCourse() {
   const [newSection, setNewSection] = useState<boolean>(true);
   const [moduleId, setModuleId] = useState<string>();
   const [courseId, setCourseId] = useState<string>("");
-  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
+  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
   const [formData, setFormData] = useState(new FormData());
 
   const [imgError, setImgError] = useState<boolean>(false)

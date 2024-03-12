@@ -114,7 +114,7 @@ const [role,setRole]=useState("Admin")
           changedOn: date,
           Otp: "",
          // Status: "new",
-          role: "",
+          role: "Student",
           LoginType: 0,
         } as IUserRegisterModel;
         
@@ -135,7 +135,7 @@ debugger;
             // Set cookies here after successful login
     
             // Optionally, you can redirect the user to another page
-            router.push('/protected/admin/manage-courses');
+            router.push('/protected/student/course/all-courses');
       
           }
           

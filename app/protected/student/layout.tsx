@@ -13,9 +13,9 @@ export default function RootLayout({
   
   const [isOpen, setIsOpen] = useState(false);
   const sideTabs: SideTab[] = [
-    { name: 'Dashboard', url: '#', icon: 'insert_chart_outlined' },
+    { name: 'Dashboard', url: '#/protected/student/dashboard', icon: 'insert_chart_outlined' },
     { name: 'My Courses', url: '#', icon: 'people_outline' },
-    { name: 'Courses', url: '/protected/admin/courses', icon: 'assignment' },
+    { name: 'Courses', url: '/protected/student/course/all-courses', icon: 'assignment' },
     { name: 'Learning Path', url: '#', icon: 'assignment' }
   ];
 

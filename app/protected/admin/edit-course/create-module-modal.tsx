@@ -164,7 +164,7 @@ const [document, setDocument] = useState<any>("")
   const [videoReference, setVideoReference] = useState<string>("")
 
 
-  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
+  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
   const _quizFromState: IQuiz  = _quizzesFromState[_quizzesFromState.length - 1];
 
   const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
