@@ -1,0 +1,85 @@
+.aside {
+    width: 300px;
+    position: fixed !important;
+    bottom: 0;
+    top: 130px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    background-color: #fff;
+    color: #000;
+    padding: 10px 0 0 10px;
+    border-radius: 10px 0 0 0;
+}
+
+.aside > :nth-child(1) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+}
+
+.aside > :nth-child(1) p {    
+    height: fit-content;
+    position: relative;
+    right: 10px;
+    font-size: 18px;
+    border: 1px solid lightgrey;
+    padding: 5px 15px;
+    cursor: pointer;
+    transition: .5s all ease-in-out;
+}
+
+.aside > :nth-child(1) p:hover {
+    background-color: #252525;
+    color: antiquewhite;
+}
+
+.aside > :nth-child(1) > h2 {
+    font-size: 24px;
+}
+
+.aside :nth-child(2) {
+    height: calc(100vh - 50px);
+    overflow-y: hidden;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.aside :nth-child(2) li {
+    display: flex;
+    height: 100px;
+    border: 1px solid lightgrey;
+    padding: 5px;
+    transition: .5s all;
+}
+
+
+.aside :nth-child(2) li:hover {
+    background-color: lightgrey;
+    color: #252525;
+}
+
+
+.aside :nth-child(2) li p {
+    font-size: 16px;
+    height: fit-content;
+}
+
+.aside :nth-child(2) li > div > div {
+    height: fit-content;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin: -15px 0;
+
+}
+
+
+.aside :nth-child(2) li > div > div > p {
+    font-size: 14px;
+}
