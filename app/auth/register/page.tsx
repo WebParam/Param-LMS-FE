@@ -114,7 +114,7 @@ const [role,setRole]=useState("Admin")
           changedOn: date,
           Otp: "",
          // Status: "new",
-          role: "",
+          role: "Student",
           LoginType: 0,
         } as IUserRegisterModel;
         

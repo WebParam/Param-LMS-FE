@@ -1,19 +1,17 @@
-"use Client"
-import './globals.css'
-import './css/app.css'
+import './css/style.css'
 import './vendor/perfect-scrollbar.css'
 import './css/material-icons.css'
 import './css/fontawesome.css'
 import './vendor/spinkit.css'
 import './css/preloader.css'
+import './css/app.css'
 import './css/dark-mode.css'
+import './globals.css'
+import JsScripts from '@/app/template-components/JsScripts'
 
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import { ReduxProvider } from './provider'
 
-const inter = Inter({ subsets: ['latin'] })
-// const Sentry = require('@sentry/node');
 export const metadata: Metadata = {
   title: 'Param LMS',
   description: 'Param LMS |  A new way to learn',
@@ -31,7 +29,9 @@ export default function RootLayout({
       <head
       ><link href="https://fonts.googleapis.com/css?family=Lato:400,700%7COswald:300,400,500,700%7CRoboto:400,500%7CExo+2:600&amp;display=swap" rel="stylesheet"/>
       </head>
-     <body className="layout-mini-secondary has-drawer-opened"><ReduxProvider> {children} </ReduxProvider></body>
+      <body className="layout-app layout-sticky-subnav"><ReduxProvider> {children} </ReduxProvider>
+      <JsScripts />
+      </body>
   
     </html>
   )

@@ -112,12 +112,13 @@ function EditCourse() {
   const [newSection, setNewSection] = useState<boolean>(true);
   const [sectionBtn, setSectionBtn] = useState<boolean>(true);
   const [imageUrl, setImageUrl] = useState<any>();
-  const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit);
+  const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit).quizzes;
   const [imgError, setImgError] = useState(false);
   const [moduleId, setModuleId] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
   const [arrayOfDocuments, setArrayOfDocuments] = useState<any[]>([]);
   const [isDescSet, setIsDescSet] = useState<boolean>(false);
+  const [instructorName, setInstructorName] = useState<string>("");
 
   const [videoId, setVideoId] = useState<string>("");
   const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
@@ -270,12 +271,18 @@ function EditCourse() {
       if (createCourseResponse?.data?.id) {
         const assessment = {
           courseId : createCourseResponse?.data?.id, 
-      questions  :_assessmentFromState.questions,
-      createdByUserId  : _assessmentFromState.createdByUserId,
-      createdDate  : _assessmentFromState.createdDate,
-      modifiedByUserId  : _assessmentFromState.modifiedByUserId, 
-      modifiedAt  : _assessmentFromState.modifiedAt, 
-        dueDate  : _assessmentFromState.dueDate
+         questions  :_assessmentFromState.questions,
+          createdByUserId  : _assessmentFromState.createdByUserId,
+         createdDate  : _assessmentFromState.createdDate,
+         modifiedByUserId  : _assessmentFromState.modifiedByUserId, 
+         modifiedAt  : _assessmentFromState.modifiedAt, 
+          dueDate  : _assessmentFromState.dueDate,
+          courseTitle: courseTitle,
+          instructorName:"John Doe",
+          instructorId:"656f1335650c740ce0ae4d65",
+          status : _assessmentFromState.status
+
+
         }
 
         const postAssessment = await Api.POST_AddAssessments(assessment);
@@ -431,6 +438,8 @@ function EditCourse() {
     modal: {
       maxWidth: "60%",
       width: "100%",
+      marginTop:"20px",
+      marginLeft:"50px"
     },
   };
 
@@ -896,6 +905,33 @@ function EditCourse() {
                     </div>
                   </div>
                 </div>
+
+                <div className="page-separator">
+                  <div className="page-separator__text">Instructor</div>
+                </div>
+
+                <div className="card">
+                  <div className="card-body">
+                  <label className="form-label">
+                        Intructor name
+                     
+                  </label>
+                    <div className="form-group">
+                    
+               
+                    <input
+                    type="text"
+                    className="form-control form-control-lg"
+                    placeholder="Instructor Name "
+                    value={instructorName}
+                    onChange={(e:any) => setInstructorName(e.target.value)}
+                  />
+
+                    </div>
+                  </div>
+                </div>
+
+
                 <div className="page-separator">
                   <div className="page-separator__text">Options</div>
                 </div>

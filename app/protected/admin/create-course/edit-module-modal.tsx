@@ -138,7 +138,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [disableModuleInputs, setDisableModuleInputs] = useState<boolean>(false)  
 
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
-  const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit);
+  const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit).quizzes;
   const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
 
 

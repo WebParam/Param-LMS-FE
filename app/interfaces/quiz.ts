@@ -66,7 +66,9 @@ export interface IQuiz {
 
 
 export interface IQuizState {
-    quizzes: IQuiz[]
+    quizzes: {
+        quizzes: IQuiz[]
+    }
 }
 
 export interface IUpdateQuizDetailState {

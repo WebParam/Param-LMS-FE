@@ -1,5 +1,5 @@
 'use client'
-import { Link } from "@mui/material"
+import Link from 'next/link';
 import { Development } from "./Development"
 import { useState } from "react";
 import { ICourse } from "@/app/interfaces/courses"
@@ -29,7 +29,7 @@ const Page = () => {
                   style={{ textDecoration: "none" }}
                   className="small"
                 >
-                  <a className="btn btn-outline-secondary">Add Course</a>
+                  <span className="btn btn-outline-secondary">Add Course</span>
                 </Link>
               </div>
             </div>

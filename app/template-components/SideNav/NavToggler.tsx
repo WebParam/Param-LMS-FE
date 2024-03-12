@@ -52,37 +52,7 @@ console.log("User",loggedInUser)
                                 <a className="dropdown-item" href="#billing-history.html">Payments</a>
                                 <a className="dropdown-item" href="/">Logout</a>
                                 <div className="dropdown-divider"></div>
-                                {/* <div className="dropdown-header"><strong>Select company</strong></div>
-                                <a href="#" className="dropdown-item active d-flex align-items-center">
-
-                                    <div className="avatar avatar-sm mr-8pt">
-
-                                        <span className="avatar-title rounded bg-primary-dodger-blue">FM</span>
-
-                                    </div>
-
-                                    <small className="ml-4pt flex">
-                                        <span className="d-flex flex-column">
-                                            <strong className="text-black-100">FrontendMatter Inc.</strong>
-                                            <span className="text-black-50">Administrator</span>
-                                        </span>
-                                    </small>
-                                </a>
-                                <a href="" className="dropdown-item d-flex align-items-center">
-
-                                    <div className="avatar avatar-sm mr-8pt">
-
-                                        <span className="avatar-title rounded bg-accent-pickled-bluewood">HH</span>
-
-                                    </div>
-
-                                    <small className="ml-4pt flex">
-                                        <span className="d-flex flex-column">
-                                            <strong className="text-black-100">HumaHuma Inc.</strong>
-                                            <span className="text-black-50">Publisher</span>
-                                        </span>
-                                    </small>
-                                </a> */}
+                                
                             </div>
                         </div>
 
