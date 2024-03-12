@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { NextPage } from 'next';
 import SideTab from '@/app/interfaces/sideTabs';
+import { usePathname } from 'next/navigation'
 
 const NavOverview: NextPage<{sideTabs: SideTab[]}> = ({sideTabs}) => {
+    const pathname = usePathname();
 
   return (
       <>
@@ -11,7 +13,7 @@ const NavOverview: NextPage<{sideTabs: SideTab[]}> = ({sideTabs}) => {
                             
                 {sideTabs && sideTabs.map((tab) => {
                     if (tab.children) {
-                        const children = tab.children.map((l: SideTab) => (<li key={l.name} className="sidebar-menu-item">
+                        const children = tab.children.map((l: SideTab) => (<li key={l.name} className={`sidebar-menu-item ${pathname == tab.url ? "active" : ""}`}>
                             <a className="sidebar-menu-button" href={l.url}>
                                 <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">{l.icon}</span>
                                 <span className="sidebar-menu-text">{l.name}</span>
@@ -32,7 +34,7 @@ const NavOverview: NextPage<{sideTabs: SideTab[]}> = ({sideTabs}) => {
                         
                     } 
                 
-                    return (<li key={tab.url} className="sidebar-menu-item">
+                    return (<li key={tab.url} className={`sidebar-menu-item ${pathname == tab.url ? "active" : ""}`}>
                         <a className="sidebar-menu-button" href={tab.url}>
                             <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">{tab.icon}</span>
                             <span className="sidebar-menu-text">{tab.name}</span>
