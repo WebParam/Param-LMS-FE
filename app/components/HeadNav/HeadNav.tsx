@@ -20,10 +20,7 @@ const HeadNav: NextPage<{ setIsOpen: any, isOpen: boolean }> = ({ setIsOpen, isO
 {/*     <!-- Navbar Brand --> */}
     <a href="index.html"
        className="navbar-brand mr-16pt d-lg-none">
-        <img className="navbar-brand-icon mr-0 mr-lg-8pt"
-             src="/assets/images/logo/accent-teal-100@2x.png"
-             width="32"
-             alt="Khumla"/>
+        Khumla
         <span className="d-none d-lg-block">Khumla</span>
     </a>
 

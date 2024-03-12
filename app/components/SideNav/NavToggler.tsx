@@ -9,7 +9,6 @@ const NavToggler: NextPage<{ setIsOpen?: any, isOpen?: boolean }> = ({ setIsOpen
       </a>
 
       <a href="#" className="sidebar-brand ">
-          <img className="sidebar-brand-icon" src="/assets/images/logo/dodger-blue-100@2x.png" alt="Khumla"/>
           <span>Khumla</span>
       </a>
 
