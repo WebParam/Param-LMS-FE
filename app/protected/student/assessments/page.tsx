@@ -250,7 +250,7 @@ const CourseAssessments = () => {
                     <td>
                       <div className="d-flex flex-column">
                         <small className="js-lists-values-status text-50 mb-4pt">
-                          {item?.data?.status}
+                          {item?.data?.status === 0 ? 'In Progress' : item?.data?.status === 1 ? 'Completed' : '-'}
                         </small>
                         <span className="indicator-line rounded bg-warning" />
                       </div>
