@@ -11,7 +11,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import "../../../assets/vendor/spinkit.css";
 import "../../../assets/css/preloader.css";
 import dynamic from 'next/dynamic';
-import Sidebar from "@/app/components/Sidebar";
+
 import { IQuiz } from "@/app/interfaces/quiz";
 import { updateCourseFromDataBase } from "@/app/redux/courseSlice";
 import { useDispatch, useSelector } from "react-redux";

@@ -36,7 +36,6 @@ import Dropdown from "react-bootstrap/Dropdown";
 import "react-quill/dist/quill.snow.css";
 import { IQuiz } from "@/app/interfaces/quiz";
 import { getSelectedQuizForEdit } from "@/app/redux/quizSlice";
-import Sidebar from "@/app/components/Sidebar";
 import { IDocument } from "@/app/interfaces/document";
 import { getSelectedDocumentForEdit } from "@/app/redux/documentSice";
 import { CreateCourseAssessmentModal } from "./create-assessment";

@@ -18,11 +18,8 @@ import {
 } from "@/app/redux/courseSlice";
 import {
   ICourse,
-  IDeleteModule,
-  IDeleteSection,
   IModule,
   ISection,
-  IUpdateCourse,
   IUpdateCourseDetailState,
   IUpdateSectionDetailState,
   IVideo,
@@ -36,8 +33,6 @@ import { FaTrash } from "react-icons/fa";
 import { EditCourseModal } from "./edit-module-modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Dropdown from "react-bootstrap/Dropdown";
-import Sidebar from "@/app/components/Sidebar";
 import { IQuiz } from "@/app/interfaces/quiz";
 import { getSelectedQuizForEdit, updateQuizzes } from "@/app/redux/quizSlice";
 import dynamic from "next/dynamic";
