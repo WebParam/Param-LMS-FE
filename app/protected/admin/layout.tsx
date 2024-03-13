@@ -12,7 +12,7 @@ export default function RootLayout({
   
   const [isOpen, setIsOpen] = useState(false);
   const sideTabs = [
-    { name: 'Dashboard', url: '#', icon: 'insert_chart_outlined' },
+    { name: 'Dashboard', url: '/protected/admin/manage-courses', icon: 'insert_chart_outlined' },
     { name: 'Students', url: '#', icon: 'people_outline' },
     { name: 'Courses', url: '/protected/admin/courses', icon: 'assignment' },
     {
