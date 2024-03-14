@@ -29,7 +29,7 @@ function Page() {
         </button>
         {/* // END Navbar Toggler */}
         {/* Navbar Brand */}
-        <a href="index.html" className="navbar-brand mr-16pt d-lg-none">
+        <a className="navbar-brand mr-16pt d-lg-none">
           <span className="avatar avatar-sm navbar-brand-icon mr-0 mr-lg-8pt">
             <span className="avatar-title rounded bg-primary">
               <img
@@ -44,8 +44,7 @@ function Page() {
         {/* // END Navbar Brand */}
         {/* Navbar Search */}
         <form
-          className="search-form navbar-search d-none d-md-flex mr-16pt"
-          action="index.html"
+          className="search-form navbar-search d-none d-md-flex mr-16pt"          
         >
           <button className="btn" type="submit">
             <i className="material-icons">search</i>
@@ -273,16 +272,16 @@ function Page() {
               <div className="dropdown-header">
                 <strong>Account</strong>
               </div>
-              <a className="dropdown-item" href="edit-account.html">
+              <a className="dropdown-item" >
                 Edit Account
               </a>
-              <a className="dropdown-item" href="billing.html">
+              <a className="dropdown-item" >
                 Billing
               </a>
-              <a className="dropdown-item" href="billing-history.html">
+              <a className="dropdown-item" >
                 Payments
               </a>
-              <a className="dropdown-item" href="login.html">
+              <a className="dropdown-item" >
                 Logout
               </a>
             </div>
@@ -299,7 +298,7 @@ function Page() {
               <h2 className="mb-0">Edit Quiz</h2>
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">
-                  <a href="index.html">Home</a>
+                  <a >Home</a>
                 </li>
                 <li className="breadcrumb-item active">Edit Quiz</li>
               </ol>
@@ -1051,8 +1050,7 @@ function Page() {
       >
         <div className="sidebar sidebar-mini sidebar-dark-pickled-bluewood sidebar-left d-flex flex-column">
           {/* Brand */}
-          <a
-            href="index.html"
+          <a            
             className="sidebar-brand p-0 navbar-height d-flex justify-content-center"
           >
             <span className="avatar avatar-sm ">
@@ -1308,22 +1306,22 @@ function Page() {
               <div className="sidebar-heading">Account</div>
               <ul className="sidebar-menu">
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="edit-account.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Edit Account</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="billing.html">
+                  <a className="sidebar-menu-button" >
                     Billing
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="billing-history.html">
+                  <a className="sidebar-menu-button" >
                     Payments
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="login.html">
+                  <a className="sidebar-menu-button" >
                     Logout
                   </a>
                 </li>
@@ -1351,87 +1349,45 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="erp-dashboard.html"
+                        
                       >
                         <span className="sidebar-menu-text">ERP Dashboard</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
                       <a
-                        className="sidebar-menu-button"
-                        href="crm-dashboard.html"
+                        className="sidebar-menu-button"                        
                       >
                         <span className="sidebar-menu-text">CRM Dashboard</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="hr-dashboard.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">HR Dashboard</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="employees.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Employees</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="staff.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Staff</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="leaves.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Leaves</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
                       <a
-                        className="sidebar-menu-button disabled"
-                        href="departments.html"
+                        className="sidebar-menu-button disabled"                        
                       >
                         <span className="sidebar-menu-text">Departments</span>
                       </a>
-                    </li>
-                    {/* <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="documents.html">
-      <span class="sidebar-menu-text">Documents</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="attendance.html">
-      <span class="sidebar-menu-text">Attendance</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="recruitment.html">
-      <span class="sidebar-menu-text">Recruitment</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="payroll.html">
-      <span class="sidebar-menu-text">Payroll</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="training.html">
-      <span class="sidebar-menu-text">Training</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="employee-profile.html">
-      <span class="sidebar-menu-text">Employee Profile</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="accounting.html">
-      <span class="sidebar-menu-text">Accounting</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="inventory.html">
-      <span class="sidebar-menu-text">Inventory</span>
-    </a>
-  </li> */}
+                    </li>                    
                   </ul>
                 </li>
                 <li className="sidebar-menu-item">
@@ -1451,14 +1407,13 @@ function Page() {
                     id="community_menu"
                   >
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="teachers.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Browse Teachers</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
                       <a
-                        className="sidebar-menu-button"
-                        href="student-profile.html"
+                        className="sidebar-menu-button"                        
                       >
                         <span className="sidebar-menu-text">Student Profile</span>
                       </a>
@@ -1466,39 +1421,39 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="teacher-profile.html"
+                        
                       >
                         <span className="sidebar-menu-text">Teacher Profile</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="blog.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Blog</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="blog-post.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Blog Post</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="faq.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">FAQ</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="help-center.html">
+                      <a className="sidebar-menu-button" >
                         {/*  */}
                         <span className="sidebar-menu-text">Help Center</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="discussions.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Discussions</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="discussion.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">
                           Discussion Details
                         </span>
@@ -1506,8 +1461,7 @@ function Page() {
                     </li>
                     <li className="sidebar-menu-item">
                       <a
-                        className="sidebar-menu-button"
-                        href="discussions-ask.html"
+                        className="sidebar-menu-button"                        
                       >
                         <span className="sidebar-menu-text">Ask Question</span>
                       </a>
@@ -1531,38 +1485,28 @@ function Page() {
                     id="productivity_menu"
                   >
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="projects.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Projects</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="tasks-board.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Tasks Board</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="tasks-list.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Tasks List</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button disabled"
-                        href="kanban.html"
+                        
                       >
                         <span className="sidebar-menu-text">Kanban</span>
                       </a>
                     </li>
-                    {/* <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="task-details.html">
-      <span class="sidebar-menu-text">Task Details</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="team-members.html">
-      <span class="sidebar-menu-text">Team Members</span>
-    </a>
-  </li> */}
                   </ul>
                 </li>
                 <li className="sidebar-menu-item">
@@ -1584,13 +1528,13 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="cms-dashboard.html"
+                        
                       >
                         <span className="sidebar-menu-text">CMS Dashboard</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="posts.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Posts</span>
                       </a>
                     </li>
@@ -1613,14 +1557,14 @@ function Page() {
                     id="ecommerce_menu"
                   >
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ecommerce.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Shop Dashboard</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button disabled"
-                        href="edit-product.html"
+                        
                       >
                         <span className="sidebar-menu-text">Edit Product</span>
                       </a>
@@ -1633,7 +1577,7 @@ function Page() {
               <div className="sidebar-heading">Student</div>
               <ul className="sidebar-menu">
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="index.html">
+                  <a className="sidebar-menu-button" >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       home
                     </span>
@@ -1641,7 +1585,7 @@ function Page() {
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="courses.html">
+                  <a className="sidebar-menu-button" >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       local_library
                     </span>
@@ -1649,7 +1593,7 @@ function Page() {
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="paths.html">
+                  <a className="sidebar-menu-button" >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       style
                     </span>
@@ -1659,7 +1603,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="student-dashboard.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       account_box
@@ -1670,7 +1613,7 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="student-my-courses.html"
+                    
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       search
@@ -1679,7 +1622,7 @@ function Page() {
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="student-paths.html">
+                  <a className="sidebar-menu-button" >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       timeline
                     </span>
@@ -1687,7 +1630,7 @@ function Page() {
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="student-path.html">
+                  <a className="sidebar-menu-button" >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       change_history
                     </span>
@@ -1695,7 +1638,7 @@ function Page() {
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="student-course.html">
+                  <a className="sidebar-menu-button" >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       face
                     </span>
@@ -1703,7 +1646,7 @@ function Page() {
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="student-lesson.html">
+                  <a className="sidebar-menu-button" >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       panorama_fish_eye
                     </span>
@@ -1713,7 +1656,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="student-take-course.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       class
@@ -1727,7 +1669,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="student-take-lesson.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       import_contacts
@@ -1738,7 +1679,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="student-take-quiz.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       dvr
@@ -1749,7 +1689,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="student-quiz-results.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       poll
@@ -1760,7 +1699,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="student-quiz-result-details.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       live_help
@@ -1771,7 +1709,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="student-path-assessment.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       layers
@@ -1782,7 +1719,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="student-path-assessment-result.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       assignment_turned_in
@@ -1798,7 +1734,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="instructor-dashboard.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       school
@@ -1811,7 +1746,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="instructor-courses.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       import_contacts
@@ -1822,7 +1756,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="instructor-quizzes.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       help
@@ -1833,7 +1766,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="instructor-earnings.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       trending_up
@@ -1844,7 +1776,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="instructor-statement.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       receipt
@@ -1855,7 +1786,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="instructor-edit-course.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       post_add
@@ -1866,7 +1796,6 @@ function Page() {
                 <li className="sidebar-menu-item active">
                   <a
                     className="sidebar-menu-button"
-                    href="instructor-edit-quiz.html"
                   >
                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                       format_shapes
@@ -1880,44 +1809,44 @@ function Page() {
               <div className="sidebar-heading">Account</div>
               <ul className="sidebar-menu">
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="pricing.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Pricing</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="login.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Login</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="signup.html">
+                  <a className="sidebar-menu-button">
                     <span className="sidebar-menu-text">Signup</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="signup-payment.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Payment</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="reset-password.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Reset Password</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="change-password.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Change Password</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="edit-account.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Edit Account</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="edit-account-profile.html"
+                    
                   >
                     <span className="sidebar-menu-text">
                       Profile &amp; Privacy
@@ -1927,7 +1856,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="edit-account-notifications.html"
                   >
                     <span className="sidebar-menu-text">Email Notifications</span>
                   </a>
@@ -1935,33 +1863,32 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="edit-account-password.html"
                   >
                     <span className="sidebar-menu-text">Account Password</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="billing.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Subscription</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="billing-upgrade.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Upgrade Account</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="billing-payment.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Payment Information</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="billing-history.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Payment History</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="billing-invoice.html">
+                  <a className="sidebar-menu-button">
                     <span className="sidebar-menu-text">Invoice</span>
                   </a>
                 </li>
@@ -1971,12 +1898,12 @@ function Page() {
               <div className="sidebar-heading">Messaging</div>
               <ul className="sidebar-menu">
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="messages.html">
+                  <a className="sidebar-menu-button">
                     <span className="sidebar-menu-text">Messages</span>
                   </a>
                 </li>
                 <li className="sidebar-menu-item">
-                  <a className="sidebar-menu-button" href="email.html">
+                  <a className="sidebar-menu-button" >
                     <span className="sidebar-menu-text">Email</span>
                   </a>
                 </li>
@@ -2002,98 +1929,67 @@ function Page() {
                     id="components_menu"
                   >
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ui-buttons.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Buttons</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ui-avatars.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Avatars</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ui-forms.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Forms</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ui-loaders.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Loaders</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ui-tables.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Tables</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ui-cards.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Cards</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ui-icons.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Icons</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ui-tabs.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Tabs</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ui-alerts.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Alerts</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ui-badges.html">
+                      <a className="sidebar-menu-button">
                         <span className="sidebar-menu-text">Badges</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
-                      <a className="sidebar-menu-button" href="ui-progress.html">
+                      <a className="sidebar-menu-button" >
                         <span className="sidebar-menu-text">Progress</span>
                       </a>
                     </li>
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-pagination.html"
                       >
                         <span className="sidebar-menu-text">Pagination</span>
                       </a>
                     </li>
-                    {/* <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="ui-typography.html">
-      <span class="sidebar-menu-text">Typography</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="ui-colors.html">
-      <span class="sidebar-menu-text">Colors</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="ui-breadcrumb.html">
-      <span class="sidebar-menu-text">Breadcrumb</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="ui-accordions.html">
-      <span class="sidebar-menu-text">Accordions</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="ui-modals.html">
-      <span class="sidebar-menu-text">Modals</span>
-    </a>
-  </li>
-  <li class="sidebar-menu-item">
-    <a class="sidebar-menu-button disabled" href="ui-chips.html">
-      <span class="sidebar-menu-text">Chips</span>
-    </a>
-  </li> */}
                     <li className="sidebar-menu-item">
                       <a className="sidebar-menu-button disabled" href="">
                         <span className="sidebar-menu-text">Disabled</span>
@@ -2120,7 +2016,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-charts.html"
                       >
                         <span className="sidebar-menu-text">Charts</span>
                       </a>
@@ -2128,7 +2023,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-flatpickr.html"
                       >
                         <span className="sidebar-menu-text">Flatpickr</span>
                       </a>
@@ -2136,7 +2030,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-daterangepicker.html"
                       >
                         <span className="sidebar-menu-text">
                           Date Range Picker
@@ -2146,7 +2039,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-dragula.html"
                       >
                         <span className="sidebar-menu-text">Dragula</span>
                       </a>
@@ -2154,7 +2046,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-dropzone.html"
                       >
                         <span className="sidebar-menu-text">Dropzone</span>
                       </a>
@@ -2162,7 +2053,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-range-sliders.html"
                       >
                         <span className="sidebar-menu-text">Range Sliders</span>
                       </a>
@@ -2170,7 +2060,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-quill.html"
                       >
                         <span className="sidebar-menu-text">Quill</span>
                       </a>
@@ -2178,7 +2067,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-select2.html"
                       >
                         <span className="sidebar-menu-text">Select2</span>
                       </a>
@@ -2186,7 +2074,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-nestable.html"
                       >
                         <span className="sidebar-menu-text">Nestable</span>
                       </a>
@@ -2194,7 +2081,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-fancytree.html"
                       >
                         <span className="sidebar-menu-text">Fancy Tree</span>
                       </a>
@@ -2202,7 +2088,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-maps-vector.html"
                       >
                         <span className="sidebar-menu-text">Vector Maps</span>
                       </a>
@@ -2210,7 +2095,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-sweet-alert.html"
                       >
                         <span className="sidebar-menu-text">Sweet Alert</span>
                       </a>
@@ -2218,7 +2102,6 @@ function Page() {
                     <li className="sidebar-menu-item">
                       <a
                         className="sidebar-menu-button"
-                        href="ui-plugin-toastr.html"
                       >
                         <span className="sidebar-menu-text">Toastr</span>
                       </a>
@@ -2238,7 +2121,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="../Compact_App_Layout/instructor-edit-quiz.html"
                   >
                     <span className="sidebar-menu-text">Compact</span>
                   </a>
@@ -2246,7 +2128,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="../Mini_App_Layout/instructor-edit-quiz.html"
                   >
                     <span className="sidebar-menu-text">Mini</span>
                   </a>
@@ -2254,7 +2135,6 @@ function Page() {
                 <li className="sidebar-menu-item active">
                   <a
                     className="sidebar-menu-button"
-                    href="../Mini_Secondary_Layout/instructor-edit-quiz.html"
                   >
                     <span className="sidebar-menu-text">Mini + Secondary</span>
                   </a>
@@ -2262,7 +2142,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="../App_Layout/instructor-edit-quiz.html"
                   >
                     <span className="sidebar-menu-text">App</span>
                   </a>
@@ -2270,7 +2149,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="../Boxed_App_Layout/instructor-edit-quiz.html"
                   >
                     <span className="sidebar-menu-text">Boxed</span>
                   </a>
@@ -2278,7 +2156,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="../Sticky_App_Layout/instructor-edit-quiz.html"
                   >
                     <span className="sidebar-menu-text">Sticky</span>
                   </a>
@@ -2286,7 +2163,6 @@ function Page() {
                 <li className="sidebar-menu-item">
                   <a
                     className="sidebar-menu-button"
-                    href="../Fixed_Layout/instructor-edit-quiz.html"
                   >
                     <span className="sidebar-menu-text">Fixed</span>
                   </a>

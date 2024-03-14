@@ -152,7 +152,7 @@ const handleNewComment=async ()=>{
             </div>
           </nav>
           <div className="container-fluid page__container">
-            <form action="discussions.html">
+            <form >
               <div className="row">
                 <div className="col-lg-9">
                   <div className="page-section">
@@ -195,8 +195,8 @@ const handleNewComment=async ()=>{
                                 </div>
                               </div>
                               <div className="col mb-8pt mb-md-0">
-                                <p className="mb-8pt"><a href="discussion.html" className="text-body"><strong>{comment.title}</strong></a></p>
-                                <a href="discussion.html" className="chip chip-outline-secondary">{video?.title}</a>
+                                <p className="mb-8pt"><a  className="text-body"><strong>{comment.title}</strong></a></p>
+                                <a  className="chip chip-outline-secondary">{video?.title}</a>
                               </div>
                               <div className="col-auto d-flex flex-column align-items-center justify-content-center">
                                 <h5 className="m-0">{comment.replies.length}</h5>
@@ -206,28 +206,6 @@ const handleNewComment=async ()=>{
                           </div>
                             )
                           )}
-                          {/* <div className="list-group-item p-3">
-                            <div className="row align-items-start">
-                              <div className="col-md-3 mb-8pt mb-md-0">
-                                <div className="media align-items-center">
-                                  <div className="media-left mr-8pt">
-                                    <a href="" className="avatar avatar-32pt"><img src="assets/images/people/110/guy-2.jpg" alt="avatar" className="avatar-img rounded-circle" /></a>
-                                  </div>
-                                  <div className="d-flex flex-column media-body media-middle">
-                                    <a href="" className="text-body"><strong>Adam Curtis</strong></a>
-                                    <small className="text-muted">3 days ago</small>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col mb-8pt mb-md-0">
-                                <p className="mb-0"><a href="discussion.html" className="text-body"><strong>Why am I getting an error when trying to install angular/http@2.4.2</strong></a></p>
-                              </div>
-                              <div className="col-auto d-flex flex-column align-items-center justify-content-center">
-                                <h5 className="m-0">1</h5>
-                                <p className="lh-1 mb-0"><small className="text-70">answers</small></p>
-                              </div>
-                            </div>
-                          </div> */}
                         </div>
                       </div>
                     </div>

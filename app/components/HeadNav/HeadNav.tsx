@@ -18,7 +18,7 @@ const HeadNav: NextPage<{ setIsOpen: any, isOpen: boolean }> = ({ setIsOpen, isO
     </button>
 
 {/*     <!-- Navbar Brand --> */}
-    <a href="index.html"
+    <a 
        className="navbar-brand mr-16pt d-lg-none">
         Khumla
         <span className="d-none d-lg-block">Khumla</span>
@@ -43,10 +43,8 @@ const HeadNav: NextPage<{ setIsOpen: any, isOpen: boolean }> = ({ setIsOpen, isO
             </a>
             <div className="dropdown-menu dropdown-menu-right">
                 <div className="dropdown-header"><strong>Account</strong></div>
-                <a className="dropdown-item"
-                   href="edit-account.html">Edit Account</a>
-                <a className="dropdown-item"
-                   href="login.html">Logout</a>
+                <a className="dropdown-item" >Edit Account</a>
+                <a className="dropdown-item" >Logout</a>
             </div>
         </div>
     </div>
