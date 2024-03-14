@@ -71,7 +71,7 @@ useEffect(() => {
 
   async function getStudentCourses() {
     try {
-      var student =cookies.get('param-lms-user');
+      var student = cookies.get('param-lms-user');
       console.log("Id ", student.id)
       const course = await Api.GET_StudentCoursesById(student.id);
       //const enrolled = await Api.GET_EnrolledCoursesByStudentId(student.id)
