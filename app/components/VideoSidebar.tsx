@@ -48,7 +48,7 @@ function VideoSibar({
   };
 
   const handleSectionClick = (section: any) => {
-    setExpandedSection(null);
+    // setExpandedSection(null);
     if (expandedSection === section.id) {
       setExpandedSection(null);
     } else {
@@ -60,16 +60,12 @@ function VideoSibar({
   return (
     <div className="section">
       {
-        _courseFromState?.sections[0]?.modules[0]?.videos.length > 0 &&     <h3 style={{ backgroundColor: "white", padding: "10px 0px 10px 20px", borderBottom: "1px solid gray", }}>
+        _courseFromState?.sections[0]?.modules[0]?.videos.length > 0 &&     <h3 className = "h3" >
         Course Content{" "}
         <span
           onClick={HideSidebar}
-          style={{
-            fontSize: "medium",
-            paddingLeft: "80px",
-            fontWeight: "600",
-            cursor: "pointer",
-          }}
+          className="title-content"
+        
         >
           X
         </span>

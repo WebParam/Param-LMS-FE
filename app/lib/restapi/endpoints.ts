@@ -297,7 +297,7 @@ POST_StudentAnswers: async (
 
 GET_StudentAssessmentsByCourses: async (
   payload: string
-): Promise<IResponseObject<any>> => {
+): Promise<IResponseObject<IAssessment[]>> => {
   console.log("payload server side", payload)
   const response = await GET(`${assessmentReadUrl}/Assessments/GetAssessmentsByCourses?${payload}&courses=course1`);
   return response;

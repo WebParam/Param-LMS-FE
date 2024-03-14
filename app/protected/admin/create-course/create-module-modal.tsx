@@ -120,7 +120,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [quizId, setQuizId] = useState<string>("")
   const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
 
-  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
+  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
   const _quizFromState: IQuiz  = _quizzesFromState[_quizzesFromState.length - 1];
   
  const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
