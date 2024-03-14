@@ -8,6 +8,10 @@
     border-radius: 0.25rem;
 }
 
+.user-icon {
+    font-size:  xx-large;
+}
+
 .mdk-drawer__scrim__open{
     opacity: 1;
     left: 0;

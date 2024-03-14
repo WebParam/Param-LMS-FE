@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { NextPage } from 'next';
 import SideTab from '@/app/interfaces/sideTabs';
 import { usePathname } from 'next/navigation'
@@ -11,17 +10,24 @@ const NavOverview: NextPage<{sideTabs: SideTab[]}> = ({sideTabs}) => {
           <div className="sidebar-heading">Overview</div>
             <ul className="sidebar-menu">
                             
-                {sideTabs && sideTabs.map((tab) => {
-                    if (tab.children) {
-                        const children = tab.children.map((l: SideTab) => (<li key={l.name} className={`sidebar-menu-item ${pathname == tab.url ? "active" : ""}`}>
+              {sideTabs && sideTabs.map((tab) => {
+                    
+                  if (tab.children) {
+                      let isTabActive = false;
+                        const children = tab.children.map((l: SideTab) => {
+                            if (pathname == l.url) isTabActive = true;
+                            return (<li key={l.name} className={`sidebar-menu-item ${isTabActive && pathname == l.url? "active" : ""}`}>
                             <a className="sidebar-menu-button" href={l.url}>
                                 <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">{l.icon}</span>
                                 <span className="sidebar-menu-text">{l.name}</span>
                             </a>
-                        </li>));
+                        </li>)
+                        }
+                        
+                        );
                         
                         return (
-                            <li key={tab.name} className="sidebar-menu-item">
+                            <li key={tab.name} className={`sidebar-menu-item ${isTabActive? "active" : ""}`}>
                                 <a className="sidebar-menu-button" data-toggle="collapse" href={`#${tab.name}`}>
                                     <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">{tab.icon}</span>
                                     {tab.name}

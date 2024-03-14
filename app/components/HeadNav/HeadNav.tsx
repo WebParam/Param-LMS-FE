@@ -18,12 +18,9 @@ const HeadNav: NextPage<{ setIsOpen: any, isOpen: boolean }> = ({ setIsOpen, isO
     </button>
 
 {/*     <!-- Navbar Brand --> */}
-    <a href="index.html"
+    <a 
        className="navbar-brand mr-16pt d-lg-none">
-        <img className="navbar-brand-icon mr-0 mr-lg-8pt"
-             src="/assets/images/logo/accent-teal-100@2x.png"
-             width="32"
-             alt="Khumla"/>
+        Khumla
         <span className="d-none d-lg-block">Khumla</span>
     </a>
 
@@ -33,23 +30,17 @@ const HeadNav: NextPage<{ setIsOpen: any, isOpen: boolean }> = ({ setIsOpen, isO
         <div className="nav-item dropdown d-none d-sm-flex">
             <a href="#"
                className="nav-link d-flex align-items-center dropdown-toggle"
-               data-toggle="dropdown">
-                <img width="32"
-                     height="32"
-                     className="rounded-circle mr-8pt"
-                     src="/assets/images/people/50/guy-3.jpg"
-                     alt="account" />
+                          data-toggle="dropdown">
+                          <span className="user-icon material-icons sidebar-menu-icon sidebar-menu-icon--left rounded-circle mr-8pt">account_circle</span>
                 <span className="flex d-flex flex-column mr-8pt">
                     <span className="navbar-text-100">{loggedInUser?.firstName} {loggedInUser?.lastName}</span>
-                    <small className="navbar-text-50">{loggedInUser?.role == "Customer" && "Student"}</small>
+                    <small className="navbar-text-50">{loggedInUser?.role}</small>
                 </span>
             </a>
             <div className="dropdown-menu dropdown-menu-right">
                 <div className="dropdown-header"><strong>Account</strong></div>
-                <a className="dropdown-item"
-                   href="#edit-account.html">Edit Account</a>
-                <a className="dropdown-item"
-                   href="/">Logout</a>
+                <a className="dropdown-item" >Edit Account</a>
+                <a className="dropdown-item" >Logout</a>
             </div>
         </div>
     </div>

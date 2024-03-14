@@ -11,7 +11,7 @@ const DashBoard = () => {
                 <h2 className="mb-0">Dashboard</h2>
 
                 <ol className="breadcrumb p-0 m-0">
-                    <li className="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li className="breadcrumb-item"><a >Home</a></li>
 
                     <li className="breadcrumb-item active">
 
@@ -24,7 +24,7 @@ const DashBoard = () => {
             </div>
 
             <div className="dropdown">
-                <a href=""
+                <a 
                    className="border rounded d-flex align-items-center p-16pt"
                    data-toggle="dropdown"
                    data-caret="false">
@@ -47,7 +47,7 @@ const DashBoard = () => {
                 </a>
                 <div className="dropdown-menu w-100">
                     <div className="dropdown-header"><strong>Select company</strong></div>
-                    <a href=""
+                    <a 
                        className="dropdown-item active d-flex align-items-center">
 
                         <div className="avatar avatar-sm mr-8pt">
@@ -63,7 +63,7 @@ const DashBoard = () => {
                             </span>
                         </small>
                     </a>
-                    <a href=""
+                    <a 
                        className="dropdown-item d-flex align-items-center">
 
                         <div className="avatar avatar-sm mr-8pt">
@@ -101,7 +101,7 @@ const DashBoard = () => {
                 </p>
             </div>
             <div className="col-auto border-left">
-                <a href=""
+                <a 
                    className="btn btn-accent">New Report</a>
             </div>
         </div>

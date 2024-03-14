@@ -239,16 +239,6 @@ const CourseAssessment = (props:any) => {
                             <h2 className='header'>Course Assessment</h2>
                             <h5 className='subheader'>{courseInfo?.description}</h5>
                             <nav className="course-nav">
-                                {/* <a
-                                    href="student-take-lesson.html"
-                                    data-toggle="tooltip"
-                                    data-placement="bottom"
-                                    data-title="Getting Started with Angular: Introduction"
-                                    data-original-title=""
-                                    title=""
-                                >
-                                    <span className="material-icons">check_circle</span>
-                                </a> */}
                                 {courseAssessment?.questions?.map((q: any, i:number) => (
                                 <a
                                     data-toggle="tooltip"
@@ -290,13 +280,11 @@ const CourseAssessment = (props:any) => {
                             <div className="nav navbar-nav ml-sm-auto navbar-list__item">
                                 <div className="nav-item d-flex flex-column flex-sm-row ml-sm-16pt">
                                     <a
-                                        href="_my-quizes.html"
                                         className="btn justify-content-center btn-outline-secondary w-100 w-sm-auto mb-16pt mb-sm-0"
                                     >
                                         Skip Assessment
                                     </a>
                                     <a
-                                        href="student-take-lesson.html"
                                         className="btn justify-content-center btn-outline-secondary w-100 w-sm-auto mb-16pt mb-sm-0 ml-sm-16pt"
                                     >
                                         Review Course
