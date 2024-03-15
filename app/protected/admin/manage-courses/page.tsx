@@ -41,7 +41,7 @@ function ManageCourses() {
     theme: "light",
     });
     try {
-      const data = await Api.GET_CoursesByUserId("6580051b2b3b4e16f159792d");
+      const data = await Api.GET_CoursesByUserId(userData?.id);
       setCourses(data)
       toast.dismiss(_id);
     } catch (error) {
