@@ -10,3 +10,13 @@
 .tabs_header-container{
     display: flex;
 }
+
+.instructor{
+    opacity: 0;
+}
+
+.person-container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}

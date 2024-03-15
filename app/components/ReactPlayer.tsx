@@ -7,6 +7,7 @@ import { ISection } from '@/app/interfaces/courses';
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { IoPersonSharp } from "react-icons/io5";
 
 interface ReactPlayerProps {
   selectedVideo: string;
@@ -64,17 +65,13 @@ function VideoPlayer({
 
       >Transcipt</Tab>
       <Tab>Notes</Tab>
-      <Tab>Discussions</Tab>
+      <Tab>Comments</Tab>
    </div>
     </TabList>
 
     <TabPanel
    className="instructor"
     >
-    {/* <p className="instructor">{sections[0]?.modules[0]?.videos[0].description && "Instructor: John Smith"}</p>
-          <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p> */}
-    </TabPanel>
-    <TabPanel>
     <p className="instructor">{sections[0]?.modules[0]?.videos[0].description && "Instructor: John Smith"}</p>
           <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p>
     </TabPanel>
@@ -85,6 +82,29 @@ function VideoPlayer({
     <TabPanel>
     <p className="instructor">{sections[0]?.modules[0]?.videos[0].description && "Instructor: John Smith"}</p>
           <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p>
+    </TabPanel>
+    <TabPanel>
+      <div>
+        <div className='person-container'>
+          <IoPersonSharp/> Kwanele Ndaba
+          </div>
+
+      <div>
+        <input type = "text" placeholder='' />
+        </div>
+
+
+
+
+
+
+
+
+<div className="instructor">
+<p className="instructor">{sections[0]?.modules[0]?.videos[0].description && "Instructor: John Smith"}</p>
+          <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p>
+</div>
+          </div>
     </TabPanel>
   </Tabs>
           
