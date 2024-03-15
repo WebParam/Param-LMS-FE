@@ -116,7 +116,6 @@ function EditCourse() {
   const [moduleId, setModuleId] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
   const [arrayOfDocuments, setArrayOfDocuments] = useState<any[]>([]);
-  const [isDescSet, setIsDescSet] = useState<boolean>(false);
   const [instructorName, setInstructorName] = useState<string>("");
 
   const [videoId, setVideoId] = useState<string>("");

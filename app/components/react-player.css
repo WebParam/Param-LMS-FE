@@ -6,3 +6,7 @@
     color: white;
     z-index: 1;
 }
+
+.tabs_header-container{
+    display: flex;
+}

@@ -20,6 +20,7 @@ function ManageCourses() {
   const [courseHover, setCourseHover] = useState<boolean>(false);
   const [courses, setCourses] = useState<ICourse[] | any>()
   const [quizzes, setQuizzes] = useState<any>([])
+  const [courseId, setCourseId] = useState<string>("")
   const cookies = new Cookies();
 
   const dispatch = useDispatch();
@@ -69,9 +70,12 @@ function ManageCourses() {
       console.error("Error fetching quizzes:", error);
     }
   }
-  
+
+
 
   const editCourse = (course: any) => {
+    setCourseId(course?.data?.id);
+
     dispatch(updateCourseFromDataBase(course?.data));
   };
 

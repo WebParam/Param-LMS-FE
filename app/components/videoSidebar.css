@@ -99,18 +99,32 @@ padding-left: 15px;
 .section  {
     position: absolute;
     top: 63px;
-   
+   right: 0;
+  }
+
+  .section_title{
+    font-size: small !important;
   }
 
   .video-sidebar{
     position: absolute;
-    top: 50px;
-    right: 50px;
+    top: 37px;
+    right: 0px;
     z-index: 99;
+    width: 205px;
   }
   .title-content{
     font-size: small !important;
-    padding-left: 100px;
+    padding-left: 90px;
+    position: relative;
+    right:10px !important;
+  }
+
+  .h3{
+ 
+    position: absolute;
+    right: 0;
+    font-size: small;
   }
 
 }

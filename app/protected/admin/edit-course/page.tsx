@@ -2,17 +2,14 @@
 import { CreateCourseModal } from "./create-module-modal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
-import { useState,useRef, forwardRef } from "react";
+import { useState} from "react";
 import { FaPlus, FaVideo } from "react-icons/fa";
 import {
   addSection,
-  deleteModuleFromSection,
   deleteSection,
   getSelectedCourseForEdit,
-  createCourseDetail,
   updateCourseFromDataBase,
   updateSectionDetail,
-  deleteAllSections,
   addModuleToSection,
   deleteVideoFromModule,
 } from "@/app/redux/courseSlice";
@@ -38,6 +35,9 @@ import { getSelectedQuizForEdit, updateQuizzes } from "@/app/redux/quizSlice";
 import dynamic from "next/dynamic";
 import Cookies from "universal-cookie";
 import {useRouter} from "next/navigation"
+import { createAssessmentDetail, getSelectedAssessmentForEdit, updateAssessment } from "@/app/redux/assessmentSlice";
+import { CreateCourseAssessmentModal } from "./create-assessment";
+import { IAssessment } from "@/app/interfaces/assessment";
 
 interface ReactQuillProps {
   style?: React.CSSProperties;
@@ -105,15 +105,22 @@ function EditCourse() {
   const [disableCreateCourseBtn, setDisableCreateCourseBtn] =
     useState<boolean>(false);
   const [updateSection, setUpdateSection] = useState<boolean>(true);
+  const [createAssessmentModalOpen, setCreateAssessmentModuleModalOpen] =
+  useState<boolean>(false);
   const [newSection, setNewSection] = useState<boolean>(true);
   const [moduleId, setModuleId] = useState<string>();
   const [courseId, setCourseId] = useState<string>("");
   const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
+  const _assessmentFromState : IAssessment = useSelector(getSelectedAssessmentForEdit).assessment
   const [formData, setFormData] = useState(new FormData());
 
   const [imgError, setImgError] = useState<boolean>(false)
 
   const dispatch = useDispatch();
+
+  function saveAndCloseCreateAssessmentModuleModal() {
+    setEditModuleModalOpen(false);
+  }
 
   useEffect(() => {
     
@@ -393,13 +400,50 @@ function EditCourse() {
     modal: {
       maxWidth: "60%",
       width: "100%",
+      marginTop:"20px",
+      marginLeft:"50px"
     },
   };
 
+  const getCourseAssessments = async () => {
+    const getAssessement = await Api.GET_CourseAssessment(_courseFromState?.id);
+    console.log("Course Assessments", getAssessement)
+    if(getAssessement?.length > 0) {
+      setCourseId(_courseFromState?.id);
+      const fetchedAssessment = {
+        courseId: getAssessement?.courseId,
+        questions: getAssessement?.questions,
+        createdByUserId: getAssessement?.createdByUserId,
+        createdDate: getAssessement?.createdDate,
+        modifiedByUserId: getAssessement?.modifiedByUserId,
+        modifiedAt: getAssessement?.modifiedAt,
+        dueDate: getAssessement?.dueDate,
+        courseTitle: getAssessement?.courseTitle,
+        instructorName: getAssessement?.instructorName,
+        instructorId: getAssessement?.instructorId,
+        status: getAssessement?.status,
+
+      }
+      dispatch(updateAssessment(fetchedAssessment))
+    }
+    }
+  
+
+  const createAssessment = () => {
+    const payload = {
+      dueDate : "",
+    }
+    if(_assessmentFromState.courseId === courseId){
+      dispatch(createAssessmentDetail(payload));
+    }
+  }
   
   useEffect(() => {
     formData.append("file", imageUrl);
   }, [imageUrl]);
+  useEffect(() => {
+    getCourseAssessments();
+  }, [])
   return (
     <div
       id="test"
@@ -421,6 +465,20 @@ function EditCourse() {
             moduleId={moduleId}
             sectionId={sectionId}
             onClose={saveAndCloseEditModuleModal}
+          />
+          {/* <EditCourseModal /> */}
+        </Modal>
+        <Modal
+          styles={customModalStyles}
+          open={createAssessmentModalOpen}
+          onClose={() => {
+            setCreateAssessmentModuleModalOpen(false);
+          
+          }}
+          center
+        >
+          <CreateCourseAssessmentModal
+            onClose={saveAndCloseCreateAssessmentModuleModal}
           />
           {/* <EditCourseModal /> */}
         </Modal>
@@ -752,6 +810,24 @@ function EditCourse() {
                       )}
                     </div>
                   </div>
+                  <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                  className="page-separator"
+                >
+                  <div className="page-separator__text">Assessments</div>
+                          <FaPlus
+                            onClick={() => {
+                              setCreateAssessmentModuleModalOpen(true);
+                              createAssessment();
+                            }}
+                            style={{ cursor: "pointer" }}
+                          />
+                        </div> 
                 </div>
               </div>
               <div className="col-md-4">

@@ -93,7 +93,7 @@ function VideoSibar({
                     <span
                     
                       style={{ cursor: "pointer" }}
-                      className="flex"
+                      className="flex section_title"
                     >
                       Section {index + 1} : {section.title}
                     </span>
@@ -116,6 +116,7 @@ function VideoSibar({
                     {section.modules?.map((Module) =>
                       Module.videos.map((video: IVideo) => (
                         <div
+                        className="section_title"
                           style={{
                             cursor: "pointer",
                             backgroundColor: "white",
@@ -128,6 +129,8 @@ function VideoSibar({
                           key={video.id}
                         >
                           <div
+                                             className="section_title"
+
                             style={{ display: "flex", alignItems: "center" }}
                           >
                             <label
@@ -154,7 +157,9 @@ function VideoSibar({
                               }}
                             >
                               <a
-                                onClick={() => handleVideoSelect(video)}
+                        className="section_title"
+
+onClick={() => handleVideoSelect(video)}
                                 style={{
                                   fontSize: "medium",
                                   marginLeft: "0.5em",

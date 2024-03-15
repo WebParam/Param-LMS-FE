@@ -5,6 +5,8 @@ import ReactPlayer from 'react-player';
 import "./react-player.css";
 import { ISection } from '@/app/interfaces/courses';
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 interface ReactPlayerProps {
   selectedVideo: string;
@@ -53,9 +55,39 @@ function VideoPlayer({
           ref={playerRef}
         />
         <div className="details" style={{ fontSize: "large" }}>
-          <h2>{sections[0]?.competency}</h2>
-          <p className="instructor">{sections[0]?.modules[0]?.videos[0].description && "Instructor: John Smith"}</p>
+        <h2 className="description">{sections[0]?.modules[0]?.videos[0].title}</h2>
+        <Tabs >
+    <TabList default={false}>
+   <div className = "tabs_header-container">
+   <Tab>Overview</Tab>
+      <Tab 
+
+      >Transcipt</Tab>
+      <Tab>Notes</Tab>
+      <Tab>Discussions</Tab>
+   </div>
+    </TabList>
+
+    <TabPanel
+   className="instructor"
+    >
+    {/* <p className="instructor">{sections[0]?.modules[0]?.videos[0].description && "Instructor: John Smith"}</p>
+          <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p> */}
+    </TabPanel>
+    <TabPanel>
+    <p className="instructor">{sections[0]?.modules[0]?.videos[0].description && "Instructor: John Smith"}</p>
           <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p>
+    </TabPanel>
+    <TabPanel>
+    <p className="instructor">{sections[0]?.modules[0]?.videos[0].description && "Instructor: John Smith"}</p>
+          <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p>
+    </TabPanel>
+    <TabPanel>
+    <p className="instructor">{sections[0]?.modules[0]?.videos[0].description && "Instructor: John Smith"}</p>
+          <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p>
+    </TabPanel>
+  </Tabs>
+          
         </div>
       </div>
       <ConfirmationModal
