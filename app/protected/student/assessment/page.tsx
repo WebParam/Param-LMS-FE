@@ -43,12 +43,13 @@ const CourseAssessment = (props:any) => {
     }
 
     async function getCourseAssessment(id: string) {
+  
         const cookies = new Cookies();
         console.log("searched", id);
         const userData = cookies.get("param-lms-user");
         try {
             const assessment = await Api.GET_CourseAssessment(id);
-           
+           debugger;
             if (assessment) {
                 setLoading(false)
                 setAssessment(assessment);
@@ -152,6 +153,7 @@ const CourseAssessment = (props:any) => {
 
         //getCourseAssessment('65cf2aa5604aec77fcf37a89');
         getCourseAssessment(`${props?.searchParams?.assessment}`);
+        
        
     }, []);
 

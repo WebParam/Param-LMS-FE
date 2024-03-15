@@ -20,6 +20,7 @@ const CourseAssessments = () => {
     const studentAssessmentsByCourses = async (ids:string) => {
        const assessments = await Api.GET_StudentAssessmentsByCourses(ids);
        setAssessmentList(assessments);
+       debugger;
     }
 
     const  getStudentCourses = async () => {
