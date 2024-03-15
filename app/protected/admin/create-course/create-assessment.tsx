@@ -399,7 +399,7 @@ export const CreateCourseAssessmentModal: React.FC<
                 <h2 className="mb-0">Add Assessemnt</h2>
                 <ol className="breadcrumb p-0 m-0">
                   <li className="breadcrumb-item">
-                    <a href="index.html">Home</a>
+                    <a>Home</a>
                   </li>
                   <li className="breadcrumb-item active">Add Assessment</li>
                 </ol>

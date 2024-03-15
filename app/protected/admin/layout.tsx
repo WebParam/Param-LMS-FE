@@ -17,7 +17,8 @@ export default function RootLayout({
     { name: 'Manage Courses', url: '/protected/admin/courses', icon: 'assignment' },
     {
       name: 'Assessments', url: '#', icon: 'assignment', children: [
-        { name: 'Grade Assessments', url: '/protected/admin/assessments', icon: '' }
+        { name: 'List of Assessments', url: '/protected/admin/assessments', icon: '' },
+        { name: 'Grade Assessments', url: '#', icon: '' }
       ]
     }
   ];

@@ -299,7 +299,7 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                 style={{ height: 212 }}
               >
                 <a
-                  href="instructor-edit-course.html"
+                  
                   className="js-image"
                   data-position="center"
                   data-height="auto"
@@ -334,13 +334,13 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                       <div className="flex">
                         <a
                           className="card-title mb-4pt"
-                          href="instructor-edit-course.html"
+                          
                         >
                           Learn Sketch
                         </a>
                       </div>
                       <a
-                        href="instructor-edit-course.html"
+                        
                         className="ml-4pt material-icons text-20 card-course__icon-favorite"
                       >
                         edit
@@ -465,7 +465,7 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                   </div>
                   <div className="col text-right">
                     <a
-                      href="instructor-edit-course.html"
+                      
                       className="btn btn-primary"
                     >
                       Edit course
@@ -486,7 +486,7 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                 style={{ height: 212 }}
               >
                 <a
-                  href="instructor-edit-course.html"
+                  
                   className="js-image"
                   data-position="center"
                   data-height="auto"
@@ -521,13 +521,13 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                       <div className="flex">
                         <a
                           className="card-title mb-4pt"
-                          href="instructor-edit-course.html"
+                        
                         >
                           Learn Flinto
                         </a>
                       </div>
                       <a
-                        href="instructor-edit-course.html"
+                       
                         className="ml-4pt material-icons text-20 card-course__icon-favorite"
                       >
                         edit
@@ -651,8 +651,7 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                     </div>
                   </div>
                   <div className="col text-right">
-                    <a
-                      href="instructor-edit-course.html"
+                    <a                      
                       className="btn btn-primary"
                     >
                       Edit course
@@ -673,7 +672,7 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                 style={{ height: 212 }}
               >
                 <a
-                  href="instructor-edit-course.html"
+                  
                   className="js-image"
                   data-position="center"
                   data-height="auto"
@@ -707,14 +706,12 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                     <div className="d-flex">
                       <div className="flex">
                         <a
-                          className="card-title mb-4pt"
-                          href="instructor-edit-course.html"
+                          className="card-title mb-4pt"                          
                         >
                           Learn Photoshop
                         </a>
                       </div>
-                      <a
-                        href="instructor-edit-course.html"
+                      <a                        
                         className="ml-4pt material-icons text-20 card-course__icon-favorite"
                       >
                         edit
@@ -838,8 +835,7 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                     </div>
                   </div>
                   <div className="col text-right">
-                    <a
-                      href="instructor-edit-course.html"
+                    <a                      
                       className="btn btn-primary"
                     >
                       Edit course
@@ -860,7 +856,7 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                 style={{ height: 212 }}
               >
                 <a
-                  href="instructor-edit-course.html"
+                  
                   className="js-image"
                   data-position="center"
                   data-height="auto"
@@ -894,14 +890,12 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                     <div className="d-flex">
                       <div className="flex">
                         <a
-                          className="card-title mb-4pt"
-                          href="instructor-edit-course.html"
+                          className="card-title mb-4pt"                          
                         >
                           Newsletter Design
                         </a>
                       </div>
-                      <a
-                        href="instructor-edit-course.html"
+                      <a                        
                         className="ml-4pt material-icons text-20 card-course__icon-favorite"
                       >
                         edit
@@ -1025,8 +1019,7 @@ export const Development: NextPage<{courses: ICourse[]}> = ({courses})  => {
                     </div>
                   </div>
                   <div className="col text-right">
-                    <a
-                      href="instructor-edit-course.html"
+                    <a                      
                       className="btn btn-primary"
                     >
                       Edit course

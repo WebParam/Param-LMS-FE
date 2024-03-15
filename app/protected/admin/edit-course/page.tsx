@@ -506,7 +506,7 @@ function EditCourse() {
                 <h2 className="mb-0">Edit Course</h2>
                 <ol className="breadcrumb p-0 m-0">
                   <li className="breadcrumb-item">
-                    <a href="index.html">Home</a>
+                    <a >Home</a>
                   </li>
                   <li className="breadcrumb-item active">Edit Course</li>
                 </ol>

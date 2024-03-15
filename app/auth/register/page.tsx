@@ -336,13 +336,13 @@ debugger;
   alignItems: "center",
   justifyContent: "center",
 }} className="container page__container">
-  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+  <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
     Facebook
   </a>
-  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+  <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
     Twitter
   </a>
-  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+  <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
     Google+
   </a>
 </div>
