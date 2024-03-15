@@ -19,11 +19,13 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+padding-bottom: 10px;
 }
 
 .comment-input{
     width : 100%;
     flex-wrap: wrap;
+    text-wrap: wrap;
     outline: none;
     border: none;
     border-bottom: 1px solid black;
@@ -35,20 +37,46 @@
     border: 1px solid black;
     padding: 10px;
     height: 150px;
+    border-radius: 10px;
+    border-color: lightblue;
+    margin-bottom: 30px;
 }
 
 .btn-container_icons{
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-        padding-right: 20px;
+    position: relative;
+    bottom:-1em;
+    padding-right: 20px;
 }
 
 .btn-container_icons > button{
     padding: 5px;
     border-radius: 10px;
     margin-bottom: 5px;
+    background-color: #0083ff;
+    color: white;
+    border: none;
+    outline: none;
 }
+
+.storage-comments{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+    margin-top: 5px;
+    padding: 5px;
+    
+}
+
+.loogedInUser-comment{
+    padding-bottom: 50px;
+}
+
+.all-comments-section{
+
+}
+

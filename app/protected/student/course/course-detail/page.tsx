@@ -18,7 +18,7 @@ import { IQuiz } from '@/app/interfaces/quiz';
 import { FaVideo } from 'react-icons/fa';
 import VideoSibar from '../../../../components/VideoSidebar';
 import VideoPlayer from '../../../../components/ReactPlayer';
-import { stat } from 'fs';
+
 
 export default function CourseDetail() {
 
@@ -73,6 +73,7 @@ const cancelQuiz = () => {
   useEffect(() => {
     if (allVideos.length > 0) {
       setSelectedVideo(allVideos[currentVideoIndex].videoLink);
+      setVideoId(allVideos[currentVideoIndex].id)
     }
   }, [allVideos, currentVideoIndex]);
 
@@ -235,6 +236,7 @@ const cancelQuiz = () => {
       HideSidebar = {hideSidebar}
       viewSidebar ={HideSidebar}
       playerRef={playerRef}
+      videoId = {videoId}
 
       />
 
@@ -247,7 +249,6 @@ const cancelQuiz = () => {
     
        
 <div  style={hideSidebar ? { width: "300px" , } : {display:"none"}}>
-
 <VideoSibar HideSidebar = {HideSidebar} duration = {formatDurationToMinutes(duration)} sections={sections} handleVideoSelect={handleVideoSelect}/>
 </div>
 
