@@ -29,7 +29,7 @@ export const assessmentWriteUrl = "https://khumla-dev-assessment-write.azurewebs
 
 export const assessmentReadUrl = "https://khumla-dev-assessment-read.azurewebsites.net/api";
 
-export const quizWriteUrl ="https://a6cd-154-0-14-142.ngrok-free.app/api";
+export const quizWriteUrl ="https://khumla-dev-quiz-write.azurewebsites.net/api";
 
 export const documentWrite = "https://e4e7-154-0-14-142.ngrok-free.app/api"
 
@@ -297,7 +297,7 @@ POST_StudentAnswers: async (
 
 GET_StudentAssessmentsByCourses: async (
   payload: string
-): Promise<IResponseObject<IAssessment[]>> => {
+) => {
   console.log("payload server side", payload)
   const response = await GET(`${assessmentReadUrl}/Assessments/GetAssessmentsByCourses?${payload}&courses=course1`);
   return response;

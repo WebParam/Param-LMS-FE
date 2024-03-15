@@ -58,6 +58,8 @@ const CourseAssessment = (props:any) => {
                     Answers: [],
                     SubmittedAt: new Date().toISOString(),
                 })
+                getSelectedCourse(`${assessment?.courseId}`)
+
             } else {
                 console.log("No assessment found");
             }
@@ -150,8 +152,7 @@ const CourseAssessment = (props:any) => {
 
         //getCourseAssessment('65cf2aa5604aec77fcf37a89');
         getCourseAssessment(`${props?.searchParams?.assessment}`);
-        getSelectedCourse('65e5d75f6944453739f276c3')
-
+       
     }, []);
 
     // Render question based on type
