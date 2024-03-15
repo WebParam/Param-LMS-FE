@@ -4,11 +4,12 @@ import { Api } from "@/app/lib/restapi/endpoints";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Link from 'next/link';
+import {useRouter} from "next/navigation"
 
 const CourseAssessments = () => {
 
 
-
+      const router = useRouter();
     const [student, setStudent] = useState();
     const [studentEnrolledCourses,setStudentEnrolledCourses] = useState();
     const [assessmentList, setAssessmentList] = useState([]);
@@ -64,6 +65,11 @@ const CourseAssessments = () => {
         
 
     }, []);
+
+    const takeAssessment = (id:string) => {
+      router.push(`/protected/student/assessment?id=${id}`);
+
+    }
 
   
 
@@ -264,10 +270,10 @@ const CourseAssessments = () => {
                               <span></span>
                             ) : (
                               <button className="btn btn-primary">
-                              <Link href={{ pathname: '/protected/student/assessment', query: {assessment: item?.data.id} }}>
+                              <a onClick={() => takeAssessment(item?.data.id)}>
                                 
                                 <span style={{color:'white'}}>Take Assessment</span>
-                              </Link>
+                              </a>
                                 </button>
                             )
                           }

@@ -38,8 +38,6 @@ export default function Login() {
     router.push('/auth/register');
   };
 
-
-
 async function LoginUser (event:any){
   cookies.remove('param-lms-user')
  

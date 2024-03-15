@@ -5,7 +5,7 @@ import { userInfo } from 'os';
 import React, { useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
 import './assessment.css'
-
+import { useSearchParams } from 'next/navigation';
 // Enum for question types
 const QuestionType = {
     TEXT: 0,
@@ -18,6 +18,11 @@ const QuestionType = {
 
 const CourseAssessment = (props:any) => {
 
+    const searchParams = useSearchParams();
+
+      const assessmentId = searchParams.get("id")
+       // alert(assessmentId)
+  
     console.log("props", props?.searchParams)
 
     const [courseAssessment, setAssessment] = useState<any>();
@@ -152,7 +157,7 @@ const CourseAssessment = (props:any) => {
     useEffect(() => {
 
         //getCourseAssessment('65cf2aa5604aec77fcf37a89');
-        getCourseAssessment(`${props?.searchParams?.assessment}`);
+        getCourseAssessment(`${assessmentId}`);
         
        
     }, []);
