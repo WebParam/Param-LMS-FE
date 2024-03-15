@@ -84,13 +84,19 @@ function VideoPlayer({
           <p className="description">{sections[0]?.modules[0]?.videos[0].description}</p>
     </TabPanel>
     <TabPanel>
-      <div>
+      <div className='comment-container'>
         <div className='person-container'>
           <IoPersonSharp/> Kwanele Ndaba
           </div>
 
-      <div>
-        <input type = "text" placeholder='' />
+      <div >
+        <input className = "comment-input"  type = "text" placeholder='No commnets yet, but your classmates might have questions too! Leave a comment to start a discussion and help each other out.' />
+        </div>
+
+        <div className= "btn-container_icons">
+          <button>
+            Comment
+          </button>
         </div>
 
 

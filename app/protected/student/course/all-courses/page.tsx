@@ -83,7 +83,7 @@ useEffect(() => {
 
       const getReactCourse = course.data?.allCourses.filter(c => c.id === "65e5d75f6944453739f276c3")!
       console.log(getReactCourse)
-        setCourses(getReactCourse);
+        setCourses(course?.data?.allCourses!);
         setEnrolledCourses(course.data!.enrolledCourses);
         //setStudentEnrolledCourses(enrolled)
        console.log("AllCourses",allCourses);
