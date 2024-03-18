@@ -6,8 +6,6 @@ import { ICourse } from "@/app/interfaces/courses";
 import Cookies from "universal-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-import Dropdown from "react-bootstrap/Dropdown";
 import "../../../assets/vendor/spinkit.css";
 import "../../../assets/css/preloader.css";
 import dynamic from 'next/dynamic';
