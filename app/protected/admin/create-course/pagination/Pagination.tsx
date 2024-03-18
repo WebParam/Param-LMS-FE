@@ -52,8 +52,9 @@ export const Pagination = ({
 
   return (
     <div>
-      {/* Render the current page of sections */}
-      <div
+     {
+      sections.length < 1 ? <p>0 Sections</p> : <>
+       <div
         className="accordion js-accordion accordion--boxed mb-24pt"
         id="parent"
       >
@@ -150,7 +151,6 @@ export const Pagination = ({
         ))}
       </div>
 
-      {/* Render pagination controls */}
 
 
       <ul className="pagination justify-content-start pagination-xsm m-0">
@@ -225,6 +225,9 @@ export const Pagination = ({
             </li>
           </ul>
 
+      
+      </>
+     }
   
     </div>
   );

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppStore } from "../interfaces/store";
+import { AppStore } from "./store";
 import { IDocument, IDocumentState, IUpdateDocumentDetailState } from "../interfaces/document";
 import Cookies from "universal-cookie";
 

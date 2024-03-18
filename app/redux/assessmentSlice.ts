@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAssessmentState, IAssessment, IAssessmentQuestion, IChoice } from "../interfaces/assessment";
-import { AppStore } from "../interfaces/store";
+import { AppStore } from "./store";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
