@@ -1,0 +1,44 @@
+.navbar-togger {
+    width: 64px;
+    height: 64px;
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+.user-icon {
+    font-size:  xx-large;
+}
+
+.mdk-drawer__scrim__open{
+    opacity: 1;
+    left: 0;
+    right: 0;
+    transform: translateZ(0);
+    background-color: rgba(0,0,0,.5);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    transition: opacity .2s ease;
+}
+
+#default-drawer-mobi{
+    display: none;
+}
+
+@media (max-width: 768px) {
+    #default-drawer{
+        display: none;
+    }
+    #default-drawer-mobi{
+        display: none;
+    }
+    #default-drawer .mobi .open{
+        display: block;
+    }
+    .mdk-drawer-layout__content{
+        width: 100%
+    }
+}

@@ -32805,7 +32805,7 @@ label {
 
 .sidebar-brand {
     font-weight: 500;
-    font-size: 1.625rem;
+    font-size: 2.625rem;
     display: flex;
     align-items: center
 }
@@ -33373,7 +33373,7 @@ label {
 
 [dir] .sidebar-brand {
     margin-bottom: 0;
-    padding: 2.5rem 0
+    padding: 4rem 0;
 }
 
 .sidebar-brand-icon {

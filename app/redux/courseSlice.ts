@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { AppStore } from "../interfaces/store";
+import { AppStore } from "./store";
 import { ICourse, ICourseState, IModule, ISection, IUpdateCourse, IUpdateCourseDetailState, IUpdateModuleDetailState, IUpdateSectionDetailState, IVideo } from "../interfaces/courses";
 import { useState } from "react";
 import Cookies from "universal-cookie";
@@ -15,11 +15,7 @@ const loogedInUser = cookies.get('param-lms-user');
 function sortSectionByOrder(a: ISection, b: ISection) {
   return a.order - b.order;
 }
-
-function sortModuleByOrder(a: IModule, b: IModule) {
-    return a.order - b.order;
-}
-
+                                          
 const initialState: ICourseState = {
     course: {
         id: generateUniqueId(),
@@ -91,14 +87,13 @@ export const courseSlice = createSlice({
                 const targetSection = state.course.sections.find(section => section.id === _action.sectionId);
                 
                 if (!targetSection) {
-                    // Handle case when section is not found
                     return state;
                 }
             
                 const updatedSection = {
                     ...targetSection,
                     title: _action.title,
-                    competency: _action.competency, // Fixed: used _action.competency instead of action.payload.competency
+                    competency: _action.competency, 
                 };
             
                 const updatedSections = state.course.sections.map(section => 
@@ -146,7 +141,7 @@ export const courseSlice = createSlice({
                 id: generateUniqueId(),
                 title: sectionTitle,
                 courseId: state.course.id,
-                order: 1,
+                order: state.course.sections.length+1,
                 state: 0,
                 competency: sectionCompetency,
                 createdDate: "2023-08-07T11:28:14.632Z",
@@ -185,8 +180,8 @@ export const courseSlice = createSlice({
             }
         },
         editVideoDetails: (state, action) => {
-          const { moduleId, videoId, videoTitle, videoLink } = action.payload;
-          // Find the section, module, and video to update
+      
+          const { moduleId, videoId, videoTitle, videoLink,videoDescription } = action.payload;
           const sectionIndex = state.course.sections.findIndex(section =>
             section.modules.some(module => module.id === moduleId)
           );
@@ -197,7 +192,7 @@ export const courseSlice = createSlice({
             if (moduleIndex !== -1) {
               const videoIndex = state.course.sections[sectionIndex].modules[
                 moduleIndex
-              ].videos.findIndex(video => video.id === videoId);
+              ].videos.findIndex((video:IVideo) => video.id === videoId);
               if (videoIndex !== -1) {
                 // Update the video title and URL
                 state.course.sections[sectionIndex].modules[moduleIndex].videos[
@@ -206,12 +201,41 @@ export const courseSlice = createSlice({
                 state.course.sections[sectionIndex].modules[moduleIndex].videos[
                   videoIndex
                 ].videoLink = videoLink;
+                state.course.sections[sectionIndex].modules[moduleIndex].videos[
+                  videoIndex
+                ].description = videoDescription;
               }
             }
           }
         }
       
 ,      
+udpateVideoViewState: (state, action) => {
+      
+  const { moduleId, videoId, viewed, } = action.payload;
+  const sectionIndex = state.course.sections.findIndex(section =>
+    section.modules.some(module => module.id === moduleId)
+  );
+  if (sectionIndex !== -1) {
+    const moduleIndex = state.course.sections[sectionIndex].modules.findIndex(
+      module => module.id === moduleId
+    );
+    if (moduleIndex !== -1) {
+      const videoIndex = state.course.sections[sectionIndex].modules[
+        moduleIndex
+      ].videos.findIndex((video:IVideo) => video.id === videoId);
+      if (videoIndex !== -1) {
+        // Update the video title and URL
+        state.course.sections[sectionIndex].modules[moduleIndex].videos[
+          videoIndex
+        ].viewed = viewed;
+  
+      }
+    }
+  }
+}
+
+,  
         deleteModuleFromSection(state, action) {
             const { sectionId, moduleId } = action.payload;
       
@@ -267,6 +291,7 @@ export const courseSlice = createSlice({
                 length: "5 minutes",
                 format: "mp4",
                 size: "50 MB",
+                viewed:false,
                 description:description,
                 reference:generateUniqueId(),
 

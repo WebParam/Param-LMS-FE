@@ -41,10 +41,12 @@ import {
   getSelectedQuizForEdit,
   updateChoiceDetail,
   updateQuestionDetails,
+  updateQuizState,
 } from "@/app/redux/quizSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "universal-cookie";
+import { createDocumentDetails, updateDocumentDetail } from "@/app/redux/documentSice";
 
 interface EditCourseModalProps {
   onClose: () => any;
@@ -129,16 +131,18 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [questions, setQuestions] = useState<any>([]);
   const [choiceId, setChoiceId] = useState<string>("");
   const userData = cookies.get("param-lms-user");
+  const [videoReference, setVideoReference] = useState<string>("")
   const [quizId, setQuizId] = useState<string>("")
   const [videoDescription, setVideoDescription] = useState<string>("");
   const [date, setDate] = useState<string>("");
+  const [document, setDocument] = useState<any>("")
 
   const [moduleReference, setModuleReference] = useState<any>("")
   const [hideSaveChangesBtn, setHideSaveChangesBtn] = useState(false)
   const [disableModuleInputs, setDisableModuleInputs] = useState<boolean>(false)  
 
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
-  const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit);
+  const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit).quizzes;
 
   console.log("Course from state", _courseFromState);
   console.log("Quizzes from state", _quizzesFromState);
@@ -229,6 +233,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
     const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.videoId === videoId);
     if(hasQuiz?.length === 1 ){
+     
+
       setIncludeQuiz(e.target.checked);
 
       setIncludeQuiz(true);
@@ -237,6 +243,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
       return
     }
+    
     if (!videoId) {
       let _id = toast.loading("Please add video first..", {
         //loader
@@ -300,7 +307,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
   const handleCreateQuiz = () => {
     const payload = {
-      reference: moduleReference,
+      reference: videoReference,
       createdByUserId: userData?.id,
       modifiedByUserId: userData?.id,
       createdDate: date,
@@ -319,7 +326,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
       return;
     }
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+
     if (isNaN(points) || points === 0) {
       setPointsError(true);
       return;
@@ -357,7 +365,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
     setEnableEditQuestion(true);
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+
     const payload = {
       quizId : quizId,
       questionId: questionId,
@@ -487,15 +496,35 @@ setChangeEditQuizQuestionContent(false);
 
   //Dcoument functions start here
 
-  const handleDocument = (e: any) => { 
-     const formData = new FormData();
-    const file = e.target.files[0];
 
-    if (file) {
-      formData.append("document", file);
-      setDocumentName(file.name);
+  const handleChangeDocument = (e:any) => {
+    if(document){
+     const file = e.target.files[0];
+     if (file) {
+       setDocument(file);
+     }
+     const payload = {
+       title: file ? file.name : "",
+       reference:videoReference,
+        url :"",
+       file: file ? file : null 
+     }
+     dispatch(updateDocumentDetail(payload));
+    }else{
+     const file = e.target.files[0];
+     if (file) {
+       setDocument(file);
+     }
+     const payload = {
+       title: file ? file.name : "",
+       reference:videoReference,
+        url :"",
+       file: file ? file : null 
+     }
+     dispatch(createDocumentDetails(payload));
     }
-  };
+ 
+ }
   const addDocument = (e: any) => {
     setIncludeDocument(false);
     if (!videoId) {
@@ -552,8 +581,8 @@ setChangeEditQuizQuestionContent(false);
       videoDescription && videoLink 
      
     ) {
-      const plainDescription = videoDescription
-        && videoDescription.replace(/<\/?p>/gi, "")
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
         
       const payload = {
         moduleId,
@@ -658,7 +687,7 @@ setChangeEditQuizQuestionContent(false);
       if(video && video.length > 0) {
         setVideoTitle(video[0]?.title);
         setVideoDescription(video[0]?.description);
-        
+        setVideoReference(video[0]?.reference)
         setVideoLink(video[0]?.videoLink);
         setDisableModuleInputs(true);
       }
@@ -1581,7 +1610,7 @@ setChangeEditQuizQuestionContent(false);
                     <input
                       type="file"
                       id="file"
-                      onChange={handleDocument}
+                      onChange={handleChangeDocument}
                       className="custom-file-input"
                     />
                     <label className="custom-file-label">Choose file</label>
@@ -1589,7 +1618,7 @@ setChangeEditQuizQuestionContent(false);
                 </div>
 
                 <p style={{ color: "rgba(39,44,51,.35)", paddingTop: "10px" }}>
-                  {documentName}
+                  {document?.name}
                 </p>
               </div>
 

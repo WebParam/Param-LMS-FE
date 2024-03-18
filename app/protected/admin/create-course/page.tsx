@@ -4,6 +4,7 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { useState } from "react";
 import { FaPlus, FaVideo } from "react-icons/fa";
+import { Pagination } from "../create-course/pagination/Pagination";
 import {
   addSection,
   deleteSection,
@@ -36,9 +37,14 @@ import Dropdown from "react-bootstrap/Dropdown";
 import "react-quill/dist/quill.snow.css";
 import { IQuiz } from "@/app/interfaces/quiz";
 import { getSelectedQuizForEdit } from "@/app/redux/quizSlice";
-import Sidebar from "@/app/components/Sidebar";
 import { IDocument } from "@/app/interfaces/document";
 import { getSelectedDocumentForEdit } from "@/app/redux/documentSice";
+import { CreateCourseAssessmentModal } from "./create-assessment";
+import { IAssessment } from "@/app/interfaces/assessment";
+import {
+  createAssessmentDetail,
+  getSelectedAssessmentForEdit,
+} from "@/app/redux/assessmentSlice";
 
 // Define interface for ReactQuill props
 interface ReactQuillProps {
@@ -89,6 +95,8 @@ function EditCourse() {
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [editModuleModalOpen, setEditModuleModalOpen] =
     useState<boolean>(false);
+  const [createAssessmentModalOpen, setCreateAssessmentModuleModalOpen] =
+    useState<boolean>(false);
   const [competency, setCompetency] = useState<string>("");
   const [sectionTitle, setSectionTitle] = useState<string>("");
   const [disableSectionInput, setDisableSectionInput] =
@@ -103,27 +111,31 @@ function EditCourse() {
   const [disableCreateCourseBtn, setDisableCreateCourseBtn] =
     useState<boolean>(true);
   const [updateSection, setUpdateSection] = useState<boolean>(true);
-  const [newSection, setNewSection] = useState<boolean>(true);
+  const [newSection, setNewSection] = useState<boolean>(false);
   const [sectionBtn, setSectionBtn] = useState<boolean>(true);
   const [imageUrl, setImageUrl] = useState<any>();
-  const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit);
+  const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit).quizzes;
   const [imgError, setImgError] = useState(false);
   const [moduleId, setModuleId] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
-  const [arrayOfDocuments, setArrayOfDocuments] = useState<any[]>([]);
-  const [isDescSet, setIsDescSet] = useState<boolean>(false);
+  const [instructorName, setInstructorName] = useState<string>("");
+  const [video, setVideo] = useState<IVideo | null>(null)
+
 
   const [videoId, setVideoId] = useState<string>("");
-  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit).documents;
+  const _assessmentFromState: IAssessment = useSelector(
+    getSelectedAssessmentForEdit
+  ).assessment;
   console.log("Course", _courseFromState);
+  console.log("Assessment", _assessmentFromState);
+console.log("Documents", _documentsFromState);
 
-  console.log("Document from state", _documentsFromState);
+  console.log("Quizzes from state", _quizzesFromState);
 
   let cookies = new Cookies();
-  useEffect(() => {
-    console.log("Array of documents", arrayOfDocuments);
-  }, [arrayOfDocuments]);
-  
+
+
   const userData = cookies.get("param-lms-user");
   console.log("userDataID:", userData?.id);
   const dispatch = useDispatch();
@@ -137,29 +149,26 @@ function EditCourse() {
       [{ list: "ordered" }, { list: "bullet" }],
     ],
   };
-  useEffect(() => {
-    console.log("Array of documents:", arrayOfDocuments);
-  }, [arrayOfDocuments]);
-
 
 
   const payload = {
     creatingUser: userData?.id,
     title: courseTitle ?? _courseFromState.title,
-    description: courseDescription 
+    description: courseDescription,
   };
 
-  const logOut = () => {
-    cookies.remove("param-lms-user");
-    // Optionally, you can redirect the userto another page
-    window.location.href = "/auth/login";
-  };
+
   function saveAndCloseEditModal() {
     setEditModalOpen(false);
     clearSectionContent();
+
+ 
   }
 
   function saveAndCloseEditModuleModal() {
+    setEditModuleModalOpen(false);
+  }
+  function saveAndCloseCreateAssessmentModuleModal() {
     setEditModuleModalOpen(false);
   }
 
@@ -220,14 +229,13 @@ function EditCourse() {
     dispatch(createCourseDetail(payload));
   };
 
-  const handleDescriptionChange = () => {
-    dispatch(createCourseDetail(payload))
-};
-
   async function createCourse() {
-   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
+    const plainDescription = courseDescription
+      ? courseDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, "")
+      : _courseFromState.description.replace(/<(?:\/)?[sp]+[^>]*>/g, "");
 
-    dispatch(createCourseDetail({...payload,description: plainDescription}))
+    dispatch(createCourseDetail({ ...payload, description: plainDescription }));
+    debugger;
     setImgError(false);
     setDisableCreateCourseBtn(true);
     if (!imageUrl) {
@@ -247,17 +255,38 @@ function EditCourse() {
     });
 
     try {
-
-  const _formData = new FormData();
-  const formDataArray = _documentsFromState.forEach((document,i) => {
-    console.log(`Appended key: ${JSON.stringify(document)} with value: ${document.file}`)
-    const req = {...document, file:""};
-    _formData.append(JSON.stringify(req), document.file)});     
-       const createCourseResponse = await Api.POST_CreateCourse(
+      const _formData = new FormData();
+      const formDataArray = _documentsFromState.forEach((document, i) => {
+        console.log(
+          `Appended key: ${JSON.stringify(document)} with value: ${
+            document.file
+          }`
+        );
+        const req = { ...document, file: "" };
+        _formData.append(JSON.stringify(req), document.file);
+      });
+      const createCourseResponse = await Api.POST_CreateCourse(
         _courseFromState
       )!;
 
       if (createCourseResponse?.data?.id) {
+        const assessment = {
+          courseId: createCourseResponse?.data?.id,
+          questions: _assessmentFromState.questions,
+          createdByUserId: _assessmentFromState.createdByUserId,
+          createdDate: _assessmentFromState.createdDate,
+          modifiedByUserId: _assessmentFromState.modifiedByUserId,
+          modifiedAt: _assessmentFromState.modifiedAt,
+          dueDate: _assessmentFromState.dueDate,
+          courseTitle: courseTitle,
+          instructorName: "John Doe",
+          instructorId: "656f1335650c740ce0ae4d65",
+          status: _assessmentFromState.status,
+          isRetaken: _assessmentFromState.isRetaken,
+        };
+
+        const postAssessment = await Api.POST_AddAssessments(assessment);
+        debugger;
         const uploadDocuments = await Api.POST_Document(_formData);
         const courseId: string = createCourseResponse.data?.id!;
         const uploadImageResponse = await Api.POST_Image(courseId, formData);
@@ -265,7 +294,7 @@ function EditCourse() {
           (accumulator: IVideo[], section: any) => {
             const videosInModules = section.modules.reduce(
               (moduleAccumulator: IVideo[], module: any) => {
-              return moduleAccumulator.concat(module.videos);
+                return moduleAccumulator.concat(module.videos);
               },
               []
             );
@@ -275,21 +304,23 @@ function EditCourse() {
         );
 
         const updatedQuizzes = await Promise.all(
-          _quizzesFromState.map(async (quiz: IQuiz) => {
-            try {
-              const matchingVideo = extractedVideo?.find(
-                (video: IVideo) => video.reference === quiz.reference
-              );
-              if (matchingVideo) {
-                const newQuiz = { ...quiz, videoId: matchingVideo.id };
-                return newQuiz;
+          _quizzesFromState
+            .filter((quiz: IQuiz) => quiz.questions.length > 0)
+            .map(async (quiz: IQuiz) => {
+              try {
+                const matchingVideo = extractedVideo?.find(
+                  (video: IVideo) => video.reference === quiz.reference
+                );
+                if (matchingVideo) {
+                  const newQuiz = { ...quiz, videoId: matchingVideo.id };
+                  return newQuiz;
+                }
+                return quiz;
+              } catch (error) {
+                console.error("Error updating quiz:", error);
+                return quiz;
               }
-              return quiz;
-            } catch (error) {
-              console.error("Error updating quiz:", error);
-              return quiz;
-            }
-          })
+            })
         );
 
         const uploadQuizzes = await Api.POST_Quiz(updatedQuizzes);
@@ -301,7 +332,7 @@ function EditCourse() {
         });
 
         setTimeout(() => {
-          localStorage.removeItem("persist:root")
+          localStorage.removeItem("persist:course");
           dispatch(deleteAllSections());
           setCourseTitle("");
           setCourseDescription("");
@@ -358,14 +389,12 @@ function EditCourse() {
     }
   };
 
-
-
   const clearSectionContent = () => {
     setSectionTitle("");
     setCompetency("");
     setChangeBtn(false);
     setDisableSectionInput(false);
-    setNewSection(true);
+    setNewSection(false);
   };
   1;
   const handleDeleteVideo = (videoId: any) => {
@@ -379,31 +408,34 @@ function EditCourse() {
     setNewSection(true);
   };
 
+  const createAssessment = () => {
+    const payload = {
+      dueDate: "",
+    };
+    if (_assessmentFromState.courseId === "") {
+      dispatch(createAssessmentDetail(payload));
+    }
+  };
 
   useEffect(() => {
     const sectionIds = _courseFromState?.sections?.map((section) => section.id);
     const lastSectionId = sectionIds[sectionIds?.length - 1];
-   setSectionId(lastSectionId);
+    setSectionId(lastSectionId);
     if (sectionId?.length > 0) {
       setDisableCreateCourseBtn(false);
     }
-  },[_courseFromState?.sections]);
+  }, [_courseFromState?.sections]);
 
   useEffect(() => {
     formData.append("file", imageUrl);
   }, [imageUrl]);
 
-  // useEffect(() => {
-  //   const plainDescription = courseDescription ? courseDescription.replace(/<\/?p>/gi, '') : _courseFromState.description;
-  //   setCourseDescription(plainDescription);
-  //   dispatch(createCourseDetail(payload))
-  //   console.log("Course Description: " + plainDescription);
-  // },[])
-
   const customModalStyles = {
     modal: {
       maxWidth: "60%",
       width: "100%",
+      marginTop: "20px",
+      marginLeft: "50px",
     },
   };
 
@@ -432,15 +464,33 @@ function EditCourse() {
           <EditCourseModal
             videoId={videoId}
             moduleId={moduleId}
+            video={video}
             sectionId={sectionId}
             onClose={saveAndCloseEditModuleModal}
           />
           {/* <EditCourseModal /> */}
         </Modal>
+
+        <Modal
+          styles={customModalStyles}
+          open={createAssessmentModalOpen}
+          onClose={() => {
+            setCreateAssessmentModuleModalOpen(false);
+          }}
+          center
+        >
+          <CreateCourseAssessmentModal
+            onClose={saveAndCloseCreateAssessmentModuleModal}
+          />
+          {/* <EditCourseModal /> */}
+        </Modal>
+
         <Modal
           styles={customModalStyles}
           open={editModalOpen}
-          onClose={() => setEditModalOpen(false)}
+          onClose={() => 
+            
+            setEditModalOpen(false)}
           center
         >
           <CreateCourseModal
@@ -454,288 +504,6 @@ function EditCourse() {
         className="mdk-drawer-layout__content page-content"
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
       >
-        {/* Header */}
-        {/* Navbar */}
-        <div
-          style={{
-            position: "relative",
-
-            width: "1200px",
-          }}
-          className="navbar navbar-expand pr-0 navbar-light border-bottom-2"
-          id="default-navbar"
-          data-primary=""
-        >
-          {/* Navbar Toggler */}
-          <button
-            className="navbar-toggler w-auto mr-16pt d-block d-lg-none rounded-0"
-            type="button"
-            data-toggle="sidebar"
-          >
-            <span className="material-icons">short_text</span>
-          </button>
-          {/* // END Navbar Toggler */}
-          {/* Navbar Brand */}
-          <a href="index.html" className="navbar-brand mr-16pt d-lg-none">
-            <span className="avatar avatar-sm navbar-brand-icon mr-0 mr-lg-8pt">
-              <span className="avatar-title rounded bg-primary">
-                <img
-                  src="../../public/images/illustration/student/128/white.svg"
-                  alt="logo"
-                  className="img-fluid"
-                />
-              </span>
-            </span>
-            <span className="d-none d-lg-block">Luma</span>
-          </a>
-          {/* // END Navbar Brand */}
-          {/* Navbar Search */}
-          <form
-            className="search-form navbar-search d-none d-md-flex mr-16pt"
-            action="index.html"
-          >
-            <button className="btn" type="submit">
-              <i className="material-icons">search</i>
-            </button>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search ..."
-            />
-          </form>
-          {/* // END Navbar Search */}
-          <div className="flex" />
-          {/* Navbar Menu */}
-          <div className="nav navbar-nav flex-nowrap d-flex mr-16pt">
-            {/* Notifications dropdown */}
-            <div
-              className="nav-item dropdown dropdown-notifications dropdown-xs-down-full"
-              data-toggle="tooltip"
-              data-title="Messages"
-              data-placement="bottom"
-              data-boundary="window"
-              data-original-title=""
-              title=""
-            >
-              <button
-                className="nav-link btn-flush dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                data-caret="false"
-              >
-                <i className="material-icons icon-24pt">mail_outline</i>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <div data-perfect-scrollbar="" className="position-relative ps">
-                  <div className="dropdown-header">
-                    <strong>Messages</strong>
-                  </div>
-                  <div className="list-group list-group-flush mb-0">
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action unread"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">5 minutes ago</small>
-                        <span className="ml-auto unread-indicator bg-accent" />
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <img
-                            src="../../public/images/people/110/woman-5.jpg"
-                            alt="people"
-                            className="avatar-img rounded-circle"
-                          />
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <strong className="text-black-100">Michelle</strong>
-                          <span className="text-black-70">
-                            Clients loved the new design.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">5 minutes ago</small>
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <img
-                            src="../../public/images/people/110/woman-5.jpg"
-                            alt="people"
-                            className="avatar-img rounded-circle"
-                          />
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <strong className="text-black-100">Michelle</strong>
-                          <span className="text-black-70">🔥 Superb job..</span>
-                        </span>
-                      </span>
-                    </a>
-                  </div>
-                  <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                    <div
-                      className="ps__thumb-x"
-                      tabIndex={0}
-                      style={{ left: 0, width: 0 }}
-                    />
-                  </div>
-                  <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-                    <div
-                      className="ps__thumb-y"
-                      tabIndex={0}
-                      style={{ top: 0, height: 0 }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* // END Notifications dropdown */}
-            {/* Notifications dropdown */}
-            <div
-              className="nav-item ml-16pt dropdown dropdown-notifications dropdown-xs-down-full"
-              data-toggle="tooltip"
-              data-title="Notifications"
-              data-placement="bottom"
-              data-boundary="window"
-              data-original-title=""
-              title=""
-            >
-              <button
-                className="nav-link btn-flush dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                data-caret="false"
-              >
-                <i className="material-icons">notifications_none</i>
-                <span className="badge badge-notifications badge-accent">
-                  2
-                </span>
-              </button>
-              <div className="dropdown-menu dropdown-menu-right">
-                <div data-perfect-scrollbar="" className="position-relative ps">
-                  <div className="dropdown-header">
-                    <strong>System notifications</strong>
-                  </div>
-                  <div className="list-group list-group-flush mb-0">
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action unread"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">3 minutes ago</small>
-                        <span className="ml-auto unread-indicator bg-accent" />
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <span className="avatar-title rounded-circle bg-light">
-                            <i className="material-icons font-size-16pt text-accent">
-                              account_circle
-                            </i>
-                          </span>
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <span className="text-black-70">
-                            Your profile information has not been synced
-                            correctly.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">5 hours ago</small>
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <span className="avatar-title rounded-circle bg-light">
-                            <i className="material-icons font-size-16pt text-primary">
-                              group_add
-                            </i>
-                          </span>
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <strong className="text-black-100">Adrian. D</strong>
-                          <span className="text-black-70">
-                            Wants to join your private group.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                    <a
-                      href="javascript:void(0);"
-                      className="list-group-item list-group-item-action"
-                    >
-                      <span className="d-flex align-items-center mb-1">
-                        <small className="text-black-50">1 day ago</small>
-                      </span>
-                      <span className="d-flex">
-                        <span className="avatar avatar-xs mr-2">
-                          <span className="avatar-title rounded-circle bg-light">
-                            <i className="material-icons font-size-16pt text-warning">
-                              storage
-                            </i>
-                          </span>
-                        </span>
-                        <span className="flex d-flex flex-column">
-                          <span className="text-black-70">
-                            Your deploy was successful.
-                          </span>
-                        </span>
-                      </span>
-                    </a>
-                  </div>
-                  <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                    <div
-                      className="ps__thumb-x"
-                      tabIndex={0}
-                      style={{ left: 0, width: 0 }}
-                    />
-                  </div>
-                  <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-                    <div
-                      className="ps__thumb-y"
-                      tabIndex={0}
-                      style={{ top: 0, height: 0 }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* // END Notifications dropdown */}
-            <Dropdown>
-              <Dropdown.Toggle id="accountDropdown" variant="link">
-                <span className="avatar avatar-sm mr-8pt2">
-                  <span className="avatar-title rounded-circle bg-primary">
-                    <i className="material-icons">account_box</i>
-                  </span>
-                </span>
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu style={{ textAlign: "right" }}>
-                <Dropdown.Header>Account</Dropdown.Header>
-                <Dropdown.Item href="/protected/admin/account">
-                  Edit Account
-                </Dropdown.Item>
-                <Dropdown.Item href="billing.html">Billing</Dropdown.Item>
-                <Dropdown.Item href="billing-history.html">
-                  Payments
-                </Dropdown.Item>
-                <Dropdown.Item onClick={logOut}>Logout</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          {/* // END Navbar Menu */}
-        </div>
-        {/* // END Navbar */}
-        {/* // END Header */}
         <div className="pt-32pt">
           <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
             <div className="flex d-flex flex-column flex-sm-row align-items-center">
@@ -743,7 +511,7 @@ function EditCourse() {
                 <h2 className="mb-0">Create Course</h2>
                 <ol className="breadcrumb p-0 m-0">
                   <li className="breadcrumb-item">
-                    <a href="index.html">Home</a>
+                    <a>Home</a>
                   </li>
                   <li className="breadcrumb-item active">Create Course</li>
                 </ol>
@@ -751,9 +519,7 @@ function EditCourse() {
             </div>
           </div>
         </div>
-        {/* BEFORE Page Content */}
-        {/* // END BEFORE Page Content */}
-        {/* Page Content */}
+
         <div className="page-section border-bottom-2">
           <div className="container page__container">
             <div className="row">
@@ -774,24 +540,26 @@ function EditCourse() {
                     Please see our <a href="">course title guideline</a>
                   </small>
                 </div>
-
                 <label className="form-label">Course Description</label>
-
-                <div style={{ height: "140px" ,    backgroundColor: "white", marginBottom:"2em"}}>
-                  <div style={{ height: "200px", overflow: "auto",  }}>
+                <div
+                  style={{
+                    height: "140px",
+                    backgroundColor: "white",
+                    marginBottom: "2em",
+                  }}
+                >
+                  <div style={{ height: "200px", overflow: "auto" }}>
                     <ReactQuillWrapper
                       style={{ height: "100px" }}
                       value={courseDescription}
-                      onChange={(value:string) => {
-                        setCourseDescription(value)
+                      onChange={(value: string) => {
+                        setCourseDescription(value);
                       }}
                       placeholder="Module description..."
                       modules={descriptionToolbar}
-
                     />
                   </div>
                 </div>
-
                 <div
                   style={{
                     display: "flex",
@@ -800,7 +568,6 @@ function EditCourse() {
                     marginTop: "5px",
                   }}
                 ></div>
-
                 <div
                   style={{
                     display: "flex",
@@ -811,250 +578,166 @@ function EditCourse() {
                   className="page-separator"
                 >
                   <div className="page-separator__text">Sections</div>
-                  <div>
-                    {newSection ? null : (
-                      <FaPlus
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          clearSectionContent();
-                          setNewSection(!newSection);
-                        }}
-                      />
-                    )}
-                  </div>
+                
                 </div>
-                <div
-                  className="accordion js-accordion accordion--boxed mb-24pt"
-                  id="parent"
-                >
-                  {selectedCourse.sections.map((section: ISection) => (
-                    <div
-                      className={`accordion__item ${
-                        expandedSection === section.id ? "open" : ""
-                      }`}
-                      key={section.id}
-                    >
-                      <a
-                        style={{ cursor: "pointer" }}
-                        className="accordion__toggle"
-                        data-toggle="collapse"
-                        data-target={`#course-toc-${section.id}`}
-                        data-parent="#parent"
-                        onClick={() => handleSectionClick(section)}
-                      >
-                        <span
-                          onClick={() => {
-                            selectSection(section.id);
-                          }}
-                          style={{ cursor: "pointer" }}
-                          className="flex"
-                        >
-                          {section.title}
-                        </span>
-                        <button
-                          onClick={() => handleDeleteSection(section.id)}
-                          style={{
-                            backgroundColor: "white",
-                            border: "none",
-                            outline: "none",
-                          }}
-                        >
-                          <FaTrash />
-                        </button>
-
-                        <span className="accordion__toggle-icon material-icons">
-                          keyboard_arrow_down
-                        </span>
-                      </a>
+                {
+                  !newSection ? <Pagination
+                  expandedSection={expandedSection}
+                  handleSectionClick={handleSectionClick}
+                  selectSection={selectSection}
+                  handleDeleteSection={handleDeleteSection}
+                  setModuleId={setModuleId}
+                  setEditModuleModalOpen={setEditModuleModalOpen}
+                  setSectionId={setSectionId}
+                  setVideoId={setVideoId}
+                  handleDeleteVideo={handleDeleteVideo}
+                  setVideo = {setVideo}
+                  sections={selectedCourse.sections}
+                  itemsPerPage={9}
+                /> :   <div
+                className="accordion js-accordion accordion--boxed mb-24pt"
+                id="parent"
+                data-domfactory-upgraded="accordion"
+              >
+                <div className="accordion__item open">
+                  <a
+                    className="accordion__toggle"
+                    data-toggle="collapse"
+                    data-target="#course-toc-2"
+                    data-parent="#parent"
+                  >
+                    <span className="flex">
+                      {disableSectionInput
+                        ? sectionTitle
+                        : "Create new section"}
+                    </span>
+                    {/* <span className="accordion__toggle-icon material-icons">
+                  keyboard_arrow_down
+                </span> */}
+                  </a>
+                  <div
+                    className="accordion__menu collapse show"
+                    id="course-toc-2"
+                  >
+                    <div className="accordion__menu-link"></div>
+  
+                    <div className="accordion__menu-link active">
                       <div
-                        className={`accordion__menu collapse ${
-                          expandedSection === section.id ? "show" : ""
-                        }`}
-                        id={`course-toc-${section.id}`}
+                        className="form-group"
+                        style={{ width: "70%", marginRight: "2%" }}
                       >
-                        {section.modules?.map((Module) =>
-                          Module.videos.map((video: IVideo) => (
-                            <div
-                              style={{ cursor: "pointer" }}
-                              className="accordion__menu-link"
-                              key={video.id}
-                            >
-                              <FaVideo
-                                onClick={() => {
-                                  setModuleId(Module.id);
-                                  setEditModuleModalOpen(true);
-                                  setSectionId(section.id);
-                                  setVideoId(video.id);
-                                }}
-                                className="video-icon"
-                              />
-                              <a
-                                style={{ marginLeft: "8px" }}
-                                className="flex"
-                                onClick={() => {
-                                  setModuleId(Module.id);
-                                  setEditModuleModalOpen(true);
-                                  setSectionId(section.id);
-                                  setVideoId(video.id);
-                                }}
-                              >
-                                {video.title}
-                              </a>
-                              <span className="text-muted">
-                                <button
-                                  onClick={() => handleDeleteVideo(video.id)}
-                                  style={{
-                                    backgroundColor: "white",
-                                    border: "none",
-                                    outline: "none",
-                                  }}
-                                >
-                                  <FaTrash />
-                                </button>
-                              </span>
-                            </div>
-                          ))
-                        )}
+                        <label className="form-label">Section Title</label>
+                        <input
+                          disabled={disableSectionInput}
+                          onChange={(e) => setSectionTitle(e.target.value)}
+                          value={sectionTitle}
+                          type="text"
+                          className="form-control"
+                          placeholder="Section title"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Competency</label>
+                        <select
+                          disabled={disableSectionInput}
+                          onChange={(e) => setCompetency(e.target.value)}
+                          value={competency}
+                          id="custom-select"
+                          className="form-control custom-select"
+                        >
+                          <option value="JavaScript">JavaScript</option>
+                          <option value="Angular">Angular</option>
+                          <option value="Python">Python</option>
+                        </select>
                       </div>
                     </div>
-                  ))}
-                </div>
-                <div
-                  className="accordion js-accordion accordion--boxed mb-24pt"
-                  id="parent"
-                  data-domfactory-upgraded="accordion"
-                >
-                  <div className="accordion__item open">
-                    <a
-                      className="accordion__toggle"
-                      data-toggle="collapse"
-                      data-target="#course-toc-2"
-                      data-parent="#parent"
-                    >
-                      <span className="flex">
-                        {disableSectionInput
-                          ? sectionTitle
-                          : "Create new section"}
-                      </span>
-                      {/* <span className="accordion__toggle-icon material-icons">
-                    keyboard_arrow_down
-                  </span> */}
-                    </a>
+                    {/* ... */}
+  
                     <div
-                      className="accordion__menu collapse show"
-                      id="course-toc-2"
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        alignItems: "center",
+                        padding: "5px 15px",
+                      }}
                     >
-                      <div className="accordion__menu-link"></div>
-
-                      <div className="accordion__menu-link active">
-                        <div
-                          className="form-group"
-                          style={{ width: "70%", marginRight: "2%" }}
+                      {changeBtn ? (
+                        <>
+                          {updateSection ? (
+                            <a
+                              onClick={() => {
+                                setDisableSectionInput(false);
+                                setUpdateSection(false);
+                              }}
+                              className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                            >
+                              edit section
+                            </a>
+                          ) : (
+                            <a
+                              onClick={() => {
+                                updateCourseSection();
+                                setDisableSectionInput(true);
+                                setUpdateSection(true);
+                              }}
+                              className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                            >
+                              update section
+                            </a>
+                          )}
+                        </>
+                      ) : (
+                        <button
+                          style={{
+                            border: "none",
+                            outline: "none",
+                            backgroundColor: "white",
+                          }}
                         >
-                          <label className="form-label">Section Title</label>
-                          <input
-                            disabled={disableSectionInput}
-                            onChange={(e) => setSectionTitle(e.target.value)}
-                            value={sectionTitle}
-                            type="text"
-                            className="form-control"
-                            placeholder="Section title"
-                          />
-                        </div>
-                        <div className="form-group">
-                          <label className="form-label">Competency</label>
-                          <select
-                            disabled={disableSectionInput}
-                            onChange={(e) => setCompetency(e.target.value)}
-                            value={competency}
-                            id="custom-select"
-                            className="form-control custom-select"
+                          <a
+                            onClick={createSection}
+                            className="btn btn-outline-secondary mb-24pt mb-sm-0"
                           >
-                            <option value="JavaScript">JavaScript</option>
-                            <option value="Angular">Angular</option>
-                            <option value="Python">Python</option>
-                          </select>
-                        </div>
-                      </div>
-                      {/* ... */}
-
+                            save section
+                          </a>
+                        </button>
+                      )}
+                    </div>
+                    {changeBtn && (
                       <div
                         style={{
                           display: "flex",
-                          justifyContent: "flex-end",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
                           alignItems: "center",
-                          padding: "5px 15px",
+                          padding: "5%",
                         }}
                       >
-                        {changeBtn ? (
-                          <>
-                            {updateSection ? (
-                              <a
-                                onClick={() => {
-                                  setDisableSectionInput(false);
-                                  setUpdateSection(false);
-                                }}
-                                className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                              >
-                                edit section
-                              </a>
-                            ) : (
-                              <a
-                                onClick={() => {
-                                  updateCourseSection();
-                                  setDisableSectionInput(true);
-                                  setUpdateSection(true);
-                                }}
-                                className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                              >
-                                update section
-                              </a>
-                            )}
-                          </>
-                        ) : (
-                          <button
-                            style={{
-                              border: "none",
-                              outline: "none",
-                              backgroundColor: "white",
-                            }}
-                          >
-                            <a
-                              onClick={createSection}
-                              className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                            >
-                              save section
-                            </a>
-                          </button>
-                        )}
-                      </div>
-                      {changeBtn && (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            padding: "5%",
+                        <label className="form-label">Videos</label>
+                        <FaPlus
+                          onClick={() => {
+                            setEditModalOpen(true);
+                            updateCourseSection();
+                            setDisableCreateCourseBtn(false);
+                            clearSectionContent();
+                            createModule();
                           }}
-                        >
-                          <label className="form-label">Videos</label>
-                          <FaPlus
-                            onClick={() => {
-                              setEditModalOpen(true);
-                              updateCourseSection();
-                              setDisableCreateCourseBtn(false);
-                              clearSectionContent();
-                              createModule();
-                            }}
-                            style={{ cursor: "pointer" }}
-                          />
-                        </div>
-                      )}
-                    </div>
+                          style={{ cursor: "pointer" }}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
+                }
+               
+                
+          
+
+
+                
+              </div>
+
               <div className="col-md-4">
                 <div className="card">
                   <div className="card-header text-center">
@@ -1088,7 +771,7 @@ function EditCourse() {
                   <div className="card-body">
                     <div className="form-group">
                       <label className="form-label">
-                        Image url{" "}
+                        Image url
                         {imgError && (
                           <span
                             style={{ color: "tomato", fontWeight: "500px" }}
@@ -1108,13 +791,34 @@ function EditCourse() {
                           onChange={handleImageChange}
                           className="custom-file-input"
                         />
-                        <label className="custom-file-label">{!imageUrl ? "Choose File" : imageUrl?.name}</label>
+                        <label className="custom-file-label">
+                          {!imageUrl ? "Choose File" : imageUrl?.name}
+                        </label>
                         {/* </div> */}
                       </div>
-
                     </div>
                   </div>
                 </div>
+
+                <div className="page-separator">
+                  <div className="page-separator__text">Instructor</div>
+                </div>
+
+                <div className="card">
+                  <div className="card-body">
+                    <label className="form-label">Intructor name</label>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        className="form-control form-control-lg"
+                        placeholder="Instructor Name "
+                        value={instructorName}
+                        onChange={(e: any) => setInstructorName(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="page-separator">
                   <div className="page-separator__text">Options</div>
                 </div>
@@ -1133,48 +837,78 @@ function EditCourse() {
                     </div>
                   </div>
                 </div>
+                <div className="page-separator">
+                  <div className="page-separator__text">Section</div>
+                </div>
+                <div className="card">
+                  <div className="card-header text-center">
+                    <button
+                         onClick={() => {
+                          clearSectionContent();
+                          setNewSection(!newSection);
+ 
+                         }}
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                        outline: "none",
+                      }}
+                    >
+                      <a  className="btn btn-accent">
+                       {!newSection ? " Create Section" : "All Sections"}
+                      </a>
+                    </button>
+                  </div>
+                  <div className="list-group list-group-flush">
+                    <div className="list-group-item d-flex">
+                      <a className="flex" >
+                        <strong>Save Draft</strong>
+                      </a>
+                      <i className="material-icons text-muted">check</i>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="page-separator">
+                  <div className="page-separator__text">Assessment</div>
+                </div>
+                <div className="card">
+                  <div className="card-header text-center">
+                    <button
+                      onClick={() => {
+                        setCreateAssessmentModuleModalOpen(true);
+                        createAssessment();
+                      }}
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                        outline: "none",
+                      }}
+                    >
+                      <a  className="btn btn-accent">
+                        Create Assessment
+                      </a>
+                    </button>
+                  </div>
+                  <div className="list-group list-group-flush">
+                    <div className="list-group-item d-flex">
+                      <a className="flex" >
+                        <strong>Save Draft</strong>
+                      </a>
+                      <i className="material-icons text-muted">check</i>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
         {/* // END Page Content */}
         {/* Footer */}
-        <div className="bg-body border-top-2 mt-auto">
-          <div className="container page__container page-section d-flex flex-column">
-            <p className="text-70 brand mb-24pt">
-              <img
-                className="brand-icon"
-                src="../../public/images/logo/black-70@2x.png"
-                width={30}
-                alt="Luma"
-              />{" "}
-              Luma
-            </p>
-            <p className="measure-lead-max text-50 small mr-8pt">
-              Luma is a beautifully crafted user interface for modern Education
-              Platforms, including Courses &amp; Tutorials, Video Lessons,
-              Student and Teacher Dashboard, Curriculum Management, Earnings and
-              Reporting, ERP, HR, CMS, Tasks, Projects, eCommerce and more.
-            </p>
-            <p className="mb-8pt d-flex">
-              <a href="" className="text-70 text-underline mr-8pt small">
-                Terms
-              </a>
-              <a href="" className="text-70 text-underline small">
-                Privacy policy
-              </a>
-            </p>
-            <p className="text-50 small mt-n1 mb-0">
-              Copyright 2019 © All rights reserved.
-            </p>
-          </div>
-        </div>
-        {/* // END Footer */}
       </div>
 
       {}
-      <Sidebar />
-      {/* // END drawer */}
+      {/* <Sidebar /> */}
     </div>
   );
 }

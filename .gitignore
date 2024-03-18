@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 /dist
+.yarn.lock
+.sentry.client.config
+.sentry.edge.config
+.sentry.server.config
 
 # testing
 /coverage

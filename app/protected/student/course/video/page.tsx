@@ -78,11 +78,8 @@ const handlePlayClick = useCallback((event:React.MouseEvent<HTMLAnchorElement, M
 const goToQuiz = () => {
 
   window.location.href = '/protected/student/course/quiz';
-  
 
 }
-
-
 
 const goToAskQuestion=()=>{
   window.location.href = '/protected/student/Comments/add-comment'; 
@@ -97,7 +94,6 @@ const handleBackClick=()=>{
 }
 
 const handleVideoEnd = () => {
-  // Video has ended, you can add your logic here
   console.log('Video has completed.');
   setOpen(!open)
 };
@@ -112,27 +108,7 @@ const getComments=async (id:string)=>{
 
 
 
-async function getAllQuizzes() {
-  try {
-    const getQuizzes = await Api.GET_AllQuizzes();
 
-    if (getQuizzes && getQuizzes.length > 0) {
-      const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
-
-      const quizByVideoId = mappedQuizzes.filter((quiz:IQuiz) => quiz.videoId === videoId)[0]//videoId here
-      localStorage.setItem("quiz", JSON.stringify(quizByVideoId))
-;     
-    } else {
-      console.log("No quizzes found");
-    }
-  } catch (error) {
-    console.error("Error fetching quizzes:", error);
-  }
-}
-
-useEffect(() => {
-getAllQuizzes();
-},[videoId]);
 
   return (
 <>
@@ -259,7 +235,9 @@ getAllQuizzes();
             <span className="material-icons text-primary">account_circle</span>
             </p>
             <div className="media-body">
-              <a className="card-title m-0" href="teacher-profile.html">{author?.name} {author?.surname}</a>
+              <div>
+                <button className='class="btn btn-primary"'>Enroll</button>
+              </div>
               <p className="text-50 lh-1 mb-0">Instructor</p>
             </div>
           </div>

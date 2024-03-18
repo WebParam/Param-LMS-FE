@@ -11,7 +11,9 @@ export interface IDocument {
 }
 
 export interface IDocumentState{
-    documents : IDocument[] 
+    documents: {
+        documents: IDocument[]
+    }
 }
 
 export interface IUpdateDocumentDetailState {
@@ -19,6 +21,6 @@ export interface IUpdateDocumentDetailState {
     createdDate?: string;
     modifyingUser?: string;
     reference: string;
-    url: string;
+    url?: string;
     file : any
 }

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IQuiz, IQuestion, IChoice, IQuizState, IUpdateQuizDetailState, IUpdateQuestionDetailState, IDeleteQuestion, IDeleteChoice} from "../interfaces/quiz";
-import { AppStore } from "../interfaces/store";
+import { AppStore } from "./store";
 import { IModule, IVideo } from "../interfaces/courses";
 import { Api } from "../lib/restapi/endpoints";
 
@@ -19,11 +19,13 @@ function sortQuestionsByOrder(a: IQuestion, b: IQuestion) {
 }
 
 export const initialState: IQuizState = {
-  quizzes: [] as IQuiz[],
+  quizzes: {
+    quizzes : [] as IQuiz[],
+  }
 };
 
 export const quizSlice = createSlice({
-  name: "quiz",
+  name: "quizzes",
   initialState,
   reducers: {
     setSelectedQuizForEdit(state, action) {
@@ -42,16 +44,27 @@ export const quizSlice = createSlice({
         questions: [],
         modifiedDate: _action.modifiedDate,
         videoId: _action.videoId,
+        state:2
       };
 
-      state.quizzes.push(newQuiz);
+      state.quizzes.quizzes.push(newQuiz);
     },
     updateQuizzes(state, action: PayloadAction<IQuiz[]>) {
-      state.quizzes = action.payload;
+      state.quizzes.quizzes = action.payload;
     },
+
+    updateQuizState(state, action) {
+      const { quizState, quizId  } = action.payload;
+      const quizIndex = state.quizzes.quizzes.findIndex((quiz:IQuiz) => quiz?.id === quizId);
+
+      if (quizIndex !== -1) {
+        state.quizzes.quizzes[quizIndex].state = quizState;
+      }
+    },
+
    updateQuizVideoId(state, action: PayloadAction<IVideo[]>) {
       const videosData = action.payload;
-      state.quizzes.forEach((quiz) => {
+      state.quizzes.quizzes.forEach((quiz) => {
         const matchingVideo = videosData.find((video:IVideo) => video.reference === quiz.reference);
         if (matchingVideo) {
           quiz.videoId = matchingVideo.id;
@@ -68,28 +81,28 @@ export const quizSlice = createSlice({
         points: points,
       };
 
-      const quizIndex = state.quizzes.length - 1;
-      state.quizzes[quizIndex].questions.push(newQuestion);
+      const quizIndex = state.quizzes.quizzes.length - 1;
+      state.quizzes.quizzes[quizIndex].questions.push(newQuestion);
     },
 
     deleteQuestion(state, action: PayloadAction<IDeleteQuestion>) {
       const { quizId, questionId } = action.payload;
 
-      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
+      const quizIndex = state.quizzes.quizzes.findIndex((quiz) => quiz.id === quizId);
 
       if (quizIndex !== -1) {
-        const updatedQuestions = state.quizzes[quizIndex].questions.filter((question) => question.id !== questionId);
-        state.quizzes[quizIndex].questions = updatedQuestions;
+        const updatedQuestions = state.quizzes.quizzes[quizIndex].questions.filter((question) => question.id !== questionId);
+        state.quizzes.quizzes[quizIndex].questions = updatedQuestions;
       }
     },
 
     addChoices(state, action: PayloadAction<{ quizId: string, questionId: string, choiceDescription: string, isCorrect: boolean }>) {
       const { quizId, questionId, choiceDescription, isCorrect } = action.payload;
 
-      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
+      const quizIndex = state.quizzes.quizzes.findIndex((quiz:IQuiz) => quiz?.id === quizId);
 
       if (quizIndex !== -1) {
-        const questionIndex = state.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
+        const questionIndex = state.quizzes.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
 
         if (questionIndex !== -1) {
           const newChoice: IChoice = {
@@ -99,7 +112,7 @@ export const quizSlice = createSlice({
             isCorrect: isCorrect,
           };
 
-          state.quizzes[quizIndex].questions[questionIndex].choices.push(newChoice);
+          state.quizzes.quizzes[quizIndex].questions[questionIndex].choices.push(newChoice);
         }
       } else {
         console.log("Choice not created");
@@ -109,14 +122,14 @@ export const quizSlice = createSlice({
     deleteChoiceFromQuestion(state, action: PayloadAction<IDeleteChoice>) {
       const { quizId, questionId, choiceId } = action.payload;
 
-      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
+      const quizIndex = state.quizzes.quizzes.findIndex((quiz) => quiz.id === quizId);
 
       if (quizIndex !== -1) {
-        const questionIndex = state.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
+        const questionIndex = state.quizzes.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
 
         if (questionIndex !== -1) {
-          const updatedChoices = state.quizzes[quizIndex].questions[questionIndex].choices.filter((choice) => choice.id !== choiceId);
-          state.quizzes[quizIndex].questions[questionIndex].choices = updatedChoices;
+          const updatedChoices = state.quizzes.quizzes[quizIndex].questions[questionIndex].choices.filter((choice) => choice.id !== choiceId);
+          state.quizzes.quizzes[quizIndex].questions[questionIndex].choices = updatedChoices;
         }
       }
     },
@@ -124,13 +137,13 @@ export const quizSlice = createSlice({
     updateChoiceDetail(state, action: PayloadAction<{ quizId: string, questionId: string, choiceId: string, choiceDescription: string, isCorrect: boolean }>) {
       const { quizId, questionId, choiceId, choiceDescription, isCorrect } = action.payload;
 
-      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
+      const quizIndex = state.quizzes.quizzes.findIndex((quiz) => quiz.id === quizId);
 
       if (quizIndex !== -1) {
-        const questionIndex = state.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
+        const questionIndex = state.quizzes.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
 
         if (questionIndex !== -1) {
-          const updatedChoices = state.quizzes[quizIndex].questions[questionIndex].choices.map((choice) => {
+          const updatedChoices = state.quizzes.quizzes[quizIndex].questions[questionIndex].choices.map((choice) => {
             if (choice.id === choiceId) {
               return { ...choice, choiceDescription, isCorrect };
             }
@@ -138,7 +151,7 @@ export const quizSlice = createSlice({
           });
 
           // Sort the choices by order
-          state.quizzes[quizIndex].questions[questionIndex].choices = updatedChoices.sort(sortChoicesByOrder);
+          state.quizzes.quizzes[quizIndex].questions[questionIndex].choices = updatedChoices.sort(sortChoicesByOrder);
         }
       } else {
         console.log("Choice is not updated");
@@ -147,13 +160,13 @@ export const quizSlice = createSlice({
     updateChoiceAnswer(state, action: PayloadAction<{ quizId: string, questionId: string, choiceId: string, isCorrect: boolean }>) {
       const { quizId, questionId, choiceId,  isCorrect } = action.payload;
 
-      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
+      const quizIndex = state.quizzes.quizzes.findIndex((quiz) => quiz.id === quizId);
 
       if (quizIndex !== -1) {
-        const questionIndex = state.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
+        const questionIndex = state.quizzes.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
 
         if (questionIndex !== -1) {
-          const updatedChoices = state.quizzes[quizIndex].questions[questionIndex].choices.map((choice) => {
+          const updatedChoices = state.quizzes.quizzes[quizIndex].questions[questionIndex].choices.map((choice) => {
             if (choice.id === choiceId) {
               return { ...choice, isCorrect };
             }
@@ -161,7 +174,7 @@ export const quizSlice = createSlice({
           });
 
           // Sort the choices by order
-          state.quizzes[quizIndex].questions[questionIndex].choices = updatedChoices.sort(sortChoicesByOrder);
+          state.quizzes.quizzes[quizIndex].questions[questionIndex].choices = updatedChoices.sort(sortChoicesByOrder);
         }
       } else {
         console.log("Choice is not updated");
@@ -172,20 +185,20 @@ export const quizSlice = createSlice({
     updateQuestionDetails(state, action: PayloadAction<IUpdateQuestionDetailState>) {
       const { quizId, questionId, questionDescription, points } = action.payload;
 
-      const quizIndex = state.quizzes.findIndex((quiz) => quiz.id === quizId);
+      const quizIndex = state.quizzes.quizzes.findIndex((quiz) => quiz.id === quizId);
 
       if (quizIndex !== -1) {
-        const questionIndex = state.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
+        const questionIndex = state.quizzes.quizzes[quizIndex].questions.findIndex((question) => question.id === questionId);
 
         if (questionIndex !== -1) {
-          state.quizzes[quizIndex].questions[questionIndex] = {
-            ...state.quizzes[quizIndex].questions[questionIndex],
+          state.quizzes.quizzes[quizIndex].questions[questionIndex] = {
+            ...state.quizzes.quizzes[quizIndex].questions[questionIndex],
             questionDescription,
             points,
           };
 
           // Sort the questions by order
-          state.quizzes[quizIndex].questions.sort(sortQuestionsByOrder);
+          state.quizzes.quizzes[quizIndex].questions.sort(sortQuestionsByOrder);
         }
       }
     },
@@ -203,7 +216,8 @@ export const {
   deleteQuestion,
   updateQuizzes,
   updateQuizVideoId,
-  updateChoiceAnswer
+  updateChoiceAnswer,
+  updateQuizState
 } = quizSlice.actions;
 
 export const getSelectedQuizForEdit = (state: AppStore) => state.quizzes.quizzes;

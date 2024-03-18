@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import Sidebar from "@/app/components/Sidebar";
+
 
 export default function Dashbaord() {
   return (
@@ -1613,7 +1613,7 @@ export default function Dashbaord() {
                 </ul>
               </div>
               <div className="tab-pane  fade active show " id="sm_instructor">
-                <Sidebar />
+          
               </div>
               <div className="tab-pane " id="sm_account">
                 <div className="sidebar-heading">Account</div>

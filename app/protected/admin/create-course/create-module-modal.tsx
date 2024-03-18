@@ -33,7 +33,7 @@ import {
 import Cookies from "universal-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {  createDocumentDetails, getSelectedDocumentForEdit } from "@/app/redux/documentSice";
+import {  createDocumentDetails, getSelectedDocumentForEdit, updateDocumentDetail } from "@/app/redux/documentSice";
 import { IDocument } from "@/app/interfaces/document";
 
 
@@ -120,7 +120,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [quizId, setQuizId] = useState<string>("")
   const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
 
-  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
+  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
   const _quizFromState: IQuiz  = _quizzesFromState[_quizzesFromState.length - 1];
   
  const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
@@ -153,21 +153,13 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [videoUrlError, setVideoUrlError] = useState(false);
   const [formData, setFormData] = useState(new FormData());
 
-  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit).documents;
   const _documentFromState: IDocument  = _documentsFromState[_documentsFromState.length - 1];
 
   
   console.log("Documents from state", _documentsFromState);
 
-  // const handleDescriptionChange = (content: string, _: any, source: string) => {
-  //   if (source === "user") {
-  //     const plainDescription = content.replace(/<\/?p>/gi, "");
 
-  //     setCourseDescription(plainDescription);
-
-  //     dispatch(createCourseDetail(payload));
-  //   }
-  // };
 
   const onChange = (isChecked: boolean , id : string) => {
 
@@ -218,7 +210,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const addQuiz = (e: any) => {
     setIncludeQuiz(false);
 
-    const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz.videoId === videoId);
+    const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.videoId === videoId);
     if(hasQuiz?.length === 1 ){
       setIncludeQuiz(e.target.checked);
 
@@ -270,21 +262,21 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     setChangeEditQuizQuestionContent(true)
 
     const hasQuestion = questions.filter(
-      (question: IQuestion) => question.id === id
+      (question: IQuestion) => question?.id === id
     );
-    setQuestionDescription(hasQuestion[0].questionDescription);
-    setPoints(hasQuestion[0].points);
-    setQuestionId(hasQuestion[0].id);
+    setQuestionDescription(hasQuestion[0]?.questionDescription);
+    setPoints(hasQuestion[0]?.points);
+    setQuestionId(hasQuestion[0]?.id);
   };
 
 
   const selectChoiceForEdit = (id: string) => {
     setEnableUpdateChoice(true);
     const hasChoice = choices.filter(
-      (choice: IChoice) => choice.id === id
+      (choice: IChoice) => choice?.id === id
     );
-    setChoiceDescription(hasChoice[0].choiceDescription);
-    setChoiceId(hasChoice[0].id);
+    setChoiceDescription(hasChoice[0]?.choiceDescription);
+    setChoiceId(hasChoice[0]?.id);
   };
 
   const handleCreateQuiz = () => {
@@ -311,7 +303,8 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
       return;
     }
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+
     if (isNaN(points) || points === 0) {
       setPointsError(true);
       return;
@@ -345,7 +338,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
 
     setEnableEditQuestion(true);
     const plainDescription =
-      questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
     const payload = {
       quizId : quizId,
       questionId: questionId,
@@ -472,6 +465,8 @@ setChangeEditQuizQuestionContent(false);
     setChoiceDescription("");
 
   };
+
+  
   const nextQuestion = () => {
     if (questionNumber < questions.length) {
       setQuestionNumber(questionNumber + 1);
@@ -525,27 +520,31 @@ setChangeEditQuizQuestionContent(false);
   };
 
   const handleChangeDocument = (e:any) => {
+   if(document){
     const file = e.target.files[0];
-
     if (file) {
       setDocument(file);
-      console.log("Selected file", file)
     }
-
     const payload = {
       title: file ? file.name : "",
       reference:videoReference,
        url :"",
       file: file ? file : null 
     }
-    //   const formData = new FormData();
-    // Object.entries(payload).forEach(([key, value]) => {
-    //   formData.append(key, value);
-    //   console.log("Appended key:", key, "with value:", value);
-    // });
-
+    dispatch(updateDocumentDetail(payload));
+   }else{
+    const file = e.target.files[0];
+    if (file) {
+      setDocument(file);
+    }
+    const payload = {
+      title: file ? file.name : "",
+      reference:videoReference,
+       url :"",
+      file: file ? file : null 
+    }
     dispatch(createDocumentDetails(payload));
-    console.log("Document from state", _documentFromState);
+   }
 
 }
   //Document functions ends here
@@ -580,8 +579,8 @@ setChangeEditQuizQuestionContent(false);
     setVideoUrlError(false);
     setDisableSaveChanges(false);
     if (videoDescription.length > 0 && videoTitle.length > 0  && videoLink.length > 0) {
-      const plainDescription = videoDescription
-      && videoDescription.replace(/<\/?p>/gi, "");
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');;
 
       const payload = {
         moduleId: moduleId,
@@ -592,20 +591,10 @@ setChangeEditQuizQuestionContent(false);
 
 
       dispatch(addVideoToModule(payload));
-
-
-
-
-
       setDisableSaveChanges(true);
       setHideSaveChangesBtn(true)
       setDisableModuleInputs(true);
-    
   
-
-
-
-
     }else{
       if(!videoDescription){
         setVideoDescError(true);
@@ -632,8 +621,8 @@ setChangeEditQuizQuestionContent(false);
       videoDescription && videoLink 
      
     ) {
-      const plainDescription = videoDescription
-        && videoDescription.replace(/<\/?p>/gi, "")
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
         
       const payload = {
         videoId: videoId,
@@ -684,7 +673,11 @@ setChangeEditQuizQuestionContent(false);
   setVideoLink(video[0]?.videoLink);
   setVideoId(video[0]?.id)
   setVideoReference(video[0]?.reference)
-
+  const videoDoc = _documentsFromState.filter((doc:IDocument) => doc.reference === video[0]?.reference)[0];
+  console.log("documents",videoDoc);
+  if(videoDoc){
+    setDocument(videoDoc.file);
+  }
   }
 
   const newVideo = () => {
@@ -711,6 +704,7 @@ setChangeEditQuizQuestionContent(false);
       setVideoReference("");
       setIsQuestionCreated(false);
       setQuestionDescription("");
+      setDocument("");
       setPoints(0);
       setQuizId("");
       setVideoIdForEdit("")
@@ -757,14 +751,14 @@ setChangeEditQuizQuestionContent(false);
 
   useEffect(() => {
     
-    const videoQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz.videoId === videoIdForEdit)[0];
+    const videoQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.videoId === videoIdForEdit)[0];
     if(videoQuiz?.id){
       setQuizId(videoQuiz?.id)
       setQuestions(videoQuiz?.questions);
       
     }else{
       setQuestions([]);
-      const quiz = _quizzesFromState.filter((quiz:IQuiz) => quiz.id === quizId)[0];
+      const quiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.id === quizId)[0];
       setQuestions(quiz?.questions);
       console.log("Quiz Questions",quiz?.questions);
     }
@@ -779,17 +773,17 @@ setChangeEditQuizQuestionContent(false);
 
   useEffect(() => {
     if (_quizzesFromState.length > 0) {
-      setQuizId(_quizzesFromState[_quizzesFromState.length - 1].id);
+      setQuizId(_quizzesFromState[_quizzesFromState.length - 1]?.id);
     }
   }, [_quizzesFromState]);
 
   useEffect(() => {
     const choices = _quizFromState?.questions.map(
-      (question) => question.choices
+      (question) => question?.choices
     );
 
     const hasQuestion = _quizFromState?.questions?.filter(
-      (question: IQuestion) => question.id === questionId
+      (question: IQuestion) => question?.id === questionId
     )!;
     setChoices(hasQuestion?.length > 0 && hasQuestion[0]?.choices);
   });
@@ -912,7 +906,7 @@ setChangeEditQuizQuestionContent(false);
                 </h2>
                 <ol className="breadcrumb p-0 m-0">
                   <li className="breadcrumb-item">
-                    <a href="index.html">Home</a>
+                    <a >Home</a>
                   </li>
                   <li className="breadcrumb-item active">{enableEditVideo ? "Edit Video" : "Add Video"}</li>
                 </ol>

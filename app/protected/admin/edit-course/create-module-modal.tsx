@@ -35,7 +35,7 @@ import Cookies from "universal-cookie";
 import { Dropdown } from "react-bootstrap";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IDocument } from "@/app/interfaces/document";
-import { getSelectedDocumentForEdit, setSelectedDocumentForEdit } from "@/app/redux/documentSice";
+import { createDocumentDetails, getSelectedDocumentForEdit, setSelectedDocumentForEdit, updateDocumentDetail } from "@/app/redux/documentSice";
 
 
 interface CreateCourseModalProps {
@@ -98,7 +98,6 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
 }) => {
   const cookies = new Cookies();
   const userData = cookies.get("param-lms-user");
-  const [showVideoInputs, setShowVideoInputs] = useState(false);
   const [videoTitle, setVideoTitle] = useState<string>("");
   const [videoLink, setVideoLink] = useState<string>("");
   const [videos, setVideos] = useState<any>([]);
@@ -112,10 +111,8 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [modules, setModules] = useState<string[]>([]);
   const [isModuleSaved, setIsModuleSaved] = useState<boolean>(false);
 
-  const [changeModulBtn, setChangeModulBtn] = useState<boolean>(false);
   const [disableSaveChanges, setDisableSaveChanges] = useState<boolean>(true);
   const [lastSection, setLastSection] = useState<number>(-1);
-  const [changeVidBtn, setChangeVidBtn] = useState<boolean>(true);
   const [videoId, setVideoId] = useState<string>("");
 
   const [toggler, setToggler] = useState<Number>(1);
@@ -136,7 +133,6 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
 
   const [choices, setChoices] = useState<any>([]);
   const [questions, setQuestions] = useState<IQuestion[]>([]);
-  const [choicesToEdit, setChoicesToEdit] = useState<any>([]);
 
  const [choiceError, setChoiceError] = useState(false);
   const [questionError, setQuestionError] = useState(false);
@@ -163,14 +159,15 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [videoDescError, setVideoDescError] = useState(false);
   const [videoUrlError, setVideoUrlError] = useState(false);
 const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
+const [document, setDocument] = useState<any>("")
 
   const [videoReference, setVideoReference] = useState<string>("")
 
 
-  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit);
+  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
   const _quizFromState: IQuiz  = _quizzesFromState[_quizzesFromState.length - 1];
 
-  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit).documents;
   const _documentFromState: IDocument  = _documentsFromState[_documentsFromState.length - 1];
 
 
@@ -315,8 +312,8 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
   
         return;
       }
-      const plainDescription =
-        questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+      const plainDescription = questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+
       if (isNaN(points) || points === 0) {
         setPointsError(true);
         return;
@@ -349,7 +346,8 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
   
       setEnableEditQuestion(true);
       const plainDescription =
-        questionDescription && questionDescription.replace(/<\/?p>/gi, "");
+        questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+
       const payload = {
         quizId : quizId,
         questionId: questionId,
@@ -488,19 +486,41 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
   
     //Dcoument functions start here
 
-    const handleDocument = (e: any) => {
-      const formData = new FormData();
+
+
+    const handleChangeDocument = (e:any) => {
+     if(document){
       const file = e.target.files[0];
-  
       if (file) {
-        formData.append("document", file);
-        setDocumentName(file.name);
+        setDocument(file);
       }
-    };
+      const payload = {
+        title: file ? file.name : "",
+        reference:videoReference,
+         url :"",
+        file: file ? file : null 
+      }
+      dispatch(updateDocumentDetail(payload));
+     }else{
+      const file = e.target.files[0];
+      if (file) {
+        setDocument(file);
+      }
+      const payload = {
+        title: file ? file.name : "",
+        reference:videoReference,
+         url :"",
+        file: file ? file : null 
+      }
+      dispatch(createDocumentDetails(payload));
+     }
+  
+  }
+ 
     const addDocument = (e: any) => {
       setIncludeDocument(false);
-      if (modules.length === 0) {
-        let _id = toast.loading("Please add module first..", {
+      if (!videoId) {
+        let _id = toast.loading("Please add video first..", {
           //loader
           position: "top-center",
           autoClose: 1000,
@@ -542,8 +562,8 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
     setDisableSaveChanges(false);
     if (videoDescription && videoTitle  && videoLink ) {
    
-      const plainDescription = videoDescription
-      && videoDescription.replace(/<\/?p>/gi, "");
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
 
       const payload = {
         moduleId: moduleId,
@@ -601,6 +621,11 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
   setVideoLink(video[0]?.videoLink);
   setVideoId(video[0]?.id)
   setVideoReference(video[0]?.reference)
+  const videoDoc = _documentsFromState.filter((doc:IDocument) => doc.reference === video[0]?.reference)[0];
+  console.log("documents",videoDoc);
+  if(videoDoc){
+    setDocument(videoDoc.file);
+  }
 
   }
 
@@ -658,8 +683,9 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
       videoDescription && videoLink 
      
     ) {
-      const plainDescription = videoDescription
-        && videoDescription.replace(/<\/?p>/gi, "")
+      const plainDescription =
+      videoDescription && videoDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+
         
       const payload = {
         videoId: videoId,
@@ -853,7 +879,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
                 </h2>
                 <ol className="breadcrumb p-0 m-0">
                   <li className="breadcrumb-item">
-                    <a href="index.html">Home</a>
+                    <a >Home</a>
                   </li>
                   <li className="breadcrumb-item active">{enableEditVideo ? "Edit Video": "Add Video"}</li>
                 </ol>
@@ -1933,7 +1959,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
                     <input
                       type="file"
                       id="file"
-                      onChange={handleDocument}
+                      onChange={handleChangeDocument}
                       className="custom-file-input"
                     />
                     <label className="custom-file-label">Choose file</label>
@@ -1941,7 +1967,7 @@ const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
                 </div>
 
                 <p style={{ color: "rgba(39,44,51,.35)", paddingTop: "10px" }}>
-                  {documentName}
+                  {document?.name}
                 </p>
               </div>
 

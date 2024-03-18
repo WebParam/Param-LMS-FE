@@ -23,7 +23,7 @@ export default function Register() {
   const[ConfirmPassError, setConfirmPassError] = useState<boolean>(false)
   const[EmailError, setEmailError] = useState<boolean>(false)
   const[disable, setDisable] = useState<boolean>(false)
-const [role,setRole]=useState()
+const [role,setRole]=useState("Admin")
 
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -114,7 +114,7 @@ const [role,setRole]=useState()
           changedOn: date,
           Otp: "",
          // Status: "new",
-          role: "",
+          role: "Student",
           LoginType: 0,
         } as IUserRegisterModel;
         
@@ -135,7 +135,7 @@ debugger;
             // Set cookies here after successful login
     
             // Optionally, you can redirect the user to another page
-            navigateToLogin()
+            router.push('/protected/student/course/all-courses');
       
           }
           
@@ -166,10 +166,10 @@ debugger;
                 type: "success",
                 isLoading: false,
               });
-              // Set cookies here after successful login
-      
-              // Optionally, you can redirect the user to another page
-              navigateToLogin()
+              cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
+
+              router.push('/protected/admin/manage-courses');
+
             }
             else if(user.error){
               console.log("response", user);
@@ -199,43 +199,6 @@ debugger;
         }
         
        
-      
-
-    
-        // axios
-        //   .post(
-        //     "https://86e8-154-0-14-142.ngrok-free.app/api/Users/AddUSer",
-        //     payload
-        //   )
-        //   .then((response: any) => {
-        //     console.log("response", response);
-    
-        //     toast.update(_id, {
-        //       render: "Successfully registered",
-        //       type: "success",
-        //       isLoading: false,
-        //     });
-    
-        //     // Set cookies here after successful login
-    
-        //     // Optionally, you can redirect the user to another page
-        //     navigateToLogin()
-        //   })
-        //   .catch((error: any) => {
-            
-        //     toast.update(_id, {
-        //       render: "Cannot register user with the supplied information",
-        //       type: "error",
-        //       isLoading: false,
-        //     });
-
-        //     setTimeout(() => {
-        //       setDisable(false)
-        //       toast.dismiss(_id);
-        //     }, 2000);
-
-        //     console.log(error);
-        //   });
     
       }
     }else{
@@ -319,19 +282,7 @@ debugger;
                 placeholder="Your email address ..."
               />
             </div>
-            <div className="form-group">
-          <label className="form-label">Role</label>
-          <select
-            onChange={(e:any) => setRole(e.target.value)}
-            value={role}
-            id="custom-select"
-            className="form-control custom-select"
-          >
-            <option value="Student">student</option>
-            <option value="Admin">Admin</option>
-
-          </select>
-        </div>
+        
 
 
 
@@ -385,18 +336,18 @@ debugger;
   alignItems: "center",
   justifyContent: "center",
 }} className="container page__container">
-  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+  <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
     Facebook
   </a>
-  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+  <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
     Twitter
   </a>
-  <a href="fixed-index.html" className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
+  <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
     Google+
   </a>
 </div>
 
-        <div  onClick = {navigateToLogin} className="page-separator__text mt-3">Already have an account? <span style={{cursor:"pointer"}}>sign-in</span></div>
+        <div  onClick = {navigateToLogin} className="page-separator__text mt-3">Already have an account? <span style={{cursor:"pointer", color:"blue"}}>sign-in</span></div>
 
       </div>
     </>
