@@ -19,6 +19,7 @@ import {
   addChoicesToQuestion,
   deleteAssessmentQuestion,
   getSelectedAssessmentForEdit,
+  updateAssessment,
   updateAssessmentQuestion,
   updateChoiceDetails,
 } from "@/app/redux/assessmentSlice";
@@ -109,6 +110,8 @@ export const CreateCourseAssessmentModal: React.FC<
     useState(false);
   const [enableUpdateChoice, setEnableUpdateChoice] = useState(false);
   const [viewCreatedQuestion, setViewCreatedQuestion] = useState(true);
+  const [isRetaken, setIsRetaken] = useState<string>("")
+  const [dueDate, setDueDate] = useState<string>("")
 
   const [questionType, setQuestionType] = useState<string>("");
 
@@ -117,6 +120,48 @@ export const CreateCourseAssessmentModal: React.FC<
   ).assessment;
 
   console.log("Assessments from state", _assessmentFromState);
+
+
+  
+  const handleAssessmentDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDueDate(e.target.value);
+    const payload = {
+      courseId : _assessmentFromState.courseId, 
+      questions  :_assessmentFromState.questions,
+       createdByUserId  : _assessmentFromState.createdByUserId,
+      createdDate  : _assessmentFromState.createdDate,
+      modifiedByUserId  : _assessmentFromState.modifiedByUserId, 
+      modifiedAt  : _assessmentFromState.modifiedAt, 
+       dueDate  : dueDate,
+       courseTitle: _assessmentFromState.courseTitle,
+       instructorName:"John Doe",
+       instructorId:"656f1335650c740ce0ae4d65",
+       status : _assessmentFromState.status,
+       isRetaken : isRetaken === "Yes" ? true : false 
+
+    }
+    dispatch(updateAssessment(payload));
+  };
+
+  const handleAssessmentRetaken = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setIsRetaken(e.target.value);
+    const payload = {
+      courseId : _assessmentFromState.courseId, 
+      questions  :_assessmentFromState.questions,
+       createdByUserId  : _assessmentFromState.createdByUserId,
+      createdDate  : _assessmentFromState.createdDate,
+      modifiedByUserId  : _assessmentFromState.modifiedByUserId, 
+      modifiedAt  : _assessmentFromState.modifiedAt, 
+       dueDate  : _assessmentFromState.dueDate,
+       courseTitle: _assessmentFromState.courseTitle,
+       instructorName:"John Doe",
+       instructorId:"656f1335650c740ce0ae4d65",
+       status : _assessmentFromState.status,
+       isRetaken : isRetaken === "0" ? true : false 
+
+    }
+    dispatch(updateAssessment(payload));
+  };
 
   const onChange = (isChecked: boolean, id: string) => {
     const choiceDetails = choices.filter(
@@ -284,6 +329,7 @@ export const CreateCourseAssessmentModal: React.FC<
       setQuestionDescription("");
       setPoints(0);
       setChoiceDescription("");
+      setQuestionType("");
     } else {
       if (choices.length === 0) {
         let _id = toast.loading("Please add choices first..", {
@@ -322,6 +368,7 @@ export const CreateCourseAssessmentModal: React.FC<
       setQuestionDescription("");
       setPoints(0);
       setChoiceDescription("");
+      setQuestionType("");
     }
   };
 
@@ -556,8 +603,24 @@ export const CreateCourseAssessmentModal: React.FC<
                       <div className="page-separator">
                         <div className="page-separator__text">New Question</div>
                       </div>
+                      <div className="form-group">
+                          <label className="form-label">Question Type</label>
+                          <select
+                            onChange={(e) => setQuestionType(e.target.value)}
+                            value={questionType}
+                            id="custom-select"
+                            className="form-control custom-select"
+                          >
+                            <option>Select Type</option>
+                            <option value="0">Multiple choice</option>
+                            <option value="1">Short question</option>
+                          </select>
+                        </div>
+
                       <div className="card card-body">
-                        <div className="form-group">
+                        
+                      {(questionType === "0" || questionType === "1") && <>
+                      <div className="form-group">
                           <label className="form-label">
                             Question{" "}
                             {questionError && (
@@ -590,6 +653,9 @@ export const CreateCourseAssessmentModal: React.FC<
                             />
                           </div>
                         </div>
+
+
+
                         <div className="form-group">
                           <label className="form-label">
                             Completion Points
@@ -618,6 +684,9 @@ export const CreateCourseAssessmentModal: React.FC<
                             value={points}
                           />
                         </div>
+
+
+
                         <div className="mb-3">
                           {!isQuestionCreated && (
                             <button
@@ -672,21 +741,10 @@ export const CreateCourseAssessmentModal: React.FC<
                           )}
                         </div>
 
-                        <div className="form-group">
-                          <label className="form-label">Question Type</label>
-                          <select
-                            onChange={(e) => setQuestionType(e.target.value)}
-                            value={questionType}
-                            id="custom-select"
-                            className="form-control custom-select"
-                          >
-                            <option>Select Type</option>
-                            <option value="0">Multiple choice</option>
-                            <option value="1">Short question</option>
-                          </select>
-                        </div>
-
-                        {isQuestionCreated && questionType === "0" && (
+                      
+                      </>}
+                   
+                      {isQuestionCreated && questionType === "0" && (
                           <>
                             <div className="form-group">
                               <label className="form-label">
@@ -838,6 +896,29 @@ export const CreateCourseAssessmentModal: React.FC<
                               </button>
                             </div>
                           )}
+
+                        <div className="form-group mt-3">
+                          <label className="form-label">Select due date</label>
+                          <input value = {dueDate} onChange={handleAssessmentDate} type = "date" className="form-control" />
+                       
+                        </div>
+
+                        <div className="form-group">
+                          <label className="form-label">Allow Assessment to be retaken?</label>
+                          <select
+                            onChange={handleAssessmentRetaken}
+                            value={isRetaken}
+                            id="custom-select"
+                            className="form-control custom-select"
+                          >
+                            <option>Select choice</option>
+                            <option value="0">Yes</option>
+                            <option value="1">No</option>
+                          </select>
+                        </div>
+
+
+                      
                       </div>
                     </div>
                   </div>

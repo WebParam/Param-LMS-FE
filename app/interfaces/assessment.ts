@@ -11,6 +11,7 @@ export interface IAssessment {
     status: number;
     fileUrl?: string;
     instructorId:string;
+    isRetaken : boolean;
 }
 
 export interface IAssessmentState {

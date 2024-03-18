@@ -43,6 +43,7 @@ const initialState: IAssessmentState = {
     fileUrl:"",
     status: 0,
     instructorId:"",
+    isRetaken : false
   } as IAssessment
 };
 
@@ -55,7 +56,7 @@ export const assessmentSlice = createSlice({
     },
 
     createAssessmentDetail(state, action) {
-      const { dueDate,courseTitle ,intructor} = action.payload;
+      const { dueDate,courseTitle ,intructor,isRetaken} = action.payload;
       const newState = {
         courseId: generateUniqueId(),
         questions: [] as IAssessmentQuestion[],
@@ -68,9 +69,11 @@ export const assessmentSlice = createSlice({
         instructorName:"",
         instructorId:"",
         status: 0,
+        isRetaken : isRetaken
       }
 
       state.assessment = newState;
+
     },
 
     updateAssessment(state, action) {
@@ -87,6 +90,7 @@ export const assessmentSlice = createSlice({
         instructorName: _action.instructorName,
         instructorId: _action.instructorId,
         status: 0,
+        isRetaken : _action.isRetaken
 
       }
       state.assessment = newState;

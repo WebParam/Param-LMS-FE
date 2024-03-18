@@ -11,6 +11,10 @@ import { IoPersonSharp } from "react-icons/io5";
 import { useSelector } from 'react-redux';
 import { getSelectedCourseForEdit } from '../redux/courseSlice';
 import Cookies from "universal-cookie"
+import { Api } from '../lib/restapi/endpoints';
+import { IResponseObject } from '../lib/restapi/response';
+import IComment from '../interfaces/comment';
+
 
 interface ReactPlayerProps {
   selectedVideo: string;
@@ -49,6 +53,16 @@ function VideoPlayer({
   const _courseFromState = useSelector(getSelectedCourseForEdit).course;
 const [courseId, setCourseId] = useState<string>("")
 
+const today = new Date();
+const year = today.getFullYear();
+let month: number | string = today.getMonth() + 1;
+let day: number | string = today.getDate();
+
+month = month < 10 ? `0${month}` : month;
+day = day < 10 ? `0${day}` : day;
+
+const todayDate = (`${year}-${month}-${day}`);
+
   useEffect(() => {
 setCourseId(_courseFromState?.id)
 
@@ -57,42 +71,47 @@ setCourseId(_courseFromState?.id)
   useEffect(() => {
     setComments([])
     setComment("");
-    const storedComments = localStorage.getItem(`comments_${_courseFromState?.id}`);
-    if (storedComments) {
-      const videoComment = JSON.parse(storedComments).filter((c:any) => c?.videoId === videoId )
-      setComments(videoComment);
-    }
+    
+() => async (id:string)=>{
+  var _comment:IResponseObject<IComment>[]= await Api.GET_CommentsByReference(videoId);
+  debugger;
+  var data:IComment[]=_comment.map((comment) => comment.data) as IComment[];
+  const videoComments = data.filter(comment => comment.referenceId === videoId);
+  setComments(videoComments);
+  console.log("Comments",videoComments);
+}
+
   }, [courseId,videoId]);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
+
+  
     e.preventDefault();
-    if (videoId && creatingUser && comment) {
-      const newComment = {
-        videoId,
-        creatingUser,
-        comment
-      };
-      // Load existing comments for the video from localStorage
-      const storedComments = localStorage.getItem(`comments_${courseId}`);
-      let existingComments = [];
-      if (storedComments) {
-        existingComments = JSON.parse(storedComments);
-      }
-  
-      // Filter existing comments for the current video
-      const videoComments = existingComments.filter((c: any) => c.videoId === videoId);
-  
-      // Add the new comment to the filtered comments
-      const updatedComments = [...videoComments, newComment];
-  
-      // Update localStorage with the updated comments for the current video
-      localStorage.setItem(`comments_${courseId}`, JSON.stringify(updatedComments));
-  
-      // Update the state with the updated comments for the current video
+    const commentPayload = {
+      title:"Sample Comment",
+      message:comment,
+      creatingUser:loogedInUser?.id,
+      createdDate:todayDate,
+      modifyingUser:loogedInUser?.id,
+      modifiedDate:todayDate,
+      referenceId:videoId,
+      type:1,
+      state:0,
+      replies:[],
+      creatingUserName:loogedInUser?.firstName + " " + loogedInUser?.lastName,
+    }
+
+    const postComment = await Api.POST_AddComment(commentPayload)
+    console.log("Posted Comment",postComment);
+    if(postComment.data?.id){
+      const updatedComments = [...comments, postComment.data];
       setComments(updatedComments);
-      
-      // Clear the comment input field and reset creatingUser for the next comment
-      setComment('');
+    }
+    debugger;
+ 
+    if (videoId && creatingUser && comment) {
+    
+ 
     }
   };
   

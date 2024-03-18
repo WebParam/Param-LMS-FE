@@ -19,9 +19,9 @@ export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api
  
 export const userReadUrl="https://khmla-dev-user-read.azurewebsites.net/api";
 
-export const commentReadUrl="https://localhost:61280/api";
+export const commentReadUrl="https://khumla-develop-comments-read.azurewebsites.net/api";
 
-export const commentWriteUrl="https://localhost:61275/api";
+export const commentWriteUrl="https://khumla-develop-comments-write.azurewebsites.net/api";
 
 export const quizReadUrl = "https://khumla-dev-quiz-read.azurewebsites.net/api";
 

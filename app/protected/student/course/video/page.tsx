@@ -78,11 +78,8 @@ const handlePlayClick = useCallback((event:React.MouseEvent<HTMLAnchorElement, M
 const goToQuiz = () => {
 
   window.location.href = '/protected/student/course/quiz';
-  
 
 }
-
-
 
 const goToAskQuestion=()=>{
   window.location.href = '/protected/student/Comments/add-comment'; 
@@ -97,7 +94,6 @@ const handleBackClick=()=>{
 }
 
 const handleVideoEnd = () => {
-  // Video has ended, you can add your logic here
   console.log('Video has completed.');
   setOpen(!open)
 };
