@@ -1207,6 +1207,29 @@ export const CreateCourseAssessmentModal: React.FC<
               )}
             </div>
           </div>
+          <div className="card" style={{ width: "auto" }}>
+              <div className="card-header text-center">
+              <button
+
+                    style={{
+                      backgroundColor: "transparent",
+                      border: "none",
+                      outline: "none",
+                      width: "150px",
+                    }}
+                  >
+                    <a
+                    
+                      href="#"
+                      className="btn btn-accent"
+                    >
+                      save video
+                    </a>
+                  </button>         
+              </div>
+
+              
+            </div>
         </div>
         {/* // END Page Content */}
       </div>

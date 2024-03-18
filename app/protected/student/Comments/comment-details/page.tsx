@@ -52,7 +52,7 @@ export default function CommentDetails() {
     }
   };
 
-  const getReplies = async (reference: string) => {
+  const getReplies = async (reference: string ) => {
     var response: IResponseObject<IComment>[] =
       await Api.GET_CommentsByReference(reference);
     var data: any = response.map((data) => data.data);
@@ -68,7 +68,7 @@ export default function CommentDetails() {
     setTopCommeters(getTop5Commenters(_comments));
     setComment(_comment);
     setUser(cookies.get("param-lms-user"));
-    getReplies(_comment?.id);
+    getReplies(_comment?.id!);
   }, []);
 
   return (
