@@ -13,6 +13,8 @@ import dynamic from 'next/dynamic';
 import { IQuiz } from "@/app/interfaces/quiz";
 import { updateCourseFromDataBase } from "@/app/redux/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { updateQuizzes } from "@/app/redux/quizSlice";
+import { IResponseObject } from "@/app/lib/restapi/response";
 function ManageCourses() {
 
   const [courseHover, setCourseHover] = useState<boolean>(false);
@@ -52,15 +54,15 @@ function ManageCourses() {
   }
 
   async function getAllQuizzes() {
-    localStorage.removeItem("quizzes");
     try {
       const getQuizzes = await Api.GET_AllQuizzes();
       setQuizzes(getQuizzes);
   
       if (getQuizzes && getQuizzes.length > 0) {
-        const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
-        console.log("Mapped Quizzes", mappedQuizzes);
-        localStorage.setItem('quizzes', JSON.stringify(mappedQuizzes));
+        const mappedQuizzes = getQuizzes.map((quiz:any) => {
+          return { ...quiz?.data, state: 0 }; 
+        });
+        dispatch(updateQuizzes(mappedQuizzes));
       } else {
         console.log("No quizzes found");
       }

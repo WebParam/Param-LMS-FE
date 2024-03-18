@@ -11,7 +11,9 @@ export interface IDocument {
 }
 
 export interface IDocumentState{
-    documents : IDocument[] 
+    documents: {
+        documents: IDocument[]
+    }
 }
 
 export interface IUpdateDocumentDetailState {

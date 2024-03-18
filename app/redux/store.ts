@@ -14,27 +14,27 @@ import {documentSlice } from "./documentSice";
 
 const persistCourse = {
   key: 'course',
-  storage: storage, // Change this to localStorage
+  storage: storage, 
   whitelist: ['course'], 
 };
 
 const persistQuiz = {
   key: 'quizzes',
-  storage: storage, // Change this to localStorage
+  storage: storage, 
   whitelist: ['quizzes'], 
 };
 
 
 const persistAssessment = {
   key: 'assessment',
-  storage: storage, // Change this to localStorage
+  storage: storage, 
   whitelist: ['assessment'], 
 };
 
 const persistDocument = {
-  key: 'document',
-  storage: storage, // Change this to localStorage
-  whitelist: ['document'],  
+  key: 'documents',
+  storage: storage, 
+  whitelist: ['documents'],  
 };
 
 const persistedCourseReducer = persistReducer(persistCourse, courseSlice.reducer);

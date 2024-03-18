@@ -153,7 +153,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [videoUrlError, setVideoUrlError] = useState(false);
   const [formData, setFormData] = useState(new FormData());
 
-  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit).documents;
   const _documentFromState: IDocument  = _documentsFromState[_documentsFromState.length - 1];
 
   

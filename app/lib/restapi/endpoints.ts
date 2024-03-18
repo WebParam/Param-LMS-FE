@@ -23,13 +23,13 @@ export const commentReadUrl="https://khumla-develop-comments-read.azurewebsites.
 
 export const commentWriteUrl="https://khumla-develop-comments-write.azurewebsites.net/api";
 
-export const quizReadUrl = "https://khumla-dev-quiz-read.azurewebsites.net/api";
+export const quizReadUrl = "https://khumla-develop-quiz-read.azurewebsites.net/api";
 
 export const assessmentWriteUrl = "https://khumla-dev-assessment-write.azurewebsites.net/api";
 
 export const assessmentReadUrl = "https://khumla-dev-assessment-read.azurewebsites.net/api";
 
-export const quizWriteUrl ="https://khumla-dev-quiz-write.azurewebsites.net/api";
+export const quizWriteUrl ="https://khumla-develop-assessment-write.azurewebsites.net/api";
 
 export const documentWrite = "https://e4e7-154-0-14-142.ngrok-free.app/api"
 

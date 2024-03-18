@@ -111,34 +111,30 @@ function EditCourse() {
   const [disableCreateCourseBtn, setDisableCreateCourseBtn] =
     useState<boolean>(true);
   const [updateSection, setUpdateSection] = useState<boolean>(true);
-  const [newSection, setNewSection] = useState<boolean>(true);
+  const [newSection, setNewSection] = useState<boolean>(false);
   const [sectionBtn, setSectionBtn] = useState<boolean>(true);
   const [imageUrl, setImageUrl] = useState<any>();
   const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit).quizzes;
   const [imgError, setImgError] = useState(false);
   const [moduleId, setModuleId] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
-  const [arrayOfDocuments, setArrayOfDocuments] = useState<any[]>([]);
   const [instructorName, setInstructorName] = useState<string>("");
+  const [video, setVideo] = useState<IVideo | null>(null)
 
 
   const [videoId, setVideoId] = useState<string>("");
-  const _documentsFromState: IDocument[] = useSelector(
-    getSelectedDocumentForEdit
-  );
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit).documents;
   const _assessmentFromState: IAssessment = useSelector(
     getSelectedAssessmentForEdit
   ).assessment;
   console.log("Course", _courseFromState);
   console.log("Assessment", _assessmentFromState);
-  const [isRetaken, setIsRetaken] = useState<boolean>(false);
+console.log("Documents", _documentsFromState);
 
   console.log("Quizzes from state", _quizzesFromState);
 
   let cookies = new Cookies();
-  useEffect(() => {
-    console.log("Array of documents", arrayOfDocuments);
-  }, [arrayOfDocuments]);
+
 
   const userData = cookies.get("param-lms-user");
   console.log("userDataID:", userData?.id);
@@ -153,9 +149,7 @@ function EditCourse() {
       [{ list: "ordered" }, { list: "bullet" }],
     ],
   };
-  useEffect(() => {
-    console.log("Array of documents:", arrayOfDocuments);
-  }, [arrayOfDocuments]);
+
 
   const payload = {
     creatingUser: userData?.id,
@@ -163,15 +157,11 @@ function EditCourse() {
     description: courseDescription,
   };
 
-  const logOut = () => {
-    cookies.remove("param-lms-user");
-    // Optionally, you can redirect the userto another page
-    window.location.href = "/auth/login";
-  };
+
   function saveAndCloseEditModal() {
     setEditModalOpen(false);
     clearSectionContent();
-    setNewSection((prev) => !prev);
+
  
   }
 
@@ -404,7 +394,7 @@ function EditCourse() {
     setCompetency("");
     setChangeBtn(false);
     setDisableSectionInput(false);
-    setNewSection(true);
+    setNewSection(false);
   };
   1;
   const handleDeleteVideo = (videoId: any) => {
@@ -474,6 +464,7 @@ function EditCourse() {
           <EditCourseModal
             videoId={videoId}
             moduleId={moduleId}
+            video={video}
             sectionId={sectionId}
             onClose={saveAndCloseEditModuleModal}
           />
@@ -600,6 +591,7 @@ function EditCourse() {
                   setSectionId={setSectionId}
                   setVideoId={setVideoId}
                   handleDeleteVideo={handleDeleteVideo}
+                  setVideo = {setVideo}
                   sections={selectedCourse.sections}
                   itemsPerPage={9}
                 /> :   <div

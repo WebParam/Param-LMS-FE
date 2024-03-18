@@ -12,9 +12,10 @@ interface PaginationProps {
   handleDeleteSection: (sectionId: string) => void;
   setModuleId: (moduleId: string) => void;
   setEditModuleModalOpen: (isOpen: boolean) => void;
+  setVideo : (video: IVideo) => void;
   setSectionId: (sectionId: string) => void;
   setVideoId: (videoId: string) => void;
-  handleDeleteVideo: (videoId: string) => void;
+  handleDeleteVideo: (videoId: string,moduleId?:string | null) => void;
 }
 
 export const Pagination = ({
@@ -29,6 +30,7 @@ export const Pagination = ({
   setSectionId,
   setVideoId,
   handleDeleteVideo,
+  setVideo
 }: PaginationProps) => {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -116,6 +118,7 @@ export const Pagination = ({
                         setEditModuleModalOpen(true);
                         setSectionId(section.id);
                         setVideoId(video.id);
+                        setVideo(video);
                       }}
                       className="video-icon"
                     />
@@ -133,7 +136,7 @@ export const Pagination = ({
                     </a>
                     <span className="text-muted">
                       <button
-                        onClick={() => handleDeleteVideo(video.id)}
+                        onClick={() => handleDeleteVideo(video.id, Module?.id)}
                         style={{
                           backgroundColor: "white",
                           border: "none",
