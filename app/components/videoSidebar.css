@@ -10,12 +10,13 @@
  justify-content: flex-start;
   /* border: red solid 2px ; */
   overflow-y: scroll;
-  max-height: 500px; 
+  max-height: 800px; 
+  min-height: 100px;
 }
 
 .player-wrapper {
   position: relative;
-  padding-top: 56.25%; /* 720 / 1280 = 0.5625 */
+  padding-top: 52.25%; /* 720 / 1280 = 0.5625 */
   width: 100vh;
 
 }

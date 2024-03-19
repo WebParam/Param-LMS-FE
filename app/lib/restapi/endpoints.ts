@@ -8,6 +8,7 @@ import { get } from "http";
 import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import { IMarks, IQuiz } from "@/app/interfaces/quiz";
 import { IAssessment } from "@/app/interfaces/assessment";
+import { IDocument } from "@/app/interfaces/document";
 
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
@@ -31,7 +32,9 @@ export const assessmentReadUrl = "https://khumla-dev-assessment-read.azurewebsit
 
 export const quizWriteUrl ="https://khumla-develop-assessment-write.azurewebsites.net/api";
 
-export const documentWrite = "https://e4e7-154-0-14-142.ngrok-free.app/api"
+export const documentWrite = "https://khumla-dev-document-write.azurewebsites.net/api"
+
+export const documentRead = "https://khumla-dev-document-read.azurewebsites.net/api"
 
 export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
 
@@ -305,10 +308,20 @@ GET_StudentAssessmentsByCourses: async (
 
 
 POST_Document: async ( payload:any)
-:Promise<IResponseObject<any>> => {
+:Promise<IResponseObject<IDocument[]>> => {
   const _document:any = await POST(`${documentWrite}/Documents/AddDocuments`,payload);
   return _document;
 },
+
+
+GET_Documents: async (
+
+) => {
+
+  const response = await GET(`${documentRead}/Documents/getDocuments`);
+  return response;
+},
+
 
 GET_AllQuizzes: async (
   ) => {

@@ -457,7 +457,7 @@ export const CreateCourseAssessmentModal: React.FC<
 
         <div style={{ width: "100%" }} className="page-section border-bottom-2">
           <div className="container page__container">
-            <div className="row" style={{ width: "900px" }}>
+            <div className="row" style={{ width: "800px" }}>{/*width for modal content*/}
               {/*Quiz Content Starts Here*/}
               {!viewCreatedQuestion && (
                 <div
@@ -1202,35 +1202,48 @@ export const CreateCourseAssessmentModal: React.FC<
                         )}
                       </div>
                     </div>
+                    
                   </div>
                 </>
               )}
-            </div>
-          </div>
-          <div className="card" style={{ width: "auto" }}>
-              <div className="card-header text-center">
+
+              <div className="card-header text-center"
+              
+              style={{
+                marginRight:"2em !important",
+              
+              }}
+            
+              >
               <button
+              onClick={() => onClose()}
 
                     style={{
+                      marginRight:"10px",
                       backgroundColor: "transparent",
                       border: "none",
                       outline: "none",
-                      width: "150px",
+                      width: "149px",
                     }}
                   >
                     <a
-                    
-                      href="#"
+                 
+                      
                       className="btn btn-accent"
                     >
-                      save video
+                      save assessment
                     </a>
                   </button>         
               </div>
 
-              
+
+
             </div>
+           
+          </div>
+       
         </div>
+        
         {/* // END Page Content */}
       </div>
     </div>

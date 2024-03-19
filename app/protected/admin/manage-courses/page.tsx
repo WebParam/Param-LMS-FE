@@ -70,6 +70,14 @@ function ManageCourses() {
       console.error("Error fetching quizzes:", error);
     }
   }
+  async function getAllDocuments() {
+    try {
+      const getDocuments = await Api.GET_Documents();
+      console.log("Documents fetched", getDocuments)
+    } catch (error) {
+      console.error("Error fetching documents:", error);
+    }
+  }
 
 
 
@@ -82,6 +90,7 @@ function ManageCourses() {
   useEffect(() => {
     ListAllCourses();
     getAllQuizzes();
+    getAllDocuments();
   }, []);
 
 

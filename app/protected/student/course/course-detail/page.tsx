@@ -32,8 +32,9 @@ export default function CourseDetail() {
   const [allVideos, setAllVideos] = useState<IVideo[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string>("");
   const [quizId, setQuizId] = useState<string>("")
+  const _courseFromState = useSelector(getSelectedCourseForEdit).course;
   const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
-  const [videoId, setVideoId] = useState<string>("")
+  const [videoId, setVideoId] = useState<string>(_courseFromState.sections[0]?.modules[0]?.videos[0]?.id)
   console.log("Quizzes from state",_quizzesFromState)
   const [open, setOpen] = useState(false);
   const [enrollOpen, setEnrollOpen] = useState(false);
@@ -129,7 +130,7 @@ const getEnrolledCourses = async () => {
   const state: ICourse = useSelector(getSelectedCourseForEdit).course;
   useEffect(() => {
     setSection(state?.sections);
-    setVideoId(sections[0]?.modules[0]?.videos[0]?.id)
+
   
     console.log("Link",state)
     state.sections.forEach((section:ISection) => {
@@ -171,6 +172,8 @@ const getEnrolledCourses = async () => {
     const index = allVideos.findIndex((v: IVideo) => v.id === video.id);
     setSelectedVideo(video.videoLink);
     setCurrentVideoIndex(index);
+    setVideoId(video?.id);
+    console.log("VideoId Selected", video?.id);
   };
 
 

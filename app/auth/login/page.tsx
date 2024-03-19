@@ -176,7 +176,7 @@ async function LoginUser (event:any){
         <div className="page-separator__bg-top " />
       </div>
       <div className="bg-body pt-32pt pb-32pt pb-md-64pt text-center">
-      <div style={{
+      {/* <div style={{
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
@@ -191,7 +191,7 @@ async function LoginUser (event:any){
   <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
     Google+
   </a>
-</div>
+</div> */}
 
         <div className="page-separator__text mt-3">Do not have an account? <span style={{cursor:"pointer", color:"blue"}} onClick = {navigateToRegister}>sign-up</span></div>
       </div>

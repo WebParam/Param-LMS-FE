@@ -903,12 +903,7 @@ console.log("Documents", _documentsFromState);
             </div>
           </div>
         </div>
-        {/* // END Page Content */}
-        {/* Footer */}
       </div>
-
-      {}
-      {/* <Sidebar /> */}
     </div>
   );
 }
