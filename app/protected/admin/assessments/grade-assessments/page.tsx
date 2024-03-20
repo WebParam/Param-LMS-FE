@@ -1,6 +1,26 @@
+"use client"
+import { Api } from "@/app/lib/restapi/endpoints";
 import "../assessments.css"
-
+import {useRouter} from "next/navigation"
+import { useEffect } from "react";
 export default function ViewAssessments() {
+
+const router = useRouter();
+
+const goToAssessments = () => {
+  router.push("/protected/admin/assessments/mark-assessment")
+}
+
+
+const getComments = async () => {
+  const comments = await Api.GET_GetAllComments();
+  console.log("Comments",comments)
+}
+
+useEffect(() => {
+  getComments();
+},[])
+
   return (
     <div
     style={{ width: "100%" }}
@@ -58,7 +78,7 @@ export default function ViewAssessments() {
                     Mastering React
 
                     <a
-                          href="#"
+                       onClick={goToAssessments}
                           className="btn btn-outline-secondary btn-grade"
                         >
                           Grade Assessment

@@ -1,6 +1,15 @@
+"use client"
 import "../assessments.css"
 import { TiTick } from "react-icons/ti";
+import { IoCheckmarkSharp } from "react-icons/io5";
+import { FaXmark } from "react-icons/fa6";
+import NumberInput from 'react-number-input';
+import { useState } from "react";
 export default function GradeAssessment() {
+
+  const [count, setCount] = useState<number>(0);
+
+
   return (
     <div
     style={{ width: "100%" }}
@@ -73,16 +82,20 @@ Kwanele Ndaba
 
            <div className="mark-section">
          <p>
-         <input type="text" placeholder="1 Point" className="point-text-box"/>
-         </p>
+         
+          <input type = "text" placeholder="1"
+          
+          style={{width: "80px"}}
+          />
+              </p>
             <div className = "icons">
         <p>
-        <TiTick  className="tick-icon"/>
+        <IoCheckmarkSharp  className="tick-icon"/>
         </p>
             <p 
             className="x-icon"
             style={{paddingTop:"2px", marginLeft:"2px"}}
-            >X</p>
+            ><FaXmark/></p>
             </div>
            </div>
            </div>

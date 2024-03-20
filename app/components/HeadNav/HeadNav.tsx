@@ -46,7 +46,7 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                           <span className="user-icon material-icons sidebar-menu-icon sidebar-menu-icon--left rounded-circle mr-8pt">account_circle</span>
                 <span className="flex d-flex flex-column mr-8pt">
                     <span className="navbar-text-100">{loggedInUser?.firstName} {loggedInUser?.lastName}</span>
-                    <small className="navbar-text-50">{loggedInUser?.role}</small>
+                    <small className="navbar-text-50">{loggedInUser?.role === "Customer" && "Student"}</small>
                 </span>
             </a>
             <div className="dropdown-menu dropdown-menu-right">

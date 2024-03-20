@@ -228,6 +228,14 @@ DELETE_CourseById: async (
     const response=await GET(`${commentReadUrl}/Ratings/GetRating?id=${id}`);
     return response;
   },
+  
+  GET_GetAllComments:async ():
+  Promise<IResponseObject<IComment[]>>=>{
+    const response=await GET(`${commentReadUrl}/Comments/GetComments`);
+    return response;
+  },
+
+
   POST_AddCommentReply:async(payload:ICommentReply)       
   :Promise<IResponseObject<IComment>> => {
     const response:any = await POST(`${commentWriteUrl}/Comments/AddCommentReply`,payload);
