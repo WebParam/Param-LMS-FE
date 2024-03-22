@@ -24,7 +24,7 @@ export default function RootLayout({
   const pathname = usePathname();
   if (pathname == "/auth/admin/login") bannerName = "Khumla Admin Login"
   else if (pathname == "/auth/admin/register") bannerName = "Khumla Admin Register"
-  else if (pathname == "/auth/login") bannerName = "Khumla Login"
+  else if (pathname == "/" || pathname == "/auth/login" ) bannerName = "Khumla Login"
   else bannerName = "Khumla Register"
 
   return (
