@@ -89,7 +89,6 @@ export default function Register() {
     const user = await Api.POST_RegisterAdmin(payload);
     try {
       if (user.data) {
-        console.log("response", user);
 
         toast.update(_id, {
           render: "Successfully registered",
