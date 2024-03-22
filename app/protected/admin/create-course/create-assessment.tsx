@@ -24,6 +24,7 @@ import {
   updateChoiceDetails,
 } from "@/app/redux/assessmentSlice";
 import { IAssessment, IAssessmentQuestion } from "@/app/interfaces/assessment";
+import ConfirmationModal from "@leafygreen-ui/confirmation-modal";
 
 interface CreateCourseAssessmentModal {
   onClose: () => any;
@@ -112,6 +113,7 @@ export const CreateCourseAssessmentModal: React.FC<
   const [viewCreatedQuestion, setViewCreatedQuestion] = useState(true);
   const [isRetaken, setIsRetaken] = useState<string>("")
   const [dueDate, setDueDate] = useState<string>("")
+
 
   const [questionType, setQuestionType] = useState<string>("");
 
@@ -435,6 +437,8 @@ export const CreateCourseAssessmentModal: React.FC<
       data-responsive-width="992px"
       data-domfactory-upgraded="mdk-drawer-layout"
     >
+          
+     
       <div
         className="mdk-drawer-layout__content page-content"
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
@@ -1243,8 +1247,7 @@ export const CreateCourseAssessmentModal: React.FC<
           </div>
        
         </div>
-        
-        {/* // END Page Content */}
+    
       </div>
     </div>
   );

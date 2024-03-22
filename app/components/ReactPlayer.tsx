@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import ReactPlayer from "react-player";
 import "./react-player.css";
-import { ISection } from "@/app/interfaces/courses";
+import { ISection, IVideo } from "@/app/interfaces/courses";
 import ConfirmationModal from "@leafygreen-ui/confirmation-modal";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
@@ -25,6 +25,7 @@ interface ReactPlayerProps {
   openQuiz: () => void;
   open: boolean;
   videoId: string;
+  video: IVideo;
   handleVideoEnd: () => void;
   handleDuration: (duration: number) => void;
   HideSidebar: boolean;
@@ -43,6 +44,7 @@ function VideoPlayer({
   videoId,
   handleDuration,
   HideSidebar,
+  video,
   viewSidebar,
 }: ReactPlayerProps) {
   const cookies = new Cookies();
@@ -58,13 +60,13 @@ function VideoPlayer({
   const [replyCommentId, setReplyCommentId] = useState<string>("");
   const [selectedComment, setselectedComment] = useState<IComment>();
   const [commentReply, setCommentReply] = useState<string>("");
-  const [commentReplies, setCommentReplies] = useState<IComment[]>([])   
-  const [enableComment, setEnableComment] = useState<boolean>(false) ;
+  const [commentReplies, setCommentReplies] = useState<IComment[]>([]);
+  const [enableComment, setEnableComment] = useState<boolean>(false);
 
   const selectCommentForReply = (comment: IComment) => {
     setReplyCommentId(comment?.id!);
     setselectedComment(comment);
-    setEnableComment(true)
+    setEnableComment(true);
   };
 
   const today = new Date();
@@ -101,11 +103,10 @@ function VideoPlayer({
     }
   };
 
-  const getCommentReplies = async (commentId:string) => {
-
-    setReplyCommentId("")
-    setCommentReplies([])
-    setEnableComment(false)
+  const getCommentReplies = async (commentId: string) => {
+    setReplyCommentId("");
+    setCommentReplies([]);
+    setEnableComment(false);
     var _comment: IResponseObject<IComment>[] =
       await Api.GET_CommentsByReference(commentId);
     var data: IComment[] = _comment.map(
@@ -114,8 +115,8 @@ function VideoPlayer({
     const commentReplies = data.filter(
       (comment) => comment.referenceId === commentId
     );
-    setCommentReplies(commentReplies)
-    setReplyCommentId(commentReplies[0]?.referenceId)
+    setCommentReplies(commentReplies);
+    setReplyCommentId(commentReplies[0]?.referenceId);
   };
 
   const getVideoComments = async () => {
@@ -133,12 +134,11 @@ function VideoPlayer({
     setComments(videoComments);
   };
 
-
   const PostCommentReply = async () => {
     const commentPayload: ICommentReply = {
       comment: selectedComment!,
       reply: {
-        title: "Sample Comment",
+        title: video?.title,
         message: commentReply,
         creatingUser: loogedInUser?.id,
         createdDate: todayDate,
@@ -296,158 +296,172 @@ function VideoPlayer({
 
                 <div className="all-comments-section">
                   <ul>
+                    {comments?.length > 0 &&
+                      comments.map((c: IComment, index: number) => (
+                        <div className="" key={c.id}>
+                          <div
+                            style={{
+                              cursor: "pointer",
+                              backgroundColor: "#f5f7fa",
+                              fontSize: "large",
+                              borderBottom: "1px solid lightgrey",
+                              height: "180px",
+                            }}
+                            className={`accordion__toggle  ${
+                              c?.replies.length > 0
+                                ? "show-replies"
+                                : "videoComments"
+                            }`}
+                            data-target={`#course-toc-${c.id}`}
+                            data-parent="#parent"
+                          >
+                            <div className="person-container">
+                              <IoPersonSharp />{" "}
+                              <span className="username">
+                                {c?.creatingUserName}
+                              </span>
+                            </div>
 
-
-{
-  comments?.length > 0 &&
-  comments.map((c: IComment, index: number) => (
-  <div className="" key={c.id}>
-  <div
-    style={{
-      cursor: "pointer",
-      backgroundColor: "#f5f7fa",
-      fontSize: "large",
-      borderBottom: "1px solid lightgrey",
-        height:"180px"
-    }}
-
-    className={`accordion__toggle  ${
-      c?.replies.length > 0 ? "show-replies" : "videoComments"
-    }`}
-
-
-    data-target={`#course-toc-${c.id}`}
-    data-parent="#parent"
-  >
-    <div className="person-container">
-                            <IoPersonSharp />{" "}
-                            <span className="username">
-                              {c?.creatingUserName}
-                            </span>
-                          </div>
-
-                          <p style={{ fontSize: "small", marginLeft: "20px" }}>
-                            {" "}
-                            {c.message}
-                          </p>
-
-                          <div className="reaction-icons">
-                            <p>
-                              <FaRegThumbsUp />
-                            </p>
-                            <p>
-                              <FaRegThumbsDown />
-                            </p>
                             <p
-                              onClick={() => selectCommentForReply(c)}
-                              className="reply-text"
+                              style={{ fontSize: "small", marginLeft: "20px" }}
                             >
-                              <BsReply style={{ fontSize: "x-large" }} />
+                              {" "}
+                              {c.message}
                             </p>
 
-                          </div>
-  </div>
-
-  <div
-  style={{marginTop:"3em"}}
-    className={`accordion__menu collapse ${
-      replyCommentId === c?.id && enableComment ? "show" : ""
-    }`}
-    id={`course-toc-${c.id}`}
-  >
-  {replyCommentId === c?.id && (
-                            <div className="reply-container">
-                              <div>
-                                <IoPersonSharp />
-                              </div>
-                              <div>
-                                <textarea
-                                  value={commentReply}
-                                  onChange={(e) => {
-                                    setCommentReply(e.target.value);
-                                  }}
-                                  className="reply-comment-input"
-                                  placeholder="Add comments"
-                                />
-                              </div>
-                            </div>
-                          )}
-
-                          {replyCommentId === c?.id && (
-                            <div className="reply-btn">
-                              <button
-                                onClick={() => setReplyCommentId("")}
-                                style={{ cursor: "pointer" }}
-                                type="button"
-                                className="btn btn-accent cancel-btn"
+                            <div className="reaction-icons">
+                              <p>
+                                <FaRegThumbsUp />
+                              </p>
+                              <p>
+                                <FaRegThumbsDown />
+                              </p>
+                              <p
+                                onClick={() => selectCommentForReply(c)}
+                                className="reply-text"
                               >
-                                Cancel
-                              </button>
-
-                              <button
-                                onClick={PostCommentReply}
-                                style={{ cursor: "pointer" }}
-                                type="button"
-                                className="btn btn-accent"
-                              >
-                                Reply
-                              </button>
+                                <BsReply style={{ fontSize: "x-large" }} />
+                              </p>
                             </div>
-                          )}
-
-</div>
-
-
-  <div
-    className={`accordion__menu collapse ${
-      replyCommentId === c?.id  ? "show" : ""
-    }`}
-    id={`course-toc-${c.id}`}
-  >
-    {commentReplies?.length > 0 && commentReplies[0].referenceId === c?.id &&
-                      commentReplies.map((comment: IComment, index: number) => (
-                        <li
-                          className={`storage-comments ${
-                            replyCommentId === c?.id && ""
-                          }`}
-                          key={index}
-                        >
-                          <div className="person-container">
-                            <IoPersonSharp />{" "}
-                            <span className="username">
-                              {comment?.creatingUserName}
-                            </span>
                           </div>
 
-                          <p style={{ fontSize: "small", marginLeft: "20px" }}>
+                          <div
+                            style={{ marginTop: "3em" }}
+                            className={`accordion__menu collapse ${
+                              replyCommentId === c?.id && enableComment
+                                ? "show"
+                                : ""
+                            }`}
+                            id={`course-toc-${c.id}`}
+                          >
+                            {replyCommentId === c?.id && (
+                              <div className="reply-container">
+                                <div>
+                                  <IoPersonSharp />
+                                </div>
+                                <div>
+                                  <textarea
+                                    value={commentReply}
+                                    onChange={(e) => {
+                                      setCommentReply(e.target.value);
+                                    }}
+                                    className="reply-comment-input"
+                                    placeholder="Add comments"
+                                  />
+                                </div>
+                              </div>
+                            )}
+
+                            {replyCommentId === c?.id && (
+                              <div className="reply-btn">
+                                <button
+                                  onClick={() => setReplyCommentId("")}
+                                  style={{ cursor: "pointer" }}
+                                  type="button"
+                                  className="btn btn-accent cancel-btn"
+                                >
+                                  Cancel
+                                </button>
+
+                                <button
+                                  onClick={PostCommentReply}
+                                  style={{ cursor: "pointer" }}
+                                  type="button"
+                                  className="btn btn-accent"
+                                >
+                                  Reply
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          <div
+                            style={{
+                              marginLeft: "30px",
+                            }}
+                            className={`accordion__menu collapse ${
+                              replyCommentId === c?.id ? "show" : ""
+                            }`}
+                            id={`course-toc-${c.id}`}
+                          >
+                            {commentReplies?.length > 0 &&
+                              commentReplies[0].referenceId === c?.id &&
+                              commentReplies.map(
+                                (comment: IComment, index: number) => (
+                                  <li
+                                    className={`storage-comments ${
+                                      replyCommentId === c?.id && ""
+                                    }`}
+                                    key={index}
+                                  >
+                                    <div className="person-container">
+                                      <IoPersonSharp />{" "}
+                                      <span className="username">
+                                        {comment?.creatingUserName}
+                                      </span>
+                                    </div>
+
+                                    <p
+                                      style={{
+                                        fontSize: "small",
+                                        marginLeft: "20px",
+                                      }}
+                                    >
+                                      {" "}
+                                      {comment.message}
+                                    </p>
+
+                                    <div className="reaction-icons">
+                                      <p>
+                                        <FaRegThumbsUp />
+                                      </p>
+                                      <p>
+                                        <FaRegThumbsDown />
+                                      </p>
+                                    </div>
+
+                                    <p
+                                      className="reply-count"
+                                      onClick={() => getCommentReplies(c?.id!)}
+                                    >
+                                      {comment.replies.length > 0 &&
+                                        `${comment.replies.length} replies`}
+                                    </p>
+                                  </li>
+                                )
+                              )}
+                          </div>
+
+                          <p
+                            className="reply-count"
+                            onClick={() => getCommentReplies(c?.id!)}
+                          >
                             {" "}
-                            {comment.message}
+                            {c.replies.length > 0 &&
+                              `${c.replies.length} replies`}
                           </p>
-
-                          <div className="reaction-icons">
-                            <p>
-                              <FaRegThumbsUp />
-                            </p>
-                            <p>
-                              <FaRegThumbsDown />
-                            </p>
-                         
-                          </div>
-                          
-                          <p className="reply-count" onClick={() => getCommentReplies(c?.id!)}>
-                               {comment.replies.length > 0 && `${comment.replies.length} replies` }
-                            </p>
-                      
-                        </li>
+                        </div>
                       ))}
-  </div>
-
-
-  <p className="reply-count" onClick={() => getCommentReplies(c?.id!)}>  {c.replies.length > 0 && `${c.replies.length} replies` }</p>
-
-  </div>
-  ))
-}
                   </ul>
                 </div>
 
@@ -474,4 +488,3 @@ function VideoPlayer({
 }
 
 export default VideoPlayer;
-

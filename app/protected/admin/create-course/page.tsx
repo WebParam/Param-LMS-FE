@@ -120,6 +120,7 @@ function EditCourse() {
   const [formData, setFormData] = useState(new FormData());
   const [instructorName, setInstructorName] = useState<string>("");
   const [video, setVideo] = useState<IVideo | null>(null)
+  
 
 
   const [videoId, setVideoId] = useState<string>("");
@@ -168,8 +169,10 @@ console.log("Documents", _documentsFromState);
   function saveAndCloseEditModuleModal() {
     setEditModuleModalOpen(false);
   }
+
+
   function saveAndCloseCreateAssessmentModuleModal() {
-    setEditModuleModalOpen(false);
+    setCreateAssessmentModuleModalOpen(false)
   }
 
   const updateCourseSection = function () {
@@ -405,7 +408,7 @@ console.log("Documents", _documentsFromState);
     clearSectionContent();
     dispatch(deleteSection(sectionId));
     setDisableSectionInput(false);
-    setNewSection(true);
+
   };
 
   const createAssessment = () => {
@@ -450,6 +453,9 @@ console.log("Documents", _documentsFromState);
       <ToastContainer />
 
       <div>
+
+  
+
         <Modal
           styles={customModalStyles}
           open={editModuleModalOpen}
@@ -474,9 +480,7 @@ console.log("Documents", _documentsFromState);
         <Modal
           styles={customModalStyles}
           open={createAssessmentModalOpen}
-          onClose={() => {
-            setCreateAssessmentModuleModalOpen(false);
-          }}
+          onClose={saveAndCloseCreateAssessmentModuleModal}
           center
         >
           <CreateCourseAssessmentModal

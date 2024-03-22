@@ -12,6 +12,10 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   return (
     <>
       <div
+      style={{
+        position: "sticky",
+        top:"0px"
+      }}
         className="navbar navbar-expand navbar-shadow px-0  pl-lg-16pt navbar-light bg-body"
         id="default-navbar"
         data-primary

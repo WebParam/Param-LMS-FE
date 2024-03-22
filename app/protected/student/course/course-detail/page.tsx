@@ -37,6 +37,7 @@ export default function CourseDetail() {
   const [videoId, setVideoId] = useState<string>(_courseFromState.sections[0]?.modules[0]?.videos[0]?.id)
   console.log("Quizzes from state",_quizzesFromState)
   const [open, setOpen] = useState(false);
+  const [video, setVideo] = useState<IVideo>(_courseFromState.sections[0]?.modules[0]?.videos[0])
   const [enrollOpen, setEnrollOpen] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -170,9 +171,10 @@ const getEnrolledCourses = async () => {
   const handleVideoSelect = (video: IVideo) => {
 
     const index = allVideos.findIndex((v: IVideo) => v.id === video.id);
-    setSelectedVideo(video.videoLink);
+    setSelectedVideo(_courseFromState.sections[0]?.modules[0]?.videos[index].videoLink);
     setCurrentVideoIndex(index);
-    setVideoId(video?.id);
+    setVideoId(_courseFromState.sections[0]?.modules[0]?.videos[index].id);
+    setVideo(_courseFromState.sections[0]?.modules[0]?.videos[index])
     console.log("VideoId Selected", video?.id);
   };
 
@@ -239,6 +241,7 @@ const getEnrolledCourses = async () => {
       HideSidebar = {hideSidebar}
       viewSidebar ={HideSidebar}
       playerRef={playerRef}
+      video={video}
       videoId = {videoId}
 
       />

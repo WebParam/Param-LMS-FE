@@ -26,9 +26,9 @@ export const commentWriteUrl="https://khumla-develop-comments-write.azurewebsite
 
 export const quizReadUrl = "https://khumla-develop-quiz-read.azurewebsites.net/api";
 
-export const assessmentWriteUrl = "https://khumla-dev-assessment-write.azurewebsites.net/api";
+export const assessmentWriteUrl = "https://khumla-develop-assessment-write.azurewebsites.net/api";
 
-export const assessmentReadUrl = "https://khumla-dev-assessment-read.azurewebsites.net/api";
+export const assessmentReadUrl = "https://khumla-develop-assessment-read.azurewebsites.net/api";
 
 export const quizWriteUrl ="https://khumla-develop-assessment-write.azurewebsites.net/api";
 
@@ -178,28 +178,12 @@ DELETE_CourseById: async (
     return response;
   },
 
-  GET_UserById:async(id:string)
-          :Promise<IResponseObject<IUser>>=>{
+  GET_UserById:async()
+          :Promise<IResponseObject<IUser[]>>=>{
             
-            const response:IResponseObject<IUserRegisterModel>= await GET(`${userReadUrl}/Users/GetUserById?Id=${id}`);
-            
-            console.log("response:" ,response);
+            const response = await GET(`${userReadUrl}/Users/GetUsers`);
            
-            const user:IResponseObject<IUser>={
-              data:{
-                name:response.data?.firstName??"",
-                surname:response.data?.lastName??"",
-                image:response.data?.image??"",
-                email:response.data?.email??"",
-                summary:response.data?.summary??"",
-                headLine:response.data?.headLine??""
-              },
-              message:response.message,
-              error:response.error,
-              status:0
-            };
-            console.log("Author response:",user);
-           return user;
+           return response;
           },
 
 
@@ -305,6 +289,14 @@ POST_StudentAnswers: async (
   const response = await POST(`${assessmentWriteUrl}/StudentAnswers/AddStudentAnswer`, payload);
   return response;
 },
+
+GET_StudentAssessmentsAnswers: async (
+
+) => {
+  const response = await GET(`${assessmentReadUrl}/StudentAnswers/GetStudentsAnswers`);
+  return response;
+},
+
 
 GET_StudentAssessmentsByCourses: async (
   payload: string

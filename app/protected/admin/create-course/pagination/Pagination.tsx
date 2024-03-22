@@ -1,6 +1,7 @@
 "use client";
 import { ISection, IVideo } from "@/app/interfaces/courses";
-import React, { useState } from "react";
+import ConfirmationModal from "@leafygreen-ui/confirmation-modal";
+import React, { useEffect, useState } from "react";
 import { FaTrash, FaVideo } from "react-icons/fa";
 
 interface PaginationProps {
@@ -33,24 +34,28 @@ export const Pagination = ({
   setVideo
 }: PaginationProps) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [allowDeleteVideo, setAllowDeleteVideo] = useState<boolean>(false)
 
-  // Calculate the total number of pages
+  const [deleteVideoId, setDeleteVideoId] = useState<string>("");
+  const [deleteVideoModuleId, setDeleteVideoModuleId] = useState<string>("");
+  const [sectionId, setSetSectionId] = useState<string>("")
+
+
+
+
+
   const totalPages = Math.ceil(sections.length / itemsPerPage);
-
-  // Calculate the index of the first and last section to display on the current page
   const indexOfLastSection = currentPage * itemsPerPage;
   const indexOfFirstSection = indexOfLastSection - itemsPerPage;
-
-  // Get the current page of sections
   const currentSections = sections.slice(
     indexOfFirstSection,
     indexOfLastSection
   );
-
-  // Function to handle page navigation
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
 
   return (
     <div>
@@ -85,7 +90,14 @@ export const Pagination = ({
                 {section.title}
               </span>
               <button
-                onClick={() => handleDeleteSection(section.id)}
+                onClick={() => {
+                  setOpenModal(true)
+                  setAllowDeleteVideo(false)
+                  setSectionId(section.id)
+                  setSetSectionId(section?.id)
+  
+                }
+                }
                 style={{
                   backgroundColor: "white",
                   border: "none",
@@ -115,8 +127,8 @@ export const Pagination = ({
                     <FaVideo
                       onClick={() => {
                         setModuleId(Module.id);
+                        setAllowDeleteVideo(true);
                         setEditModuleModalOpen(true);
-                        setSectionId(section.id);
                         setVideoId(video.id);
                         setVideo(video);
                       }}
@@ -136,7 +148,17 @@ export const Pagination = ({
                     </a>
                     <span className="text-muted">
                       <button
-                        onClick={() => handleDeleteVideo(video.id, Module?.id)}
+                        onClick={() => {
+                          setAllowDeleteVideo(true);
+
+                          setOpenModal(true)
+
+                          setModuleId(Module.id);
+                          setDeleteVideoId(video.id);
+                          setDeleteVideoModuleId(Module.id);
+                          setVideoId(video.id);
+                 
+                        }}
                         style={{
                           backgroundColor: "white",
                           border: "none",
@@ -231,7 +253,31 @@ export const Pagination = ({
       
       </>
      }
-  
+        <ConfirmationModal
+        open={openModal}
+        onConfirm={() => {
+          if(allowDeleteVideo){
+            handleDeleteVideo(deleteVideoId,
+              deleteVideoModuleId)
+              setAllowDeleteVideo(false);
+              setOpenModal(false);
+              
+            }else{
+              handleDeleteSection(sectionId)
+              setOpenModal(false);
+              setAllowDeleteVideo(false);
+
+          }
+        }}
+        onCancel={() =>{
+          setAllowDeleteVideo(false);
+          setOpenModal(false)
+        }}
+        title={allowDeleteVideo ? 'Delete Video' : "Delete Section"}
+        buttonText="Delete"
+      >
+       Are you sure you want to delete this {allowDeleteVideo ? 'video' : "section"}
+      </ConfirmationModal>
     </div>
   );
 };
