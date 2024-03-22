@@ -1,9 +1,19 @@
 import { NextPage } from 'next';
 import Cookies from "universal-cookie"	
+import { useRouter } from 'next/navigation'
 
 const HeadNav: NextPage<{ setIsOpen: any, isOpen: boolean }> = ({ setIsOpen, isOpen }) => {
     const cookies = new Cookies();	
     const loggedInUser = cookies.get("param-lms-user");
+    const router = useRouter()
+
+    const logout = () => {
+        const cookies = new Cookies();
+        cookies.remove('param-lms-user');
+        if (loggedInUser?.role == 'Admin')
+            router.replace("/auth/admin/login");
+        else router.replace("/");
+    }
     
   return (
       <>
@@ -40,7 +50,7 @@ const HeadNav: NextPage<{ setIsOpen: any, isOpen: boolean }> = ({ setIsOpen, isO
             <div className="dropdown-menu dropdown-menu-right">
                 <div className="dropdown-header"><strong>Account</strong></div>
                 <a className="dropdown-item" >Edit Account</a>
-                <a className="dropdown-item" >Logout</a>
+                <a className="dropdown-item" onClick={() => logout()}>Logout</a>
             </div>
         </div>
     </div>
