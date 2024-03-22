@@ -3,9 +3,9 @@ import Drawer from '@/app/components/SideNav/Drawer'
 import HeadNav from '@/app/components/HeadNav/HeadNav';
 import { useState } from 'react';
 import SideTab from '@/app/interfaces/sideTabs';
+import withAuth from './StudentAuthWrapper'
 
-
-export default function RootLayout({
+function RootLayout({
   children,
 }: {
   children: React.ReactNode
@@ -34,3 +34,5 @@ export default function RootLayout({
     </>
   )
 }
+
+export default withAuth(RootLayout);

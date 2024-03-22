@@ -2,13 +2,13 @@
 import Drawer from '@/app/components/SideNav/Drawer'
 import HeadNav from '@/app/components/HeadNav/HeadNav';
 import { useState } from 'react';
-
-
-export default function RootLayout({
+import withAuth from './AdminAuthWrapper'
+  
+function RootLayout({
   children,
 }: {
   children: React.ReactNode
-}) {
+  }) {
   
   const [isOpen, setIsOpen] = useState(false);
   const sideTabs = [
@@ -38,3 +38,5 @@ export default function RootLayout({
     </>
   )
 }
+
+export default withAuth(RootLayout);
