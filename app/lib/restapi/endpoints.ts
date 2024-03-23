@@ -178,10 +178,10 @@ DELETE_CourseById: async (
     return response;
   },
 
-  GET_UserById:async()
-          :Promise<IResponseObject<IUser[]>>=>{
+  GET_UserById:async(id: string)
+          :Promise<IResponseObject<IUser>>=>{
             
-            const response = await GET(`${userReadUrl}/Users/GetUsers`);
+            const response = await GET(`${userReadUrl}/Users/GetUsersByIds?userIds=${id}`);
            
            return response;
           },
