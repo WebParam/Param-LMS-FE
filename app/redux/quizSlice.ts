@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IQuiz, IQuestion, IChoice, IQuizState, IUpdateQuizDetailState, IUpdateQuestionDetailState, IDeleteQuestion, IDeleteChoice} from "../interfaces/quiz";
-import { AppStore } from "../interfaces/store";
+import { AppStore } from "./store";
 import { IModule, IVideo } from "../interfaces/courses";
 import { Api } from "../lib/restapi/endpoints";
 
@@ -25,7 +25,7 @@ export const initialState: IQuizState = {
 };
 
 export const quizSlice = createSlice({
-  name: "quiz",
+  name: "quizzes",
   initialState,
   reducers: {
     setSelectedQuizForEdit(state, action) {

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppStore } from "../interfaces/store";
+import { AppStore } from "./store";
 import { IDocument, IDocumentState, IUpdateDocumentDetailState } from "../interfaces/document";
 import Cookies from "universal-cookie";
 
@@ -7,7 +7,9 @@ const cookies = new Cookies();
 const loogedInUser = cookies.get('param-lms-user');
 
 const initialState: IDocumentState = {
-    documents: [] as IDocument[],
+    documents: {
+        documents:[] as IDocument[],
+    }
 };
 
 
@@ -22,7 +24,7 @@ day = day < 10 ? `0${day}` : day;
 let todayDate = (`${year}-${month}-${day}`);
 
 export const documentSlice = createSlice({
-    name: "document",
+    name: "documents",
     initialState,
     reducers: {
         setSelectedDocumentForEdit(state, action) {
@@ -43,15 +45,15 @@ export const documentSlice = createSlice({
                 state: 0,
             };
 
-            state.documents.push(newDocument);
+            state.documents.documents.push(newDocument);
         },
 
         updateDocumentDetail(state, action: PayloadAction<IUpdateDocumentDetailState>) {
             const _action = action.payload;
-            const index = state.documents.findIndex(doc => doc.reference === _action.reference);
+            const index = state.documents.documents.findIndex(doc => doc.reference === _action.reference);
             if (index !== -1) {
-                state.documents[index] = {
-                    ...state.documents[index],
+                state.documents.documents[index] = {
+                    ...state.documents.documents[index],
                     title: _action.title,
                     modifyingUser:loogedInUser?.id,
                     file: _action.file,

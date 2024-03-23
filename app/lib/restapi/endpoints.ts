@@ -8,6 +8,7 @@ import { get } from "http";
 import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import { IMarks, IQuiz } from "@/app/interfaces/quiz";
 import { IAssessment } from "@/app/interfaces/assessment";
+import { IDocument } from "@/app/interfaces/document";
 
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
@@ -19,19 +20,21 @@ export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api
  
 export const userReadUrl="https://khmla-dev-user-read.azurewebsites.net/api";
 
-export const commentReadUrl="https://localhost:61280/api";
+export const commentReadUrl="https://khumla-develop-comments-read.azurewebsites.net/api";
 
-export const commentWriteUrl="https://localhost:61275/api";
+export const commentWriteUrl="https://khumla-develop-comments-write.azurewebsites.net/api";
 
-export const quizReadUrl = "https://khumla-dev-quiz-read.azurewebsites.net/api";
+export const quizReadUrl = "https://khumla-develop-quiz-read.azurewebsites.net/api";
 
-export const assessmentWriteUrl = "https://khumla-dev-assessment-write.azurewebsites.net/api";
+export const assessmentWriteUrl = "https://khumla-develop-assessment-write.azurewebsites.net/api";
 
-export const assessmentReadUrl = "https://khumla-dev-assessment-read.azurewebsites.net/api";
+export const assessmentReadUrl = "https://khumla-develop-assessment-read.azurewebsites.net/api";
 
-export const quizWriteUrl ="https://a6cd-154-0-14-142.ngrok-free.app/api";
+export const quizWriteUrl ="https://khumla-develop-assessment-write.azurewebsites.net/api";
 
-export const documentWrite = "https://e4e7-154-0-14-142.ngrok-free.app/api"
+export const documentWrite = "https://khumla-dev-document-write.azurewebsites.net/api"
+
+export const documentRead = "https://khumla-dev-document-read.azurewebsites.net/api"
 
 export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
 
@@ -175,28 +178,12 @@ DELETE_CourseById: async (
     return response;
   },
 
-  GET_UserById:async(id:string)
-          :Promise<IResponseObject<IUser>>=>{
+  GET_UserById:async()
+          :Promise<IResponseObject<IUser[]>>=>{
             
-            const response:IResponseObject<IUserRegisterModel>= await GET(`${userReadUrl}/Users/GetUserById?Id=${id}`);
-            
-            console.log("response:" ,response);
+            const response = await GET(`${userReadUrl}/Users/GetUsers`);
            
-            const user:IResponseObject<IUser>={
-              data:{
-                name:response.data?.firstName??"",
-                surname:response.data?.lastName??"",
-                image:response.data?.image??"",
-                email:response.data?.email??"",
-                summary:response.data?.summary??"",
-                headLine:response.data?.headLine??""
-              },
-              message:response.message,
-              error:response.error,
-              status:0
-            };
-            console.log("Author response:",user);
-           return user;
+           return response;
           },
 
 
@@ -225,6 +212,14 @@ DELETE_CourseById: async (
     const response=await GET(`${commentReadUrl}/Ratings/GetRating?id=${id}`);
     return response;
   },
+  
+  GET_GetAllComments:async ():
+  Promise<IResponseObject<IComment[]>>=>{
+    const response=await GET(`${commentReadUrl}/Comments/GetComments`);
+    return response;
+  },
+
+
   POST_AddCommentReply:async(payload:ICommentReply)       
   :Promise<IResponseObject<IComment>> => {
     const response:any = await POST(`${commentWriteUrl}/Comments/AddCommentReply`,payload);
@@ -295,9 +290,17 @@ POST_StudentAnswers: async (
   return response;
 },
 
+GET_StudentAssessmentsAnswers: async (
+
+) => {
+  const response = await GET(`${assessmentReadUrl}/StudentAnswers/GetStudentsAnswers`);
+  return response;
+},
+
+
 GET_StudentAssessmentsByCourses: async (
   payload: string
-): Promise<IResponseObject<IAssessment[]>> => {
+) => {
   console.log("payload server side", payload)
   const response = await GET(`${assessmentReadUrl}/Assessments/GetAssessmentsByCourses?${payload}&courses=course1`);
   return response;
@@ -305,10 +308,20 @@ GET_StudentAssessmentsByCourses: async (
 
 
 POST_Document: async ( payload:any)
-:Promise<IResponseObject<any>> => {
+:Promise<IResponseObject<IDocument[]>> => {
   const _document:any = await POST(`${documentWrite}/Documents/AddDocuments`,payload);
   return _document;
 },
+
+
+GET_Documents: async (
+
+) => {
+
+  const response = await GET(`${documentRead}/Documents/getDocuments`);
+  return response;
+},
+
 
 GET_AllQuizzes: async (
   ) => {

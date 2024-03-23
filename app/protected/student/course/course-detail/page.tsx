@@ -1,5 +1,5 @@
 "use client"
-import React, { Suspense, useState } from 'react';
+import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';
 import { ICourse, ISection, IModule, IVideo } from '@/app/interfaces/courses';
@@ -11,14 +11,15 @@ import { getAuthor } from '@/app/lib/getAuthor';
 import IComment from '@/app/interfaces/comment';
 import "../../../../components/videoSidebar.css";
 import './main.css'
-import ReactPlayer, { ReactPlayerProps } from 'react-player';
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
 import {useRouter} from "next/navigation";
 import { IQuiz } from '@/app/interfaces/quiz';
+import { getSelectedQuizForEdit } from '@/app/redux/quizSlice';
 import { FaVideo } from 'react-icons/fa';
 import VideoSibar from '../../../../components/VideoSidebar';
 import VideoPlayer from '../../../../components/ReactPlayer';
-import { stat } from 'fs';
+const cookies = new Cookies();
+
 
 export default function CourseDetail() {
 
@@ -31,25 +32,23 @@ export default function CourseDetail() {
   const [allVideos, setAllVideos] = useState<IVideo[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string>("");
   const [quizId, setQuizId] = useState<string>("")
-  const [videoId, setVideoId] = useState<string>("")
+  const _courseFromState = useSelector(getSelectedCourseForEdit).course;
+  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
+  const [videoId, setVideoId] = useState<string>(_courseFromState.sections[0]?.modules[0]?.videos[0]?.id)
+  console.log("Quizzes from state",_quizzesFromState)
   const [open, setOpen] = useState(false);
+  const [video, setVideo] = useState<IVideo>(_courseFromState.sections[0]?.modules[0]?.videos[0])
+  const [enrollOpen, setEnrollOpen] = useState(false);
+  const [isEnrolled, setIsEnrolled] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [expandedSection, setExpandedSection] = useState<any>(null);
   const [hideSidebar, setHideSidebar] = useState<boolean>(true)
-  const [videoDurations, setVideoDurations] = useState<(number | null)[]>([]);
+  
   const [duration, setDuration] = useState(0);
-  const playerRef = useRef(null);
-  const router = useRouter();
-
 
   const handleDuration = (duration:any) => {
-    // Handle the duration only if it's a valid number
-    if (!isNaN(duration)) {
-      setDuration(duration);
-    }
+    setDuration(duration);
   };
-  
-
-
   const formatDurationToMinutes = (durationInSeconds:any) => {
     const minutes = Math.floor(durationInSeconds / 60);
     const seconds = Math.floor(durationInSeconds % 60);
@@ -60,6 +59,9 @@ export default function CourseDetail() {
     setHideSidebar((prev) => !prev)
   }
 
+  const playerRef = useRef(null);
+
+  const router = useRouter();
 
 
 const cancelQuiz = () => {
@@ -70,7 +72,30 @@ const cancelQuiz = () => {
   }
 }
 
+const checkIdMatchesCourses = (dataList:any, givenId:string) => {
+  for (const item of dataList) {
+      const courses = item.data.courses;
+      if (courses.includes(givenId)) {
+          setIsEnrolled(true)
+          return true;
+      }
+  }
+  setIsEnrolled(false)
+  return false;
+};
+
+const getEnrolledCourses = async () => {
+  var student = cookies.get('param-lms-user');
+   const res = await Api.GET_EnrolledCoursesByStudentId(student.id);
+   if(res){
+    console.log(checkIdMatchesCourses(res, state?.id));
+    console.log("Enrolled courses", res)
+   }
+}
+
   useEffect(() => {
+    getEnrolledCourses();
+    // Set the initial video when the component mounts
     if (allVideos.length > 0) {
       setSelectedVideo(allVideos[currentVideoIndex].videoLink);
     }
@@ -86,8 +111,9 @@ const cancelQuiz = () => {
         .filter((quiz: IQuiz) => quiz.questions.length > 0);
       
         const currentVideoId = allVideos[currentVideoIndex].id;
-   
+        console.log("ID",currentVideoId)
         const getQuiz: IQuiz = quizzes.find((quiz: IQuiz) => quiz.videoId === currentVideoId);
+        console.log("Opened Quiz", getQuiz);
         if (getQuiz?.id) {
           setQuizId(getQuiz.id);
           setOpen(!open);
@@ -105,9 +131,9 @@ const cancelQuiz = () => {
   const state: ICourse = useSelector(getSelectedCourseForEdit).course;
   useEffect(() => {
     setSection(state?.sections);
-    setVideoId(sections[0]?.modules[0]?.videos[0]?.id)
+
   
- 
+    console.log("Link",state)
     state.sections.forEach((section:ISection) => {
         section.modules.forEach((Module:IModule) => {
             if (Module.videos.length > 0) {
@@ -118,16 +144,13 @@ const cancelQuiz = () => {
 
     setAllVideos(videos);
 
-
-    console.log("Durations",videoDurations)
-
+    
     setData(state);
     if (state) {
       setIsLoading(false);
     }
     getUserCourses(state?.creatingUser!);
     const fetchData = async () => {
-
       setAuthor(await getAuthor(state?.creatingUser!));
 
       // Fetch comments
@@ -139,50 +162,20 @@ const cancelQuiz = () => {
     fetchData();
   }, []);
 
-
-  useEffect(() => {
-    const fetchDurations = async () => {
-      const durations = await Promise.all(
-        allVideos.map(async (video:IVideo) => {
-          try {
-            const response = await fetch(video.videoLink);
-            const blob = await response.blob();
-            const objectURL = URL.createObjectURL(blob);
-
-            return new Promise<number>((resolve) => {
-              const player = React.createElement(ReactPlayer, {
-                url: objectURL,
-                controls: false, // Disable controls to prevent UI appearance
-                playing: false, // Not playing the video to avoid unnecessary network traffic
-                onDuration: (duration: number) => {
-                  resolve(duration);
-                },
-              });
-            });
-          } catch (error) {
-            console.error('Error fetching video duration:', error);
-            return null;
-          }
-        })
-      );
-      setVideoDurations(durations as (number | null)[]);
-      console.log("Durations", durations);
-    };
-
-    fetchDurations();
-  }, [allVideos]);
-
   async function getUserCourses(id: string) {
     var userCourses = await Api.GET_CoursesByUserId(id);
 
-  
+    console.log("Author courses", userCourses?.data);
   }
 
   const handleVideoSelect = (video: IVideo) => {
 
     const index = allVideos.findIndex((v: IVideo) => v.id === video.id);
-    setSelectedVideo(video.videoLink);
+    setSelectedVideo(_courseFromState.sections[0]?.modules[0]?.videos[index].videoLink);
     setCurrentVideoIndex(index);
+    setVideoId(_courseFromState.sections[0]?.modules[0]?.videos[index].id);
+    setVideo(_courseFromState.sections[0]?.modules[0]?.videos[index])
+    console.log("VideoId Selected", video?.id);
   };
 
 
@@ -191,7 +184,6 @@ const cancelQuiz = () => {
     goToQuiz()
   }
 
- 
   const goToQuiz = () => {
 
     router.push(`/protected/student/course/quiz?id=${quizId}`);
@@ -199,7 +191,12 @@ const cancelQuiz = () => {
   
   }
 
+  const goToCourse = () => {
+    setEnrollOpen(false);
+  }
+
   const courseEnrollment = async (course:any) => {
+    setIsLoading(true)
     const cookies = new Cookies();
 
     const userData = cookies.get("param-lms-user");
@@ -214,9 +211,18 @@ const cancelQuiz = () => {
       courses:[course?.id]
     }
     const enroll = await Api.POST_CourseEnrollment(payload);
+    if(enroll){
+      setIsLoading(false);
+      setEnrollOpen(true);
+    }
     console.log("Enrolled", enroll) 
   }
 
+  if(isLoading){
+        return (
+        <div>Loading</div>
+        )
+  }else
     return (
 
 
@@ -235,11 +241,29 @@ const cancelQuiz = () => {
       HideSidebar = {hideSidebar}
       viewSidebar ={HideSidebar}
       playerRef={playerRef}
+      video={video}
+      videoId = {videoId}
 
       />
-
+      
+      <ConfirmationModal
+        open={enrollOpen}
+        onConfirm={() => goToCourse()}
+        onCancel={close}
+        title="Congratulations"
+        buttonText="Get Started"
+      >
+        Thank you for enrolling for the course. click get started to complete the course
+      </ConfirmationModal>
+  
 <div>
-  <button className="btn btn-primary" onClick={() => courseEnrollment(state)}>Enroll</button>
+  {
+      !isEnrolled ? 
+      <button className="btn btn-primary" onClick={() => courseEnrollment(state)}>Enroll</button>
+      :
+      ''
+    }
+  
 </div>
   </div>
 

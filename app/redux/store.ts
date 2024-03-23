@@ -7,34 +7,34 @@ import { persistStore, persistReducer ,
   PURGE,
   REGISTER,} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { courseSlice } from "../redux/courseSlice";
-import { quizSlice } from "../redux/quizSlice";
-import { assessmentSlice } from "../redux/assessmentSlice";
-import {documentSlice } from "../redux/documentSice";
+import { courseSlice } from "./courseSlice";
+import { quizSlice } from "./quizSlice";
+import { assessmentSlice } from "./assessmentSlice";
+import {documentSlice } from "./documentSice";
 
 const persistCourse = {
   key: 'course',
-  storage: storage, // Change this to localStorage
+  storage: storage, 
   whitelist: ['course'], 
 };
 
 const persistQuiz = {
-  key: 'quiz',
-  storage: storage, // Change this to localStorage
-  whitelist: ['quiz'], 
+  key: 'quizzes',
+  storage: storage, 
+  whitelist: ['quizzes'], 
 };
 
 
 const persistAssessment = {
   key: 'assessment',
-  storage: storage, // Change this to localStorage
+  storage: storage, 
   whitelist: ['assessment'], 
 };
 
 const persistDocument = {
-  key: 'document',
-  storage: storage, // Change this to localStorage
-  whitelist: ['document'],  
+  key: 'documents',
+  storage: storage, 
+  whitelist: ['documents'],  
 };
 
 const persistedCourseReducer = persistReducer(persistCourse, courseSlice.reducer);
@@ -54,7 +54,7 @@ export const store = configureStore({
   getDefaultMiddleware({
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      ignoredPaths: ['quiz'] 
+      ignoredPaths: ['quizzes'] 
     },
   }),
 });

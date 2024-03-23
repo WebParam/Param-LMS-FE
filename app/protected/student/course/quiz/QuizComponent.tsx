@@ -35,7 +35,7 @@ export default function QuizData() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const videoId = searchParams.get("id")
+  const videoId = searchParams.get("id");
   console.log("videoid", videoId)
 
 

@@ -233,11 +233,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
     const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.videoId === videoId);
     if(hasQuiz?.length === 1 ){
-      const payload = {
-        quizId: hasQuiz[0]?.id,
-        quizState :0
-      }
-      dispatch(updateQuizState(payload));
+     
 
       setIncludeQuiz(e.target.checked);
 
@@ -247,6 +243,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
       return
     }
+    
     if (!videoId) {
       let _id = toast.loading("Please add video first..", {
         //loader

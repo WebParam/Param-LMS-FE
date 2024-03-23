@@ -6,20 +6,19 @@ import { ICourse } from "@/app/interfaces/courses";
 import Cookies from "universal-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-import Dropdown from "react-bootstrap/Dropdown";
 import "../../../assets/vendor/spinkit.css";
 import "../../../assets/css/preloader.css";
 import dynamic from 'next/dynamic';
 
-import { IQuiz } from "@/app/interfaces/quiz";
 import { updateCourseFromDataBase } from "@/app/redux/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { updateQuizzes } from "@/app/redux/quizSlice";
 function ManageCourses() {
 
   const [courseHover, setCourseHover] = useState<boolean>(false);
   const [courses, setCourses] = useState<ICourse[] | any>()
   const [quizzes, setQuizzes] = useState<any>([])
+  const [courseId, setCourseId] = useState<string>("")
   const cookies = new Cookies();
 
   const dispatch = useDispatch();
@@ -40,7 +39,7 @@ function ManageCourses() {
     theme: "light",
     });
     try {
-      const data = await Api.GET_CoursesByUserId("65cf2b93041671b63407c9a5");
+      const data = await Api.GET_CoursesByUserId(userData?.id);
       setCourses(data)
       toast.dismiss(_id);
     } catch (error) {
@@ -53,15 +52,15 @@ function ManageCourses() {
   }
 
   async function getAllQuizzes() {
-    localStorage.removeItem("quizzes");
     try {
       const getQuizzes = await Api.GET_AllQuizzes();
       setQuizzes(getQuizzes);
   
       if (getQuizzes && getQuizzes.length > 0) {
-        const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
-        console.log("Mapped Quizzes", mappedQuizzes);
-        localStorage.setItem('quizzes', JSON.stringify(mappedQuizzes));
+        const mappedQuizzes = getQuizzes.map((quiz:any) => {
+          return { ...quiz?.data, state: 0 }; 
+        });
+        dispatch(updateQuizzes(mappedQuizzes));
       } else {
         console.log("No quizzes found");
       }
@@ -69,15 +68,27 @@ function ManageCourses() {
       console.error("Error fetching quizzes:", error);
     }
   }
-  
+  async function getAllDocuments() {
+    try {
+      const getDocuments = await Api.GET_Documents();
+      console.log("Documents fetched", getDocuments)
+    } catch (error) {
+      console.error("Error fetching documents:", error);
+    }
+  }
+
+
 
   const editCourse = (course: any) => {
+    setCourseId(course?.data?.id);
+
     dispatch(updateCourseFromDataBase(course?.data));
   };
 
   useEffect(() => {
     ListAllCourses();
     getAllQuizzes();
+    getAllDocuments();
   }, []);
 
 

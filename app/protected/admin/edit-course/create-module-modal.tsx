@@ -167,7 +167,7 @@ const [document, setDocument] = useState<any>("")
   const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
   const _quizFromState: IQuiz  = _quizzesFromState[_quizzesFromState.length - 1];
 
-  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit).documents;
   const _documentFromState: IDocument  = _documentsFromState[_documentsFromState.length - 1];
 
 

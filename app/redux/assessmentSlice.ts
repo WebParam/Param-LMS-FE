@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAssessmentState, IAssessment, IAssessmentQuestion, IChoice } from "../interfaces/assessment";
-import { AppStore } from "../interfaces/store";
+import { AppStore } from "./store";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
@@ -43,6 +43,7 @@ const initialState: IAssessmentState = {
     fileUrl:"",
     status: 0,
     instructorId:"",
+    isRetaken : false
   } as IAssessment
 };
 
@@ -55,7 +56,7 @@ export const assessmentSlice = createSlice({
     },
 
     createAssessmentDetail(state, action) {
-      const { dueDate,courseTitle ,intructor} = action.payload;
+      const { dueDate,courseTitle ,intructor,isRetaken} = action.payload;
       const newState = {
         courseId: generateUniqueId(),
         questions: [] as IAssessmentQuestion[],
@@ -68,6 +69,7 @@ export const assessmentSlice = createSlice({
         instructorName:"",
         instructorId:"",
         status: 0,
+        isRetaken : isRetaken
       }
 
       state.assessment = newState;
@@ -87,6 +89,7 @@ export const assessmentSlice = createSlice({
         instructorName: _action.instructorName,
         instructorId: _action.instructorId,
         status: 0,
+        isRetaken : _action.isRetaken
 
       }
       state.assessment = newState;

@@ -16,6 +16,11 @@ function RootLayout({
     { name: 'Dashboard', url: '#/protected/student/dashboard', icon: 'insert_chart_outlined' },
     { name: 'My Courses', url: '#', icon: 'people_outline' },
     { name: 'Courses', url: '/protected/student/course/all-courses', icon: 'assignment' },
+    {
+      name: 'Assessments', url: '#', icon: 'assignment', children: [
+        { name: 'My Assessments', url: '/protected/student/assessments', icon: '' },
+      ]
+    },
     { name: 'Learning Path', url: '#', icon: 'assignment' }
   ];
 

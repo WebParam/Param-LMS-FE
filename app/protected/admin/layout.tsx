@@ -12,13 +12,13 @@ function RootLayout({
   
   const [isOpen, setIsOpen] = useState(false);
   const sideTabs = [
-    { name: 'Dashboard', url: '/protected/admin/manage-courses', icon: 'insert_chart_outlined' },
+    { name: 'Dashboard', url: '#', icon: 'insert_chart_outlined' },
     { name: 'Students', url: '#', icon: 'people_outline' },
-    { name: 'Courses', url: '/protected/admin/courses', icon: 'assignment' },
+    { name: 'Manage Courses', url: '/protected/admin/manage-courses', icon: 'assignment' },
     {
       name: 'Assessments', url: '#', icon: 'assignment', children: [
         { name: 'List of Assessments', url: '/protected/admin/assessments', icon: '' },
-        { name: 'Grade Assessments', url: '#', icon: '' }
+        { name: 'Grade Assessments', url: '/protected/admin/assessments/grade-assessments', icon: '' }
       ]
     }
   ];

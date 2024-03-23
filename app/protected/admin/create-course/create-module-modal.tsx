@@ -153,7 +153,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [videoUrlError, setVideoUrlError] = useState(false);
   const [formData, setFormData] = useState(new FormData());
 
-  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit).documents;
   const _documentFromState: IDocument  = _documentsFromState[_documentsFromState.length - 1];
 
   
@@ -210,7 +210,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const addQuiz = (e: any) => {
     setIncludeQuiz(false);
 
-    const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz.videoId === videoId);
+    const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.videoId === videoId);
     if(hasQuiz?.length === 1 ){
       setIncludeQuiz(e.target.checked);
 
@@ -262,21 +262,21 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
     setChangeEditQuizQuestionContent(true)
 
     const hasQuestion = questions.filter(
-      (question: IQuestion) => question.id === id
+      (question: IQuestion) => question?.id === id
     );
-    setQuestionDescription(hasQuestion[0].questionDescription);
-    setPoints(hasQuestion[0].points);
-    setQuestionId(hasQuestion[0].id);
+    setQuestionDescription(hasQuestion[0]?.questionDescription);
+    setPoints(hasQuestion[0]?.points);
+    setQuestionId(hasQuestion[0]?.id);
   };
 
 
   const selectChoiceForEdit = (id: string) => {
     setEnableUpdateChoice(true);
     const hasChoice = choices.filter(
-      (choice: IChoice) => choice.id === id
+      (choice: IChoice) => choice?.id === id
     );
-    setChoiceDescription(hasChoice[0].choiceDescription);
-    setChoiceId(hasChoice[0].id);
+    setChoiceDescription(hasChoice[0]?.choiceDescription);
+    setChoiceId(hasChoice[0]?.id);
   };
 
   const handleCreateQuiz = () => {
@@ -751,14 +751,14 @@ setChangeEditQuizQuestionContent(false);
 
   useEffect(() => {
     
-    const videoQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz.videoId === videoIdForEdit)[0];
+    const videoQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.videoId === videoIdForEdit)[0];
     if(videoQuiz?.id){
       setQuizId(videoQuiz?.id)
       setQuestions(videoQuiz?.questions);
       
     }else{
       setQuestions([]);
-      const quiz = _quizzesFromState.filter((quiz:IQuiz) => quiz.id === quizId)[0];
+      const quiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.id === quizId)[0];
       setQuestions(quiz?.questions);
       console.log("Quiz Questions",quiz?.questions);
     }
@@ -773,17 +773,17 @@ setChangeEditQuizQuestionContent(false);
 
   useEffect(() => {
     if (_quizzesFromState.length > 0) {
-      setQuizId(_quizzesFromState[_quizzesFromState.length - 1].id);
+      setQuizId(_quizzesFromState[_quizzesFromState.length - 1]?.id);
     }
   }, [_quizzesFromState]);
 
   useEffect(() => {
     const choices = _quizFromState?.questions.map(
-      (question) => question.choices
+      (question) => question?.choices
     );
 
     const hasQuestion = _quizFromState?.questions?.filter(
-      (question: IQuestion) => question.id === questionId
+      (question: IQuestion) => question?.id === questionId
     )!;
     setChoices(hasQuestion?.length > 0 && hasQuestion[0]?.choices);
   });

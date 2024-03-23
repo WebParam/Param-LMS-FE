@@ -53,6 +53,7 @@ interface EditCourseModalProps {
   sectionId: string;
   moduleId: any;
   videoId:string
+  video:IVideo | null
 }
 
 
@@ -106,6 +107,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   onClose,
   sectionId,
   videoId,
+  video,
   moduleId
 }) => {
 
@@ -121,7 +123,6 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [choiceDescription, setChoiceDescription] = useState<string>("");
   const [choiceAnswer, setChoiceAnswer] = useState<string>("");
   const [points, setPoints] = useState<number>(0);
-  const [video, setVideo] = useState<IVideo>()
   const [countChoice, setCountChoices] = useState<number>(0);
   const [questionId, setQuestionId] = useState<any>(0);
   const [questionNumber, setQuestionNumber] = useState<number>(1);
@@ -139,21 +140,14 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
   const _quizzesFromState: any[] = useSelector(getSelectedQuizForEdit).quizzes;
-  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit).documents;
 
 
   console.log("Quizzes to Edit", _quizzesFromState)
 
   const [_quizFromState, set_QuizFromState] = useState<IQuiz>()  
 
-
-
   const [choices, setChoices] = useState<any>([]);
-
-  const [modules, setModules] = useState<IModule[]>([]);
-
-
-
 
   const [enableEditQuestion, setEnableEditQuestion] = useState<boolean>(false);
 
@@ -229,7 +223,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const addQuiz = (e: any) => {
     setIncludeQuiz(false);
 
-    const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz.videoId === videoId);
+    const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.videoId === videoId);
     if(hasQuiz?.length === 1 ){
       setIncludeQuiz(e.target.checked);
 
@@ -239,6 +233,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
       return
     }
+
     if (!videoId) {
       let _id = toast.loading("Please add video first..", {
         //loader
@@ -492,6 +487,18 @@ setChangeEditQuizQuestionContent(false);
 
   const addDocument = (e: any) => {
     setIncludeDocument(false);
+    const hasDocumment = _documentsFromState.filter((doc:IDocument) => doc?.reference === videoId);
+    if(hasDocumment?.length === 1 ){
+      setDocument(hasDocumment[0].file);
+      setIncludeDocument(e.target.checked);
+
+      setIncludeQuiz(true);
+
+      setToggler(3);
+
+      return
+    }
+
     if (!videoId) {
       let _id = toast.loading("Please add video first..", {
         //loader
@@ -638,13 +645,13 @@ setChangeEditQuizQuestionContent(false);
     if(videoDoc){
       setDocument(videoDoc.file);
     }
-    const quiz:IQuiz[] = _quizzesFromState.filter((quiz:IQuiz) => quiz.videoId === videoId);
+    const quiz:IQuiz[] = _quizzesFromState.filter((quiz:IQuiz) => quiz?.videoId === videoId);
     if(quiz.length > 0){
       setHasQuiz(true);
       setIncludeQuiz(true)
       setIncludeDocument(true)
       set_QuizFromState(quiz[0])
-      const addQuestions =quiz[0]?.questions.filter(question => question.choices.length > 0 );
+      const addQuestions =quiz[0]?.questions.filter(question => question?.choices.length > 0 );
       setQuestions(addQuestions)
       setQuizId(quiz[0].id);
       setViewCreatedQuestion(false)
