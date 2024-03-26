@@ -29,8 +29,6 @@ useEffect(() => {
 },[])
 
   return (
-
-
 <>
 {
   !viewAnswers ?     <div

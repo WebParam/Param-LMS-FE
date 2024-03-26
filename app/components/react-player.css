@@ -184,3 +184,7 @@
 .comment-reply_section > .reply-comment-input{
     width: 500px;
 }
+
+.all-comments-section{
+    /* height: 300px; */
+}

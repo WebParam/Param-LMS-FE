@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import ReactPlayer from "react-player";
 import "./react-player.css";
@@ -62,11 +62,18 @@ function VideoPlayer({
   const [commentReply, setCommentReply] = useState<string>("");
   const [commentReplies, setCommentReplies] = useState<IComment[]>([]);
   const [enableComment, setEnableComment] = useState<boolean>(false);
+  const commentsContainerRef = useRef<any>(null);
+
+
+  const handleClick = () => {
+    commentsContainerRef.current?.scrollIntoView({behavior: 'smooth'});
+  };
 
   const selectCommentForReply = (comment: IComment) => {
     setReplyCommentId(comment?.id!);
     setselectedComment(comment);
     setEnableComment(true);
+   
   };
 
   const today = new Date();
@@ -254,6 +261,7 @@ function VideoPlayer({
               }}
             >
               <div
+               ref={commentsContainerRef} 
                 className={`comment-container ${
                   !isCommenting && "hide-input-border"
                 }`}
@@ -358,6 +366,9 @@ function VideoPlayer({
                             </div>
                           </div>
 
+                            {
+                              /*Reply to comment section start here*/
+                            }
                           <div
                             style={{ marginTop: "3em" }}
                             className={`accordion__menu collapse ${
@@ -368,7 +379,7 @@ function VideoPlayer({
                             id={`course-toc-${c.id}`}
                           >
                             {replyCommentId === c?.id && (
-                              <div className="reply-container">
+                              <div  className="reply-container">
                                 <div>
                                   <IoPersonSharp />
                                 </div>
@@ -407,7 +418,9 @@ function VideoPlayer({
                               </div>
                             )}
                           </div>
-
+                          {
+                              /*Reply to comment section ends  here*/
+                            }
                           <div
                             style={{
                               marginLeft: "30px",
