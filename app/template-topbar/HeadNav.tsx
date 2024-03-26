@@ -42,9 +42,8 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
             </button>
 
             {/* <!-- Navbar Brand --> */}
-            <a className="navbar-brand mr-16pt d-lg-none">
-              Khumla
-              <span className="d-none d-lg-block">Khumla</span>
+            <a className="navbar-brand mr-16pt">
+              <span className=" d-lg-block">Khumla</span>
             </a>
 
             <div className="flex"></div>
