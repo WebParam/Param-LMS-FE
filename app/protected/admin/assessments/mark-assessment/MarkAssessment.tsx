@@ -1,9 +1,7 @@
 "use client";
 import "../assessments.css";
-import { TiTick } from "react-icons/ti";
 import { IoCheckmarkSharp } from "react-icons/io5";
 import { FaXmark } from "react-icons/fa6";
-import NumberInput from "react-number-input";
 import { useState } from "react";
 import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import ConfirmationModal from "@leafygreen-ui/confirmation-modal";
@@ -12,7 +10,6 @@ interface MarkAssessmentProps {
   answer: IStudentAnswer;
 }
 export default function MarkAssessment({ answer }: MarkAssessmentProps) {
-  const [count, setCount] = useState<number>(0);
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   return (

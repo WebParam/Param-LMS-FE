@@ -73,10 +73,18 @@ function VideoPlayer({
   const year = today.getFullYear();
   let month: number | string = today.getMonth() + 1;
   let day: number | string = today.getDate();
+  let hours: number | string = today.getHours();
+  let minutes: number | string = today.getMinutes();
+  let seconds: number | string = today.getSeconds();
+  
   month = month < 10 ? `0${month}` : month;
   day = day < 10 ? `0${day}` : day;
-  const todayDate = `${year}-${month}-${day}`;
-
+  hours = hours < 10 ? `0${hours}` : hours;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+  
+  const todayDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  
   const handleSubmit = async (e: any) => {
     setIsCommentCreated(false);
     e.preventDefault();
@@ -84,9 +92,9 @@ function VideoPlayer({
       title: "Sample Comment",
       message: comment,
       creatingUser: loogedInUser?.id,
-      createdDate: todayDate,
+      createdDate: todayDateTime,
       modifyingUser: loogedInUser?.id,
-      modifiedDate: todayDate,
+      modifiedDate: todayDateTime,
       referenceId: videoId,
       type: 1,
       state: 0,
@@ -122,7 +130,7 @@ function VideoPlayer({
   const getVideoComments = async () => {
     setComments([]);
     setComment("");
-
+  
     var _comment: IResponseObject<IComment>[] =
       await Api.GET_CommentsByReference(videoId);
     var data: IComment[] = _comment.map(
@@ -131,9 +139,14 @@ function VideoPlayer({
     const videoComments = data.filter(
       (comment) => comment.referenceId === videoId
     );
+  
+   
+    videoComments.sort((a, b) => {
+      return new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime();
+    });
+  
     setComments(videoComments);
   };
-
   const PostCommentReply = async () => {
     const commentPayload: ICommentReply = {
       comment: selectedComment!,
@@ -141,9 +154,9 @@ function VideoPlayer({
         title: video?.title,
         message: commentReply,
         creatingUser: loogedInUser?.id,
-        createdDate: todayDate,
+        createdDate: todayDateTime,
         modifyingUser: loogedInUser?.id,
-        modifiedDate: todayDate,
+        modifiedDate: todayDateTime,
         referenceId: selectedComment?.id!,
         type: 1,
         state: 0,
