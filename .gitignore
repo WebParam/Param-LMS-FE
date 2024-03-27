@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-/dist
 .yarn.lock
 .sentry.client.config
 .sentry.edge.config

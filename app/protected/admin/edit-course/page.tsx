@@ -23,15 +23,13 @@ import {
 } from "@/app/interfaces/courses";
 import { useDispatch, useSelector } from "react-redux";
 import "react-quill/dist/quill.snow.css";
-import { useEffect,useMemo } from "react";
+import { useEffect } from "react";
 import { Api } from "@/app/lib/restapi/endpoints";
-import { Link } from "@mui/material";
-import { FaTrash } from "react-icons/fa";
 import { EditCourseModal } from "./edit-module-modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IQuiz } from "@/app/interfaces/quiz";
-import { getSelectedQuizForEdit, updateQuizzes } from "@/app/redux/quizSlice";
+import { getSelectedQuizForEdit } from "@/app/redux/quizSlice";
 import dynamic from "next/dynamic";
 import Cookies from "universal-cookie";
 import {useRouter} from "next/navigation"
@@ -85,9 +83,6 @@ const ReactQuillWrapper = ({
 
 function EditCourse() {
 
-  const cookies = new Cookies();
-  const loogedInUser = cookies.get('param-lms-user');
-  const router = useRouter();
 
   const _courseFromState: ICourse = useSelector(getSelectedCourseForEdit).course;
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
@@ -285,7 +280,6 @@ function EditCourse() {
         setTimeout(() => {
           toast.dismiss(_id);
         }, 2000);
-    //   router.push("/protected/admin/manage-courses")
       }
     } catch (error) {
       toast.update(_id, {
