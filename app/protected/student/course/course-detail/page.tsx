@@ -270,7 +270,7 @@ const getEnrolledCourses = async () => {
 
     
        
-<div  style={hideSidebar ? { width: "300px" , } : {display:"none"}}>
+<div  style={hideSidebar ? { width: "30%" , } : {display:"none"}}>
 
 <VideoSibar HideSidebar = {HideSidebar} duration = {formatDurationToMinutes(duration)} sections={sections} handleVideoSelect={handleVideoSelect}/>
 </div>

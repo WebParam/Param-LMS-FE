@@ -12,6 +12,7 @@ export interface IAssessment {
     fileUrl?: string;
     instructorId:string;
     isRetaken : boolean;
+    attempts : number;
 }
 
 export interface IAssessmentState {

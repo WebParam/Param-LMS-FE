@@ -38,7 +38,7 @@ export const documentRead = "https://khumla-dev-document-read.azurewebsites.net/
 
 export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
 
-export const assessmentWrite = "https://khumla-dev-assessment-write.azurewebsites.net/api"
+export const assessmentWrite = "https://khumla-develop-assessment-write.azurewebsites.net/api"
 
 
 
