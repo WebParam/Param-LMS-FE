@@ -23679,7 +23679,7 @@ a.text-primary-pickled-bluewood:focus,a.text-primary-pickled-bluewood:hover {
     top: 0;
     bottom: 0;
     width: 256px;
-    transition: transform .2s ease;
+    transition: all .3s ease;
     left: 0;
     transform: translate3d(-100%,0,0)
 }

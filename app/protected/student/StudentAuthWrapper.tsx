@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import Preloader from "@/app/components/Preloader";
 
 const withAuth = <P extends object>(
   WrappedComponent: React.ComponentType<P>
@@ -26,7 +27,7 @@ const withAuth = <P extends object>(
     }, [loggedInUser]);
 
     if (!isAuthorised()) {
-      return <div>Loading...</div>;
+      return <Preloader />;
     }
 
     return <WrappedComponent {...props} />;
