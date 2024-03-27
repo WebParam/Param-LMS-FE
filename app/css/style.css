@@ -32,6 +32,6 @@
     color: white;
 }
 
-.mdk-drawer__content .material-icons, .mdk-drawer__content .sidebar-menu-button:hover{
+.mdk-drawer__content .material-icons, .mdk-drawer__content .sidebar-menu-button:hover, .sidebar-brand:hover{
     color: #90EA8E;
 }

@@ -7,7 +7,6 @@ const Menu: NextPage<{sideTabs: SideTab[]}> = ({sideTabs}) => {
 
   return (
       <>
-          <div className="sidebar-heading">Overview</div>
             <ul className="sidebar-menu">
                             
               {sideTabs && sideTabs.map((tab) => {
