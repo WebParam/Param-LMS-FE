@@ -1,11 +1,13 @@
 "use client"
 import { Api } from "@/app/lib/restapi/endpoints";
 import "../assessments.css"
+import {useRouter} from "next/navigation"
 import { useEffect, useState } from "react";
 import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import MarkAssessment from "../mark-assessment/MarkAssessment";
 export default function ViewAssessments() {
 
+const router = useRouter();
 const [studentAnswers, setStudentAnswers] = useState<IStudentAnswer[]>([]) ;
 const [viewAnswers, setViewAnswers] = useState<boolean>(false);
 const [selectedAnswer, setSelectedAnswer] = useState<IStudentAnswer>()
@@ -27,8 +29,6 @@ useEffect(() => {
 },[])
 
   return (
-
-
 <>
 {
   !viewAnswers ?     <div
@@ -97,6 +97,12 @@ useEffect(() => {
                         </a>
                 </p>
 
+                {/* <a
+                          href="#"
+                          className="btn btn-outline-secondary"
+                        >
+                          Grade Assessment
+                        </a> */}
 
             </div>
 

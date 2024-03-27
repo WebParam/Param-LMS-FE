@@ -225,6 +225,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
     const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.videoId === videoId);
     if(hasQuiz?.length === 1 ){
+  
       setIncludeQuiz(e.target.checked);
 
       setIncludeQuiz(true);

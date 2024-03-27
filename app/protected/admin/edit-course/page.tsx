@@ -3,7 +3,7 @@ import { CreateCourseModal } from "./create-module-modal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { useState} from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaVideo } from "react-icons/fa";
 import {
   addSection,
   deleteSection,

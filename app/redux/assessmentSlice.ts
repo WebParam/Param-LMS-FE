@@ -43,7 +43,8 @@ const initialState: IAssessmentState = {
     fileUrl:"",
     status: 0,
     instructorId:"",
-    isRetaken : false
+    isRetaken : false,
+    attempts : 3
   } as IAssessment
 };
 
@@ -69,10 +70,12 @@ export const assessmentSlice = createSlice({
         instructorName:"",
         instructorId:"",
         status: 0,
-        isRetaken : isRetaken
+        isRetaken : isRetaken,
+        attempts : 3
       }
 
       state.assessment = newState;
+
     },
 
     updateAssessment(state, action) {
@@ -89,7 +92,8 @@ export const assessmentSlice = createSlice({
         instructorName: _action.instructorName,
         instructorId: _action.instructorId,
         status: 0,
-        isRetaken : _action.isRetaken
+        isRetaken : _action.isRetaken,
+        attempts : 3
 
       }
       state.assessment = newState;

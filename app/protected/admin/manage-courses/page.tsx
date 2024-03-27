@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic';
 import { updateCourseFromDataBase } from "@/app/redux/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { updateQuizzes } from "@/app/redux/quizSlice";
+import { IResponseObject } from "@/app/lib/restapi/response";
 function ManageCourses() {
 
   const [courseHover, setCourseHover] = useState<boolean>(false);

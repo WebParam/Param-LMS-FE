@@ -171,7 +171,7 @@ const getEnrolledCourses = async () => {
   const handleVideoSelect = (video: IVideo) => {
 
     const index = allVideos.findIndex((v: IVideo) => v.id === video.id);
-    setSelectedVideo(_courseFromState.sections[0]?.modules[0]?.videos[index].videoLink);
+    setSelectedVideo(_courseFromState.sections[0]?.modules[0]?.videos[index]?.videoLink);
     setCurrentVideoIndex(index);
     setVideoId(_courseFromState.sections[0]?.modules[0]?.videos[index].id);
     setVideo(_courseFromState.sections[0]?.modules[0]?.videos[index])
@@ -270,7 +270,7 @@ const getEnrolledCourses = async () => {
 
     
        
-<div  style={hideSidebar ? { width: "300px" , } : {display:"none"}}>
+<div  style={hideSidebar ? { width: "30%" , } : {display:"none"}}>
 
 <VideoSibar HideSidebar = {HideSidebar} duration = {formatDurationToMinutes(duration)} sections={sections} handleVideoSelect={handleVideoSelect}/>
 </div>
