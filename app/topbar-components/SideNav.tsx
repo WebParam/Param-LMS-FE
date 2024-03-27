@@ -15,7 +15,7 @@ const SideNav: NextPage<{
         className="mdk-drawer__content"
       >
         <div
-          className="sidebar sidebar-dark sidebar-dark-purple sidebar-left"
+          className="sidebar side-bar-bg sidebar-left"
           data-perfect-scrollbar
         >
           <NavToggler setIsOpen={setIsOpen} isOpen={isOpen} />

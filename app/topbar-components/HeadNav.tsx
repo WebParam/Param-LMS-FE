@@ -25,7 +25,7 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
       <div id="header" className="mdk-header js-mdk-header mb-0" data-fixed>
         <div className="mdk-header__content">
           <div
-            className="navbar navbar-expand px-0  navbar-dark navbar-dark-purple bg-dark"
+            className="navbar navbar-expand px-0 nav-bar-bg navbar-dark"
             id="default-navbar"
             data-primary
           >
