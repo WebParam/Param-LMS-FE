@@ -6,6 +6,7 @@ import { useState } from "react";
 import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import ConfirmationModal from "@leafygreen-ui/confirmation-modal";
 
+
 interface MarkAssessmentProps {
   answer: IStudentAnswer;
 }
@@ -100,6 +101,7 @@ export default function MarkAssessment({ answer }: MarkAssessmentProps) {
           open={openModal}
           onConfirm={() => {
             setOpenModal(false);
+
           }}
           onCancel={() => {
             setOpenModal(false);
