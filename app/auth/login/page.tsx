@@ -158,11 +158,7 @@ async function LoginUser (event:any){
                 className="form-control"
                 placeholder="Your password ..."
               />
-              <p className="text-right">
-                <Link href="/auth/login/reset-password" className="small">
-                  Forgot your password?
-                </Link>
-              </p>
+              
             </div>
             <div className="text-center">
               <button disabled ={disable} onClick = {LoginUser} className="btn btn-accent">Login</button>
@@ -176,22 +172,7 @@ async function LoginUser (event:any){
         <div className="page-separator__bg-top " />
       </div>
       <div className="bg-body pt-32pt pb-32pt pb-md-64pt text-center">
-      {/* <div style={{
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "center",
-}} className="container page__container">
-  <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
-    Facebook
-  </a>
-  <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
-    Twitter
-  </a>
-  <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>
-    Google+
-  </a>
-</div> */}
+      
 
         <div className="page-separator__text mt-3">Do not have an account? <span style={{cursor:"pointer", color:"blue"}} onClick = {navigateToRegister}>sign-up</span></div>
       </div>

@@ -10,7 +10,6 @@ import "../../../assets/vendor/spinkit.css";
 import "../../../assets/css/preloader.css";
 import dynamic from 'next/dynamic';
 
-import { IQuiz } from "@/app/interfaces/quiz";
 import { updateCourseFromDataBase } from "@/app/redux/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { updateQuizzes } from "@/app/redux/quizSlice";

@@ -38,7 +38,7 @@ export const documentRead = "https://khumla-dev-document-read.azurewebsites.net/
 
 export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
 
-export const assessmentWrite = "https://khumla-develop-assessment-write.azurewebsites.net/api"
+export const assessmentWrite = "https://khumla-dev-assessment-write.azurewebsites.net/api"
 
 
 
@@ -179,12 +179,13 @@ DELETE_CourseById: async (
   },
 
   GET_UserById:async(id: string)
-  :Promise<IResponseObject<IUser>>=>{
-    
-    const response = await GET(`${userReadUrl}/Users/GetUsersByIds?userIds=${id}`);
-   
-   return response;
-          },
+          :Promise<IResponseObject<IUser>>=>{
+            
+            const response = await GET(`${userReadUrl}/Users/GetUsersByIds?userIds=${id}`);
+           
+           return response;
+          },
+
 
           
   POST_AddComment:async (payload:IComment)
