@@ -25,9 +25,13 @@
 }
 
 .side-bar-bg, .nav-bar-bg {
-    background: #2d593d !important;
+    background: black !important;
 }
 
 .mdk-drawer__content {
     color: white;
+}
+
+.mdk-drawer__content .material-icons{
+    color: #90EA8E;
 }
