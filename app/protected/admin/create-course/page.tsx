@@ -286,6 +286,7 @@ console.log("Documents", _documentsFromState);
           instructorId: "656f1335650c740ce0ae4d65",
           status: _assessmentFromState.status,
           isRetaken: _assessmentFromState.isRetaken,
+          attempts :  _assessmentFromState.attempts,
         };
 
         const postAssessment = await Api.POST_AddAssessments(assessment);
