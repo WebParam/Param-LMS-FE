@@ -7,8 +7,6 @@ import withAuth from './AdminAuthWrapper'
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const sideTabs = [
-    { name: 'Dashboard', url: '#', icon: 'insert_chart_outlined' },
-    { name: 'Students', url: '#', icon: 'people_outline' },
     { name: 'Manage Courses', url: '/protected/admin/manage-courses', icon: 'assignment' },
     {
       name: 'Assessments', url: '#', icon: 'assignment', children: [
