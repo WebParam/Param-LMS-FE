@@ -117,6 +117,7 @@ useEffect(() => {
 </div>
 :  <MarkAssessment
         answer = {selectedAnswer!}
+        setViewAnswers={setViewAnswers}
 
 />
 }

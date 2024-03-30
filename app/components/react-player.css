@@ -17,12 +17,13 @@
 
 .details{
     width: 100%;
+    margin-top: 40px;
     
 }
 
 .full-screen{
     width: 1000px;
-   
+    margin-top: 40px;
 }
 
 .person-container{

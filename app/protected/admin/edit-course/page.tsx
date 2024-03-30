@@ -4,6 +4,9 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { useState} from "react";
 import { FaPlus, FaVideo } from "react-icons/fa";
+import { persistor } from '../../../redux/store';
+import { resetAssessmentState } from '../../../redux/assessmentSlice';
+
 import {
   addSection,
   deleteSection,
@@ -12,6 +15,7 @@ import {
   updateSectionDetail,
   addModuleToSection,
   deleteVideoFromModule,
+  resetCourseState
 } from "@/app/redux/courseSlice";
 import {
   ICourse,
@@ -29,7 +33,8 @@ import { EditCourseModal } from "./edit-module-modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IQuiz } from "@/app/interfaces/quiz";
-import { getSelectedQuizForEdit } from "@/app/redux/quizSlice";
+import { getSelectedQuizForEdit ,resetQuizState} from "@/app/redux/quizSlice";
+import { resetDocumentState } from "@/app/redux/documentSice";
 import dynamic from "next/dynamic";
 import Cookies from "universal-cookie";
 import {useRouter} from "next/navigation"
@@ -123,6 +128,7 @@ function EditCourse() {
  
   console.log("Quizzes from localStorage", _quizzesFromState);
 
+  console.log('Course Assessment From State', _assessmentFromState);
 
   const descriptionToolbar = {
     toolbar: [
@@ -207,6 +213,18 @@ function EditCourse() {
     }
   };
 
+  const clearReduxState = () => {
+    localStorage.removeItem('persist:assessment');
+    localStorage.removeItem('persist:course');
+    localStorage.removeItem('persist:documents');
+    localStorage.removeItem('persist:quizzes');
+    resetAssessmentState();
+    resetCourseState();
+    resetDocumentState();
+    resetQuizState()
+    
+  };
+
   async function UpdateCourse() {
     const plainDescription = courseDescription ? courseDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '') : _courseFromState.description.replace(/<(?:\/)?[sp]+[^>]*>/g, '');;
 
@@ -228,6 +246,34 @@ function EditCourse() {
       const updateCoursedata = await Api.PUT_UpdateCourse(_courseFromState);
       if (updateCoursedata.data.id) {
         
+        if(_assessmentFromState.courseId === ""){
+          const assessment = {
+            courseId: updateCoursedata?.data?.id,
+            questions: _assessmentFromState.questions,
+            createdByUserId: _assessmentFromState.createdByUserId,
+            createdDate: _assessmentFromState.createdDate,
+            modifiedByUserId: _assessmentFromState.modifiedByUserId,
+            modifiedAt: _assessmentFromState.modifiedAt,
+            dueDate: _assessmentFromState.dueDate,
+            courseTitle: courseTitle,
+            instructorName: "John Doe",
+            instructorId: "656f1335650c740ce0ae4d65",
+            status: _assessmentFromState.status,
+            isRetaken: _assessmentFromState.isRetaken,
+            attempts :  _assessmentFromState.attempts,
+          };
+  
+          const postAssessment = await Api.POST_AddAssessments(assessment)!;
+       
+      
+        }else{
+          
+          const updateAssessment = await Api.PUT_UpdateAssessment(_assessmentFromState);
+        
+    
+        }
+       
+
         const uploadImageResponse = await Api.POST_Image(updateCoursedata.data.id, formData);
 
         const extractedVideo = updateCoursedata?.data?.sections.reduce(
@@ -279,8 +325,10 @@ function EditCourse() {
         });
         setTimeout(() => {
           toast.dismiss(_id);
+          clearReduxState()
         }, 2000);
       }
+
     } catch (error) {
       toast.update(_id, {
         render: "Error saving course",
@@ -385,29 +433,7 @@ function EditCourse() {
     },
   };
 
-  const getCourseAssessments = async () => {
-    const getAssessement = await Api.GET_CourseAssessment(_courseFromState?.id);
-    console.log("Course Assessments", getAssessement)
-    if(getAssessement?.length > 0) {
-      setCourseId(_courseFromState?.id);
-      const fetchedAssessment = {
-        courseId: getAssessement?.courseId,
-        questions: getAssessement?.questions,
-        createdByUserId: getAssessement?.createdByUserId,
-        createdDate: getAssessement?.createdDate,
-        modifiedByUserId: getAssessement?.modifiedByUserId,
-        modifiedAt: getAssessement?.modifiedAt,
-        dueDate: getAssessement?.dueDate,
-        courseTitle: getAssessement?.courseTitle,
-        instructorName: getAssessement?.instructorName,
-        instructorId: getAssessement?.instructorId,
-        status: getAssessement?.status,
 
-      }
-      dispatch(updateAssessment(fetchedAssessment))
-    }
-    }
-  
 
   const createAssessment = () => {
     const payload = {
@@ -421,9 +447,7 @@ function EditCourse() {
   useEffect(() => {
     formData.append("file", imageUrl);
   }, [imageUrl]);
-  useEffect(() => {
-    getCourseAssessments();
-  }, [])
+
   return (
     <div
       id="test"

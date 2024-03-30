@@ -186,7 +186,6 @@ function VideoPlayer({
     
         const accessToken = "cca5d0ef803dac4b5746c4a378073e38";
 
-        // Step 2: Make API Requests
         const response = await axios.get(`https://api.vimeo.com/videos/915091193/texttracks`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,

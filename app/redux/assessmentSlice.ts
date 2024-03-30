@@ -4,7 +4,7 @@ import { AppStore } from "./store";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
-const loogedInUser = cookies.get('param-lms-user');
+const loogedInUser = cookies.get("param-lms-user");
 
 const generateUniqueId = () => {
   return Math.random().toString(36).substring(7);
@@ -55,6 +55,9 @@ export const assessmentSlice = createSlice({
     setSelectedAssessmentForEdit(state, action) {
       state.assessment = action.payload;
     },
+    resetAssessmentState: state => {
+      state = initialState;
+    },
 
     createAssessmentDetail(state, action) {
       const { dueDate,courseTitle ,intructor,isRetaken} = action.payload;
@@ -81,6 +84,7 @@ export const assessmentSlice = createSlice({
     updateAssessment(state, action) {
       const _action = action.payload as IAssessment;
       const newState = {
+        id : _action.id,
         courseId: _action.courseId,
         questions: _action.questions,
         createdByUserId: _action.createdByUserId,
@@ -197,6 +201,7 @@ export const {
   updateChoiceDetails,
   updateAssessmentQuestion,
   addChoicesToQuestion,
+  resetAssessmentState,
 } = assessmentSlice.actions;
 
 export const getSelectedAssessmentForEdit = (state: AppStore) => state.assessment;

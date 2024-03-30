@@ -1,6 +1,7 @@
 import { IResponseObject } from "../lib/restapi/response";
 import { IDocument } from "./document";
 import { IQuiz } from "./quiz";
+import { IUser } from "./user";
 
 export interface ICourse {
         id: string;
@@ -14,7 +15,7 @@ export interface ICourse {
         logo: string,
         courseImage: string,
         bannerImage: string,
-        instructor : string,
+        instructor: string,
         modifyingUser: string
 
 }
@@ -50,7 +51,7 @@ export interface IModule {
         notes: string;
         modifyingUser: string,
         modifiedDate: string,
-  
+
 
 
 
@@ -168,5 +169,16 @@ export interface IDeleteVideo {
         moduleId: string
         videoId: string
 
+}
+
+export interface IWatchedVideo {
+        courseId: string;
+        videoId: string;
+        studentId? : string
+        watched: boolean
+}
+
+export interface IWatchedVideos {
+        videos : IWatchedVideo[]
 }
 

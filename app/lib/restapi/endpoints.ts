@@ -38,7 +38,7 @@ export const documentRead = "https://khumla-dev-document-read.azurewebsites.net/
 
 export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
 
-export const assessmentWrite = "https://khumla-dev-assessment-write.azurewebsites.net/api"
+export const assessmentWrite = "https://khumla-develop-assessment-write.azurewebsites.net/api"
 
 
 
@@ -200,6 +200,19 @@ DELETE_CourseById: async (
     return response;
   },
 
+  PUT_UpdateAssessment: async (payload: IAssessment): Promise<any> => {
+    try {
+    
+      const response = await PUT(`${assessmentWrite}/Assessments/UpdateAssessment`, payload);
+      
+      return response;
+    } catch (error) {
+      console.error("Error updating assessment:", error);
+      throw error;
+    }
+  },
+  
+
 
   POST_AddRating:async (payload:IRating)
   :Promise<IResponseObject<IRating>>=>{
@@ -210,6 +223,12 @@ DELETE_CourseById: async (
   GET_GetRating:async (id:string):
   Promise<IResponseObject<IRating>>=>{
     const response=await GET(`${commentReadUrl}/Ratings/GetRating?id=${id}`);
+    return response;
+  },
+
+  
+  GET_GetAllAssessments:async () => {
+    const response=await GET(`${assessmentReadUrl}/Assessments/GetAssessments`);
     return response;
   },
   

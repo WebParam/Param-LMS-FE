@@ -4,7 +4,7 @@ import Cookies from 'universal-cookie';
 import { Api } from '@/app/lib/restapi/endpoints';
 import { ICourse, ISection, IModule, IVideo } from '@/app/interfaces/courses';
 import { useEffect,useRef  } from 'react'
-import {  useSelector } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
 import { IUser } from '@/app/interfaces/user';
 import { getSelectedCourseForEdit } from '@/app/redux/courseSlice';
 import { getAuthor } from '@/app/lib/getAuthor';
@@ -18,6 +18,7 @@ import { getSelectedQuizForEdit } from '@/app/redux/quizSlice';
 import { FaVideo } from 'react-icons/fa';
 import VideoSibar from '../../../../components/VideoSidebar';
 import VideoPlayer from '../../../../components/ReactPlayer';
+import { createWatchedDetail } from '@/app/redux/watcheVideosSlice';
 const cookies = new Cookies();
 
 
@@ -45,6 +46,9 @@ export default function CourseDetail() {
   const [hideSidebar, setHideSidebar] = useState<boolean>(true)
   
   const [duration, setDuration] = useState(0);
+
+
+  const dispatch = useDispatch();
 
   const handleDuration = (duration:any) => {
     setDuration(duration);
@@ -102,7 +106,17 @@ const getEnrolledCourses = async () => {
   }, [allVideos, currentVideoIndex]);
 
   const handleVideoEnd = () => {
+
+    const watchedVideo  = {
+      courseId: _courseFromState.id,
+      videoId : allVideos[currentVideoIndex].id,
+      creatingUserName:_courseFromState.creatingUserName,
+      watched: true
+    }
+   
+    dispatch(createWatchedDetail(watchedVideo))
     setOpen(false);
+ 
     const quizFromStorage = localStorage.getItem("student-quizzes");
   
     if (quizFromStorage) {
@@ -111,6 +125,7 @@ const getEnrolledCourses = async () => {
         .filter((quiz: IQuiz) => quiz.questions.length > 0);
       
         const currentVideoId = allVideos[currentVideoIndex].id;
+
         console.log("ID",currentVideoId)
         const getQuiz: IQuiz = quizzes.find((quiz: IQuiz) => quiz.videoId === currentVideoId);
         console.log("Opened Quiz", getQuiz);
@@ -119,6 +134,7 @@ const getEnrolledCourses = async () => {
           setOpen(!open);
         } else {
           if (currentVideoIndex < allVideos.length - 1) {
+  
             setCurrentVideoIndex(currentVideoIndex + 1);
           }
         }

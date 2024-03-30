@@ -87,7 +87,6 @@ const ReactQuillWrapper = ({
     }
   }, []);
 
-  console.log("ReactQuillComponent:", ReactQuillComponent);
 
   if (!ReactQuillComponent) return null; 
 
@@ -136,6 +135,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [videoDescription, setVideoDescription] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [document, setDocument] = useState<any>("")
+  const [videoDuration, setVideoDuration] = useState<string>()
 
   const [moduleReference, setModuleReference] = useState<any>("")
   const [hideSaveChangesBtn, setHideSaveChangesBtn] = useState(false)
@@ -591,6 +591,7 @@ setChangeEditQuizQuestionContent(false);
         videoLink: videoLink,
         videoTitle: videoTitle,
         videoDescription: plainDescription,
+        duration : videoDuration
       };
 
       dispatch(editVideoDetails(payload));
@@ -690,6 +691,7 @@ setChangeEditQuizQuestionContent(false);
         setVideoReference(video[0]?.reference)
         setVideoLink(video[0]?.videoLink);
         setDisableModuleInputs(true);
+        setVideoDuration(video[0]?.duration);
       }
 
   },[]);
@@ -1691,6 +1693,19 @@ setChangeEditQuizQuestionContent(false);
                 </small>
               </div>
             </div>
+            <div className="card-body">
+                <label className="form-label">Video Duration</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  disabled={disableModuleInputs}
+                  onChange={(e:any) => setVideoDuration(e.target.value)}
+                    value ={videoDuration}
+                  placeholder="Enter Video Duration"
+                />
+
+               
+              </div>
               </div>
             </div>
           </div>
