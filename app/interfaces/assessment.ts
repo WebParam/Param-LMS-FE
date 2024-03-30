@@ -1,4 +1,5 @@
 export interface IAssessment {
+    id? : string;
     courseId: string;
     questions: IAssessmentQuestion[];
     createdByUserId: string;

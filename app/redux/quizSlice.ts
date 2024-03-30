@@ -52,6 +52,10 @@ export const quizSlice = createSlice({
     updateQuizzes(state, action: PayloadAction<IQuiz[]>) {
       state.quizzes.quizzes = action.payload;
     },
+    resetQuizState: state => {
+      state = initialState;
+    },
+
 
     updateQuizState(state, action) {
       const { quizState, quizId  } = action.payload;
@@ -217,7 +221,8 @@ export const {
   updateQuizzes,
   updateQuizVideoId,
   updateChoiceAnswer,
-  updateQuizState
+  updateQuizState,
+  resetQuizState
 } = quizSlice.actions;
 
 export const getSelectedQuizForEdit = (state: AppStore) => state.quizzes.quizzes;

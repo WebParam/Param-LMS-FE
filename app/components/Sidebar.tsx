@@ -6,13 +6,12 @@ import { usePathname } from 'next/navigation'
 
 
 const Sidebar = () => {
-  const [activeTab, setActiveTab] = useState("home"); // State to track active tab
+  const [activeTab, setActiveTab] = useState("home");
   const [expandSidebar, setExpandSidebar] = useState<boolean>(false);
   const [isStudentPathName, setIsStudentPathName] = useState<boolean>(false)
 
   const handleTabClick = (tab: any) => {
     setActiveTab(tab);
-    // Add logic here to handle tab change if needed
   };
 
 

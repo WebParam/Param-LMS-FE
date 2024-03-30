@@ -47,7 +47,10 @@ export const documentSlice = createSlice({
 
             state.documents.documents.push(newDocument);
         },
-
+        resetDocumentState: state => {
+            state = initialState;
+          },
+  
         updateDocumentDetail(state, action: PayloadAction<IUpdateDocumentDetailState>) {
             const _action = action.payload;
             const index = state.documents.documents.findIndex(doc => doc.reference === _action.reference);
@@ -68,6 +71,7 @@ export const {
     setSelectedDocumentForEdit,
     createDocumentDetails,
     updateDocumentDetail,
+    resetDocumentState
 } = documentSlice.actions;
 
 export const getSelectedDocumentForEdit = (state: AppStore) => state.documents.documents;
