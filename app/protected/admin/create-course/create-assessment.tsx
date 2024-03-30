@@ -24,8 +24,7 @@ import {
   updateChoiceDetails,
 } from "@/app/redux/assessmentSlice";
 import { IAssessment, IAssessmentQuestion } from "@/app/interfaces/assessment";
-
-
+import ConfirmationModal from "@leafygreen-ui/confirmation-modal";
 
 interface CreateCourseAssessmentModal {
   onClose: () => any;
@@ -114,7 +113,10 @@ export const CreateCourseAssessmentModal: React.FC<
   const [viewCreatedQuestion, setViewCreatedQuestion] = useState(true);
   const [isRetaken, setIsRetaken] = useState<string>("")
   const [dueDate, setDueDate] = useState<string>("")
+
+
   const [questionType, setQuestionType] = useState<string>("");
+
   const _assessmentFromState: IAssessment = useSelector(
     getSelectedAssessmentForEdit
   ).assessment;
@@ -244,7 +246,9 @@ export const CreateCourseAssessmentModal: React.FC<
     if (payload.questionId) {
       dispatch(deleteAssessmentQuestion(payload));
 
+      //setUpdateQuestion(true)
     }
+    debugger;
   };
 
   const updateQuizQuestion = function () {
@@ -434,6 +438,7 @@ export const CreateCourseAssessmentModal: React.FC<
       data-domfactory-upgraded="mdk-drawer-layout"
     >
           
+     
       <div
         className="mdk-drawer-layout__content page-content"
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
@@ -684,6 +689,8 @@ export const CreateCourseAssessmentModal: React.FC<
                           />
                         </div>
 
+
+
                         <div className="mb-3">
                           {!isQuestionCreated && (
                             <button
@@ -737,7 +744,8 @@ export const CreateCourseAssessmentModal: React.FC<
                             </>
                           )}
                         </div>
-  
+
+                      
                       </>}
                    
                       {isQuestionCreated && questionType === "0" && (
@@ -767,6 +775,7 @@ export const CreateCourseAssessmentModal: React.FC<
                                 className="form-control mb-3"
                                 placeholder="Enter your choice here..."
                               />
+
                               <div>
                                 {!enableUpdateChoice ? (
                                   <button

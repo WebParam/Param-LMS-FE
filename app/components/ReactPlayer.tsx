@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import ReactPlayer from "react-player";
 import "./react-player.css";
@@ -17,6 +17,7 @@ import IComment, { ICommentReply } from "../interfaces/comment";
 import { FaRegThumbsUp } from "react-icons/fa";
 import { FaRegThumbsDown } from "react-icons/fa";
 import { BsReply } from "react-icons/bs";
+import axios from "axios";
 
 interface ReactPlayerProps {
   selectedVideo: string;
@@ -62,21 +63,35 @@ function VideoPlayer({
   const [commentReply, setCommentReply] = useState<string>("");
   const [commentReplies, setCommentReplies] = useState<IComment[]>([]);
   const [enableComment, setEnableComment] = useState<boolean>(false);
+  const commentTextareaRefs = useRef<Array<HTMLInputElement | any>>([]); 
+  const [transcript, setTranscript] = useState<any>([]);
 
-  const selectCommentForReply = (comment: IComment) => {
+  const selectCommentForReply = (comment: IComment, index:number) => {
     setReplyCommentId(comment?.id!);
     setselectedComment(comment);
     setEnableComment(true);
+    if (commentTextareaRefs.current[index]) {
+      commentTextareaRefs.current[index]!.scrollIntoView({ behavior: 'smooth' });
+      commentTextareaRefs.current[index]!.focus();
+    }
   };
 
   const today = new Date();
   const year = today.getFullYear();
   let month: number | string = today.getMonth() + 1;
   let day: number | string = today.getDate();
+  let hours: number | string = today.getHours();
+  let minutes: number | string = today.getMinutes();
+  let seconds: number | string = today.getSeconds();
+  
   month = month < 10 ? `0${month}` : month;
   day = day < 10 ? `0${day}` : day;
-  const todayDate = `${year}-${month}-${day}`;
-
+  hours = hours < 10 ? `0${hours}` : hours;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+  
+  const todayDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  
   const handleSubmit = async (e: any) => {
     setIsCommentCreated(false);
     e.preventDefault();
@@ -84,9 +99,9 @@ function VideoPlayer({
       title: "Sample Comment",
       message: comment,
       creatingUser: loogedInUser?.id,
-      createdDate: todayDate,
+      createdDate: todayDateTime,
       modifyingUser: loogedInUser?.id,
-      modifiedDate: todayDate,
+      modifiedDate: todayDateTime,
       referenceId: videoId,
       type: 1,
       state: 0,
@@ -122,7 +137,7 @@ function VideoPlayer({
   const getVideoComments = async () => {
     setComments([]);
     setComment("");
-
+  
     var _comment: IResponseObject<IComment>[] =
       await Api.GET_CommentsByReference(videoId);
     var data: IComment[] = _comment.map(
@@ -131,9 +146,14 @@ function VideoPlayer({
     const videoComments = data.filter(
       (comment) => comment.referenceId === videoId
     );
+  
+   
+    videoComments.sort((a, b) => {
+      return new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime();
+    });
+  
     setComments(videoComments);
   };
-
   const PostCommentReply = async () => {
     const commentPayload: ICommentReply = {
       comment: selectedComment!,
@@ -141,9 +161,9 @@ function VideoPlayer({
         title: video?.title,
         message: commentReply,
         creatingUser: loogedInUser?.id,
-        createdDate: todayDate,
+        createdDate: todayDateTime,
         modifyingUser: loogedInUser?.id,
-        modifiedDate: todayDate,
+        modifiedDate: todayDateTime,
         referenceId: selectedComment?.id!,
         type: 1,
         state: 0,
@@ -159,8 +179,70 @@ function VideoPlayer({
     }
   };
 
+
+  useEffect(() => {
+    const fetchTranscript = async () => {
+      try {
+    
+        const accessToken = "cca5d0ef803dac4b5746c4a378073e38";
+
+        const response = await axios.get(`https://api.vimeo.com/videos/915091193/texttracks`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        const transcriptLink = response.data.data[0]?.link;
+        const transcriptResponse = await axios.get(transcriptLink);
+        const lines = transcriptResponse.data.split('\n');
+        const parsedTranscript = [];
+      
+        let currentEntry = { time: null, text: '' };
+      
+        lines.forEach((line:any) => {
+          if (/^\d/.test(line)) {
+            currentEntry.time = line.split(' --> ')[0];
+          } else if (line.trim() !== '') {
+            currentEntry.text += (currentEntry.text ? ' ' : '') + line.trim();
+          } else if (currentEntry.time !== null) {
+            parsedTranscript.push(currentEntry);
+            currentEntry = { time: null, text: '' };
+          }
+        });
+      
+        if (currentEntry.time !== null) {
+          parsedTranscript.push(currentEntry);
+        }
+        if (parsedTranscript.length > 0 && parsedTranscript[0].text.includes("WEBVTT -")) {
+          parsedTranscript.shift();
+        }
+      
+    
+        setTranscript(parsedTranscript);
+
+
+    console.log("Transcript",parsedTranscript)
+
+
+
+
+
+      } catch (error) {
+        console.error('Error fetching transcript:', error);
+        setTranscript('Error fetching transcript');
+      }
+    };
+
+    fetchTranscript();
+  }, []);
+
+
+
   useEffect(() => {
     getVideoComments();
+
+
+    
   }, [videoId, isCommentCreated]);
 
   return (
@@ -191,45 +273,28 @@ function VideoPlayer({
           {sections[0]?.modules[0]?.videos[0].description}
         </span>
 
-        <div className="details" style={{ fontSize: "large" }}>
-          <h2>{sections[0]?.modules[0]?.videos[0].title}</h2>
-
-          <Tabs style={{ width: "100%" }}>
+        <div className={HideSidebar ? "details" : "full-screen"} style={{ fontSize: "large" }}>
+          <h4>{video?.title}</h4>
+        <Tabs style={{ width: "100%" }}>
             <TabList default={false}>
               <div className="tabs_header-container">
                 <Tab>Overview</Tab>
                 <Tab>Transcipt</Tab>
-                <Tab>Notes</Tab>
                 <Tab>Comments</Tab>
               </div>
             </TabList>
 
-            <TabPanel className="instructor">
-              <p className="instructor">
-                {sections[0]?.modules[0]?.videos[0].description &&
-                  "Instructor: John Smith"}
-              </p>
-              <p className="description">
-                {sections[0]?.modules[0]?.videos[0].description}
-              </p>
+       
+            <TabPanel>
+             {video?.description}
             </TabPanel>
             <TabPanel>
-              <p className="instructor">
-                {sections[0]?.modules[0]?.videos[0].description &&
-                  "Instructor: John Smith"}
-              </p>
-              <p className="description">
-                {sections[0]?.modules[0]?.videos[0].description}
-              </p>
-            </TabPanel>
-            <TabPanel>
-              <p className="instructor">
-                {sections[0]?.modules[0]?.videos[0].description &&
-                  "Instructor: John Smith"}
-              </p>
-              <p className="description">
-                {sections[0]?.modules[0]?.videos[0].description}
-              </p>
+            {transcript?.map((entry:any) => (
+        <div key={entry?.time}>
+          <p>{entry?.time}</p>
+          <p>{entry?.text}</p>
+        </div>
+      ))}
             </TabPanel>
             <TabPanel
               className="comments-scroll"
@@ -240,11 +305,8 @@ function VideoPlayer({
                 scrollbarWidth: "none",
               }}
             >
-              <div
-                className={`comment-container ${
-                  !isCommenting && "hide-input-border"
-                }`}
-              >
+             <div  id="commentsContainer" className={`comment-container ${!isCommenting && "hide-input-border"}`}>
+
                 <div className="loogedInUser-comment">
                   <div className="person-container">
                     <IoPersonSharp />{" "}
@@ -337,7 +399,7 @@ function VideoPlayer({
                                 <FaRegThumbsDown />
                               </p>
                               <p
-                                onClick={() => selectCommentForReply(c)}
+                                onClick={() => selectCommentForReply(c, index)}
                                 className="reply-text"
                               >
                                 <BsReply style={{ fontSize: "x-large" }} />
@@ -345,9 +407,12 @@ function VideoPlayer({
                             </div>
                           </div>
 
+                            {
+                              /*Reply to comment section start here*/
+                            }
                           <div
                             style={{ marginTop: "3em" }}
-                            className={`accordion__menu collapse ${
+                            className={`reply_comment-section accordion__menu collapse  ${
                               replyCommentId === c?.id && enableComment
                                 ? "show"
                                 : ""
@@ -355,13 +420,17 @@ function VideoPlayer({
                             id={`course-toc-${c.id}`}
                           >
                             {replyCommentId === c?.id && (
-                              <div className="reply-container">
+                              <div  className="reply-container">
                                 <div>
                                   <IoPersonSharp />
                                 </div>
                                 <div>
                                   <textarea
-                                    value={commentReply}
+                                     ref={(ref) => {
+                                      // Assign ref to the array element
+                                      commentTextareaRefs.current[index] = ref;
+                                    }}
+                                     value={commentReply}
                                     onChange={(e) => {
                                       setCommentReply(e.target.value);
                                     }}
@@ -394,8 +463,11 @@ function VideoPlayer({
                               </div>
                             )}
                           </div>
-
+                          {
+                              /*Reply to comment section ends  here*/
+                            }
                           <div
+                      
                             style={{
                               marginLeft: "30px",
                             }}
@@ -471,6 +543,8 @@ function VideoPlayer({
               </div>
             </TabPanel>
           </Tabs>
+
+          
         </div>
       </div>
       <ConfirmationModal

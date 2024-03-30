@@ -1,22 +1,20 @@
 "use client";
-import Drawer from "@/app/topbar-components/Drawer";
-import HeadNav from "@/app/topbar-components/HeadNav";
+import Drawer from "./Drawer";
+import HeadNav from "./HeadNav";
 import { useState } from "react";
-import withAuth from './StudentAuthWrapper'
-import SideTab from '@/app/interfaces/sideTabs';
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const sideTabs: SideTab[] = [
-    { name: 'Dashboard', url: '#/protected/student/dashboard', icon: 'insert_chart_outlined' },
-    { name: 'My Courses', url: '#', icon: 'people_outline' },
-    { name: 'Courses', url: '/protected/student/course/all-courses', icon: 'assignment' },
+  const sideTabs = [
+    { name: 'Dashboard', url: '#', icon: 'insert_chart_outlined' },
+    { name: 'Students', url: '#', icon: 'people_outline' },
+    { name: 'Manage Courses', url: '/protected/admin/manage-courses', icon: 'assignment' },
     {
       name: 'Assessments', url: '#', icon: 'assignment', children: [
-        { name: 'My Assessments', url: '/protected/student/assessments', icon: '' },
+        { name: 'List of Assessments', url: '/protected/admin/assessments', icon: '' },
+        { name: 'Grade Assessments', url: '/protected/admin/assessments/grade-assessments', icon: '' }
       ]
-    },
-    { name: 'Learning Path', url: '#', icon: 'assignment' }
+    }
   ];
 
   return (
@@ -49,4 +47,4 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default withAuth(RootLayout);
+export default RootLayout;

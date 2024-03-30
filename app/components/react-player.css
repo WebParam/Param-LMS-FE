@@ -15,6 +15,17 @@
     opacity: 0;
 }
 
+.details{
+    width: 100%;
+    margin-top: 40px;
+    
+}
+
+.full-screen{
+    width: 1000px;
+    margin-top: 40px;
+}
+
 .person-container{
     display: flex;
     justify-content: flex-start;
@@ -183,4 +194,8 @@
 
 .comment-reply_section > .reply-comment-input{
     width: 500px;
+}
+
+.all-comments-section{
+    /* height: 300px; */
 }

@@ -30,10 +30,10 @@ const CourseAssessment = (props:any) => {
     const [status, setStatus] = useState<any>('All questions answered. Submit the assessment.')
     const [courseInfo, setCourse] = useState<any>();
     const [studentAnswer, setStudentAnswer] = useState<any>({
-        AssessmentId: 'yourAssessmentId', // Set your actual assessmentId here
-        StudentId: 'yourStudentId', // Set your actual studentId here
+        AssessmentId: 'yourAssessmentId',
+        StudentId: 'yourStudentId', 
         Answers: [],
-        SubmittedAt: new Date().toISOString(), // Set the submission time
+        SubmittedAt: new Date().toISOString(),
     });
 
     async function getSelectedCourse(id:string){
@@ -59,8 +59,8 @@ const CourseAssessment = (props:any) => {
                 setLoading(false)
                 setAssessment(assessment);
                 setStudentAnswer({
-                    AssessmentId: assessment.id, // Set your actual assessmentId here
-                    StudentId: userData.id, // Set your actual studentId here
+                    AssessmentId: assessment.id, 
+                    StudentId: userData.id, 
                     Answers: [],
                     SubmittedAt: new Date().toISOString(),
                 })
@@ -156,7 +156,6 @@ const CourseAssessment = (props:any) => {
 
     useEffect(() => {
 
-        //getCourseAssessment('65cf2aa5604aec77fcf37a89');
         getCourseAssessment(`${assessmentId}`);
         
        

@@ -14,6 +14,7 @@ import {
   deleteAllSections,
   addModuleToSection,
   deleteVideoFromModule,
+  resetCourseState,
 } from "@/app/redux/courseSlice";
 import dynamic from "next/dynamic";
 import {
@@ -36,14 +37,15 @@ import Cookies from "universal-cookie"; // Import the library
 import Dropdown from "react-bootstrap/Dropdown";
 import "react-quill/dist/quill.snow.css";
 import { IQuiz } from "@/app/interfaces/quiz";
-import { getSelectedQuizForEdit } from "@/app/redux/quizSlice";
+import { getSelectedQuizForEdit, resetQuizState } from "@/app/redux/quizSlice";
 import { IDocument } from "@/app/interfaces/document";
-import { getSelectedDocumentForEdit } from "@/app/redux/documentSice";
+import { getSelectedDocumentForEdit, resetDocumentState } from "@/app/redux/documentSice";
 import { CreateCourseAssessmentModal } from "./create-assessment";
 import { IAssessment } from "@/app/interfaces/assessment";
 import {
   createAssessmentDetail,
   getSelectedAssessmentForEdit,
+  resetAssessmentState,
 } from "@/app/redux/assessmentSlice";
 
 // Define interface for ReactQuill props
@@ -232,6 +234,18 @@ console.log("Documents", _documentsFromState);
     dispatch(createCourseDetail(payload));
   };
 
+  const clearReduxState = () => {
+    localStorage.removeItem('persist:assessment');
+    localStorage.removeItem('persist:course');
+    localStorage.removeItem('persist:documents');
+    localStorage.removeItem('persist:quizzes');
+    resetAssessmentState();
+    resetCourseState();
+    resetDocumentState();
+    resetQuizState()
+    
+  };
+
   async function createCourse() {
     const plainDescription = courseDescription
       ? courseDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, "")
@@ -286,6 +300,7 @@ console.log("Documents", _documentsFromState);
           instructorId: "656f1335650c740ce0ae4d65",
           status: _assessmentFromState.status,
           isRetaken: _assessmentFromState.isRetaken,
+          attempts :  _assessmentFromState.attempts,
         };
 
         const postAssessment = await Api.POST_AddAssessments(assessment);
@@ -334,14 +349,10 @@ console.log("Documents", _documentsFromState);
           isLoading: false,
         });
 
-        setTimeout(() => {
-          localStorage.removeItem("persist:course");
-          dispatch(deleteAllSections());
-          setCourseTitle("");
-          setCourseDescription("");
-          setCompetency("");
+        setTimeout(() => {        
           toast.dismiss(_id);
           setDisableCreateCourseBtn(false);
+          clearReduxState()
         }, 2000);
       } else {
         toast.update(_id, {
@@ -453,6 +464,9 @@ console.log("Documents", _documentsFromState);
       <ToastContainer />
 
       <div>
+
+  
+
         <Modal
           styles={customModalStyles}
           open={editModuleModalOpen}
