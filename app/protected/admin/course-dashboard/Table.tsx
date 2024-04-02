@@ -1,8 +1,9 @@
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
-import list from "./data"
+import { NextPage } from "next";
 
-const Table = () => {
+const Table: NextPage<{ list: any[] }> = ({
+  list }) => {
 
   return (
     <>

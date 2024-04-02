@@ -1,8 +1,16 @@
+"use client";
 import Pagination from "./Pagination";
 import Table from "./Table";
+import { useState } from "react";
+import list from "./data"
 
 const Body = () => {
-  
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMSPERPAGE = 6; 
+  const indexOfLastItem = currentPage * ITEMSPERPAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
+  const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
+
   return (
     <>
       <div className="container page__container page__container page-section">
@@ -13,10 +21,10 @@ const Body = () => {
             data-lists-sort-by="js-lists-values-employee-name"
             data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
           >
-            <Table />
+            <Table list={currentItems} />
           </div>
 
-          <Pagination />
+          <Pagination listLength={list.length} indexOfLastItem={indexOfLastItem} currentPage={currentPage} setCurrentPage={setCurrentPage} ITEMSPERPAGE={ITEMSPERPAGE} />
         </div>
       </div>
     </>
