@@ -8,9 +8,11 @@ import './css/app.css'
 import './css/dark-mode.css'
 import './globals.css'
 import JsScripts from '@/app/template-components/JsScripts'
+import CookieBanner from './components/CookieBanner';
 
 import type { Metadata } from 'next'
 import { ReduxProvider } from './provider'
+import GoogleAnalytics from './components/GoogleAnalytics'
 
 export const metadata: Metadata = {
   title: 'Param LMS',
@@ -26,10 +28,11 @@ export default function RootLayout({
 
   return (
     <html lang="en" dir="ltr">
+      <GoogleAnalytics GA_MEASUREMENT_ID='G-CNE4CPM0EN'/>
       <head
       ><link href="https://fonts.googleapis.com/css?family=Lato:400,700%7COswald:300,400,500,700%7CRoboto:400,500%7CExo+2:600&amp;display=swap" rel="stylesheet"/>
       </head>
-      <body className="layout-app layout-sticky-subnav"><ReduxProvider> {children} </ReduxProvider>
+      <body className="layout-app layout-sticky-subnav"><ReduxProvider> {children} <CookieBanner/> </ReduxProvider>
       <JsScripts />
       </body>
   
