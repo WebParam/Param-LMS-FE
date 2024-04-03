@@ -9,6 +9,7 @@ import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import { IMarks, IQuiz } from "@/app/interfaces/quiz";
 import { IAssessment } from "@/app/interfaces/assessment";
 import { IDocument } from "@/app/interfaces/document";
+import { IActivity } from "@/app/interfaces/analytics";
 
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
@@ -39,6 +40,8 @@ export const documentRead = "https://khumla-dev-document-read.azurewebsites.net/
 export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
 
 export const assessmentWrite = "https://khumla-develop-assessment-write.azurewebsites.net/api"
+
+export const activityWrite = "https://khumla-develop-activity-write.azurewebsites.net/api"
 
 
 
@@ -341,7 +344,11 @@ GET_Documents: async (
   return response;
 },
 
-
+POST_Activity : async(payload:IActivity) : Promise<IResponseObject<IActivity>> => {
+  const activity = await POST(`${activityWrite}//Activities/CreateActivity`, payload)
+  return activity;
+}
+,
 GET_AllQuizzes: async (
   ) => {
   const response:IQuiz[] = await GET(`${quizReadUrl}/Quizzes/getQuizzes`);

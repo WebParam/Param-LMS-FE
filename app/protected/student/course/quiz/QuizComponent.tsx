@@ -28,10 +28,20 @@ export default function QuizData() {
   const [viewResults, setViewResults] = useState<boolean>(false)
   const _courseFromState = useSelector(getSelectedCourseForEdit).course;
   const [marks, setMarks] = useState<IMarks[]>([]);
-  const [hasTakenQuiz, setHasTakenQuiz] = useState<boolean>(false);
   console.log("course from state", _courseFromState);
 
-  
+  const [loginTime] = useState(Date.now());
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentTime = Date.now();
+      const timeDifference = Math.floor((currentTime - loginTime) / 1000); 
+      setSeconds(timeDifference);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [loginTime])
 
   const router = useRouter();
   const searchParams = useSearchParams();

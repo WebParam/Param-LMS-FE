@@ -3,7 +3,6 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import React, { useRef, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
-//import "react-quill/dist/quill.snow.css";
 import {
   FaBullseye,
   FaPencilAlt,
@@ -43,10 +42,6 @@ interface CreateCourseModalProps {
   sectionId: string;
 }
 
-
-
-
-// Define interface for ReactQuill props
 interface ReactQuillProps {
   style?: React.CSSProperties;
   value?: string;
@@ -69,7 +64,6 @@ const ReactQuillWrapper = ({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       import('react-quill').then(module => {
-        console.log("ReactQuill module loaded:", module);
         setReactQuillComponent(() => module.default);
       }).catch(error => {
         console.error("Error loading ReactQuill module:", error);
@@ -336,9 +330,7 @@ const [document, setDocument] = useState<any>("")
       }
     }
   
-  
     const updateQuizQuestion = function () {
-  
       setEnableEditQuestion(true);
       const plainDescription =
         questionDescription && questionDescription.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
@@ -567,6 +559,7 @@ const [document, setDocument] = useState<any>("")
         description: plainDescription,
         duration : videoDuration
       };
+      console.log("My payload", payload);
       dispatch(addVideoToModule(payload));
       setDisableSaveChanges(true);
       setHideSaveChangesBtn(true)
@@ -594,7 +587,7 @@ const [document, setDocument] = useState<any>("")
   const newVideo = () => {
     
  
-    setHideCreateModuleSection(false);
+  setHideCreateModuleSection(false);
  
   setViewAddedVideos(false)
   setDisableModuleInputs(false);
@@ -619,8 +612,7 @@ const [document, setDocument] = useState<any>("")
   setVideoReference(video[0]?.reference)
   setVideoDuration(video[0]?.duration)
 
-  console.log("Description",videoDescription)
-  console.log("Duration",videoDuration)
+
   const videoDoc = _documentsFromState.filter((doc:IDocument) => doc.reference === video[0]?.reference)[0];
   console.log("documents",videoDoc);
   if(videoDoc){
@@ -693,13 +685,13 @@ const [document, setDocument] = useState<any>("")
         moduleId: moduleId,
         videoLink: videoLink,
         videoTitle: videoTitle,
-        description: plainDescription,
+        videoDescription: plainDescription,
         duration : videoDuration
       };
 
 
       dispatch(editVideoDetails(payload));
-
+      console.log("Payload: ", payload );
 
      setDisableModuleInputs(true);
 
