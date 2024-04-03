@@ -16,5 +16,4 @@ export default interface IComment{
 export interface ICommentReply{
     comment:IComment;
     reply:IComment;
-
 }

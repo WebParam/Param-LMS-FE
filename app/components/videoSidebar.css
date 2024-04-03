@@ -2,7 +2,7 @@
 
 .video-sidebar {
   border-left: 1px solid #ddd;
-  width: 300px;
+  width: 30%;
   position: absolute;
   right: 0;
   display: flex;
@@ -10,13 +10,14 @@
  justify-content: flex-start;
   /* border: red solid 2px ; */
   overflow-y: scroll;
-  max-height: 500px; 
+  max-height: 800px; 
+  min-height: 100px;
 }
 
 .player-wrapper {
   position: relative;
-  padding-top: 56.25%; /* 720 / 1280 = 0.5625 */
-  width: 100vh;
+  padding-top: 52.25%; /* 720 / 1280 = 0.5625 */
+  width: 70%;
 
 }
 
@@ -111,7 +112,7 @@ padding-left: 15px;
     top: 37px;
     right: 0px;
     z-index: 99;
-    width: 205px;
+    width: 30%;
   }
   .title-content{
     font-size: small !important;

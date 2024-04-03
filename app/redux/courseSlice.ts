@@ -59,6 +59,9 @@ export const courseSlice = createSlice({
 
             state.course = newState;
         },
+        resetCourseState: state => {
+          state = initialState;
+        },
 
         updateCourseFromDataBase(state, action) {
             const _action = action.payload as IUpdateCourse;
@@ -181,7 +184,7 @@ export const courseSlice = createSlice({
         },
         editVideoDetails: (state, action) => {
       
-          const { moduleId, videoId, videoTitle, videoLink,videoDescription } = action.payload;
+          const { moduleId, videoId, videoTitle, videoLink,videoDescription , duration} = action.payload;
           const sectionIndex = state.course.sections.findIndex(section =>
             section.modules.some(module => module.id === moduleId)
           );
@@ -204,6 +207,9 @@ export const courseSlice = createSlice({
                 state.course.sections[sectionIndex].modules[moduleIndex].videos[
                   videoIndex
                 ].description = videoDescription;
+                state.course.sections[sectionIndex].modules[moduleIndex].videos[
+                  videoIndex
+                ].duration = duration
               }
             }
           }
@@ -271,12 +277,12 @@ udpateVideoViewState: (state, action) => {
             state.course.sections = [];
         },
         addVideoToModule(state, action) {
-            const { moduleId, videoTitle, videoLink, description } = action.payload;
+            const { moduleId, videoTitle, videoLink, description, duration } = action.payload;
 
             const newVideo: IVideo = {
                 id: generateUniqueId(),
                 title: videoTitle,
-                duration: "5:00",
+                duration: duration,
                 moduleId: "module-101",
                 order: 1,
                 state: 0,
@@ -320,6 +326,7 @@ udpateVideoViewState: (state, action) => {
     updateCourseFromDataBase,
     addModuleToSection,
     deleteAllSections,
+    resetCourseState,
     editVideoDetails,
     addVideoToModule,
     deleteModuleFromSection,

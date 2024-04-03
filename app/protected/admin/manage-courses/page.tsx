@@ -10,17 +10,20 @@ import "../../../assets/vendor/spinkit.css";
 import "../../../assets/css/preloader.css";
 import dynamic from 'next/dynamic';
 
-import { IQuiz } from "@/app/interfaces/quiz";
-import { updateCourseFromDataBase } from "@/app/redux/courseSlice";
+import { resetCourseState, updateCourseFromDataBase } from "@/app/redux/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { updateQuizzes } from "@/app/redux/quizSlice";
+import { resetQuizState, updateQuizzes } from "@/app/redux/quizSlice";
 import { IResponseObject } from "@/app/lib/restapi/response";
+import { IAssessment } from "@/app/interfaces/assessment";
+import { resetAssessmentState, updateAssessment } from "@/app/redux/assessmentSlice";
+import { resetDocumentState } from "@/app/redux/documentSice";
 function ManageCourses() {
 
   const [courseHover, setCourseHover] = useState<boolean>(false);
   const [courses, setCourses] = useState<ICourse[] | any>()
   const [quizzes, setQuizzes] = useState<any>([])
   const [courseId, setCourseId] = useState<string>("")
+  const [assesssments, setAssesssments] = useState<IAssessment[]>()
   const cookies = new Cookies();
 
   const dispatch = useDispatch();
@@ -70,20 +73,50 @@ function ManageCourses() {
       console.error("Error fetching quizzes:", error);
     }
   }
-
-
+  async function getAllDocuments() {
+    try {
+      const getDocuments = await Api.GET_Documents();
+      console.log("Documents fetched", getDocuments)
+    } catch (error) {
+      console.error("Error fetching documents:", error);
+    }
+  }
+  async function getAllAssessments() {
+    try {
+      const getAssessments = await Api.GET_GetAllAssessments();
+      const sortedAssessmenst = getAssessments.map((assessment:any) => assessment?.data);
+      console.log("Assessments fetched", sortedAssessmenst);
+      setAssesssments(sortedAssessmenst);
+    } catch (error) {
+      console.error("Error fetching assessments:", error);
+    }
+  }
 
   const editCourse = (course: any) => {
+    const getCourseAssessment = assesssments?.filter(assessment => assessment.courseId === course?.data?.id)[0];
     setCourseId(course?.data?.id);
-
+    dispatch(updateAssessment(getCourseAssessment));
     dispatch(updateCourseFromDataBase(course?.data));
   };
 
   useEffect(() => {
     ListAllCourses();
     getAllQuizzes();
+    getAllDocuments();
+    getAllAssessments();
   }, []);
 
+  const clearReduxState = () => {
+    localStorage.removeItem('persist:assessment');
+    localStorage.removeItem('persist:course');
+    localStorage.removeItem('persist:documents');
+    localStorage.removeItem('persist:quizzes');
+    resetAssessmentState();
+    resetCourseState();
+    resetDocumentState();
+    resetQuizState()
+    
+  };
 
 
   return (
@@ -121,7 +154,7 @@ function ManageCourses() {
                 style={{ textDecoration: "none", marginRight:"5em" }}
                 className="small"
               >
-                <a className="btn btn-outline-secondary ">Add Course</a>
+                <a onClick={clearReduxState}  className="btn btn-outline-secondary ">Add Course</a>
               </Link>
           </div>
         </div>
@@ -600,7 +633,6 @@ function ManageCourses() {
                 style={{ height: 212 }}
               >
                 <a
-                  href="instructor-edit-course.html"
                   className="js-image"
                   data-position="center"
                   data-height="auto"
@@ -635,13 +667,11 @@ function ManageCourses() {
                       <div className="flex">
                         <a
                           className="card-title mb-4pt"
-                          href="instructor-edit-course.html"
                         >
                           Learn Sketch
                         </a>
                       </div>
                       <a
-                        href="instructor-edit-course.html"
                         className="ml-4pt material-icons text-20 card-course__icon-favorite"
                       >
                         edit
@@ -766,7 +796,6 @@ function ManageCourses() {
                   </div>
                   <div className="col text-right">
                     <a
-                      href="instructor-edit-course.html"
                       className="btn btn-primary"
                     >
                       Edit course
@@ -787,7 +816,6 @@ function ManageCourses() {
                 style={{ height: 212 }}
               >
                 <a
-                  href="instructor-edit-course.html"
                   className="js-image"
                   data-position="center"
                   data-height="auto"
@@ -822,13 +850,11 @@ function ManageCourses() {
                       <div className="flex">
                         <a
                           className="card-title mb-4pt"
-                          href="instructor-edit-course.html"
                         >
                           Learn Flinto
                         </a>
                       </div>
                       <a
-                        href="instructor-edit-course.html"
                         className="ml-4pt material-icons text-20 card-course__icon-favorite"
                       >
                         edit
@@ -953,7 +979,6 @@ function ManageCourses() {
                   </div>
                   <div className="col text-right">
                     <a
-                      href="instructor-edit-course.html"
                       className="btn btn-primary"
                     >
                       Edit course
@@ -1009,13 +1034,13 @@ function ManageCourses() {
                       <div className="flex">
                         <a
                           className="card-title mb-4pt"
-                          href="instructor-edit-course.html"
+                        
                         >
                           Learn Photoshop
                         </a>
                       </div>
                       <a
-                        href="instructor-edit-course.html"
+                       
                         className="ml-4pt material-icons text-20 card-course__icon-favorite"
                       >
                         edit
@@ -1140,7 +1165,7 @@ function ManageCourses() {
                   </div>
                   <div className="col text-right">
                     <a
-                      href="instructor-edit-course.html"
+        
                       className="btn btn-primary"
                     >
                       Edit course
@@ -1161,7 +1186,7 @@ function ManageCourses() {
                 style={{ height: 212 }}
               >
                 <a
-                  href="instructor-edit-course.html"
+        
                   className="js-image"
                   data-position="center"
                   data-height="auto"
@@ -1196,13 +1221,13 @@ function ManageCourses() {
                       <div className="flex">
                         <a
                           className="card-title mb-4pt"
-                          href="instructor-edit-course.html"
+               
                         >
                           Newsletter Design
                         </a>
                       </div>
                       <a
-                        href="instructor-edit-course.html"
+                
                         className="ml-4pt material-icons text-20 card-course__icon-favorite"
                       >
                         edit
@@ -1327,7 +1352,7 @@ function ManageCourses() {
                   </div>
                   <div className="col text-right">
                     <a
-                      href="instructor-edit-course.html"
+                    
                       className="btn btn-primary"
                     >
                       Edit course

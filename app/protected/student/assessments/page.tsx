@@ -96,21 +96,7 @@ const CourseAssessments = () => {
                   </span>
                 </a>
               </div>
-              {/* <div className="col-auto border-left border-right">
-                <a
-                  href="#"
-                  data-toggle="tab"
-                  role="tab"
-                  aria-selected="false"
-                  className="dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start"
-                >
-                  <span className="h2 mb-0 mr-3">2</span>
-                  <span className="flex d-flex flex-column">
-                    <strong className="card-title">Archived</strong>
-                    <small className="card-subtitle text-50">Assessments</small>
-                  </span>
-                </a>
-              </div> */}
+              
             </div>
           </div>
           <div
@@ -168,23 +154,7 @@ const CourseAssessments = () => {
                     </a>
                   </th>
                   <th style={{ width: 48 }}>
-                    {/* <a
-                      href="javascript:void(0)"
-                      className="sort"
-                      data-sort="js-lists-values-budget"
-                    >
-                      Budget
-                    </a> */}
                   </th>
-                  {/* <th style={{ width: 48 }}>
-                    <a
-                      href="javascript:void(0)"
-                      className="sort desc"
-                      data-sort="js-lists-values-date"
-                    >
-                      Due
-                    </a>
-                  </th> */}
                   <th style={{ width: 24 }} />
                 </tr>
               </thead>
@@ -223,9 +193,6 @@ const CourseAssessments = () => {
                             <small className="js-lists-values-project">
                               <strong>{item?.data?.courseTitle || 'Sample Course'}</strong>
                             </small>
-                            {/* <small className="js-lists-values-location text-50">
-                              Twitter
-                            </small> */}
                           </div>
                         </div>
                       </div>
@@ -236,7 +203,6 @@ const CourseAssessments = () => {
                         style={{ whiteSpace: "nowrap" }}
                       >
                         <div className="avatar avatar-32pt mr-8pt">
-                          {/* <span className="avatar-title rounded-circle">BN</span> */}
                         </div>
                         <div className="media-body">
                           <div className="d-flex align-items-center">
@@ -280,15 +246,12 @@ const CourseAssessments = () => {
                          
                           
                         </small>
-                        {/* <small className="text-50">Invoice Sent</small> */}
                       </div>
                     </td>
                     <td>
                       <div className="d-flex flex-column">
                         <small className="js-lists-values-date">
-                          {/* <strong>19/02/2019</strong> */}
                         </small>
-                        {/* <small className="text-50">18 days</small> */}
                       </div>
                     </td>
                     <td className="text-right">
@@ -300,99 +263,6 @@ const CourseAssessments = () => {
                 ))
                 }
                
-                {/* <tr>
-                  <td className="pr-0">
-                    <div className="custom-control custom-checkbox">
-                      <input
-                        type="checkbox"
-                        className="custom-control-input js-check-selected-row"
-                        id="customCheck1_2"
-                        data-domfactory-upgraded="check-selected-row"
-                      />
-                      <label
-                        className="custom-control-label"
-                        htmlFor="customCheck1_2"
-                      >
-                        <span className="text-hide">Check</span>
-                      </label>
-                    </div>
-                  </td>
-                  <td>
-                    <div
-                      className="media flex-nowrap align-items-center"
-                      style={{ whiteSpace: "nowrap" }}
-                    >
-                      <div className="avatar avatar-sm mr-8pt">
-                        <span className="avatar-title rounded bg-accent text-white">
-                          PM
-                        </span>
-                      </div>
-                      <div className="media-body">
-                        <div className="d-flex flex-column">
-                          <small className="js-lists-values-project">
-                            <strong>Project Management App</strong>
-                          </small>
-                          <small className="js-lists-values-location text-50">
-                            Github
-                          </small>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div
-                      className="media flex-nowrap align-items-center"
-                      style={{ whiteSpace: "nowrap" }}
-                    >
-                      <div className="avatar avatar-32pt mr-8pt">
-                        <span className="avatar-title rounded-circle">TP</span>
-                      </div>
-                      <div className="media-body">
-                        <div className="d-flex align-items-center">
-                          <div className="flex d-flex flex-column">
-                            <p className="mb-0">
-                              <strong className="js-lists-values-lead">
-                                Tony Parks
-                              </strong>
-                            </p>
-                            <small className="js-lists-values-email text-50">
-                              iOS Development
-                            </small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="d-flex flex-column">
-                      <small className="js-lists-values-status text-50 mb-4pt">
-                        Finished
-                      </small>
-                      <span className="indicator-line rounded bg-accent" />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="d-flex flex-column">
-                      <small className="js-lists-values-budget">
-                        <strong>$12,500</strong>
-                      </small>
-                      <small className="text-50">Paid</small>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="d-flex flex-column">
-                      <small className="js-lists-values-date">
-                        <strong>18/02/2019</strong>
-                      </small>
-                      <small className="text-danger">Overdue</small>
-                    </div>
-                  </td>
-                  <td className="text-right">
-                    <a href="" className="text-50">
-                      <i className="material-icons">more_vert</i>
-                    </a>
-                  </td>
-                </tr> */}
                 
               </tbody>
             </table>
