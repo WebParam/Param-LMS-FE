@@ -10,6 +10,7 @@ import './css/dark-mode.css'
 import './globals.css'
 import JsScripts from '@/app/template-components/JsScripts'
 import Cookies from "universal-cookie"
+import { UseDispatch, useDispatch } from 'react-redux'
 import type { Metadata } from 'next'
 import { ReduxProvider } from './provider'
 import { Api } from './lib/restapi/endpoints'
@@ -30,7 +31,7 @@ export default function RootLayout({
 
   const cookies = new Cookies();
   const user = cookies.get('param-lms-user');
-  
+
   const today = new Date();
   const year = today.getFullYear();
   let month: number | string = today.getMonth() + 1;
@@ -44,34 +45,30 @@ export default function RootLayout({
   hours = hours < 10 ? `0${hours}` : hours;
   minutes = minutes < 10 ? `0${minutes}` : minutes;
   seconds = seconds < 10 ? `0${seconds}` : seconds;
+  
   const todayDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
-function differenceInSeconds(startTime : string, endTime:string) {
+function differenceInSeconds(startTime:string, endTime:string) {
   const startDateTime = new Date(startTime);
   const endDateTime = new Date(endTime);
   const difference = Math.abs(endDateTime.getTime() - startDateTime.getTime());
-  return Math.floor(difference / 1000); // Convert milliseconds to seconds
+  return Math.floor(difference / 1000);
 }
 
 
-  
-
-useEffect(() => {
-  const handleBeforeUnload = async (event:any) => {
+ const handleBeforeUnload = async (event:any) => {
     event.preventDefault(); 
 
     try {
       const loginTime = localStorage.getItem("loginTime");
-      const targetId =  localStorage.getItem("targetId")!;
-      const parsedTime = loginTime ?  JSON.parse(loginTime) : null;
-
-      const seconds = differenceInSeconds(parsedTime, todayDateTime);
-
-      const activity : IActivity = {
+      const parsedLogInTime  = loginTime ? JSON.parse(loginTime) : null;
+      const targetId = localStorage.get("targetId")
+      const duration =   differenceInSeconds("2024-04-03 15:15:45", todayDateTime);
+  const activity : IActivity = {
     UserId: user?.id,
-    DateTime: todayDateTime,
+    TimeStamp: null,
     ActivityType: IActivityType.Logout,
-    Duration: seconds,
+    Duration: duration,
     TargetId: targetId,
    }
 
@@ -89,9 +86,9 @@ useEffect(() => {
 
   window.addEventListener('beforeunload', handleBeforeUnload);
 
-  return () => {
-    window.removeEventListener('beforeunload', handleBeforeUnload);
-  };
+
+useEffect(() => {
+ 
 }, []);
 
   return (
@@ -102,6 +99,7 @@ useEffect(() => {
       <body className="layout-app layout-sticky-subnav"><ReduxProvider> {children} </ReduxProvider>
       <JsScripts />
       </body>
+  
     </html>
   )
 }

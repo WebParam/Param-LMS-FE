@@ -55,7 +55,7 @@ export default function Login() {
   minutes = minutes < 10 ? `0${minutes}` : minutes;
   seconds = seconds < 10 ? `0${seconds}` : seconds;
   
-  const todayDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  const todayDateTime = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
 
 
 async function LoginUser (event:any){
@@ -118,7 +118,7 @@ async function LoginUser (event:any){
      localStorage.setItem("targetId", targetId);
      const activity : IActivity = {
       UserId: user?.data?.id,
-      DateTime: todayDateTime,
+      TimeStamp:null,
       ActivityType: IActivityType.Login,
       Duration: 0,
       TargetId: targetId,
