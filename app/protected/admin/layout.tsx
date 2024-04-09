@@ -11,7 +11,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     { name: 'Manage Courses', url: '/protected/admin/manage-courses', icon: 'assignment' },
     {
       name: 'Assessments', url: '#', icon: 'list', children: [
-        { name: 'List of Assessments', url: '/protected/admin/assessments', icon: '' },
         { name: 'Grade Assessments', url: '/protected/admin/assessments/grade-assessments', icon: '' }
       ]
     }
