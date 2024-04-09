@@ -11,7 +11,7 @@ import { IActivity, IActivityType } from '@/app/interfaces/analytics';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
-const cookies = new Cookies(); // Create an instance of Cookies
+const cookies = new Cookies();
 
 
 
@@ -55,7 +55,7 @@ export default function Login() {
   minutes = minutes < 10 ? `0${minutes}` : minutes;
   seconds = seconds < 10 ? `0${seconds}` : seconds;
   
-  const todayDateTime = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+  const todayDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 
 
 async function LoginUser (event:any){
@@ -118,7 +118,6 @@ async function LoginUser (event:any){
      localStorage.setItem("targetId", targetId);
      const activity : IActivity = {
       UserId: user?.data?.id,
-      TimeStamp:null,
       ActivityType: IActivityType.Login,
       Duration: 0,
       TargetId: targetId,

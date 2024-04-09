@@ -326,6 +326,7 @@ function EditCourse() {
         setTimeout(() => {
           toast.dismiss(_id);
           clearReduxState()
+          
         }, 2000);
       }
 

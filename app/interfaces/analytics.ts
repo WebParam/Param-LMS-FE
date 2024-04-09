@@ -1,9 +1,9 @@
 import { IUser } from "./user"
 
 export interface IActivity {
-
+    id?: string
     UserId: string
-    TimeStamp: null
+ 
     ActivityType: IActivityType
     Duration: number
     TargetId: string
@@ -28,4 +28,12 @@ export interface IUserTimeState {
     logoutTime: number | null;
    }
   }
-  
+
+  export interface IStudentAnalyticDetails{
+    studentId: string,
+    studentName:string,
+    completionRate:string ,
+    timeSpentOnCourse: string,
+    pointsCollected: string
+   }
+ 

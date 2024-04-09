@@ -1,6 +1,8 @@
 import { NextPage } from "next";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import { IActivity, IActivityType } from "../interfaces/analytics";
+import { Api } from "../lib/restapi/endpoints";
 
 const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   setIsOpen,
@@ -10,14 +12,66 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const loggedInUser = cookies.get("param-lms-user");
   const router = useRouter();
 
-  const logout = () => {
-    cookies.remove("param-lms-user", {
-      path: "/",
-    });
 
-    if (loggedInUser?.role == "Admin") router.replace("/auth/admin/login");
-    else router.replace("/");
-  };
+  
+  const today = new Date();
+  const year = today.getFullYear();
+  let month: number | string = today.getMonth() + 1;
+  let day: number | string = today.getDate();
+  let hours: number | string = today.getHours();
+  let minutes: number | string = today.getMinutes();
+  let seconds: number | string = today.getSeconds();
+  
+  month = month < 10 ? `0${month}` : month;
+  day = day < 10 ? `0${day}` : day;
+  hours = hours < 10 ? `0${hours}` : hours;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+  
+  const logoutTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  const logInTime = localStorage.getItem("loginTime")!
+  const time1 :any = new Date(logInTime);
+const time2 : any = new Date(logoutTime);
+const differenceInMilliseconds = Math.abs(time2 - time1);
+const differenceInSeconds = differenceInMilliseconds / 1000;
+
+  const logout = async () => {
+    const targetId = localStorage.getItem("targetId")!;
+    const activity = {
+        UserId: loggedInUser?.id,
+        ActivityType: IActivityType.Logout,
+        Duration: differenceInSeconds,
+        TargetId: targetId,
+    };
+
+    try {
+        const response = await Api.POST_Activity(activity);
+        if (response.data?.id) {
+          console.log("User LoggedIn",loggedInUser)
+            if (loggedInUser?.role === "Admin") {
+                router.push("/auth/admin/login");
+            } else {
+                router.push("/");
+            }
+            cookies.remove("param-lms-user", {
+                path: "/",
+            });
+        }
+    } catch (error) {
+        console.error("Error logging out:", error);
+        if (loggedInUser?.role === "Admin") {
+            router.push("/auth/admin/login");
+        } else {
+            router.push("/");
+        }
+        cookies.remove("param-lms-user", {
+            path: "/",
+        });
+    }
+};
+
+
+
 
   return (
     <>

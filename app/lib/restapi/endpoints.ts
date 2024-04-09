@@ -10,6 +10,7 @@ import { IMarks, IQuiz } from "@/app/interfaces/quiz";
 import { IAssessment } from "@/app/interfaces/assessment";
 import { IDocument } from "@/app/interfaces/document";
 import { IActivity } from "@/app/interfaces/analytics";
+import { ICourseProgress, UpdateProgressRequestModel } from "@/app/interfaces/Enrollment";
 
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
@@ -31,7 +32,7 @@ export const assessmentWriteUrl = "https://khumla-develop-assessment-write.azure
 
 export const assessmentReadUrl = "https://khumla-develop-assessment-read.azurewebsites.net/api";
 
-export const quizWriteUrl ="https://khumla-develop-assessment-write.azurewebsites.net/api";
+export const quizWriteUrl ="https://khumla-develop-quiz-write.azurewebsites.net/api";
 
 export const documentWrite = "https://khumla-dev-document-write.azurewebsites.net/api"
 
@@ -42,6 +43,8 @@ export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
 export const assessmentWrite = "https://khumla-develop-assessment-write.azurewebsites.net/api"
 
 export const activityWrite = "https://khumla-develop-activity-write.azurewebsites.net/api"
+
+export const analyticsRead = "https://khumla-dev-aggregator.azurewebsites.net/api"
 
 
 
@@ -84,6 +87,7 @@ export const Api = {
       throw error;
     }
   },
+
   DELETE_DeleteSection: async (
     payload: IDeleteSection
   ): Promise<any> => {
@@ -135,7 +139,7 @@ export const Api = {
   
   GET_EnrolledCoursesByStudentId: async (
     studentId:string
-  ): Promise<IResponseObject<IStudentCourses>> => {
+  ): Promise<any> => {
     const response = await GET(`${courseReadUrl}/Enrollments/GetUserEnrollements?userId=${studentId}`);
     return response;
   },
@@ -270,7 +274,7 @@ DELETE_CourseById: async (
     }
   },
   
-  PUT_UpdateMarks: async (payload: IMarks): Promise<IResponseObject<IQuiz[]>> => {
+  PUT_UpdateMarks: async (payload: IMarks): Promise<IResponseObject<IMarks>> => {
     try {
       const response = await PUT(`${quizWriteUrl}/Marks/UpdateMarks`,payload);
       return response;
@@ -344,11 +348,33 @@ GET_Documents: async (
   return response;
 },
 
+
+
+GET_StudentAnalytics: async (
+courseId :string , creatingUser:string
+) => {
+
+  const response = await GET(`${analyticsRead}/Analytics/GetCourseProgress?courseId=${courseId}&creatingUser=${creatingUser}`);
+  return response;
+},
+
 POST_Activity : async(payload:IActivity) : Promise<IResponseObject<IActivity>> => {
-  const activity = await POST(`${activityWrite}//Activities/CreateActivity`, payload)
+  const activity = await POST(`${activityWrite}/Activities/CreateActivity`, payload)
   return activity;
 }
+
 ,
+  
+  POST_CourseProgress: async (payload:UpdateProgressRequestModel): Promise<any> => {
+    try{
+      const response = await POST(`${courseWriteUrl}/Enrollments/UpdateProgress`, payload);
+      return response;
+    }
+    catch(error){
+      console.error("Error enrolling course:", error);
+      throw error;
+    }
+  },
 GET_AllQuizzes: async (
   ) => {
   const response:IQuiz[] = await GET(`${quizReadUrl}/Quizzes/getQuizzes`);

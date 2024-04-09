@@ -19,11 +19,14 @@ import { FaVideo } from 'react-icons/fa';
 import VideoSibar from '../../../../components/VideoSidebar';
 import VideoPlayer from '../../../../components/ReactPlayer';
 import { createWatchedDetail } from '@/app/redux/watcheVideosSlice';
-const cookies = new Cookies();
+import { IEnrollment } from '@/app/interfaces/Enrollment';
+import { IActivity, IActivityType } from '@/app/interfaces/analytics';
+
 
 
 export default function CourseDetail() {
-
+  const cookies = new Cookies();
+  const user = cookies.get("param-lms-user");
   const [data, setData] = useState<ICourse>();
   const [sections, setSection] = useState<ISection[]>([])
   const [videos, setVideos] = useState<IVideo[]>([])
@@ -44,8 +47,13 @@ export default function CourseDetail() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [expandedSection, setExpandedSection] = useState<any>(null);
   const [hideSidebar, setHideSidebar] = useState<boolean>(true)
+  const [enrollment, setEnrollment] = useState<IEnrollment | any>()
+  const [loginTime] = useState(Date.now());
+const [seconds, setSeconds] = useState(0);
   
   const [duration, setDuration] = useState(0);
+  const date = new Date();
+
 
 
   const dispatch = useDispatch();
@@ -92,21 +100,46 @@ const getEnrolledCourses = async () => {
   var student = cookies.get('param-lms-user');
    const res = await Api.GET_EnrolledCoursesByStudentId(student.id);
    if(res){
+    const getEnrollment = res?.map((enroll:any) => enroll?.data)[0]
     console.log(checkIdMatchesCourses(res, state?.id));
-    console.log("Enrolled courses", res)
+    console.log("Enrolled courses", getEnrollment)
+    setEnrollment(getEnrollment);
    }
 }
 
+
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    const currentTime = Date.now();
+    const timeDifference = Math.floor((currentTime - loginTime) / 1000); 
+    setSeconds(timeDifference);
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [loginTime])
+
   useEffect(() => {
     getEnrolledCourses();
-    // Set the initial video when the component mounts
     if (allVideos.length > 0) {
       setSelectedVideo(allVideos[currentVideoIndex].videoLink);
     }
   }, [allVideos, currentVideoIndex]);
 
-  const handleVideoEnd = () => {
+  const handleVideoEnd = async () => {
 
+    const courseProgress = {
+      
+      enrollmentId : enrollment?.id,
+      userId : enrollment?.userId,
+      courseId: _courseFromState?.id,
+      videoId: allVideos[currentVideoIndex].id,
+      videoLength: duration.toString(),
+      timeSpent: seconds.toString()
+    }
+
+    const createProgress = await Api.POST_CourseProgress(courseProgress);
+debugger;
     const watchedVideo  = {
       courseId: _courseFromState.id,
       videoId : allVideos[currentVideoIndex].id,
@@ -195,9 +228,21 @@ const getEnrolledCourses = async () => {
   };
 
 
-  const openQuiz = () => {
-    setOpen(false);
-    goToQuiz()
+  const openQuiz = async () => {
+
+   const targetId = localStorage.getItem("targetId")!
+    const activity : IActivity = {
+        UserId: user?.id,
+        ActivityType: IActivityType.QuizStart,
+        Duration: 0,
+        TargetId: targetId,
+       }
+       const createActivity = await Api.POST_Activity(activity);
+       if(createActivity.data?.UserId){
+        setOpen(false);
+        goToQuiz()
+       }
+
   }
 
   const goToQuiz = () => {
@@ -216,17 +261,27 @@ const getEnrolledCourses = async () => {
     const cookies = new Cookies();
 
     const userData = cookies.get("param-lms-user");
-    //console.log("before", course, userData)
-    const payload = {
+    const payload : IEnrollment= {
       userId: userData?.id,
-      creatingUser: course?.creatingUser,
-      creatingDate: course?.creatingDate,
+      creatingUser: "66150254d1797476abf49106",
+      createdDate: date.getDate().toString(),
       modifiedDate: course?.modifiedDate,
-      modifyingUser: course?.modifyingUser,
+      modifyingUser: "66150254d1797476abf49106",
       state: 0,
-      courses:[course?.id]
+      courses:[course?.id],
+      courseProgress: [
+        {
+          courseId:_courseFromState.id,
+          studentId:  userData?.id,
+          progress: 0,
+          isCompleted: false,
+          watchedVideos: []
+        },
+      ]
+
     }
     const enroll = await Api.POST_CourseEnrollment(payload);
+    debugger;
     if(enroll){
       setIsLoading(false);
       setEnrollOpen(true);

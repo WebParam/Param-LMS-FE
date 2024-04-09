@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Link from 'next/link';
 import {useRouter} from "next/navigation"
+import { IActivity, IActivityType } from "@/app/interfaces/analytics";
 
 const CourseAssessments = () => {
 
-
+const cookies = new Cookies();
+const user = cookies.get("param-lms-user");
       const router = useRouter();
     const [student, setStudent] = useState();
     const [studentEnrolledCourses,setStudentEnrolledCourses] = useState();
@@ -16,7 +18,16 @@ const CourseAssessments = () => {
     const [courses, setCourses] = useState();
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     
+  
 
+    const targetId = localStorage.getItem("targetId")!
+    const activity : IActivity = {
+        UserId: user?.id,
+        ActivityType: IActivityType.AssessmentStart,
+        Duration: 0,
+        TargetId: targetId,
+       }
+   
 
     const studentAssessmentsByCourses = async (ids:string) => {
        const assessments = await Api.GET_StudentAssessmentsByCourses(ids);
@@ -32,10 +43,10 @@ const CourseAssessments = () => {
           const course = await Api.GET_StudentCoursesById(student.id);
            const pluck = (property:any) => (element:any) => element[property];
             const arrayList = course.data!.enrolledCourses.map(pluck('id'))
-           // Create a new URLSearchParams object
+           
             var params = new URLSearchParams();
 
-            // Add each item in the list as a 'courses' parameter
+    
             arrayList.forEach(function(id) {
                 params.append('courses', id);
             });
@@ -66,8 +77,11 @@ const CourseAssessments = () => {
 
     }, []);
 
-    const takeAssessment = (id:string) => {
-      router.push(`/protected/student/assessment?id=${id}`);
+    const takeAssessment = async (id:string) => {
+      const createActivity = await Api.POST_Activity(activity);
+      if(createActivity.data?.id){
+        router.push(`/protected/student/assessment?id=${id}`);
+      }
 
     }
 
@@ -236,7 +250,7 @@ const CourseAssessments = () => {
                               <span></span>
                             ) : (
                               <button className="btn btn-primary">
-                              <a onClick={() => takeAssessment(item?.data.id)}>
+                              <a onClick={() => takeAssessment(item?.data?.id)}>
                                 
                                 <span style={{color:'white'}}>Take Assessment</span>
                               </a>

@@ -285,13 +285,6 @@ debugger;
             </div>
         
 
-
-
-
-
-
-
-
             <div className="form-group">
               <label className="form-label" htmlFor="password">
                 Password: {PasswordError ? <span style ={{color : "red" , fontSize: "10px"}}>*required field</span> : null}

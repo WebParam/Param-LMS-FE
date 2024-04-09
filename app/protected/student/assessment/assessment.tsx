@@ -6,6 +6,8 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
 import './assessment.css'
 import { useSearchParams } from 'next/navigation';
+const cookies = new Cookies(); 
+import { IActivity, IActivityType } from '@/app/interfaces/analytics';
 // Enum for question types
 const QuestionType = {
     TEXT: 0,
@@ -19,6 +21,8 @@ const QuestionType = {
 const CourseAssessment = (props:any) => {
 
     const searchParams = useSearchParams();
+    const cookies = new Cookies();
+    const user = cookies.get('param-lms-user');
 
       const assessmentId = searchParams.get("id")
        // alert(assessmentId)
@@ -35,6 +39,24 @@ const CourseAssessment = (props:any) => {
         Answers: [],
         SubmittedAt: new Date().toISOString(),
     });
+
+
+    const [loginTime] = useState(Date.now());
+    const [duration, setDuration] = useState(0);
+  
+    useEffect(() => {
+      const interval = setInterval(() => {
+        const currentTime = Date.now();
+        const timeDifference = Math.floor((currentTime - loginTime) / 1000); 
+        setDuration(timeDifference);
+      }, 1000);
+  
+      return () => clearInterval(interval);
+    }, [loginTime])
+
+    
+   
+   
 
     async function getSelectedCourse(id:string){
         try {
@@ -140,17 +162,28 @@ const CourseAssessment = (props:any) => {
         }
     };
 
-    const handleSubmit = (event: any) => {
+    const handleSubmit = async (event: any) => {
 
         event.preventDefault();
         console.log('Submitted Responses:', studentAnswer);
         setLoading(true)
-        const submitAssessment = Api.POST_StudentAnswers(studentAnswer);
+        const submitAssessment = await Api.POST_StudentAnswers(studentAnswer);
 
         if (submitAssessment) {
-            setLoading(false);
-            console.log("Submited", submitAssessment)
-            setStatus("Submitted, successfully")
+            const targetId = localStorage.getItem("targetId")!
+    const activity : IActivity = {
+        UserId: user?.id,
+        ActivityType: IActivityType.AssessmentEnd,
+        Duration: duration,
+        TargetId: targetId,
+       }
+            const createActivity = await Api.POST_Activity(activity);
+            if(createActivity.data?.id){
+                setLoading(false);
+                console.log("Submited", submitAssessment)
+                setStatus("Submitted, successfully")
+            }
+          
         }
     };
 
