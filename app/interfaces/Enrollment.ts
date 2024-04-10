@@ -13,7 +13,7 @@ export interface IEnrollment{
 
 export interface ICourseProgress
 {
-    courseId : string
+       courseId : string
       studentId :string
       progress : number 
      isCompleted : boolean
@@ -23,6 +23,7 @@ export interface ICourseProgress
 
 export interface IVideoModel
 {
+    sectionId : string
     videoId :string
     videoLength : string
     timeSpent : string
@@ -31,6 +32,7 @@ export interface IVideoModel
 
 export interface UpdateProgressRequestModel
   {
+        sectionId : string
         enrollmentId : string 
         userId : string
         courseId: string 

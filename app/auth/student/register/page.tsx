@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Api } from "../../lib/restapi/endpoints";
-import {IUserRegisterModel } from "../../interfaces/user";
+import { Api } from "../../../lib/restapi/endpoints";
+import {IUserRegisterModel } from "../../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from 'next/navigation'
 const cookies = new Cookies();

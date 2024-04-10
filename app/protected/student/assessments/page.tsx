@@ -17,10 +17,21 @@ const user = cookies.get("param-lms-user");
     const [assessmentList, setAssessmentList] = useState([]);
     const [courses, setCourses] = useState();
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [targetId, setTargetId] = useState<string>("")
     
   
+    if (typeof localStorage !== 'undefined') {
+     
+      const targetId = localStorage.getItem("targetId")!;
+      setTargetId(targetId);
+  } else {
 
-    const targetId = localStorage.getItem("targetId")!
+      console.log('localStorage is not available in this environment');
+  }
+
+
+
+    
     const activity : IActivity = {
         UserId: user?.id,
         ActivityType: IActivityType.AssessmentStart,

@@ -2,8 +2,8 @@
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Api } from '../../lib/restapi/endpoints';
-import { IUserLoginModel, IUserRegisterModel } from '../../interfaces/user';
+import { Api } from '../../../lib/restapi/endpoints';
+import { IUserLoginModel, IUserRegisterModel } from '../../../interfaces/user';
 import Cookies from 'universal-cookie'; // Import the library
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
@@ -19,12 +19,9 @@ const axios = require("axios").default;
 
 
 export default function Login() {
- // cookies.remove("param-lms-user"); 
   const[disable , setDisable] = useState<boolean>(false)
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
-  const dispatch = useDispatch();
 
   const onChangeEmail = (e:any) => {
     setEmail(e.target.value);
@@ -41,21 +38,7 @@ export default function Login() {
     router.push('/auth/register');
   };
 
-  const today = new Date();
-  const year = today.getFullYear();
-  let month: number | string = today.getMonth() + 1;
-  let day: number | string = today.getDate();
-  let hours: number | string = today.getHours();
-  let minutes: number | string = today.getMinutes();
-  let seconds: number | string = today.getSeconds();
-  
-  month = month < 10 ? `0${month}` : month;
-  day = day < 10 ? `0${day}` : day;
-  hours = hours < 10 ? `0${hours}` : hours;
-  minutes = minutes < 10 ? `0${minutes}` : minutes;
-  seconds = seconds < 10 ? `0${seconds}` : seconds;
-  
-  const todayDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+;
 
 
 async function LoginUser (event:any){
@@ -115,14 +98,15 @@ async function LoginUser (event:any){
 
      const targetId = uuidv4();
 
-     localStorage.setItem("targetId", targetId);
+
+
+
      const activity : IActivity = {
       UserId: user?.data?.id,
       ActivityType: IActivityType.Login,
       Duration: 0,
       TargetId: targetId,
      }
-     localStorage.setItem("loginTime", todayDateTime);
     const createActivity = await Api.POST_Activity(activity)
  
    
@@ -219,14 +203,3 @@ async function LoginUser (event:any){
  
   )
 }
-
-
-// function differenceInSeconds(startDate, endDate) {
-//   const difference = Math.abs(endDate.getTime() - startDate.getTime());
-//   return Math.floor(difference / 1000); // Convert milliseconds to seconds
-// }
-
-// // Example usage:
-// const startDate = new Date('2024-04-03T12:00:00');
-// const endDate = new Date('2024-04-03T12:10:00');
-// const difference = differenceInSeconds(startDate, endDate);

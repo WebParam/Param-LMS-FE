@@ -31,6 +31,7 @@ const CourseAssessment = (props:any) => {
 
     const [courseAssessment, setAssessment] = useState<any>();
     const [loading, setLoading] = useState<any>(true);
+    const [targetId, setTargetId] = useState<string>("")
     const [status, setStatus] = useState<any>('All questions answered. Submit the assessment.')
     const [courseInfo, setCourse] = useState<any>();
     const [studentAnswer, setStudentAnswer] = useState<any>({
@@ -170,7 +171,17 @@ const CourseAssessment = (props:any) => {
         const submitAssessment = await Api.POST_StudentAnswers(studentAnswer);
 
         if (submitAssessment) {
-            const targetId = localStorage.getItem("targetId")!
+            
+    if (typeof localStorage !== 'undefined') {
+     
+        const targetId = localStorage.getItem("targetId")!;
+        setTargetId(targetId);
+    } else {
+  
+        console.log('localStorage is not available in this environment');
+    }
+  
+          
     const activity : IActivity = {
         UserId: user?.id,
         ActivityType: IActivityType.AssessmentEnd,

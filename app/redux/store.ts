@@ -12,7 +12,7 @@ import { quizSlice } from "./quizSlice";
 import { assessmentSlice } from "./assessmentSlice";
 import {documentSlice } from "./documentSice";
 import {watchedVideoSlice} from "./watcheVideosSlice";
-import {timeSlice} from "./timeSlice";
+
 
 
 const persistCourse = {
@@ -59,7 +59,7 @@ const persistedQuizReducer = persistReducer(persistQuiz, quizSlice.reducer);
 const persistedDocumentReducer = persistReducer(persistDocument, documentSlice.reducer);
 const persistedWatchedVideoReducer = persistReducer(persistWatchedVideo, watchedVideoSlice.reducer);
 const persistedAssessmentReducer = persistReducer(persistAssessment, assessmentSlice.reducer);
-const persistedUserTimeReducer = persistReducer(persistLoggedInUser, timeSlice.reducer );
+
 
 export const store = configureStore({
   reducer: {
@@ -68,7 +68,7 @@ export const store = configureStore({
     documents: persistedDocumentReducer,
     assessment : persistedAssessmentReducer,
     watchedVideos : persistedWatchedVideoReducer,
-    time : persistedUserTimeReducer
+
   },
   devTools: true,
   middleware: (getDefaultMiddleware) =>

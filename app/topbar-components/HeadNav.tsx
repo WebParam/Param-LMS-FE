@@ -1,8 +1,10 @@
+"use client"
 import { NextPage } from "next";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 import { IActivity, IActivityType } from "../interfaces/analytics";
 import { Api } from "../lib/restapi/endpoints";
+import { useEffect, useState } from "react";
 
 const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   setIsOpen,
@@ -11,6 +13,8 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const cookies = new Cookies();
   const loggedInUser = cookies.get("param-lms-user");
   const router = useRouter();
+  const [targetId, setTargetId] = useState<string>("")
+  const [loginTime, setLoginTime] = useState<string>("")
 
 
   
@@ -29,14 +33,15 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   seconds = seconds < 10 ? `0${seconds}` : seconds;
   
   const logoutTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-  const logInTime = localStorage.getItem("loginTime")!
-  const time1 :any = new Date(logInTime);
+
+  const time1 :any = new Date(loginTime);
 const time2 : any = new Date(logoutTime);
 const differenceInMilliseconds = Math.abs(time2 - time1);
 const differenceInSeconds = differenceInMilliseconds / 1000;
 
   const logout = async () => {
-    const targetId = localStorage.getItem("targetId")!;
+
+  
     const activity = {
         UserId: loggedInUser?.id,
         ActivityType: IActivityType.Logout,
@@ -69,6 +74,20 @@ const differenceInSeconds = differenceInMilliseconds / 1000;
         });
     }
 };
+
+useEffect(() => {
+
+  if (typeof localStorage !== 'undefined') {
+    const logInTime = localStorage.getItem("loginTime")!
+    setLoginTime(logInTime);
+    const targetId = localStorage.getItem("targetId")!;
+    setTargetId(targetId);
+} else {
+
+    console.log('localStorage is not available in this environment');
+}
+
+}, [])
 
 
 

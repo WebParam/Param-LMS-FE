@@ -1,7 +1,7 @@
 "use client"
 import React from "react";
 import { Routes, Route, MemoryRouter,  } from "react-router-dom";
-import Login from "./auth/login/page";
+import Login from "./auth/student/login/page";
 import RootLayout from "./auth/layout";
 import { ReduxProvider } from "./provider";
 

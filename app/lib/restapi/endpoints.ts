@@ -358,13 +358,22 @@ courseId :string , creatingUser:string
   return response;
 },
 
+
+GET_StudentSectionAnalytics: async (
+  courseId :string , creatingUser:string
+  ) => {
+  
+    const response = await GET(`${analyticsRead}/Analytics/GetStudentCourseProgress?courseId=${courseId}&studentId=${creatingUser}`);
+    return response;
+  },
+
 POST_Activity : async(payload:IActivity) : Promise<IResponseObject<IActivity>> => {
   const activity = await POST(`${activityWrite}/Activities/CreateActivity`, payload)
   return activity;
 }
 
 ,
-  
+
   POST_CourseProgress: async (payload:UpdateProgressRequestModel): Promise<any> => {
     try{
       const response = await POST(`${courseWriteUrl}/Enrollments/UpdateProgress`, payload);

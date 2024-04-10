@@ -27,16 +27,17 @@ import { IActivity, IActivityType } from '@/app/interfaces/analytics';
 export default function CourseDetail() {
   const cookies = new Cookies();
   const user = cookies.get("param-lms-user");
+  const _courseFromState = useSelector(getSelectedCourseForEdit).course;
   const [data, setData] = useState<ICourse>();
   const [sections, setSection] = useState<ISection[]>([])
   const [videos, setVideos] = useState<IVideo[]>([])
   const [author, setAuthor] = useState<IUser>();
+  const [sectionId, setSectionId] = useState<string>(_courseFromState.sections[0].id)
   const [comments, setComments] = useState<IComment[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [allVideos, setAllVideos] = useState<IVideo[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string>("");
   const [quizId, setQuizId] = useState<string>("")
-  const _courseFromState = useSelector(getSelectedCourseForEdit).course;
   const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
   const [videoId, setVideoId] = useState<string>(_courseFromState.sections[0]?.modules[0]?.videos[0]?.id)
   console.log("Quizzes from state",_quizzesFromState)
@@ -122,6 +123,13 @@ useEffect(() => {
   useEffect(() => {
     getEnrolledCourses();
     if (allVideos.length > 0) {
+      const foundSection = sections.find(section =>
+        section.modules.some(module =>
+            module.videos.some((v: IVideo) => v.id === allVideos[currentVideoIndex].id)
+        )
+    );
+
+    setSectionId(foundSection?.id!)
       setSelectedVideo(allVideos[currentVideoIndex].videoLink);
     }
   }, [allVideos, currentVideoIndex]);
@@ -129,7 +137,7 @@ useEffect(() => {
   const handleVideoEnd = async () => {
 
     const courseProgress = {
-      
+      sectionId:sectionId,
       enrollmentId : enrollment?.id,
       userId : enrollment?.userId,
       courseId: _courseFromState?.id,
@@ -218,6 +226,13 @@ debugger;
   }
 
   const handleVideoSelect = (video: IVideo) => {
+    const foundSection = sections.find(section =>
+      section.modules.some(module =>
+          module.videos.some((v: IVideo) => v.id === video.id)
+      )
+  );
+console.log("SectionId:" , foundSection?.id)
+  setSectionId(foundSection?.id!)
 
     const index = allVideos.findIndex((v: IVideo) => v.id === video.id);
     setSelectedVideo(_courseFromState.sections[0]?.modules[0]?.videos[index]?.videoLink);
