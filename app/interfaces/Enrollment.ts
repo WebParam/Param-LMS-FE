@@ -37,6 +37,8 @@ export interface UpdateProgressRequestModel
         userId : string
         courseId: string 
         videoId: string 
-        videoLength: string 
-        timeSpent: string 
+        videoLength: string
+        timeSpent: string
+        progress: number
+
 }

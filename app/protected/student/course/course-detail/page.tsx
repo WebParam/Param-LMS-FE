@@ -49,12 +49,17 @@ export default function CourseDetail() {
   const [expandedSection, setExpandedSection] = useState<any>(null);
   const [hideSidebar, setHideSidebar] = useState<boolean>(true)
   const [enrollment, setEnrollment] = useState<IEnrollment | any>()
-  const [loginTime] = useState(Date.now());
 const [seconds, setSeconds] = useState(0);
+
+const [loginTime, setLoginTime] = useState(Date.now());
+const [intervalId, setIntervalId] = useState<any>(null);
+
+const [numberOfVideos, setNumberOfVideos] = useState<number>(0)
+const [videoEnded, setVideoEnded] = useState<boolean>(false)
   
   const [duration, setDuration] = useState(0);
   const date = new Date();
-
+console.log("seconds", seconds)
 
 
   const dispatch = useDispatch();
@@ -65,6 +70,7 @@ const [seconds, setSeconds] = useState(0);
   const formatDurationToMinutes = (durationInSeconds:any) => {
     const minutes = Math.floor(durationInSeconds / 60);
     const seconds = Math.floor(durationInSeconds % 60);
+    
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
@@ -116,9 +122,10 @@ useEffect(() => {
     const timeDifference = Math.floor((currentTime - loginTime) / 1000); 
     setSeconds(timeDifference);
   }, 1000);
+  setIntervalId(interval);
 
   return () => clearInterval(interval);
-}, [loginTime])
+}, [loginTime]);
 
   useEffect(() => {
     getEnrolledCourses();
@@ -135,6 +142,10 @@ useEffect(() => {
   }, [allVideos, currentVideoIndex]);
 
   const handleVideoEnd = async () => {
+    setLoginTime(Date.now()); // Reset login time
+    setSeconds(0);
+    setVideoEnded(true)
+    clearInterval(intervalId); // Clear the interval
 
     const courseProgress = {
       sectionId:sectionId,
@@ -143,9 +154,11 @@ useEffect(() => {
       courseId: _courseFromState?.id,
       videoId: allVideos[currentVideoIndex].id,
       videoLength: duration.toString(),
-      timeSpent: seconds.toString()
-    }
+      timeSpent: seconds.toString(),
+      progress : numberOfVideos / 100
 
+    }
+ ///   debugger;
     const createProgress = await Api.POST_CourseProgress(courseProgress);
 debugger;
     const watchedVideo  = {
@@ -157,7 +170,7 @@ debugger;
    
     dispatch(createWatchedDetail(watchedVideo))
     setOpen(false);
- 
+    setSeconds(0)
     const quizFromStorage = localStorage.getItem("student-quizzes");
   
     if (quizFromStorage) {
@@ -186,7 +199,21 @@ debugger;
   };
   
   const state: ICourse = useSelector(getSelectedCourseForEdit).course;
+
+  function countVideosInCourse(course:ICourse) {
+    let videoCount = 0;
+    course?.sections.forEach((section:ISection) => {
+        section?.modules.forEach((Module:IModule) => {
+            videoCount += Module?.videos.length;
+        });
+    });
+    setNumberOfVideos(videoCount)
+}
+
   useEffect(() => {
+
+    countVideosInCourse(_courseFromState)
+
     setSection(state?.sections);
 
   
@@ -226,6 +253,11 @@ debugger;
   }
 
   const handleVideoSelect = (video: IVideo) => {
+    clearInterval(intervalId); // Clear the interval
+
+    setVideoEnded(true)
+    setLoginTime(Date.now()); // Reset login time
+    setSeconds(0);
     const foundSection = sections.find(section =>
       section.modules.some(module =>
           module.videos.some((v: IVideo) => v.id === video.id)
@@ -279,7 +311,7 @@ console.log("SectionId:" , foundSection?.id)
     const payload : IEnrollment= {
       userId: userData?.id,
       creatingUser: "66150254d1797476abf49106",
-      createdDate: date.getDate().toString(),
+      createdDate: course?.modifiedDate ,
       modifiedDate: course?.modifiedDate,
       modifyingUser: "66150254d1797476abf49106",
       state: 0,

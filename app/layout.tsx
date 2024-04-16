@@ -37,24 +37,32 @@ export default function RootLayout({
 
 // useEffect(() => {
 //   const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
-//     setIsNavigatingWithinApp(true)
-//     if (!isNavigatingWithinApp) {
-//       event.preventDefault();
-
-//       try {
-//         const targetId = localStorage.getItem("targetId") || '';
-//         const activity = {
-//           UserId: user?.id,
-//           ActivityType: IActivityType.Logout,
-//           Duration: 0,
-//           TargetId: targetId,
-//         };
-
-//         await Api.POST_Activity(activity);
-//       } catch (error) {
-//         console.error('Error sending data:', error);
-//       }
+//     event.preventDefault();
+//     const date = new Date();
+//     const user_session = localStorage.getItem("user-session") || null;
+    
+//     if (user_session) {
+//         const parseSession = JSON.parse(user_session);
+//         const sessionEnd = new Date(parseSession.sessionEnd);
+    
+//         if (date > sessionEnd) {
+//             // Session has ended, redirect user to the home page
+//             window.location.href = "/";
+//         } else {
+//             // Session is still active, update last active time and extend session
+//             const loginData = {
+//                 sessionStart: parseSession.sessionStart,
+//                 sessionEnd: new Date(date.getTime() + (2 * 60000)), // Adding 2 minutes for testing
+//                 lastActive: new Date().toISOString()
+//             };
+    
+//             localStorage.setItem("user-session", JSON.stringify(loginData));
+//         }
+//     } else {
+//         // Handle case when no user session is found
+//         console.log("User session not found.");
 //     }
+  
 //   };
 
 //   window.addEventListener('beforeunload', handleBeforeUnload);
@@ -62,11 +70,8 @@ export default function RootLayout({
 //   return () => {
 //     window.removeEventListener('beforeunload', handleBeforeUnload);
 //   };
-// }, [isNavigatingWithinApp]);
+// }, []);
 
-// const handleNavigationWithinApp = () => {
-//   setIsNavigatingWithinApp(true);
-// };
 
   return (
     <html lang="en" dir="ltr">

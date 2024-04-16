@@ -12,16 +12,12 @@ import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
 const cookies = new Cookies();
-
-
-
-const axios = require("axios").default;
-
-
 export default function Login() {
   const[disable , setDisable] = useState<boolean>(false)
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [targetId, setTargetId] = useState<string>("")
+  const dispatch = useDispatch();
 
   const onChangeEmail = (e:any) => {
     setEmail(e.target.value);
@@ -32,22 +28,28 @@ export default function Login() {
     setPassword(e.target.value);
   }
   const router = useRouter();
-
-  const navigateToRegister= () => {
-    
+  const navigateToRegister= () => { 
     router.push('/auth/register');
-  };
-
-;
-
-
+  }
+  const today = new Date();
+  const year = today.getFullYear();
+  let month: number | string = today.getMonth() + 1;
+  let day: number | string = today.getDate();
+  let hours: number | string = today.getHours();
+  let minutes: number | string = today.getMinutes();
+  let seconds: number | string = today.getSeconds();
+  month = month < 10 ? `0${month}` : month;
+  day = day < 10 ? `0${day}` : day;
+  hours = hours < 10 ? `0${hours}` : hours;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+  const todayDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 async function LoginUser (event:any){
   cookies.remove('param-lms-user')
- 
   setDisable(true)
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    let _id = toast.loading("Logging in..", {//loader
+    let _id = toast.loading("Logging in..", {
       position: "top-center",
       autoClose: 1000,
       hideProgressBar: false,
@@ -76,11 +78,8 @@ async function LoginUser (event:any){
     Email : email,
     Password : password,
     } as IUserLoginModel; 
-
-
-    
     const user = await  Api.POST_Login(payload);
-    console.log("data", user);
+    
     try {
       
     if(user?.data?.id){
@@ -91,29 +90,27 @@ async function LoginUser (event:any){
       });
 
      cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
- 
-     console.log(user.data);
+
+     if (typeof localStorage !== 'undefined') {
+      const targetId = uuidv4();
+      localStorage.setItem("targetId", targetId);
+      setTargetId(targetId);
+
+      const date = new Date();
+      const loginData = {
+        sessionStart : new Date().toISOString(),
+        sessionEnd : new Date(date.getTime() + 2 * 60000),
+        lastActitive: new Date().toISOString()
+      }
+
   
-     console.log("Role",user?.data?.role);
+      localStorage.setItem("user-session",     JSON.stringify(loginData))
+  } else {
 
-     const targetId = uuidv4();
-
-
-
-
-     const activity : IActivity = {
-      UserId: user?.data?.id,
-      ActivityType: IActivityType.Login,
-      Duration: 0,
-      TargetId: targetId,
-     }
-    const createActivity = await Api.POST_Activity(activity)
- 
+      console.log('localStorage is not available in this environment');
+  }
+    
    
-    //dispatch()
-
-
-
      router.push('/protected/student/course/all-courses')
    
     }else{
@@ -140,8 +137,6 @@ async function LoginUser (event:any){
       }, 3000);
       console.log(error);
     }
-
-
   event?.preventDefault();
   }
  

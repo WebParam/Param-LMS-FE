@@ -15,6 +15,7 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const router = useRouter();
   const [targetId, setTargetId] = useState<string>("")
   const [loginTime, setLoginTime] = useState<string>("")
+  const [user_session, setUser_session] = useState<any>(null)
 
 
   
@@ -41,16 +42,39 @@ const differenceInSeconds = differenceInMilliseconds / 1000;
 
   const logout = async () => {
 
+
+    if (typeof localStorage !== 'undefined') {
+   const targetId =  localStorage.getItem("targetId") || ""
+      setTargetId(targetId);
+
+     
+  
+      const user_session = localStorage.getItem("user-session") || null;
+
+      if(user_session){
+        const parseSession = JSON.parse(user_session)
+        setUser_session(parseSession)
+        console.log("User session", user_session)
+      }
+      
+  } else {
+
+      console.log('localStorage is not available in this environment');
+  }
+    
   
     const activity = {
         UserId: loggedInUser?.id,
+        from: user_session.sessionStart,
+        to : new Date().toISOString(),
         ActivityType: IActivityType.Logout,
-        Duration: differenceInSeconds,
+        Duration: 0,
         TargetId: targetId,
     };
 
     try {
         const response = await Api.POST_Activity(activity);
+        debugger;
         if (response.data?.id) {
           console.log("User LoggedIn",loggedInUser)
             if (loggedInUser?.role === "Admin") {

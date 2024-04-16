@@ -10,7 +10,7 @@ import { IMarks, IQuiz } from "@/app/interfaces/quiz";
 import { IAssessment } from "@/app/interfaces/assessment";
 import { IDocument } from "@/app/interfaces/document";
 import { IActivity } from "@/app/interfaces/analytics";
-import { ICourseProgress, UpdateProgressRequestModel } from "@/app/interfaces/Enrollment";
+import {  UpdateProgressRequestModel } from "@/app/interfaces/Enrollment";
 
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
@@ -42,11 +42,9 @@ export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
 
 export const assessmentWrite = "https://khumla-develop-assessment-write.azurewebsites.net/api"
 
-export const activityWrite = "https://khumla-develop-activity-write.azurewebsites.net/api"
+export const activityWrite = "https://khumla-dev-activity-write.azurewebsites.net/api"
 
 export const analyticsRead = "https://khumla-dev-aggregator.azurewebsites.net/api"
-
-
 
 
 
@@ -67,9 +65,9 @@ export const Api = {
 
   PUT_UpdateCourse: async (payload: ICourse): Promise<any> => {
     try {
-      debugger
+      
       const response = await PUT(`${courseWriteUrl}/Courses/updateCourse`, payload);
-      debugger
+      
       return response;
     } catch (error) {
       console.error("Error updating course:", error);
@@ -159,9 +157,9 @@ export const Api = {
 DELETE_CourseById: async (
     courseId: string
   ): Promise<any> => {
-    debugger;
+
     const response = await DELETE(`${courseWriteUrl}/Courses/${courseId}`);
-    debugger;
+    
     return response;
   },
 

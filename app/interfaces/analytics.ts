@@ -3,7 +3,8 @@ import { IUser } from "./user"
 export interface IActivity {
     id?: string
     UserId: string
- 
+    from?: string
+    to?: string
     ActivityType: IActivityType
     Duration: number
     TargetId: string
