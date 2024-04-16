@@ -7,10 +7,13 @@ function Layout({ children }: { children: React.ReactNode }) {
   const name = searchParams.get("name");
   const pathname = usePathname();
 
-  const title =
+  let title =
     pathname == "/protected/admin/course-dashboard"
       ? "Course Dashboard - Web Development"
       : `Web Development - ${name}`;
+
+  if (pathname == "/protected/admin/course-dashboard/graphs")
+    title = "Sanlam Dashboard Analytics - Web Development";
 
   return (
     <>
