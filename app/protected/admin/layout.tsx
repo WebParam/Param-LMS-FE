@@ -8,6 +8,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const sideTabs = [
     { name: 'Course Dashboard', url: '/protected/admin/course-dashboard', icon: 'dashboard' },
+    { name: 'Course Graphs', url: '/protected/admin/course-dashboard/graphs', icon: 'show_chart' },
     { name: 'Manage Courses', url: '/protected/admin/manage-courses', icon: 'assignment' },
     {
       name: 'Assessments', url: '#', icon: 'list', children: [
