@@ -8,6 +8,7 @@ export interface IEnrollment{
     courses:string[];
     courseProgress: ICourseProgress[] 
     state?:number
+    studentNumber?:string
 }
 
 

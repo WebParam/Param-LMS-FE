@@ -38,3 +38,11 @@ export interface IUserTimeState {
     pointsCollected: string
    }
  
+   export interface IStudentSectionAnalyticDetails{
+    section: string,
+    timeSpent:string,
+    completionRate:string ,
+    numberOfComments: string,
+    pointsCollected: string
+   }
+ 

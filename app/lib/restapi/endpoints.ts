@@ -12,7 +12,7 @@ import { IDocument } from "@/app/interfaces/document";
 import { IActivity } from "@/app/interfaces/analytics";
 import {  UpdateProgressRequestModel } from "@/app/interfaces/Enrollment";
 
-export const courseWriteUrl = "https://d1a4-154-0-14-142.ngrok-free.app/api";
+export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
 export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api";
 
@@ -44,9 +44,7 @@ export const assessmentWrite = "https://khumla-develop-assessment-write.azureweb
 
 export const activityWrite = "https://khumla-dev-activity-write.azurewebsites.net/api"
 
-export const analyticsRead = "https://khumla-development-aggregator.azurewebsites.net/api"
-
-
+export const analyticsRead = "https://45b7-154-0-14-142.ngrok-free.app/api"
 
 export const Api = {
   Base: courseWriteUrl,

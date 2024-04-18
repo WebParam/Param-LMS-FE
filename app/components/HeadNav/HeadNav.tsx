@@ -58,7 +58,7 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                 <span className="navbar-text-100">
                   {loggedInUser?.firstName} {loggedInUser?.lastName}
                 </span>
-                <small className="navbar-text-50">{loggedInUser?.rolez}</small>
+                <small className="navbar-text-50">{loggedInUser?.role}</small>
               </span>
             </a>
             <div className="dropdown-menu dropdown-menu-right">

@@ -1,31 +1,19 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
 import Table from "./Table";
-import { useEffect, useState } from "react";
-import { IStudentAnalyticDetails, IStudentSectionAnalyticDetails } from "@/app/interfaces/analytics";
-import { Api } from "@/app/lib/restapi/endpoints";
+import {useState } from "react";
+import list from "./data"
+import { IStudentAnalyticDetails } from "@/app/interfaces/analytics";
+
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [list, setList] = useState<IStudentSectionAnalyticDetails[]>()
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list?.slice(indexOfFirstItem, indexOfLastItem);
 
 
-
-
-  const getSectionData = async () => {
-    const getAnalytics = await Api.GET_StudentSectionAnalytics( "65e5d75f6944453739f276c3","2024139517");
-    const data = getAnalytics?.map((data:any) => data.data);
-    setList(data);
-    console.log("Data",data);
-  }
-
-  useEffect(() => {
-    getSectionData()
-  },[])
 
 
   return (
