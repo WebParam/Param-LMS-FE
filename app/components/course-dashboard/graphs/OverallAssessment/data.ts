@@ -1,10 +1,14 @@
 import { faker } from "@faker-js/faker";
 
-export const options = {
+
+export const options = {  
   responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
+  scales: {
+    x: {
+      stacked: true,
+    },
+    y: {
+      stacked: true,
     },
   },
 };
@@ -12,18 +16,26 @@ export const options = {
 const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export const barDescriptions = [
-  { description: "Assessment taken over time", color: "rgb(82 121 249)" },
+  { description: "Completed Assessment", color: "rgb(33, 138, 253)" },
+  { description: "Pending Assessment", color: "rgba(145, 21, 243, 0.3)" },
 ];
 
 export const data = {
   labels,
   datasets: [
     {
-      label: "No of Assessments",
-      data: labels.map(() => faker.number.int({ min: 0, max: 300 })),
-      backgroundColor: "rgb(82 121 249)",
-      barPercentage: 0.2,
+      label: 'Completed',
+      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+      backgroundColor: "rgb(33, 138, 253)",
+      barPercentage: 0.3,
       borderRadius: 10,
     },
+    {
+      label: 'Pending',
+      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+      backgroundColor: "rgba(145, 21, 243, 0.3)",
+      barPercentage: 0.3,
+      borderRadius: 10,
+    }
   ],
 };
