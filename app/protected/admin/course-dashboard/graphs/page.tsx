@@ -58,7 +58,7 @@ export default function Page() {
                 className="dashboard-area-tabs__tab card-body text-center active"
               >
                 <span className="font-weight-bold">{data.name}</span>
-                <i className="material-icons text-success icon-48pt text-20 ml-2">
+                <i className="material-icons text-success icon-48pt">
                   {data.icon}
                 </i>
                 <span className="h2 mb-0 mt-n1">{data.data}</span>
