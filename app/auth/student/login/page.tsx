@@ -29,7 +29,7 @@ export default function Login() {
   }
   const router = useRouter();
   const navigateToRegister= () => { 
-    router.push('/auth/register');
+    router.push('/auth/student/register');
   }
   const today = new Date();
   const year = today.getFullYear();

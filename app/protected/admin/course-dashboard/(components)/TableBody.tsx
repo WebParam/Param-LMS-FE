@@ -40,8 +40,8 @@ const TableBody:NextPage<{list: any[]}> = ({list}) => {
               </div>
             </td>
             <td className="text-center js-lists-values-projects small">
-              221077876
-              {/*{data.studentId}*/}
+              
+              {data.studentId}
             </td>
             <td className="text-center js-lists-values-projects small">
               {data.studentName}
@@ -54,7 +54,7 @@ const TableBody:NextPage<{list: any[]}> = ({list}) => {
                     style={{ width: `${data.completionRate}%` }}
                   ></div>
                 </div>
-                <div className="progress-bar-text">{data.completionRate}%</div>
+                <div className="progress-bar-text">{Number(data.completionRate).toFixed()}%</div>
               </div>
             </td>
             <td className="text-center js-lists-values-projects small">

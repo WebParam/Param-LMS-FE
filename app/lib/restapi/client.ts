@@ -41,8 +41,7 @@ let header: any;
     "ngrok-skip-browser-warning":"any"
   // };
 }
-const user_session = localStorage.getItem("user-session") || null;
-const parseSession = JSON.parse(user_session!)
+
    
 export async function GET(endPoint: string) {
   try {

@@ -1,5 +1,3 @@
-"use client";
-import Image from "next/image";
 import Cookies from "universal-cookie";
 import { ReduxProvider } from "../provider";
 import { usePathname } from "next/navigation";

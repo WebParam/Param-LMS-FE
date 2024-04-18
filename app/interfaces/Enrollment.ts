@@ -14,7 +14,7 @@ export interface IEnrollment{
 export interface ICourseProgress
 {
        courseId : string
-      studentId :string
+      studentId? :string
       progress : number 
      isCompleted : boolean
      watchedVideos : IVideoModel[]

@@ -1,6 +1,9 @@
+import { Api } from "@/app/lib/restapi/endpoints";
 import { NextPage } from "next";
+import { useEffect, useState } from "react";
 
-const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
+const TableBody: NextPage<{ list: any[] }> = () => {
+  const [list, setList] = useState<any>();
   const align = {
     section_title: "pl-48pt text-left",
     time_spent: "text-left",
@@ -8,6 +11,17 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
     no_of_comments: "text-center",
     points_collected: "text-center",
   };
+
+  const getSectionData = async () => {
+    const getAnalytics = await Api.GET_StudentSectionAnalytics( "65e5d75f6944453739f276c3","2024139517");
+    const data = getAnalytics?.map((data:any) => data.data);
+    setList(data);
+    console.log("Data",data);
+  }
+
+  useEffect(() => {
+    getSectionData()
+  },[])
 
   return (
     <>

@@ -50,7 +50,7 @@ export default function CourseDetail() {
   const [hideSidebar, setHideSidebar] = useState<boolean>(true)
   const [enrollment, setEnrollment] = useState<IEnrollment | any>()
 const [seconds, setSeconds] = useState(0);
-
+const userData = cookies.get("param-lms-user");
 const [loginTime, setLoginTime] = useState(Date.now());
 const [intervalId, setIntervalId] = useState<any>(null);
 
@@ -150,7 +150,7 @@ useEffect(() => {
     const courseProgress = {
       sectionId:sectionId,
       enrollmentId : enrollment?.id,
-      userId : enrollment?.userId,
+      userId : userData?.id,
       courseId: _courseFromState?.id,
       videoId: allVideos[currentVideoIndex].id,
       videoLength: duration.toString(),
@@ -307,19 +307,19 @@ console.log("SectionId:" , foundSection?.id)
     setIsLoading(true)
     const cookies = new Cookies();
 
-    const userData = cookies.get("param-lms-user");
+    
     const payload : IEnrollment= {
       userId: userData?.id,
-      creatingUser: "66150254d1797476abf49106",
-      createdDate: course?.modifiedDate ,
-      modifiedDate: course?.modifiedDate,
-      modifyingUser: "66150254d1797476abf49106",
+      creatingUser: "65d74882251362b65ed82c2c",
+      createdDate: new Date().toISOString() ,
+      modifiedDate: new Date().toISOString(),
+      modifyingUser: _courseFromState?.modifyingUser,
       state: 0,
       courses:[course?.id],
       courseProgress: [
         {
+          studentId:userData?.reference,
           courseId:_courseFromState.id,
-          studentId:  userData?.id,
           progress: 0,
           isCompleted: false,
           watchedVideos: []

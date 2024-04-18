@@ -12,7 +12,7 @@ import { IDocument } from "@/app/interfaces/document";
 import { IActivity } from "@/app/interfaces/analytics";
 import {  UpdateProgressRequestModel } from "@/app/interfaces/Enrollment";
 
-export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
+export const courseWriteUrl = "https://d1a4-154-0-14-142.ngrok-free.app/api";
 
 export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api";
 
@@ -44,7 +44,7 @@ export const assessmentWrite = "https://khumla-develop-assessment-write.azureweb
 
 export const activityWrite = "https://khumla-dev-activity-write.azurewebsites.net/api"
 
-export const analyticsRead = "https://khumla-dev-aggregator.azurewebsites.net/api"
+export const analyticsRead = "https://khumla-development-aggregator.azurewebsites.net/api"
 
 
 
@@ -358,12 +358,29 @@ courseId :string , creatingUser:string
 
 
 GET_StudentSectionAnalytics: async (
-  courseId :string , creatingUser:string
+  courseId :string , studentNumber:string
   ) => {
   
-    const response = await GET(`${analyticsRead}/Analytics/GetStudentCourseProgress?courseId=${courseId}&studentId=${creatingUser}`);
+    const response = await GET(`${analyticsRead}/Analytics/GetStudentCourseProgress?courseId=${courseId}&studentNumber=${studentNumber}`);
     return response;
   },
+
+  GET_StudentAssessmentAnalytics: async (
+    courseId :string , studentId:string
+    ) => {
+    
+      const response = await GET(`${analyticsRead}/Analytics/GetStudentAssessmentProgress?courseId=${courseId}&studentId=${studentId}`);
+      return response;
+    },
+    GET_StudentQuizAnalytics: async (
+      courseId :string , studentId:string
+      ) => {
+      
+        const response = await GET(`${analyticsRead}/Analytics/GetStudentQuizProgress?courseId=${courseId}&studentId=${studentId}`);
+        return response;
+      },
+
+
 
 POST_Activity : async(payload:IActivity) : Promise<IResponseObject<IActivity>> => {
   const activity = await POST(`${activityWrite}/Activities/CreateActivity`, payload)

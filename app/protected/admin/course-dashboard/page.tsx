@@ -15,15 +15,20 @@ const Body = () => {
   const currentItems = list?.slice(indexOfFirstItem, indexOfLastItem);
 
   const getData = async () => {
-    const getAnalytics = await Api.GET_StudentAnalytics( "65dfa6c48d42c66c74d3940c","admin");
+    const getAnalytics = await Api.GET_StudentAnalytics( "65e5d75f6944453739f276c3","65d74882251362b65ed82c2c");
     const data = getAnalytics?.map((data:any) => data.data);
     setList(data);
     console.log("Data",data);
   }
 
 
+
+
+
   useEffect(() => {
     getData();
+
+   
     },[])
 
   return (

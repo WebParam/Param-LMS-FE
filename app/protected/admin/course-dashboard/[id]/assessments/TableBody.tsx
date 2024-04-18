@@ -1,6 +1,10 @@
+import { Api } from "@/app/lib/restapi/endpoints";
 import { NextPage } from "next";
+import { useEffect, useState } from "react";
 
-const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
+const TableBody: NextPage<{ list: any[] }> = () => {
+  const [list, setList] = useState<any>();
+
   const PASSMARK = 50;
   const align = {
     assessment_name: "pl-64pt text-left",
@@ -8,6 +12,20 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
     result: "text-center",
     time_spent: "text-center",
   };
+
+
+  const getaAssessmentData = async () => {
+    const getAnalytics = await Api.GET_StudentAssessmentAnalytics( "65e5d75f6944453739f276c3","2024139517");
+    const data = getAnalytics?.map((data:any) => data.data);
+    setList(data);
+    console.log("Data",data);
+  }
+
+  useEffect(() => {
+    getaAssessmentData()
+  },[])
+
+
 
   return (
     <>

@@ -4,12 +4,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Api } from "@/app/lib/restapi/endpoints";
 import { IUserLoginModel } from "@/app/interfaces/user";
-import Cookies from "universal-cookie"; // Import the library
+import Cookies from "universal-cookie"; 
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 
 
-const cookies = new Cookies(); // Create an instance of Cookies
+const cookies = new Cookies(); 
 
 export default function Login() {
   const [disable, setDisable] = useState<boolean>(false);
@@ -28,7 +28,7 @@ export default function Login() {
   };
   const router = useRouter();
 
-  const navigateToRegister = () => {
+  const                                                                                                                           navigateToRegister = () => {
     router.push("/auth/admin/register");
   };
 
@@ -39,7 +39,7 @@ export default function Login() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     let _id = toast.loading("Logging in..", {
-      //loader
+      
       position: "top-center",
       autoClose: 1000,
       hideProgressBar: false,
