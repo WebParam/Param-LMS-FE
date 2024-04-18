@@ -30,7 +30,6 @@ export default function RootLayout({
         />
       </head>
       <body className="layout-app layout-sticky-subnav">
-    
         <ReduxProvider> {children} </ReduxProvider>
         <JsScripts />
       </body>
