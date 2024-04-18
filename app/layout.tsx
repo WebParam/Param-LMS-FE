@@ -30,7 +30,7 @@ export default function RootLayout({
         />
       </head>
       <body className="layout-app layout-sticky-subnav">
-        <GoogleAnalytics />
+      
         
         <ReduxProvider> {children} </ReduxProvider>
           <JsScripts />
