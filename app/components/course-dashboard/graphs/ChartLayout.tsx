@@ -3,10 +3,12 @@ export default function CommentChartWrapper({
   title,
   barDescriptions,
   children,
+  type
 }: {
   title: string;
   barDescriptions: barDescriptionType[];
-  children: React.ReactNode;
+    children: React.ReactNode;
+  type?: string
 }) {
   return (
     <div className="card card-group-row__card">
@@ -14,7 +16,7 @@ export default function CommentChartWrapper({
         <strong>{title}</strong>
       </div>
       <div className="card-body text-muted flex d-flex flex-column align-items-center justify-content-center">
-        <div className="chart w-100" style={{ height: "300px" }}>
+        <div className={type == "pie" ? "chart" : "chart w-100"} style={{ height: "300px" }}>
           <div className="chartjs-size-monitor">
             <div className="chartjs-size-monitor-expand">
               <div className=""></div>

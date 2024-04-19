@@ -33,7 +33,7 @@ export function AvgTimeSpent() {
       datasets: [
         {
           label: "Average Hours Spent",
-          data: labels.map(() => faker.number.int({ min: 0, max: 120 })),
+          data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
           fill: "start",
           pointRadius: 2,
           lineTension: 0.4,
