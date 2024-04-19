@@ -6,14 +6,13 @@ import { Api } from "@/app/lib/restapi/endpoints";
 import { IUserLoginModel } from "@/app/interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
-
 const cookies = new Cookies();
 
 export default function Login() {
   const [disable, setDisable] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  
+
   const onChangeEmail = (e: any) => {
     setEmail(e.target.value);
   };
@@ -34,7 +33,6 @@ export default function Login() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     let _id = toast.loading("Logging in..", {
-
       position: "top-center",
       autoClose: 1000,
       hideProgressBar: false,

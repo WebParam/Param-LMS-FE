@@ -1,24 +1,18 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Api } from "@/app/lib/restapi/endpoints";
-import { IUserLoginModel } from "@/app/interfaces/user";
-import Cookies from "universal-cookie"; // Import the library
+import { Api } from "../../../lib/restapi/endpoints";
+import { IUserLoginModel } from "../../../interfaces/user";
+import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-
-
-const cookies = new Cookies(); // Create an instance of Cookies
+const cookies = new Cookies();
 
 export default function Login() {
   const [disable, setDisable] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const dispatch = useDispatch();
-  
-  
-  
+
   const onChangeEmail = (e: any) => {
     setEmail(e.target.value);
   };
@@ -34,12 +28,9 @@ export default function Login() {
 
   async function LoginUser(event: any) {
     cookies.remove("param-lms-user");
-
     setDisable(true);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     let _id = toast.loading("Logging in..", {
-      //loader
       position: "top-center",
       autoClose: 1000,
       hideProgressBar: false,
@@ -75,17 +66,13 @@ export default function Login() {
             type: "success",
             isLoading: false,
           });
-        
-     
-  
-
           cookies.set("param-lms-user", JSON.stringify(user.data), {
             path: "/",
           });
 
-          router.push('/protected/student/course/all-courses')   
-             }
-           else {
+          router.push('/protected/student/course/all-courses')
+        }
+        else {
           const errorString = user?.data?.id
             ? "Not an Admin"
             : "Invalid login credentials";
