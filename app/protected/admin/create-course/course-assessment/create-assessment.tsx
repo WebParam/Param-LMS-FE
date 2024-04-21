@@ -30,7 +30,6 @@ interface CreateCourseAssessmentModal {
   onClose: () => any;
 }
 
-
 interface ReactQuillProps {
   style?: React.CSSProperties;
   value?: string;
@@ -95,6 +94,7 @@ export const CreateCourseAssessmentModal: React.FC<
   const [questionNumber, setQuestionNumber] = useState<number>(1);
   const [openChoices, setOpenChoices] = useState(false);
   const [choiceId, setChoiceId] = useState<string>("");
+  const [openModal, setOpenModal] = useState<boolean>(true);
 
   const [expandedSection, setExpandedSection] = useState();
 
@@ -111,9 +111,8 @@ export const CreateCourseAssessmentModal: React.FC<
     useState(false);
   const [enableUpdateChoice, setEnableUpdateChoice] = useState(false);
   const [viewCreatedQuestion, setViewCreatedQuestion] = useState(true);
-  const [isRetaken, setIsRetaken] = useState<string>("")
-  const [dueDate, setDueDate] = useState<string>("")
-
+  const [isRetaken, setIsRetaken] = useState<string>("");
+  const [dueDate, setDueDate] = useState<string>("");
 
   const [questionType, setQuestionType] = useState<string>("");
 
@@ -123,45 +122,41 @@ export const CreateCourseAssessmentModal: React.FC<
 
   console.log("Assessments from state", _assessmentFromState);
 
-
-  
   const handleAssessmentDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDueDate(e.target.value);
     const payload = {
-      courseId : _assessmentFromState.courseId, 
-      questions  :_assessmentFromState.questions,
-       createdByUserId  : _assessmentFromState.createdByUserId,
-      createdDate  : _assessmentFromState.createdDate,
-      modifiedByUserId  : _assessmentFromState.modifiedByUserId, 
-      modifiedAt  : _assessmentFromState.modifiedAt, 
-       dueDate  : dueDate,
-       courseTitle: _assessmentFromState.courseTitle,
-       instructorName:"John Doe",
-       instructorId:"656f1335650c740ce0ae4d65",
-       status : _assessmentFromState.status,
-       isRetaken : isRetaken === "Yes" ? true : false 
-
-    }
+      courseId: _assessmentFromState.courseId,
+      questions: _assessmentFromState.questions,
+      createdByUserId: _assessmentFromState.createdByUserId,
+      createdDate: _assessmentFromState.createdDate,
+      modifiedByUserId: _assessmentFromState.modifiedByUserId,
+      modifiedAt: _assessmentFromState.modifiedAt,
+      dueDate: dueDate,
+      courseTitle: _assessmentFromState.courseTitle,
+      instructorName: "John Doe",
+      instructorId: "656f1335650c740ce0ae4d65",
+      status: _assessmentFromState.status,
+      isRetaken: isRetaken === "Yes" ? true : false,
+    };
     dispatch(updateAssessment(payload));
   };
 
   const handleAssessmentRetaken = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setIsRetaken(e.target.value);
     const payload = {
-      courseId : _assessmentFromState.courseId, 
-      questions  :_assessmentFromState.questions,
-       createdByUserId  : _assessmentFromState.createdByUserId,
-      createdDate  : _assessmentFromState.createdDate,
-      modifiedByUserId  : _assessmentFromState.modifiedByUserId, 
-      modifiedAt  : _assessmentFromState.modifiedAt, 
-       dueDate  : _assessmentFromState.dueDate,
-       courseTitle: _assessmentFromState.courseTitle,
-       instructorName:"John Doe",
-       instructorId:"656f1335650c740ce0ae4d65",
-       status : _assessmentFromState.status,
-       isRetaken : isRetaken === "0" ? true : false 
-
-    }
+      courseId: _assessmentFromState.courseId,
+      questions: _assessmentFromState.questions,
+      createdByUserId: _assessmentFromState.createdByUserId,
+      createdDate: _assessmentFromState.createdDate,
+      modifiedByUserId: _assessmentFromState.modifiedByUserId,
+      modifiedAt: _assessmentFromState.modifiedAt,
+      dueDate: _assessmentFromState.dueDate,
+      courseTitle: _assessmentFromState.courseTitle,
+      instructorName: "John Doe",
+      instructorId: "656f1335650c740ce0ae4d65",
+      status: _assessmentFromState.status,
+      isRetaken: isRetaken === "0" ? true : false,
+    };
     dispatch(updateAssessment(payload));
   };
 
@@ -211,7 +206,6 @@ export const CreateCourseAssessmentModal: React.FC<
     setChoiceDescription(hasChoice[0].choiceDescription);
     setChoiceId(hasChoice[0].id);
   };
-
 
   const handleCreateQuestion = () => {
     setPointsError(false);
@@ -345,7 +339,6 @@ export const CreateCourseAssessmentModal: React.FC<
           progress: undefined,
           theme: "light",
         });
-  
 
         toast.update(_id, {
           render: "Please add choices first",
@@ -386,7 +379,9 @@ export const CreateCourseAssessmentModal: React.FC<
     }
   };
 
+  
   useEffect(() => {
+    
     const assessmentQuestions = _assessmentFromState?.questions.map(
       (questions) => questions
     );
@@ -437,8 +432,6 @@ export const CreateCourseAssessmentModal: React.FC<
       data-responsive-width="992px"
       data-domfactory-upgraded="mdk-drawer-layout"
     >
-          
-     
       <div
         className="mdk-drawer-layout__content page-content"
         style={{ transform: "translate3d(0px, 0px, 0px)" }}
@@ -461,7 +454,8 @@ export const CreateCourseAssessmentModal: React.FC<
 
         <div style={{ width: "100%" }} className="page-section border-bottom-2">
           <div className="container page__container">
-            <div className="row" style={{ width: "800px" }}>{/*width for modal content*/}
+            <div className="row" style={{ width: "800px" }}>
+              {/*width for modal content*/}
               {/*Quiz Content Starts Here*/}
               {!viewCreatedQuestion && (
                 <div
@@ -608,109 +602,89 @@ export const CreateCourseAssessmentModal: React.FC<
                         <div className="page-separator__text">New Question</div>
                       </div>
                       <div className="form-group">
-                          <label className="form-label">Question Type</label>
-                          <select
-                            onChange={(e) => setQuestionType(e.target.value)}
-                            value={questionType}
-                            id="custom-select"
-                            className="form-control custom-select"
-                          >
-                            <option>Select Type</option>
-                            <option value="0">Multiple choice</option>
-                            <option value="1">Short question</option>
-                          </select>
-                        </div>
+                        <label className="form-label">Question Type</label>
+                        <select
+                          onChange={(e) => setQuestionType(e.target.value)}
+                          value={questionType}
+                          id="custom-select"
+                          className="form-control custom-select"
+                        >
+                          <option>Select Type</option>
+                          <option value="0">Multiple choice</option>
+                          <option value="1">Short question</option>
+                        </select>
+                      </div>
 
                       <div className="card card-body">
-                        
-                      {(questionType === "0" || questionType === "1") && <>
-                      <div className="form-group">
-                          <label className="form-label">
-                            Question{" "}
-                            {questionError && (
-                              <span
-                                style={{
-                                  color: "tomato",
-                                  fontWeight: "600",
-                                  fontSize: "small",
-                                }}
+                        {(questionType === "0" || questionType === "1") && (
+                          <>
+                            <div className="form-group">
+                              <label className="form-label">
+                                Question{" "}
+                                {questionError && (
+                                  <span
+                                    style={{
+                                      color: "tomato",
+                                      fontWeight: "600",
+                                      fontSize: "small",
+                                    }}
+                                  >
+                                    *required field
+                                  </span>
+                                )}
+                              </label>
+
+                              <div
+                                style={{ height: "150px" }}
+                                className="mb-0"
+                                data-toggle="quill"
+                                data-quill-placeholder="Question"
                               >
-                                *required field
-                              </span>
-                            )}
-                          </label>
+                                <ReactQuillWrapper
+                                  readOnly={enableEditQuestion}
+                                  style={{ height: "100px" }}
+                                  value={questionDescription}
+                                  onChange={(value: string) => {
+                                    setQuestionDescription(value);
+                                  }}
+                                  placeholder="Enter your question description here..."
+                                />
+                              </div>
+                            </div>
 
-                          <div
-                            style={{ height: "150px" }}
-                            className="mb-0"
-                            data-toggle="quill"
-                            data-quill-placeholder="Question"
-                          >
-                            <ReactQuillWrapper
-                              readOnly={enableEditQuestion}
-                              style={{ height: "100px" }}
-                              value={questionDescription}
-                              onChange={(value: string) => {
-                                setQuestionDescription(value);
-                              }}
-                              placeholder="Enter your question description here..."
-                            />
-                          </div>
-                        </div>
-
-
-
-                        <div className="form-group">
-                          <label className="form-label">
-                            Completion Points
-                            {pointsError && (
-                              <span
+                            <div className="form-group">
+                              <label className="form-label">
+                                Completion Points
+                                {pointsError && (
+                                  <span
+                                    style={{
+                                      color: "tomato",
+                                      fontWeight: "600",
+                                      fontSize: "small",
+                                    }}
+                                  >
+                                    *invalid points
+                                  </span>
+                                )}
+                              </label>
+                              <input
                                 style={{
-                                  color: "tomato",
-                                  fontWeight: "600",
-                                  fontSize: "small",
+                                  border: `${
+                                    pointsError ? "2px solid tomato" : "none"
+                                  }`,
                                 }}
-                              >
-                                *invalid points
-                              </span>
-                            )}
-                          </label>
-                          <input
-                            style={{
-                              border: `${
-                                pointsError ? "2px solid tomato" : "none"
-                              }`,
-                            }}
-                            disabled={enableEditQuestion}
-                            onChange={(e: any) => setPoints(e.target.value)}
-                            type="text"
-                            className="form-control"
-                            value={points}
-                          />
-                        </div>
+                                disabled={enableEditQuestion}
+                                onChange={(e: any) => setPoints(e.target.value)}
+                                type="text"
+                                className="form-control"
+                                value={points}
+                              />
+                            </div>
 
-
-
-                        <div className="mb-3">
-                          {!isQuestionCreated && (
-                            <button
-                              onClick={handleCreateQuestion}
-                              style={{
-                                outline: "none",
-                                border: "none",
-                                backgroundColor: "transparent",
-                              }}
-                            >
-                              <a href="#" className="btn btn-outline-secondary">
-                                Add Question
-                              </a>
-                            </button>
-                          )}
-                          {isQuestionCreated && (
-                            <>
-                              {enableEditQuestion ? (
+                            <div className="mb-3">
+                              {!isQuestionCreated && (
                                 <button
-                                  onClick={() => setEnableEditQuestion(false)}
+                                  onClick={handleCreateQuestion}
                                   style={{
                                     outline: "none",
                                     border: "none",
@@ -721,34 +695,54 @@ export const CreateCourseAssessmentModal: React.FC<
                                     href="#"
                                     className="btn btn-outline-secondary"
                                   >
-                                    Edit Question
-                                  </a>
-                                </button>
-                              ) : (
-                                <button
-                                  onClick={updateQuizQuestion}
-                                  style={{
-                                    outline: "none",
-                                    border: "none",
-                                    backgroundColor: "transparent",
-                                  }}
-                                >
-                                  <a
-                                    href="#"
-                                    className="btn btn-outline-secondary"
-                                  >
-                                    save Question
+                                    Add Question
                                   </a>
                                 </button>
                               )}
-                            </>
-                          )}
-                        </div>
+                              {isQuestionCreated && (
+                                <>
+                                  {enableEditQuestion ? (
+                                    <button
+                                      onClick={() =>
+                                        setEnableEditQuestion(false)
+                                      }
+                                      style={{
+                                        outline: "none",
+                                        border: "none",
+                                        backgroundColor: "transparent",
+                                      }}
+                                    >
+                                      <a
+                                        href="#"
+                                        className="btn btn-outline-secondary"
+                                      >
+                                        Edit Question
+                                      </a>
+                                    </button>
+                                  ) : (
+                                    <button
+                                      onClick={updateQuizQuestion}
+                                      style={{
+                                        outline: "none",
+                                        border: "none",
+                                        backgroundColor: "transparent",
+                                      }}
+                                    >
+                                      <a
+                                        href="#"
+                                        className="btn btn-outline-secondary"
+                                      >
+                                        save Question
+                                      </a>
+                                    </button>
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          </>
+                        )}
 
-                      
-                      </>}
-                   
-                      {isQuestionCreated && questionType === "0" && (
+                        {isQuestionCreated && questionType === "0" && (
                           <>
                             <div className="form-group">
                               <label className="form-label">
@@ -903,12 +897,18 @@ export const CreateCourseAssessmentModal: React.FC<
 
                         <div className="form-group mt-3">
                           <label className="form-label">Select due date</label>
-                          <input value = {dueDate} onChange={handleAssessmentDate} type = "date" className="form-control" />
-                       
+                          <input
+                            value={dueDate}
+                            onChange={handleAssessmentDate}
+                            type="date"
+                            className="form-control"
+                          />
                         </div>
 
                         <div className="form-group">
-                          <label className="form-label">Allow Assessment to be retaken?</label>
+                          <label className="form-label">
+                            Allow Assessment to be retaken?
+                          </label>
                           <select
                             onChange={handleAssessmentRetaken}
                             value={isRetaken}
@@ -920,9 +920,6 @@ export const CreateCourseAssessmentModal: React.FC<
                             <option value="1">No</option>
                           </select>
                         </div>
-
-
-                      
                       </div>
                     </div>
                   </div>
@@ -1206,48 +1203,32 @@ export const CreateCourseAssessmentModal: React.FC<
                         )}
                       </div>
                     </div>
-                    
                   </div>
                 </>
               )}
 
-              <div className="card-header text-center"
-              
-              style={{
-                marginRight:"2em !important",
-              
-              }}
-            
+              <div
+                className="card-header text-center"
+                style={{
+                  marginRight: "2em !important",
+                }}
               >
-              <button
-              onClick={() => onClose()}
-
-                    style={{
-                      marginRight:"10px",
-                      backgroundColor: "transparent",
-                      border: "none",
-                      outline: "none",
-                      width: "149px",
-                    }}
-                  >
-                    <a
-                 
-                      
-                      className="btn btn-accent"
-                    >
-                      save assessment
-                    </a>
-                  </button>         
+                <button
+                  onClick={() => onClose()}
+                  style={{
+                    marginRight: "10px",
+                    backgroundColor: "transparent",
+                    border: "none",
+                    outline: "none",
+                    width: "149px",
+                  }}
+                >
+                  <a className="btn btn-accent">save assessment</a>
+                </button>
               </div>
-
-
-
             </div>
-           
           </div>
-       
         </div>
-    
       </div>
     </div>
   );

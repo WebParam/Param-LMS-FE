@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { NextPage } from "next";
+import { IStudentAnalyticDetails } from '@/app/interfaces/analytics';
 
 const TableBody:NextPage<{list: any[]}> = ({list}) => {
   return (
     <>
       <tbody className="list" id="staff">
-        {list && list.map((data: any, key) => (
-          <tr key={data.student_id} className="selected">
+        {list && list.map((data: IStudentAnalyticDetails, key) => (
+          <tr key={data.studentId} className="selected">
             <td className="pr-0">
               <div className="custom-control custom-checkbox">
                 <input
@@ -29,8 +30,8 @@ const TableBody:NextPage<{list: any[]}> = ({list}) => {
                   <i className="material-icons mr-8pt">delete</i>
                 </a>
                 <Link href={{
-                      pathname: `/protected/admin/course-dashboard/${data.student_id}/sections`,
-                      query: { id: data.student_id, name: data.student_name },
+                      pathname: `/protected/admin/course-dashboard/${data.studentId}/sections`,
+                      query: { id: data.studentId, name: data.studentName },
                     }} >
                   <i className="material-icons mr-8pt">visibility</i>
                 </Link> 
@@ -39,27 +40,28 @@ const TableBody:NextPage<{list: any[]}> = ({list}) => {
               </div>
             </td>
             <td className="text-center js-lists-values-projects small">
-              {data.student_id}
+              
+              {data.studentId}
             </td>
             <td className="text-center js-lists-values-projects small">
-              {data.student_name}
+              {data.studentName}
             </td>
             <td className="text-center js-lists-values-projects small">
               <div className="progress-container">
                 <div className="progress-bar">
                   <div
                     className="progress-bar-fill"
-                    style={{ width: `${data.completion_rate}%` }}
+                    style={{ width: `${data.completionRate}%` }}
                   ></div>
                 </div>
-                <div className="progress-bar-text">{data.completion_rate}%</div>
+                <div className="progress-bar-text">{Number(data.completionRate).toFixed()}%</div>
               </div>
             </td>
             <td className="text-center js-lists-values-projects small">
-              {data.time_spent}
+              {data.timeSpentOnCourse}
             </td>
             <td className="text-center js-lists-values-projects small">
-              {data.points_collected}
+              {data.pointsCollected}
             </td>
           </tr>
         ))}

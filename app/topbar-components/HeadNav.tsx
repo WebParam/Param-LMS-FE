@@ -1,6 +1,10 @@
+"use client"
 import { NextPage } from "next";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import { IActivity, IActivityType } from "../interfaces/analytics";
+import { Api } from "../lib/restapi/endpoints";
+import { useEffect, useState } from "react";
 
 const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   setIsOpen,
@@ -9,15 +13,109 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const cookies = new Cookies();
   const loggedInUser = cookies.get("param-lms-user");
   const router = useRouter();
+  const [targetId, setTargetId] = useState<string>("")
+  const [loginTime, setLoginTime] = useState<string>("")
+  const [user_session, setUser_session] = useState<any>(null)
 
-  const logout = () => {
-    cookies.remove("param-lms-user", {
-      path: "/",
-    });
 
-    if (loggedInUser?.role == "Admin") router.replace("/auth/admin/login");
-    else router.replace("/");
-  };
+  
+  const today = new Date();
+  const year = today.getFullYear();
+  let month: number | string = today.getMonth() + 1;
+  let day: number | string = today.getDate();
+  let hours: number | string = today.getHours();
+  let minutes: number | string = today.getMinutes();
+  let seconds: number | string = today.getSeconds();
+  
+  month = month < 10 ? `0${month}` : month;
+  day = day < 10 ? `0${day}` : day;
+  hours = hours < 10 ? `0${hours}` : hours;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+  
+  const logoutTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+
+  const time1 :any = new Date(loginTime);
+const time2 : any = new Date(logoutTime);
+const differenceInMilliseconds = Math.abs(time2 - time1);
+const differenceInSeconds = differenceInMilliseconds / 1000;
+
+  const logout = async () => {
+
+
+    if (typeof localStorage !== 'undefined') {
+   const targetId =  localStorage.getItem("targetId") || ""
+      setTargetId(targetId);
+
+     
+  
+      const user_session = localStorage.getItem("user-session") || null;
+
+      if(user_session){
+        const parseSession = JSON.parse(user_session)
+        setUser_session(parseSession)
+        console.log("User session", user_session)
+      }
+      
+  } else {
+
+      console.log('localStorage is not available in this environment');
+  }
+    
+  
+    const activity = {
+        UserId: loggedInUser?.id,
+        from: user_session.sessionStart,
+        to : new Date().toISOString(),
+        ActivityType: IActivityType.Logout,
+        Duration: 0,
+        TargetId: targetId,
+    };
+
+    try {
+        const response = await Api.POST_Activity(activity);
+        debugger;
+        if (response.data?.id) {
+          console.log("User LoggedIn",loggedInUser)
+            if (loggedInUser?.role === "Admin") {
+                router.push("/auth/admin/login");
+            } else {
+                router.push("/");
+            }
+            cookies.remove("param-lms-user", {
+                path: "/",
+            });
+        }
+    } catch (error) {
+        console.error("Error logging out:", error);
+        if (loggedInUser?.role === "Admin") {
+            router.push("/auth/admin/login");
+        } else {
+            router.push("/");
+        }
+        cookies.remove("param-lms-user", {
+            path: "/",
+        });
+    }
+};
+
+useEffect(() => {
+
+  if (typeof localStorage !== 'undefined') {
+    const logInTime = localStorage.getItem("loginTime")!
+    setLoginTime(logInTime);
+    const targetId = localStorage.getItem("targetId")!;
+    setTargetId(targetId);
+} else {
+
+    console.log('localStorage is not available in this environment');
+}
+
+}, [])
+
+
+
+
 
   return (
     <>

@@ -8,7 +8,6 @@ import "./css/app.css";
 import "./css/dark-mode.css";
 import "./globals.css";
 import JsScripts from "@/app/template-components/JsScripts";
-import GoogleAnalytics from "@/app/components/GoogleAnalytics";
 import type { Metadata } from "next";
 import { ReduxProvider } from "./provider";
 
@@ -31,9 +30,10 @@ export default function RootLayout({
         />
       </head>
       <body className="layout-app layout-sticky-subnav">
-        <GoogleAnalytics />
+      
+        
         <ReduxProvider> {children} </ReduxProvider>
-        <JsScripts />
+          <JsScripts />
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 const Body = () => {
   return (
-    <>
+    <div>
       <div className="page-section bg-alt border-bottom-2">
         <div className="container page__container">
           <div className="row">
@@ -159,7 +159,7 @@ const Body = () => {
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

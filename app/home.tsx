@@ -10,9 +10,6 @@ import './css/preloader.css'
 import './css/dark-mode.css'
 export default function Home() {
   return (
-
-
-
     <div
     className="mdk-drawer-layout js-mdk-drawer-layout"
     data-push=""

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 import { AppStore } from "./store";
 import { ICourse, ICourseState, IModule, ISection, IUpdateCourse, IUpdateCourseDetailState, IUpdateModuleDetailState, IUpdateSectionDetailState, IVideo } from "../interfaces/courses";
 import { useState } from "react";
@@ -24,12 +23,12 @@ const initialState: ICourseState = {
         sections: [] as ISection[],
         createdDate: "04/09/2015",
         creatingUser: "",
+        modifyingUser: loogedInUser?.id,
         state: 0,
         logo:"",
         instructor:"John Smith",
         courseImage: "course_image.jpg",
         bannerImage: "banner_image.jpg",
-        modifyingUser: loogedInUser,
         creatingUserName:"Kwanele"
 
     } as ICourse
@@ -77,7 +76,7 @@ export const courseSlice = createSlice({
               logo: _action.logo,
               courseImage: _action.courseImage,
               bannerImage: _action.bannerImage,
-              modifyingUser: _action.modifyingUser
+              modifyingUser: loogedInUser?.id,
             } as ICourse;
             state.course = newState;
           

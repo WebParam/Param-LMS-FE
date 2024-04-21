@@ -4,7 +4,7 @@ import Body from "./Body";
 const page = () => {
   return (
     <>
-      <Body />
+    <Body/>
     </>
   );
 };

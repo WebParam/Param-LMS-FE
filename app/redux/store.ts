@@ -13,6 +13,8 @@ import { assessmentSlice } from "./assessmentSlice";
 import {documentSlice } from "./documentSice";
 import {watchedVideoSlice} from "./watcheVideosSlice";
 
+
+
 const persistCourse = {
   key: 'course',
   storage: storage, 
@@ -44,11 +46,20 @@ const persistWatchedVideo = {
   whitelist: ['videos'],  
 };
 
+
+const persistLoggedInUser = {
+  key: 'time',
+  storage: storage, 
+  whitelist: ['time'],  
+};
+
+
 const persistedCourseReducer = persistReducer(persistCourse, courseSlice.reducer);
 const persistedQuizReducer = persistReducer(persistQuiz, quizSlice.reducer);
 const persistedDocumentReducer = persistReducer(persistDocument, documentSlice.reducer);
 const persistedWatchedVideoReducer = persistReducer(persistWatchedVideo, watchedVideoSlice.reducer);
 const persistedAssessmentReducer = persistReducer(persistAssessment, assessmentSlice.reducer);
+
 
 export const store = configureStore({
   reducer: {
@@ -56,7 +67,8 @@ export const store = configureStore({
     quizzes: persistedQuizReducer,
     documents: persistedDocumentReducer,
     assessment : persistedAssessmentReducer,
-    watchedVideos : persistedWatchedVideoReducer
+    watchedVideos : persistedWatchedVideoReducer,
+
   },
   devTools: true,
   middleware: (getDefaultMiddleware) =>

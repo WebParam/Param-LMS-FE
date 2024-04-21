@@ -9,6 +9,8 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { getSelectedCourseForEdit } from "@/app/redux/courseSlice";
 import Cookies from "universal-cookie";
+import { IActivity, IActivityType } from "@/app/interfaces/analytics";
+
 
 export default function QuizData() {
 
@@ -28,10 +30,20 @@ export default function QuizData() {
   const [viewResults, setViewResults] = useState<boolean>(false)
   const _courseFromState = useSelector(getSelectedCourseForEdit).course;
   const [marks, setMarks] = useState<IMarks[]>([]);
-  const [hasTakenQuiz, setHasTakenQuiz] = useState<boolean>(false);
   console.log("course from state", _courseFromState);
 
-  
+  const [loginTime] = useState(Date.now());
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentTime = Date.now();
+      const timeDifference = Math.floor((currentTime - loginTime) / 1000); 
+      setSeconds(timeDifference);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [loginTime])
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -119,6 +131,7 @@ export default function QuizData() {
     getAllQuizzes()
  
   }, []);
+  
   const nextQuestion = () => {
     if (selectedOptions[questionNumber] !== null) {
       if (questionNumber + 1 < questionsLength) {
@@ -163,8 +176,16 @@ export default function QuizData() {
 
   const saveMarks = async () => {
 
+    const targetId = localStorage.getItem("targetId")!
+    const activity : IActivity = {
+        UserId: loogedInUser?.id,
+        ActivityType: IActivityType.QuizEnd,
+        Duration: seconds,
+        TargetId: targetId,
+       }
+
     const payload:IMarks = {
-      studentId: "65dc3a8c3d7d82d33ed4ebb4",
+      studentId: loogedInUser?.id,
       points: score,
       courseId: _courseFromState.id,
       quizId: quiz?.id!,
@@ -175,19 +196,30 @@ export default function QuizData() {
 
       try {
 
-        const studentMarksForQuiz = marks.filter((mark:IMarks) => mark.studentId === "65dc3a8c3d7d82d33ed4ebb4" && mark.quizId === quiz?.id);
+        const studentMarksForQuiz = marks.filter((mark:IMarks) => mark.studentId === loogedInUser?.id && mark.quizId === quiz?.id);
         if (studentMarksForQuiz.length > 0) {
           const updatedMarks = await Api.PUT_UpdateMarks(payload);
           console.log("Updateds Marks",updatedMarks);
+        if(updatedMarks.data?.studentId){
+          const createActivity = await Api.POST_Activity(activity);
+          if(createActivity.data?.UserId){
+            router.push("/protected/student/course/course-detail");
+          }
+        }
         }else{
           const newMarks = await Api.POST_Marks(payload);
-
+          if(newMarks.data?.studentId){
+            const createActivity = await Api.POST_Activity(activity);
+            if(createActivity.data?.UserId){
+              router.push("/protected/student/course/course-detail");
+            }
+          }
         }
 
      
       
         debugger;
-      //  router.push("/protected/student/course/course-detail");
+      
 
       } catch (error) {
         console.error(error);
@@ -281,10 +313,6 @@ useEffect(() => {
           </p>
 </>
 }
-     
-
-     
-          
         </div>
       </div>
 

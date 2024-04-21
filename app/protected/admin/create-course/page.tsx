@@ -39,14 +39,20 @@ import "react-quill/dist/quill.snow.css";
 import { IQuiz } from "@/app/interfaces/quiz";
 import { getSelectedQuizForEdit, resetQuizState } from "@/app/redux/quizSlice";
 import { IDocument } from "@/app/interfaces/document";
-import { getSelectedDocumentForEdit, resetDocumentState } from "@/app/redux/documentSice";
-import { CreateCourseAssessmentModal } from "./create-assessment";
+import {
+  getSelectedDocumentForEdit,
+  resetDocumentState,
+} from "@/app/redux/documentSice";
+import { CreateCourseAssessmentModal } from "./course-assessment/create-assessment";
 import { IAssessment } from "@/app/interfaces/assessment";
 import {
   createAssessmentDetail,
   getSelectedAssessmentForEdit,
   resetAssessmentState,
 } from "@/app/redux/assessmentSlice";
+import ConfirmationModal from "@leafygreen-ui/confirmation-modal";
+import ConfirmAssessmenModal from "./course-assessment/ConfirmAssessmenModal";
+import ConfirmAssessmentModal from "./course-assessment/ConfirmAssessmenModal";
 
 // Define interface for ReactQuill props
 interface ReactQuillProps {
@@ -99,6 +105,7 @@ function EditCourse() {
     useState<boolean>(false);
   const [createAssessmentModalOpen, setCreateAssessmentModuleModalOpen] =
     useState<boolean>(false);
+  const [saveAssessment, setSaveAssessment] = useState<boolean>(true);
   const [competency, setCompetency] = useState<string>("");
   const [sectionTitle, setSectionTitle] = useState<string>("");
   const [disableSectionInput, setDisableSectionInput] =
@@ -121,23 +128,23 @@ function EditCourse() {
   const [moduleId, setModuleId] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
   const [instructorName, setInstructorName] = useState<string>("");
-  const [video, setVideo] = useState<IVideo | null>(null)
-  
-
+  const [video, setVideo] = useState<IVideo | null>(null);
+  const [openConfirmModal, setOpenConfirmModal] = useState<boolean>(false);
 
   const [videoId, setVideoId] = useState<string>("");
-  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit).documents;
+  const _documentsFromState: IDocument[] = useSelector(
+    getSelectedDocumentForEdit
+  ).documents;
   const _assessmentFromState: IAssessment = useSelector(
     getSelectedAssessmentForEdit
   ).assessment;
   console.log("Course", _courseFromState);
   console.log("Assessment", _assessmentFromState);
-console.log("Documents", _documentsFromState);
+  console.log("Documents", _documentsFromState);
 
   console.log("Quizzes from state", _quizzesFromState);
 
   let cookies = new Cookies();
-
 
   const userData = cookies.get("param-lms-user");
   console.log("userDataID:", userData?.id);
@@ -153,28 +160,29 @@ console.log("Documents", _documentsFromState);
     ],
   };
 
-
   const payload = {
     creatingUser: userData?.id,
     title: courseTitle ?? _courseFromState.title,
     description: courseDescription,
   };
 
-
   function saveAndCloseEditModal() {
     setEditModalOpen(false);
     clearSectionContent();
-
- 
   }
 
   function saveAndCloseEditModuleModal() {
     setEditModuleModalOpen(false);
   }
 
+  function SaveAssessment() {
+    localStorage.removeItem("persist:assessment");
+    dispatch(resetAssessmentState());
+    setSaveAssessment(false);
+  }
 
   function saveAndCloseCreateAssessmentModuleModal() {
-    setCreateAssessmentModuleModalOpen(false)
+    setOpenConfirmModal(true);
   }
 
   const updateCourseSection = function () {
@@ -235,15 +243,14 @@ console.log("Documents", _documentsFromState);
   };
 
   const clearReduxState = () => {
-    localStorage.removeItem('persist:assessment');
-    localStorage.removeItem('persist:course');
-    localStorage.removeItem('persist:documents');
-    localStorage.removeItem('persist:quizzes');
+    localStorage.removeItem("persist:assessment");
+    localStorage.removeItem("persist:course");
+    localStorage.removeItem("persist:documents");
+    localStorage.removeItem("persist:quizzes");
     resetAssessmentState();
     resetCourseState();
     resetDocumentState();
-    resetQuizState()
-    
+    resetQuizState();
   };
 
   async function createCourse() {
@@ -300,7 +307,7 @@ console.log("Documents", _documentsFromState);
           instructorId: "656f1335650c740ce0ae4d65",
           status: _assessmentFromState.status,
           isRetaken: _assessmentFromState.isRetaken,
-          attempts :  _assessmentFromState.attempts,
+          attempts: _assessmentFromState.attempts,
         };
 
         const postAssessment = await Api.POST_AddAssessments(assessment);
@@ -349,10 +356,10 @@ console.log("Documents", _documentsFromState);
           isLoading: false,
         });
 
-        setTimeout(() => {        
+        setTimeout(() => {
           toast.dismiss(_id);
           setDisableCreateCourseBtn(false);
-          clearReduxState()
+          clearReduxState();
         }, 2000);
       } else {
         toast.update(_id, {
@@ -419,7 +426,6 @@ console.log("Documents", _documentsFromState);
     clearSectionContent();
     dispatch(deleteSection(sectionId));
     setDisableSectionInput(false);
-
   };
 
   const createAssessment = () => {
@@ -453,6 +459,26 @@ console.log("Documents", _documentsFromState);
     },
   };
 
+  const ConfirmCustomModalStyles = {
+    modal: {
+      maxWidth: "40%",
+      width: "100%",
+      height: "200px",
+      borderRadius: "10px",
+      marginTop: "20px",
+      marginLeft: "50px",
+    },
+  };
+
+  const handleConfirm = () => {
+    setOpenConfirmModal(false);
+    setCreateAssessmentModuleModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setOpenConfirmModal(false);
+  };
+
   return (
     <div
       id="test"
@@ -464,9 +490,6 @@ console.log("Documents", _documentsFromState);
       <ToastContainer />
 
       <div>
-
-  
-
         <Modal
           styles={customModalStyles}
           open={editModuleModalOpen}
@@ -490,8 +513,8 @@ console.log("Documents", _documentsFromState);
 
         <Modal
           styles={customModalStyles}
-          open={createAssessmentModalOpen}
-          onClose={saveAndCloseCreateAssessmentModuleModal}
+          open={saveAssessment ? createAssessmentModalOpen : false}
+          onClose={SaveAssessment}
           center
         >
           <CreateCourseAssessmentModal
@@ -501,11 +524,24 @@ console.log("Documents", _documentsFromState);
         </Modal>
 
         <Modal
+          styles={ConfirmCustomModalStyles}
+          open={openConfirmModal}
+          onClose={saveAndCloseCreateAssessmentModuleModal}
+          center
+        >
+          <ConfirmAssessmentModal
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+            onClose={() => {}}
+          />
+
+          {/* <EditCourseModal /> */}
+        </Modal>
+
+        <Modal
           styles={customModalStyles}
           open={editModalOpen}
-          onClose={() => 
-            
-            setEditModalOpen(false)}
+          onClose={() => setEditModalOpen(false)}
           center
         >
           <CreateCourseModal
@@ -593,164 +629,159 @@ console.log("Documents", _documentsFromState);
                   className="page-separator"
                 >
                   <div className="page-separator__text">Sections</div>
-                
                 </div>
-                {
-                  !newSection ? <Pagination
-                  expandedSection={expandedSection}
-                  handleSectionClick={handleSectionClick}
-                  selectSection={selectSection}
-                  handleDeleteSection={handleDeleteSection}
-                  setModuleId={setModuleId}
-                  setEditModuleModalOpen={setEditModuleModalOpen}
-                  setSectionId={setSectionId}
-                  setVideoId={setVideoId}
-                  handleDeleteVideo={handleDeleteVideo}
-                  setVideo = {setVideo}
-                  sections={selectedCourse.sections}
-                  itemsPerPage={9}
-                /> :   <div
-                className="accordion js-accordion accordion--boxed mb-24pt"
-                id="parent"
-                data-domfactory-upgraded="accordion"
-              >
-                <div className="accordion__item open">
-                  <a
-                    className="accordion__toggle"
-                    data-toggle="collapse"
-                    data-target="#course-toc-2"
-                    data-parent="#parent"
+                {!newSection ? (
+                  <Pagination
+                    expandedSection={expandedSection}
+                    handleSectionClick={handleSectionClick}
+                    selectSection={selectSection}
+                    handleDeleteSection={handleDeleteSection}
+                    setModuleId={setModuleId}
+                    setEditModuleModalOpen={setEditModuleModalOpen}
+                    setSectionId={setSectionId}
+                    setVideoId={setVideoId}
+                    handleDeleteVideo={handleDeleteVideo}
+                    setVideo={setVideo}
+                    sections={selectedCourse.sections}
+                    itemsPerPage={9}
+                  />
+                ) : (
+                  <div
+                    className="accordion js-accordion accordion--boxed mb-24pt"
+                    id="parent"
+                    data-domfactory-upgraded="accordion"
                   >
-                    <span className="flex">
-                      {disableSectionInput
-                        ? sectionTitle
-                        : "Create new section"}
-                    </span>
-                    {/* <span className="accordion__toggle-icon material-icons">
+                    <div className="accordion__item open">
+                      <a
+                        className="accordion__toggle"
+                        data-toggle="collapse"
+                        data-target="#course-toc-2"
+                        data-parent="#parent"
+                      >
+                        <span className="flex">
+                          {disableSectionInput
+                            ? sectionTitle
+                            : "Create new section"}
+                        </span>
+                        {/* <span className="accordion__toggle-icon material-icons">
                   keyboard_arrow_down
                 </span> */}
-                  </a>
-                  <div
-                    className="accordion__menu collapse show"
-                    id="course-toc-2"
-                  >
-                    <div className="accordion__menu-link"></div>
-  
-                    <div className="accordion__menu-link active">
+                      </a>
                       <div
-                        className="form-group"
-                        style={{ width: "70%", marginRight: "2%" }}
+                        className="accordion__menu collapse show"
+                        id="course-toc-2"
                       >
-                        <label className="form-label">Section Title</label>
-                        <input
-                          disabled={disableSectionInput}
-                          onChange={(e) => setSectionTitle(e.target.value)}
-                          value={sectionTitle}
-                          type="text"
-                          className="form-control"
-                          placeholder="Section title"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="form-label">Competency</label>
-                        <select
-                          disabled={disableSectionInput}
-                          onChange={(e) => setCompetency(e.target.value)}
-                          value={competency}
-                          id="custom-select"
-                          className="form-control custom-select"
-                        >
-                          <option value="JavaScript">JavaScript</option>
-                          <option value="Angular">Angular</option>
-                          <option value="Python">Python</option>
-                        </select>
-                      </div>
-                    </div>
-                    {/* ... */}
-  
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                        padding: "5px 15px",
-                      }}
-                    >
-                      {changeBtn ? (
-                        <>
-                          {updateSection ? (
-                            <a
-                              onClick={() => {
-                                setDisableSectionInput(false);
-                                setUpdateSection(false);
-                              }}
-                              className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                            >
-                              edit section
-                            </a>
-                          ) : (
-                            <a
-                              onClick={() => {
-                                updateCourseSection();
-                                setDisableSectionInput(true);
-                                setUpdateSection(true);
-                              }}
-                              className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                            >
-                              update section
-                            </a>
-                          )}
-                        </>
-                      ) : (
-                        <button
-                          style={{
-                            border: "none",
-                            outline: "none",
-                            backgroundColor: "white",
-                          }}
-                        >
-                          <a
-                            onClick={createSection}
-                            className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                        <div className="accordion__menu-link"></div>
+
+                        <div className="accordion__menu-link active">
+                          <div
+                            className="form-group"
+                            style={{ width: "70%", marginRight: "2%" }}
                           >
-                            save section
-                          </a>
-                        </button>
-                      )}
-                    </div>
-                    {changeBtn && (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          padding: "5%",
-                        }}
-                      >
-                        <label className="form-label">Videos</label>
-                        <FaPlus
-                          onClick={() => {
-                            setEditModalOpen(true);
-                            updateCourseSection();
-                            setDisableCreateCourseBtn(false);
-                            clearSectionContent();
-                            createModule();
+                            <label className="form-label">Section Title</label>
+                            <input
+                              disabled={disableSectionInput}
+                              onChange={(e) => setSectionTitle(e.target.value)}
+                              value={sectionTitle}
+                              type="text"
+                              className="form-control"
+                              placeholder="Section title"
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label">Competency</label>
+                            <select
+                              disabled={disableSectionInput}
+                              onChange={(e) => setCompetency(e.target.value)}
+                              value={competency}
+                              id="custom-select"
+                              className="form-control custom-select"
+                            >
+                              <option value="JavaScript">JavaScript</option>
+                              <option value="Angular">Angular</option>
+                              <option value="Python">Python</option>
+                            </select>
+                          </div>
+                        </div>
+                        {/* ... */}
+
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            alignItems: "center",
+                            padding: "5px 15px",
                           }}
-                          style={{ cursor: "pointer" }}
-                        />
+                        >
+                          {changeBtn ? (
+                            <>
+                              {updateSection ? (
+                                <a
+                                  onClick={() => {
+                                    setDisableSectionInput(false);
+                                    setUpdateSection(false);
+                                  }}
+                                  className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                                >
+                                  edit section
+                                </a>
+                              ) : (
+                                <a
+                                  onClick={() => {
+                                    updateCourseSection();
+                                    setDisableSectionInput(true);
+                                    setUpdateSection(true);
+                                  }}
+                                  className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                                >
+                                  update section
+                                </a>
+                              )}
+                            </>
+                          ) : (
+                            <button
+                              style={{
+                                border: "none",
+                                outline: "none",
+                                backgroundColor: "white",
+                              }}
+                            >
+                              <a
+                                onClick={createSection}
+                                className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                              >
+                                save section
+                              </a>
+                            </button>
+                          )}
+                        </div>
+                        {changeBtn && (
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              padding: "5%",
+                            }}
+                          >
+                            <label className="form-label">Videos</label>
+                            <FaPlus
+                              onClick={() => {
+                                setEditModalOpen(true);
+                                updateCourseSection();
+                                setDisableCreateCourseBtn(false);
+                                clearSectionContent();
+                                createModule();
+                              }}
+                              style={{ cursor: "pointer" }}
+                            />
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
-                </div>
-              </div>
-                }
-               
-                
-          
-
-
-                
+                )}
               </div>
 
               <div className="col-md-4">
@@ -858,25 +889,24 @@ console.log("Documents", _documentsFromState);
                 <div className="card">
                   <div className="card-header text-center">
                     <button
-                         onClick={() => {
-                          clearSectionContent();
-                          setNewSection(!newSection);
- 
-                         }}
+                      onClick={() => {
+                        clearSectionContent();
+                        setNewSection(!newSection);
+                      }}
                       style={{
                         backgroundColor: "transparent",
                         border: "none",
                         outline: "none",
                       }}
                     >
-                      <a  className="btn btn-accent">
-                       {!newSection ? " Create Section" : "All Sections"}
+                      <a className="btn btn-accent">
+                        {!newSection ? " Create Section" : "All Sections"}
                       </a>
                     </button>
                   </div>
                   <div className="list-group list-group-flush">
                     <div className="list-group-item d-flex">
-                      <a className="flex" >
+                      <a className="flex">
                         <strong>Save Draft</strong>
                       </a>
                       <i className="material-icons text-muted">check</i>
@@ -891,6 +921,7 @@ console.log("Documents", _documentsFromState);
                   <div className="card-header text-center">
                     <button
                       onClick={() => {
+                        setSaveAssessment(true);
                         setCreateAssessmentModuleModalOpen(true);
                         createAssessment();
                       }}
@@ -900,14 +931,12 @@ console.log("Documents", _documentsFromState);
                         outline: "none",
                       }}
                     >
-                      <a  className="btn btn-accent">
-                        Create Assessment
-                      </a>
+                      <a className="btn btn-accent">Create Assessment</a>
                     </button>
                   </div>
                   <div className="list-group list-group-flush">
                     <div className="list-group-item d-flex">
-                      <a className="flex" >
+                      <a className="flex">
                         <strong>Save Draft</strong>
                       </a>
                       <i className="material-icons text-muted">check</i>

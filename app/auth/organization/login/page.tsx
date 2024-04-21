@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Api } from "@/app/lib/restapi/endpoints";
-import { IUserLoginModel } from "@/app/interfaces/user";
+import { Api } from "../../../lib/restapi/endpoints";
+import { IUserLoginModel } from "../../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 const cookies = new Cookies();
@@ -28,10 +28,8 @@ export default function Login() {
 
   async function LoginUser(event: any) {
     cookies.remove("param-lms-user");
-
     setDisable(true);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     let _id = toast.loading("Logging in..", {
       position: "top-center",
       autoClose: 1000,
