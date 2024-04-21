@@ -28,9 +28,9 @@ export const commentWriteUrl="https://khumla-develop-comments-write.azurewebsite
 
 export const quizReadUrl = "https://khumla-develop-quiz-read.azurewebsites.net/api";
 
-export const assessmentWriteUrl = "https://khumla-develop-assessment-write.azurewebsites.net/api";
+export const assessmentWriteUrl = "https://khumla-dev-assessment-write.azurewebsites.net/api";
 
-export const assessmentReadUrl = "https://khumla-develop-assessment-read.azurewebsites.net/api";
+export const assessmentReadUrl = "https://khumla-dev-assessment-read.azurewebsites.net/api";
 
 export const quizWriteUrl ="https://khumla-develop-quiz-write.azurewebsites.net/api";
 
@@ -39,8 +39,6 @@ export const documentWrite = "https://khumla-dev-document-write.azurewebsites.ne
 export const documentRead = "https://khumla-dev-document-read.azurewebsites.net/api"
 
 export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
-
-export const assessmentWrite = "https://khumla-develop-assessment-write.azurewebsites.net/api"
 
 export const activityWrite = "https://khumla-dev-activity-write.azurewebsites.net/api"
 
@@ -199,14 +197,14 @@ DELETE_CourseById: async (
 
   POST_AddAssessments:async (payload:IAssessment)
   :Promise<IResponseObject<IAssessment>>=>{
-    const response = await POST(`${assessmentWrite}/Assessments/AddAssessment`,payload);
+    const response = await POST(`${assessmentWriteUrl}/Assessments/AddAssessment`,payload);
     return response;
   },
 
   PUT_UpdateAssessment: async (payload: IAssessment): Promise<any> => {
     try {
     
-      const response = await PUT(`${assessmentWrite}/Assessments/UpdateAssessment`, payload);
+      const response = await PUT(`${assessmentWriteUrl}/Assessments/UpdateAssessment`, payload);
       
       return response;
     } catch (error) {

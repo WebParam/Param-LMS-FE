@@ -9,15 +9,14 @@ import { IUser } from '@/app/interfaces/user';
 import { getSelectedCourseForEdit } from '@/app/redux/courseSlice';
 import { getAuthor } from '@/app/lib/getAuthor';
 import IComment from '@/app/interfaces/comment';
-import "../../../../components/videoSidebar.css";
+import "../../../../components/video-player/videoSidebar.css";
 import './main.css'
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
 import { useRouter } from "next/navigation";
 import { IQuiz } from '@/app/interfaces/quiz';
 import { getSelectedQuizForEdit } from '@/app/redux/quizSlice';
-import { FaVideo } from 'react-icons/fa';
-import VideoSibar from '../../../../components/VideoSidebar';
-import VideoPlayer from '../../../../components/ReactPlayer';
+import VideoSibar from '../../../../components/video-player/VideoSidebar';
+import VideoPlayer from '../../../../components/video-player/ReactPlayer';
 import { createWatchedDetail } from '@/app/redux/watcheVideosSlice';
 import { IEnrollment } from '@/app/interfaces/Enrollment';
 import { IActivity, IActivityType } from '@/app/interfaces/analytics';

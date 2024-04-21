@@ -3,8 +3,8 @@ import { IModule, ISection, IVideo } from "@/app/interfaces/courses";
 import React, { useEffect, useState } from "react";
 import { FaVideo } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { getSelectedCourseForEdit } from "../redux/courseSlice";
-import { getSelectedWatchedVideoForEdit } from "../redux/watcheVideosSlice";
+import { getSelectedCourseForEdit } from "../../redux/courseSlice";
+import { getSelectedWatchedVideoForEdit } from "../../redux/watcheVideosSlice";
 
 interface VideoSidebarProps {
   sections: ISection[];
@@ -24,7 +24,6 @@ function VideoSibar({
   const [height, setHeight] = useState<any>();
   const _watchedVideos : any[] = useSelector(getSelectedWatchedVideoForEdit);
   const [watchedVideosExist, setWatchedVideosExist] = useState<boolean>(false)
-  console.log("_watchedVideos", _watchedVideos)
 
   const findSection = (id: string) => {
     const section = _courseFromState.sections.find(
@@ -65,7 +64,6 @@ function VideoSibar({
     const courseVideos = _watchedVideos.filter((video:any) => video?.courseId === _courseFromState?.id)
     if(courseVideos.length > 0){
       setWatchedVideosExist(true);
-      console.log("Watched videos", watchedVideosExist)
     }
   }
 
