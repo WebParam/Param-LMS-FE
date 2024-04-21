@@ -54,22 +54,6 @@ function VideoPlayer({
     `${loogedInUser?.firstName} ${loogedInUser?.lastName}`
   );
 
-
-  const today = new Date();
-  const year = today.getFullYear();
-  let month: number | string = today.getMonth() + 1;
-  let day: number | string = today.getDate();
-  let hours: number | string = today.getHours();
-  let minutes: number | string = today.getMinutes();
-  let seconds: number | string = today.getSeconds();
-  
-  month = month < 10 ? `0${month}` : month;
-  day = day < 10 ? `0${day}` : day;
-  hours = hours < 10 ? `0${hours}` : hours;
-  minutes = minutes < 10 ? `0${minutes}` : minutes;
-  seconds = seconds < 10 ? `0${seconds}` : seconds;
-  
-  const todayDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   
   const handleSubmit = async () => {
     setIsCommentCreated(false);
@@ -77,9 +61,9 @@ function VideoPlayer({
       title: video.title,
       message: comment,
       creatingUser: loogedInUser?.id,
-      createdDate: todayDateTime,
+      createdDate: new Date().toISOString(),
       modifyingUser: loogedInUser?.id,
-      modifiedDate: todayDateTime,
+      modifiedDate: new Date().toISOString(),
       referenceId: videoId,
       type: 1,
       state: 0,
