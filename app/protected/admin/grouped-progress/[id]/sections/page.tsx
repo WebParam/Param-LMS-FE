@@ -3,7 +3,6 @@ import Pagination from "@/app/components/Pagination";
 import Table from "./Table";
 import {useState } from "react";
 import list from "./data"
-import { IStudentAnalyticDetails } from "@/app/interfaces/analytics";
 
 
 const Body = () => {
@@ -12,9 +11,6 @@ const Body = () => {
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list?.slice(indexOfFirstItem, indexOfLastItem);
-
-
-
 
   return (
     <>
@@ -26,7 +22,6 @@ const Body = () => {
         >
           <Table list={currentItems!} />
         </div>
-
         <Pagination
           listLength={list?.length!}
           indexOfLastItem={indexOfLastItem}

@@ -21,7 +21,6 @@ const Body = () => {
         >
           <Table list={currentItems} />
         </div>
-
         <Pagination
           listLength={list.length}
           indexOfLastItem={indexOfLastItem}
