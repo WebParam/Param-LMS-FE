@@ -1,5 +1,5 @@
 export default interface IComment{
-    id:string;
+    id?:string;
     title:string;
     message:string;
     creatingUser:string;
@@ -12,8 +12,8 @@ export default interface IComment{
     replies:string[];
     creatingUserName:string;
 }
+
 export interface ICommentReply{
     comment:IComment;
     reply:IComment;
-
 }

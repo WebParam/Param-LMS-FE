@@ -65,7 +65,6 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
               <div className="dropdown-header">
                 <strong>Account</strong>
               </div>
-              <a className="dropdown-item">Edit Account</a>
               <a className="dropdown-item" onClick={() => logout()}>
                 Logout
               </a>

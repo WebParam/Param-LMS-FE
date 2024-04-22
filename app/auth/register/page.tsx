@@ -23,7 +23,7 @@ export default function Register() {
   const[ConfirmPassError, setConfirmPassError] = useState<boolean>(false)
   const[EmailError, setEmailError] = useState<boolean>(false)
   const[disable, setDisable] = useState<boolean>(false)
-const [role,setRole]=useState("Admin")
+
 
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -118,7 +118,7 @@ const [role,setRole]=useState("Admin")
           LoginType: 0,
         } as IUserRegisterModel;
         
-        if(role === "Admin")
+        if(payload.role === "Student")
         {
         const user = await  Api.POST_RegisterAdmin(payload);
 debugger;
@@ -171,7 +171,8 @@ debugger;
               });
               cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
 
-              router.push('/protected/admin/manage-courses');
+              router.push('/protected/student/course/all-courses');
+      
 
             }
             else if(user.error){

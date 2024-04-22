@@ -77,7 +77,6 @@ const ReactQuillWrapper = ({
     }
   }, []);
 
-  console.log("ReactQuillComponent:", ReactQuillComponent);
 
   if (!ReactQuillComponent) return null; 
 
@@ -108,11 +107,8 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const _courseFromState: ICourse = useSelector(
     getSelectedCourseForEdit
   ).course;
-  const [modules, setModules] = useState<string[]>([]);
-  const [isModuleSaved, setIsModuleSaved] = useState<boolean>(false);
 
   const [disableSaveChanges, setDisableSaveChanges] = useState<boolean>(true);
-  const [lastSection, setLastSection] = useState<number>(-1);
   const [videoId, setVideoId] = useState<string>("");
 
   const [toggler, setToggler] = useState<Number>(1);
@@ -121,12 +117,10 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [choiceDescription, setChoiceDescription] = useState<string>("");
   const [choiceAnswer, setChoiceAnswer] = useState<string>("");
   const [points, setPoints] = useState<number>(0);
-  const [documentName, setDocumentName] = useState<string>();
   const [countChoice, setCountChoices] = useState<number>(0);
   const [date, setDate] = useState<string>("");
   const [questionId, setQuestionId] = useState<string>("");
   const [questionNumber, setQuestionNumber] = useState<number>(1);
-  const [moduleReference, setModuleReference] = useState<any>("");
   const [openChoices, setOpenChoices] = useState(false);
   const [choiceId, setChoiceId] = useState<string>("");
   const [quizId, setQuizId] = useState<string>("")
@@ -158,6 +152,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [videoTitleError, setVideoTitleError] = useState(false);
   const [videoDescError, setVideoDescError] = useState(false);
   const [videoUrlError, setVideoUrlError] = useState(false);
+  const [videoDuration, setVideoDuration] = useState<string>("")
 const [videoIdForEdit, setVideoIdForEdit] = useState<string>("")
 const [document, setDocument] = useState<any>("")
 
@@ -167,7 +162,7 @@ const [document, setDocument] = useState<any>("")
   const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
   const _quizFromState: IQuiz  = _quizzesFromState[_quizzesFromState.length - 1];
 
-  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit);
+  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit).documents;
   const _documentFromState: IDocument  = _documentsFromState[_documentsFromState.length - 1];
 
 
@@ -570,6 +565,7 @@ const [document, setDocument] = useState<any>("")
         videoTitle: videoTitle,
         videoLink: videoLink,
         description: plainDescription,
+        duration : videoDuration
       };
       dispatch(addVideoToModule(payload));
       setDisableSaveChanges(true);
@@ -597,7 +593,7 @@ const [document, setDocument] = useState<any>("")
 
   const newVideo = () => {
     
-    setIsModuleSaved(true);
+ 
     setHideCreateModuleSection(false);
  
   setViewAddedVideos(false)
@@ -609,7 +605,7 @@ const [document, setDocument] = useState<any>("")
     setVideoIdForEdit(id);
 
     setEnableEditVideo(true);
-    setIsModuleSaved(true);
+
     setHideCreateVideoSection(false);
   setViewAddedVideos(false)
   setDisableModuleInputs(false);
@@ -621,6 +617,10 @@ const [document, setDocument] = useState<any>("")
   setVideoLink(video[0]?.videoLink);
   setVideoId(video[0]?.id)
   setVideoReference(video[0]?.reference)
+  setVideoDuration(video[0]?.duration)
+
+  console.log("Description",videoDescription)
+  console.log("Duration",videoDuration)
   const videoDoc = _documentsFromState.filter((doc:IDocument) => doc.reference === video[0]?.reference)[0];
   console.log("documents",videoDoc);
   if(videoDoc){
@@ -634,13 +634,14 @@ const [document, setDocument] = useState<any>("")
     setVideoDescError(false);
     setVideoTitleError(false);
     setVideoUrlError(false);
-    if(videoLink && videoTitle && videoDescription) {
+    if(videoLink && videoTitle && videoDescription && videoDuration) {
       setQuestions([]);
       setVideoLink("");
       setEditQuizQuestion(false);
       setVideoTitle("");
       setVideoDescription("")
       setVideoId("");
+      setVideoDuration("");
       setVideoReference("");
       setIsQuestionCreated(false);
       setQuestionDescription("");
@@ -680,7 +681,7 @@ const [document, setDocument] = useState<any>("")
     setVideoUrlError(false);
     if (
       videoTitle &&
-      videoDescription && videoLink 
+      videoDescription && videoLink && videoDuration
      
     ) {
       const plainDescription =
@@ -693,6 +694,7 @@ const [document, setDocument] = useState<any>("")
         videoLink: videoLink,
         videoTitle: videoTitle,
         description: plainDescription,
+        duration : videoDuration
       };
 
 
@@ -722,7 +724,7 @@ const [document, setDocument] = useState<any>("")
     getTodaysDate();
     const sections = _courseFromState.sections;
     const lastSection = sections.length - 1;
-    setLastSection(lastSection);
+  
   }, []);
 
   useEffect(() => {
@@ -2042,6 +2044,19 @@ const [document, setDocument] = useState<any>("")
                 </small>
               </div>
             </div>
+            <div className="card-body">
+                <label className="form-label">Video Duration</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  disabled={disableModuleInputs}
+                  onChange={(e:any) => setVideoDuration(e.target.value)}
+                    value ={videoDuration}
+                  placeholder="Enter Video Duration"
+                />
+
+               
+              </div>
           </div>
           }
 

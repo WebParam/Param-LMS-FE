@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAssessmentState, IAssessment, IAssessmentQuestion, IChoice } from "../interfaces/assessment";
-import { AppStore } from "../interfaces/store";
+import { AppStore } from "./store";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
-const loogedInUser = cookies.get('param-lms-user');
+const loogedInUser = cookies.get("param-lms-user");
 
 const generateUniqueId = () => {
   return Math.random().toString(36).substring(7);
@@ -43,6 +43,8 @@ const initialState: IAssessmentState = {
     fileUrl:"",
     status: 0,
     instructorId:"",
+    isRetaken : false,
+    attempts : 3
   } as IAssessment
 };
 
@@ -53,9 +55,12 @@ export const assessmentSlice = createSlice({
     setSelectedAssessmentForEdit(state, action) {
       state.assessment = action.payload;
     },
+    resetAssessmentState: state => {
+      state = initialState;
+    },
 
     createAssessmentDetail(state, action) {
-      const { dueDate,courseTitle ,intructor} = action.payload;
+      const { dueDate,courseTitle ,intructor,isRetaken} = action.payload;
       const newState = {
         courseId: generateUniqueId(),
         questions: [] as IAssessmentQuestion[],
@@ -68,14 +73,18 @@ export const assessmentSlice = createSlice({
         instructorName:"",
         instructorId:"",
         status: 0,
+        isRetaken : isRetaken,
+        attempts : 3
       }
 
       state.assessment = newState;
+
     },
 
     updateAssessment(state, action) {
       const _action = action.payload as IAssessment;
       const newState = {
+        id : _action.id,
         courseId: _action.courseId,
         questions: _action.questions,
         createdByUserId: _action.createdByUserId,
@@ -87,6 +96,8 @@ export const assessmentSlice = createSlice({
         instructorName: _action.instructorName,
         instructorId: _action.instructorId,
         status: 0,
+        isRetaken : _action.isRetaken,
+        attempts : 3
 
       }
       state.assessment = newState;
@@ -190,6 +201,7 @@ export const {
   updateChoiceDetails,
   updateAssessmentQuestion,
   addChoicesToQuestion,
+  resetAssessmentState,
 } = assessmentSlice.actions;
 
 export const getSelectedAssessmentForEdit = (state: AppStore) => state.assessment;

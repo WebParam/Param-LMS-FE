@@ -4,26 +4,24 @@ import { Api } from "@/app/lib/restapi/endpoints";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Link from 'next/link';
-import { IAssessment } from "@/app/interfaces/assessment";
-import { ICourse, IStudentCourses } from "@/app/interfaces/courses";
+import {useRouter} from "next/navigation"
 
 const CourseAssessments = () => {
 
 
-
+      const router = useRouter();
     const [student, setStudent] = useState();
-    const [studentEnrolledCourses,setStudentEnrolledCourses] = useState<any>();
-    const [assessmentList, setAssessmentList] = useState<IAssessment[]>();
-    const [courses, setCourses] = useState<any>();
+    const [studentEnrolledCourses,setStudentEnrolledCourses] = useState();
+    const [assessmentList, setAssessmentList] = useState([]);
+    const [courses, setCourses] = useState();
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    
 
 
     const studentAssessmentsByCourses = async (ids:string) => {
-        console.log("payload UI", ids)
-       const assessments = await Api.GET_StudentAssessmentsByCourses(ids)!;
-       setAssessmentList(assessments.data)
-       console.log("mase", assessments)
-        console.log("courses", assessments)
-        //setAssessmentList(assessments);
+       const assessments = await Api.GET_StudentAssessmentsByCourses(ids);
+       setAssessmentList(assessments);
+       debugger;
     }
 
     const  getStudentCourses = async () => {
@@ -32,13 +30,9 @@ const CourseAssessments = () => {
           var student = cookies.get('param-lms-user');
           console.log("Id ", student.id)
           const course = await Api.GET_StudentCoursesById(student.id);
-            const enrolled = await Api.GET_EnrolledCoursesByStudentId(student.id);
-            const enrolledCourses = course.data;
-           setStudentEnrolledCourses(course.data!.enrolledCourses)
-            setCourses(course?.data?.allCourses)
-           const pluck = (property:any) => (element:any) => element[property]
-           
+           const pluck = (property:any) => (element:any) => element[property];
             const arrayList = course.data!.enrolledCourses.map(pluck('id'))
+           // Create a new URLSearchParams object
             var params = new URLSearchParams();
 
             // Add each item in the list as a 'courses' parameter
@@ -72,6 +66,11 @@ const CourseAssessments = () => {
 
     }, []);
 
+    const takeAssessment = (id:string) => {
+      router.push(`/protected/student/assessment?id=${id}`);
+
+    }
+
   
 
     return (
@@ -90,28 +89,14 @@ const CourseAssessments = () => {
                   aria-selected="true"
                   className="dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start active"
                 >
-                  <span className="h2 mb-0 mr-3">3</span>
+                  <span className="h2 mb-0 mr-3">{assessmentList ? assessmentList.length : ''}</span>
                   <span className="flex d-flex flex-column">
-                    <strong className="card-title">Active</strong>
-                    <small className="card-subtitle text-50">Ongoing Assessment</small>
+                    <strong className="card-title">All</strong>
+                    <small className="card-subtitle text-50">Assessment</small>
                   </span>
                 </a>
               </div>
-              <div className="col-auto border-left border-right">
-                <a
-                  href="#"
-                  data-toggle="tab"
-                  role="tab"
-                  aria-selected="false"
-                  className="dashboard-area-tabs__tab card-body d-flex flex-row align-items-center justify-content-start"
-                >
-                  <span className="h2 mb-0 mr-3">2</span>
-                  <span className="flex d-flex flex-column">
-                    <strong className="card-title">Archived</strong>
-                    <small className="card-subtitle text-50">Past Projects</small>
-                  </span>
-                </a>
-              </div>
+              
             </div>
           </div>
           <div
@@ -169,23 +154,7 @@ const CourseAssessments = () => {
                     </a>
                   </th>
                   <th style={{ width: 48 }}>
-                    {/* <a
-                      href="javascript:void(0)"
-                      className="sort"
-                      data-sort="js-lists-values-budget"
-                    >
-                      Budget
-                    </a> */}
                   </th>
-                  {/* <th style={{ width: 48 }}>
-                    <a
-                      href="javascript:void(0)"
-                      className="sort desc"
-                      data-sort="js-lists-values-date"
-                    >
-                      Due
-                    </a>
-                  </th> */}
                   <th style={{ width: 24 }} />
                 </tr>
               </thead>
@@ -222,11 +191,8 @@ const CourseAssessments = () => {
                         <div className="media-body">
                           <div className="d-flex flex-column">
                             <small className="js-lists-values-project">
-                              <strong>{courses?.filter((obj:any) => obj.id = item?.data.id).title ? courses?.filter((obj:any) => obj.id = item?.data.id).title : 'Sample Course'}</strong>
+                              <strong>{item?.data?.courseTitle || 'Sample Course'}</strong>
                             </small>
-                            {/* <small className="js-lists-values-location text-50">
-                              Twitter
-                            </small> */}
                           </div>
                         </div>
                       </div>
@@ -237,14 +203,13 @@ const CourseAssessments = () => {
                         style={{ whiteSpace: "nowrap" }}
                       >
                         <div className="avatar avatar-32pt mr-8pt">
-                          {/* <span className="avatar-title rounded-circle">BN</span> */}
                         </div>
                         <div className="media-body">
                           <div className="d-flex align-items-center">
                             <div className="flex d-flex flex-column">
                               <p className="mb-0">
                                 <strong className="js-lists-values-lead">
-                                {courses?.filter((obj:any) => obj.id = item?.data.createdByUserId).instructor ? courses?.filter((obj:any) => obj.id = item?.data.createdByUserId).instructor : 'John Doe'}
+                                {item?.data?.instructorName}
                                 </strong>
                               </p>
                               <small className="js-lists-values-email text-50">
@@ -258,7 +223,7 @@ const CourseAssessments = () => {
                     <td>
                       <div className="d-flex flex-column">
                         <small className="js-lists-values-status text-50 mb-4pt">
-                          Completed
+                          {item?.data?.status === 0 ? 'In Progress' : item?.data?.status === 1 ? 'Completed' : '-'}
                         </small>
                         <span className="indicator-line rounded bg-warning" />
                       </div>
@@ -266,24 +231,27 @@ const CourseAssessments = () => {
                     <td>
                       <div className="d-flex flex-column">
                         <small className="js-lists-values-budget">
-                          <strong></strong>
-                          <button className="btn btn-primary">
-                          <Link href={{ pathname: '/protected/student/assessment', query: {assessment: item?.data.id} }}>
-                            
-                            <span style={{color:'white'}}>Take Assessment</span>
-                          </Link>
-                            </button>
+                          {
+                             item?.data.status === 0 ? (
+                              <span></span>
+                            ) : (
+                              <button className="btn btn-primary">
+                              <a onClick={() => takeAssessment(item?.data.id)}>
+                                
+                                <span style={{color:'white'}}>Take Assessment</span>
+                              </a>
+                                </button>
+                            )
+                          }
+                         
                           
                         </small>
-                        {/* <small className="text-50">Invoice Sent</small> */}
                       </div>
                     </td>
                     <td>
                       <div className="d-flex flex-column">
                         <small className="js-lists-values-date">
-                          {/* <strong>19/02/2019</strong> */}
                         </small>
-                        {/* <small className="text-50">18 days</small> */}
                       </div>
                     </td>
                     <td className="text-right">
@@ -295,150 +263,11 @@ const CourseAssessments = () => {
                 ))
                 }
                
-                {/* <tr>
-                  <td className="pr-0">
-                    <div className="custom-control custom-checkbox">
-                      <input
-                        type="checkbox"
-                        className="custom-control-input js-check-selected-row"
-                        id="customCheck1_2"
-                        data-domfactory-upgraded="check-selected-row"
-                      />
-                      <label
-                        className="custom-control-label"
-                        htmlFor="customCheck1_2"
-                      >
-                        <span className="text-hide">Check</span>
-                      </label>
-                    </div>
-                  </td>
-                  <td>
-                    <div
-                      className="media flex-nowrap align-items-center"
-                      style={{ whiteSpace: "nowrap" }}
-                    >
-                      <div className="avatar avatar-sm mr-8pt">
-                        <span className="avatar-title rounded bg-accent text-white">
-                          PM
-                        </span>
-                      </div>
-                      <div className="media-body">
-                        <div className="d-flex flex-column">
-                          <small className="js-lists-values-project">
-                            <strong>Project Management App</strong>
-                          </small>
-                          <small className="js-lists-values-location text-50">
-                            Github
-                          </small>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div
-                      className="media flex-nowrap align-items-center"
-                      style={{ whiteSpace: "nowrap" }}
-                    >
-                      <div className="avatar avatar-32pt mr-8pt">
-                        <span className="avatar-title rounded-circle">TP</span>
-                      </div>
-                      <div className="media-body">
-                        <div className="d-flex align-items-center">
-                          <div className="flex d-flex flex-column">
-                            <p className="mb-0">
-                              <strong className="js-lists-values-lead">
-                                Tony Parks
-                              </strong>
-                            </p>
-                            <small className="js-lists-values-email text-50">
-                              iOS Development
-                            </small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="d-flex flex-column">
-                      <small className="js-lists-values-status text-50 mb-4pt">
-                        Finished
-                      </small>
-                      <span className="indicator-line rounded bg-accent" />
-                    </div>
-                  </td>
-                  <td>
-                    <div className="d-flex flex-column">
-                      <small className="js-lists-values-budget">
-                        <strong>$12,500</strong>
-                      </small>
-                      <small className="text-50">Paid</small>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="d-flex flex-column">
-                      <small className="js-lists-values-date">
-                        <strong>18/02/2019</strong>
-                      </small>
-                      <small className="text-danger">Overdue</small>
-                    </div>
-                  </td>
-                  <td className="text-right">
-                    <a href="" className="text-50">
-                      <i className="material-icons">more_vert</i>
-                    </a>
-                  </td>
-                </tr> */}
                 
               </tbody>
             </table>
           </div>
-          <div className="card-footer p-8pt">
-            <ul className="pagination justify-content-start pagination-xsm m-0">
-              <li className="page-item disabled">
-                <a className="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true" className="material-icons">
-                    chevron_left
-                  </span>
-                  <span>Prev</span>
-                </a>
-              </li>
-              <li className="page-item dropdown">
-                <a
-                  className="page-link dropdown-toggle"
-                  data-toggle="dropdown"
-                  href="#"
-                  aria-label="Page"
-                >
-                  <span>1</span>
-                </a>
-                <div className="dropdown-menu">
-                  <a href="" className="dropdown-item active">
-                    1
-                  </a>
-                  <a href="" className="dropdown-item">
-                    2
-                  </a>
-                  <a href="" className="dropdown-item">
-                    3
-                  </a>
-                  <a href="" className="dropdown-item">
-                    4
-                  </a>
-                  <a href="" className="dropdown-item">
-                    5
-                  </a>
-                </div>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#" aria-label="Next">
-                  <span>Next</span>
-                  <span aria-hidden="true" className="material-icons">
-                    chevron_right
-                  </span>
-                </a>
-              </li>
-            </ul>
-          </div>
+          
           {/* <div class="card-body bordet-top text-right">
         15 <span class="text-50">of 1,430</span> <a href="#" class="text-50"><i class="material-icons ml-1">arrow_forward</i></a>
       </div> */}

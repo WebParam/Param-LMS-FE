@@ -87,7 +87,6 @@ const ReactQuillWrapper = ({
     }
   }, []);
 
-  console.log("ReactQuillComponent:", ReactQuillComponent);
 
   if (!ReactQuillComponent) return null; 
 
@@ -136,6 +135,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
   const [videoDescription, setVideoDescription] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [document, setDocument] = useState<any>("")
+  const [videoDuration, setVideoDuration] = useState<string>()
 
   const [moduleReference, setModuleReference] = useState<any>("")
   const [hideSaveChangesBtn, setHideSaveChangesBtn] = useState(false)
@@ -233,11 +233,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
     const hasQuiz = _quizzesFromState.filter((quiz:IQuiz) => quiz?.videoId === videoId);
     if(hasQuiz?.length === 1 ){
-      const payload = {
-        quizId: hasQuiz[0]?.id,
-        quizState :0
-      }
-      dispatch(updateQuizState(payload));
+     
 
       setIncludeQuiz(e.target.checked);
 
@@ -247,6 +243,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
       return
     }
+    
     if (!videoId) {
       let _id = toast.loading("Please add video first..", {
         //loader
@@ -594,6 +591,7 @@ setChangeEditQuizQuestionContent(false);
         videoLink: videoLink,
         videoTitle: videoTitle,
         videoDescription: plainDescription,
+        duration : videoDuration
       };
 
       dispatch(editVideoDetails(payload));
@@ -693,6 +691,7 @@ setChangeEditQuizQuestionContent(false);
         setVideoReference(video[0]?.reference)
         setVideoLink(video[0]?.videoLink);
         setDisableModuleInputs(true);
+        setVideoDuration(video[0]?.duration);
       }
 
   },[]);
@@ -1694,6 +1693,19 @@ setChangeEditQuizQuestionContent(false);
                 </small>
               </div>
             </div>
+            <div className="card-body">
+                <label className="form-label">Video Duration</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  disabled={disableModuleInputs}
+                  onChange={(e:any) => setVideoDuration(e.target.value)}
+                    value ={videoDuration}
+                  placeholder="Enter Video Duration"
+                />
+
+               
+              </div>
               </div>
             </div>
           </div>

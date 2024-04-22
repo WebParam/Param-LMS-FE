@@ -1,42 +1,50 @@
-"use client"
-import Drawer from '@/app/components/SideNav/Drawer'
-import HeadNav from '@/app/components/HeadNav/HeadNav';
-import { useState } from 'react';
+"use client";
+import Drawer from "@/app/topbar-components/Drawer";
+import HeadNav from "@/app/topbar-components/HeadNav";
+import { useState } from "react";
 import withAuth from './AdminAuthWrapper'
-  
-function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-  }) {
-  
+
+function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const sideTabs = [
-    { name: 'Dashboard', url: '/protected/admin/manage-courses', icon: 'insert_chart_outlined' },
-    { name: 'Students', url: '#', icon: 'people_outline' },
-    { name: 'Courses', url: '/protected/admin/courses', icon: 'assignment' },
+    { name: 'Course Dashboard', url: '/protected/admin/course-dashboard', icon: 'dashboard' },
+    { name: 'Course Graphs', url: '/protected/admin/course-dashboard/graphs', icon: 'show_chart' },
+    { name: 'Manage Courses', url: '/protected/admin/manage-courses', icon: 'assignment' },
     {
-      name: 'Assessments', url: '#', icon: 'assignment', children: [
-        { name: 'List of Assessments', url: '/protected/admin/assessments', icon: '' },
-        { name: 'Grade Assessments', url: '#', icon: '' }
+      name: 'Assessments', url: '#', icon: 'list', children: [
+        { name: 'Grade Assessments', url: '/protected/admin/assessments/grade-assessments', icon: '' }
       ]
     }
   ];
 
-  return ( 
+  return (
     <>
-      <div className="mdk-drawer-layout js-mdk-drawer-layout"
-              data-push
-              data-responsive-width="992px">
-                  <div className="mdk-drawer-layout__content page-content">
-                  <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} /> 
-          
-                      {children}
-          </div>
-        <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs}/> 
+      <div className="mdk-header-layout js-mdk-header-layout">
+        <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} />
+
+        {/* <!-- Header Layout Content --> */}
+        <div className="mdk-header-layout__content page-content ">
+
+          <nav className="navbar navbar-light bg-alt border-bottom">
+            <div className="container page__container">
+              <ul className="nav navbar-nav">
+                <li className="nav-item">
+                  
+                </li>
+              </ul>
+            </div>
+          </nav>
+
+          {children}
         </div>
+        {/* <!-- // END Header Layout Content --> */}
+      </div>
+      {/* <!-- // END Header Layout --> */}
+
+      {/* <!-- drawer --> */}
+      <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
     </>
-  )
+  );
 }
 
 export default withAuth(RootLayout);

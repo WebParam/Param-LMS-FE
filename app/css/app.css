@@ -175,7 +175,6 @@ sup {
 }
 
 a {
-    color: rgba(39,44,51,.7);
     text-decoration: none
 }
 
@@ -23679,7 +23678,7 @@ a.text-primary-pickled-bluewood:focus,a.text-primary-pickled-bluewood:hover {
     top: 0;
     bottom: 0;
     width: 256px;
-    transition: transform .2s ease;
+    transition: all .3s ease;
     left: 0;
     transform: translate3d(-100%,0,0)
 }
@@ -28235,7 +28234,7 @@ body,html {
 }
 
 [dir] .card-header-tabs-basic a {
-    padding: .5rem .75rem
+    padding: 1rem 1.75rem;
 }
 
 .card-header-tabs-basic a:hover {
@@ -33373,7 +33372,7 @@ label {
 
 [dir] .sidebar-brand {
     margin-bottom: 0;
-    padding: 4rem 0;
+    padding: 6rem 0;
 }
 
 .sidebar-brand-icon {
