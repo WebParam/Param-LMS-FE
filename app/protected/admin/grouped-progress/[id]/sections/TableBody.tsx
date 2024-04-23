@@ -42,7 +42,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   <div className="progress-bar">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `${data.average_completion_rate}%` }}
+                      style={{ width: `${data.active_status}%` }}
                     ></div>
                   </div>
                   <div className="progress-bar-text">
@@ -61,7 +61,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   <div className="progress-bar">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `${data.average_completion_rate}%` }}
+                      style={{ width: `${data.downloaded_content}%` }}
                     ></div>
                   </div>
                   <div className="progress-bar-text">

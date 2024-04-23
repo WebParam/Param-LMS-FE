@@ -24,7 +24,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
               </td>
               <td className={`${align.average_result} js-lists-values-projects small`}>
                 <div className="align-items-center">
-                  {data.result >= PASSMARK ? (
+                  {data.average_result >= PASSMARK ? (
                     <a href="#" className="text-success">
                       <i className="material-icons mr-8pt">check_circle</i>
                     </a>
