@@ -5,13 +5,25 @@ const TableHead = () => {
     "Completion",
     "Time Spent",
     "Points Collected",
-    "Progress Status"
   ];
 
   return (
     <>
       <thead>
-        <tr>          
+        <tr>
+          <th style={{ width: "18px" }} className="pr-0">
+            <div className="custom-control custom-checkbox">
+              <input
+                type="checkbox"
+                className="custom-control-input js-toggle-check-all"
+                data-target="#staff"
+                id="customCheckAllstaff"
+              />
+              <label className="custom-control-label">
+                <span className="text-hide">Toggle all</span>
+              </label>
+            </div>
+          </th>
           <th className="text-center">Actions</th>
           {headers.map((name) => (
             <th key={name} className="text-center">

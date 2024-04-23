@@ -1,6 +1,9 @@
+import { Api } from "@/app/lib/restapi/endpoints";
 import { NextPage } from "next";
+import { useEffect, useState } from "react";
 
-const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
+const TableBody: NextPage<{ list: any[] }> = ({list}) => {
+
   const PASSMARK = 50;
   const align = {
     quiz_name: "pl-64pt text-left",
@@ -9,6 +12,17 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
     time_spent: "text-center",
   };
 
+  function displayTime(seconds:number) {
+    if (seconds >= 3600) {
+        let hours = Math.floor(seconds / 3600);
+        return hours + " hour(s)";
+    } else if (seconds >= 60) {
+        let minutes = Math.floor(seconds / 60);
+        return minutes + " minute(s)";
+    } else {
+        return seconds + " second(s)";
+    }
+}
 
   return (
     <>
@@ -17,14 +31,14 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
           list.map((data: any) => (
             <tr key={data.quiz_name} className="selected">
               <td className={`${align.quiz_name} js-lists-values-projects small`} >
-                {data.quiz_name}
+                {data.quizName}
               </td>
               <td className={`${align.attempts} js-lists-values-projects small`} >
                 {data.attempts}
               </td>
               <td className={`${align.result} js-lists-values-projects small`}>
                 <div className="align-items-center">
-                  {data.result >= PASSMARK ? (
+                  {data.results >= PASSMARK ? (
                     <a href="#" className="text-success">
                       <i className="material-icons mr-8pt">check_circle</i>
                     </a>
@@ -36,13 +50,13 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
 
                   <a href="" className="text-70">
                     <span className="js-lists-values-employer-name">
-                      {data.result}%
+                      {data.results}%
                     </span>
                   </a>
                 </div>
               </td>
               <td className={`${align.time_spent} js-lists-values-projects small`}>
-                {data.time_spent}
+              {displayTime(Number(data.timeSpent))}
               </td>
             </tr>
           ))}
