@@ -1,4 +1,4 @@
-const list = [
+export const list = [
     {
         "section_title": "Introduction to the Course",
         "average_time_spent": "1hr 30min",

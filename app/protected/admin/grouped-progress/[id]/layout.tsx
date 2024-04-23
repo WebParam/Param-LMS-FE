@@ -10,12 +10,12 @@ function Layout({ children }: { children: React.ReactNode }) {
   const name = searchParams.get("name");
 
   const tabs = [
-    { name: "sections", title: "Sections", url: `/protected/admin/grouped-progress/${id}/sections` },
+    { name: "sections", title: "Sections", url: `/protected/admin/grouped-progress/1/sections` },
     {
       name: "assessments", title: "Assessments",
-      url: `/protected/admin/grouped-progress/${id}/assessments`,
+      url: `/protected/admin/grouped-progress/1/assessments`,
     },
-    { name: "quizzes", title: "Quizzes", url: `/protected/admin/grouped-progress/${id}/quizzes` },
+    { name: "quizzes", title: "Quizzes", url: `/protected/admin/grouped-progress/1/quizzes` },
   ];
 
 
