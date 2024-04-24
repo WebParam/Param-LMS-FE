@@ -1,9 +1,6 @@
-import { Api } from "@/app/lib/restapi/endpoints";
 import { NextPage } from "next";
-import { useEffect, useState } from "react";
 
-const TableBody: NextPage<{ list: any[] }> = ({list}) => {
-
+const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   const align = {
     section_title: "pl-48pt text-left",
     time_spent: "text-left",
@@ -11,19 +8,6 @@ const TableBody: NextPage<{ list: any[] }> = ({list}) => {
     no_of_comments: "text-center",
     points_collected: "text-center",
   };
-  
-  function displayTime(seconds:number) {
-    if (seconds >= 3600) {
-        let hours = Math.floor(seconds / 3600);
-        return hours + " hour(s)";
-    } else if (seconds >= 60) {
-        let minutes = Math.floor(seconds / 60);
-        return minutes + " minute(s)";
-    } else {
-        return seconds + " second(s)";
-    }
-}
-
 
   return (
     <>
@@ -32,29 +16,29 @@ const TableBody: NextPage<{ list: any[] }> = ({list}) => {
           list.map((data: any) => (
             <tr key={data.section_title} className="selected">
               <td className={`${align.section_title} js-lists-values-projects small`}>
-                {data.section}
+                {data.section_title}
               </td>
               <td className={`${align.time_spent} js-lists-values-projects small`}>
-                {displayTime(Number(data.timeSpent))}
+                {data.time_spent}
               </td>
               <td className={`${align.completion_rate} js-lists-values-projects small`}>
                 <div className="progress-container">
                   <div className="progress-bar">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `${Number(data.completionRate)}%` }}
+                      style={{ width: `${data.completion_rate}%` }}
                     ></div>
                   </div>
                   <div className="progress-bar-text">
-                    {data.completionRate}
+                    {data.completion_rate}%
                   </div>
                 </div>
               </td>
               <td className={`${align.no_of_comments} js-lists-values-projects small`}>
-                {data.numberOfComments}
+                {data.no_of_comments}
               </td>
               <td className={`${align.points_collected} js-lists-values-projects small`}>
-                {data.pointsCollected}
+                {data.points_collected}
               </td>
             </tr>
           ))}

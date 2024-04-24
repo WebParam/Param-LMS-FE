@@ -1,28 +1,15 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
 import Table from "./Table";
-import { useEffect, useState } from "react";
-import { Api } from "@/app/lib/restapi/endpoints";
-import { IStudentQuizAnalytics } from "@/app/interfaces/analytics";
+import { useState } from "react";
+import list from "./data";
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [list, setList] = useState<IStudentQuizAnalytics[]>([])
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
-  
-  const getQuizData = async () => {
-    const getAnalytics = await Api.GET_StudentQuizAnalytics("2024139517");
-    const data = getAnalytics?.map((data:any) => data.data);
-    setList(getAnalytics);
-    console.log("Data",data);
-  }
-
-  useEffect(() => {
-    getQuizData()
-  },[])
 
   return (
     <>
