@@ -1,6 +1,25 @@
 import { Diagnostic } from "../logger/logger";
 
 
+function resetSessions() {
+  
+  const user_session = localStorage.getItem("user-session") || null;
+
+  if(user_session){
+    const parseSession = JSON.parse(user_session)
+    const date = new Date();
+    const loginData = {
+      sessionStart : parseSession.sessionStart,
+      sessionEnd : new Date(date.getTime() + 2 * 60000),
+      lastActitive: new Date().toISOString()
+    }
+
+
+    localStorage.setItem("user-session",     JSON.stringify(loginData))
+  }
+}
+
+
 const axios = require("axios").default;
 
 const token = "";
@@ -23,6 +42,7 @@ let header: any;
   // };
 }
 
+   
 export async function GET(endPoint: string) {
   try {
     // const result = await axios.get(`${endPoint}`, {auth: {
@@ -34,6 +54,7 @@ export async function GET(endPoint: string) {
       headers: header,
       // body: JSON.stringify(opts)
     }).then(function(response) {
+      resetSessions()
       return response.json();
     })
 
@@ -54,6 +75,7 @@ export async function POST(endPoint: string, payload: Object) {
       headers: header,
     });
     Diagnostic("SUCCESS ON POST, returning", result);
+    resetSessions()
     return result.data;
   } catch (error:any) {
     
@@ -73,6 +95,7 @@ export function DELETE(endPoint: string): Promise<any> {
     .delete(`${endPoint}`, { headers: HEADER })
     .then((result: any) => {
       // Assuming result.data is the actual data returned from the API
+      resetSessions()
       return result.data;
     })
     .catch((error: any) => {
@@ -91,6 +114,7 @@ export function PUT(endPoint: string, payload: Object): Promise<any> {
     .put(`${endPoint}`, payload, { headers: HEADER })
     .then((result: any) => {
       // Assuming result.data is the actual data returned from the API
+      resetSessions()
       return result.data;
     })
     .catch((error: any) => {
