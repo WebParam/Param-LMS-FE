@@ -1,6 +1,4 @@
 import { Diagnostic } from "../logger/logger";
-
-
 const axios = require("axios").default;
 
 const token = "";
