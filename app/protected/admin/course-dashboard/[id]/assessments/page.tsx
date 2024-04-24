@@ -29,7 +29,6 @@ const Body = () => {
       const data = getAnalytics?.map((data: any) => data.data);
       dispatch(saveStudentAssessmentAnalytics(data));
       setList(data)
-
     }
   };
 
