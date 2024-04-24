@@ -19,7 +19,6 @@ export interface ICourse {
         modifyingUser: string
 
 }
-
 export interface IStudentCourses {
         allCourses: ICourse[],
         enrolledCourses: ICourse[],
