@@ -1,144 +1,144 @@
 const list = [
-  {
-      "student_id": "1001",
+    {
+      "student_id": 1,
       "student_name": "Alice",
-      "completion_rate": 62,
-      "time_spent": "4hrs 20min",
-      "points_collected": 85
-  },
-  {
-      "student_id": "1002",
-      "student_name": "Bob",
-      "completion_rate": 48,
-      "time_spent": "3hrs 55min",
-      "points_collected": 70
-  },
-  {
-      "student_id": "1003",
-      "student_name": "Charlie",
-      "completion_rate": 55,
-      "time_spent": "2hrs 30min",
-      "points_collected": 75
-  },
-  {
-      "student_id": "1004",
-      "student_name": "David",
-      "completion_rate": 60,
-      "time_spent": "5hrs 15min",
-      "points_collected": 90
-  },
-  {
-      "student_id": "1005",
-      "student_name": "Eva",
-      "completion_rate": 42,
+      "completion_rate": 85,
       "time_spent": "3hrs 45min",
-      "points_collected": 65
-  },
-  {
-      "student_id": "1006",
-      "student_name": "Frank",
-      "completion_rate": 57,
-      "time_spent": "4hrs 10min",
-      "points_collected": 80
-  },
-  {
-      "student_id": "1007",
-      "student_name": "Grace",
-      "completion_rate": 49,
+      "points_collected": 320
+    },
+    {
+      "student_id": 2,
+      "student_name": "Bob",
+      "completion_rate": 92,
+      "time_spent": "5hrs 20min",
+      "points_collected": 400
+    },
+    {
+      "student_id": 3,
+      "student_name": "Charlie",
+      "completion_rate": 78,
       "time_spent": "2hrs 55min",
-      "points_collected": 68
-  },
-  {
-      "student_id": "1008",
-      "student_name": "Henry",
-      "completion_rate": 65,
-      "time_spent": "3hrs 35min",
-      "points_collected": 88
-  },
-  {
-      "student_id": "1009",
-      "student_name": "Ivy",
-      "completion_rate": 52,
-      "time_spent": "4hrs 40min",
-      "points_collected": 78
-  },
-  {
-      "student_id": "1010",
-      "student_name": "Jack",
-      "completion_rate": 45,
-      "time_spent": "5hrs 0min",
-      "points_collected": 72
-  },
-  {
-      "student_id": "1011",
-      "student_name": "Katie",
-      "completion_rate": 58,
+      "points_collected": 270
+    },
+    {
+      "student_id": 4,
+      "student_name": "David",
+      "completion_rate": 96,
+      "time_spent": "4hrs 15min",
+      "points_collected": 450
+    },
+    {
+      "student_id": 5,
+      "student_name": "Eve",
+      "completion_rate": 88,
+      "time_spent": "6hrs 10min",
+      "points_collected": 380
+    },
+    {
+      "student_id": 6,
+      "student_name": "Frank",
+      "completion_rate": 82,
       "time_spent": "3hrs 20min",
-      "points_collected": 82
-  },
-  {
-      "student_id": "1012",
-      "student_name": "Liam",
-      "completion_rate": 53,
-      "time_spent": "2hrs 45min",
-      "points_collected": 76
-  },
-  {
-      "student_id": "1013",
-      "student_name": "Mia",
-      "completion_rate": 47,
+      "points_collected": 300
+    },
+    {
+      "student_id": 7,
+      "student_name": "Grace",
+      "completion_rate": 90,
       "time_spent": "4hrs 50min",
-      "points_collected": 69
-  },
-  {
-      "student_id": "1014",
-      "student_name": "Nathan",
-      "completion_rate": 63,
-      "time_spent": "3hrs 15min",
-      "points_collected": 87
-  },
-  {
-      "student_id": "1015",
-      "student_name": "Olivia",
-      "completion_rate": 56,
-      "time_spent": "5hrs 25min",
-      "points_collected": 79
-  },
-  {
-      "student_id": "1016",
-      "student_name": "Peter",
-      "completion_rate": 50,
+      "points_collected": 420
+    },
+    {
+      "student_id": 8,
+      "student_name": "Harry",
+      "completion_rate": 75,
+      "time_spent": "2hrs 35min",
+      "points_collected": 240
+    },
+    {
+      "student_id": 9,
+      "student_name": "Ivy",
+      "completion_rate": 83,
       "time_spent": "4hrs 5min",
-      "points_collected": 74
-  },
-  {
-      "student_id": "1017",
+      "points_collected": 350
+    },
+    {
+      "student_id": 10,
+      "student_name": "Jack",
+      "completion_rate": 95,
+      "time_spent": "5hrs 45min",
+      "points_collected": 490
+    },
+    {
+      "student_id": 11,
+      "student_name": "Kate",
+      "completion_rate": 86,
+      "time_spent": "3hrs 55min",
+      "points_collected": 340
+    },
+    {
+      "student_id": 12,
+      "student_name": "Liam",
+      "completion_rate": 91,
+      "time_spent": "6hrs 30min",
+      "points_collected": 430
+    },
+    {
+      "student_id": 13,
+      "student_name": "Mia",
+      "completion_rate": 80,
+      "time_spent": "4hrs 0min",
+      "points_collected": 320
+    },
+    {
+      "student_id": 14,
+      "student_name": "Noah",
+      "completion_rate": 97,
+      "time_spent": "4hrs 25min",
+      "points_collected": 470
+    },
+    {
+      "student_id": 15,
+      "student_name": "Olivia",
+      "completion_rate": 87,
+      "time_spent": "5hrs 5min",
+      "points_collected": 390
+    },
+    {
+      "student_id": 16,
+      "student_name": "Peter",
+      "completion_rate": 79,
+      "time_spent": "3hrs 15min",
+      "points_collected": 280
+    },
+    {
+      "student_id": 17,
       "student_name": "Quinn",
-      "completion_rate": 46,
-      "time_spent": "3hrs 30min",
-      "points_collected": 71
-  },
-  {
-      "student_id": "1018",
+      "completion_rate": 94,
+      "time_spent": "6hrs 15min",
+      "points_collected": 460
+    },
+    {
+      "student_id": 18,
       "student_name": "Rachel",
-      "completion_rate": 59,
-      "time_spent": "2hrs 20min",
-      "points_collected": 83
-  },
-  {
-      "student_id": "1019",
-      "student_name": "Sam",
-      "completion_rate": 43,
+      "completion_rate": 84,
       "time_spent": "4hrs 35min",
-      "points_collected": 67
-  },
-  {
-      "student_id": "1020",
+      "points_collected": 360
+    },
+    {
+      "student_id": 19,
+      "student_name": "Sam",
+      "completion_rate": 89,
+      "time_spent": "7hrs 0min",
+      "points_collected": 400
+    },
+    {
+      "student_id": 20,
       "student_name": "Tom",
-      "completion_rate": 61,
-      "time_spent": "3hrs 0min",
-      "points_collected": 84
-  }
-]
+      "completion_rate": 93,
+      "time_spent": "5hrs 35min",
+      "points_collected": 440
+    }
+  ]
   
 export default list;

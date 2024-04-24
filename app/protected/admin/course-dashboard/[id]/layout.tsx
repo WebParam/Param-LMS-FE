@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 
 function Layout({ children }: { children: React.ReactNode }) {
@@ -7,7 +8,6 @@ function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const name = searchParams.get("name");
-  const router = useRouter();
 
   const tabs = [
     { name: "sections", title: "Sections", url: `/protected/admin/course-dashboard/${id}/sections` },
@@ -17,6 +17,7 @@ function Layout({ children }: { children: React.ReactNode }) {
     },
     { name: "quizzes", title: "Quizzes", url: `/protected/admin/course-dashboard/${id}/quizzes` },
   ];
+
   
   return (
     <>
@@ -26,9 +27,12 @@ function Layout({ children }: { children: React.ReactNode }) {
           role="tablist"
         >
           {tabs.map((tab) => (
-            <a
+            <Link
               key={tab.name}
-              onClick={()=> router.replace(`${tab.url}?id=${id}&name=${name}`)}
+              href={{
+                pathname: tab.url,
+                query: { id: id, name: name },
+              }}
               className={pathname.includes(tab.name) ? "active" : ""}
               data-toggle="tab"
               role="tab"
@@ -37,7 +41,7 @@ function Layout({ children }: { children: React.ReactNode }) {
               <span className="flex d-flex flex-column">
                 <strong className="card-title">{tab.title}</strong>
               </span>
-            </a>
+            </Link>
           ))}          
         </div>
       </div>
