@@ -2,6 +2,7 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "./Table";
 import {useState } from "react";
+import {list} from "./data"
 import { IStudentAnalyticDetails } from "@/app/interfaces/analytics";
 
 
