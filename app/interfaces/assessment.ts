@@ -1,4 +1,5 @@
 export interface IAssessment {
+    id? : string;
     courseId: string;
     questions: IAssessmentQuestion[];
     createdByUserId: string;
@@ -12,6 +13,7 @@ export interface IAssessment {
     fileUrl?: string;
     instructorId:string;
     isRetaken : boolean;
+    attempts : number;
 }
 
 export interface IAssessmentState {

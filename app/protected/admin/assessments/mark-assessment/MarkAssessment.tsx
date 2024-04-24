@@ -2,15 +2,22 @@
 import "../assessments.css";
 import { IoCheckmarkSharp } from "react-icons/io5";
 import { FaXmark } from "react-icons/fa6";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import ConfirmationModal from "@leafygreen-ui/confirmation-modal";
+import {useRouter} from "next/navigation"
+
 
 interface MarkAssessmentProps {
   answer: IStudentAnswer;
+  setViewAnswers: React.Dispatch<React.SetStateAction<boolean>>;
+
 }
-export default function MarkAssessment({ answer }: MarkAssessmentProps) {
+export default function MarkAssessment({ answer , setViewAnswers}: MarkAssessmentProps) {
   const [openModal, setOpenModal] = useState<boolean>(false);
+const router = useRouter();
+
+
 
   return (
     <div
@@ -88,7 +95,9 @@ export default function MarkAssessment({ answer }: MarkAssessmentProps) {
           ))}
         </div>
         <div className="confirm-btns">
-          <button className="btn btn-accent">Cancel</button>
+          <button
+          onClick={() => setViewAnswers((prev:boolean) => !prev)}
+          className="btn btn-accent">Cancel</button>
           <button
             onClick={() => setOpenModal(true)}
             className="btn btn-outline-secondary"
@@ -100,12 +109,13 @@ export default function MarkAssessment({ answer }: MarkAssessmentProps) {
           open={openModal}
           onConfirm={() => {
             setOpenModal(false);
+            setViewAnswers((prev:boolean) => !prev);
           }}
           onCancel={() => {
             setOpenModal(false);
           }}
           title="Submit"
-          buttonText="Cancel"
+          buttonText="Submit"
         >
           Are you sure you want to submit grades
         </ConfirmationModal>

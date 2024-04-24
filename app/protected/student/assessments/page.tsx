@@ -3,6 +3,7 @@
 import { Api } from "@/app/lib/restapi/endpoints";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
+import Link from 'next/link';
 import {useRouter} from "next/navigation"
 
 const CourseAssessments = () => {
@@ -10,7 +11,10 @@ const CourseAssessments = () => {
 
       const router = useRouter();
     const [student, setStudent] = useState();
+    const [studentEnrolledCourses,setStudentEnrolledCourses] = useState();
     const [assessmentList, setAssessmentList] = useState([]);
+    const [courses, setCourses] = useState();
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     
 
 
