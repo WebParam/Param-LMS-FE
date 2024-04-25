@@ -29,7 +29,7 @@ const initialState: ICourseState = {
         instructor:"John Smith",
         courseImage: "course_image.jpg",
         bannerImage: "banner_image.jpg",
-        modifyingUser: loogedInUser,
+        modifyingUser: loogedInUser?.id,
         creatingUserName:"Kwanele"
 
     } as ICourse
