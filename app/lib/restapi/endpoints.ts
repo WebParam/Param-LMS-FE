@@ -363,6 +363,15 @@ GET_StudentSectionAnalytics: async (
     return response;
   },
 
+  GET_StudentAverageSectionAnalytics: async (
+    courseId :string , 
+    creatingUserId : string
+    ) => {
+    
+      const response = await GET(`${analyticsRead}/AveragesAnalytics/GetCourseProgressAverage?courseId=${courseId}&creatingUserId=${creatingUserId}`);
+      return response;
+    },
+
   GET_StudentAssessmentAnalytics: async (
     courseId : string,
      studentId:string
