@@ -12,35 +12,35 @@ import { IDocument } from "@/app/interfaces/document";
 import { IActivity } from "@/app/interfaces/analytics";
 import {  UpdateProgressRequestModel } from "@/app/interfaces/Enrollment";
 
-export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
+export const courseWriteUrl = "https://khumla-development-course-write.azurewebsites.net/api";
 
-export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api";
+export const courseReadUrl="https://khumla-development-course-read.azurewebsites.net/api";
 
 export const uploadImage = ""
 
 export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api";
  
-export const userReadUrl="https://khmla-dev-user-read.azurewebsites.net/api";
+export const userReadUrl="https://khmla-development-user-read.azurewebsites.net/api";
 
-export const commentReadUrl="https://khumla-develop-comments-read.azurewebsites.net/api";
+export const commentReadUrl="https://khumla-development-comments-read.azurewebsites.net/api";
 
-export const commentWriteUrl="https://khumla-develop-comments-write.azurewebsites.net/api";
+export const commentWriteUrl="https://khumla-development-comments-write.azurewebsites.net/api";
 
-export const quizReadUrl = "https://khumla-develop-quiz-read.azurewebsites.net/api";
+export const quizReadUrl = "https://khumla-development-quiz-read.azurewebsites.net/api";
 
-export const assessmentWriteUrl = "https://khumla-dev-assessment-write.azurewebsites.net/api";
+export const assessmentWriteUrl = "https://khumla-development-assessment-write.azurewebsites.net/api";
 
-export const assessmentReadUrl = "https://khumla-dev-assessment-read.azurewebsites.net/api";
+export const assessmentReadUrl = "https://khumla-development-assessment-read.azurewebsites.net/api";
 
-export const quizWriteUrl ="https://khumla-develop-quiz-write.azurewebsites.net/api";
+export const quizWriteUrl ="https://khumla-development-quiz-write.azurewebsites.net/api";
 
-export const documentWrite = "https://khumla-dev-document-write.azurewebsites.net/api"
+export const documentWrite = "https://khumla-development-document-write.azurewebsites.net/api"
 
-export const documentRead = "https://khumla-dev-document-read.azurewebsites.net/api"
+export const documentRead = "https://khumla-development-document-read.azurewebsites.net/api"
 
-export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
+export const marksWrite = "https://khumla-development-marks-write.azurewebsites.net/api"
 
-export const activityWrite = "https://khumla-dev-activity-write.azurewebsites.net/api"
+export const activityWrite = "https://khumla-development-activity-write.azurewebsites.net/api"
 
 export const analyticsRead = "https://khumla-development-api-aggregator.azurewebsites.net/api"
 

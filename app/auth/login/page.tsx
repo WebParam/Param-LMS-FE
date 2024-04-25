@@ -98,10 +98,11 @@ export default function Login() {
             Duration: 0,
             TargetId: targetId
           }
+          router.push('/protected/student/course/all-courses')
 
           const postActivity = await Api.POST_Activity(activity);
           if(postActivity.data?.id){
-            router.push('/protected/student/course/all-courses')
+          
           }
 
         } else {
