@@ -4,12 +4,24 @@ import { NextPage } from "next";
 const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   const PASSMARK = 50;
 
+  function displayTime(seconds:number) {
+    if (seconds >= 3600) {
+        let hours = Math.floor(seconds / 3600);
+        return hours + " hour(s)";
+    } else if (seconds >= 60) {
+        let minutes = Math.floor(seconds / 60);
+        return minutes + " minute(s)";
+    } else {
+        return seconds + " second(s)";
+    }
+}
+
   return (
     <>
       <tbody className="list" id="staff">
         {list &&
           list.map((data: any, key) => (
-            <tr key={data.student_id} className="selected">
+            <tr key={data.studentId} className="selected">
               
               <td className="text-center js-lists-values-projects small">
                 <div className="d-flex align-items-center">
@@ -21,8 +33,8 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   </a>
                   <Link
                     href={{
-                      pathname: `/protected/admin/course-dashboard/${data.student_id}/sections`,
-                      query: { id: data.student_id, name: data.student_name },
+                      pathname: `/protected/admin/course-dashboard/${data.studentId}/sections`,
+                      query: { id: data.studentId, name: data.studentName },
                     }}
                   >
                     <i className="material-icons mr-8pt">visibility</i>
@@ -30,33 +42,33 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                 </div>
               </td>
               <td className="text-center js-lists-values-projects small">
-                {data.student_id}
+                {data.studentId}
               </td>
               <td className="text-center js-lists-values-projects small">
-                {data.student_name}
+                {data.studentName}
               </td>
               <td className="text-center js-lists-values-projects small">
                 <div className="progress-container">
                   <div className="progress-bar">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `${data.completion_rate}%` }}
+                      style={{ width: `${data.completionRate}%` }}
                     ></div>
                   </div>
                   <div className="progress-bar-text">
-                    {data.completion_rate}%
+                    {Number(data.completionRate).toFixed(0)}%
                   </div>
                 </div>
               </td>
               <td className="text-center js-lists-values-projects small">
-                {data.time_spent}
+                {displayTime(Number(data.timeSpentOnCourse))}
               </td>
               <td className="text-center js-lists-values-projects small">
-                {data.points_collected}
+                {data.pointsCollected}
               </td>
               <td className="text-center js-lists-values-projects small">
                 <div className="align-items-center">
-                  {data.completion_rate >= PASSMARK ? (
+                  {data.completionRate >= PASSMARK ? (
                     <>
                       <a href="#" className="text-success">
                         <i className="material-icons mr-8pt">thumb_up</i>
