@@ -70,3 +70,17 @@ export interface IStudentSectionAverage{
     downloadedResources: string
     notes: string
 }
+
+export interface IStudentQuizAverage{
+    quizName: string
+    averageAttempts: number,
+    averageResults: number
+    averageTimeSpent: number
+}
+
+export interface IStudentAssessmentAverage{
+    assessmentName: string
+    averageAttempts: number,
+    averageResults: number
+    averageTimeSpent: number
+}

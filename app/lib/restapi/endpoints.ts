@@ -372,6 +372,26 @@ GET_StudentSectionAnalytics: async (
       return response;
     },
 
+    GET_StudentAverageQuizAnalytics: async (
+      courseId :string , 
+      creatingUserId : string
+      ) => {
+      
+        const response = await GET(`${analyticsRead}/AveragesAnalytics/GetQuizProgressAverage?courseId=${courseId}&creatingUserId=${creatingUserId}`);
+        return response;
+      },
+  
+
+      GET_StudentAverageAssessmentAnalytics: async (
+        courseId :string , 
+        creatingUserId : string
+        ) => {
+        
+          const response = await GET(`${analyticsRead}/AveragesAnalytics/GetAssessmentProgressAverage?courseId=${courseId}&creatingUserId=${creatingUserId}`);
+          return response;
+        },
+    
+
   GET_StudentAssessmentAnalytics: async (
     courseId : string,
      studentId:string
