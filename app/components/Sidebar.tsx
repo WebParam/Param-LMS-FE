@@ -4,7 +4,6 @@ import { FaBars} from "react-icons/fa";
 import "./style.css";
 import { usePathname } from 'next/navigation'
 
-
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState("home");
   const [expandSidebar, setExpandSidebar] = useState<boolean>(false);
