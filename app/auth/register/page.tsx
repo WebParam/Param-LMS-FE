@@ -160,11 +160,7 @@ export default function Register() {
         <div className="page-separator__bg-top " />
       </div>
       <div className="bg-body pt-32pt pb-32pt pb-md-64pt text-center">
-        <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }} className="container page__container">
-          <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>Facebook</a>
-          <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>Twitter</a>
-          <a className="btn btn-secondary btn-block-xs" style={{ marginRight: '5px' }}>Google+</a>
-        </div>
+       
         <div onClick={navigateToLogin} className="page-separator__text mt-3">Already have an account? <span style={{ cursor: "pointer", color: "blue" }}>sign-in</span></div>
       </div>
     </>
