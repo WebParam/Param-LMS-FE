@@ -1,6 +1,9 @@
 import { NextPage } from "next";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import { IActivityType } from "@/app/interfaces/analytics";
+import { Api } from "@/app/lib/restapi/endpoints";
+
 
 const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   setIsOpen,
@@ -10,15 +13,30 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const loggedInUser = cookies.get("param-lms-user");
   const router = useRouter();
 
-  const logout = () => {
-    cookies.remove("param-lms-user", {
-      path: "/",
-    });
-
-    if (loggedInUser?.role == "Admin") router.replace("/auth/admin/login");
-    else router.replace("/");
+  const logout = async () => {
+    if (typeof localStorage !== 'undefined') {
+      const targetId = localStorage.getItem("targetId")!;
+      const loginData = JSON.parse(localStorage.getItem("user-session") || "{}");
+      const from = loginData.sessionStart;      const activity = {
+        UserId: loggedInUser?.id,
+        from: from,
+        to: new Date().toISOString(),
+        ActivityType: IActivityType.Login,
+        Duration: 0,
+        TargetId: targetId
+      };
+  
+      const postActivity = await Api.POST_Activity(activity);
+      if (postActivity.data?.id) {
+        cookies.remove("param-lms-user", { path: "/" });
+        if (loggedInUser?.role === "Admin") router.replace("/auth/admin/login");
+        else router.replace("/");
+      }
+    } else {
+      console.log('localStorage is not available in this environment');
+    }
   };
-
+  
   return (
     <>
       <div
