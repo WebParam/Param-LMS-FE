@@ -135,12 +135,13 @@ export default function QuizData() {
   };
 
   const saveMarks = async () => {
-    const targetId = localStorage.getItem("targetId")!;
-    const activity: IActivity = {
+    const activity = {
       UserId: loogedInUser?.id,
+      from:  localStorage.getItem("quizStartTime")!,
+      to: new Date().toISOString(),
       ActivityType: IActivityType.QuizEnd,
-      Duration: duration,
-      TargetId: targetId,
+      Duration: 0,
+      TargetId: localStorage.getItem("targetId")!
     };
 
     const payload: IMarks = {

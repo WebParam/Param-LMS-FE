@@ -209,19 +209,9 @@ export default function CourseDetail() {
     setVideo(_courseFromState.sections[0]?.modules[0]?.videos[index])
   };
   const openQuiz = async () => {
-    const targetId = localStorage.getItem("targetId")!
-    const activity: IActivity = {
-      UserId: user?.id,
-      ActivityType: IActivityType.QuizStart,
-      Duration: 0,
-      TargetId: targetId,
-    }
-    const createActivity = await Api.POST_Activity(activity);
-    if (createActivity.data?.UserId) {
-      setOpen(false);
-      goToQuiz()
-    }
-
+    localStorage.setItem("quizStartTime", new Date().toISOString())
+    setOpen(false);
+    goToQuiz()
   }
   const goToQuiz = () => {
     router.push(`/protected/student/course/quiz?id=${quizId}`);

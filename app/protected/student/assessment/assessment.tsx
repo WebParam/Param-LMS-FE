@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import { IActivity, IActivityType } from '@/app/interfaces/analytics';
 import QuestionType from './QuestionType';
 import Header from './Header';
+import { userInfo } from 'os';
 
 const CourseAssessment = (props: any) => {
     const cookies = new Cookies();
@@ -88,19 +89,15 @@ const CourseAssessment = (props: any) => {
         setLoading(true)
         const submitAssessment = await Api.POST_StudentAnswers(studentAnswer);
         if (submitAssessment) {
-            if (typeof localStorage !== 'undefined') {
-                const targetId = localStorage.getItem("targetId")!;
-                setTargetId(targetId);
-            } else {
-                console.log('localStorage is not available in this environment');
-            }
-
-            const activity: IActivity = {
+                      
+            const activity = {
                 UserId: user?.id,
+                from:  localStorage.getItem("assessmentStartTime")!,
+                to: new Date().toISOString(),
                 ActivityType: IActivityType.AssessmentEnd,
-                Duration: duration,
-                TargetId: targetId,
-            }
+                Duration: 0,
+                TargetId: localStorage.getItem("targetId")!
+              };
             const createActivity = await Api.POST_Activity(activity);
             if (createActivity.data?.id) {
                 setLoading(false);
@@ -111,16 +108,7 @@ const CourseAssessment = (props: any) => {
     };
 
     useEffect(() => {
-        async () => {
-            const targetId = localStorage.getItem("targetId")!;
-            const activity: IActivity = {
-                UserId: user?.id,
-                ActivityType: IActivityType.AssessmentStart,
-                Duration: 0,
-                TargetId: targetId,
-            }
-            const createActivity = await Api.POST_Activity(activity);
-        }
+        localStorage.setItem("assessmentStartTime",new Date().toISOString() )
         getCourseAssessment(`${assessmentId}`);
     }, []);
 
