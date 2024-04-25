@@ -4,10 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'universal-cookie'; 
 import { useRouter } from 'next/navigation'
-import { v4 as uuidv4 } from 'uuid';
 import { Api } from '@/app/lib/restapi/endpoints';
 import { IUserLoginModel } from '@/app/interfaces/user';
-import { IActivityType } from '@/app/interfaces/analytics';
 
 const cookies = new Cookies();
 export default function Login() {
@@ -25,6 +23,25 @@ export default function Login() {
   const router = useRouter();
   const navigateToRegister = () => {
     router.push('/auth/student/register');
+  }
+
+  const setUserSession = () => {
+      
+    if (typeof localStorage !== 'undefined') {
+          
+      const date = new Date();
+      const loginData = {
+        sessionStart: new Date().toISOString(),
+        sessionEnd: new Date(date.getTime() + 2 * 60000),
+        lastActitive: new Date().toISOString()
+      }
+      localStorage.setItem("loginTime", new Date().toISOString())
+      localStorage.setItem("user-session", JSON.stringify(loginData))
+    } else {
+
+      console.log('localStorage is not available in this environment');
+    }
+
   }
 
   async function LoginUser(event: any) {
@@ -53,10 +70,7 @@ export default function Login() {
         setDisable(false)
         toast.dismiss(_id);
       }, 2000);
-
-
     } else {
-
       const payload = {
         Email: email,
         Password: password,
@@ -64,46 +78,15 @@ export default function Login() {
       const user = await Api.POST_Login(payload);
 
       try {
-
         if (user?.data?.id) {
           toast.update(_id, {
             render: "Successfully logged in",
             type: "success",
             isLoading: false,
           });
-
-          cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
-          const targetId = uuidv4();
-          if (typeof localStorage !== 'undefined') {
-          
-            localStorage.setItem("targetId", targetId);
-            const date = new Date();
-            const loginData = {
-              sessionStart: new Date().toISOString(),
-              sessionEnd: new Date(date.getTime() + 2 * 60000),
-              lastActitive: new Date().toISOString()
-            }
-
-            localStorage.setItem("user-session", JSON.stringify(loginData))
-          } else {
-
-            console.log('localStorage is not available in this environment');
-          }
-
-          const activity = {
-            UserId: user?.data?.id,
-            from: new Date().toISOString(),
-            to: new Date().toISOString(),
-            ActivityType: IActivityType.Login,
-            Duration: 0,
-            TargetId: targetId
-          }
-
-          const postActivity = await Api.POST_Activity(activity);
-          if(postActivity.data?.id){
-            router.push('/protected/student/course/all-courses')
-          }
-
+         cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
+          setUserSession();
+          router.push('/protected/student/course/all-courses')
         } else {
           toast.update(_id, {
             render: "Invalid login credentials",
