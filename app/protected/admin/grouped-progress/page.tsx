@@ -2,6 +2,7 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "../grouped-progress/[id]/sections/Table";
 import { useState } from "react";
+import {list} from "../grouped-progress/[id]/sections/data";
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
