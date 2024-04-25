@@ -2,6 +2,7 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "./Table";
 import {useState } from "react";
+import {list} from "./data"
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
