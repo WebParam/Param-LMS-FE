@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IStudentSectionAnalyticDetails, IStudentAssessmentAnalytic, IStudentQuizAnalytics } from "../interfaces/analytics";
+import { IStudentSectionAnalyticDetails, IStudentAssessmentAnalytic, IStudentQuizAnalytics, IStudentSectionAverage, IStudentAssessmentAverage, IStudentQuizAverage } from "../interfaces/analytics";
 import { AppStore } from "./store";
 
 interface AnalyticsState {
-  studentSectionAnalytics: IStudentSectionAnalyticDetails[];
-  studentAssessmentAnalytics: IStudentAssessmentAnalytic[];
-  studentQuizAnalytics: IStudentQuizAnalytics[];
+  studentSectionAnalytics: IStudentSectionAnalyticDetails[] | IStudentSectionAverage[];
+  studentAssessmentAnalytics: IStudentAssessmentAnalytic[] | IStudentAssessmentAverage[];
+  studentQuizAnalytics: IStudentQuizAnalytics[] | IStudentQuizAverage[];
 }
 
 const initialState: AnalyticsState = {
