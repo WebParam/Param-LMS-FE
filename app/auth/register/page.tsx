@@ -104,10 +104,10 @@ export default function Register() {
             Duration: 0,
             TargetId: targetId
           }
-            router.push('/protected/student/course/all-courses')
           const postActivity = await Api.POST_Activity(activity);
           if (postActivity.data?.id) {
             toast.success("Successfully registered");
+            router.push('/protected/student/course/all-courses')
           }
 
         }
