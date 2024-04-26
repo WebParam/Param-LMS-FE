@@ -14,6 +14,8 @@ const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [list, setList] = useState<IStudentSectionAverage[]>([]);
   const studentSectionnalytics = useSelector(selectStudentSectionAnalytics);
+  const creatingUserId = "65d74882251362b65ed82c2c";
+  const courseId = "65e5d75f6944453739f276c3";
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
@@ -28,8 +30,8 @@ const Body = () => {
       return;
     }
     const getData = await Api.GET_StudentAverageSectionAnalytics(
-      "65e5d75f6944453739f276c3",
-      "65d74882251362b65ed82c2c"
+      courseId,
+      creatingUserId
     );
     dispatch(saveStudentSectionAnalytics(getData));
     setList(getData);

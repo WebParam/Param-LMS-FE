@@ -22,14 +22,15 @@ const Body = () => {
       ? studentQuizAnalytics?.slice(indexOfFirstItem, indexOfLastItem)
       : list.slice(indexOfFirstItem, indexOfLastItem);
   const dispatch = useDispatch();
-
+  const creatingUserId = "65d74882251362b65ed82c2c";
+  const courseId = "65e5d75f6944453739f276c3";
   const getQuizAverageData = async () => {
     if (studentQuizAnalytics?.length > 0) {
       return;
     }
     const getData = await Api.GET_StudentAverageQuizAnalytics(
-      "65e5d75f6944453739f276c3",
-      "65d74882251362b65ed82c2c"
+      courseId,
+      creatingUserId
     );
     if (getData[0]?.error === false) {
       const data = getData?.map((data: any) => data.data);
