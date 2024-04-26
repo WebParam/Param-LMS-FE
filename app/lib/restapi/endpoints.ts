@@ -40,7 +40,7 @@ export const documentRead = "https://khumla-dev-document-read.azurewebsites.net/
 
 export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
 
-export const activityWrite = "https://khumla-dev-activity-write.azurewebsites.net/api"
+export const activityWrite = "https://khumla-development-activity-write.azurewebsites.net/api"
 
 export const analyticsRead = "https://khumla-development-api-aggregator.azurewebsites.net/api"
 

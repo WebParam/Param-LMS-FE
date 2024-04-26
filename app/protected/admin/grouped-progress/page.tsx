@@ -1,7 +1,7 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
 import { useState } from "react";
-import list from "./data"
+import {list} from "../grouped-progress/[id]/sections/data";
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
