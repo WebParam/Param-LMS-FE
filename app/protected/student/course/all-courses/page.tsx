@@ -18,11 +18,8 @@ export default function AllCourses() {
   const dispatch = useDispatch();
    const [allCourses, setCourses] = useState<ICourse[]>([]); 
    const [enrolledCourses, setEnrolledCourses] = useState<ICourse[]>([]); 
-   const [studentEnrolledCourses, setStudentEnrolledCourses] = useState<IStudentCourses[]>([]);
 
    const goToCourseDetails=(course:ICourse)=>{
-    
-   
     dispatch(setSelectedCourseForEdit(course));
     window.location.href = '/protected/student/course/course-detail'; 
    }
@@ -66,9 +63,6 @@ useEffect(() => {
   }, []);
 
 
-  const getEnrolled = () => {
-
-  }
 
   console.log("courses",allCourses);
   console.log("enrolledCourses",enrolledCourses);
@@ -78,19 +72,15 @@ useEffect(() => {
       var student =cookies.get('param-lms-user');
       console.log("Id ", student.id)
       const course = await Api.GET_StudentCoursesById(student.id);
-      //const enrolled = await Api.GET_EnrolledCoursesByStudentId(student.id)
       console.log("Student-Courses",course);
-
-      const getReactCourse = course.data?.allCourses.filter(c => c.id === "65e5d75f6944453739f276c3")!
-      console.log(getReactCourse)
         setCourses(course?.data?.allCourses!);
         setEnrolledCourses(course.data!.enrolledCourses);
-        //setStudentEnrolledCourses(enrolled)
        console.log("AllCourses",allCourses);
     } catch (error) {
       console.error('Error:', error);
     }
   }
+
   return (
 <>
   {/* Page Content */}
@@ -342,7 +332,7 @@ useEffect(() => {
       </div>
       <div className="row card-group-row">
        {
-        allCourses.map((course) => 
+        allCourses?.map((course) => 
              (
                 
             <div className="col-md-6 col-lg-4 col-xl-3 card-group-row__col">
