@@ -59,3 +59,28 @@ export interface IStudentQuizAnalytics {
     attempts: string;
     results: string;
 }
+
+export interface IStudentSectionAverage{
+    sectionName: string
+    averageCompletionRate: number
+    averageTimeSpent: number
+    averagePoints: string
+    activeStudents: string
+    questionsLauched: string
+    downloadedResources: string
+    notes: string
+}
+
+export interface IStudentQuizAverage{
+    quizName: string
+    averageAttempts: number,
+    averageResults: number
+    averageTimeSpent: number
+}
+
+export interface IStudentAssessmentAverage{
+    assessmentName: string
+    averageAttempts: number,
+    averageResults: number
+    averageTimeSpent: number
+}

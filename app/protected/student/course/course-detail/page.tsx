@@ -204,7 +204,6 @@ const getEnrolledCourses = async () => {
 
     router.push(`/protected/student/course/quiz?id=${quizId}`);
     
-  
   }
 
   const goToCourse = () => {

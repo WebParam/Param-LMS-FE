@@ -1,6 +1,5 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import Table from "../grouped-progress/[id]/sections/Table";
 import { useState } from "react";
 import {list} from "../grouped-progress/[id]/sections/data";
 
