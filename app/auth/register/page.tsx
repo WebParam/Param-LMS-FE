@@ -133,7 +133,10 @@ debugger;
             });
     
             // Set cookies here after successful login
-    
+            cookies.set("param-lms-user", JSON.stringify(user.data), {
+              path: "/",
+            });
+
             // Optionally, you can redirect the user to another page
             router.push('/protected/student/course/all-courses');
       
