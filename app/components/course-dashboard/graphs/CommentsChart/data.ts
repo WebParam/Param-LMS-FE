@@ -15,15 +15,18 @@ export const barDescriptions = [
 
 const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export const data = {
+export const data = async ({ CommentsChartBarData }: { CommentsChartBarData: number[]; }) => {
+"use server";
+return {
   labels,
   datasets: [
     {
       label: "No of Comments",
-      data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
+      data: CommentsChartBarData,
       backgroundColor: "rgb(82 121 249)",
       barPercentage: 0.3,
       borderRadius: 10,
     }
   ],
-};
+}
+}

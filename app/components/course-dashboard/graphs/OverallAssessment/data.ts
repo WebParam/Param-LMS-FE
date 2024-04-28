@@ -20,22 +20,26 @@ export const barDescriptions = [
   { description: "Pending Assessment", color: "rgba(145, 21, 243, 0.3)" },
 ];
 
-export const data = {
+export const data = async ({numberOfAssessments}: {numberOfAssessments?: number[]}) => {
+  "use server"
+   return {
   labels,
   datasets: [
     {
       label: 'Completed',
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+      data: numberOfAssessments,
       backgroundColor: "rgb(33, 138, 253)",
       barPercentage: 0.3,
       borderRadius: 10,
     },
     {
       label: 'Pending',
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+      data: numberOfAssessments,
       backgroundColor: "rgba(145, 21, 243, 0.3)",
       barPercentage: 0.3,
       borderRadius: 10,
     }
   ],
-};
+}; 
+}
+  

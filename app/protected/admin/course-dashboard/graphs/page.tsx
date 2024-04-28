@@ -3,24 +3,24 @@ import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/compone
 
 import {
   options as OverallAssessmentBarOptions,
-  data as OverallAssessmentBarData,
+  data as OverallAssessmentBarDataFn,
   barDescriptions as OverallAssessmentBarDescription,
 } from "@/app/components/course-dashboard/graphs/OverallAssessment/data";
 import {
   options as QuestionsAskedOptions,
-  data as QuestionsAskedData,
+  data as QuestionsAskedDataFn,
   barDescriptions as QuestionsAskedDescription,
 } from "@/app/components/course-dashboard/graphs/QuestionsAsked/data";
 
 import {
   options as OverallQuizBarOptions,
-  data as OverallQuizBarData,
+  data as OverallQuizBarDataFn,
   barDescriptions as OverallQuizBarDescription,
 } from "@/app/components/course-dashboard/graphs/OverallQuiz/data";
 
 import {
   options as CommentsChartBarOptions,
-  data as CommentsChartBarData,
+  data as CommentsChartBarDataFn,
   barDescriptions as CommentsChartBarDescription,
 } from "@/app/components/course-dashboard/graphs/CommentsChart/data";
 
@@ -29,51 +29,47 @@ import { barDescriptions as StudentsProgressStatusDescription } from "@/app/comp
 import ChartLayout from "@/app/components/course-dashboard/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/course-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
 import { StudentsProgressStatus } from "@/app/components/course-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
+import { getCourseGraphs } from "@/app/lib/restapi/admin";
+import DataTabs from "@/app/components/course-dashboard/graphs/DataTabs";
 
-type DataTiles = {
-  name: string;
-  icon: string;
-  data: number;
-};
-
-export default function Page() {
-  const dataTiles: DataTiles[] = [
-    { name: "Students", icon: "person_outline", data: 112 },
-    { name: "Modules", icon: "book", data: 5 },
-    { name: "Quizzes", icon: "help", data: 10 },
-    { name: "Assessments", icon: "list", data: 4 },
-    { name: "Documents Downloaded", icon: "cloud_download", data: 79 },
-  ];
+export default async function Page() {
+  const creatingUser = "Admin";
+  const courseId = "65e5d75f6944453739f276c3";
+  const data = await getCourseGraphs(creatingUser, courseId);
+  const studentCourseProgress = [12, 9];
+  const {
+    totalEnrollments,
+    totalAssessments,
+    totalQuizzes,
+    documentsDownloaded,
+    averageTimeSpent,
+    overallAssessments,
+    quizAttempts,
+    questionsLaunchedPerMonth,
+    commentsPerMonthByNumbers
+  } = data.data;
+  const OverallAssessmentBarData = await OverallAssessmentBarDataFn(overallAssessments.numberOfAssessments);
+  const OverallQuizBarData = await OverallQuizBarDataFn(quizAttempts.attempts);
+  const QuestionsAskedData = await QuestionsAskedDataFn(questionsLaunchedPerMonth.numberOfQuestions);
+  const CommentsChartBarData = await CommentsChartBarDataFn(commentsPerMonthByNumbers.numberOfComments);
+  const totalModdules = 0;
 
   return (
     <>
-      <div className="row mb-lg-8pt">
-        {dataTiles.map((data: DataTiles) => (
-          <div key={data.name} className="col-lg-3">
-            <div className="card">
-              <div
-                data-toggle="tab"
-                role="tab"
-                aria-selected="true"
-                className="dashboard-area-tabs__tab card-body text-center active"
-              >
-                <span className="font-weight-bold">{data.name}</span>
-                <i className="material-icons text-success icon-48pt">
-                  {data.icon}
-                </i>
-                <span className="h2 mb-0 mt-n1">{data.data}</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <DataTabs
+        totalEnrollments={totalEnrollments}
+        totalModdules={totalModdules}
+        totalAssessments={totalAssessments}
+        totalQuizzes={totalQuizzes}
+        documentsDownloaded={documentsDownloaded}
+      />
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
             title="Average Time Spent"
             barDescriptions={AvgTimeSpentBarDataDescription}
           >
-            <AvgTimeSpent />
+            <AvgTimeSpent averageTimeSpent={averageTimeSpent.averageTimeSpent} />
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
@@ -91,7 +87,7 @@ export default function Page() {
             barDescriptions={StudentsProgressStatusDescription}
             type="pie"
           >
-            <StudentsProgressStatus />
+            <StudentsProgressStatus studentCourseProgress={studentCourseProgress} />
           </ChartLayout>
         </div>
 
