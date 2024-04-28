@@ -1,6 +1,5 @@
 "use client";
 import { IMarks, IQuiz } from "@/app/interfaces/quiz";
-import { Api } from "@/app/lib/restapi/endpoints";
 import React, { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from 'next/link';
@@ -9,6 +8,8 @@ import { useSelector } from "react-redux";
 import { getSelectedCourseForEdit } from "@/app/redux/courseSlice";
 import Cookies from "universal-cookie";
 import { IActivity, IActivityType } from "@/app/interfaces/analytics";
+import { QuizApi } from "@/app/lib/restapi/endpoints/quizzes.api";
+import { AnalyticsApi } from "@/app/lib/restapi/endpoints/analytics.api";
 
 export default function QuizData() {
   const cookies = new Cookies();
@@ -157,17 +158,17 @@ export default function QuizData() {
     try {
       const studentMarksForQuiz = marks.filter((mark: IMarks) => mark.studentId === loogedInUser?.id && mark.quizId === quiz?.id);
       if (studentMarksForQuiz.length > 0) {
-        const updatedMarks = await Api.PUT_UpdateMarks(payload);
+        const updatedMarks = await QuizApi.PUT_UpdateMarks(payload);
         if (updatedMarks.data?.studentId) {
-          const createActivity = await Api.POST_Activity(activity);
+          const createActivity = await AnalyticsApi.POST_Activity(activity);
           if (createActivity.data?.UserId) {
             router.push("/protected/student/course/course-detail");
           }
         }
       } else {
-        const newMarks = await Api.POST_Marks(payload);
+        const newMarks = await QuizApi.POST_Marks(payload);
         if (newMarks.data?.studentId) {
-          const createActivity = await Api.POST_Activity(activity);
+          const createActivity = await AnalyticsApi.POST_Activity(activity);
           if (createActivity.data?.UserId) {
             router.push("/protected/student/course/course-detail");
           }

@@ -2,7 +2,7 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "./Table";
 import { useEffect, useState } from "react";
-import { Api } from "@/app/lib/restapi/endpoints";
+import { AnalyticsApi } from "@/app/lib/restapi/endpoints/analytics.api";
 import { IStudentQuizAnalytics } from "@/app/interfaces/analytics";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
@@ -24,7 +24,7 @@ const Body = () => {
     if (studentQuizAnalytics?.length > 0) {
       return
     }
-    const getAnalytics = await Api.GET_StudentQuizAnalytics(studentNumber, "65e5d75f6944453739f276c3");
+    const getAnalytics = await AnalyticsApi.GET_StudentQuizAnalytics(studentNumber, "65e5d75f6944453739f276c3");
     if (getAnalytics[0]?.error === false) {
       const data = getAnalytics?.map((data: any) => data.data);
       dispatch(saveStudentQuizAnalytics(data));

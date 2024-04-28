@@ -3,7 +3,7 @@ import Pagination from "@/app/components/Pagination";
 import Table from "./(components)/Table";
 import { useEffect, useState } from "react";
 import { IStudentAnalyticDetails } from "@/app/interfaces/analytics";
-import { Api } from "@/app/lib/restapi/endpoints";
+import { AnalyticsApi } from "@/app/lib/restapi/endpoints/analytics.api";
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,7 +14,7 @@ const Body = () => {
   const currentItems = list?.slice(indexOfFirstItem, indexOfLastItem);
 
   const getData = async () => {
-    const getAnalytics = await Api.GET_StudentAnalytics( "65e5d75f6944453739f276c3","65d74882251362b65ed82c2c");
+    const getAnalytics = await AnalyticsApi.GET_StudentAnalytics( "65e5d75f6944453739f276c3","65d74882251362b65ed82c2c");
     const data = getAnalytics?.map((data:any) => data.data);
     setList(data);
     console.log("Data",data);

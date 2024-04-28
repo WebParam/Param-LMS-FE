@@ -1,6 +1,6 @@
 "use client"
 import { IChoice, IQuiz } from '@/app/interfaces/quiz'
-import { Api } from '@/app/lib/restapi/endpoints';
+import { QuizApi } from '@/app/lib/restapi/endpoints/quizzes.api';
 import React, { useEffect, useState } from 'react'
 
 function  Page() {
@@ -17,7 +17,7 @@ function  Page() {
 
   async function getAllQuizzes() {
     try {
-      const getQuizzes = await Api.GET_AllQuizzes();
+      const getQuizzes = await QuizApi.GET_AllQuizzes();
   
       if (getQuizzes && getQuizzes.length > 0) {
         const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Api } from "@/app/lib/restapi/endpoints";
+import { UserApi } from "@/app/lib/restapi/endpoints/users.api";
 import { IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/user";
 import Cookies from "universal-cookie"; // Import the library
 import { useRouter } from "next/navigation";
@@ -60,7 +60,7 @@ export default function Login() {
         Password: password,
       } as IUserLoginModel;
 
-      const user = await Api.POST_Login(payload);
+      const user = await UserApi.POST_Login(payload);
       console.log("data", user);
       try {
         if (user?.data?.id && user?.data?.role == "Admin") {

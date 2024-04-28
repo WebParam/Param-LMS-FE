@@ -1,7 +1,6 @@
 "use client"
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
-import { Api } from '@/app/lib/restapi/endpoints';
 import { ICourse, ISection, IModule, IVideo } from '@/app/interfaces/courses';
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from "react-redux";
@@ -18,11 +17,12 @@ import VideoSibar from '../../../../components/VideoSidebar';
 import VideoPlayer from '../../../../components/ReactPlayer';
 import { createWatchedDetail } from '@/app/redux/watcheVideosSlice';
 import { IEnrollment } from '@/app/interfaces/Enrollment';
-import { IActivity, IActivityType } from '@/app/interfaces/analytics';
+import { CourseApi } from '@/app/lib/restapi/endpoints/courses.api';
+import { AnalyticsApi } from '@/app/lib/restapi/endpoints/analytics.api';
+import { CommentsApi } from '@/app/lib/restapi/endpoints/comments.api';
 
 export default function CourseDetail() {
   const cookies = new Cookies();
-  const user = cookies.get("param-lms-user");
   const _courseFromState = useSelector(getSelectedCourseForEdit).course;
   const [sections, setSection] = useState<ISection[]>([])
   const videos : IVideo[] = []
@@ -39,7 +39,6 @@ export default function CourseDetail() {
   const [enrollOpen, setEnrollOpen] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [expandedSection, setExpandedSection] = useState<any>(null);
   const [hideSidebar, setHideSidebar] = useState<boolean>(true)
   const [enrollment, setEnrollment] = useState<IEnrollment | any>()
   const [seconds, setSeconds] = useState(0);
@@ -49,7 +48,6 @@ export default function CourseDetail() {
   const [numberOfVideos, setNumberOfVideos] = useState<number>(0)
   const [videoEnded, setVideoEnded] = useState<boolean>(false)
   const [duration, setDuration] = useState(0);
-  const date = new Date();
   const dispatch = useDispatch();
   const handleDuration = (duration: any) => {
     setDuration(duration);
@@ -75,7 +73,7 @@ export default function CourseDetail() {
 
   const getEnrolledCourses = async () => {
     var student = cookies.get('param-lms-user');
-    const res = await Api.GET_EnrolledCoursesByStudentId(student.id);
+    const res = await CourseApi.GET_EnrolledCoursesByStudentId(student.id);
     if (res) {
       const getEnrollment = res?.map((enroll: any) => enroll?.data)[0]
       setEnrollment(getEnrollment);
@@ -120,7 +118,7 @@ export default function CourseDetail() {
       progress: numberOfVideos / 100
 
     }
-    const createProgress = await Api.POST_CourseProgress(courseProgress);
+    const createProgress = await AnalyticsApi.POST_CourseProgress(courseProgress);
     const watchedVideo = {
       courseId: _courseFromState.id,
       videoId: allVideos[currentVideoIndex].id,
@@ -180,7 +178,7 @@ export default function CourseDetail() {
     getUserCourses(state?.creatingUser!);
     const fetchData = async () => {
       setAuthor(await getAuthor(state?.creatingUser!));
-      var _comments = await Api.GET_CommentsByReference(state.id);
+      var _comments = await CommentsApi.GET_CommentsByReference(state.id);
       if (_comments) {
         setComments(_comments?.map((comment) => comment.data) as any);
       }
@@ -189,7 +187,7 @@ export default function CourseDetail() {
   }, []);
 
   async function getUserCourses(id: string) {
-    var userCourses = await Api.GET_CoursesByUserId(id);
+    var userCourses = await CourseApi.GET_CoursesByUserId(id);
   }
   const handleVideoSelect = (video: IVideo) => {
     clearInterval(intervalId); 
@@ -242,7 +240,7 @@ export default function CourseDetail() {
       ]
 
     }
-    const enroll = await Api.POST_CourseEnrollment(payload);
+    const enroll = await CourseApi.POST_CourseEnrollment(payload);
     if (enroll) {
       setIsLoading(false);
       setEnrollOpen(true);

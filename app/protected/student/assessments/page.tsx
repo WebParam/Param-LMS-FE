@@ -1,10 +1,11 @@
 "use client"
-import { Api } from "@/app/lib/restapi/endpoints";
+import { AssessmentApi } from "@/app/lib/restapi/endpoints/assessments.api";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Link from 'next/link';
 import { useRouter } from "next/navigation"
 import { IActivity, IActivityType } from "@/app/interfaces/analytics";
+import { CourseApi } from "@/app/lib/restapi/endpoints/courses.api";
 
 const CourseAssessments = () => {
 
@@ -14,13 +15,13 @@ const CourseAssessments = () => {
   const [assessmentList, setAssessmentList] = useState([]);
 
   const studentAssessmentsByCourses = async (ids: string) => {
-    const assessments = await Api.GET_StudentAssessmentsByCourses(ids);
+    const assessments = await AssessmentApi.GET_StudentAssessmentsByCourses(ids);
     setAssessmentList(assessments);
   }
 
   const getStudentCourses = async () => {
     try {
-      const course = await Api.GET_StudentCoursesById(user?.id);
+      const course = await CourseApi.GET_StudentCoursesById(user?.id);
       const pluck = (property: any) => (element: any) => element[property];
       const arrayList = course.data!.enrolledCourses.map(pluck('id'))
       var params = new URLSearchParams();

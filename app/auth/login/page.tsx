@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'universal-cookie'; 
 import { useRouter } from 'next/navigation'
-import { Api } from '@/app/lib/restapi/endpoints';
+import { UserApi } from "@/app/lib/restapi/endpoints/users.api";
 import { IUserLoginModel } from '@/app/interfaces/user';
 
 const cookies = new Cookies();
@@ -75,7 +75,7 @@ export default function Login() {
         Email: email,
         Password: password,
       } as IUserLoginModel;
-      const user = await Api.POST_Login(payload);
+      const user = await UserApi.POST_Login(payload);
 
       try {
         if (user?.data?.id) {

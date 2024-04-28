@@ -11,7 +11,7 @@ import { IoPersonSharp } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { getSelectedCourseForEdit } from "../redux/courseSlice";
 import Cookies from "universal-cookie";
-import { Api } from "../lib/restapi/endpoints";
+import { CommentsApi } from "../lib/restapi/endpoints/comments.api";
 import { IResponseObject } from "../lib/restapi/response";
 import IComment, { ICommentReply } from "../interfaces/comment";
 import { FaRegThumbsUp } from "react-icons/fa";
@@ -109,7 +109,7 @@ function VideoPlayer({
       creatingUserName: loogedInUser?.firstName + " " + loogedInUser?.lastName,
     };
 
-    const postComment = await Api.POST_AddComment(commentPayload);
+    const postComment = await CommentsApi.POST_AddComment(commentPayload);
     if (postComment.data?.id) {
       const updatedComments = [...comments, postComment.data];
       setComments(updatedComments);
@@ -123,7 +123,7 @@ function VideoPlayer({
     setCommentReplies([]);
     setEnableComment(false);
     var _comment: IResponseObject<IComment>[] =
-      await Api.GET_CommentsByReference(commentId);
+      await CommentsApi.GET_CommentsByReference(commentId);
     var data: IComment[] = _comment.map(
       (comment) => comment.data
     ) as IComment[];
@@ -139,7 +139,7 @@ function VideoPlayer({
     setComment("");
   
     var _comment: IResponseObject<IComment>[] =
-      await Api.GET_CommentsByReference(videoId);
+      await CommentsApi.GET_CommentsByReference(videoId);
     var data: IComment[] = _comment.map(
       (comment) => comment.data
     ) as IComment[];
@@ -173,7 +173,7 @@ function VideoPlayer({
       },
     };
 
-    const postComment = await Api.POST_AddCommentReply(commentPayload);
+    const postComment = await CommentsApi.POST_AddCommentReply(commentPayload);
     if (postComment.data?.id) {
       setCommentReply("");
     }
