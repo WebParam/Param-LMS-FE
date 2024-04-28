@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import ReactPlayer from "react-player";
 import "./react-player.css";
@@ -8,16 +8,13 @@ import ConfirmationModal from "@leafygreen-ui/confirmation-modal";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { IoPersonSharp } from "react-icons/io5";
-import { useSelector } from "react-redux";
-import { getSelectedCourseForEdit } from "../redux/courseSlice";
 import Cookies from "universal-cookie";
 import { Api } from "../lib/restapi/endpoints";
 import { IResponseObject } from "../lib/restapi/response";
-import IComment, { ICommentReply } from "../interfaces/comment";
+import IComment from "../interfaces/comment";
 import { FaRegThumbsUp } from "react-icons/fa";
 import { FaRegThumbsDown } from "react-icons/fa";
-import { BsReply } from "react-icons/bs";
-import axios from "axios";
+import VideoTranscript from "./transcript/VideoTranscript";
 
 interface ReactPlayerProps {
   selectedVideo: string;
@@ -58,23 +55,6 @@ function VideoPlayer({
   const [loggedInUserName, setLoggedInUserName] = useState<string>(
     `${loogedInUser?.firstName} ${loogedInUser?.lastName}`
   );
-  const [replyCommentId, setReplyCommentId] = useState<string>("");
-  const [selectedComment, setselectedComment] = useState<IComment>();
-  const [commentReply, setCommentReply] = useState<string>("");
-  const [commentReplies, setCommentReplies] = useState<IComment[]>([]);
-  const [enableComment, setEnableComment] = useState<boolean>(false);
-  const commentTextareaRefs = useRef<Array<HTMLInputElement | any>>([]); 
-  const [transcript, setTranscript] = useState<any>([]);
-
-  const selectCommentForReply = (comment: IComment, index:number) => {
-    setReplyCommentId(comment?.id!);
-    setselectedComment(comment);
-    setEnableComment(true);
-    if (commentTextareaRefs.current[index]) {
-      commentTextareaRefs.current[index]!.scrollIntoView({ behavior: 'smooth' });
-      commentTextareaRefs.current[index]!.focus();
-    }
-  };
 
   const today = new Date();
   const year = today.getFullYear();
@@ -83,15 +63,15 @@ function VideoPlayer({
   let hours: number | string = today.getHours();
   let minutes: number | string = today.getMinutes();
   let seconds: number | string = today.getSeconds();
-  
+
   month = month < 10 ? `0${month}` : month;
   day = day < 10 ? `0${day}` : day;
   hours = hours < 10 ? `0${hours}` : hours;
   minutes = minutes < 10 ? `0${minutes}` : minutes;
   seconds = seconds < 10 ? `0${seconds}` : seconds;
-  
+
   const todayDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  
+
   const handleSubmit = async (e: any) => {
     setIsCommentCreated(false);
     e.preventDefault();
@@ -118,26 +98,10 @@ function VideoPlayer({
     }
   };
 
-  const getCommentReplies = async (commentId: string) => {
-    setReplyCommentId("");
-    setCommentReplies([]);
-    setEnableComment(false);
-    var _comment: IResponseObject<IComment>[] =
-      await Api.GET_CommentsByReference(commentId);
-    var data: IComment[] = _comment.map(
-      (comment) => comment.data
-    ) as IComment[];
-    const commentReplies = data.filter(
-      (comment) => comment.referenceId === commentId
-    );
-    setCommentReplies(commentReplies);
-    setReplyCommentId(commentReplies[0]?.referenceId);
-  };
-
   const getVideoComments = async () => {
     setComments([]);
     setComment("");
-  
+
     var _comment: IResponseObject<IComment>[] =
       await Api.GET_CommentsByReference(videoId);
     var data: IComment[] = _comment.map(
@@ -146,104 +110,34 @@ function VideoPlayer({
     const videoComments = data.filter(
       (comment) => comment.referenceId === videoId
     );
-  
-   
+
     videoComments.sort((a, b) => {
-      return new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime();
+      return (
+        new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
+      );
     });
-  
+
     setComments(videoComments);
   };
-  const PostCommentReply = async () => {
-    const commentPayload: ICommentReply = {
-      comment: selectedComment!,
-      reply: {
-        title: video?.title,
-        message: commentReply,
-        creatingUser: loogedInUser?.id,
-        createdDate: todayDateTime,
-        modifyingUser: loogedInUser?.id,
-        modifiedDate: todayDateTime,
-        referenceId: selectedComment?.id!,
-        type: 1,
-        state: 0,
-        replies: [],
-        creatingUserName:
-          loogedInUser?.firstName + " " + loogedInUser?.lastName,
-      },
-    };
-
-    const postComment = await Api.POST_AddCommentReply(commentPayload);
-    if (postComment.data?.id) {
-      setCommentReply("");
-    }
-  };
-
-
-  useEffect(() => {
-    const fetchTranscript = async () => {
-      try {
-    
-        const accessToken = "cca5d0ef803dac4b5746c4a378073e38";
-
-        const response = await axios.get(`https://api.vimeo.com/videos/915091193/texttracks`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        const transcriptLink = response.data.data[0]?.link;
-        const transcriptResponse = await axios.get(transcriptLink);
-        const lines = transcriptResponse.data.split('\n');
-        const parsedTranscript = [];
-      
-        let currentEntry = { time: null, text: '' };
-      
-        lines.forEach((line:any) => {
-          if (/^\d/.test(line)) {
-            currentEntry.time = line.split(' --> ')[0];
-          } else if (line.trim() !== '') {
-            currentEntry.text += (currentEntry.text ? ' ' : '') + line.trim();
-          } else if (currentEntry.time !== null) {
-            parsedTranscript.push(currentEntry);
-            currentEntry = { time: null, text: '' };
-          }
-        });
-      
-        if (currentEntry.time !== null) {
-          parsedTranscript.push(currentEntry);
-        }
-        if (parsedTranscript.length > 0 && parsedTranscript[0].text.includes("WEBVTT -")) {
-          parsedTranscript.shift();
-        }
-      
-    
-        setTranscript(parsedTranscript);
-
-
-    console.log("Transcript",parsedTranscript)
-
-
-
-
-
-      } catch (error) {
-        console.error('Error fetching transcript:', error);
-        setTranscript('Error fetching transcript');
-      }
-    };
-
-    fetchTranscript();
-  }, []);
-
-
 
   useEffect(() => {
     getVideoComments();
-
-
-    
   }, [videoId, isCommentCreated]);
+
+  function timeToSeconds(timestamp: any) {
+    const timeParts = timestamp.split(":");
+    const hours = parseInt(timeParts[0], 10);
+    const minutes = parseInt(timeParts[1], 10);
+    const seconds = parseInt(timeParts[2], 10);
+    return hours * 3600 + minutes * 60 + seconds;
+  }
+
+  const handleTimestampClick = (time: any) => {
+    const seconds = timeToSeconds(time);
+    if (playerRef.current) {
+      playerRef.current.seekTo(seconds, "seconds");
+    }
+  };
 
   return (
     <div style={{ marginBottom: "5em" }}>
@@ -273,9 +167,12 @@ function VideoPlayer({
           {sections[0]?.modules[0]?.videos[0].description}
         </span>
 
-        <div className={HideSidebar ? "details" : "full-screen"} style={{ fontSize: "large" }}>
+        <div
+          className={HideSidebar ? "details" : "full-screen"}
+          style={{ fontSize: "large" }}
+        >
           <h4>{video?.title}</h4>
-        <Tabs style={{ width: "100%" }}>
+          <Tabs style={{ width: "100%" }}>
             <TabList default={false}>
               <div className="tabs_header-container">
                 <Tab>Overview</Tab>
@@ -284,17 +181,9 @@ function VideoPlayer({
               </div>
             </TabList>
 
-       
+            <TabPanel>{video?.description}</TabPanel>
             <TabPanel>
-             {video?.description}
-            </TabPanel>
-            <TabPanel>
-            {transcript?.map((entry:any) => (
-        <div key={entry?.time}>
-          <p>{entry?.time}</p>
-          <p>{entry?.text}</p>
-        </div>
-      ))}
+              <VideoTranscript handleTimestampClick={handleTimestampClick} />
             </TabPanel>
             <TabPanel
               className="comments-scroll"
@@ -305,8 +194,12 @@ function VideoPlayer({
                 scrollbarWidth: "none",
               }}
             >
-             <div  id="commentsContainer" className={`comment-container ${!isCommenting && "hide-input-border"}`}>
-
+              <div
+                id="commentsContainer"
+                className={`comment-container ${
+                  !isCommenting && "hide-input-border"
+                }`}
+              >
                 <div className="loogedInUser-comment">
                   <div className="person-container">
                     <IoPersonSharp />{" "}
@@ -398,140 +291,8 @@ function VideoPlayer({
                               <p>
                                 <FaRegThumbsDown />
                               </p>
-                              <p
-                                onClick={() => selectCommentForReply(c, index)}
-                                className="reply-text"
-                              >
-                                <BsReply style={{ fontSize: "x-large" }} />
-                              </p>
                             </div>
                           </div>
-
-                            {
-                              /*Reply to comment section start here*/
-                            }
-                          <div
-                            style={{ marginTop: "3em" }}
-                            className={`reply_comment-section accordion__menu collapse  ${
-                              replyCommentId === c?.id && enableComment
-                                ? "show"
-                                : ""
-                            }`}
-                            id={`course-toc-${c.id}`}
-                          >
-                            {replyCommentId === c?.id && (
-                              <div  className="reply-container">
-                                <div>
-                                  <IoPersonSharp />
-                                </div>
-                                <div>
-                                  <textarea
-                                     ref={(ref) => {
-                                      // Assign ref to the array element
-                                      commentTextareaRefs.current[index] = ref;
-                                    }}
-                                     value={commentReply}
-                                    onChange={(e) => {
-                                      setCommentReply(e.target.value);
-                                    }}
-                                    className="reply-comment-input"
-                                    placeholder="Add comments"
-                                  />
-                                </div>
-                              </div>
-                            )}
-
-                            {replyCommentId === c?.id && (
-                              <div className="reply-btn">
-                                <button
-                                  onClick={() => setReplyCommentId("")}
-                                  style={{ cursor: "pointer" }}
-                                  type="button"
-                                  className="btn btn-accent cancel-btn"
-                                >
-                                  Cancel
-                                </button>
-
-                                <button
-                                  onClick={PostCommentReply}
-                                  style={{ cursor: "pointer" }}
-                                  type="button"
-                                  className="btn btn-accent"
-                                >
-                                  Reply
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                          {
-                              /*Reply to comment section ends  here*/
-                            }
-                          <div
-                      
-                            style={{
-                              marginLeft: "30px",
-                            }}
-                            className={`accordion__menu collapse ${
-                              replyCommentId === c?.id ? "show" : ""
-                            }`}
-                            id={`course-toc-${c.id}`}
-                          >
-                            {commentReplies?.length > 0 &&
-                              commentReplies[0].referenceId === c?.id &&
-                              commentReplies.map(
-                                (comment: IComment, index: number) => (
-                                  <li
-                                    className={`storage-comments ${
-                                      replyCommentId === c?.id && ""
-                                    }`}
-                                    key={index}
-                                  >
-                                    <div className="person-container">
-                                      <IoPersonSharp />{" "}
-                                      <span className="username">
-                                        {comment?.creatingUserName}
-                                      </span>
-                                    </div>
-
-                                    <p
-                                      style={{
-                                        fontSize: "small",
-                                        marginLeft: "20px",
-                                      }}
-                                    >
-                                      {" "}
-                                      {comment.message}
-                                    </p>
-
-                                    <div className="reaction-icons">
-                                      <p>
-                                        <FaRegThumbsUp />
-                                      </p>
-                                      <p>
-                                        <FaRegThumbsDown />
-                                      </p>
-                                    </div>
-
-                                    <p
-                                      className="reply-count"
-                                      onClick={() => getCommentReplies(c?.id!)}
-                                    >
-                                      {comment.replies.length > 0 &&
-                                        `${comment.replies.length} replies`}
-                                    </p>
-                                  </li>
-                                )
-                              )}
-                          </div>
-
-                          <p
-                            className="reply-count"
-                            onClick={() => getCommentReplies(c?.id!)}
-                          >
-                            {" "}
-                            {c.replies.length > 0 &&
-                              `${c.replies.length} replies`}
-                          </p>
                         </div>
                       ))}
                   </ul>
@@ -543,8 +304,6 @@ function VideoPlayer({
               </div>
             </TabPanel>
           </Tabs>
-
-          
         </div>
       </div>
       <ConfirmationModal

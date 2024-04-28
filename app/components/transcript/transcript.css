@@ -1,0 +1,5 @@
+.transcript-entry :hover{
+    cursor: pointer;
+    background-color: rgb(241, 241, 241);
+    
+}
