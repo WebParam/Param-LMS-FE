@@ -15,17 +15,20 @@ export const barDescriptions = [
   { description: "Quiz Attempts over time", color: "rgb(145 21 243)" },
 ];
 
-export const data = {
-  labels: labels,
-  datasets: [
-    {
-      label: "No of Quiz Attempts",
-      data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
-      borderColor: "rgb(145 21 243)",
-      backgroundColor: "rgb(145 21 243)",
-      pointRadius: 2,
-      lineTension: 0.4,
-      borderWidth: 3,
-    },
-  ],
+export const data = async ( quizAttempts: number[] ) => {
+  "use server";
+  return {
+    labels: labels,
+    datasets: [
+      {
+        label: "No of Quiz Attempts",
+        data: quizAttempts,
+        borderColor: "rgb(145 21 243)",
+        backgroundColor: "rgb(145 21 243)",
+        pointRadius: 2,
+        lineTension: 0.4,
+        borderWidth: 3,
+      },
+    ],
+  };
 };
