@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-
-export const options = {  
+export const options = {
   responsive: true,
   scales: {
     x: {
@@ -20,26 +19,26 @@ export const barDescriptions = [
   { description: "Pending Assessment", color: "rgba(145, 21, 243, 0.3)" },
 ];
 
-export const data = async ({numberOfAssessments}: {numberOfAssessments?: number[]}) => {
-  "use server"
-   return {
-  labels,
-  datasets: [
-    {
-      label: 'Completed',
-      data: numberOfAssessments,
-      backgroundColor: "rgb(33, 138, 253)",
-      barPercentage: 0.3,
-      borderRadius: 10,
-    },
-    {
-      label: 'Pending',
-      data: numberOfAssessments,
-      backgroundColor: "rgba(145, 21, 243, 0.3)",
-      barPercentage: 0.3,
-      borderRadius: 10,
-    }
-  ],
-}; 
-}
-  
+export const data = async ({ pending, completed }: { pending: number[];  completed: number[]}) => {
+  "use server";
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: "Completed",
+        data: completed,
+        backgroundColor: "rgb(33, 138, 253)",
+        barPercentage: 0.3,
+        borderRadius: 10,
+      },
+      {
+        label: "Pending",
+        data: pending,
+        backgroundColor: "rgba(145, 21, 243, 0.3)",
+        barPercentage: 0.3,
+        borderRadius: 10,
+      },
+    ],
+  };
+};

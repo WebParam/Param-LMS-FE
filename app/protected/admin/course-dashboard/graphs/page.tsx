@@ -48,10 +48,10 @@ export default async function Page() {
     questionsLaunchedPerMonth,
     commentsPerMonthByNumbers
   } = data.data;
-  const OverallAssessmentBarData = await OverallAssessmentBarDataFn(overallAssessments.numberOfAssessments);
-  const OverallQuizBarData = await OverallQuizBarDataFn(quizAttempts.attempts);
-  const QuestionsAskedData = await QuestionsAskedDataFn(questionsLaunchedPerMonth.numberOfQuestions);
-  const CommentsChartBarData = await CommentsChartBarDataFn(commentsPerMonthByNumbers.numberOfComments);
+  const OverallAssessmentBarData = await OverallAssessmentBarDataFn(overallAssessments);
+  const OverallQuizBarData = await OverallQuizBarDataFn(quizAttempts);
+  const QuestionsAskedData = await QuestionsAskedDataFn(questionsLaunchedPerMonth);
+  const CommentsChartBarData = await CommentsChartBarDataFn(commentsPerMonthByNumbers);
   const totalModdules = 0;
 
   return (
@@ -69,7 +69,7 @@ export default async function Page() {
             title="Average Time Spent"
             barDescriptions={AvgTimeSpentBarDataDescription}
           >
-            <AvgTimeSpent averageTimeSpent={averageTimeSpent.averageTimeSpent} />
+            <AvgTimeSpent averageTimeSpent={averageTimeSpent} />
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">

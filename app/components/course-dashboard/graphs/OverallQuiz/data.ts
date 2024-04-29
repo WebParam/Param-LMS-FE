@@ -15,7 +15,7 @@ export const barDescriptions = [
   { description: "Quiz Attempts over time", color: "rgb(145 21 243)" },
 ];
 
-export const data = async ({ quizAttempts }: { quizAttempts: number[] }) => {
+export const data = async ( quizAttempts: number[] ) => {
   "use server";
   return {
     labels: labels,

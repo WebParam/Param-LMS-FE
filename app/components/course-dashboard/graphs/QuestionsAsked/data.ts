@@ -13,11 +13,7 @@ export const barDescriptions = [
   { description: "Questions Asked over time", color: "rgb(82 121 249)" },
 ];
 
-export const data = async ({
-  QuestionsAskedData,
-}: {
-  QuestionsAskedData: number[];
-}) => {
+export const data = async (QuestionsAskedData: number[]) => {
   "use server";
   return {
     labels,
