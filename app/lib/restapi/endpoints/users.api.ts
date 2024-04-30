@@ -7,10 +7,10 @@ import {
 import { IResponseObject } from "../response";
 
 export const userWriteUrl =
-  "https://khumla-development-user-write.azurewebsites.net/api";
+  "https://khumla-dev-user-write.azurewebsites.net/api";
 
 export const userReadUrl =
-  "https://khmla-development-user-read.azurewebsites.net/api";
+  "https://khumla-dev-user-read.azurewebsites.net/api";
 
 export const UserApi = {
   POST_Login: async (
