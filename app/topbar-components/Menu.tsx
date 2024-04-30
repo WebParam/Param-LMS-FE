@@ -1,11 +1,10 @@
-import { NextPage } from "next";
-import SideTab from "@/app/interfaces/sideTabs";
-import { usePathname } from "next/navigation";
-import Dropdown from "../components/Dropdown";
+import { NextPage } from 'next';
+import SideTab from '@/app/interfaces/sideTabs';
+import { usePathname } from 'next/navigation'
+import { useState } from 'react';
 
-const Menu: NextPage<{ sideTabs: SideTab[] }> = ({ sideTabs }) => {
-  const pathname = usePathname();
-
+const Menu: NextPage<{sideTabs: SideTab[]}> = ({sideTabs}) => {
+    const pathname = usePathname();
   return (
     <>
       <ul className="sidebar-menu">

@@ -3,7 +3,7 @@ import { CreateCourseModal } from "./create-module-modal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { useState } from "react";
-import { FaPlus, FaVideo } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { Pagination } from "../create-course/pagination/Pagination";
 import {
   addSection,
@@ -11,7 +11,6 @@ import {
   getSelectedCourseForEdit,
   createCourseDetail,
   updateSectionDetail,
-  deleteAllSections,
   addModuleToSection,
   deleteVideoFromModule,
   resetCourseState,
@@ -19,27 +18,24 @@ import {
 import dynamic from "next/dynamic";
 import {
   ICourse,
-  IModule,
-  ISection,
-  IUpdateCourseDetailState,
   IUpdateSectionDetailState,
   IVideo,
 } from "@/app/interfaces/courses";
 import { useDispatch, useSelector } from "react-redux";
-import ReactQuill from "react-quill";
 import { useEffect } from "react";
-import { Api } from "@/app/lib/restapi/endpoints";
-import { FaTrash } from "react-icons/fa";
+import { CourseApi } from "@/app/lib/restapi/endpoints/courses.api";
 import { EditCourseModal } from "./edit-module-modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "universal-cookie"; // Import the library
-import Dropdown from "react-bootstrap/Dropdown";
 import "react-quill/dist/quill.snow.css";
 import { IQuiz } from "@/app/interfaces/quiz";
 import { getSelectedQuizForEdit, resetQuizState } from "@/app/redux/quizSlice";
 import { IDocument } from "@/app/interfaces/document";
-import { getSelectedDocumentForEdit, resetDocumentState } from "@/app/redux/documentSice";
+import {
+  getSelectedDocumentForEdit,
+  resetDocumentState,
+} from "@/app/redux/documentSice";
 import { CreateCourseAssessmentModal } from "./create-assessment";
 import { IAssessment } from "@/app/interfaces/assessment";
 import {
@@ -47,8 +43,10 @@ import {
   getSelectedAssessmentForEdit,
   resetAssessmentState,
 } from "@/app/redux/assessmentSlice";
+import { DocumentsApi } from "@/app/lib/restapi/endpoints/documents.api";
+import { AssessmentApi } from "@/app/lib/restapi/endpoints/assessments.api";
+import { QuizApi } from "@/app/lib/restapi/endpoints/quizzes.api";
 
-// Define interface for ReactQuill props
 interface ReactQuillProps {
   style?: React.CSSProperties;
   value?: string;
@@ -121,29 +119,20 @@ function EditCourse() {
   const [moduleId, setModuleId] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
   const [instructorName, setInstructorName] = useState<string>("");
-  const [video, setVideo] = useState<IVideo | null>(null)
-  
-
+  const [video, setVideo] = useState<IVideo | null>(null);
 
   const [videoId, setVideoId] = useState<string>("");
-  const _documentsFromState: IDocument[] = useSelector(getSelectedDocumentForEdit).documents;
+  const _documentsFromState: IDocument[] = useSelector(
+    getSelectedDocumentForEdit
+  ).documents;
   const _assessmentFromState: IAssessment = useSelector(
     getSelectedAssessmentForEdit
   ).assessment;
-  console.log("Course", _courseFromState);
-  console.log("Assessment", _assessmentFromState);
-console.log("Documents", _documentsFromState);
-
-  console.log("Quizzes from state", _quizzesFromState);
 
   let cookies = new Cookies();
 
-
   const userData = cookies.get("param-lms-user");
-  console.log("userDataID:", userData?.id);
   const dispatch = useDispatch();
-
-  console.log("UserData", userData?.id);
 
   const descriptionToolbar = {
     toolbar: [
@@ -153,28 +142,23 @@ console.log("Documents", _documentsFromState);
     ],
   };
 
-
   const payload = {
     creatingUser: userData?.id,
     title: courseTitle ?? _courseFromState.title,
     description: courseDescription,
   };
 
-
   function saveAndCloseEditModal() {
     setEditModalOpen(false);
     clearSectionContent();
-
- 
   }
 
   function saveAndCloseEditModuleModal() {
     setEditModuleModalOpen(false);
   }
 
-
   function saveAndCloseCreateAssessmentModuleModal() {
-    setCreateAssessmentModuleModalOpen(false)
+    setCreateAssessmentModuleModalOpen(false);
   }
 
   const updateCourseSection = function () {
@@ -225,7 +209,6 @@ console.log("Documents", _documentsFromState);
     const file = event.target.files[0];
     if (file) {
       setImageUrl(file);
-      console.log("Image selected: " + file);
     }
   };
 
@@ -235,15 +218,14 @@ console.log("Documents", _documentsFromState);
   };
 
   const clearReduxState = () => {
-    localStorage.removeItem('persist:assessment');
-    localStorage.removeItem('persist:course');
-    localStorage.removeItem('persist:documents');
-    localStorage.removeItem('persist:quizzes');
+    localStorage.removeItem("persist:assessment");
+    localStorage.removeItem("persist:course");
+    localStorage.removeItem("persist:documents");
+    localStorage.removeItem("persist:quizzes");
     resetAssessmentState();
     resetCourseState();
     resetDocumentState();
-    resetQuizState()
-    
+    resetQuizState();
   };
 
   async function createCourse() {
@@ -274,15 +256,10 @@ console.log("Documents", _documentsFromState);
     try {
       const _formData = new FormData();
       const formDataArray = _documentsFromState.forEach((document, i) => {
-        console.log(
-          `Appended key: ${JSON.stringify(document)} with value: ${
-            document.file
-          }`
-        );
         const req = { ...document, file: "" };
         _formData.append(JSON.stringify(req), document.file);
       });
-      const createCourseResponse = await Api.POST_CreateCourse(
+      const createCourseResponse = await CourseApi.POST_CreateCourse(
         _courseFromState
       )!;
 
@@ -300,14 +277,19 @@ console.log("Documents", _documentsFromState);
           instructorId: "656f1335650c740ce0ae4d65",
           status: _assessmentFromState.status,
           isRetaken: _assessmentFromState.isRetaken,
-          attempts :  _assessmentFromState.attempts,
+          attempts: _assessmentFromState.attempts,
         };
 
-        const postAssessment = await Api.POST_AddAssessments(assessment);
+        const postAssessment = await AssessmentApi.POST_AddAssessments(
+          assessment
+        );
         debugger;
-        const uploadDocuments = await Api.POST_Document(_formData);
+        const uploadDocuments = await DocumentsApi.POST_Document(_formData);
         const courseId: string = createCourseResponse.data?.id!;
-        const uploadImageResponse = await Api.POST_Image(courseId, formData);
+        const uploadImageResponse = await CourseApi.POST_Image(
+          courseId,
+          formData
+        );
         const extractedVideo = createCourseResponse?.data?.sections.reduce(
           (accumulator: IVideo[], section: any) => {
             const videosInModules = section.modules.reduce(
@@ -341,7 +323,7 @@ console.log("Documents", _documentsFromState);
             })
         );
 
-        const uploadQuizzes = await Api.POST_Quiz(updatedQuizzes);
+        const uploadQuizzes = await QuizApi.POST_Quiz(updatedQuizzes);
 
         toast.update(_id, {
           render: "Successfully saved course",
@@ -349,10 +331,10 @@ console.log("Documents", _documentsFromState);
           isLoading: false,
         });
 
-        setTimeout(() => {        
+        setTimeout(() => {
           toast.dismiss(_id);
           setDisableCreateCourseBtn(false);
-          clearReduxState()
+          clearReduxState();
         }, 2000);
       } else {
         toast.update(_id, {
@@ -385,7 +367,6 @@ console.log("Documents", _documentsFromState);
         sectionTitle: sectionTitle,
         sectionCompetency: competency,
       };
-      console.log("payload: ", payload);
 
       dispatch(addSection(payload));
       setDisableSectionInput(true);
@@ -419,7 +400,6 @@ console.log("Documents", _documentsFromState);
     clearSectionContent();
     dispatch(deleteSection(sectionId));
     setDisableSectionInput(false);
-
   };
 
   const createAssessment = () => {
@@ -464,9 +444,6 @@ console.log("Documents", _documentsFromState);
       <ToastContainer />
 
       <div>
-
-  
-
         <Modal
           styles={customModalStyles}
           open={editModuleModalOpen}
@@ -503,9 +480,7 @@ console.log("Documents", _documentsFromState);
         <Modal
           styles={customModalStyles}
           open={editModalOpen}
-          onClose={() => 
-            
-            setEditModalOpen(false)}
+          onClose={() => setEditModalOpen(false)}
           center
         >
           <CreateCourseModal
@@ -593,164 +568,159 @@ console.log("Documents", _documentsFromState);
                   className="page-separator"
                 >
                   <div className="page-separator__text">Sections</div>
-                
                 </div>
-                {
-                  !newSection ? <Pagination
-                  expandedSection={expandedSection}
-                  handleSectionClick={handleSectionClick}
-                  selectSection={selectSection}
-                  handleDeleteSection={handleDeleteSection}
-                  setModuleId={setModuleId}
-                  setEditModuleModalOpen={setEditModuleModalOpen}
-                  setSectionId={setSectionId}
-                  setVideoId={setVideoId}
-                  handleDeleteVideo={handleDeleteVideo}
-                  setVideo = {setVideo}
-                  sections={selectedCourse.sections}
-                  itemsPerPage={9}
-                /> :   <div
-                className="accordion js-accordion accordion--boxed mb-24pt"
-                id="parent"
-                data-domfactory-upgraded="accordion"
-              >
-                <div className="accordion__item open">
-                  <a
-                    className="accordion__toggle"
-                    data-toggle="collapse"
-                    data-target="#course-toc-2"
-                    data-parent="#parent"
+                {!newSection ? (
+                  <Pagination
+                    expandedSection={expandedSection}
+                    handleSectionClick={handleSectionClick}
+                    selectSection={selectSection}
+                    handleDeleteSection={handleDeleteSection}
+                    setModuleId={setModuleId}
+                    setEditModuleModalOpen={setEditModuleModalOpen}
+                    setSectionId={setSectionId}
+                    setVideoId={setVideoId}
+                    handleDeleteVideo={handleDeleteVideo}
+                    setVideo={setVideo}
+                    sections={selectedCourse.sections}
+                    itemsPerPage={9}
+                  />
+                ) : (
+                  <div
+                    className="accordion js-accordion accordion--boxed mb-24pt"
+                    id="parent"
+                    data-domfactory-upgraded="accordion"
                   >
-                    <span className="flex">
-                      {disableSectionInput
-                        ? sectionTitle
-                        : "Create new section"}
-                    </span>
-                    {/* <span className="accordion__toggle-icon material-icons">
+                    <div className="accordion__item open">
+                      <a
+                        className="accordion__toggle"
+                        data-toggle="collapse"
+                        data-target="#course-toc-2"
+                        data-parent="#parent"
+                      >
+                        <span className="flex">
+                          {disableSectionInput
+                            ? sectionTitle
+                            : "Create new section"}
+                        </span>
+                        {/* <span className="accordion__toggle-icon material-icons">
                   keyboard_arrow_down
                 </span> */}
-                  </a>
-                  <div
-                    className="accordion__menu collapse show"
-                    id="course-toc-2"
-                  >
-                    <div className="accordion__menu-link"></div>
-  
-                    <div className="accordion__menu-link active">
+                      </a>
                       <div
-                        className="form-group"
-                        style={{ width: "70%", marginRight: "2%" }}
+                        className="accordion__menu collapse show"
+                        id="course-toc-2"
                       >
-                        <label className="form-label">Section Title</label>
-                        <input
-                          disabled={disableSectionInput}
-                          onChange={(e) => setSectionTitle(e.target.value)}
-                          value={sectionTitle}
-                          type="text"
-                          className="form-control"
-                          placeholder="Section title"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="form-label">Competency</label>
-                        <select
-                          disabled={disableSectionInput}
-                          onChange={(e) => setCompetency(e.target.value)}
-                          value={competency}
-                          id="custom-select"
-                          className="form-control custom-select"
-                        >
-                          <option value="JavaScript">JavaScript</option>
-                          <option value="Angular">Angular</option>
-                          <option value="Python">Python</option>
-                        </select>
-                      </div>
-                    </div>
-                    {/* ... */}
-  
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                        padding: "5px 15px",
-                      }}
-                    >
-                      {changeBtn ? (
-                        <>
-                          {updateSection ? (
-                            <a
-                              onClick={() => {
-                                setDisableSectionInput(false);
-                                setUpdateSection(false);
-                              }}
-                              className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                            >
-                              edit section
-                            </a>
-                          ) : (
-                            <a
-                              onClick={() => {
-                                updateCourseSection();
-                                setDisableSectionInput(true);
-                                setUpdateSection(true);
-                              }}
-                              className="btn btn-outline-secondary mb-24pt mb-sm-0"
-                            >
-                              update section
-                            </a>
-                          )}
-                        </>
-                      ) : (
-                        <button
-                          style={{
-                            border: "none",
-                            outline: "none",
-                            backgroundColor: "white",
-                          }}
-                        >
-                          <a
-                            onClick={createSection}
-                            className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                        <div className="accordion__menu-link"></div>
+
+                        <div className="accordion__menu-link active">
+                          <div
+                            className="form-group"
+                            style={{ width: "70%", marginRight: "2%" }}
                           >
-                            save section
-                          </a>
-                        </button>
-                      )}
-                    </div>
-                    {changeBtn && (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          padding: "5%",
-                        }}
-                      >
-                        <label className="form-label">Videos</label>
-                        <FaPlus
-                          onClick={() => {
-                            setEditModalOpen(true);
-                            updateCourseSection();
-                            setDisableCreateCourseBtn(false);
-                            clearSectionContent();
-                            createModule();
+                            <label className="form-label">Section Title</label>
+                            <input
+                              disabled={disableSectionInput}
+                              onChange={(e) => setSectionTitle(e.target.value)}
+                              value={sectionTitle}
+                              type="text"
+                              className="form-control"
+                              placeholder="Section title"
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label">Competency</label>
+                            <select
+                              disabled={disableSectionInput}
+                              onChange={(e) => setCompetency(e.target.value)}
+                              value={competency}
+                              id="custom-select"
+                              className="form-control custom-select"
+                            >
+                              <option value="JavaScript">JavaScript</option>
+                              <option value="Angular">Angular</option>
+                              <option value="Python">Python</option>
+                            </select>
+                          </div>
+                        </div>
+                        {/* ... */}
+
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            alignItems: "center",
+                            padding: "5px 15px",
                           }}
-                          style={{ cursor: "pointer" }}
-                        />
+                        >
+                          {changeBtn ? (
+                            <>
+                              {updateSection ? (
+                                <a
+                                  onClick={() => {
+                                    setDisableSectionInput(false);
+                                    setUpdateSection(false);
+                                  }}
+                                  className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                                >
+                                  edit section
+                                </a>
+                              ) : (
+                                <a
+                                  onClick={() => {
+                                    updateCourseSection();
+                                    setDisableSectionInput(true);
+                                    setUpdateSection(true);
+                                  }}
+                                  className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                                >
+                                  update section
+                                </a>
+                              )}
+                            </>
+                          ) : (
+                            <button
+                              style={{
+                                border: "none",
+                                outline: "none",
+                                backgroundColor: "white",
+                              }}
+                            >
+                              <a
+                                onClick={createSection}
+                                className="btn btn-outline-secondary mb-24pt mb-sm-0"
+                              >
+                                save section
+                              </a>
+                            </button>
+                          )}
+                        </div>
+                        {changeBtn && (
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              padding: "5%",
+                            }}
+                          >
+                            <label className="form-label">Videos</label>
+                            <FaPlus
+                              onClick={() => {
+                                setEditModalOpen(true);
+                                updateCourseSection();
+                                setDisableCreateCourseBtn(false);
+                                clearSectionContent();
+                                createModule();
+                              }}
+                              style={{ cursor: "pointer" }}
+                            />
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
-                </div>
-              </div>
-                }
-               
-                
-          
-
-
-                
+                )}
               </div>
 
               <div className="col-md-4">
@@ -858,25 +828,24 @@ console.log("Documents", _documentsFromState);
                 <div className="card">
                   <div className="card-header text-center">
                     <button
-                         onClick={() => {
-                          clearSectionContent();
-                          setNewSection(!newSection);
- 
-                         }}
+                      onClick={() => {
+                        clearSectionContent();
+                        setNewSection(!newSection);
+                      }}
                       style={{
                         backgroundColor: "transparent",
                         border: "none",
                         outline: "none",
                       }}
                     >
-                      <a  className="btn btn-accent">
-                       {!newSection ? " Create Section" : "All Sections"}
+                      <a className="btn btn-accent">
+                        {!newSection ? " Create Section" : "All Sections"}
                       </a>
                     </button>
                   </div>
                   <div className="list-group list-group-flush">
                     <div className="list-group-item d-flex">
-                      <a className="flex" >
+                      <a className="flex">
                         <strong>Save Draft</strong>
                       </a>
                       <i className="material-icons text-muted">check</i>
@@ -900,14 +869,12 @@ console.log("Documents", _documentsFromState);
                         outline: "none",
                       }}
                     >
-                      <a  className="btn btn-accent">
-                        Create Assessment
-                      </a>
+                      <a className="btn btn-accent">Create Assessment</a>
                     </button>
                   </div>
                   <div className="list-group list-group-flush">
                     <div className="list-group-item d-flex">
-                      <a className="flex" >
+                      <a className="flex">
                         <strong>Save Draft</strong>
                       </a>
                       <i className="material-icons text-muted">check</i>
