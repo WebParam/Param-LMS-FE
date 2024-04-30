@@ -2,7 +2,7 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "./Table";
 import { useEffect, useState } from "react";
-import { Api } from "@/app/lib/restapi/endpoints";
+import { AnalyticsApi } from "@/app/lib/restapi/endpoints/analytics.api";
 import { IStudentAssessmentAverage } from "@/app/interfaces/analytics";
 import {
   saveStudentAssessmentAnalytics,
@@ -33,7 +33,7 @@ const Body = () => {
     if (studentAssessmentAnalytics.length > 0) {
       return;
     }
-    const getData = await Api.GET_StudentAverageAssessmentAnalytics(
+    const getData = await AnalyticsApi.GET_StudentAverageAssessmentAnalytics(
       courseId,
       creatingUserId
     );

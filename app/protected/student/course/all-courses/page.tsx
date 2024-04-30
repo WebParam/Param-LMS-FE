@@ -1,20 +1,15 @@
 "use client"
-import Image from 'next/image'
-import styles from './page.module.css'
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
-import { Api } from '@/app/lib/restapi/endpoints';
-import { ICourse, IStudentCourses } from '@/app/interfaces/courses';
+import { ICourse} from '@/app/interfaces/courses';
 import {useEffect} from 'react'
-import axios from 'axios';
-import { useDispatch, useSelector } from "react-redux";
-import { setSelectedCourseForEdit } from '@/app/redux/courseSlice';
-import { updateQuizzes } from '@/app/redux/quizSlice';
-import { IQuiz } from '@/app/interfaces/quiz';
-const cookies = new Cookies();
-
+import { useDispatch} from "react-redux";
+import { setSelectedCourseForEdit } from '@/app/redux/courseSlice';;
+import { QuizApi } from '@/app/lib/restapi/endpoints/quizzes.api';
+import { CourseApi } from '@/app/lib/restapi/endpoints/courses.api';
 
 export default function AllCourses() {
+  const cookies = new Cookies();
   const dispatch = useDispatch();
    const [allCourses, setCourses] = useState<ICourse[]>([]); 
    const [enrolledCourses, setEnrolledCourses] = useState<ICourse[]>([]); 
@@ -30,7 +25,7 @@ console.log("User",loggedInUser)
    
    async function getAllQuizzes() {
     try {
-      const getQuizzes = await Api.GET_AllQuizzes();
+      const getQuizzes = await QuizApi.GET_AllQuizzes();
   
       if (getQuizzes && getQuizzes.length > 0) {
         const mappedQuizzes = getQuizzes.map((quiz: any) => quiz.data);
@@ -47,7 +42,7 @@ console.log("User",loggedInUser)
 
       
   async function getMarks () {
-    const getMarks = await Api.GET_AllStudentMarks();
+    const getMarks = await QuizApi.GET_AllStudentMarks();
     const mappedMarks = getMarks.map((quiz: any) => quiz.data);
     localStorage.setItem("student-marks", JSON.stringify(mappedMarks));
 
@@ -71,7 +66,7 @@ useEffect(() => {
     try {
       var student =cookies.get('param-lms-user');
       console.log("Id ", student.id)
-      const course = await Api.GET_StudentCoursesById(student.id);
+      const course = await CourseApi.GET_StudentCoursesById(student.id);
       console.log("Student-Courses",course);
         setCourses(course?.data?.allCourses!);
         setEnrolledCourses(course.data!.enrolledCourses);

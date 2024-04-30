@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Api } from '@/app/lib/restapi/endpoints';
+import { UserApi } from "@/app/lib/restapi/endpoints/users.api";
+import { AnalyticsApi } from "@/app/lib/restapi/endpoints/analytics.api";
 import { IUserRegisterModel } from '@/app/interfaces/user';
 import Cookies from "universal-cookie";
 import { v4 as uuidv4 } from 'uuid';
@@ -74,7 +75,7 @@ export default function Register() {
         LoginType: 0,
       } as IUserRegisterModel;
 
-      const user = await Api.POST_Register(payload);
+      const user = await UserApi.POST_Register(payload);
 
       try {
         if (user.data) {
@@ -104,7 +105,7 @@ export default function Register() {
             Duration: 0,
             TargetId: targetId
           }
-          const postActivity = await Api.POST_Activity(activity);
+          const postActivity = await AnalyticsApi.POST_Activity(activity);
           if (postActivity.data?.id) {
             toast.success("Successfully registered");
             router.push('/protected/student/course/all-courses')

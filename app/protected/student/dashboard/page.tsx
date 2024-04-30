@@ -1,13 +1,13 @@
 "use client"
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
-import { Api } from '@/app/lib/restapi/endpoints';
 import { ICourse } from '@/app/interfaces/courses';
 import {useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedCourseForEdit } from '@/app/redux/courseSlice';
 import MyCoursesChart from '@/app/components/CoursesChart';
 import { IEnrollment } from '@/app/interfaces/Enrollment';
+import { CourseApi } from '@/app/lib/restapi/endpoints/courses.api';
 const cookies = new Cookies();
 
 
@@ -40,12 +40,11 @@ useEffect(() => {
     try {
       var student =cookies.get('param-lms-user');
       console.log("Id ", student.id)
-      const course = await Api.GET_StudentCoursesById(student.id);
+      const course = await CourseApi.GET_StudentCoursesById(student.id);
       console.log("Student-Courses",course);
         setCourses(course.data!.allCourses);
         setEnrolledCourses(course.data!.enrolledCourses);
 
-     //   var highScore = Math.max.apply(Math, enrolledCourses?.score);  
         setHighScore(0);
 
        console.log("AllCourses",allCourses);
@@ -129,56 +128,7 @@ useEffect(() => {
         className="carousel carousel-card slide mb-24pt">
         <div className="carousel-inner">
           <div className="carousel-item active">
-            {/* <a className="card border-0 mb-0" href="">
-              <img
-                src="../../public/images/achievements/flinto.png"
-                alt="Flinto"
-                className="card-img"
-                style={{ maxHeight: "100%", width: "initial" }}
-              />
-              <div className="fullbleed bg-primary" style={{ opacity: ".5" }} />
-              <span className="card-body d-flex flex-column align-items-center justify-content-center fullbleed">
-                <span className="row flex-nowrap">
-                  <span className="col-auto text-center d-flex flex-column justify-content-center align-items-center">
-                    <span className="h5 text-white text-uppercase font-weight-normal m-0 d-block">
-                      Achievement
-                    </span>
-                    <span className="text-white-60 d-block mb-24pt">
-                      Jun 5, 2018
-                    </span>
-                  </span>
-                  <span className="col d-flex flex-column">
-                    <span className="text-right flex mb-16pt">
-                      <img
-                        src="../../public/images/paths/flinto_40x40@2x.png"
-                        width={64}
-                        alt="Flinto"
-                        className="rounded"
-                      />
-                    </span>
-                  </span>
-                </span>
-                <span className="row flex-nowrap">
-                  <span className="col-auto text-center d-flex flex-column justify-content-center align-items-center">
-                    <img
-                      src="../../public/images/illustration/achievement/128/white.png"
-                      width={64}
-                      alt="achievement"
-                    />
-                  </span>
-                  <span className="col d-flex flex-column">
-                    <span>
-                      <span className="card-title text-white mb-4pt d-block">
-                        Flinto
-                      </span>
-                      <span className="text-white-60">
-                        Introduction to The App Design Application
-                      </span>
-                    </span>
-                  </span>
-                </span>
-              </span>
-            </a> */}
+          
           </div>
           <div className="carousel-item">
             <a className="card border-0 mb-0" href="">
@@ -233,24 +183,7 @@ useEffect(() => {
             </a>
           </div>
         </div>
-        {/* <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
-    <span class="carousel-control-icon material-icons" aria-hidden="true">keyboard_arrow_left</span>
-    <span class="sr-only">Previous</span>
-    </a> */}
-        {/* <a
-          className="carousel-control-next"
-          href="#carouselExampleFade"
-          role="button"
-          data-slide="next"
-        >
-          <span
-            className="carousel-control-icon material-icons"
-            aria-hidden="true"
-          >
-            keyboard_arrow_right
-          </span>
-          <span className="sr-only">Next</span>
-        </a> */}
+      
       </div>
     </div>
   </div>
@@ -315,106 +248,7 @@ useEffect(() => {
         ))
       }
       
-      {/* <div
-        className="card js-overlay card-sm overlay--primary-dodger-blue stack stack--1 mb-16pt"
-        data-toggle="popover"
-        data-trigger="click"
-        data-original-title=""
-        title=""
-        data-domfactory-upgraded="overlay">
-        <div className="card-body d-flex flex-column">
-          <div className="d-flex align-items-center">
-            <div className="flex">
-              <div className="d-flex align-items-center">
-                <div className="rounded mr-12pt z-0 o-hidden">
-                  <div className="overlay">
-                    <img
-                      src="../../public/images/paths/swift_40x40@2x.png"
-                      width={40}
-                      height={40}
-                      alt="Angular"
-                      className="rounded"
-                    />
-                    <span className="overlay__content overlay__content-transparent">
-                      <span className="overlay__action d-flex flex-column text-center lh-1">
-                        <small
-                          className="h6 small text-white mb-0"
-                          style={{ fontWeight: 500 }}
-                        >
-                          80%
-                        </small>
-                      </span>
-                    </span>
-                  </div>
-                </div>
-                <div className="flex">
-                  <div className="card-title">Swift</div>
-                  <p className="flex text-50 lh-1 mb-0">
-                    <small>18 courses</small>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <a
-              href="_quiz.html"
-              className="ml-4pt btn btn-sm btn-link text-secondary border-1 border-secondary"
-            >
-              Resume
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <div
-        className="card js-overlay card-sm overlay--primary-dodger-blue stack stack--1 mb-16pt"
-        data-toggle="popover"
-        data-trigger="click"
-        data-original-title=""
-        title=""
-        data-domfactory-upgraded="overlay">
-        <div className="card-body d-flex flex-column">
-          <div className="d-flex align-items-center">
-            <div className="flex">
-              <div className="d-flex align-items-center">
-                <div className="rounded mr-12pt z-0 o-hidden">
-                  <div className="overlay">
-                    <img
-                      src="../../public/images/paths/react_40x40@2x.png"
-                      width={40}
-                      height={40}
-                      alt="Angular"
-                      className="rounded"
-                    />
-                    <span className="overlay__content overlay__content-transparent">
-                      <span className="overlay__action d-flex flex-column text-center lh-1">
-                        <small
-                          className="h6 small text-white mb-0"
-                          style={{ fontWeight: 500 }}
-                        >
-                          80%
-                        </small>
-                      </span>
-                    </span>
-                  </div>
-                </div>
-                <div className="flex">
-                  <div className="card-title">React Native</div>
-                  <p className="flex text-50 lh-1 mb-0">
-                    <small>18 courses</small>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <a
-              href="_quiz.html"
-              className="ml-4pt btn btn-sm btn-link text-secondary"
-            >
-              Resume
-            </a>
-          </div>
-        </div>
-      </div> */}
-   
+     
     </div>
     <div className="col-lg-6">
       <div className="page-separator">

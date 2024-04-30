@@ -1,5 +1,4 @@
 "use client"
-import { Api } from '@/app/lib/restapi/endpoints';
 import React, { useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
 import './assessment.css'
@@ -7,7 +6,9 @@ import { useSearchParams } from 'next/navigation';
 import { IActivity, IActivityType } from '@/app/interfaces/analytics';
 import QuestionType from './QuestionType';
 import Header from './Header';
-import { userInfo } from 'os';
+import { AssessmentApi } from '@/app/lib/restapi/endpoints/assessments.api';
+import { CourseApi } from '@/app/lib/restapi/endpoints/courses.api';
+import { AnalyticsApi } from '@/app/lib/restapi/endpoints/analytics.api';
 
 const CourseAssessment = (props: any) => {
     const cookies = new Cookies();
@@ -32,7 +33,7 @@ const CourseAssessment = (props: any) => {
 
     async function getSelectedCourse(id: string) {
         try {
-            const course = await Api.GET_CourseById(id);
+            const course = await CourseApi.GET_CourseById(id);
             setCourse(course.data);
         }
         catch (error) {
@@ -43,7 +44,7 @@ const CourseAssessment = (props: any) => {
     async function getCourseAssessment(id: string) {
         
         try {
-            const assessment = await Api.GET_CourseAssessment(id);
+            const assessment = await AssessmentApi.GET_CourseAssessment(id);
             debugger;
             if (assessment) {
                 setLoading(false)
@@ -87,7 +88,7 @@ const CourseAssessment = (props: any) => {
     const handleSubmit = async () => {
         console.log('Submitted Responses:', studentAnswer);
         setLoading(true)
-        const submitAssessment = await Api.POST_StudentAnswers(studentAnswer);
+        const submitAssessment = await AssessmentApi.POST_StudentAnswers(studentAnswer);
         if (submitAssessment) {
                       
             const activity = {
@@ -98,7 +99,7 @@ const CourseAssessment = (props: any) => {
                 Duration: 0,
                 TargetId: localStorage.getItem("targetId")!
               };
-            const createActivity = await Api.POST_Activity(activity);
+            const createActivity = await AnalyticsApi.POST_Activity(activity);
             if (createActivity.data?.id) {
                 setLoading(false);
                 setStatus("Submitted, successfully")

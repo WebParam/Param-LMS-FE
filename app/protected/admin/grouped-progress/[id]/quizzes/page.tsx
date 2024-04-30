@@ -2,7 +2,7 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "./Table";
 import { useEffect, useState } from "react";
-import { Api } from "@/app/lib/restapi/endpoints";
+import { AnalyticsApi } from "@/app/lib/restapi/endpoints/analytics.api";
 import { IStudentQuizAverage } from "@/app/interfaces/analytics";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -28,7 +28,7 @@ const Body = () => {
     if (studentQuizAnalytics?.length > 0) {
       return;
     }
-    const getData = await Api.GET_StudentAverageQuizAnalytics(
+    const getData = await AnalyticsApi.GET_StudentAverageQuizAnalytics(
       courseId,
       creatingUserId
     );

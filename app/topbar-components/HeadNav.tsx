@@ -2,8 +2,8 @@ import { NextPage } from "next";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 import { IActivityType } from "@/app/interfaces/analytics";
-import { Api } from "@/app/lib/restapi/endpoints";
 import { v4 as uuidv4 } from 'uuid';
+import { AnalyticsApi } from "../lib/restapi/endpoints/analytics.api";
 const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   setIsOpen,
   isOpen,
@@ -24,7 +24,7 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
         Duration: 0,
         TargetId: targetId
       };
-      const postActivity = await Api.POST_Activity(activity);
+      const postActivity = await AnalyticsApi.POST_Activity(activity);
       if (postActivity.data?.id) {
         cookies.remove("param-lms-user", { path: "/" });
         if (loggedInUser?.role === "Admin") router.replace("/auth/admin/login");
