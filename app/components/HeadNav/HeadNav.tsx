@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 
+
 const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   setIsOpen,
   isOpen,
@@ -10,15 +11,13 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const loggedInUser = cookies.get("param-lms-user");
   const router = useRouter();
 
-  const logout = () => {
-    cookies.remove("param-lms-user", {
-      path: "/",
-    });
-
-    if (loggedInUser?.role == "Admin") router.replace("/auth/admin/login");
+  const logout = async () => {
+    cookies.remove("param-lms-user", { path: "/" });
+    if (loggedInUser?.role === "Admin") router.replace("/auth/admin/login");
     else router.replace("/");
+   
   };
-
+  
   return (
     <>
       <div
@@ -77,3 +76,4 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
 };
 
 export default HeadNav;
+

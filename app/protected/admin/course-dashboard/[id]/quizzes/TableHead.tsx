@@ -1,6 +1,6 @@
 const TableHead = () => {
   const headers = [
-    { name: "Assessment Name", align: "w-25 text-center" }, 
+    { name: "Quiz Name", align: "w-25 text-center" }, 
     { name: "Attempts", align: "text-center" }, 
     { name: "Result", align: "text-center" }, 
     { name: "Time Spent", align: "text-center" }, 

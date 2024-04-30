@@ -6,6 +6,7 @@ export interface IUser{
     email : string,
     image:string,
     summary:string,
+    reference?:string
     headLine:string
 }
 

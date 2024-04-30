@@ -28,7 +28,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import "react-quill/dist/quill.snow.css";
 import { useEffect } from "react";
-import { Api } from "@/app/lib/restapi/endpoints";
 import { EditCourseModal } from "./edit-module-modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -42,6 +41,9 @@ import { createAssessmentDetail, getSelectedAssessmentForEdit, updateAssessment 
 import { CreateCourseAssessmentModal } from "./create-assessment";
 import { IAssessment } from "@/app/interfaces/assessment";
 import { Pagination } from "../create-course/pagination/Pagination";
+import { CourseApi } from "@/app/lib/restapi/endpoints/courses.api";
+import { AssessmentApi } from "@/app/lib/restapi/endpoints/assessments.api";
+import { QuizApi } from "@/app/lib/restapi/endpoints/quizzes.api";
 
 interface ReactQuillProps {
   style?: React.CSSProperties;
@@ -243,7 +245,7 @@ function EditCourse() {
 
 
     try {
-      const updateCoursedata = await Api.PUT_UpdateCourse(_courseFromState);
+      const updateCoursedata = await CourseApi.PUT_UpdateCourse(_courseFromState);
       if (updateCoursedata.data.id) {
         
         if(_assessmentFromState.courseId === ""){
@@ -263,18 +265,18 @@ function EditCourse() {
             attempts :  _assessmentFromState.attempts,
           };
   
-          const postAssessment = await Api.POST_AddAssessments(assessment)!;
+          const postAssessment = await AssessmentApi.POST_AddAssessments(assessment)!;
        
       
         }else{
           
-          const updateAssessment = await Api.PUT_UpdateAssessment(_assessmentFromState);
+          const updateAssessment = await AssessmentApi.PUT_UpdateAssessment(_assessmentFromState);
         
     
         }
        
 
-        const uploadImageResponse = await Api.POST_Image(updateCoursedata.data.id, formData);
+        const uploadImageResponse = await CourseApi.POST_Image(updateCoursedata.data.id, formData);
 
         const extractedVideo = updateCoursedata?.data?.sections.reduce(
           (accumulator: IVideo[], section: any) => {
@@ -315,7 +317,7 @@ function EditCourse() {
       
           console.log("Updated quizzes",updatedQuizzes);
 
-        const _updateQuizzes = await Api.PUT_UpdateQuizzes(updatedQuizzes);
+        const _updateQuizzes = await QuizApi.PUT_UpdateQuizzes(updatedQuizzes);
 
         debugger;
         toast.update(_id, {
@@ -356,7 +358,7 @@ function EditCourse() {
     });
 
     try {
-      const data = await Api.DELETE_CourseById(_courseFromState?.id);
+      const data = await CourseApi.DELETE_CourseById(_courseFromState?.id);
 
       if (data == "Successfully deleted the course") {
         toast.update(_id, {

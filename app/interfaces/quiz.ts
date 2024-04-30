@@ -54,6 +54,7 @@ export interface IUpdateQuestionDetail {
 
 export interface IQuiz {
     id: string;
+    quizName ?: string;
     questions: IQuestion[];
     reference: string;
     createdByUserId: string;

@@ -1,6 +1,4 @@
 import { Diagnostic } from "../logger/logger";
-
-
 const axios = require("axios").default;
 
 const token = "";
@@ -23,6 +21,7 @@ let header: any;
   // };
 }
 
+   
 export async function GET(endPoint: string) {
   try {
     // const result = await axios.get(`${endPoint}`, {auth: {

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Api } from "@/app/lib/restapi/endpoints";
+import { UserApi } from "@/app/lib/restapi/endpoints/users.api";
 import { IUserRegisterModel } from "@/app/interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
@@ -86,7 +86,7 @@ export default function Register() {
       LoginType: 0,
     } as IUserRegisterModel;
 
-    const user = await Api.POST_RegisterAdmin(payload);
+    const user = await UserApi.POST_RegisterAdmin(payload);
     try {
       if (user.data) {
 

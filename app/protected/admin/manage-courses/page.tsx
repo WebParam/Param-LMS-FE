@@ -1,7 +1,7 @@
 "use client";
 import { Link } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Api } from "@/app/lib/restapi/endpoints";
+import { CourseApi } from "@/app/lib/restapi/endpoints/courses.api";
 import { ICourse } from "@/app/interfaces/courses";
 import Cookies from "universal-cookie";
 import { ToastContainer, toast } from "react-toastify";
@@ -17,6 +17,9 @@ import { IResponseObject } from "@/app/lib/restapi/response";
 import { IAssessment } from "@/app/interfaces/assessment";
 import { resetAssessmentState, updateAssessment } from "@/app/redux/assessmentSlice";
 import { resetDocumentState } from "@/app/redux/documentSice";
+import { QuizApi } from "@/app/lib/restapi/endpoints/quizzes.api";
+import { DocumentsApi } from "@/app/lib/restapi/endpoints/documents.api";
+import { AssessmentApi } from "@/app/lib/restapi/endpoints/assessments.api";
 function ManageCourses() {
   const [courseHover, setCourseHover] = useState<boolean>(false);
   const [courses, setCourses] = useState<ICourse[] | any>();
@@ -43,8 +46,8 @@ function ManageCourses() {
       theme: "light",
     });
     try {
-      const data = await Api.GET_CoursesByUserId(userData?.id);
-      setCourses(data);
+      const data = await CourseApi.GET_CoursesByUserId(userData?.id);
+      setCourses(data)
       toast.dismiss(_id);
     } catch (error) {
       console.log("Error fetching courses:", error);
@@ -61,7 +64,7 @@ function ManageCourses() {
 
   async function getAllQuizzes() {
     try {
-      const getQuizzes = await Api.GET_AllQuizzes();
+      const getQuizzes = await QuizApi.GET_AllQuizzes();
       setQuizzes(getQuizzes);
 
       if (getQuizzes && getQuizzes.length > 0) {
@@ -78,15 +81,15 @@ function ManageCourses() {
   }
   async function getAllDocuments() {
     try {
-      const getDocuments = await Api.GET_Documents();
-      console.log("Documents fetched", getDocuments);
+      const getDocuments = await DocumentsApi.GET_Documents();
+      console.log("Documents fetched", getDocuments)
     } catch (error) {
       console.error("Error fetching documents:", error);
     }
   }
   async function getAllAssessments() {
     try {
-      const getAssessments = await Api.GET_GetAllAssessments();
+      const getAssessments = await AssessmentApi.GET_GetAllAssessments();
       const sortedAssessmenst = getAssessments.map((assessment:any) => assessment?.data);
       console.log("Assessments fetched", sortedAssessmenst);
       setAssesssments(sortedAssessmenst);

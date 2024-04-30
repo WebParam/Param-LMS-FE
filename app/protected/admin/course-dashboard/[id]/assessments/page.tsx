@@ -1,15 +1,43 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
 import Table from "./Table";
-import { useState } from "react";
-import list from "./data";
+import { useEffect, useState } from "react";
+import { AnalyticsApi } from "@/app/lib/restapi/endpoints/analytics.api";
+import { IStudentAssessmentAnalytic } from "@/app/interfaces/analytics";
+import { useDispatch, useSelector } from "react-redux";
+import { saveStudentAssessmentAnalytics, selectStudentAssessmentAnalytics } from "@/app/redux/courseAnalyticSlice";
+import { useSearchParams} from "next/navigation";
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
+   const [list, setList] = useState<IStudentAssessmentAnalytic[]>([])
+   const studentAssessmentAnalytics = useSelector(selectStudentAssessmentAnalytics);
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = studentAssessmentAnalytics.length > 0 ? studentAssessmentAnalytics.slice(indexOfFirstItem, indexOfLastItem) : list.slice(indexOfFirstItem, indexOfLastItem)
+  const dispatch = useDispatch();
+  const searchParams = useSearchParams();
+  const studentNumber = searchParams.get("id")!;
+
+  const getAssessmentData = async () => {
+    if(studentAssessmentAnalytics.length > 0){
+      return
+    }
+    const getAnalytics = await AnalyticsApi.GET_StudentAssessmentAnalytics("65e5d75f6944453739f276c3", studentNumber);
+    if (getAnalytics[0]?.error === false) {
+      const data = getAnalytics?.map((data: any) => data.data);
+      dispatch(saveStudentAssessmentAnalytics(data));
+      setList(data)
+    }
+  };
+
+
+  useEffect(() => {
+    getAssessmentData();
+  },[])
+
+
 
   return (
     <>
@@ -23,7 +51,7 @@ const Body = () => {
         </div>
 
         <Pagination
-          listLength={list.length}
+          listLength={studentAssessmentAnalytics.length > 0 ? studentAssessmentAnalytics.length : list.length}
           indexOfLastItem={indexOfLastItem}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}

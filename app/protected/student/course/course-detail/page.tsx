@@ -1,10 +1,9 @@
 "use client"
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
-import { Api } from '@/app/lib/restapi/endpoints';
 import { ICourse, ISection, IModule, IVideo } from '@/app/interfaces/courses';
-import { useEffect,useRef  } from 'react'
-import {  useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from "react-redux";
 import { IUser } from '@/app/interfaces/user';
 import { getSelectedCourseForEdit } from '@/app/redux/courseSlice';
 import { getAuthor } from '@/app/lib/getAuthor';
@@ -12,129 +11,137 @@ import IComment from '@/app/interfaces/comment';
 import "../../../../components/videoSidebar.css";
 import './main.css'
 import ConfirmationModal from '@leafygreen-ui/confirmation-modal';
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import { IQuiz } from '@/app/interfaces/quiz';
-import { getSelectedQuizForEdit } from '@/app/redux/quizSlice';
-import { FaVideo } from 'react-icons/fa';
 import VideoSibar from '../../../../components/VideoSidebar';
 import VideoPlayer from '../../../../components/ReactPlayer';
 import { createWatchedDetail } from '@/app/redux/watcheVideosSlice';
-const cookies = new Cookies();
-
+import { IEnrollment } from '@/app/interfaces/Enrollment';
+import { CourseApi } from '@/app/lib/restapi/endpoints/courses.api';
+import { AnalyticsApi } from '@/app/lib/restapi/endpoints/analytics.api';
+import { CommentsApi } from '@/app/lib/restapi/endpoints/comments.api';
 
 export default function CourseDetail() {
-
-  const [data, setData] = useState<ICourse>();
+  const cookies = new Cookies();
+  const _courseFromState = useSelector(getSelectedCourseForEdit).course;
   const [sections, setSection] = useState<ISection[]>([])
-  const [videos, setVideos] = useState<IVideo[]>([])
+  const videos : IVideo[] = []
   const [author, setAuthor] = useState<IUser>();
+  const [sectionId, setSectionId] = useState<string>(_courseFromState.sections[0].id)
   const [comments, setComments] = useState<IComment[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [allVideos, setAllVideos] = useState<IVideo[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string>("");
   const [quizId, setQuizId] = useState<string>("")
-  const _courseFromState = useSelector(getSelectedCourseForEdit).course;
-  const _quizzesFromState: IQuiz[] = useSelector(getSelectedQuizForEdit).quizzes;
   const [videoId, setVideoId] = useState<string>(_courseFromState.sections[0]?.modules[0]?.videos[0]?.id)
-  console.log("Quizzes from state",_quizzesFromState)
   const [open, setOpen] = useState(false);
   const [video, setVideo] = useState<IVideo>(_courseFromState.sections[0]?.modules[0]?.videos[0])
   const [enrollOpen, setEnrollOpen] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [expandedSection, setExpandedSection] = useState<any>(null);
   const [hideSidebar, setHideSidebar] = useState<boolean>(true)
-  
+  const [enrollment, setEnrollment] = useState<IEnrollment | any>()
+  const [seconds, setSeconds] = useState(0);
+  const userData = cookies.get("param-lms-user");
+  const [loginTime, setLoginTime] = useState(Date.now());
+  const [intervalId, setIntervalId] = useState<any>(null);
+  const [numberOfVideos, setNumberOfVideos] = useState<number>(0)
+  const [videoEnded, setVideoEnded] = useState<boolean>(false)
   const [duration, setDuration] = useState(0);
-
-
   const dispatch = useDispatch();
-
-  const handleDuration = (duration:any) => {
+  const handleDuration = (duration: any) => {
     setDuration(duration);
   };
-  const formatDurationToMinutes = (durationInSeconds:any) => {
+  const formatDurationToMinutes = (durationInSeconds: any) => {
     const minutes = Math.floor(durationInSeconds / 60);
     const seconds = Math.floor(durationInSeconds % 60);
+
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
-
   const HideSidebar = () => {
     setHideSidebar((prev) => !prev)
   }
-
   const playerRef = useRef(null);
-
   const router = useRouter();
-
-
-const cancelQuiz = () => {
-  setOpen(false);
-  if (currentVideoIndex < allVideos.length - 1) {
-    setCurrentVideoIndex(currentVideoIndex + 1);
-    setQuizId("");
+  const cancelQuiz = () => {
+    setOpen(false);
+    if (currentVideoIndex < allVideos.length - 1) {
+      setCurrentVideoIndex(currentVideoIndex + 1);
+      setQuizId("");
+    }
   }
-}
 
-const checkIdMatchesCourses = (dataList:any, givenId:string) => {
-  for (const item of dataList) {
-      const courses = item.data.courses;
-      if (courses.includes(givenId)) {
-          setIsEnrolled(true)
-          return true;
-      }
+  const getEnrolledCourses = async () => {
+    var student = cookies.get('param-lms-user');
+    const res = await CourseApi.GET_EnrolledCoursesByStudentId(student.id);
+    if (res) {
+      const getEnrollment = res?.map((enroll: any) => enroll?.data)[0]
+      setEnrollment(getEnrollment);
+    }
   }
-  setIsEnrolled(false)
-  return false;
-};
-
-const getEnrolledCourses = async () => {
-  var student = cookies.get('param-lms-user');
-   const res = await Api.GET_EnrolledCoursesByStudentId(student.id);
-   if(res){
-    console.log(checkIdMatchesCourses(res, state?.id));
-    console.log("Enrolled courses", res)
-   }
-}
-
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentTime = Date.now();
+      const timeDifference = Math.floor((currentTime - loginTime) / 1000);
+      setSeconds(timeDifference);
+    }, 1000);
+    setIntervalId(interval);
+    return () => clearInterval(interval);
+  }, [loginTime]);
   useEffect(() => {
     getEnrolledCourses();
-    // Set the initial video when the component mounts
     if (allVideos.length > 0) {
+      const foundSection = sections.find(section =>
+        section.modules.some(module =>
+          module.videos.some((v: IVideo) => v.id === allVideos[currentVideoIndex].id)
+        )
+      );
+      setSectionId(foundSection?.id!)
       setSelectedVideo(allVideos[currentVideoIndex].videoLink);
     }
   }, [allVideos, currentVideoIndex]);
 
-  const handleVideoEnd = () => {
+  const handleVideoEnd = async () => {
+    setLoginTime(Date.now()); 
+    setSeconds(0);
+    setVideoEnded(true)
+    clearInterval(intervalId)
 
-    const watchedVideo  = {
+    const courseProgress = {
+      sectionId: sectionId,
+      enrollmentId: enrollment?.id,
+      userId: userData?.id,
+      courseId: _courseFromState?.id,
+      videoId: allVideos[currentVideoIndex].id,
+      videoLength: duration.toString(),
+      timeSpent: seconds.toString(),
+      progress: numberOfVideos / 100
+
+    }
+    const createProgress = await AnalyticsApi.POST_CourseProgress(courseProgress);
+    const watchedVideo = {
       courseId: _courseFromState.id,
-      videoId : allVideos[currentVideoIndex].id,
-      creatingUserName:_courseFromState.creatingUserName,
+      videoId: allVideos[currentVideoIndex].id,
+      creatingUserName: _courseFromState.creatingUserName,
       watched: true
     }
-   
+
     dispatch(createWatchedDetail(watchedVideo))
     setOpen(false);
- 
+    setSeconds(0)
     const quizFromStorage = localStorage.getItem("student-quizzes");
-  
     if (quizFromStorage) {
       try {
         const quizzes = JSON.parse(quizFromStorage)
-        .filter((quiz: IQuiz) => quiz.questions.length > 0);
-      
+          .filter((quiz: IQuiz) => quiz.questions.length > 0);
         const currentVideoId = allVideos[currentVideoIndex].id;
-
-        console.log("ID",currentVideoId)
         const getQuiz: IQuiz = quizzes.find((quiz: IQuiz) => quiz.videoId === currentVideoId);
-        console.log("Opened Quiz", getQuiz);
         if (getQuiz?.id) {
           setQuizId(getQuiz.id);
           setOpen(!open);
         } else {
           if (currentVideoIndex < allVideos.length - 1) {
-  
+
             setCurrentVideoIndex(currentVideoIndex + 1);
           }
         }
@@ -143,34 +150,35 @@ const getEnrolledCourses = async () => {
       }
     }
   };
-  
+
   const state: ICourse = useSelector(getSelectedCourseForEdit).course;
-  useEffect(() => {
-    setSection(state?.sections);
-
-  
-    console.log("Link",state)
-    state.sections.forEach((section:ISection) => {
-        section.modules.forEach((Module:IModule) => {
-            if (Module.videos.length > 0) {
-                videos.push(...Module.videos);
-            }
-        });
+  function countVideosInCourse(course: ICourse) {
+    let videoCount = 0;
+    course?.sections.forEach((section: ISection) => {
+      section?.modules.forEach((Module: IModule) => {
+        videoCount += Module?.videos.length;
+      });
     });
-
+    setNumberOfVideos(videoCount)
+  }
+  useEffect(() => {
+    countVideosInCourse(_courseFromState)
+    setSection(state?.sections);
+    state.sections.forEach((section: ISection) => {
+      section.modules.forEach((Module: IModule) => {
+        if (Module.videos.length > 0) {
+          videos.push(...Module.videos);
+        }
+      });
+    });
     setAllVideos(videos);
-
-    
-    setData(state);
     if (state) {
       setIsLoading(false);
     }
     getUserCourses(state?.creatingUser!);
     const fetchData = async () => {
       setAuthor(await getAuthor(state?.creatingUser!));
-
-      // Fetch comments
-      var _comments = await Api.GET_CommentsByReference(state.id);
+      var _comments = await CommentsApi.GET_CommentsByReference(state.id);
       if (_comments) {
         setComments(_comments?.map((comment) => comment.data) as any);
       }
@@ -179,121 +187,124 @@ const getEnrolledCourses = async () => {
   }, []);
 
   async function getUserCourses(id: string) {
-    var userCourses = await Api.GET_CoursesByUserId(id);
-
-    console.log("Author courses", userCourses?.data);
+    var userCourses = await CourseApi.GET_CoursesByUserId(id);
   }
-
   const handleVideoSelect = (video: IVideo) => {
-
+    clearInterval(intervalId); 
+    setVideoEnded(true)
+    setLoginTime(Date.now());
+    setSeconds(0);
+    const foundSection = sections.find(section =>
+      section.modules.some(module =>
+        module.videos.some((v: IVideo) => v.id === video.id)
+      )
+    );
+    setSectionId(foundSection?.id!)
     const index = allVideos.findIndex((v: IVideo) => v.id === video.id);
     setSelectedVideo(_courseFromState.sections[0]?.modules[0]?.videos[index]?.videoLink);
     setCurrentVideoIndex(index);
     setVideoId(_courseFromState.sections[0]?.modules[0]?.videos[index].id);
     setVideo(_courseFromState.sections[0]?.modules[0]?.videos[index])
-    console.log("VideoId Selected", video?.id);
   };
-
-
-  const openQuiz = () => {
+  const openQuiz = async () => {
+    localStorage.setItem("quizStartTime", new Date().toISOString())
     setOpen(false);
     goToQuiz()
   }
-
   const goToQuiz = () => {
-
     router.push(`/protected/student/course/quiz?id=${quizId}`);
-    
-  
   }
 
   const goToCourse = () => {
     setEnrollOpen(false);
   }
 
-  const courseEnrollment = async (course:any) => {
+  const courseEnrollment = async (course: any) => {
     setIsLoading(true)
-    const cookies = new Cookies();
-
-    const userData = cookies.get("param-lms-user");
-    //console.log("before", course, userData)
-    const payload = {
+    const payload: IEnrollment = {
       userId: userData?.id,
-      creatingUser: course?.creatingUser,
-      creatingDate: course?.creatingDate,
-      modifiedDate: course?.modifiedDate,
-      modifyingUser: course?.modifyingUser,
+      creatingUser: "65d74882251362b65ed82c2c",
+      createdDate: new Date().toISOString(),
+      modifiedDate: new Date().toISOString(),
+      modifyingUser: _courseFromState?.modifyingUser,
       state: 0,
-      courses:[course?.id]
+      courses: [course?.id],
+      courseProgress: [
+        {
+          studentId: userData?.reference,
+          courseId: _courseFromState.id,
+          progress: 0,
+          isCompleted: false,
+          watchedVideos: []
+        },
+      ]
+
     }
-    const enroll = await Api.POST_CourseEnrollment(payload);
-    if(enroll){
+    const enroll = await CourseApi.POST_CourseEnrollment(payload);
+    if (enroll) {
       setIsLoading(false);
       setEnrollOpen(true);
     }
-    console.log("Enrolled", enroll) 
   }
 
-  if(isLoading){
-        return (
-        <div>Loading</div>
-        )
-  }else
+  if (isLoading) {
     return (
+      <div>Loading</div>
+    )
+  } else
 
+    return (
+      <div className="main">
 
-   
-<div className="main">
+        <div className='react-player-container'>
+          <VideoPlayer
+            selectedVideo={selectedVideo}
+            sections={sections}
+            cancelQuiz={cancelQuiz}
+            openQuiz={openQuiz}
+            handleVideoEnd={handleVideoEnd}
+            open={open}
+            handleDuration={handleDuration}
+            HideSidebar={hideSidebar}
+            viewSidebar={HideSidebar}
+            playerRef={playerRef}
+            video={video}
+            videoId={videoId}
 
-  <div className='react-player-container'>
-  <VideoPlayer
-      selectedVideo = {selectedVideo}
-      sections = {sections}
-      cancelQuiz = {cancelQuiz}
-      openQuiz = {openQuiz}
-      handleVideoEnd= {handleVideoEnd}
-      open= {open}
-      handleDuration={handleDuration}
-      HideSidebar = {hideSidebar}
-      viewSidebar ={HideSidebar}
-      playerRef={playerRef}
-      video={video}
-      videoId = {videoId}
+          />
 
-      />
-      
-      <ConfirmationModal
-        open={enrollOpen}
-        onConfirm={() => goToCourse()}
-        onCancel={close}
-        title="Congratulations"
-        buttonText="Get Started"
-      >
-        Thank you for enrolling for the course. click get started to complete the course
-      </ConfirmationModal>
-  
-<div>
-  {
-      !isEnrolled ? 
-      <button className="btn btn-primary" onClick={() => courseEnrollment(state)}>Enroll</button>
-      :
-      ''
-    }
-  
-</div>
-  </div>
+          <ConfirmationModal
+            open={enrollOpen}
+            onConfirm={() => goToCourse()}
+            onCancel={close}
+            title="Congratulations"
+            buttonText="Get Started"
+          >
+            Thank you for enrolling for the course. click get started to complete the course
+          </ConfirmationModal>
 
+          <div>
+            {
+              !isEnrolled ?
+                <button className="btn btn-primary" onClick={() => courseEnrollment(state)}>Enroll</button>
+                :
+                ''
+            }
 
-    
-       
-<div  style={hideSidebar ? { width: "30%" , } : {display:"none"}}>
-
-<VideoSibar HideSidebar = {HideSidebar} duration = {formatDurationToMinutes(duration)} sections={sections} handleVideoSelect={handleVideoSelect}/>
-</div>
-
- </div>
+          </div>
+        </div>
 
 
 
-  )
+
+        <div style={hideSidebar ? { width: "30%", } : { display: "none" }}>
+
+          <VideoSibar HideSidebar={HideSidebar} duration={formatDurationToMinutes(duration)} sections={sections} handleVideoSelect={handleVideoSelect} />
+        </div>
+
+      </div>
+
+
+
+    )
 }

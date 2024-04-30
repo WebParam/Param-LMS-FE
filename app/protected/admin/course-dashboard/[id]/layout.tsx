@@ -17,7 +17,7 @@ function Layout({ children }: { children: React.ReactNode }) {
     },
     { name: "quizzes", title: "Quizzes", url: `/protected/admin/course-dashboard/${id}/quizzes` },
   ];
-  
+
   return (
     <>
       <div className="card p-relative o-hidden mb-0">

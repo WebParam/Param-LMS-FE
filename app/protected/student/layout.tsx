@@ -1,12 +1,14 @@
 "use client";
 import Drawer from "@/app/topbar-components/Drawer";
 import HeadNav from "@/app/topbar-components/HeadNav";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import withAuth from './StudentAuthWrapper'
 import SideTab from '@/app/interfaces/sideTabs';
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [time, setTime] = useState(new Date())
+
   const sideTabs: SideTab[] = [
     { name: 'Courses', url: '/protected/student/course/all-courses', icon: 'assignment' },
     {
@@ -16,9 +18,13 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     }
   ];
 
+
+
   return (
     <>
-      <div className="mdk-header-layout js-mdk-header-layout">
+      <div
+  
+      className="mdk-header-layout js-mdk-header-layout">
         <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} />
 
         {/* <!-- Header Layout Content --> */}

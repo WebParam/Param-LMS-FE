@@ -1,6 +1,7 @@
+import { IStudentSectionAverage } from "@/app/interfaces/analytics";
 import { NextPage } from "next";
 
-const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
+const TableBody: NextPage<{ list: IStudentSectionAverage[] }> = ({ list }) => {
   const align = {
     section_title: "pl-48pt text-left",
     time_spent: "text-left",
@@ -13,59 +14,59 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
     <>
       <tbody className="list" id="staff">
         {list &&
-          list.map((data: any) => (
-            <tr key={data.section_title} className="selected">
+          list.map((data: IStudentSectionAverage) => (
+            <tr key={data.sectionName} className="selected">
               <td className={`${align.section_title} js-lists-values-projects small`}>
-                {data.section_title}
+                {data.sectionName}
               </td>
               <td className={`${align.completion_rate} js-lists-values-projects small`}>
                 <div className="progress-container">
                   <div className="progress-bar">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `${data.average_completion_rate}%` }}
+                      style={{ width: `${data.averageCompletionRate}%` }}
                     ></div>
                   </div>
                   <div className="progress-bar-text">
-                    {data.average_completion_rate}%
+                    {data.averageCompletionRate}%
                   </div>
                 </div>
               </td>
               <td className={`text-center js-lists-values-projects small`}>
-                {data.average_time_spent}
+                {data.averageTimeSpent}
               </td>
               <td className={`text-center js-lists-values-projects small`}>
-                {data.average_points}
+                {data.averagePoints}
               </td>
               <td className={`${align.completion_rate} js-lists-values-projects small`}>
                 <div className="progress-container">
                   <div className="progress-bar">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `${data.active_status}%` }}
+                      style={{ width: `${data.activeStudents}%` }}
                     ></div>
                   </div>
                   <div className="progress-bar-text">
-                    {data.active_status}%
+                    {data.activeStudents}%
                   </div>
                 </div>
               </td>
               <td className={`${align.no_of_comments} js-lists-values-projects small`}>
-                {data.question_launched}
+                {data.questionsLauched}
               </td>
               <td className={`${align.points_collected} js-lists-values-projects small`}>
-                {data.notes_launched}
+                {data.notes}
               </td>
               <td className={`${align.completion_rate} js-lists-values-projects small`}>
                 <div className="progress-container">
                   <div className="progress-bar">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `${data.downloaded_content}%` }}
+                      style={{ width: `${data.downloadedResources}%` }}
                     ></div>
                   </div>
                   <div className="progress-bar-text">
-                    {data.downloaded_content}%
+                    {data.downloadedResources}%
                   </div>
                 </div>
               </td>

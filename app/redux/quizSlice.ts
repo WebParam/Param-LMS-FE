@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IQuiz, IQuestion, IChoice, IQuizState, IUpdateQuizDetailState, IUpdateQuestionDetailState, IDeleteQuestion, IDeleteChoice} from "../interfaces/quiz";
 import { AppStore } from "./store";
-import { IModule, IVideo } from "../interfaces/courses";
-import { Api } from "../lib/restapi/endpoints";
+import {  IVideo } from "../interfaces/courses";
 
 const generateUniqueId = () => {
   return 'xxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, () => {
