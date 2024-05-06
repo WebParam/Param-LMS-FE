@@ -41,10 +41,6 @@ export const Pagination = ({
   const [deleteVideoModuleId, setDeleteVideoModuleId] = useState<string>("");
   const [sectionId, setSetSectionId] = useState<string>("")
 
-
-
-
-
   const totalPages = Math.ceil(sections.length / itemsPerPage);
   const indexOfLastSection = currentPage * itemsPerPage;
   const indexOfFirstSection = indexOfLastSection - itemsPerPage;

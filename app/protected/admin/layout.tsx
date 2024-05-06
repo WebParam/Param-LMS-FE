@@ -15,6 +15,16 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       name: 'Assessments', url: '#', icon: 'list', children: [
         { name: 'Grade Assessments', url: '/protected/admin/assessments/grade-assessments', icon: '' }
       ]
+    },
+    {
+      name: 'Tables', url: '#', icon: 'list', children: [
+        { name: 'Documents', url: '/protected/admin/create-course/pages/tables/documents', icon: '' },
+        { name: 'Sub-Section', url: '/protected/admin/create-course/pages/tables/sub-sections', icon: '' },
+        { name: 'Sub-Section-Audios', url: '/protected/admin/create-course/pages/tables/sub-section-audios', icon: '' },
+        { name: 'Sub-Section-Links', url: '/protected/admin/create-course/pages/tables/sub-section-links', icon: '' }
+
+
+      ]
     }
   ];
 
