@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -25,9 +21,8 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/components/*": ["./app/components/*"],
+      "@/*": ["./*"],
     }
   },
   "include": [
@@ -38,10 +33,7 @@
     "dist/types/**/*.ts",
     "app/interfaces/**/*.ts",
     "middleware.ts",
-    "node_modules/react-redux",
-    
+    "node_modules/react-redux"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
