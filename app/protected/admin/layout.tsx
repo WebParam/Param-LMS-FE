@@ -11,21 +11,12 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     { name: 'Course Graphs', url: '/protected/admin/course-dashboard/graphs', icon: 'show_chart' },
     { name: 'Manage Courses', url: '/protected/admin/manage-courses', icon: 'assignment' },
     {name : 'Grouped Progress', url: `/protected/admin/grouped-progress/1/assessments`, icon : 'dashboard',},
+    {name : 'Create Course', url: `/protected/admin/courses/create`, icon : 'create_new_folder',},
     {
       name: 'Assessments', url: '#', icon: 'list', children: [
         { name: 'Grade Assessments', url: '/protected/admin/assessments/grade-assessments', icon: '' }
       ]
     },
-    {
-      name: 'Tables', url: '#', icon: 'list', children: [
-        { name: 'Documents', url: '/protected/admin/create-course/pages/tables/documents', icon: '' },
-        { name: 'Sub-Section', url: '/protected/admin/create-course/pages/tables/sub-sections', icon: '' },
-        { name: 'Sub-Section-Audios', url: '/protected/admin/create-course/pages/tables/sub-section-audios', icon: '' },
-        { name: 'Sub-Section-Links', url: '/protected/admin/create-course/pages/tables/sub-section-links', icon: '' }
-
-
-      ]
-    }
   ];
 
   return (
