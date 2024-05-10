@@ -14,7 +14,7 @@ const Body = () => {
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = files.slice(indexOfFirstItem, indexOfLastItem);
-  const ref = useRef(null);
+  const ref = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
 
   const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
