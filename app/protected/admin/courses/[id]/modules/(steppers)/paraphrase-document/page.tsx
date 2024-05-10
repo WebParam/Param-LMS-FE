@@ -6,9 +6,11 @@ import list from "@/components/course/[id]/modules/paraphrase-document/data";
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import MyVerticallyCenteredModal from "@/components/course/[id]/modules/paraphrase-document/Modal";
+import { useRouter } from "next/navigation";
 
 const Body = () => {
-  const [openModal, setOpenModal] = useState<boolean>(false)
+  const router = useRouter();
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 5;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -21,18 +23,20 @@ const Body = () => {
   const pathname = usePathname();
   const arrUrl = pathname.split("/");
   arrUrl.pop();
-  const nextUrl = arrUrl.join("/") + `/generate-audio?courseId=${courseId}&title=${title}&step=2`;
+  const nextUrl =
+    arrUrl.join("/") +
+    `/confirm-audio?courseId=${courseId}&title=${title}&step=2`;
 
   return (
     <>
       <div className="card mt-3 mb-3">
-      <div className="card mb-0">
-            <MyVerticallyCenteredModal
-              show={openModal}
-              onHide={() => setOpenModal(false)}
-            />
-          </div>
-          <Table viewModal={setOpenModal} list={currentItems!} />
+        <div className="card mb-0">
+          <MyVerticallyCenteredModal
+            show={openModal}
+            onHide={() => setOpenModal(false)}
+          />
+        </div>
+        <Table viewModal={setOpenModal} list={currentItems!} />
       </div>
 
       <div className="card mb-24pt">
@@ -47,11 +51,12 @@ const Body = () => {
 
       <div className="card p-2">
         <div className="d-flex justify-content-center">
-          <Link 
-            className="btn btn-success mx-1" href={nextUrl}            
+          <button
+            className="btn btn-success"
+            onClick={() => router.replace(nextUrl)}
           >
             Next
-          </Link>
+          </button>
         </div>
       </div>
     </>

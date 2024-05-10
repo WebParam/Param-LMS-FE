@@ -19,7 +19,7 @@ function Page() {
   const arrUrl = pathname.split("/");
   arrUrl.pop();
   const url =
-    arrUrl.join("/") + `/modules/edit?courseId=${courseId}&title=${title}`;
+    arrUrl.join("/") + `/modules/documents?courseId=${courseId}&title=${title}`;
 
   return (
     <>
