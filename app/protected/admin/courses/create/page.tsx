@@ -7,6 +7,8 @@ const Body = () => {
   const instructorName = "John Doe";
   const logoUrl =
     "https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg";
+  const thumbUrl =
+    "https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg";
 
   return (
     <>
@@ -22,6 +24,7 @@ const Body = () => {
             description={description}
             instructorName={instructorName}
             logoUrl={logoUrl}
+            thumbUrl={thumbUrl}
             action={createCourse}
           />
         </div>
