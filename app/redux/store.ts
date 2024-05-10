@@ -12,7 +12,7 @@ import { quizSlice } from "./quizSlice";
 import { assessmentSlice } from "./assessmentSlice";
 import {documentSlice } from "./documentSice";
 import {watchedVideoSlice} from "./watcheVideosSlice";
-import { fileReducer } from "./filesSice";
+import { fileReducer } from "./filesSlice";
 
 const persistCourse = {
   key: 'course',
