@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import Button from "./Button";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
@@ -37,10 +36,12 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                 style={{ width: "300px" }}
                 className="text-center js-lists-values-projects small"
               >
-                <Button
-                  classes="btn btn-outline-danger rounded-pill px-4 py-2"
-                  text="View"
-                />
+                <Link
+                  className="btn btn-success rounded-pill px-4 py-2"
+                  href="#"
+                >
+                  View
+                </Link>
               </td>
               <td
                 style={{ width: "300px" }}
