@@ -1,7 +1,7 @@
 export default function Stepper({ step, currentPath }: { step: number, currentPath: string }) {
   const steps = [
     { name: "Paraphrase Sections", stepper: 1, path: "/paraphrase-document" },
-    { name: "Generate Audio", stepper: 2, path: "/generate-audio" },
+    { name: "Confirm Audio", stepper: 2, path: "/confirm-audio" },
     { name: "Upload Video Link", stepper: 3, path: "/upload-link" },
   ];
   return (
