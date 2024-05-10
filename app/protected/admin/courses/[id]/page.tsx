@@ -10,6 +10,7 @@ const Body = () => {
   const description = searchParams.get("description") || "";
   const instructorName = searchParams.get("instructorName") || "";
   const logoUrl = searchParams.get("logoUrl") || "";
+  const thumbUrl = searchParams.get("thumbUrl") || "";
 
   return (
     <>
@@ -25,6 +26,7 @@ const Body = () => {
             description={description}
             instructorName={instructorName}
             logoUrl={logoUrl}
+            thumbUrl={thumbUrl}
             action={createCourse}
           />
         </div>

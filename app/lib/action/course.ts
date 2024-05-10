@@ -1,4 +1,4 @@
-"use server"
+"use server";
 import { redirect } from "next/navigation";
 
 function generateRandomUserId(length?: number) {
@@ -18,11 +18,9 @@ export async function createCourse(formData: FormData) {
   const description = formData.get("description");
   const instructorName = formData.get("instructorName");
   const logoUrl = formData.get("logoUrl");
+  const thumbUrl = formData.get("thumbUrl");
 
-    console.log("title: ", title, " description ", description, " instructorName ", instructorName, " logoUrl ", logoUrl);
-    console.log("url: ", `/protected/admin/courses/${userId}?title=${title}&description=${description}&instructorName=${instructorName}&logoUrl=${logoUrl}`);
-    
   redirect(
-    `/protected/admin/courses/${userId}?id=${userId}&title=${title}&description=${description}&instructorName=${instructorName}&logoUrl=${logoUrl}`
+    `/protected/admin/courses/${userId}?id=${userId}&title=${title}&description=${description}&instructorName=${instructorName}&logoUrl=${logoUrl}&thumbUrl=${thumbUrl}`
   );
 }

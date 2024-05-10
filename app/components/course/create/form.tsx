@@ -3,6 +3,7 @@ type CreateFormType = {
   description?: string;
   instructorName?: string;
   logoUrl?: string;
+  thumbUrl?: string;
   action: (formData: FormData) => void;
 };
 
@@ -11,6 +12,7 @@ export default function CreateForm({
   description,
   instructorName,
   logoUrl,
+  thumbUrl,
   action,
 }: CreateFormType) {
   return (
@@ -75,6 +77,22 @@ export default function CreateForm({
                 type="text"
                 className="form-control"
                 defaultValue={logoUrl}
+                placeholder="https://..."
+              />
+            </div>
+          </div>
+        </div>
+        <div className="list-group-item">
+          <div className="form-group row align-items-center mb-0">
+            <label className="form-label col-form-label col-sm-3">
+              Thumbnail Url
+            </label>
+            <div className="col-sm-9">
+              <input
+                name="thumbUrl"
+                type="text"
+                className="form-control"
+                defaultValue={thumbUrl}
                 placeholder="https://..."
               />
             </div>
