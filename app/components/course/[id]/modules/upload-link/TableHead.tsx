@@ -1,5 +1,5 @@
 const TableHead = () => {
-  const headers = ["Paraphrased Title", "Embedded Link"];
+  const headers = ["Paraphrased Title", "Embedded Link", "Action", "Preview Video"];
 
   return (
     <>
@@ -19,6 +19,8 @@ const TableHead = () => {
               </a>
             </th>
           ))}
+            <th></th>
+            <th></th>
         </tr>
       </thead>
     </>

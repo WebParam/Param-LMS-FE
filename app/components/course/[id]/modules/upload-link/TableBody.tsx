@@ -1,5 +1,7 @@
 "use client";
 import { NextPage } from "next";
+import Link from "next/link";
+
 const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   return (
     <>
@@ -24,6 +26,30 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   placeholder="Input link"
                   className="rounded text-center"
                 />
+              </td>
+              <td
+                style={{ width: "300px" }}
+                className="text-center js-lists-values-projects small"
+              >
+                <Link
+                  className="btn btn-success rounded-pill px-4 py-2"
+                  href="#"
+                >
+                  Upload Link
+                  <i className="material-icons ml-1">publish</i>
+                </Link>
+              </td>
+              <td
+                style={{ width: "300px" }}
+                className="text-center js-lists-values-projects small"
+              >
+                <Link
+                  className="btn btn-success rounded-pill px-4 py-2"
+                  href="#"
+                >
+                  Preview
+                  <i className="material-icons ml-1">open_in_new</i>
+                </Link>
               </td>
             </tr>
           ))}

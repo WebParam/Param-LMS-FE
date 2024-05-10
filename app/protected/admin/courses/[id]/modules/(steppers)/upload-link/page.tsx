@@ -5,8 +5,10 @@ import { useState } from "react";
 import list from "@/components/course/[id]/modules/upload-link/data";
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Body = () => {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 5;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -20,8 +22,9 @@ const Body = () => {
   const arrUrl = pathname.split("/");
   arrUrl.pop();
   const url = arrUrl.join("/");
-  const prevUrl = url + `/generate-audio?courseId=${courseId}&title=${title}&step=2`;
-  const submitUrl = url + `?courseId=${courseId}&title=${title}`;
+  const prevUrl =
+    url + `/confirm-audio?courseId=${courseId}&title=${title}&step=2`;
+  const submitUrl = url + `/documents?courseId=${courseId}&title=${title}`;
 
   return (
     <>
@@ -37,19 +40,24 @@ const Body = () => {
           setCurrentPage={setCurrentPage}
           ITEMSPERPAGE={ITEMSPERPAGE}
         />
-      </div>      
+      </div>
 
       <div className="card p-2">
         <div className="d-flex justify-content-center">
-          <Link className="btn btn-success mx-1" href={prevUrl}>
+          <button
+            className="btn btn-success mx-1"
+            onClick={() => router.replace(prevUrl)}
+          >
             Previous
-          </Link>
-          <Link className="btn btn-success mx-1" href={submitUrl}>
+          </button>
+          <button
+            className="btn btn-success mx-1"
+            onClick={() => router.replace(submitUrl)}
+          >
             Submit
-          </Link>
+          </button>
         </div>
       </div>
-
     </>
   );
 };
