@@ -13,15 +13,17 @@ export default function PageHeader({ title }: { title: string }) {
   const name = searchParams.get("title");
   let isModule = false;
   let isCreateModule = false;
+  let isEditModule = false;
   let isEditCourse = false;
+  let isEditDocument = false;
 
   const arrUrl = pathname.split("/");
   const suffixPath = arrUrl.pop() || "";
 
-  const arrLink = ["paraphrase-document", "generate-audio", "upload-link"];
-  const stepperMap:any = {
+  const arrLink = ["paraphrase-document", "confirm-audio", "upload-link"];
+  const stepperMap: any = {
     "paraphrase-document": "Paraphrase Sections",
-    "generate-audio": "Generate Audio",
+    "confirm-audio": "Confirm Audio",
     "upload-link": "Upload Link",
   };
 
@@ -30,7 +32,10 @@ export default function PageHeader({ title }: { title: string }) {
     isCreateModule = true;
   } else if (pathname.indexOf("/modules/edit") !== -1) {
     title = `Edit Unit Standard`;
-    isCreateModule = true;
+    isEditModule = true;
+  } else if (pathname.indexOf("/modules/documents") !== -1) {
+    title = `Unit Standard - Documents`;
+    isEditModule = true;
   } else if (id) {
     isEditCourse = true;
   } else if (pathname.indexOf("/modules") !== -1) {
@@ -38,7 +43,8 @@ export default function PageHeader({ title }: { title: string }) {
     if (arrLink.indexOf(suffixPath) === -1) {
       isModule = true;
     } else {
-      title = `${name} - ${stepperMap[suffixPath]}`;      
+      isEditDocument = true;
+      title = `${name} - ${stepperMap[suffixPath]}`;
     }
   }
 
@@ -75,6 +81,16 @@ export default function PageHeader({ title }: { title: string }) {
                 </Link>
               </div>
             )}
+            {isEditModule && (
+              <div>
+                <Link
+                  className="btn btn-success"
+                  href={`/protected/admin/courses/${courseId}/modules?courseId=${courseId}&title=${name}`}
+                >
+                  Unit Standards
+                </Link>
+              </div>
+            )}
             {isModule && (
               <div>
                 <button
@@ -83,6 +99,16 @@ export default function PageHeader({ title }: { title: string }) {
                 >
                   Create Unit Standard
                 </button>
+              </div>
+            )}
+            {isEditDocument && (
+              <div>
+                <Link
+                  className="btn btn-success"
+                  href={`/protected/admin/courses/${courseId}/modules/documents?courseId=${courseId}&title=${name}`}
+                >
+                  Documents
+                </Link>
               </div>
             )}
           </div>
