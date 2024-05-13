@@ -1,14 +1,14 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import Table from "@/components/course/[id]/modules/create/Table";
+import Table from "@/components/course/[id]/modules/edit/Table";
 import { ChangeEvent, useRef, useState, useEffect } from "react";
-import list from "@/components/course/[id]/modules/create/data";
+import list from "@/components/course/[id]/modules/edit/data";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "@/app/redux/filesSlice";
 
 const Body = () => {
   const reduxFiles = useSelector((state: any) => state.files.files);
-  const [files, setFiles] = useState<any[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 7;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -23,13 +23,13 @@ const Body = () => {
     if (selectedFiles) {
       const fileList = Array.from(selectedFiles);
       dispatch(uploadFile(fileList.map((file: File) => file)));
-      setFiles(fileList.map((file: File) => file.name));
+      setFiles(fileList.map((file: File) => file));
     }
   };
 
   useEffect(() => {
     if (reduxFiles[0] && reduxFiles[0].length > 0) {
-      setFiles(reduxFiles[0].map((file: File) => file.name));
+      setFiles(reduxFiles[0].map((file: File) => file));
     }
   }, []);
 

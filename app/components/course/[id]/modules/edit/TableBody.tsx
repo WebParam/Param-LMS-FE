@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import Button from "./Button";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
@@ -15,11 +16,16 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
     arrUrl.join("/") +
     `/paraphrase-document?courseId=${courseId}&title=${title}&step=2`;
 
+  const handleViewDocument = (file: File) => {
+    const documentURL = URL.createObjectURL(file);
+    window.open(documentURL, "_blank");
+  };
+
   return (
     <>
       <tbody className="list" id="staff">
         {list.length > 0 ? (
-          list.map((data: any, key) => (
+          list.map((file: File, key) => (
             <tr key={key} className="selected">
               <td
                 style={{ width: "300px" }}
@@ -29,8 +35,19 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   <p>
                     <i className="material-icons ">file_present</i>
                   </p>
-                  <p className="text-justify">{data}</p>
+                  <p className="text-justify">{file.name}</p>
                 </div>
+              </td>
+              <td
+                style={{ width: "300px" }}
+                className="text-center js-lists-values-projects small"
+              >
+                <button
+                  className="btn btn-success rounded-pill px-4 py-2"
+                  onClick={() => handleViewDocument(file)}
+                >
+                  View
+                </button>
               </td>
               <td
                 style={{ width: "300px" }}
@@ -38,24 +55,18 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
               >
                 <Link
                   className="btn btn-success rounded-pill px-4 py-2"
-                  href="#"
+                  href={url}
                 >
-                  View
+                  Paraphase
                 </Link>
               </td>
               <td
                 style={{ width: "300px" }}
                 className="text-center js-lists-values-projects small"
               >
-                <Link
-                  className="btn btn-outline-success rounded-pill px-4 py-2"
-                  href={url}
-                >
-                  Paraphase
-                </Link>
-              </td>
-              <td className="text-center js-lists-values-projects small ">
-                <input type="checkbox" />
+                <button className="btn btn-outline-success rounded-pill px-4 py-2">
+                  Pending
+                </button>
               </td>
             </tr>
           ))
