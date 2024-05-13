@@ -17,8 +17,6 @@ export default function CreateForm({
 }: CreateFormType) {
   return (
     <form name="create-course" className="mb-0" action={action} data-netlify="true">
-      <input type="hidden" name="form-name" value="create-course" />
-
       <div className="list-group list-group-form">
         <div className="list-group-item">
           <div className="form-group row align-items-center mb-0">
