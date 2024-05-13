@@ -16,7 +16,7 @@ export default function CreateForm({
   action,
 }: CreateFormType) {
   return (
-    <form className="mb-0" action={action}>
+    <form name="create-course" className="mb-0" action={action} data-netlify="true">
       <div className="list-group list-group-form">
         <div className="list-group-item">
           <div className="form-group row align-items-center mb-0">
