@@ -1,9 +1,7 @@
-"use client";
 import { NextPage } from "next";
-import { useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
 const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
-  const [playPause, setPlayPause] = useState<boolean>(false);
+
   return (
     <>
       <tbody className="list" id="staff">
@@ -22,17 +20,9 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                 <ReactAudioPlayer
                   src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
                   controls
+                  style={{height: "35px"}}
                 />
-              </td>
-              <td className="text-center js-lists-values-projects small cursor-pointer">
-                <i
-                  onClick={(prev) => setPlayPause(!prev)}
-                  id="playPauseIcon"
-                  className="material-icons mr-8pt"
-                >
-                  <i className="material-icons mr-8pt">file_download</i>
-                </i>
-              </td>
+              </td>              
               <td className="text-center js-lists-values-projects small ">
                 <input type="checkbox" />
               </td>

@@ -2,7 +2,6 @@ const TableHead = () => {
   const headers = [
     "Paraphrased Title",
     "Audio",
-    "Download",
     "Confirm Audio"
 
   ];
