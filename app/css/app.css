@@ -29571,7 +29571,7 @@ body,html {
 }
 
 [dir] .progression-bar__item:after,[dir] .progression-bar__item:before {
-    background-color: #f2f2f2
+    background-color: green
 }
 
 [dir=ltr] .progression-bar__item:after,[dir=ltr] .progression-bar__item:before {
@@ -29598,7 +29598,7 @@ body,html {
 
 [dir] .progression-bar__item-icon {
     border-radius: 50%;
-    border: 2px solid #f2f2f2;
+    border: 2px solid green;
     text-align: center;
     background-color: #fff;
     margin-bottom: 5px
