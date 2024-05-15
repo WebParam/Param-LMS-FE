@@ -3,20 +3,21 @@ import Link from "next/link";
 import { useSearchParams, usePathname } from "next/navigation";
 import Modal from "./Modal";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 export default function PageHeader({ title }: { title: string }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const courseId = searchParams.get("courseId");
-  const id = searchParams.get("id");
   const name = searchParams.get("title");
   let isModule = false;
   let isCreateModule = false;
   let isEditModule = false;
   let isEditCourse = false;
+  let isCourse = false;
   let isEditDocument = false;
-
+  const { id } = useParams<{ id: string }>();
   const arrUrl = pathname.split("/");
   const suffixPath = arrUrl.pop() || "";
 
@@ -27,7 +28,11 @@ export default function PageHeader({ title }: { title: string }) {
     "upload-link": "Upload Link",
   };
 
-  if (pathname.indexOf("/modules/create") !== -1) {
+  if (pathname == "/protected/admin/courses") {
+    title = "Courses";
+    isCourse = true;
+  }
+  else if (pathname.indexOf("/modules/create") !== -1) {
     title = `Create Unit Standard`;
     isCreateModule = true;
   } else if (pathname.indexOf("/modules/edit") !== -1) {
@@ -71,6 +76,16 @@ export default function PageHeader({ title }: { title: string }) {
                 <li className="breadcrumb-item active">{title}</li>
               </ol>
             </div>
+            {isCourse && (
+              <div>
+                <Link
+                  className="btn btn-success"
+                  href={`/protected/admin/courses/create`}
+                >
+                  Create Course
+                </Link>
+              </div>
+            )}
             {isEditCourse && (
               <div>
                 <Link

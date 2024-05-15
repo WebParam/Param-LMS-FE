@@ -1,5 +1,5 @@
 import CreateForm from "@/app/components/course/create/form";
-import { createCourse } from "@/app/lib/action/course";
+import { createCourse } from "@/app/lib/actions/course";
 
 const Body = () => {
   const title = "Calculus";
