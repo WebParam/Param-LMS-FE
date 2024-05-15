@@ -12,6 +12,8 @@ function Layout({ children }: { children: React.ReactNode }) {
       ? "Create Course"
       : `Edit Course - ${name}`;
 
+  if (pathname == "/protected/admin/courses") title = "Courses";
+
   return (
     <>
       <div className="mdk-header-layout__content page-content ">
