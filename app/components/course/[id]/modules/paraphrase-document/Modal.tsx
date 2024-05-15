@@ -27,7 +27,7 @@ function MyVerticallyCenteredModal(props: any) {
         <div>
           <h5>Paraphrased Title</h5>
           <input
-            defaultValue="Basic structure of HTML documents"
+            defaultValue={props.data.title}
             minLength={10}
             onChange={(event) => setTitle(event.target.value)}
             className="form-control mb-3"
