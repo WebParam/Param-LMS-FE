@@ -37,7 +37,7 @@ function MyVerticallyCenteredModal(props: any) {
         <div>
           <h5>Paraphrased Text</h5>
           <ReactQuill
-            value={description}
+            value={props.data.description}
             onChange={(value) => setDescription(value)}
           />
         </div>
