@@ -1,45 +1,56 @@
+import { Diagnostic } from "../logger/logger";
+
 export const post = async (url: string, body: any) => {
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to Post data");
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    Diagnostic("SUCCESS ON POST, returning", data);
+    return data;
+  } catch (err) {
+    console.log(`[API ERROR : Method: POST; Endpoint: ${url}]`, err);
+    Diagnostic("ERROR ON POST, returning", err);
+    return err;
   }
-
-  return await res.json();
 };
 
 export const put = async (url: string, body: any) => {
-  const res = await fetch(url, {
-    method: "PUT",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to Post data");
+  try {
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    Diagnostic("SUCCESS ON PUT, returning", data);
+    return data;
+  } catch (err) {
+    console.log(`[API ERROR : Method: PUT; Endpoint: ${url}]`, err);
+    Diagnostic("ERROR ON PUT, returning", err);
+    return err;
   }
-
-  return await res.json();
 };
 
 export const get = async (url: string) => {
-  const res = await fetch(url, { next: { revalidate: 3600 } });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
+  try {
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    const data = await res.json();
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    console.log(`[API ERROR : Method: GET; Endpoint: ${url}]`, err);
+    Diagnostic("ERROR ON GET, returning", err);
+    return err;
   }
-
-  return await res.json();
 };
 
 export function generateRandomUserId(length?: number) {
