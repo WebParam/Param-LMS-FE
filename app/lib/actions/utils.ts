@@ -1,7 +1,28 @@
 export const post = async (url: string, body: any) => {
   const res = await fetch(url, {
     method: "POST",
-    body,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to Post data");
+  }
+
+  return await res.json();
+};
+
+export const put = async (url: string, body: any) => {
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
