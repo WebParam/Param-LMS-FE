@@ -73,7 +73,7 @@ export default function CreateForm({
             </label>
             <div className="col-sm-9">
               <input
-                name="logoUrl"
+                name="courseLogoUrl"
                 type="text"
                 className="form-control"
                 defaultValue={logoUrl}
@@ -89,7 +89,7 @@ export default function CreateForm({
             </label>
             <div className="col-sm-9">
               <input
-                name="thumbUrl"
+                name="thumbnailUrl"
                 type="text"
                 className="form-control"
                 defaultValue={thumbUrl}

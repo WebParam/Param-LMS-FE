@@ -1,9 +1,10 @@
 import EditForm from "@/app/components/course/[id]/editForm";
-import { createCourse, getCourse } from "@/app/lib/actions/course";
+import { updateCourse, getCourse } from "@/app/lib/actions/course";
 
-export default async function Course({ params }: { params: { id: number } }) {
+export default async function Course({ params }: { params: { id: string } }) {
   const course = await getCourse(params.id);
-
+  const updateUserWithId = updateCourse.bind(null, params.id)
+  console.log(course)
   return (
     <>
       <div className="card mt-3">
@@ -18,9 +19,9 @@ export default async function Course({ params }: { params: { id: number } }) {
               title={course.title}
               description={course.description}
               instructorName={course.instructorName}
-              logoUrl={course.logoUrl}
-              thumbUrl={course.thumbUrl}
-              action={createCourse}
+              logoUrl={course.courseLogoUrl}
+              thumbUrl={course.thumbnailUrl}
+              action={updateUserWithId}
             />
           )}
         </div>
