@@ -29,7 +29,9 @@ const Course = ({ imgUrl, url, title }: { imgUrl: string; url: string; title: st
     <div className="col-lg-3 card-group-row__col">
       <div className="card card-group-row__card">
         <Link href={url} className="d-block mb-16pt">
-          <img src={imgUrl} alt="" className="card-img card-img-cover" />
+          <div className="d-flex align-items-center justify-content-center" style={{ height: "200px", border: "2px" }}>
+            <p className="bg-success p-5 font-size-32pt font-weight-bold" style={{borderRadius: "50%"}}>{titleShort(title)}</p>
+          </div>
         </Link>
 
         <div className="d-flex p-16pt">
@@ -49,3 +51,8 @@ const Course = ({ imgUrl, url, title }: { imgUrl: string; url: string; title: st
     </div>
   );
 };
+
+const titleShort = (title: string) => {
+  const strArr = title.split(" ");
+  return strArr[0][0] + strArr[1][0] || "";
+}
