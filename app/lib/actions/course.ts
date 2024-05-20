@@ -1,7 +1,8 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post, put } from "./utils";
-const mockUrl = "https://663efe1be3a7c3218a4bcaaf.mockapi.io/api/v1";
+import { unstable_noStore as noStore } from 'next/cache';
+
 const wCourseUrl =
   "https://khumla-development-newcourse-write.azurewebsites.net/api/v1/Courses";
 const rCourseUrl =
@@ -22,8 +23,12 @@ export const createCourse = async (formData: FormData) => {
 };
 
 export const getCourses = async () => {
+  noStore();
+
   try {
-    return await get(`${mockUrl}/course`);
+    const resp = await get(`${rCourseUrl}/GetCoursesNew`);
+
+    return resp.map((res: any) => res.data);
   } catch (err) {
     console.error(err);
   }

@@ -24,13 +24,29 @@ export default async function Courses() {
   );
 }
 
-const Course = ({ imgUrl, url, title }: { imgUrl: string; url: string; title: string }) => {
+const Course = ({
+  imgUrl,
+  url,
+  title,
+}: {
+  imgUrl: string;
+  url: string;
+  title: string;
+}) => {
   return (
     <div className="col-lg-3 card-group-row__col">
       <div className="card card-group-row__card">
         <Link href={url} className="d-block mb-16pt">
-          <div className="d-flex align-items-center justify-content-center" style={{ height: "200px", border: "2px" }}>
-            <p className="bg-success p-5 font-size-32pt font-weight-bold" style={{borderRadius: "50%"}}>{titleShort(title)}</p>
+          <div
+            className="d-flex align-items-center justify-content-center"
+            style={{ height: "200px", border: "2px" }}
+          >
+            <p
+              className="bg-success d-flex align-items-center justify-content-center font-size-32pt font-weight-bold"
+              style={{ borderRadius: "50%", width: "130px", height: "130px" }}
+            >
+              {title && titleShort(title)}
+            </p>
           </div>
         </Link>
 
@@ -54,5 +70,8 @@ const Course = ({ imgUrl, url, title }: { imgUrl: string; url: string; title: st
 
 const titleShort = (title: string) => {
   const strArr = title.split(" ");
-  return strArr[0][0] + strArr[1][0] || "";
-}
+
+  if (strArr.length > 1 && strArr[1][0])
+    return (strArr[0][0].toUpperCase() + strArr[1][0].toUpperCase())
+  return strArr[0][0].toUpperCase();
+};
