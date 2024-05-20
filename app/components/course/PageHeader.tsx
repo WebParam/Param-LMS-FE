@@ -31,8 +31,7 @@ export default function PageHeader({ title }: { title: string }) {
   if (pathname == "/protected/admin/courses") {
     title = "Courses";
     isCourse = true;
-  }
-  else if (pathname.indexOf("/modules/create") !== -1) {
+  } else if (pathname.indexOf("/modules/create") !== -1) {
     title = `Create Unit Standard`;
     isCreateModule = true;
   } else if (pathname.indexOf("/modules/edit") !== -1) {
@@ -45,9 +44,9 @@ export default function PageHeader({ title }: { title: string }) {
     isEditCourse = true;
   } else if (pathname.indexOf("/modules") !== -1) {
     title = `${name} - Unit Standards`;
-    if (arrLink.indexOf(suffixPath) === -1) {
+    if (pathname.indexOf("/documents") !== -1) {
       isModule = true;
-    } else {
+    } else if (arrLink.indexOf(suffixPath) !== -1) {
       isEditDocument = true;
       title = `${name} - ${stepperMap[suffixPath]}`;
     }
@@ -65,7 +64,10 @@ export default function PageHeader({ title }: { title: string }) {
       <div className="border-bottom-2 py-32pt position-relative z-1">
         <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
           <div className="flex d-flex justify-content-between flex-column flex-sm-row align-items-center mb-24pt mb-md-0">
-            <div className="mb-24pt mb-sm-0 mr-sm-24pt">
+            <div
+              style={{ width: "850px" }}
+              className="mb-24pt mb-sm-0 mr-sm-24pt"
+            >
               <h2 className="mb-0">{title}</h2>
 
               <ol className="breadcrumb p-0 m-0">
@@ -76,56 +78,48 @@ export default function PageHeader({ title }: { title: string }) {
                 <li className="breadcrumb-item active">{title}</li>
               </ol>
             </div>
-            {isCourse && (
-              <div>
+            <div>
+              {isCourse && (
                 <Link
                   className="btn btn-success"
                   href={`/protected/admin/courses/create`}
                 >
                   Create Course
                 </Link>
-              </div>
-            )}
-            {isEditCourse && (
-              <div>
+              )}
+              {isEditCourse && (
                 <Link
                   className="btn btn-success"
                   href={`/protected/admin/courses/${id}/modules?courseId=${id}&title=${name}`}
                 >
                   Unit Standards
                 </Link>
-              </div>
-            )}
-            {isEditModule && (
-              <div>
+              )}
+              {isEditModule && (
                 <Link
                   className="btn btn-success"
                   href={`/protected/admin/courses/${courseId}/modules?courseId=${courseId}&title=${name}`}
                 >
                   Unit Standards
                 </Link>
-              </div>
-            )}
-            {isModule && (
-              <div>
+              )}
+              {isModule && (
                 <button
                   className="btn btn-success"
                   onClick={() => setOpenModal(true)}
                 >
                   Create Unit Standard
                 </button>
-              </div>
-            )}
-            {isEditDocument && (
-              <div>
+              )}
+              {isEditDocument && (
                 <Link
                   className="btn btn-success"
                   href={`/protected/admin/courses/${courseId}/modules/documents?courseId=${courseId}&title=${name}`}
                 >
                   Documents
                 </Link>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
