@@ -12,8 +12,8 @@ export const createCourse = async (formData: FormData) => {
     title: formData.get("title"),
     description: formData.get("description"),
     instructorName: formData.get("instructorName"),
-    logoUrl: formData.get("logoUrl"),
-    thumbUrl: formData.get("thumbUrl"),
+    courseLogoUrl: formData.get("courseLogoUrl"),
+    thumbnailUrl: formData.get("thumbnailUrl"),
   };
 
   const resp = await post(`${wCourseUrl}/AddCourseNew`, body);
@@ -45,8 +45,8 @@ export const updateCourse = async (id: string, formData: FormData) => {
     title: formData.get("title"),
     description: formData.get("description"),
     instructorName: formData.get("instructorName"),
-    logoUrl: formData.get("logoUrl"),
-    thumbUrl: formData.get("thumbUrl"),
+    courseLogoUrl: formData.get("courseLogoUrl"),
+    thumbnailUrl: formData.get("thumbnailUrl"),
   };
 
   const resp = await put(`${wCourseUrl}/UpdateCourseNew`, body);

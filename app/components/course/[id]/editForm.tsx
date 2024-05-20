@@ -4,8 +4,8 @@ type EditFormType = {
   title: string;
   description: string;
   instructorName: string;
-  logoUrl: string;
-  thumbUrl: string;
+  courseLogoUrl: string;
+  thumbnailUrl: string;
   action: (formData: FormData) => void;
 };
 
@@ -13,8 +13,8 @@ export default function EditForm({
   title,
   description,
   instructorName,
-  logoUrl,
-  thumbUrl,
+  courseLogoUrl,
+  thumbnailUrl,
   action
 }: EditFormType) {
   return (
@@ -22,8 +22,8 @@ export default function EditForm({
       title={title}
       description={description}
       instructorName={instructorName}
-      logoUrl={logoUrl}
-      thumbUrl={thumbUrl}
+      courseLogoUrl={courseLogoUrl}
+      thumbnailUrl={thumbnailUrl}
       action={action}
     />
   );

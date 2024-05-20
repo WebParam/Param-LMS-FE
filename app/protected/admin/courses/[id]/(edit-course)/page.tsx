@@ -19,8 +19,8 @@ export default async function Course({ params }: { params: { id: string } }) {
               title={course.title}
               description={course.description}
               instructorName={course.instructorName}
-              logoUrl={course.courseLogoUrl}
-              thumbUrl={course.thumbnailUrl}
+              courseLogoUrl={course.courseLogoUrl}
+              thumbnailUrl={course.thumbnailUrl}
               action={updateUserWithId}
             />
           )}

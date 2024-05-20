@@ -5,9 +5,9 @@ const Body = () => {
   const title = "Calculus";
   const description = "Mathematical Calculation and derivations of formulas";
   const instructorName = "John Doe";
-  const logoUrl =
+  const courseLogoUrl =
     "https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg";
-  const thumbUrl =
+  const thumbnailUrl =
     "https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg";
 
   return (
@@ -23,8 +23,8 @@ const Body = () => {
             title={title}
             description={description}
             instructorName={instructorName}
-            logoUrl={logoUrl}
-            thumbUrl={thumbUrl}
+            courseLogoUrl={courseLogoUrl}
+            thumbnailUrl={thumbnailUrl}
             action={createCourse}
           />
         </div>

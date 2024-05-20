@@ -2,8 +2,8 @@ type CreateFormType = {
   title?: string;
   description?: string;
   instructorName?: string;
-  logoUrl?: string;
-  thumbUrl?: string;
+  courseLogoUrl?: string;
+  thumbnailUrl?: string;
   action: (formData: FormData) => void;
 };
 
@@ -11,8 +11,8 @@ export default function CreateForm({
   title,
   description,
   instructorName,
-  logoUrl,
-  thumbUrl,
+  courseLogoUrl,
+  thumbnailUrl,
   action,
 }: CreateFormType) {
   return (
@@ -76,7 +76,7 @@ export default function CreateForm({
                 name="courseLogoUrl"
                 type="text"
                 className="form-control"
-                defaultValue={logoUrl}
+                defaultValue={courseLogoUrl}
                 placeholder="https://..."
               />
             </div>
@@ -92,7 +92,7 @@ export default function CreateForm({
                 name="thumbnailUrl"
                 type="text"
                 className="form-control"
-                defaultValue={thumbUrl}
+                defaultValue={thumbnailUrl}
                 placeholder="https://..."
               />
             </div>
