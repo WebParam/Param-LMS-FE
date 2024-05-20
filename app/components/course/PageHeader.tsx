@@ -21,11 +21,23 @@ export default function PageHeader({ title }: { title: string }) {
   const arrUrl = pathname.split("/");
   const suffixPath = arrUrl.pop() || "";
 
-  const arrLink = ["paraphrase-document", "confirm-audio", "upload-link"];
+  const arrLink = [
+    "paraphrase-document",
+    "confirm-audio",
+    "upload-link",
+    "documents",
+    "edit",
+    "audios",
+    "videos",
+  ];
   const stepperMap: any = {
     "paraphrase-document": "Paraphrase Sections",
     "confirm-audio": "Confirm Audio",
     "upload-link": "Upload Link",
+    documents: "Documents",
+    audios: "Audios",
+    videos: "Videos",
+    edit: "Edit",
   };
 
   if (pathname == "/protected/admin/courses") {
@@ -37,18 +49,18 @@ export default function PageHeader({ title }: { title: string }) {
   } else if (pathname.indexOf("/modules/edit") !== -1) {
     title = `Edit Unit Standard`;
     isEditModule = true;
-  } else if (pathname.indexOf("/modules/documents") !== -1) {
-    title = `Unit Standard - Documents`;
-    isEditModule = true;
   } else if (id) {
     isEditCourse = true;
   } else if (pathname.indexOf("/modules") !== -1) {
     title = `${name} - Unit Standards`;
-    if (pathname.indexOf("/documents") !== -1) {
+    if (arrLink.indexOf(suffixPath) === -1) {
       isModule = true;
-    } else if (arrLink.indexOf(suffixPath) !== -1) {
-      isEditDocument = true;
-      title = `${name} - ${stepperMap[suffixPath]}`;
+    } else {
+      // isEditDocument = true;
+      title =
+        name +
+        " - " +
+        (stepperMap[suffixPath] ? stepperMap[suffixPath] : "Unit Standards");
     }
   }
 

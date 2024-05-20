@@ -17,14 +17,25 @@ function Layout({ children }: { children: React.ReactNode }) {
       name: "edit",
       title: "Edit Unit Standard",
       url: `${url}/edit?courseId=${courseId}&title=${title}`,
-      path: `${url}/edit`
+      path: `${url}/edit`,
     },
     {
       name: "documents",
       title: "Documents",
       url: `${url}/documents?courseId=${courseId}&title=${title}`,
-      path: `${url}/documents`
-
+      path: `${url}/documents`,
+    },
+    {
+      name: "audios",
+      title: "Audios",
+      url: `${url}/audios?courseId=${courseId}&title=${title}`,
+      path: `${url}/audios`,
+    },
+    {
+      name: "videos",
+      title: "Video Links",
+      url: `${url}/videos?courseId=${courseId}&title=${title}`,
+      path: `${url}/videos`,
     },
   ];
 

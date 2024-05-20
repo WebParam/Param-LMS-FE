@@ -6,7 +6,8 @@ import list from "@/components/course/[id]/modules/edit/data";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "@/app/redux/filesSlice";
 
-const Body = () => {
+const Body = ({params}: {params: {moduleId: string}}) => {
+  const id = params.moduleId;
   const reduxFiles = useSelector((state: any) => state.files.files);
   const [files, setFiles] = useState<File[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,25 +37,7 @@ const Body = () => {
   return (
     <>
       <div className="page-separator my-4">
-        <div className="page-separator__text">Documents</div>
-      </div>
-
-      <div className="card mb-3">
-        <input
-          type="file"
-          hidden
-          ref={ref}
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            handleFileSelect(event)
-          }
-          multiple
-        />
-        <button
-          className="btn btn-success btn-block"
-          onClick={() => ref?.current?.click()}
-        >
-          Add Files
-        </button>
+        <div className="page-separator__text">Audios - Module ID({id})</div>
       </div>
 
       <div className="card mt-3 mb-3">
