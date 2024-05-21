@@ -1,7 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post, put } from "./utils";
-import { unstable_noStore as noStore } from 'next/cache';
+import { get, post, put } from "../utils";
+import { revalidatePath } from 'next/cache';
 
 const wCourseUrl =
   "https://khumla-development-newcourse-write.azurewebsites.net/api/v1/Courses";
@@ -19,12 +19,13 @@ export const createCourse = async (formData: FormData) => {
 
   const resp = await post(`${wCourseUrl}/AddCourseNew`, body);
   const { id, title } = resp.data;
-  redirect(`/protected/admin/courses/${id}?title=${title}`);
+  const url = `/protected/admin/courses/${id}?title=${title}`;
+
+  revalidatePath(url);
+  redirect(url);
 };
 
 export const getCourses = async () => {
-  noStore();
-
   try {
     const resp = await get(`${rCourseUrl}/GetCoursesNew`);
 
@@ -32,6 +33,7 @@ export const getCourses = async () => {
   } catch (err) {
     console.error(err);
   }
+  const url = `/protected/admin/courses`;
 };
 
 export const getCourse = async (id: string) => {
