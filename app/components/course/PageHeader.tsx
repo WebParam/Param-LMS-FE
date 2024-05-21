@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import Modal from "./Modal";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -11,6 +11,8 @@ export default function PageHeader({ title }: { title: string }) {
   const searchParams = useSearchParams();
   const courseId = searchParams.get("courseId");
   const name = searchParams.get("title");
+  const router = useRouter();
+
   let isModule = false;
   let isCreateModule = false;
   let isEditModule = false;
@@ -56,7 +58,13 @@ export default function PageHeader({ title }: { title: string }) {
     if (arrLink.indexOf(suffixPath) === -1) {
       isModule = true;
     } else {
-      // isEditDocument = true;
+      if (
+        ["paraphrase-document", "confirm-audio", "upload-link"].indexOf(
+          suffixPath
+        ) !== -1
+      )
+        isEditDocument = true;
+      
       title =
         name +
         " - " +
@@ -124,12 +132,12 @@ export default function PageHeader({ title }: { title: string }) {
                 </button>
               )}
               {isEditDocument && (
-                <Link
+                <button
                   className="btn btn-success"
-                  href={`/protected/admin/courses/${courseId}/modules/documents?courseId=${courseId}&title=${name}`}
+                  onClick={() => router.back()}
                 >
                   Documents
-                </Link>
+                </button>
               )}
             </div>
           </div>
