@@ -14,7 +14,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   arrUrl.pop();
   const url =
     arrUrl.join("/") +
-    `/paraphrase-document?courseId=${courseId}&title=${title}&step=2`;
+    `/document/123456789/paraphrase-document?courseId=${courseId}&title=${title}&step=2`;
 
   const handleViewDocument = (file: File) => {
     const documentURL = URL.createObjectURL(file);
