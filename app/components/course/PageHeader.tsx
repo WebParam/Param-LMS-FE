@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import Modal from "./Modal";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "next/navigation";
 
 export default function PageHeader({ title }: { title: string }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -19,18 +19,12 @@ export default function PageHeader({ title }: { title: string }) {
   let isCourse = false;
   let isEditDocument = false;
   const { id } = useParams<{ id: string }>();
+
   const arrUrl = pathname.split("/");
   const suffixPath = arrUrl.pop() || "";
 
-  const arrLink = [
-    "paraphrase-document",
-    "confirm-audio",
-    "upload-link",
-    "documents",
-    "edit",
-    "audios",
-    "videos",
-  ];
+  const actionLinks = ["paraphrase-document", "confirm-audio", "upload-link"];
+  const arrLink = ["edit", "documents", "audios", "videos"];
   const stepperMap: any = {
     "paraphrase-document": "Paraphrase Sections",
     "confirm-audio": "Confirm Audio",
@@ -47,23 +41,14 @@ export default function PageHeader({ title }: { title: string }) {
   } else if (pathname.indexOf("/modules/create") !== -1) {
     title = `Create Unit Standard`;
     isCreateModule = true;
-  } else if (pathname.indexOf("/modules/edit") !== -1) {
-    title = `Edit Unit Standard`;
-    isEditModule = true;
-  } else if (id) {
-    isEditCourse = true;
   } else if (pathname.indexOf("/modules") !== -1) {
     title = `${name} - Unit Standards`;
-    if (arrLink.indexOf(suffixPath) === -1) {
+    if ([...arrLink, ...actionLinks].indexOf(suffixPath) === -1) {
       isModule = true;
     } else {
-      if (
-        ["paraphrase-document", "confirm-audio", "upload-link"].indexOf(
-          suffixPath
-        ) !== -1
-      )
-        isEditDocument = true;
-      
+      if (actionLinks.indexOf(suffixPath) !== -1) isEditDocument = true;
+      else if (arrLink.indexOf(suffixPath) !== -1) isEditModule = true;
+
       title =
         name +
         " - " +
@@ -76,8 +61,8 @@ export default function PageHeader({ title }: { title: string }) {
       <Modal
         show={openModal}
         onHide={() => setOpenModal(false)}
-        id={id}
-        name={name}
+        courseId={id}
+        title={name}
       />
 
       <div className="border-bottom-2 py-32pt position-relative z-1">
