@@ -3,7 +3,6 @@ import Pagination from "@/app/components/Pagination";
 import Table from "@/components/course/[id]/modules/paraphrase-document/Table";
 import { useState } from "react";
 import list from "@/components/course/[id]/modules/paraphrase-document/data";
-import { usePathname, useSearchParams } from "next/navigation";
 
 const Body = ({ params }: { params: { moduleId: string } }) => {
   const id = params.moduleId;
@@ -12,17 +11,6 @@ const Body = ({ params }: { params: { moduleId: string } }) => {
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
-
-  const searchParams = useSearchParams();
-  const title = searchParams.get("title");
-  const courseId = searchParams.get("courseId");
-  const pathname = usePathname();
-  const arrUrl = pathname.split("/");
-  arrUrl.pop();
-  const nextUrl =
-    arrUrl.join("/") +
-    `/confirm-audio?courseId=${courseId}&title=${title}&step=2`;
-
   return (
     <>
       <div className="page-separator mb-4">

@@ -8,13 +8,12 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
-  const courseId = searchParams.get("courseId");
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
   const url =
     arrUrl.join("/") +
-    `/document/123456789/paraphrase-document?courseId=${courseId}&title=${title}&step=2`;
+    `/document/123456789/paraphrase-document?title=${title}&step=2`;
 
   const handleViewDocument = (file: File) => {
     const documentURL = URL.createObjectURL(file);

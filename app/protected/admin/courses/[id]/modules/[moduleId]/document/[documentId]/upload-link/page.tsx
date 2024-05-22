@@ -15,17 +15,6 @@ const Body = ({ params }: { params: { moduleId: string } }) => {
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
 
-  const searchParams = useSearchParams();
-  const title = searchParams.get("title");
-  const courseId = searchParams.get("courseId");
-  const pathname = usePathname();
-  const arrUrl = pathname.split("/");
-  arrUrl.pop();
-  const url = arrUrl.join("/");
-  const prevUrl =
-    url + `/confirm-audio?courseId=${courseId}&title=${title}&step=2`;
-  const submitUrl = url + `/documents?courseId=${courseId}&title=${title}`;
-
   return (
     <>
       <div className="page-separator mb-4">

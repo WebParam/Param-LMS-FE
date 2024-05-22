@@ -18,7 +18,7 @@ function Page({params}: {params: {id: string}}) {
   const arrUrl = pathname.split("/");
   arrUrl.pop();
   const url =
-    arrUrl.join("/") + `/modules/${params.id}/documents?courseId=${params.id}&title=${title}`;
+    arrUrl.join("/") + `/modules/${params.id}/documents?title=${title}`;
 
   return (
     <>

@@ -9,7 +9,6 @@ export default function PageHeader({ title }: { title: string }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const courseId = searchParams.get("courseId");
   const name = searchParams.get("title");
   const router = useRouter();
 
@@ -77,7 +76,7 @@ export default function PageHeader({ title }: { title: string }) {
       <Modal
         show={openModal}
         onHide={() => setOpenModal(false)}
-        courseId={courseId}
+        id={id}
         name={name}
       />
 
@@ -110,7 +109,7 @@ export default function PageHeader({ title }: { title: string }) {
               {isEditCourse && (
                 <Link
                   className="btn btn-success"
-                  href={`/protected/admin/courses/${id}/modules?courseId=${id}&title=${name}`}
+                  href={`/protected/admin/courses/${id}/modules?title=${name}`}
                 >
                   Unit Standards
                 </Link>
@@ -118,7 +117,7 @@ export default function PageHeader({ title }: { title: string }) {
               {isEditModule && (
                 <Link
                   className="btn btn-success"
-                  href={`/protected/admin/courses/${courseId}/modules?courseId=${courseId}&title=${name}`}
+                  href={`/protected/admin/courses/${id}/modules?title=${name}`}
                 >
                   Unit Standards
                 </Link>

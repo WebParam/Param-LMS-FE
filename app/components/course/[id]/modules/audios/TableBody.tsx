@@ -8,13 +8,12 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
-  const courseId = searchParams.get("courseId");
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
   const url =
     arrUrl.join("/") +
-    `/document/123456789/confirm-audio?courseId=${courseId}&title=${title}&step=2`;
+    `/document/123456789/confirm-audio?title=${title}&step=2`;
 
   return (
     <>
