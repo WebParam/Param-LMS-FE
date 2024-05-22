@@ -2,11 +2,7 @@
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
 import { revalidatePath } from 'next/cache';
-
-const wCourseUrl =
-  "https://khumla-development-newcourse-write.azurewebsites.net/api/v1/Courses";
-const rCourseUrl =
-  "https://khumla-development-newcourse-read.azurewebsites.net/api/v1/Courses";
+import { rCourseUrl, wCourseUrl } from "./endpoints"
 
 export const createCourse = async (formData: FormData) => {
   const body = {
@@ -17,7 +13,7 @@ export const createCourse = async (formData: FormData) => {
     thumbnailUrl: formData.get("thumbnailUrl"),
   };
 
-  const resp = await post(`${wCourseUrl}/AddCourseNew`, body);
+  const resp = await post(`${wCourseUrl}/Courses/AddCourseNew`, body);
   const { id, title } = resp.data;
   const url = `/protected/admin/courses/${id}?title=${title}`;
 
@@ -27,7 +23,7 @@ export const createCourse = async (formData: FormData) => {
 
 export const getCourses = async () => {
   try {
-    const resp = await get(`${rCourseUrl}/GetCoursesNew`);
+    const resp = await get(`${rCourseUrl}/Courses/GetCoursesNew`);
 
     return resp.map((res: any) => res.data);
   } catch (err) {
@@ -38,7 +34,7 @@ export const getCourses = async () => {
 
 export const getCourse = async (id: string) => {
   try {
-    const resp = await get(`${rCourseUrl}/GetCourseNew/${id}`);
+    const resp = await get(`${rCourseUrl}/Courses/GetCourseNew/${id}`);
 
     return resp.data;
   } catch (err) {
@@ -56,7 +52,7 @@ export const updateCourse = async (id: string, formData: FormData) => {
     thumbnailUrl: formData.get("thumbnailUrl"),
   };
 
-  const resp = await put(`${wCourseUrl}/UpdateCourseNew`, body);
+  const resp = await put(`${wCourseUrl}/Courses/UpdateCourseNew`, body);
   const { title } = resp.data;
   redirect(`/protected/admin/courses/${id}?title=${title}`);
 };
