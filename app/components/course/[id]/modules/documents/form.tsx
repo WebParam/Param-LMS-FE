@@ -1,15 +1,29 @@
 "use client";
+import { IUnitStandard } from "@/app/interfaces/unit-standard";
+import { updateModule } from "@/app/lib/actions/module";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+import { useParams, useSearchParams } from "next/navigation";
 
-function CreateForm() {
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+function EditForm({ module }: { module: IUnitStandard }) {
+  const [text, setText] = useState<string>(module.description);
+  const { id: courseId, moduleId } = useParams<{ id: string; moduleId: string }>();
+  const searchParams = useSearchParams();
+  const courseTitle = searchParams.get("title") || '';
+
+  const tones = ["Informal", "Formal", "Soft", "Strong"];
+  const updateModuleWithParams = updateModule.bind(
+    null,
+    moduleId,
+    text,
+    courseId,
+    courseTitle
+  );
 
   return (
-    <form className="mb-0">
+    <form action={updateModuleWithParams} className="mb-0">
       <div className="list-group list-group-form">
         <div className="list-group-item">
           <div className="form-group row align-items-center mb-0">
@@ -17,10 +31,9 @@ function CreateForm() {
             <div className="col-sm-9">
               <input
                 name="title"
-                type="text"
+                defaultValue={module.title}
                 className="form-control"
-                defaultValue={title}
-                placeholder="Course Name"
+                placeholder="Module Name"
               />
             </div>
           </div>
@@ -31,10 +44,7 @@ function CreateForm() {
               Description
             </label>
             <div className="col-sm-9">
-              <ReactQuill
-                value={description}
-                onChange={(value) => setDescription(value)}
-              />
+              <ReactQuill value={text} onChange={(value) => setText(value)} />
             </div>
           </div>
         </div>
@@ -50,11 +60,9 @@ function CreateForm() {
                 className="form-control"
               >
                 <option selected={false}>Select Tone</option>
-                <option>Another option</option>
-                <option>Formal</option>
-                <option>Informal</option>
-                <option>Soft</option>
-                <option>Strong</option>
+                {tones.map((name: string) => (
+                  <option selected={module.documentTone === name}>{name}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -66,10 +74,10 @@ function CreateForm() {
             </label>
             <div className="col-sm-9">
               <input
-                name="title"
+                name="lengthOfParagraph"
                 type="number"
                 className="form-control"
-                defaultValue="1"
+                defaultValue={module.lengthOfParagraph}
                 placeholder="Course Name"
                 min="1"
               />
@@ -84,6 +92,6 @@ function CreateForm() {
   );
 }
 
-export default dynamic(() => Promise.resolve(CreateForm), {
+export default dynamic(() => Promise.resolve(EditForm), {
   ssr: false,
 });
