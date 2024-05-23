@@ -6,7 +6,7 @@ import { rCourseUrl, wCourseUrl } from "./endpoints";
 import { IUnitStandard } from "@/app/interfaces/unit-standard";
 import { IResponseObject } from "@/app/lib/restapi/response";
 
-export const createModule = async (description: string, courseId: string, courseTitle: string, formData: FormData) => {
+export const createModule = async (description: string, courseId: string, courseTitle: string, formData: FormData) : Promise<IResponseObject<IUnitStandard>> => {
   const body = {
     title: formData.get("title"),
     description: description,
