@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import Button from "./Button";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
