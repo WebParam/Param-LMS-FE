@@ -1,7 +1,6 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post, put } from "../utils";
-import { revalidatePath } from "next/cache";
+import { get, post } from "../utils";
 import { rCourseUrl, wCourseUrl } from "./endpoints";
 import { IUnitStandard } from "@/app/interfaces/unit-standard";
 import { IResponseObject } from "@/app/lib/restapi/response";
@@ -22,7 +21,6 @@ export const createModule = async (description: string, courseId: string, course
   }
 
   const url = `/protected/admin/courses/${courseId}/modules?title=${courseTitle}`;
-  revalidatePath(url);
   redirect(url);
 };
 
@@ -64,6 +62,5 @@ export const updateModule = async (id: string, description: string, courseId: st
   }
 
   const url = `/protected/admin/courses/${courseId}/modules/${id}/edit?title=${courseTitle}`;
-  revalidatePath(url);
   redirect(url);
 };
