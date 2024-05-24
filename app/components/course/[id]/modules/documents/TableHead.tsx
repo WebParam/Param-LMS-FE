@@ -1,9 +1,9 @@
 const TableHead = () => {
   const headers = [
     "Document Name",
+    "Status",
     "Preview",
-    "Action",
-    "Status"
+    "Action"
   ];
 
   return (
