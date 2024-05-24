@@ -38,6 +38,8 @@ export default function PageHeader({ title }: { title: string }) {
   if (pathname == "/protected/admin/courses") {
     title = "Courses";
     isCourse = true;
+  } else if (pathname == `/protected/admin/courses/${id}`) {
+    isEditCourse = true;
   } else if (pathname.indexOf("/modules/create") !== -1) {
     title = `Create Unit Standard`;
     isCreateModule = true;
@@ -94,9 +96,9 @@ export default function PageHeader({ title }: { title: string }) {
               {isEditCourse && (
                 <Link
                   className="btn btn-success"
-                  href={`/protected/admin/courses/${id}/modules?title=${name}`}
+                  href={`/protected/admin/courses`}
                 >
-                  Unit Standards
+                  All Courses
                 </Link>
               )}
               {isEditModule && (

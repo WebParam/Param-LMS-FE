@@ -1,8 +1,6 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post, put } from "../utils";
-import { revalidatePath } from 'next/cache';
-import { rCourseUrl, wCourseUrl } from "./endpoints"
+import { get, post, put } from "../utils";import { rCourseUrl, wCourseUrl } from "./endpoints"
 
 export const createCourse = async (formData: FormData) => {
   const body = {
@@ -17,7 +15,6 @@ export const createCourse = async (formData: FormData) => {
   const { id, title } = resp.data;
   const url = `/protected/admin/courses/${id}?title=${title}`;
 
-  revalidatePath(url);
   redirect(url);
 };
 
