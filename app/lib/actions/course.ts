@@ -1,6 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";import { rCourseUrl, wCourseUrl } from "./endpoints"
+import { unstable_noStore as noStore } from 'next/cache';
 
 export const createCourse = async (formData: FormData) => {
   const body = {
@@ -19,6 +20,7 @@ export const createCourse = async (formData: FormData) => {
 };
 
 export const getCourses = async () => {
+  noStore();
   try {
     const resp = await get(`${rCourseUrl}/Courses/GetCoursesNew`);
 
@@ -26,7 +28,6 @@ export const getCourses = async () => {
   } catch (err) {
     console.error(err);
   }
-  const url = `/protected/admin/courses`;
 };
 
 export const getCourse = async (id: string) => {
