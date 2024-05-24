@@ -16,9 +16,9 @@ export const uploadDocuments = async (courseId: string, moduleId: string, course
       method: "POST",
       body: formData,
     });
-    console.log(res);
     const data = await res.json();
     Diagnostic("SUCCESS ON POST, returning", data);
+    return data;
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
   }

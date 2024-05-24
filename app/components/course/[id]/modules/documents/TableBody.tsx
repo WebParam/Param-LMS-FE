@@ -32,7 +32,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
     <>
       <tbody className="list" id="staff">
         {list.length > 0 ? (
-          list.map((file: IDocument, key) => (
+          list.map((document: IDocument, key) => (
             <tr key={key} className="selected">
               <td
                 style={{ width: "300px" }}
@@ -42,7 +42,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   <p>
                     <i className="material-icons ">file_present</i>
                   </p>
-                  <p className="text-justify">{file.name}</p>
+                  <p className="text-justify">{document.name}</p>
                 </div>
               </td>
               <td style={{ width: "200px" }} className="text-center js-lists-values-projects small">
@@ -64,7 +64,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
               >
                 <button
                   className="btn btn-success rounded-pill px-4 py-2"
-                  onClick={() => console.log(file.fileBlobUrl)}
+                  onClick={() => console.log(document.fileBlobUrl)}
                 >
                   View
                 </button>
@@ -73,17 +73,17 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                 style={{ width: "300px" }}
                 className="text-center js-lists-values-projects small"
               >
-                {file.status !== "Pending" ? (
+                {document.status !== "Pending" ? (
                   <button
                     className="btn btn-success rounded-pill px-4 py-2"
-                    onClick={() => paraphrase(file.id, file.fileBlobUrl)}
+                    onClick={() => paraphrase(document.id, document.fileBlobUrl)}
                   >
                     Paraphase
                   </button>
                 ) : (
                   <Link
                     className="btn btn-success rounded-pill px-4 py-2"
-                    href={url}
+                    href={`${url}/document/${document.id}/paraphrase-document?title=${title}`}
                   >
                     Edit
                   </Link>

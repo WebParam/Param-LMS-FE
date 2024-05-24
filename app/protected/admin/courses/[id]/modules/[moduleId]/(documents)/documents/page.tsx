@@ -22,7 +22,7 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
       : [];
   const ref = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
 
     if (selectedFiles) {
@@ -31,15 +31,16 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
       for (const file of fileList) {
         formData.append("files[]", file, file.name);
       }
-      uploadDocuments(courseId, moduleId, courseTitle, formData);
+      const documents = await uploadDocuments(courseId, moduleId, courseTitle, formData);
+      setFiles([...documents, ...files]);
     }
   };
 
   const fetchDocuments = async () => {
     const files = await getDocuments(moduleId);
     setFiles(files);
-  }
-  
+  };
+
   useEffect(() => {
     fetchDocuments();
   }, []);
