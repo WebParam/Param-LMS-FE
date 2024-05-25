@@ -1,16 +1,31 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
 import Table from "@/components/course/[id]/modules/paraphrase-document/Table";
-import { useState } from "react";
-import list from "@/components/course/[id]/modules/paraphrase-document/data";
+import { useEffect, useState } from "react";
+import { getParaphrases } from "@/app/lib/actions/paraphrase";
 
 const Body = ({ params }: { params: { moduleId: string } }) => {
   const id = params.moduleId;
+  const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 5;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems =
+    list && list.length > 0
+      ? list.slice(indexOfFirstItem, indexOfLastItem)
+      : [];
+
+  const documentId = "76419588591c0dcb22cbe488";
+
+  const fetchParaphrases = async () => {
+    const response = await getParaphrases(documentId);
+    setList(response);
+  };
+
+  useEffect(() => {
+    fetchParaphrases();
+  }, []);
   return (
     <>
       <div className="page-separator mb-4">
@@ -23,7 +38,7 @@ const Body = ({ params }: { params: { moduleId: string } }) => {
 
       <div className="card mb-24pt">
         <Pagination
-          listLength={list.length}
+          listLength={list?.length}
           indexOfLastItem={indexOfLastItem}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}

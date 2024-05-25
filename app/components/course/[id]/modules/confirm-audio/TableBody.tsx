@@ -13,7 +13,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                 className="text-center mx-auto text-justify js-lists-values-projects small"
               >
                 <div className="d-flex align-items-center ml-5">
-                  <p className="text-justify">{data}</p>
+                  <p className="text-justify">{data.title}</p>
                 </div>
               </td>
               <td className="text-center js-lists-values-projects small">

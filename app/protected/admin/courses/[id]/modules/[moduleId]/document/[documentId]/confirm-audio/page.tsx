@@ -1,18 +1,31 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
+import { getParaphrases } from "@/app/lib/actions/paraphrase";
 import Table from "@/components/course/[id]/modules/confirm-audio/Table";
-import list from "@/components/course/[id]/modules/confirm-audio/data";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Body = ({params}: {params: {moduleId: string}}) => {
-  const id = params.moduleId;
+const Body = ({params}: {params: {documentId: string}}) => {
+  const id = params.documentId;
+  const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 5;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems =
+    list && list.length > 0
+      ? list.slice(indexOfFirstItem, indexOfLastItem)
+      : [];
 
+  const documentId = "76419588591c0dcb22cbe488";
 
+  const fetchParaphrases = async () => {
+    const response = await getParaphrases(documentId);
+    setList(response);
+  };
+
+  useEffect(() => {
+    fetchParaphrases();
+  }, []);
 
   return (
     <>
