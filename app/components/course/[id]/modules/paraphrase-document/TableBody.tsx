@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import Button from "./Button";
 import { useState } from "react";
 import MyVerticallyCenteredModal from "./Modal";
+import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
 
 const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   return (
@@ -16,7 +17,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
 
 export default TableBody;
 
-const TableRow = ({ data }: { data: any }) => {
+const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   return (
