@@ -44,3 +44,25 @@ export const confirmParaphrase = async (
   revalidatePath(url);
   redirect(url);
 };
+
+export const confirmAudio = async (
+  id: string,
+  isConfirm: boolean,
+  courseId: string,
+  moduleId: string,
+  documentId: string,
+  courseTitle: string
+) => {
+  const audioStatus = isConfirm ? 1 : 0;
+  
+  try {
+    await put(`${wCourseUrl}/Paraphrase/ConfirmAudio`, { id, audioStatus });
+  } catch (error) {
+    throw error;
+  }
+
+  const date = new Date().toString();
+  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/document/${documentId}/confirm-audio?title=${courseTitle}&refreshId=${date}`;
+  revalidatePath(url);
+  redirect(url);
+};
