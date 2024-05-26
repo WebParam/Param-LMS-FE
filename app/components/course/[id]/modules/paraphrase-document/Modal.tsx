@@ -5,11 +5,27 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+import { confirmParaphrase } from "@/app/lib/actions/paraphrase";
+import { useParams, useSearchParams } from "next/navigation";
 
 function MyVerticallyCenteredModal(props: any) {
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>(
-    "HTML documents follow a basic structure consisting of an opening <html> tag, containing <head> and <body> sections. The head typically includes metadata like title and links to CSS or JavaScript files, while the body contains the visible content of the page."
+  const { id, moduleId, documentId } = useParams<{
+    id: string;
+    moduleId: string;
+    documentId: string;
+  }>();
+
+  const searchParams = useSearchParams();
+  const title = searchParams.get("title") || "";
+  const [description, setDescription] = useState(props.data.description);
+  const confirmParaphraseWithParams = confirmParaphrase.bind(
+    null,
+    props.data.id,
+    description,
+    id,
+    moduleId,
+    documentId,
+    title
   );
 
   return (
@@ -19,37 +35,39 @@ function MyVerticallyCenteredModal(props: any) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton>
-        <Modal.Title>Edit Paraphrase</Modal.Title>
-      </Modal.Header>
+      <form action={confirmParaphraseWithParams}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Paraphrase</Modal.Title>
+        </Modal.Header>
 
-      <Modal.Body>
-        <div>
-          <h5>Paraphrased Title</h5>
-          <input
-            defaultValue={props.data.title}
-            minLength={10}
-            onChange={(event) => setTitle(event.target.value)}
-            className="form-control mb-3"
-            placeholder="Enter your title here..."
-          />
-        </div>
-        <div>
-          <h5>Paraphrased Text</h5>
-          <ReactQuill
-            value={props.data.description}
-            onChange={(value) => setDescription(value)}
-          />
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={props.onHide}>
-          Close
-        </Button>
-        <Button variant="success" onClick={props.onHide}>
-          Confirm
-        </Button>
-      </Modal.Footer>
+        <Modal.Body>
+          <div>
+            <h5>Paraphrased Title</h5>
+            <input
+              defaultValue={props.data.title}
+              minLength={10}
+              className="form-control mb-3"
+              placeholder="Enter your title here..."
+              name="title"
+            />
+          </div>
+          <div>
+            <h5>Paraphrased Text</h5>
+            <ReactQuill
+              value={description}
+              onChange={(value) => setDescription(value)}
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={props.onHide}>
+            Close
+          </Button>
+          <Button variant="success" onClick={props.onHide} type="submit">
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </form>
     </Modal>
   );
 }
