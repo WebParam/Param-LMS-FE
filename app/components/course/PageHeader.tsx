@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import Modal from "./Modal";
 import { useState } from "react";
 import { useParams } from "next/navigation";
@@ -10,7 +10,6 @@ export default function PageHeader({ title }: { title: string }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const name = searchParams.get("title");
-  const router = useRouter();
 
   let isModule = false;
   let isCreateModule = false;
@@ -25,6 +24,7 @@ export default function PageHeader({ title }: { title: string }) {
 
   const actionLinks = ["paraphrase-document", "confirm-audio", "upload-link"];
   const arrLink = ["edit", "documents", "audios", "videos"];
+
   const stepperMap: any = {
     "paraphrase-document": "Paraphrase Sections",
     "confirm-audio": "Confirm Audio",
@@ -35,6 +35,14 @@ export default function PageHeader({ title }: { title: string }) {
     edit: "Edit",
   };
 
+  const urlDocumentMap: any = {
+    "paraphrase-document": "documents",
+    "confirm-audio": "audios",
+    "upload-link": "videos",
+  };
+
+  let backUrl = "";
+
   if (pathname == "/protected/admin/courses") {
     title = "Courses";
     isCourse = true;
@@ -44,17 +52,22 @@ export default function PageHeader({ title }: { title: string }) {
     title = `Create Unit Standard`;
     isCreateModule = true;
   } else if (pathname.indexOf("/modules") !== -1) {
-    title = `${name} - Unit Standards`;
+    title = `${name}`;
     if ([...arrLink, ...actionLinks].indexOf(suffixPath) === -1) {
       isModule = true;
     } else {
-      if (actionLinks.indexOf(suffixPath) !== -1) isEditDocument = true;
+      if (actionLinks.indexOf(suffixPath) !== -1) {
+        const arr = pathname.split("/");
+        const urlSlice = arr.slice(0, -3);
+        backUrl = `${ urlSlice.join("/") }/${urlDocumentMap[suffixPath]}?title=${title}`; 
+        isEditDocument = true;
+      }
       else if (arrLink.indexOf(suffixPath) !== -1) isEditModule = true;
 
       title =
         name +
         " - " +
-        (stepperMap[suffixPath] ? stepperMap[suffixPath] : "Unit Standards");
+        (stepperMap[suffixPath] ? stepperMap[suffixPath] : "");
     }
   }
 
@@ -118,12 +131,12 @@ export default function PageHeader({ title }: { title: string }) {
                 </button>
               )}
               {isEditDocument && (
-                <button
+                <Link
                   className="btn btn-success"
-                  onClick={() => router.back()}
+                  href={backUrl}
                 >
                   Documents
-                </button>
+                </Link>
               )}
             </div>
           </div>
