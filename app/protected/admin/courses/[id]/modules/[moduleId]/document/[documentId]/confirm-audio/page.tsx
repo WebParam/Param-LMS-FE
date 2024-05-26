@@ -34,7 +34,7 @@ const Body = ({params}: {params: {documentId: string}}) => {
   return (
     <>
       <div className="page-separator mb-4">
-        <div className="page-separator__text">Audios - Module ID({id})</div>
+        <div className="page-separator__text">Audios</div>
       </div>
 
       <div className="card mt-3 mb-3">
