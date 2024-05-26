@@ -66,3 +66,24 @@ export const confirmAudio = async (
   revalidatePath(url);
   redirect(url);
 };
+
+export const updateVideoLink = async (
+  id: string,
+  videoLink: string,
+  courseId: string,
+  moduleId: string,
+  documentId: string,
+  courseTitle: string
+) => {
+  
+  try {
+    await put(`${wCourseUrl}/Paraphrase/UploadVideoLink`, { id, videoLink });
+  } catch (error) {
+    throw error;
+  }
+
+  const date = new Date().toString();
+  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/document/${documentId}/upload-link?title=${courseTitle}&refreshId=${date}`;
+  revalidatePath(url);
+  redirect(url);
+};

@@ -3,10 +3,14 @@ import Pagination from "@/app/components/Pagination";
 import Table from "@/components/course/[id]/modules/upload-link/Table";
 import { useEffect, useState } from "react";
 import { getParaphrases } from "@/app/lib/actions/paraphrase";
+import { useSearchParams } from "next/navigation";
 
-const Body = ({ params }: { params: { moduleId: string } }) => {
-  const id = params.moduleId;
+const Body = ({ params }: { params: { documentId: string } }) => {
+  const id = params.documentId;
   const [list, setList] = useState([]);
+  const searchParams = useSearchParams();
+  const refreshId = searchParams.get("refreshId");
+
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 5;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -25,13 +29,13 @@ const Body = ({ params }: { params: { moduleId: string } }) => {
 
   useEffect(() => {
     fetchParaphrases();
-  }, []);
+  }, [refreshId]);
 
   return (
     <>
       <div className="page-separator mb-4">
         <div className="page-separator__text">
-          Video Links - Module ID({id})
+          Video Links
         </div>
       </div>
 
