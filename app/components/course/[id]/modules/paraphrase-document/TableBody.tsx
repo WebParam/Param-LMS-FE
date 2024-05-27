@@ -40,10 +40,15 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
           </div>
         </td>
         <td className="text-center js-lists-values-projects small">
-          <Button
-            classes="btn btn-outline-success rounded-pill px-4 py-2"
-            text="Pending"
-          />
+          {data.status ? (
+            <button className="btn btn-success rounded-pill px-4 py-2">
+              Confirmed
+            </button>
+          ) : (
+            <button className="btn btn-outline-success rounded-pill px-4 py-2">
+              Pending
+            </button>
+          )}
         </td>
         <td
           onClick={() => setOpenModal(true)}
