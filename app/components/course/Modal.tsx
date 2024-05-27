@@ -26,7 +26,7 @@ function MyVerticallyCenteredModal(props: any) {
     >
       <form action={createModuleWithParams}>
         <Modal.Header closeButton>
-          <Modal.Title>Create Unit Standard{props.title}</Modal.Title>
+          <Modal.Title>Create Unit Standard - {props.title}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
