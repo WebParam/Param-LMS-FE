@@ -20,7 +20,8 @@ export const createModule = async (description: string, courseId: string, course
     console.error(err);
   }
 
-  const url = `/protected/admin/courses/${courseId}/modules?title=${courseTitle}`;
+  const date = new Date().toString();
+  const url = `/protected/admin/courses/${courseId}/modules?title=${courseTitle}&refreshId=${date}`;
   redirect(url);
 };
 

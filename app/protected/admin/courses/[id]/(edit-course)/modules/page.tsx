@@ -20,6 +20,7 @@ function Page({ params }: { params: { id: string } }) {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
+  const refreshId = searchParams.get("refreshId");
   const pathname = usePathname();
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -31,7 +32,7 @@ function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     fetchModules();
-  }, [params.id]);
+  }, [refreshId]);
 
   return (
     <>
@@ -54,7 +55,7 @@ function Page({ params }: { params: { id: string } }) {
         })
       ) : (
         <div className="card my-24pt text-center py-3">
-          No Modules Available...
+          No Unit Standards Available...
         </div>
       )}
       <div className="card mb-24pt">
