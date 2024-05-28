@@ -28,10 +28,22 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   <p>
                     <i className="material-icons px-2">queue_music</i>
                   </p>
-                  <p className="text-justify">{file.name}</p>
+                  <p
+                    className="text-justify"
+                    style={{
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      width: "350px",
+                    }}
+                  >
+                    {file.name}
+                  </p>
                 </div>
               </td>
-              <td style={{ width: "200px" }} className="text-center js-lists-values-projects small">
+              <td
+                style={{ width: "200px" }}
+                className="text-center js-lists-values-projects small"
+              >
                 <div className="progress-container">
                   <div className="progress-bar">
                     <div
@@ -39,9 +51,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                       style={{ width: `60%` }}
                     ></div>
                   </div>
-                  <div className="progress-bar-text">
-                    2 / 10
-                  </div>
+                  <div className="progress-bar-text">2 / 10</div>
                 </div>
               </td>
               <td

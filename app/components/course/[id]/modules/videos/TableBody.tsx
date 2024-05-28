@@ -11,8 +11,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   const arrUrl = pathname.split("/");
   arrUrl.pop();
   const url =
-    arrUrl.join("/") +
-    `/document/123456789/upload-link?title=${title}&step=2`;
+    arrUrl.join("/") + `/document/123456789/upload-link?title=${title}&step=2`;
 
   return (
     <>
@@ -28,7 +27,16 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   <p>
                     <i className="material-icons px-2">videocam</i>
                   </p>
-                  <p className="text-justify">{file.name}</p>
+                  <p
+                    className="text-justify"
+                    style={{
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      width: "350px",
+                    }}
+                  >
+                    {file.name}
+                  </p>
                 </div>
               </td>
               <td

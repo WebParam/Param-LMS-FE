@@ -44,7 +44,16 @@ const TableRow = ({ document }: { document: IDocument }) => {
             <p>
               <i className="material-icons ">file_present</i>
             </p>
-            <p className="text-justify">{document.name}</p>
+            <p
+              className="text-justify"
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                width: "350px",
+              }}
+            >
+              {document.name}
+            </p>
           </div>
         </td>
         <td
