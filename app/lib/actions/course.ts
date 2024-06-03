@@ -1,6 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post, put } from "../utils";import { rCourseUrl, wCourseUrl } from "./endpoints"
+import { get, post, put } from "../utils";
+import { rCourseUrl, wCourseUrl } from "./endpoints"
 import { unstable_noStore as noStore } from 'next/cache';
 
 export const createCourse = async (formData: FormData) => {

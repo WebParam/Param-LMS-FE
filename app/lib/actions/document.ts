@@ -2,17 +2,18 @@
 import { redirect } from "next/navigation";
 import { get, post } from "../utils";
 import {
-  wDocumentUrl,
-  rDocumentUrl,
+  wCourseUrl,
+  rCourseUrl,
   rDocumentParaphraseUrl,
 } from "./endpoints";
+
 import { IResponseObject } from "@/app/lib/restapi/response";
 import { Diagnostic } from "../logger/logger";
 import { IDocument } from "@/app/interfaces/course-document";
 
 export const uploadDocuments = async (courseId: string, moduleId: string, courseTitle: string, formData: FormData) => {
   try {
-    const res = await fetch(`${wDocumentUrl}/Modules/${moduleId}/upload`, {
+    const res = await fetch(`${wCourseUrl}/Modules/${moduleId}/upload`, {
       method: "POST",
       body: formData,
     });
@@ -29,7 +30,7 @@ export const uploadDocuments = async (courseId: string, moduleId: string, course
 
 export const getDocuments = async (moduleId: string) => {
   try {
-    const resp = await get(`${rDocumentUrl}/${moduleId}`);
+    const resp = await get(`${rCourseUrl}/Document/Documents/${moduleId}`);
 
     return resp.map((res: IResponseObject<IDocument>) => res.data);
   } catch (err) {
