@@ -1,12 +1,11 @@
 "use client";
 import Link from "next/link";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
   const pathname = usePathname();
-  const router = useRouter();
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -21,7 +20,7 @@ function Layout({ children }: { children: React.ReactNode }) {
     },
     {
       name: "documents",
-      title: "Documents",
+      title: "Modules",
       url: `${url}/documents?title=${title}`,
       path: `${url}/documents`,
     },
@@ -36,6 +35,12 @@ function Layout({ children }: { children: React.ReactNode }) {
       title: "Video Links",
       url: `${url}/videos?title=${title}`,
       path: `${url}/videos`,
+    },
+    {
+      name: "quizzes",
+      title: "Quizzes",
+      url: `${url}/quizzes?title=${title}`,
+      path: `${url}/quizzes`,
     },
   ];
 
