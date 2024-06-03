@@ -6,8 +6,10 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import { rCourseUrl } from "@/app/lib/actions/endpoints";
 const pdfVersion = "3.11.174";
 const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
+const apiDocUrl = `${rCourseUrl}/Document/PreviewDocument`;
 
 function MyVerticallyCenteredModal(props: any) {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
@@ -25,7 +27,7 @@ function MyVerticallyCenteredModal(props: any) {
       <Modal.Body>
         <Worker workerUrl={pdfWorkerUrl}>
           <Viewer
-            fileUrl={props.documentUrl}
+            fileUrl={`${apiDocUrl}/${props.documentId}`}
             plugins={[defaultLayoutPluginInstance]}
           />
         </Worker>

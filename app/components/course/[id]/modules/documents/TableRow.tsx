@@ -30,7 +30,7 @@ const TableRow = ({ document }: { document: IDocument }) => {
   return (
     <>
       <DocumentModal
-        documentUrl={document.fileBlobUrl}
+        documentId={document.id}
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
@@ -82,6 +82,13 @@ const TableRow = ({ document }: { document: IDocument }) => {
           style={{ width: "300px" }}
           className="text-center js-lists-values-projects small"
         >
+          <button
+            className="btn btn-success rounded-pill px-4 py-2 mr-2"
+            onClick={() => console.log("Edit Document Name")}
+          >
+            Edit
+          </button>
+
           {document.status !== "Pending" ? (
             <button
               className="btn btn-success rounded-pill px-4 py-2"
