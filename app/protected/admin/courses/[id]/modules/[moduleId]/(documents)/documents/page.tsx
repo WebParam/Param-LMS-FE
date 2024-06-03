@@ -5,11 +5,13 @@ import { ChangeEvent, useRef, useState, useEffect } from "react";
 import { uploadDocuments, getDocuments } from "@/app/lib/actions/document";
 import { IDocument } from "@/app/interfaces/course-document";
 import { useSearchParams } from "next/navigation";
+import CreateDocumentModal from "@/components/course/[id]/modules/documents/CreateDocumentModal";
 
 const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
   const { id: courseId, moduleId } = params;
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
+  const refreshId = searchParams.get("refreshId");
 
   const [files, setFiles] = useState<IDocument[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,7 +33,12 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
       for (const file of fileList) {
         formData.append("files[]", file, file.name);
       }
-      const documents = await uploadDocuments(courseId, moduleId, courseTitle, formData);
+      const documents = await uploadDocuments(
+        courseId,
+        moduleId,
+        courseTitle,
+        formData
+      );
       setFiles([...documents, ...files]);
     }
   };
@@ -43,15 +50,24 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
 
   useEffect(() => {
     fetchDocuments();
-  }, []);
+  }, [refreshId]);
+
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   return (
     <>
+      <CreateDocumentModal
+        show={openModal}
+        onHide={() => {
+          setOpenModal(false);
+        }}
+      />
+
       <div className="page-separator my-4">
-        <div className="page-separator__text">Documents</div>
+        <div className="page-separator__text">Modules</div>
       </div>
 
-      <div className="card mb-3">
+      <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
         <input
           type="file"
           hidden
@@ -62,12 +78,22 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
           }
           multiple
         />
-        <button
-          className="btn btn-success btn-block"
-          onClick={() => ref?.current?.click()}
-        >
-          Add Files
-        </button>
+        <div className="mx-1">
+          <button
+            className="btn btn-success btn-block mx-1"
+            onClick={() => ref?.current?.click()}
+          >
+            Add Files
+          </button>
+        </div>
+        <div className="mx-1">
+          <button
+            className="btn btn-success btn-block"
+            onClick={() => setOpenModal(true)}
+          >
+            Create Module
+          </button>
+        </div>
       </div>
 
       <div className="card mt-3 mb-3">
