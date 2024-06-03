@@ -22,14 +22,15 @@ export default function PageHeader({ title }: { title: string }) {
   const arrUrl = pathname.split("/");
   const suffixPath = arrUrl.pop() || "";
 
-  const actionLinks = ["paraphrase-document", "confirm-audio", "upload-link"];
-  const arrLink = ["edit", "documents", "audios", "videos"];
+  const actionLinks = ["paraphrase-document", "confirm-audio", "upload-link", "generate-quizzes"];
+  const arrLink = ["edit", "documents", "audios", "videos", "quizzes"];
 
   const stepperMap: any = {
     "paraphrase-document": "Paraphrase Sections",
     "confirm-audio": "Confirm Audio",
     "upload-link": "Upload Link",
-    documents: "Documents",
+    "generate-quizzes": "Generate Quizzes",
+    documents: "Modules",
     audios: "Audios",
     videos: "Videos",
     edit: "Edit",
@@ -39,6 +40,7 @@ export default function PageHeader({ title }: { title: string }) {
     "paraphrase-document": "documents",
     "confirm-audio": "audios",
     "upload-link": "videos",
+    "generate-quizzes": "quizzes",
   };
 
   let backUrl = "";
