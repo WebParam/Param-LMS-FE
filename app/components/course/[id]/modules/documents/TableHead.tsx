@@ -1,6 +1,6 @@
 const TableHead = () => {
   const headers = [
-    "Document Name",
+    "Module Name",
     "Status",
     "Preview",
     "Action"
