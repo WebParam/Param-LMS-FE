@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Body = ({params}: {params: {documentId: string}}) => {
-  const id = params.documentId;
+  const documentId = params.documentId;
   const [list, setList] = useState([]);
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId");
@@ -19,8 +19,6 @@ const Body = ({params}: {params: {documentId: string}}) => {
     list && list.length > 0
       ? list.slice(indexOfFirstItem, indexOfLastItem)
       : [];
-
-  const documentId = "76419588591c0dcb22cbe488";
 
   const fetchParaphrases = async () => {
     const response = await getParaphrases(documentId);

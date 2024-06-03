@@ -29,7 +29,7 @@ const Body = ({ params }: { params: { moduleId: string } }) => {
   return (
     <>
       <div className="page-separator my-4">
-        <div className="page-separator__text">Audio</div>
+        <div className="page-separator__text">Audios</div>
       </div>
 
       <div className="card mt-3 mb-3">

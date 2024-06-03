@@ -4,9 +4,10 @@ import Table from "@/components/course/[id]/modules/upload-link/Table";
 import { useEffect, useState } from "react";
 import { getParaphrases } from "@/app/lib/actions/paraphrase";
 import { useSearchParams } from "next/navigation";
+import CreateDocumentModal from "@/components/course/[id]/modules/documents/CreateDocumentModal";
 
 const Body = ({ params }: { params: { documentId: string } }) => {
-  const id = params.documentId;
+  const documentId = params.documentId;
   const [list, setList] = useState([]);
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId");
@@ -20,7 +21,6 @@ const Body = ({ params }: { params: { documentId: string } }) => {
       ? list.slice(indexOfFirstItem, indexOfLastItem)
       : [];
 
-  const documentId = "76419588591c0dcb22cbe488";
 
   const fetchParaphrases = async () => {
     const response = await getParaphrases(documentId);
@@ -31,11 +31,29 @@ const Body = ({ params }: { params: { documentId: string } }) => {
     fetchParaphrases();
   }, [refreshId]);
 
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
   return (
     <>
+      <CreateDocumentModal
+        show={openModal}
+        onHide={() => {
+          setOpenModal(false);
+        }}
+      />
+
       <div className="page-separator mb-4">
-        <div className="page-separator__text">
-          Video Links
+        <div className="page-separator__text">Video Links</div>
+      </div>
+
+      <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+        <div className="mx-1">
+          <button
+            className="btn btn-success btn-block"
+            onClick={() => setOpenModal(true)}
+          >
+            Create Transcript
+          </button>
         </div>
       </div>
 

@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { getParaphrases } from "@/app/lib/actions/paraphrase";
 import { useSearchParams } from "next/navigation";
 
-const Body = ({ params }: { params: { moduleId: string } }) => {
-  const id = params.moduleId;
+const Body = ({ params }: { params: { documentId: string } }) => {
+  const documentId = params.documentId;
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId");
   const [list, setList] = useState([]);
@@ -18,8 +18,6 @@ const Body = ({ params }: { params: { moduleId: string } }) => {
     list && list.length > 0
       ? list.slice(indexOfFirstItem, indexOfLastItem)
       : [];
-
-  const documentId = "76419588591c0dcb22cbe488";
 
   const fetchParaphrases = async () => {
     const response = await getParaphrases(documentId);

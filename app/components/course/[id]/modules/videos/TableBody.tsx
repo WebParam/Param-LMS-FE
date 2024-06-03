@@ -1,3 +1,4 @@
+import { IDocument } from "@/app/interfaces/course-document";
 import { NextPage } from "next";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -10,14 +11,13 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
-  const url =
-    arrUrl.join("/") + `/document/123456789/upload-link?title=${title}&step=2`;
+  const url = arrUrl.join("/");
 
   return (
     <>
       <tbody className="list" id="staff">
         {list.length > 0 ? (
-          list.map((file: File, key) => (
+          list.map((document: IDocument, key) => (
             <tr key={key} className="selected">
               <td
                 style={{ width: "300px" }}
@@ -35,7 +35,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                       width: "350px",
                     }}
                   >
-                    {file.name}
+                    {document.name}
                   </p>
                 </div>
               </td>
@@ -59,7 +59,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
               >
                 <Link
                   className="btn btn-success rounded-pill px-4 py-2"
-                  href={url}
+                  href={`${url}/document/${document.id}/upload-link?title=${title}`}
                 >
                   View
                 </Link>
