@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import list from "./quizData";
 
 function QuizzesModal(props: any) {
+
   return (
     <Modal
       {...props}
@@ -20,10 +21,10 @@ function QuizzesModal(props: any) {
           className="mdk-drawer-layout__content page-content"
           style={{ transform: "translate3d(0px, 0px, 0px)" }}
         >
-          {list.map((data: any) => (
+          {props.quizzes.map((data: any) => (
             <div key={data.id} className="mb-3">
               <div style={{ fontSize: "16px", fontWeight: "500" }}>
-                {data.question}
+                {data.description}
               </div>
               <div className="d-flex flex-column">
                 {data.options.map((option: any) => (

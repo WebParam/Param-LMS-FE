@@ -1,27 +1,18 @@
 import { useState } from "react";
 import QuizzesModal from "./QuizzesModal";
 import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
-import { useParams, useSearchParams } from "next/navigation";
-import { updateVideoLink } from "@/app/lib/actions/paraphrase";
+import { generateQuizzes, getQuizzes } from "@/app/lib/actions/quiz";
 
 const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [quizzes, setQuizzes] = useState([]);
 
-  const {
-    id: courseId,
-    moduleId,
-    documentId,
-  } = useParams<{
-    id: string;
-    moduleId: string;
-    documentId: string;
-  }>();
-  const searchParams = useSearchParams();
-  const title = searchParams.get("title") || "";
+  const previewQuizzes = async (paraphraseId: string) => {
+    const data = await getQuizzes(paraphraseId);
 
-  const generateQuizzes = async () => {
-    await updateVideoLink(data.id, "", courseId, moduleId, documentId, title);
-  };
+    setQuizzes(data);
+    setOpenModal(true);
+  }
 
   return (
     <>
@@ -32,6 +23,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             show={openModal}
             onHide={() => setOpenModal(false)}
             data={data}
+            quizzes={quizzes}
           />
         </div>
       )}
@@ -49,9 +41,9 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
           </div>
         </td>
         <td className="text-center js-lists-values-projects small">
-          {data.status === 0 ? (
+          {!data.isQuizGenerated ? (
             <button
-              onClick={() => setOpenModal(true)}
+              onClick={() => previewQuizzes(data.id)}
               className="btn btn-success rounded-pill px-4 py-2"
             >
               Preview
@@ -59,11 +51,10 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             </button>
           ) : (
             <button
-              onClick={() => generateQuizzes()}
+              onClick={() => generateQuizzes(data.id, data.description)}
               className="btn btn-success rounded-pill px-4 py-2"
             >
               Generate Quiz
-              <i className="material-icons ml-1">open_in_new</i>
             </button>
           )}
         </td>
