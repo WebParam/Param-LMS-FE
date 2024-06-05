@@ -1,14 +1,15 @@
-import Link from "next/link";
 import { useState } from "react";
 import VideoPopUpModal from "./VideoPopUpModal";
 import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
 import { useParams, useSearchParams } from "next/navigation";
 import { updateVideoLink } from "@/app/lib/actions/paraphrase";
+import EditTranscriptModal from "./EditTranscriptModal";
 
 const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [url, setUrl] = useState(data.videoUrl);
-  
+  const [openPreviewModal, setOpenPreviewModal] = useState<boolean>(false);
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+  const [url, setUrl] = useState(data.videoUrl || "");
+
   const {
     id: courseId,
     moduleId,
@@ -51,32 +52,55 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
         style={{ width: "300px" }}
         className="text-center js-lists-values-projects small"
       >
-        <button
-          className="btn btn-success rounded-pill px-4 py-2"
-          onClick={() => submitVideoLink()}
-        >
-          Upload Link
-          <i className="material-icons ml-1">publish</i>
-        </button>
+        {!data.isSystemGenerated ? (
+          <button
+            className="btn btn-success rounded-pill px-4 py-2"
+            onClick={() => submitVideoLink()}
+          >
+            Upload Link
+            <i className="material-icons ml-1">publish</i>
+          </button>
+        ) : (
+          <button
+            className="btn btn-success rounded-pill px-4 py-2 ml-2"
+            onClick={() => setOpenEditModal(true)}
+          >
+            Edit
+            <i className="material-icons ml-1">edit</i>
+          </button>
+        )}
       </td>
       <td
         style={{ width: "300px" }}
         className="text-center js-lists-values-projects small"
       >
-        <Link
-          onClick={() => setOpenModal(true)}
-          className="btn btn-success rounded-pill px-4 py-2"
-          href="#"
+        <button
+          onClick={() => setOpenPreviewModal(true)}
+          className={`btn ${
+            url.length === 0 ? "btn-secondary" : "btn-success"
+          }  rounded-pill px-4 py-2`}
+          disabled={url.length === 0}
         >
           Preview
           <i className="material-icons ml-1">open_in_new</i>
-        </Link>
-        {openModal && (
+        </button>
+
+        {openEditModal && (
+          <div className="card mb-0">
+            <EditTranscriptModal
+              show={openEditModal}
+              onHide={() => setOpenEditModal(false)}
+              data={data}
+            />
+          </div>
+        )}
+
+        {openPreviewModal && (
           <div className="card mb-0">
             <VideoPopUpModal
               url={data.videoUrl}
-              show={openModal}
-              onHide={() => setOpenModal(false)}
+              show={openPreviewModal}
+              onHide={() => setOpenPreviewModal(false)}
               data={data}
             />
           </div>

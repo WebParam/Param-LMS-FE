@@ -4,7 +4,7 @@ import Table from "@/components/course/[id]/modules/upload-link/Table";
 import { useEffect, useState } from "react";
 import { getParaphrases } from "@/app/lib/actions/paraphrase";
 import { useSearchParams } from "next/navigation";
-import CreateDocumentModal from "@/components/course/[id]/modules/documents/CreateDocumentModal";
+import CreateTranscriptModal from "@/components/course/[id]/modules/upload-link/CreateTranscriptModal";
 
 const Body = ({ params }: { params: { documentId: string } }) => {
   const documentId = params.documentId;
@@ -35,7 +35,7 @@ const Body = ({ params }: { params: { documentId: string } }) => {
 
   return (
     <>
-      <CreateDocumentModal
+      <CreateTranscriptModal
         show={openModal}
         onHide={() => {
           setOpenModal(false);
