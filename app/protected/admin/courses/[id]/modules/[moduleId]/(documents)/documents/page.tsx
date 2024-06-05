@@ -15,7 +15,7 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
 
   const [files, setFiles] = useState<IDocument[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 7;
+  const ITEMSPERPAGE = 4;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems =
