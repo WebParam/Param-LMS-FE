@@ -9,7 +9,7 @@ const Body = ({ params }: { params: { moduleId: string } }) => {
   const id = params.moduleId;
   const [files, setFiles] = useState<IDocument[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 7;
+  const ITEMSPERPAGE = 5;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems =
@@ -18,7 +18,8 @@ const Body = ({ params }: { params: { moduleId: string } }) => {
       : [];
 
   const fetchDocuments = async () => {
-    const files = await getDocuments(id);
+    const data = await getDocuments(id);
+    const files = data.filter((file: IDocument) => !file.isSystemGenerated);
     setFiles(files);
   };
 
