@@ -72,8 +72,11 @@ const TableRow = ({ document }: { document: IDocument }) => {
           className="text-center js-lists-values-projects small"
         >
           <button
-            className="btn btn-success rounded-pill px-4 py-2"
+            className={`btn ${
+              !document.isSystemGenerated ? "btn-success" : "btn-secondary"
+            } rounded-pill px-4 py-2`}
             onClick={() => setModalShow(true)}
+            disabled={document.isSystemGenerated}
           >
             Preview File
           </button>
@@ -89,21 +92,21 @@ const TableRow = ({ document }: { document: IDocument }) => {
             Edit
           </button>
 
-          {document.status !== "Pending" ? (
-            <button
-              className="btn btn-success rounded-pill px-4 py-2"
-              onClick={() => paraphrase(document.id, document.fileBlobUrl)}
-            >
-              Paraphase
-            </button>
-          ) : (
+          {document.status === "GeneratedParaphrase" ? (
             <Link
               className="btn btn-success rounded-pill px-4 py-2"
               href={`${url}/document/${document.id}/paraphrase-document?title=${title}`}
             >
               View
             </Link>
-          )}
+          ) : (
+            <button
+              className="btn btn-success rounded-pill px-4 py-2"
+              onClick={() => paraphrase(document.id, document.fileBlobUrl)}
+            >
+              Paraphase
+            </button>
+          ) }
         </td>
       </tr>
     </>

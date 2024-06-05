@@ -3,5 +3,6 @@ export interface IDocument {
     name: string,
     fileBlobUrl: string,
     moduleId: string,
-    status: string
+    status: string,
+    isSystemGenerated: boolean
 }

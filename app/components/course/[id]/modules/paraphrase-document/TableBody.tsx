@@ -51,6 +51,14 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
           )}
         </td>
         <td
+          onClick={() => console.log("Generate Audio")}
+          className="text-center js-lists-values-projects small"
+        >
+            <button className="btn btn-success rounded-pill px-4 py-2">
+              Generate Audio
+            </button>
+        </td>
+        <td
           onClick={() => setOpenModal(true)}
           className="text-center js-lists-values-projects small"
         >
