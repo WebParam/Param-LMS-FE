@@ -12,3 +12,9 @@ export const rDocumentUrl =
 
 export const rDocumentParaphraseUrl =
   "https://khumla-development-document-parser.azurewebsites.net/api/v1/document";
+
+export const wQuizGenerateUrl =
+  "https://khumla-development-quiz-generate.azurewebsites.net/api/v1";
+
+export const rQuizUrl =
+  "https://khumla-development-quiz-read.azurewebsites.net/api/v1";

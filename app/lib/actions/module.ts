@@ -4,8 +4,14 @@ import { get, post } from "../utils";
 import { rCourseUrl, wCourseUrl } from "./endpoints";
 import { IUnitStandard } from "@/app/interfaces/unit-standard";
 import { IResponseObject } from "@/app/lib/restapi/response";
+import { Diagnostic } from "../logger/logger";
 
-export const createModule = async (description: string, courseId: string, courseTitle: string, formData: FormData) => {
+export const createModule = async (
+  description: string,
+  courseId: string,
+  courseTitle: string,
+  formData: FormData
+) => {
   const body = {
     title: formData.get("title"),
     description: description,
@@ -15,8 +21,11 @@ export const createModule = async (description: string, courseId: string, course
   };
 
   try {
-    await post(`${wCourseUrl}/Modules/Create`, body);
+    const data = await post(`${wCourseUrl}/Modules/Create`, body);
+    Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+
     console.error(err);
   }
 
@@ -28,9 +37,12 @@ export const createModule = async (description: string, courseId: string, course
 export const getModules = async (id: string) => {
   try {
     const resp = await get(`${rCourseUrl}/Modules/${id}`);
-
-    return resp.map((res: IResponseObject<IUnitStandard>) => res.data);
+    const data = resp.map((res: IResponseObject<IUnitStandard>) => res.data);
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
   } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+
     console.error(err);
   }
 };
@@ -38,15 +50,22 @@ export const getModules = async (id: string) => {
 export const getModule = async (id: string) => {
   try {
     const resp = await get(`${rCourseUrl}/Modules/GetModule/${id}`);
-
-    return resp.data;
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
   } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
     console.error(err);
   }
 };
-  
-export const updateModule = async (id: string, description: string, courseId: string, courseTitle: string, formData: FormData) => {
 
+export const updateModule = async (
+  id: string,
+  description: string,
+  courseId: string,
+  courseTitle: string,
+  formData: FormData
+) => {
   const body = {
     id,
     title: formData.get("title"),
@@ -57,8 +76,10 @@ export const updateModule = async (id: string, description: string, courseId: st
   };
 
   try {
-    await post(`${wCourseUrl}/Modules/UpdateModule`, body);
+    const data = await post(`${wCourseUrl}/Modules/UpdateModule`, body);
+    Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
     console.error(err);
   }
 
