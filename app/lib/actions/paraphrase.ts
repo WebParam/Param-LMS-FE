@@ -21,9 +21,10 @@ export const createParaphrase = async (
     videoLink: formData.get("videoLink"),
     documentId
   };
+            
 
   try {
-    const data = await post(`${wCourseUrl}/Paraphrase/ConfirmParaphrase`, body);
+    const data = await post(`${wCourseUrl}/Paraphrase/AddParaphrase/NonSystemGenerated`, body);
     Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
