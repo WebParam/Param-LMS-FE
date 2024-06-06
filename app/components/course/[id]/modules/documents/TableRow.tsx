@@ -27,6 +27,17 @@ const TableRow = ({ document }: { document: IDocument }) => {
     );
   };
 
+  const toPercent = ({
+    noOfConfirmedParapharases,
+    noOfParapharases,
+  }: {
+    noOfConfirmedParapharases: number;
+    noOfParapharases: number;
+  }) => {
+    if (noOfConfirmedParapharases == 0 && noOfParapharases == 0) return 0;
+    return (noOfConfirmedParapharases / noOfParapharases) * 100;
+  };
+  
   return (
     <>
       <DocumentModal
@@ -62,9 +73,16 @@ const TableRow = ({ document }: { document: IDocument }) => {
         >
           <div className="progress-container">
             <div className="progress-bar">
-              <div className="progress-bar-fill" style={{ width: `60%` }}></div>
+              <div
+                className="progress-bar-fill"
+                style={{
+                  width: `${toPercent(document)}%`,
+                }}
+              ></div>
             </div>
-            <div className="progress-bar-text">2 / 10</div>
+            <div className="progress-bar-text">
+              {document.noOfConfirmedParapharases} / {document.noOfParapharases}
+            </div>
           </div>
         </td>
         <td
@@ -106,7 +124,7 @@ const TableRow = ({ document }: { document: IDocument }) => {
             >
               Paraphase
             </button>
-          ) }
+          )}
         </td>
       </tr>
     </>

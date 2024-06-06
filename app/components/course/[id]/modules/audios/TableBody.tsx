@@ -12,7 +12,18 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   const arrUrl = pathname.split("/");
   arrUrl.pop();
   const url = arrUrl.join("/");
-  
+
+  const toPercent = ({
+    noOfConfirmedParapharases,
+    noOfParapharases,
+  }: {
+    noOfConfirmedParapharases: number;
+    noOfParapharases: number;
+  }) => {
+    if (noOfConfirmedParapharases == 0 && noOfParapharases == 0) return 0;
+    return (noOfConfirmedParapharases / noOfParapharases) * 100;
+  };
+
   return (
     <>
       <tbody className="list" id="staff">
@@ -47,10 +58,12 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   <div className="progress-bar">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `60%` }}
+                      style={{ width: `${toPercent(document)}%` }}
                     ></div>
                   </div>
-                  <div className="progress-bar-text">2 / 10</div>
+                  <div className="progress-bar-text">
+                    {document.noOfAudios} / {document.noOfParapharases}
+                  </div>
                 </div>
               </td>
               <td
