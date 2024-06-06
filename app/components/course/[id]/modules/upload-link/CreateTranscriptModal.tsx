@@ -26,7 +26,8 @@ function CreateTranscriptModal(props: any) {
     id,
     moduleId,
     documentId,
-    title
+    title,
+  
   );
 
   const submit = () => {

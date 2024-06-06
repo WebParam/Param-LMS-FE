@@ -27,8 +27,12 @@ function EditTranscriptModal(props: any) {
     id,
     moduleId,
     documentId,
-    title
+    title,
+  
   );
+
+
+
 
   const submit = () => {
     submmitRef.current?.click();
@@ -72,6 +76,7 @@ function EditTranscriptModal(props: any) {
               className="form-control mb-3"
               placeholder="Enter your Video Link here. E.g https://..."
               name="videoLink"
+              defaultValue={props.data.videoLink}
             />
           </div>{" "}
           <div>
