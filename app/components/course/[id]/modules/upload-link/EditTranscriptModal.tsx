@@ -49,7 +49,7 @@ function EditTranscriptModal(props: any) {
     >
       <form action={updateParaphraseWithParams}>
         <Modal.Header closeButton>
-          <Modal.Title>Create Transcript</Modal.Title>
+          <Modal.Title>Edit Transcript</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
