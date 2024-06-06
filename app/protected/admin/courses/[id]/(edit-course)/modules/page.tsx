@@ -13,10 +13,14 @@ function Page({ params }: { params: { id: string } }) {
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const [list, setList] = useState<IUnitStandard[]>([]);
 
-  const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems =
+    list && list.length > 0
+      ? list.slice(indexOfFirstItem, indexOfLastItem)
+      : [];
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
+  const refreshId = searchParams.get("refreshId");
   const pathname = usePathname();
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -28,30 +32,35 @@ function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     fetchModules();
-  }, [params.id]);
+  }, [refreshId]);
 
   return (
     <>
       <div className="my-3"></div>
 
-      {currentItems.map((data) => {
-        const url =
-          arrUrl.join("/") + `/modules/${data.id}/documents?title=${title}`;
+      {currentItems.length > 0 ? (
+        currentItems.map((data) => {
+          const url =
+            arrUrl.join("/") + `/modules/${data.id}/documents?title=${title}`;
 
-        return (
-          <Module
-            key={data.id}
-            moduleName={data.title}
-            moduleAnswer={data.description}
-            noOfFile={10}
-            url={url}
-          />
-        );
-      })}
-
+          return (
+            <Module
+              key={data.id}
+              moduleName={data.title}
+              moduleAnswer={data.description}
+              noOfFile={10}
+              url={url}
+            />
+          );
+        })
+      ) : (
+        <div className="card my-24pt text-center py-3">
+          No Unit Standards Available...
+        </div>
+      )}
       <div className="card mb-24pt">
         <Pagination
-          listLength={list.length}
+          listLength={list?.length}
           indexOfLastItem={indexOfLastItem}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}

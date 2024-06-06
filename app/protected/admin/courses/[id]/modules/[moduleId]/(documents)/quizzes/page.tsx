@@ -1,6 +1,6 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import Table from "@/components/course/[id]/modules/videos/Table";
+import Table from "@/components/course/[id]/modules/quizzes/Table";
 import { useState, useEffect } from "react";
 import { getDocuments } from "@/app/lib/actions/document";
 import { IDocument } from "@/app/interfaces/course-document";
@@ -30,7 +30,7 @@ const Body = ({params}: {params: {moduleId: string}}) => {
   return (
     <>
       <div className="page-separator my-4">
-        <div className="page-separator__text">Videos</div>
+        <div className="page-separator__text">Quizzes</div>
       </div>
 
       <div className="card mt-3 mb-3">

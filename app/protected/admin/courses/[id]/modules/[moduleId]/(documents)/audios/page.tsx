@@ -1,43 +1,36 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
 import Table from "@/components/course/[id]/modules/audios/Table";
-import { ChangeEvent, useRef, useState, useEffect } from "react";
-import list from "@/components/course/[id]/modules/documents/data";
-import { useDispatch, useSelector } from "react-redux";
-import { uploadFile } from "@/app/redux/filesSlice";
+import { useState, useEffect } from "react";
+import { getDocuments } from "@/app/lib/actions/document";
+import { IDocument } from "@/app/interfaces/course-document";
 
-const Body = ({params}: {params: {moduleId: string}}) => {
+const Body = ({ params }: { params: { moduleId: string } }) => {
   const id = params.moduleId;
-  const reduxFiles = useSelector((state: any) => state.files.files);
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<IDocument[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 7;
+  const ITEMSPERPAGE = 5;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems = files.slice(indexOfFirstItem, indexOfLastItem);
-  const ref = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch();
+  const currentItems =
+    files && files.length > 0
+      ? files.slice(indexOfFirstItem, indexOfLastItem)
+      : [];
 
-  const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = event.target.files;
-
-    if (selectedFiles) {
-      const fileList = Array.from(selectedFiles);
-      dispatch(uploadFile(fileList.map((file: File) => file)));
-      setFiles(fileList.map((file: File) => file));
-    }
+  const fetchDocuments = async () => {
+    const data = await getDocuments(id);
+    const files = data.filter((file: IDocument) => !file.isSystemGenerated);
+    setFiles(files);
   };
 
   useEffect(() => {
-    if (reduxFiles[0] && reduxFiles[0].length > 0) {
-      setFiles(reduxFiles[0].map((file: File) => file));
-    }
+    fetchDocuments();
   }, []);
 
   return (
     <>
       <div className="page-separator my-4">
-        <div className="page-separator__text">Audios - Module ID({id})</div>
+        <div className="page-separator__text">Audios</div>
       </div>
 
       <div className="card mt-3 mb-3">
@@ -46,7 +39,7 @@ const Body = ({params}: {params: {moduleId: string}}) => {
 
       <div className="card mb-0">
         <Pagination
-          listLength={list.length}
+          listLength={files?.length}
           indexOfLastItem={indexOfLastItem}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}

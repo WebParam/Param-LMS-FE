@@ -1,9 +1,8 @@
 const TableHead = () => {
   const headers = [
-    "Module Name",
+    "Document Name",
     "Status",
-    "Preview",
-    "Action"
+    "Action",
   ];
 
   return (

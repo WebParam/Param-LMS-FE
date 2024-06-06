@@ -30,6 +30,8 @@ export interface IParaPhraseResponseObject{
     audioStatus: number;
     status: number;
     videoUrl: string;
+    isQuizGenerated: boolean;
+    isSystemGenerated: boolean;
     createdAt: string;
     updatedAt: string;
 }

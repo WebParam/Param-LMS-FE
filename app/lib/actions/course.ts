@@ -1,8 +1,9 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
-import { revalidatePath } from 'next/cache';
-import { rCourseUrl, wCourseUrl } from "./endpoints"
+import { rCourseUrl, wCourseUrl } from "./endpoints";
+import { unstable_noStore as noStore } from "next/cache";
+import { Diagnostic } from "../logger/logger";
 
 export const createCourse = async (formData: FormData) => {
   const body = {
@@ -13,32 +14,44 @@ export const createCourse = async (formData: FormData) => {
     thumbnailUrl: formData.get("thumbnailUrl"),
   };
 
-  const resp = await post(`${wCourseUrl}/Courses/AddCourseNew`, body);
-  const { id, title } = resp.data;
-  const url = `/protected/admin/courses/${id}?title=${title}`;
+  let url = "";
+  try {
+    const resp = await post(`${wCourseUrl}/Courses/AddCourseNew`, body);
+    const data = await resp.data;
+    const { id, title } = data;
+    url = `/protected/admin/courses/${id}?title=${title}`;
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    throw err;
+  }
 
-  revalidatePath(url);
   redirect(url);
 };
 
 export const getCourses = async () => {
+  noStore();
   try {
     const resp = await get(`${rCourseUrl}/Courses/GetCoursesNew`);
-
-    return resp.map((res: any) => res.data);
+    const data = resp.map((res: any) => res.data);
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
   } catch (err) {
-    console.error(err);
+    Diagnostic("ERROR ON GET, returning", err);
+    throw err;
   }
-  const url = `/protected/admin/courses`;
 };
 
 export const getCourse = async (id: string) => {
   try {
     const resp = await get(`${rCourseUrl}/Courses/GetCourseNew/${id}`);
 
-    return resp.data;
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
   } catch (err) {
-    console.error(err);
+    Diagnostic("ERROR ON GET, returning", err);
+    throw err;
   }
 };
 
@@ -52,7 +65,18 @@ export const updateCourse = async (id: string, formData: FormData) => {
     thumbnailUrl: formData.get("thumbnailUrl"),
   };
 
-  const resp = await put(`${wCourseUrl}/Courses/UpdateCourseNew`, body);
-  const { title } = resp.data;
-  redirect(`/protected/admin/courses/${id}?title=${title}`);
+  let url = "";
+  try {
+    const resp = await put(`${wCourseUrl}/Courses/UpdateCourseNew`, body);
+
+    const data = await resp.data;
+    const { title } = data;
+    url = `/protected/admin/courses/${id}?title=${title}`;
+    Diagnostic("SUCCESS ON PUT, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON PUT, returning", err);
+    throw err;
+  }
+
+  redirect(url);
 };

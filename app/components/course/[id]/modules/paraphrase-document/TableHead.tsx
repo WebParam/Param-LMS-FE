@@ -4,8 +4,8 @@ const TableHead = () => {
   const headers = [
     "Paraphrased Title",
     "Status",
-    "Edit",
-
+    "Action",
+    "Edit"
   ];
 
   return (

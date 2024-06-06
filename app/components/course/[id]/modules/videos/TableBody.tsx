@@ -1,3 +1,4 @@
+import { IDocument } from "@/app/interfaces/course-document";
 import { NextPage } from "next";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -10,15 +11,24 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
-  const url =
-    arrUrl.join("/") +
-    `/document/123456789/upload-link?title=${title}&step=2`;
+  const url = arrUrl.join("/");
+
+  const toPercent = ({
+    noOfConfirmedParapharases,
+    noOfParapharases,
+  }: {
+    noOfConfirmedParapharases: number;
+    noOfParapharases: number;
+  }) => {
+    if (noOfConfirmedParapharases == 0 && noOfParapharases == 0) return 0;
+    return (noOfConfirmedParapharases / noOfParapharases) * 100;
+  };
 
   return (
     <>
       <tbody className="list" id="staff">
         {list.length > 0 ? (
-          list.map((file: File, key) => (
+          list.map((document: IDocument, key) => (
             <tr key={key} className="selected">
               <td
                 style={{ width: "300px" }}
@@ -28,7 +38,16 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   <p>
                     <i className="material-icons px-2">videocam</i>
                   </p>
-                  <p className="text-justify">{file.name}</p>
+                  <p
+                    className="text-justify"
+                    style={{
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      width: "350px",
+                    }}
+                  >
+                    {document.name}
+                  </p>
                 </div>
               </td>
               <td
@@ -39,10 +58,12 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   <div className="progress-bar">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `60%` }}
+                      style={{ width: `${toPercent(document)}%` }}
                     ></div>
                   </div>
-                  <div className="progress-bar-text">2 / 10</div>
+                  <div className="progress-bar-text">
+                    {document.noOfVideoLinks} / {document.noOfParapharases}
+                  </div>
                 </div>
               </td>
               <td
@@ -51,7 +72,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
               >
                 <Link
                   className="btn btn-success rounded-pill px-4 py-2"
-                  href={url}
+                  href={`${url}/document/${document.id}/upload-link?title=${title}`}
                 >
                   View
                 </Link>

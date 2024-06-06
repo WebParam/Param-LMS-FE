@@ -1,30 +1,22 @@
 "use client";
-import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import "react-quill/dist/quill.snow.css";
-import { confirmParaphrase } from "@/app/lib/actions/paraphrase";
 import { useParams, useSearchParams } from "next/navigation";
+import { createDocument } from "@/app/lib/actions/document";
 
-function MyVerticallyCenteredModal(props: any) {
-  const { id, moduleId, documentId } = useParams<{
+function CreateDocumentModal(props: any) {
+  const { id: courseId, moduleId } = useParams<{
     id: string;
     moduleId: string;
-    documentId: string;
   }>();
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
-  const [description, setDescription] = useState(props.data.description);
-  const confirmParaphraseWithParams = confirmParaphrase.bind(
+  const createDocumentWithParams = createDocument.bind(
     null,
-    props.data.id,
-    description,
-    id,
+    courseId,
     moduleId,
-    documentId,
     title
   );
 
@@ -35,42 +27,34 @@ function MyVerticallyCenteredModal(props: any) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <form action={confirmParaphraseWithParams}>
+      <form action={createDocumentWithParams}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Paraphrase</Modal.Title>
+          <Modal.Title>Create Module</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <div>
-            <h5>Paraphrased Title</h5>
+            <h5>Name</h5>
             <input
-              defaultValue={props.data.title}
               minLength={10}
               className="form-control mb-3"
               placeholder="Enter your title here..."
-              name="title"
+              name="name"
             />
-          </div>
-          <div>
-            <h5>Paraphrased Text</h5>
-            <ReactQuill
-              value={description}
-              onChange={(value) => setDescription(value)}
-            />
-          </div>
+          </div>          
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
           <Button variant="success" onClick={props.onHide} type="submit">
-            Confirm
+            Submit
           </Button>
         </Modal.Footer>
       </form>
     </Modal>
   );
 }
-export default dynamic(() => Promise.resolve(MyVerticallyCenteredModal), {
+export default dynamic(() => Promise.resolve(CreateDocumentModal), {
   ssr: false,
 });

@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 function Layout({ children, params }: { children: React.ReactNode; params: {id : string} }) {
@@ -22,17 +23,14 @@ function Layout({ children, params }: { children: React.ReactNode; params: {id :
           role="tablist"
         >
           {links.map((l: any) => (
-            <a
+            <Link
               className={pathname === l.path ? "active" : ""}
-              onClick={() => router.replace(l.url)}
-              data-toggle="tab"
-              role="tab"
-              aria-selected="true"
+              href={l.url}
             >
               <span className="flex d-flex flex-column">
                 <strong className="card-title">{l.name}</strong>
               </span>
-            </a>
+            </Link>
           ))}          
         </div>
       </div>

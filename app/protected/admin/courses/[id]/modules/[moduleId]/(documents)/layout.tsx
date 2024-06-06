@@ -1,11 +1,11 @@
 "use client";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import { useSearchParams, usePathname } from "next/navigation";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
   const pathname = usePathname();
-  const router = useRouter();
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -20,7 +20,7 @@ function Layout({ children }: { children: React.ReactNode }) {
     },
     {
       name: "documents",
-      title: "Documents",
+      title: "Modules",
       url: `${url}/documents?title=${title}`,
       path: `${url}/documents`,
     },
@@ -36,6 +36,12 @@ function Layout({ children }: { children: React.ReactNode }) {
       url: `${url}/videos?title=${title}`,
       path: `${url}/videos`,
     },
+    {
+      name: "quizzes",
+      title: "Quizzes",
+      url: `${url}/quizzes?title=${title}`,
+      path: `${url}/quizzes`,
+    },
   ];
 
   return (
@@ -46,18 +52,15 @@ function Layout({ children }: { children: React.ReactNode }) {
           role="tablist"
         >
           {tabs.map((tab) => (
-            <a
+            <Link
               key={tab.name}
               className={tab.path === pathname ? "active" : ""}
-              onClick={() => router.replace(tab.url)}
-              data-toggle="tab"
-              role="tab"
-              aria-selected="true"
+              href={tab.url}
             >
               <span className="flex d-flex flex-column">
                 <strong className="card-title">{tab.title}</strong>
               </span>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

@@ -12,7 +12,7 @@ function VideoPopUpModal(props: any) {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>{props?.data?.title}</Modal.Title>
+        <Modal.Title>{props.data.title}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -24,14 +24,14 @@ function VideoPopUpModal(props: any) {
             <div className="embed-responsive embed-responsive-16by9">
               <iframe
                 className="embed-responsive-item"
-                src="https://www.youtube.com/embed/MffdAFJN-DA"
+                src={props.data.videoUrl}
                 allowFullScreen={true}
               />
             </div>
             <div className="card-body">
               <label className="form-label">Description</label>
               <p>
-                {props?.data?.text}
+                {props.data.description}
               </p>
             </div>
           </div>

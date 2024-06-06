@@ -1,10 +1,5 @@
 const TableHead = () => {
-  const headers = [
-    "Module Name",
-    "Status",
-    "Preview",
-    "Action"
-  ];
+  const headers = ["Paraphrased Title", "Action"];
 
   return (
     <>
@@ -12,6 +7,9 @@ const TableHead = () => {
         <tr>
           {headers.map((name) => (
             <th key={name} className="text-center">
+              {name === "Embedded Link" && (
+                <i className="material-icons mr-8pt">link</i>
+              )}
               <a
                 key={name}
                 className="sort"
@@ -21,6 +19,8 @@ const TableHead = () => {
               </a>
             </th>
           ))}
+          <th></th>
+          <th></th>
         </tr>
       </thead>
     </>

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import Modal from "./Modal";
 import { useState } from "react";
 import { useParams } from "next/navigation";
@@ -10,7 +10,6 @@ export default function PageHeader({ title }: { title: string }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const name = searchParams.get("title");
-  const router = useRouter();
 
   let isModule = false;
   let isCreateModule = false;
@@ -23,36 +22,54 @@ export default function PageHeader({ title }: { title: string }) {
   const arrUrl = pathname.split("/");
   const suffixPath = arrUrl.pop() || "";
 
-  const actionLinks = ["paraphrase-document", "confirm-audio", "upload-link"];
-  const arrLink = ["edit", "documents", "audios", "videos"];
+  const actionLinks = ["paraphrase-document", "confirm-audio", "upload-link", "generate-quizzes"];
+  const arrLink = ["edit", "documents", "audios", "videos", "quizzes"];
+
   const stepperMap: any = {
     "paraphrase-document": "Paraphrase Sections",
     "confirm-audio": "Confirm Audio",
     "upload-link": "Upload Link",
-    documents: "Documents",
+    "generate-quizzes": "Generate Quizzes",
+    documents: "Modules",
     audios: "Audios",
     videos: "Videos",
     edit: "Edit",
   };
 
+  const urlDocumentMap: any = {
+    "paraphrase-document": "documents",
+    "confirm-audio": "audios",
+    "upload-link": "videos",
+    "generate-quizzes": "quizzes",
+  };
+
+  let backUrl = "";
+
   if (pathname == "/protected/admin/courses") {
     title = "Courses";
     isCourse = true;
+  } else if (pathname == `/protected/admin/courses/${id}`) {
+    isEditCourse = true;
   } else if (pathname.indexOf("/modules/create") !== -1) {
     title = `Create Unit Standard`;
     isCreateModule = true;
   } else if (pathname.indexOf("/modules") !== -1) {
-    title = `${name} - Unit Standards`;
+    title = `${name}`;
     if ([...arrLink, ...actionLinks].indexOf(suffixPath) === -1) {
       isModule = true;
     } else {
-      if (actionLinks.indexOf(suffixPath) !== -1) isEditDocument = true;
+      if (actionLinks.indexOf(suffixPath) !== -1) {
+        const arr = pathname.split("/");
+        const urlSlice = arr.slice(0, -3);
+        backUrl = `${ urlSlice.join("/") }/${urlDocumentMap[suffixPath]}?title=${title}`; 
+        isEditDocument = true;
+      }
       else if (arrLink.indexOf(suffixPath) !== -1) isEditModule = true;
 
       title =
         name +
         " - " +
-        (stepperMap[suffixPath] ? stepperMap[suffixPath] : "Unit Standards");
+        (stepperMap[suffixPath] ? stepperMap[suffixPath] : "");
     }
   }
 
@@ -94,9 +111,9 @@ export default function PageHeader({ title }: { title: string }) {
               {isEditCourse && (
                 <Link
                   className="btn btn-success"
-                  href={`/protected/admin/courses/${id}/modules?title=${name}`}
+                  href={`/protected/admin/courses`}
                 >
-                  Unit Standards
+                  All Courses
                 </Link>
               )}
               {isEditModule && (
@@ -116,12 +133,12 @@ export default function PageHeader({ title }: { title: string }) {
                 </button>
               )}
               {isEditDocument && (
-                <button
+                <Link
                   className="btn btn-success"
-                  onClick={() => router.back()}
+                  href={backUrl}
                 >
                   Documents
-                </button>
+                </Link>
               )}
             </div>
           </div>

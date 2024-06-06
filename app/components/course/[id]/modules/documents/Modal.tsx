@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -9,14 +9,26 @@ import { createModule } from "@/app/lib/actions/module";
 
 function MyVerticallyCenteredModal(props: any) {
   const [description, setDescription] = useState("");
-  const tones = ["Informal","Formal","Soft", "Strong"];
+  const tones = ["Informal", "Formal", "Soft", "Strong"];
+  const submmitRef = useRef<HTMLInputElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
   const createModuleWithParams = createModule.bind(
     null,
     description,
     props.courseId,
     props.title
   );
-  
+
+  const submit = () => {
+    submmitRef.current?.click();
+    if (
+      titleRef.current?.value &&
+      titleRef.current?.value.length > 10
+    ) {
+      props.onHide();
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -26,7 +38,7 @@ function MyVerticallyCenteredModal(props: any) {
     >
       <form action={createModuleWithParams}>
         <Modal.Header closeButton>
-          <Modal.Title>Create Unit Standard - {props.title}</Modal.Title>
+          <Modal.Title>Create Unit Standard{props.title}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -37,6 +49,8 @@ function MyVerticallyCenteredModal(props: any) {
               name="title"
               className="form-control mb-3"
               placeholder="Enter your title here..."
+              required
+              ref={titleRef}
             />
           </div>
           <div>
@@ -56,8 +70,8 @@ function MyVerticallyCenteredModal(props: any) {
             >
               <option selected={false}>Select Tone</option>
               {tones.map((name: string) => (
-                  <option selected={false}>{name}</option>
-                ))}
+                <option selected={false}>{name}</option>
+              ))}
             </select>
           </div>
           <div className="mt-3">
@@ -73,10 +87,14 @@ function MyVerticallyCenteredModal(props: any) {
           </div>
         </Modal.Body>
         <Modal.Footer>
+          <input type="submit" hidden ref={submmitRef} />
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
-          <Button variant="success" onClick={props.onHide} type="submit">
+          <Button
+            variant="success"
+            onClick={() => submit()}
+          >
             Submit
           </Button>
         </Modal.Footer>

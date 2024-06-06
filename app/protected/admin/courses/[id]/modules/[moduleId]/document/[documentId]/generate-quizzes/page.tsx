@@ -1,11 +1,11 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import { getParaphrases } from "@/app/lib/actions/paraphrase";
-import Table from "@/components/course/[id]/modules/confirm-audio/Table";
-import { useSearchParams } from "next/navigation";
+import Table from "@/components/course/[id]/modules/generate-quizzes/Table";
 import { useEffect, useState } from "react";
+import { getParaphrases } from "@/app/lib/actions/paraphrase";
+import { useSearchParams } from "next/navigation";
 
-const Body = ({params}: {params: {documentId: string}}) => {
+const Body = ({ params }: { params: { documentId: string } }) => {
   const documentId = params.documentId;
   const [list, setList] = useState([]);
   const searchParams = useSearchParams();
@@ -32,7 +32,9 @@ const Body = ({params}: {params: {documentId: string}}) => {
   return (
     <>
       <div className="page-separator mb-4">
-        <div className="page-separator__text">Audios</div>
+        <div className="page-separator__text">
+          Quizzes
+        </div>
       </div>
 
       <div className="card mt-3 mb-3">
@@ -41,7 +43,7 @@ const Body = ({params}: {params: {documentId: string}}) => {
 
       <div className="card mb-24pt">
         <Pagination
-          listLength={list.length}
+          listLength={list?.length}
           indexOfLastItem={indexOfLastItem}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}

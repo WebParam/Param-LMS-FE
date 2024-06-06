@@ -1,14 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import { confirmParaphrase } from "@/app/lib/actions/paraphrase";
+import { updateParaphrase } from "@/app/lib/actions/paraphrase";
 import { useParams, useSearchParams } from "next/navigation";
 
-function MyVerticallyCenteredModal(props: any) {
+function EditTranscriptModal(props: any) {
   const { id, moduleId, documentId } = useParams<{
     id: string;
     moduleId: string;
@@ -18,7 +18,9 @@ function MyVerticallyCenteredModal(props: any) {
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
   const [description, setDescription] = useState(props.data.description);
-  const confirmParaphraseWithParams = confirmParaphrase.bind(
+  const submmitRef = useRef<HTMLInputElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const updateParaphraseWithParams = updateParaphrase.bind(
     null,
     props.data.id,
     description,
@@ -28,6 +30,16 @@ function MyVerticallyCenteredModal(props: any) {
     title
   );
 
+  const submit = () => {
+    submmitRef.current?.click();
+    if (
+      titleRef.current?.value &&
+      titleRef.current?.value.length > 10
+    ) {
+      props.onHide();
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -35,24 +47,35 @@ function MyVerticallyCenteredModal(props: any) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <form action={confirmParaphraseWithParams}>
+      <form action={updateParaphraseWithParams}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Paraphrase</Modal.Title>
+          <Modal.Title>Create Transcript</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <div>
-            <h5>Paraphrased Title</h5>
+            <h5>Title</h5>
             <input
-              defaultValue={props.data.title}
               minLength={10}
               className="form-control mb-3"
               placeholder="Enter your title here..."
               name="title"
+              required
+              defaultValue={props.data.title}
+              ref={titleRef}
             />
           </div>
           <div>
-            <h5>Paraphrased Text</h5>
+            <h5>Video Link</h5>
+            <input
+              minLength={10}
+              className="form-control mb-3"
+              placeholder="Enter your Video Link here. E.g https://..."
+              name="videoLink"
+            />
+          </div>{" "}
+          <div>
+            <h5>Transcript</h5>
             <ReactQuill
               value={description}
               onChange={(value) => setDescription(value)}
@@ -60,17 +83,21 @@ function MyVerticallyCenteredModal(props: any) {
           </div>
         </Modal.Body>
         <Modal.Footer>
+        <input type="submit" hidden ref={submmitRef} />
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
-          <Button variant="success" onClick={props.onHide} type="submit">
-            Confirm
+          <Button
+            variant="success"
+            onClick={() => submit()}
+          >
+            Submit
           </Button>
         </Modal.Footer>
       </form>
     </Modal>
   );
 }
-export default dynamic(() => Promise.resolve(MyVerticallyCenteredModal), {
+export default dynamic(() => Promise.resolve(EditTranscriptModal), {
   ssr: false,
 });

@@ -13,17 +13,6 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   arrUrl.pop();
   const url = arrUrl.join("/");
 
-  const toPercent = ({
-    noOfConfirmedParapharases,
-    noOfParapharases,
-  }: {
-    noOfConfirmedParapharases: number;
-    noOfParapharases: number;
-  }) => {
-    if (noOfConfirmedParapharases == 0 && noOfParapharases == 0) return 0;
-    return (noOfConfirmedParapharases / noOfParapharases) * 100;
-  };
-
   return (
     <>
       <tbody className="list" id="staff">
@@ -35,8 +24,8 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                 className="text-center mx-auto text-justify js-lists-values-projects small"
               >
                 <div className="d-flex align-items-center ml-5">
-                  <p>
-                    <i className="material-icons px-2">queue_music</i>
+                  <p className="px-2">
+                    <i className="fa-solid fa-question"></i>
                   </p>
                   <p
                     className="text-justify"
@@ -58,12 +47,10 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   <div className="progress-bar">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `${toPercent(document)}%` }}
+                      style={{ width: `60%` }}
                     ></div>
                   </div>
-                  <div className="progress-bar-text">
-                    {document.noOfAudios} / {document.noOfParapharases}
-                  </div>
+                  <div className="progress-bar-text">2 / 10</div>
                 </div>
               </td>
               <td
@@ -72,7 +59,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
               >
                 <Link
                   className="btn btn-success rounded-pill px-4 py-2"
-                  href={`${url}/document/${document.id}/confirm-audio?title=${title}`}
+                  href={`${url}/document/${document.id}/generate-quizzes?title=${title}`}
                 >
                   View
                 </Link>
