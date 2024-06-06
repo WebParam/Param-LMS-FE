@@ -22,7 +22,6 @@ export const createParaphrase = async (
     documentId
   };
 
-  console.log("body: ", body);
   try {
     const data = await post(`${wCourseUrl}/Paraphrase/ConfirmParaphrase`, body);
     Diagnostic("SUCCESS ON POST, returning", data);
@@ -54,8 +53,6 @@ export const updateParaphrase = async (
     description,
     videoLink: formData.get("videoLink"),
   };
-
-  console.log("body: ", body);
 
   try {
     const resp = await put(`${wCourseUrl}/Courses/UpdateCourseNew`, body);
