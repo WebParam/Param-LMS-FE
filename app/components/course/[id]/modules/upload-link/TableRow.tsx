@@ -52,7 +52,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
         style={{ width: "300px" }}
         className="text-center js-lists-values-projects small"
       >
-        {!data.isSystemGenerated ? (
+        {data.isSystemGenerated ? (
           <button
             className="btn btn-success rounded-pill px-4 py-2"
             onClick={() => submitVideoLink()}
