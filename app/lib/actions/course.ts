@@ -68,10 +68,10 @@ export const updateCourse = async (id: string, formData: FormData) => {
   let url = "";
   try {
     const resp = await put(`${wCourseUrl}/Courses/UpdateCourseNew`, body);
-  
+
     const data = await resp.data;
     const { title } = data;
-    url = `/protected/admin/courses/${id}?title=${title}`
+    url = `/protected/admin/courses/${id}?title=${title}`;
     Diagnostic("SUCCESS ON PUT, returning", data);
   } catch (err) {
     Diagnostic("ERROR ON PUT, returning", err);
