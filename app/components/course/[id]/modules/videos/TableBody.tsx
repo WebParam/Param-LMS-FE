@@ -14,14 +14,14 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   const url = arrUrl.join("/");
 
   const toPercent = ({
-    noOfConfirmedParapharases,
+    noOfVideoLinks,
     noOfParapharases,
   }: {
-    noOfConfirmedParapharases: number;
+    noOfVideoLinks: number;
     noOfParapharases: number;
   }) => {
-    if (noOfConfirmedParapharases == 0 && noOfParapharases == 0) return 0;
-    return (noOfConfirmedParapharases / noOfParapharases) * 100;
+    if (noOfVideoLinks == 0 && noOfParapharases == 0) return 0;
+    return (noOfVideoLinks / noOfParapharases) * 100;
   };
 
   return (
