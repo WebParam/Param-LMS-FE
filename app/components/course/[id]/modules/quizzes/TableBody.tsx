@@ -24,8 +24,8 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                 className="text-center mx-auto text-justify js-lists-values-projects small"
               >
                 <div className="d-flex align-items-center ml-5">
-                  <p>
-                    <i className="material-icons px-2">videocam</i>
+                  <p className="px-2">
+                    <i className="fa-solid fa-question"></i>
                   </p>
                   <p
                     className="text-justify"

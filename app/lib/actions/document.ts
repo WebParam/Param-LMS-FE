@@ -1,7 +1,12 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post } from "../utils";
-import { wCourseUrl, rCourseUrl, rDocumentParaphraseUrl } from "./endpoints";
+import {
+  wCourseUrl,
+  rCourseUrl,
+  rDocumentParaphraseUrl,
+  wDocumentUrl,
+} from "./endpoints";
 import { Diagnostic } from "../logger/logger";
 
 export const uploadDocuments = async (
@@ -11,18 +16,19 @@ export const uploadDocuments = async (
   formData: FormData
 ) => {
   try {
-    const res = await fetch(`${wCourseUrl}/Modules/${moduleId}/upload`, {
+    const res = await fetch(`${wDocumentUrl}/Modules/${moduleId}/upload`, {
       method: "POST",
       body: formData,
     });
+
     const data = await res.json();
     Diagnostic("SUCCESS ON POST, returning", data);
-    return data;
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
   }
 
-  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/documents?title=${courseTitle}&refreshed="true"`;
+  const date = new Date().toString();
+  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/documents?title=${courseTitle}&refreshId=${date}`;
   redirect(url);
 };
 

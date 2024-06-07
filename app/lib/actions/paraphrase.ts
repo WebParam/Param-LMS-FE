@@ -13,18 +13,17 @@ export const createParaphrase = async (
   moduleId: string,
   documentId: string,
   courseTitle: string,
-  formData: FormData
+  formData: FormData,
 ) => {
   const body = {
     title: formData.get("title"),
     description,
-    videoLink: formData.get("videoLink"),
-    documentId
+    videoUrl: formData.get("videoUrl"),
+    documentId,
   };
 
-  console.log("body: ", body);
   try {
-    const data = await post(`${wCourseUrl}/Paraphrase/ConfirmParaphrase`, body);
+    const data = await post(`${wCourseUrl}/Paraphrase/AddParaphrase/NonSystemGenerated`, body);
     Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
@@ -52,13 +51,10 @@ export const updateParaphrase = async (
     id,
     title: formData.get("title"),
     description,
-    videoLink: formData.get("videoLink"),
+    videoUrl: formData.get("videoUrl"),
   };
-
-  console.log("body: ", body);
-
   try {
-    const resp = await put(`${wCourseUrl}/Courses/UpdateCourseNew`, body);
+    const resp = await put(`${wCourseUrl}/Paraphrase/UpdateParaphrase/NonSystemGenerated`, body);
     const data = await resp.data;
     Diagnostic("SUCCESS ON PUT, returning", data);
   } catch (err) {

@@ -2,10 +2,19 @@ import { useState } from "react";
 import QuizzesModal from "./QuizzesModal";
 import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
 import { generateQuizzes, getQuizzes } from "@/app/lib/actions/quiz";
+import { useParams, useSearchParams } from "next/navigation";
 
 const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [quizzes, setQuizzes] = useState([]);
+  const { id: courseId, moduleId, documentId } = useParams<{
+    id: string;
+    moduleId: string;
+    documentId: string;
+  }>();
+
+  const searchParams = useSearchParams();
+  const title = searchParams.get("title") || "";
 
   const previewQuizzes = async (paraphraseId: string) => {
     const data = await getQuizzes(paraphraseId);
@@ -41,7 +50,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
           </div>
         </td>
         <td className="text-center js-lists-values-projects small">
-          {!data.isQuizGenerated ? (
+          {data.isQuizGenerated ? (
             <button
               onClick={() => previewQuizzes(data.id)}
               className="btn btn-success rounded-pill px-4 py-2"
@@ -51,7 +60,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             </button>
           ) : (
             <button
-              onClick={() => generateQuizzes(data.id, data.description)}
+              onClick={() => generateQuizzes(data.id, data.description, courseId, moduleId, documentId, title)}
               className="btn btn-success rounded-pill px-4 py-2"
             >
               Generate Quiz

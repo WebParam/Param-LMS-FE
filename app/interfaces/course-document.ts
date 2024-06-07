@@ -5,4 +5,8 @@ export interface IDocument {
     moduleId: string,
     status: string,
     isSystemGenerated: boolean
+    noOfConfirmedParapharases: number;
+    noOfParapharases: number;
+    noOfAudios: number;
+    noOfVideoLinks: number;
 }
