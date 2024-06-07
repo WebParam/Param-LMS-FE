@@ -26,8 +26,7 @@ function CreateTranscriptModal(props: any) {
     id,
     moduleId,
     documentId,
-    title,
-  
+    title
   );
 
   const submit = () => {
@@ -70,7 +69,7 @@ function CreateTranscriptModal(props: any) {
               minLength={10}
               className="form-control mb-3"
               placeholder="Enter your Video Link here. E.g https://..."
-              name="videoLink"
+              name="videoUrl"
             />
           </div>{" "}
           <div>

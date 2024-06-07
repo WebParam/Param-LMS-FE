@@ -18,10 +18,9 @@ export const createParaphrase = async (
   const body = {
     title: formData.get("title"),
     description,
-    videoUrl: formData.get("videoLink"),
+    videoUrl: formData.get("videoUrl"),
     documentId,
   };
-
 
   try {
     const data = await post(`${wCourseUrl}/Paraphrase/AddParaphrase/NonSystemGenerated`, body);
@@ -45,16 +44,14 @@ export const updateParaphrase = async (
   moduleId: string,
   documentId: string,
   courseTitle: string,
- 
-  formData: FormData,
-
+  formData: FormData
 ) => {
 
   const body = {
     id,
     title: formData.get("title"),
     description,
-    videoUrl: formData.get("videoLink"),
+    videoUrl: formData.get("videoUrl"),
   };
   try {
     const resp = await put(`${wCourseUrl}/Paraphrase/UpdateParaphrase/NonSystemGenerated`, body);
