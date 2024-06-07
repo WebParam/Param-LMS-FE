@@ -2,8 +2,9 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IDocument } from "@/app/interfaces/course-document";
 import { paraphraseDocument } from "@/app/lib/actions/document";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DocumentModal from "./DocumentModal";
+import { Button, Modal } from "react-bootstrap";
 
 const TableRow = ({ document }: { document: IDocument }) => {
   const pathname = usePathname();
@@ -11,6 +12,8 @@ const TableRow = ({ document }: { document: IDocument }) => {
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
   const [modalShow, setModalShow] = useState(false);
+  const [paraphraseModal, setParaphraseModal] = useState(false);
+  const [paraphraseError, setParaphraseError] = useState(false);
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -18,22 +21,61 @@ const TableRow = ({ document }: { document: IDocument }) => {
 
   const paraphrase = async (documentId: string, documentUrl: string) => {
     try {
+      setParaphraseModal(true);
       await paraphraseDocument(documentId, documentUrl);
+      setParaphraseModal(false);
+      router.push(
+        `${url}/document/${documentId}/paraphrase-document?title=${title}`
+      );
     } catch (err) {
       console.log(err);
+      setParaphraseError(true);
     }
-    router.push(
-      `${url}/document/${documentId}/paraphrase-document?title=${title}`
-    );
+    
   };
 
   return (
     <>
+    <Modal
+        show={paraphraseModal}
+        onHide={() => setParaphraseModal(false)}
+        aria-labelledby="contained-modal-title-vcenter"
+        backdrop={false}
+        keyboard={false}
+        centered
+        size="lg"
+      >
+        <Modal.Body>
+        { 
+          paraphraseError ? 
+          <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '10px', height: '300px'}}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#252525" className="bi bi-x-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+            </svg>
+            <p style={{color: '#252525', textAlign: 'center'}}>An error occured while paraphrasing.</p>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => {setParaphraseModal(false), setParaphraseError(false)}}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={() => paraphrase(document.id, document.fileBlobUrl)}>Retry</Button>
+            </Modal.Footer>
+          </div>
+          :
+          <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '10px', height: '300px'}}>
+            <div className="spinner-border text-primary" role="status" />
+            <p style={{color: '#252525', textAlign: 'center'}}>Please wait while we paraphrase your document...</p>
+          </div>
+        }
+        </Modal.Body>
+      </Modal>
+
       <DocumentModal
         documentId={document.id}
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
+
 
       <tr className="selected">
         <td
