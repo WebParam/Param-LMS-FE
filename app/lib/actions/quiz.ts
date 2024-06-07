@@ -24,17 +24,21 @@ export const generateQuizzes = async (
   courseId: string,
   moduleId: string,
   documentId: string,
-  courseTitle: string
+  courseTitle: string,
+  setGenerateQuizModal: any
 ) => {
   try {
+    setGenerateQuizModal(true)
     const resp = await post(`${wQuizGenerateUrl}/Quiz/generate`, {
       paraphraseId,
       text,
     });
     Diagnostic("SUCCESS ON POST, returning", resp);
+    setGenerateQuizModal(false)
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
     console.error(err);
+    setGenerateQuizModal(false);
   }
 
   const date = new Date().toString();

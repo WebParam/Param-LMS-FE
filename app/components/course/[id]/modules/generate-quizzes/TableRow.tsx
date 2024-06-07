@@ -3,9 +3,11 @@ import QuizzesModal from "./QuizzesModal";
 import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
 import { generateQuizzes, getQuizzes } from "@/app/lib/actions/quiz";
 import { useParams, useSearchParams } from "next/navigation";
+import { Modal } from "react-bootstrap";
 
 const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [generateQuizModal, setGenerateQuizModal] = useState(false);
   const [quizzes, setQuizzes] = useState([]);
   const { id: courseId, moduleId, documentId } = useParams<{
     id: string;
@@ -25,6 +27,23 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
 
   return (
     <>
+    <Modal 
+      size="sm"
+      centered
+      show={generateQuizModal}
+      onHide={() => setGenerateQuizModal(false)}
+      backdrop={false}
+      keyboard={false}
+    >
+      <Modal.Body>
+      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: '#252525', gap: '15px'}}>
+        <div className="spinner-grow text-primary" role="status"/>
+        <p>
+          Generating Quiz...
+        </p>
+      </div>
+      </Modal.Body>
+    </Modal>
       {openModal && (
         <div className="card mb-0">
           <QuizzesModal
@@ -60,7 +79,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             </button>
           ) : (
             <button
-              onClick={() => generateQuizzes(data.id, data.description, courseId, moduleId, documentId, title)}
+              onClick={() => generateQuizzes(data.id, data.description, courseId, moduleId, documentId, title, setGenerateQuizModal)}
               className="btn btn-success rounded-pill px-4 py-2"
             >
               Generate Quiz
