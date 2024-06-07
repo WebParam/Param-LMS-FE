@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import QuizzesModal from "./QuizzesModal";
 import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
 import { generateQuizzes, getQuizzes } from "@/app/lib/actions/quiz";
@@ -17,6 +17,11 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const refreshId = searchParams.get("refreshId");
+
+  useEffect(() => {
+    setGenerateQuizModal(false);
+  }, [refreshId]);
 
   const previewQuizzes = async (paraphraseId: string) => {
     const data = await getQuizzes(paraphraseId);
@@ -24,6 +29,12 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
     setQuizzes(data);
     setOpenModal(true);
   }
+
+  const generateQuizzesFn = ({ id, description }: { id: string;  description: string}) => {
+    setGenerateQuizModal(true);
+    generateQuizzes(id, description, courseId, moduleId, documentId, title);
+  }
+
 
   return (
     <>
@@ -79,7 +90,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             </button>
           ) : (
             <button
-              onClick={() => generateQuizzes(data.id, data.description, courseId, moduleId, documentId, title, setGenerateQuizModal)}
+              onClick={() => generateQuizzesFn(data)}
               className="btn btn-success rounded-pill px-4 py-2"
             >
               Generate Quiz
