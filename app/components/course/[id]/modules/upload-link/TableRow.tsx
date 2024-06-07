@@ -4,10 +4,12 @@ import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
 import { useParams, useSearchParams } from "next/navigation";
 import { updateVideoLink } from "@/app/lib/actions/paraphrase";
 import EditTranscriptModal from "./EditTranscriptModal";
+import { Modal } from "react-bootstrap";
 
 const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [openPreviewModal, setOpenPreviewModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+  const [publishModal, setPublishModal] = useState(false);
   const [url, setUrl] = useState(data.videoUrl || "");
 
   const {
@@ -23,10 +25,31 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const title = searchParams.get("title") || "";
 
   const submitVideoLink = async () => {
+    setPublishModal(true)
     await updateVideoLink(data.id, url, courseId, moduleId, documentId, title);
+    setPublishModal(false);
   };
 
   return (
+    <>
+    <Modal 
+      size="sm"
+      centered
+      show={publishModal}
+      onHide={() => setPublishModal(false)}
+      backdrop={false}
+      keyboard={false}
+    >
+      <Modal.Body>
+      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: '#252525', gap: '15px'}}>
+        <div className="spinner-grow text-primary" role="status"/>
+        <p>
+          Uploading Link...
+        </p>
+      </div>
+      </Modal.Body>
+    </Modal>
+    
     <tr className="selected">
       <td
         style={{ width: "500px" }}
@@ -107,6 +130,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
         )}
       </td>
     </tr>
+    </>
   );
 };
 
