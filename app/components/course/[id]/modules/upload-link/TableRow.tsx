@@ -44,7 +44,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
           type="text"
           placeholder="Input link"
           className="rounded text-center"
-          defaultValue={url}
+          defaultValue={data.videoUrl}
           onChange={(evt: any) => setUrl(evt.target.value)}
         />
       </td>
