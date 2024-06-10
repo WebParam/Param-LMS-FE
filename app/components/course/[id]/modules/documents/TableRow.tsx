@@ -5,6 +5,7 @@ import { paraphraseDocument } from "@/app/lib/actions/document";
 import { useEffect, useState } from "react";
 import DocumentModal from "./DocumentModal";
 import { Button, Modal } from "react-bootstrap";
+import EditDocumentModal from "./EditDocumentModal";
 
 const TableRow = ({ document }: { document: IDocument }) => {
   const pathname = usePathname();
@@ -12,6 +13,7 @@ const TableRow = ({ document }: { document: IDocument }) => {
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
   const [modalShow, setModalShow] = useState(false);
+  const [isEditModal, setIsEditModal] = useState(false);
   const [paraphraseModal, setParaphraseModal] = useState(false);
   const [paraphraseError, setParaphraseError] = useState(false);
 
@@ -31,7 +33,6 @@ const TableRow = ({ document }: { document: IDocument }) => {
       console.log(err);
       setParaphraseError(true);
     }
-    
   };
 
   const toPercent = ({
@@ -44,10 +45,10 @@ const TableRow = ({ document }: { document: IDocument }) => {
     if (noOfConfirmedParapharases == 0 && noOfParapharases == 0) return 0;
     return (noOfConfirmedParapharases / noOfParapharases) * 100;
   };
-  
+
   return (
     <>
-    <Modal
+      <Modal
         show={paraphraseModal}
         onHide={() => setParaphraseModal(false)}
         aria-labelledby="contained-modal-title-vcenter"
@@ -57,27 +58,65 @@ const TableRow = ({ document }: { document: IDocument }) => {
         size="lg"
       >
         <Modal.Body>
-        { 
-          paraphraseError ? 
-          <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '10px', height: '300px'}}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#252525" className="bi bi-x-circle" viewBox="0 0 16 16">
-              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-            </svg>
-            <p style={{color: '#252525', textAlign: 'center'}}>An error occured while paraphrasing.</p>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={() => {setParaphraseModal(false), setParaphraseError(false)}}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={() => paraphrase(document.id, document.fileBlobUrl)}>Retry</Button>
-            </Modal.Footer>
-          </div>
-          :
-          <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '10px', height: '300px'}}>
-            <div className="spinner-border text-primary" role="status" />
-            <p style={{color: '#252525', textAlign: 'center'}}>Please wait while we paraphrase your document...</p>
-          </div>
-        }
+          {paraphraseError ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "10px",
+                height: "300px",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                fill="#252525"
+                className="bi bi-x-circle"
+                viewBox="0 0 16 16"
+              >
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+              </svg>
+              <p style={{ color: "#252525", textAlign: "center" }}>
+                An error occured while paraphrasing.
+              </p>
+              <Modal.Footer>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setParaphraseModal(false), setParaphraseError(false);
+                  }}
+                >
+                  Close
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => paraphrase(document.id, document.fileBlobUrl)}
+                >
+                  Retry
+                </Button>
+              </Modal.Footer>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "10px",
+                height: "300px",
+              }}
+            >
+              <div className="spinner-border text-primary" role="status" />
+              <p style={{ color: "#252525", textAlign: "center" }}>
+                Please wait while we paraphrase your document...
+              </p>
+            </div>
+          )}
         </Modal.Body>
       </Modal>
 
@@ -87,6 +126,12 @@ const TableRow = ({ document }: { document: IDocument }) => {
         onHide={() => setModalShow(false)}
       />
 
+      <EditDocumentModal
+        documentName={document.name}
+        documentId={document.id}
+        show={isEditModal}
+        onHide={() => setIsEditModal(false)}
+      />
 
       <tr className="selected">
         <td
@@ -147,7 +192,7 @@ const TableRow = ({ document }: { document: IDocument }) => {
         >
           <button
             className="btn btn-success rounded-pill px-4 py-2 mr-2"
-            onClick={() => console.log("Edit Document Name")}
+            onClick={() => setIsEditModal(true)}
           >
             Edit
           </button>

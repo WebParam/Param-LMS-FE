@@ -1,6 +1,6 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post } from "../utils";
+import { get, post, put } from "../utils";
 import {
   wCourseUrl,
   rCourseUrl,
@@ -39,12 +39,12 @@ export const createDocument = async (
   formData: FormData
 ) => {
   const body = {
-    name: formData.get("name"),
+    documentName: formData.get("name"),
     moduleId,
   };
 
   try {
-    const resp = await post(`${wCourseUrl}/Courses/AddCourseNew`, body);
+    const resp = await post(`${wCourseUrl}/Document/Modules/Create`, body);
     const data = await resp.json();
     Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
@@ -52,7 +52,32 @@ export const createDocument = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/documents?title=${courseTitle}&refreshed=${date}`;
+  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/documents?title=${courseTitle}&refreshId=${date}`;
+  redirect(url);
+};
+
+export const updateDocument = async (
+  documentId: string,
+  courseId: string,
+  moduleId: string,
+  courseTitle: string,
+  formData: FormData
+) => {
+  const body = {
+    documentName: formData.get("name"),
+    documentId,
+  };
+
+  try {
+    const resp = await put(`${wCourseUrl}/Document/Modules/UpdateDocumentName`, body);
+
+    Diagnostic("SUCCESS ON PUT, returning", resp);
+  } catch (err) {
+    Diagnostic("ERROR ON PUT, returning", err);
+  }
+
+  const date = new Date().toString();
+  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/documents?title=${courseTitle}&refreshId=${date}`;
   redirect(url);
 };
 
@@ -81,5 +106,13 @@ export const paraphraseDocument = async (
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
     console.error(err);
+  }
+};
+
+export const updateDocumentName = async () => {
+  try {
+    await put(`${wCourseUrl}/Document/Modules/UpdateDocumentName`, payload);
+  } catch (error) {
+    throw error;
   }
 };
