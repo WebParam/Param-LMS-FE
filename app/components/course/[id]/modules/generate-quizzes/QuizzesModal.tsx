@@ -19,7 +19,7 @@ function QuizzesModal(props: any) {
       <Modal.Body>
         <div
           className="mdk-drawer-layout__content page-content"
-          style={{ transform: "translate3d(0px, 0px, 0px)" }}
+          style={{ transform: "translate3d(0px, 0px, 0px)", color: '#252525' }}
         >
           {props.quizzes.map((data: any) => (
             <div key={data.id} className="mb-3">
