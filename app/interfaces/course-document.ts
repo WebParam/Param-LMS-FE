@@ -9,4 +9,5 @@ export interface IDocument {
     noOfParapharases: number;
     noOfAudios: number;
     noOfVideoLinks: number;
+    noOfQuizzes: number;
 }

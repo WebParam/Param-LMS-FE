@@ -4,6 +4,7 @@ import { NextPage } from "next";
 import { useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
+import { Modal } from "react-bootstrap";
 
 const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   return (
@@ -33,13 +34,39 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
   const [isChecked, setIsChecked] = useState<boolean>(data.audioStatus == 1);
+  const [confirmAudioModal, setConfirmAudioModal] = useState(false);
 
   const updateAudioStatus = async (id: string, value: boolean) => {
+    setConfirmAudioModal(true)
     setIsChecked(value);
     await confirmAudio(id, value, courseId, moduleId, documentId, title);
+    setConfirmAudioModal(false);
   };
 
   return (
+    <>
+    <Modal
+      show={confirmAudioModal}
+      size="sm"
+      style={{height: '400px'}}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      keyboard={false}
+      onHide={() => setConfirmAudioModal(false)}
+      backdrop={false}
+      
+    >
+      <Modal.Body>
+      
+      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: '#252525', gap: '15px'}}>
+        <div className="spinner-grow text-primary" role="status"/>
+        <p>
+          Confirming audio... 
+        </p>
+      </div>
+      </Modal.Body>
+    </Modal>
+
     <tr className="selected">
       <td
         style={{ width: "200px" }}
@@ -64,5 +91,6 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
         />
       </td>
     </tr>
+    </>
   );
 };

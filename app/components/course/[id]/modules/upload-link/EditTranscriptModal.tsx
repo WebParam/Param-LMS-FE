@@ -49,7 +49,7 @@ function EditTranscriptModal(props: any) {
     >
       <form action={updateParaphraseWithParams}>
         <Modal.Header closeButton>
-          <Modal.Title>Create Transcript</Modal.Title>
+          <Modal.Title>Edit Transcript</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -71,7 +71,8 @@ function EditTranscriptModal(props: any) {
               minLength={10}
               className="form-control mb-3"
               placeholder="Enter your Video Link here. E.g https://..."
-              name="videoLink"
+              name="videoUrl"
+              defaultValue={props.data.videoUrl}
             />
           </div>{" "}
           <div>
