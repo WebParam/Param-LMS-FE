@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useParams, useSearchParams } from "next/navigation";
 import { createDocument, updateDocument } from "@/app/lib/actions/document";
+import { useEffect, useState } from "react";
+import EditModuleBtn from "./EditModuleBtn";
 
 function EditDocumentModal(props: any) {
   const { id: courseId, moduleId } = useParams<{
@@ -12,6 +14,7 @@ function EditDocumentModal(props: any) {
   }>();
 
   const searchParams = useSearchParams();
+  const [closeEditModal, setCloseEditModal] = useState(false);
   const title = searchParams.get("title") || "";
   const updateDocumentWithParams = updateDocument.bind(
     null,
@@ -20,6 +23,14 @@ function EditDocumentModal(props: any) {
     moduleId,
     title
   );
+
+  useEffect(() => {
+    if (closeEditModal) {
+      setTimeout(() => {
+        props.onHide();
+      }, 2000);
+    }
+  }, [closeEditModal])
 
   return (
     <Modal
@@ -49,9 +60,7 @@ function EditDocumentModal(props: any) {
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
-          <Button variant="success" onClick={props.onHide} type="submit">
-            Submit
-          </Button>
+         <EditModuleBtn setCloseEditModal={setCloseEditModal} />
         </Modal.Footer>
       </form>
     </Modal>

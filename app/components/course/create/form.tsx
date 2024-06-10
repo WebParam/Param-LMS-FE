@@ -47,8 +47,8 @@ export default function CreateForm({
             <div className="col-sm-9">
               <textarea
                 name="description"
-                className="w-100 p-2"
-                style={{ height: "100px", backgroundColor: 'white', color: '#252525' }}
+                className="w-100 p-2 text-black"
+                style={{ height: "100px", backgroundColor: 'white' }}
                 defaultValue={description}
                 placeholder="Description ..."
               ></textarea>
