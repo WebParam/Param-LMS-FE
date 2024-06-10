@@ -1,3 +1,6 @@
+import EditButton from "./button";
+
+
 type CreateFormType = {
   title?: string;
   description?: string;
@@ -15,7 +18,9 @@ export default function CreateForm({
   thumbnailUrl,
   action,
 }: CreateFormType) {
+
   return (
+    <>
     <form name="create-course" className="mb-0" action={action} data-netlify="true">
       <div className="list-group list-group-form">
         <div className="list-group-item">
@@ -43,7 +48,7 @@ export default function CreateForm({
               <textarea
                 name="description"
                 className="w-100 p-2"
-                style={{ height: "100px" }}
+                style={{ height: "100px", backgroundColor: 'white', color: '#252525' }}
                 defaultValue={description}
                 placeholder="Description ..."
               ></textarea>
@@ -100,8 +105,8 @@ export default function CreateForm({
         </div>
       </div>
       <div className="m-3">
-        <button className="btn btn-success btn-block">Submit</button>
+        <EditButton />
       </div>
     </form>
-  );
-}
+    </>
+)};

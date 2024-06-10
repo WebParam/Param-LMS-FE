@@ -109,7 +109,7 @@ export const paraphraseDocument = async (
   }
 };
 
-export const updateDocumentName = async () => {
+export const updateDocumentName = async (payload: any) => {
   try {
     await put(`${wCourseUrl}/Document/Modules/UpdateDocumentName`, payload);
   } catch (error) {
