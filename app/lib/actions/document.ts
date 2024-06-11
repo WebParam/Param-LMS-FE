@@ -108,11 +108,3 @@ export const paraphraseDocument = async (
     console.error(err);
   }
 };
-
-export const updateDocumentName = async () => {
-  try {
-    await put(`${wCourseUrl}/Document/Modules/UpdateDocumentName`, payload);
-  } catch (error) {
-    throw error;
-  }
-};

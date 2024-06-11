@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useParams, useSearchParams } from "next/navigation";
-import { createDocument, updateDocument } from "@/app/lib/actions/document";
+import { updateDocument } from "@/app/lib/actions/document";
 
 function EditDocumentModal(props: any) {
   const { id: courseId, moduleId } = useParams<{
