@@ -1,15 +1,15 @@
-import { getCourses } from "@/app/lib/actions/course";
+// import { getCourses } from "@/app/lib/actions/course";
 import Link from "next/link";
 
-export default async function Courses() {
-  const list = await getCourses();
+export default async function Courses({ list }:any) {
+  // const list = await getCourses();
 
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
           <div className="row card-group-row">
-            {list.map((course: any) => (
+            {list && list.map((course: any) => (
               <Course
                 key={course.id}
                 imgUrl={course.avatar}

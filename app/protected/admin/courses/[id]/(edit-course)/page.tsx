@@ -4,7 +4,7 @@ import { updateCourse, getCourse } from "@/app/lib/actions/course";
 export default async function Course({ params }: { params: { id: string } }) {
   const course = await getCourse(params.id);
   const updateUserWithId = updateCourse.bind(null, params.id)
-  console.log(course)
+
   return (
     <>
       <div className="card mt-3">

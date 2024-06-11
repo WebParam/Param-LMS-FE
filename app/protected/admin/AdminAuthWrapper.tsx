@@ -26,9 +26,10 @@ const withAuth = <P extends object>(
       checkAuth();
     }, [loggedInUser]);
 
-    if (!isAuthorised()) {
-      return <Preloader />;
-    }
+    // if (!isAuthorised()) {
+     // return <Preloader />;
+     
+    // }
 
     return <WrappedComponent {...props} />;
   };
