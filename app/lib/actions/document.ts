@@ -1,6 +1,6 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post } from "../utils";
+import { get, post, put } from "../utils";
 import {
   wCourseUrl,
   rCourseUrl,
@@ -8,6 +8,7 @@ import {
   wDocumentUrl,
 } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
+import { IUpdateDocumentName } from "@/app/interfaces/course-document";
 
 export const uploadDocuments = async (
   courseId: string,
@@ -82,4 +83,21 @@ export const paraphraseDocument = async (
     Diagnostic("ERROR ON POST, returning", err);
     console.error(err);
   }
+};
+export const updateDocumentName = async (courseId:string, moduleId:string,documentId:string, courseTitle:string,formData:FormData) => {
+  const body = {
+    documentId,
+    documentName : formData.get("title")
+  }
+  try {
+    const data = await put(`${wCourseUrl}/Document/Modules/UpdateDocumentName`, body);
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (error) {
+    Diagnostic("ERROR ON POST, returning", error);
+    throw error;
+  }
+  
+  const date = new Date().toString();
+  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/documents?title=${courseTitle}&refreshed=${date}`;
+  redirect(url);
 };

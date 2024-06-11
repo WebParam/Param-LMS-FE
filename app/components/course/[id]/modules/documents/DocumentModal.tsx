@@ -11,7 +11,7 @@ const pdfVersion = "3.11.174";
 const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
 const apiDocUrl = `${rCourseUrl}/Document/PreviewDocument`;
 
-function MyVerticallyCenteredModal(props: any) {
+function DocumentNameModal(props: any) {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   return (
@@ -43,6 +43,6 @@ function MyVerticallyCenteredModal(props: any) {
     </Modal>
   );
 }
-export default dynamic(() => Promise.resolve(MyVerticallyCenteredModal), {
+export default dynamic(() => Promise.resolve(DocumentNameModal), {
   ssr: false,
 });

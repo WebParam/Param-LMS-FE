@@ -10,3 +10,8 @@ export interface IDocument {
     noOfAudios: number;
     noOfVideoLinks: number;
 }
+
+export interface IUpdateDocumentName{
+    documentId : string;
+    documentName : string;
+}

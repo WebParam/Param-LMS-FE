@@ -1,9 +1,15 @@
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { IDocument } from "@/app/interfaces/course-document";
 import { paraphraseDocument } from "@/app/lib/actions/document";
 import { useState } from "react";
 import DocumentModal from "./DocumentModal";
+import DocumentNameModal from "./DocNameModal";
 
 const TableRow = ({ document }: { document: IDocument }) => {
   const pathname = usePathname();
@@ -11,6 +17,12 @@ const TableRow = ({ document }: { document: IDocument }) => {
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
   const [modalShow, setModalShow] = useState(false);
+  const [name, setName] = useState<string>("");
+  const [openDocNameModal, setOpenDocNameModal] = useState<boolean>(false);
+  const { id: courseId, moduleId } = useParams<{
+    id: string;
+    moduleId: string;
+  }>();
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -37,13 +49,23 @@ const TableRow = ({ document }: { document: IDocument }) => {
     if (noOfConfirmedParapharases == 0 && noOfParapharases == 0) return 0;
     return (noOfConfirmedParapharases / noOfParapharases) * 100;
   };
-  
+
   return (
     <>
       <DocumentModal
         documentId={document.id}
         show={modalShow}
         onHide={() => setModalShow(false)}
+      />
+
+      <DocumentNameModal
+        documentId={document.id}
+        documentName={name}
+        title={title}
+        courseId={courseId}
+        moduleId={moduleId}
+        show={openDocNameModal}
+        onHide={() => setOpenDocNameModal(false)}
       />
 
       <tr className="selected">
@@ -103,28 +125,36 @@ const TableRow = ({ document }: { document: IDocument }) => {
           style={{ width: "300px" }}
           className="text-center js-lists-values-projects small"
         >
-          <button
-            className="btn btn-success rounded-pill px-4 py-2 mr-2"
-            onClick={() => console.log("Edit Document Name")}
-          >
-            Edit
-          </button>
-
-          {document.status === "GeneratedParaphrase" ? (
-            <Link
-              className="btn btn-success rounded-pill px-4 py-2"
-              href={`${url}/document/${document.id}/paraphrase-document?title=${title}`}
-            >
-              View
-            </Link>
-          ) : (
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             <button
               className="btn btn-success rounded-pill px-4 py-2"
-              onClick={() => paraphrase(document.id, document.fileBlobUrl)}
+              style={{ flex: "1.5", marginRight: "10px" }}
+              onClick={() => {
+                setName(document.name);
+                setOpenDocNameModal(true);
+              }}
             >
-              Paraphase
+              Edit
             </button>
-          )}
+
+            {document.status === "GeneratedParaphrase" ? (
+              <Link
+                className="btn btn-success rounded-pill px-4 py-2"
+                style={{ flex: "2" }}
+                href={`${url}/document/${document.id}/paraphrase-document?title=${title}`}
+              >
+                View
+              </Link>
+            ) : (
+              <button
+                className="btn btn-success rounded-pill px-4 py-2"
+                style={{ flex: "1" }}
+                onClick={() => paraphrase(document.id, document.fileBlobUrl)}
+              >
+                Paraphrase
+              </button>
+            )}
+          </div>
         </td>
       </tr>
     </>

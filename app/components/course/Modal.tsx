@@ -9,14 +9,14 @@ import { createModule } from "@/app/lib/actions/module";
 
 function MyVerticallyCenteredModal(props: any) {
   const [description, setDescription] = useState("");
-  const tones = ["Informal","Formal","Soft", "Strong"];
+  const tones = ["Informal", "Formal", "Soft", "Strong"];
   const createModuleWithParams = createModule.bind(
     null,
     description,
     props.courseId,
     props.title
   );
-  
+
   return (
     <Modal
       {...props}
@@ -56,8 +56,8 @@ function MyVerticallyCenteredModal(props: any) {
             >
               <option selected={false}>Select Tone</option>
               {tones.map((name: string) => (
-                  <option selected={false}>{name}</option>
-                ))}
+                <option selected={false}>{name}</option>
+              ))}
             </select>
           </div>
           <div className="mt-3">
@@ -70,6 +70,20 @@ function MyVerticallyCenteredModal(props: any) {
               min="1"
               defaultValue="1"
             />
+          </div>
+          <div className="mt-3">
+            <h5>Audio voices</h5>
+            <select
+              id="select01"
+              data-toggle="select"
+              className="form-control"
+              name="audioVoice"
+            >
+              <option selected={false}>Select voice</option>
+              {tones.map((name: string) => (
+                <option selected={false}>{name}</option>
+              ))}
+            </select>
           </div>
         </Modal.Body>
         <Modal.Footer>
