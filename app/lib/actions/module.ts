@@ -8,6 +8,7 @@ import { Diagnostic } from "../logger/logger";
 
 export const createModule = async (
   description: string,
+  queryPrompt:string,
   courseId: string,
   courseTitle: string,
   formData: FormData
@@ -16,6 +17,7 @@ export const createModule = async (
     title: formData.get("title"),
     description: description,
     courseId,
+    queryPrompt:queryPrompt,
     documentTone: formData.get("documentTone"),
     lengthOfParagraph: formData.get("lengthOfParagraph"),
   };

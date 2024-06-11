@@ -9,10 +9,12 @@ import { createModule } from "@/app/lib/actions/module";
 
 function MyVerticallyCenteredModal(props: any) {
   const [description, setDescription] = useState("");
+  const [queryPrompt, setQueryPrompt] = useState<string>("")
   const tones = ["Informal", "Formal", "Soft", "Strong"];
   const createModuleWithParams = createModule.bind(
     null,
     description,
+    queryPrompt,
     props.courseId,
     props.title
   );
@@ -69,6 +71,13 @@ function MyVerticallyCenteredModal(props: any) {
               name="lengthOfParagraph"
               min="1"
               defaultValue="1"
+            />
+          </div>
+          <div>
+            <h5>AI Query Prompt</h5>
+            <ReactQuill
+              value={queryPrompt}
+              onChange={(value) => setQueryPrompt(value)}
             />
           </div>
           <div className="mt-3">

@@ -14,4 +14,5 @@ export interface IDocument {
 export interface IUpdateDocumentName{
     documentId : string;
     documentName : string;
+    noOfQuizzes?: number;
 }

@@ -24,7 +24,7 @@ export const generateQuizzes = async (
   courseId: string,
   moduleId: string,
   documentId: string,
-  courseTitle: string
+  courseTitle: string,
 ) => {
   try {
     const resp = await post(`${wQuizGenerateUrl}/Quiz/generate`, {
