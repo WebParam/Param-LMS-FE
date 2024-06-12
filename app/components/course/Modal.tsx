@@ -19,6 +19,18 @@ function MyVerticallyCenteredModal(props: any) {
     props.title
   );
 
+  const handleDescription = (e:any) => {
+    const plainDescription =
+    e && e.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+    setDescription(plainDescription)  
+  }
+
+  const handleQuery = (e:any) => {
+    const plainQuery =
+    e && e.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+    setQueryPrompt(plainQuery)  
+  }
+
   return (
     <Modal
       {...props}
@@ -45,7 +57,7 @@ function MyVerticallyCenteredModal(props: any) {
             <h5>Description</h5>
             <ReactQuill
               value={description}
-              onChange={(value) => setDescription(value)}
+              onChange={handleDescription}
             />
           </div>
           <div className="mt-3">
@@ -77,7 +89,7 @@ function MyVerticallyCenteredModal(props: any) {
             <h5>AI Query Prompt</h5>
             <ReactQuill
               value={queryPrompt}
-              onChange={(value) => setQueryPrompt(value)}
+              onChange={handleQuery}
             />
           </div>
           <div className="mt-3">
