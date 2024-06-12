@@ -9,7 +9,7 @@ import { createModule } from "@/app/lib/actions/module";
 
 function MyVerticallyCenteredModal(props: any) {
   const [description, setDescription] = useState("");
-  const [queryPrompt, setQueryPrompt] = useState<string>("")
+  const [queryPrompt, setQueryPrompt] = useState<string>("");
   const tones = ["Informal", "Formal", "Soft", "Strong"];
   const createModuleWithParams = createModule.bind(
     null,
