@@ -5,6 +5,7 @@ import { rCourseUrl, wCourseUrl } from "./endpoints";
 import { IUnitStandard } from "@/app/interfaces/unit-standard";
 import { IResponseObject } from "@/app/lib/restapi/response";
 import { Diagnostic } from "../logger/logger";
+import { revalidatePath } from "next/cache";
 
 export const createModule = async (
   description: string,

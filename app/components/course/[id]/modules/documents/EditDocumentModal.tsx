@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useParams, useSearchParams } from "next/navigation";
 import { updateDocument } from "@/app/lib/actions/document";
+import { useState, useEffect } from "react";
+import EditModuleBtn from "./EditModuleBtn";
 
 function EditDocumentModal(props: any) {
   const { id: courseId, moduleId } = useParams<{

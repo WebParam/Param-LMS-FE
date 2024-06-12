@@ -7,8 +7,10 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import { createModule } from "@/app/lib/actions/module";
 
+
 function MyVerticallyCenteredModal(props: any) {
   const [description, setDescription] = useState("");
+
   const tones = ["Informal", "Formal", "Soft", "Strong"];
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -35,7 +37,10 @@ function MyVerticallyCenteredModal(props: any) {
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
+      keyboard={false}
     >
+    
+
       <form action={createModuleWithParams}>
         <Modal.Header closeButton>
           <Modal.Title>Create Unit Standard{props.title}</Modal.Title>
