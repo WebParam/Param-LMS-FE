@@ -6,7 +6,7 @@ import { uploadDocuments, getDocuments } from "@/app/lib/actions/document";
 import { IDocument } from "@/app/interfaces/course-document";
 import { useSearchParams } from "next/navigation";
 import CreateDocumentModal from "@/components/course/[id]/modules/documents/CreateDocumentModal";
-import Modal from 'react-bootstrap/Modal';
+import Modal from "react-bootstrap/Modal";
 
 const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
   const { id: courseId, moduleId } = params;
@@ -37,17 +37,12 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
         formData.append("files[]", file, file.name);
       }
       setAddFileModal(true);
-      const documents = await uploadDocuments(
+      await uploadDocuments(
         courseId,
         moduleId,
         courseTitle,
         formData
       );
-
-      if (documents) {
-        setFiles([...documents, ...files]);
-        setAddFileModal(false);
-      }
     }
   };
 
@@ -58,6 +53,7 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
 
   useEffect(() => {
     fetchDocuments();
+    setAddFileModal(false);
   }, [refreshId]);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -70,18 +66,26 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
           setOpenModal(false);
         }}
       />
-      
-      <Modal 
-      show={addFileModal} 
-      onHide={() => setAddFileModal(false)} 
-      dialogClassName="modal-30h"
-      centered
+
+      <Modal
+        show={addFileModal}
+        onHide={() => setAddFileModal(false)}
+        dialogClassName="modal-30h"
+        centered
       >
-      <Modal.Body style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '10px'}}>
-      <div className="spinner-border text-primary" role="status" />
-      <p style={{color: '#252525'}}>Uploading File...</p>
-      </Modal.Body>
-    </Modal>
+        <Modal.Body
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          <div className="spinner-border text-primary" role="status" />
+          <p style={{ color: "#252525" }}>Uploading File...</p>
+        </Modal.Body>
+      </Modal>
 
       <div className="page-separator my-4">
         <div className="page-separator__text">Modules</div>
