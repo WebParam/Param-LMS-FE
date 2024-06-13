@@ -37,3 +37,12 @@ export interface IParaPhraseResponseObject{
     createdAt: string;
     updatedAt: string;
 }
+
+export interface IGenerateAudio {
+    
+        text: string;
+        voice: string;
+        isSSML: boolean;
+        paraphraseId: string;
+
+}
