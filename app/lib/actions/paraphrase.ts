@@ -1,9 +1,9 @@
 "use server";
 import { get, post, put } from "../utils";
-import { rCourseUrl, wCourseUrl } from "./endpoints";
+import { rCourseUrl, wAudioGenerateUrl, wCourseUrl } from "./endpoints";
 import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 import { IResponseObject } from "@/app/lib/restapi/response";
-import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
+import { IGenerateAudio, IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
 import { redirect } from "next/navigation";
 import { Diagnostic } from "../logger/logger";
 
@@ -139,6 +139,30 @@ export const confirmAudio = async (
   revalidatePath(url);
   redirect(url);
 };
+
+export const generateAudio = async (
+payload : any
+) => {
+  const body  = {
+    text: payload.text,
+    voice : "",
+    paraphraseId:payload.paraphraseId,
+  };
+
+  try {
+    const data = await post(`${wAudioGenerateUrl}/Audio/generate`, body);
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+
+    throw err;
+  }
+
+  const url = `/protected/admin/courses/${payload.courseId}/modules/${payload.moduleId}/document/${payload.documentId}/paraphrase-document?title=${payload.documentTitle}`
+  revalidatePath(url);
+  redirect(url);
+};
+
 
 export const updateVideoLink = async (
   id: string,
