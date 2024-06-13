@@ -8,7 +8,7 @@ import { getModules } from "@/app/lib/actions/module";
 
 function Page({ params }: { params: { id: string } }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 4;
+  const ITEMSPERPAGE = 3;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const [list, setList] = useState<IUnitStandard[]>([]);
