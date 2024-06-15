@@ -9,25 +9,25 @@ import { createModule } from "@/app/lib/actions/module";
 
 function MyVerticallyCenteredModal(props: any) {
   const [description, setDescription] = useState("");
+  const [queryPrompt, setQueryPrompt] = useState<string>("");
   const tones = ["Informal", "Formal", "Soft", "Strong"];
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
+  const removeTags = (str: string) => str.replace(/<(?:\/)?[sp]+[^>]*>/g, "");
   const createModuleWithParams = createModule.bind(
     null,
-    description,
+    removeTags(description),
+    removeTags(queryPrompt),
     props.courseId,
     props.title
   );
 
   const submit = () => {
     submmitRef.current?.click();
-    if (
-      titleRef.current?.value &&
-      titleRef.current?.value.length > 10
-    ) {
+    if (titleRef.current?.value && titleRef.current?.value.length > 10) {
       props.onHide();
     }
-  }
+  };
 
   return (
     <Modal
@@ -85,16 +85,34 @@ function MyVerticallyCenteredModal(props: any) {
               defaultValue="1"
             />
           </div>
+          <div>
+            <h5>AI Query Prompt</h5>
+            <ReactQuill
+              value={queryPrompt}
+              onChange={(value) => setQueryPrompt(value)}
+            />
+          </div>
+          <div className="mt-3">
+            <h5>Audio voices</h5>
+            <select
+              id="select01"
+              data-toggle="select"
+              className="form-control"
+              name="audioVoice"
+            >
+              <option selected={false}>Select voice</option>
+              {tones.map((name: string) => (
+                <option selected={false}>{name}</option>
+              ))}
+            </select>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <input type="submit" hidden ref={submmitRef} />
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
-          <Button
-            variant="success"
-            onClick={() => submit()}
-          >
+          <Button variant="success" onClick={() => submit()}>
             Submit
           </Button>
         </Modal.Footer>

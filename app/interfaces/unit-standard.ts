@@ -6,6 +6,8 @@ export interface IUnitStandard {
     status: number,
     lengthOfParagraph: string,
     documentTone: string,
+    queryPrompt: string,
+    audioVoice: string,
     createdAt?: string,
     updatedAt: string
 }

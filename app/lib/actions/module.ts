@@ -8,18 +8,22 @@ import { Diagnostic } from "../logger/logger";
 
 export const createModule = async (
   description: string,
+  queryPrompt: string,
   courseId: string,
   courseTitle: string,
   formData: FormData
 ) => {
   const body = {
     title: formData.get("title"),
+    audioVoice: formData.get("audioVoice"),
     description: description,
     courseId,
+    queryPrompt: queryPrompt,
     documentTone: formData.get("documentTone"),
     lengthOfParagraph: formData.get("lengthOfParagraph"),
   };
 
+  console.log("body", body)
   try {
     const data = await post(`${wCourseUrl}/Modules/Create`, body);
     Diagnostic("SUCCESS ON POST, returning", data);
