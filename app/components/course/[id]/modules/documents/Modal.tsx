@@ -8,6 +8,7 @@ import "react-quill/dist/quill.snow.css";
 import { createModule } from "@/app/lib/actions/module";
 
 function MyVerticallyCenteredModal(props: any) {
+  const [queryPrompt, setQueryPrompt] = useState<string>("");
   const [description, setDescription] = useState("");
   const tones = ["Informal", "Formal", "Soft", "Strong"];
   const submmitRef = useRef<HTMLInputElement>(null);
@@ -16,7 +17,8 @@ function MyVerticallyCenteredModal(props: any) {
     null,
     description,
     props.courseId,
-    props.title
+    props.title,
+    queryPrompt,
   );
 
   const submit = () => {
@@ -28,6 +30,14 @@ function MyVerticallyCenteredModal(props: any) {
       props.onHide();
     }
   }
+
+
+  const handleQuery = (e:any) => {
+    const plainQuery =
+    e && e.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+    setQueryPrompt(plainQuery)  
+  }
+
 
   return (
     <Modal

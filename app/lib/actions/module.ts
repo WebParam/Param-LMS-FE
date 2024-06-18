@@ -66,6 +66,7 @@ export const updateModule = async (
   description: string,
   courseId: string,
   courseTitle: string,
+  queryPrompt:string,
   formData: FormData
 ) => {
   const body = {
@@ -73,6 +74,8 @@ export const updateModule = async (
     title: formData.get("title"),
     description: description,
     courseId,
+    audioVoice : formData.get("audioVoice"),
+    queryPrompt,
     documentTone: formData.get("documentTone"),
     lengthOfParagraph: formData.get("lengthOfParagraph"),
   };
