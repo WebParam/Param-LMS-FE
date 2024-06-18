@@ -5,9 +5,9 @@ export interface IUnitStandard {
     courseId: string,
     status: number,
     lengthOfParagraph: string,
+    queryPrompt:string;
+    audioVoice:string
     documentTone: string,
-    queryPrompt: string,
-    audioVoice: string,
     createdAt?: string,
     updatedAt: string
 }

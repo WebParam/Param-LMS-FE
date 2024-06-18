@@ -8,16 +8,22 @@ import "react-quill/dist/quill.snow.css";
 import { useParams, useSearchParams } from "next/navigation";
 
 function EditForm({ module }: { module: IUnitStandard }) {
+  const [queryPrompt, setQueryPrompt] = useState<string>("");
   const [text, setText] = useState<string>(module.description);
-  const { id: courseId, moduleId } = useParams<{ id: string; moduleId: string }>();
+  const { id: courseId, moduleId } = useParams<{
+    id: string;
+    moduleId: string;
+  }>();
   const searchParams = useSearchParams();
-  const courseTitle = searchParams.get("title") || '';
+  const courseTitle = searchParams.get("title") || "";
+  const removeTags = (str: string) => str.replace(/<(?:\/)?[sp]+[^>]*>/g, "");
 
   const tones = ["Informal", "Formal", "Soft", "Strong"];
   const updateModuleWithParams = updateModule.bind(
     null,
     moduleId,
-    text,
+    removeTags(text),
+    removeTags(queryPrompt),
     courseId,
     courseTitle
   );
@@ -61,7 +67,9 @@ function EditForm({ module }: { module: IUnitStandard }) {
               >
                 <option selected={false}>Select Tone</option>
                 {tones.map((name: string) => (
-                  <option selected={module.documentTone === name}>{name}</option>
+                  <option selected={module.documentTone === name}>
+                    {name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -81,6 +89,41 @@ function EditForm({ module }: { module: IUnitStandard }) {
                 placeholder="Course Name"
                 min="1"
               />
+            </div>
+          </div>
+        </div>
+        <div className="list-group-item">
+          <div className="form-group row align-items-center mb-0">
+            <label className="form-label col-form-label col-sm-3">
+              AI Query Prompt
+            </label>
+            <div className="col-sm-9">
+              <ReactQuill
+                value={queryPrompt}
+                onChange={(value) => setQueryPrompt(value)}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="list-group-item">
+          <div className="form-group row align-items-center mb-0">
+            <label className="form-label col-form-label col-sm-3">
+              Audio voices
+            </label>
+            <div className="col-sm-9">
+              <select
+                id="select01"
+                data-toggle="select"
+                className="form-control"
+                name="audioVoice"
+                defaultValue={module.audioVoice}
+              >
+                <option selected={false}>Select voice</option>
+                {tones.map((name: string) => (
+                  <option selected={false}>{name}</option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
