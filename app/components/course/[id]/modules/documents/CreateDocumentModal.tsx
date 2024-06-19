@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useParams, useSearchParams } from "next/navigation";
 import { createDocument } from "@/app/lib/actions/document";
+import CreateModuleBtn from "./CreateModuleBtn";
+import { useEffect, useState } from "react";
 
 function CreateDocumentModal(props: any) {
   const { id: courseId, moduleId } = useParams<{
@@ -12,6 +14,7 @@ function CreateDocumentModal(props: any) {
   }>();
 
   const searchParams = useSearchParams();
+  const [closeModal, setCloseModal] = useState(false);
   const title = searchParams.get("title") || "";
   const createDocumentWithParams = createDocument.bind(
     null,
@@ -41,15 +44,13 @@ function CreateDocumentModal(props: any) {
               placeholder="Enter your title here..."
               name="name"
             />
-          </div>          
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
-          <Button variant="success" onClick={props.onHide} type="submit">
-            Submit
-          </Button>
+          <CreateModuleBtn setCloseModal={setCloseModal} />
         </Modal.Footer>
       </form>
     </Modal>

@@ -9,6 +9,7 @@ import { createModule } from "@/app/lib/actions/module";
 
 function MyVerticallyCenteredModal(props: any) {
   const [description, setDescription] = useState("");
+  const [createUnitModal, setCreateUnitModal] = useState(false);
   const [queryPrompt, setQueryPrompt] = useState<string>("");
   const tones = ["Informal", "Formal", "Soft", "Strong"];
   const submmitRef = useRef<HTMLInputElement>(null);
@@ -26,10 +27,20 @@ function MyVerticallyCenteredModal(props: any) {
     submmitRef.current?.click();
     if (titleRef.current?.value && titleRef.current?.value.length > 10) {
       props.onHide();
-    }
-  };
+      setCreateUnitModal(true);
+   }
+  }
 
   return (
+    <>
+    <Modal show={createUnitModal} keyboard={false} centered>
+      <Modal.Body>
+      <div className="d-flex justify-content-center align-items-center flex-column gap-5">
+        <div className="spinner-border text-primary" role="status" />
+        <p style={{color: '#252525'}}>Creating...</p>
+      </div>
+      </Modal.Body>
+    </Modal>
     <Modal
       {...props}
       size="lg"
@@ -58,6 +69,7 @@ function MyVerticallyCenteredModal(props: any) {
             <ReactQuill
               value={description}
               onChange={(value) => setDescription(value)}
+              style={{color: '#252525'}}
             />
           </div>
           <div className="mt-3">
@@ -118,6 +130,7 @@ function MyVerticallyCenteredModal(props: any) {
         </Modal.Footer>
       </form>
     </Modal>
+    </>
   );
 }
 export default dynamic(() => Promise.resolve(MyVerticallyCenteredModal), {

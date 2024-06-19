@@ -8,6 +8,7 @@ import { Modal } from "react-bootstrap";
 const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [generateQuizModal, setGenerateQuizModal] = useState(false);
+  const [viewQuizModal, setViewQuizModal] = useState(false);
   const [quizzes, setQuizzes] = useState([]);
   const { id: courseId, moduleId, documentId } = useParams<{
     id: string;
@@ -24,10 +25,13 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   }, [refreshId]);
 
   const previewQuizzes = async (paraphraseId: string) => {
+    setViewQuizModal(true);
     const data = await getQuizzes(paraphraseId);
-
-    setQuizzes(data);
-    setOpenModal(true);
+    if (data) {
+      setViewQuizModal(false);
+      setQuizzes(data);
+      setOpenModal(true);
+    }
   }
 
   const generateQuizzesFn = ({ id, description }: { id: string;  description: string}) => {
@@ -51,6 +55,23 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
         <div className="spinner-grow text-primary" role="status"/>
         <p>
           Generating Quiz...
+        </p>
+      </div>
+      </Modal.Body>
+    </Modal>
+    <Modal 
+      size="sm"
+      centered
+      show={viewQuizModal}
+      onHide={() => setViewQuizModal(false)}
+      backdrop={false}
+      keyboard={false}
+    >
+      <Modal.Body>
+      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: '#252525', gap: '15px'}}>
+        <div className="spinner-grow text-primary" role="status"/>
+        <p>
+          loading preview...
         </p>
       </div>
       </Modal.Body>

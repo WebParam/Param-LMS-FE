@@ -9,14 +9,8 @@ type EditFormType = {
   action: (formData: FormData) => void;
 };
 
-export default function EditForm({
-  title,
-  description,
-  instructorName,
-  courseLogoUrl,
-  thumbnailUrl,
-  action
-}: EditFormType) {
+export default function EditForm({ title, description, instructorName, courseLogoUrl, thumbnailUrl, action }: EditFormType) {
+  
   return (
     <CreateForm
       title={title}

@@ -1,3 +1,9 @@
+"use client"
+import { Modal } from "react-bootstrap";
+import EditButton from "./button";
+import { useEffect, useState } from "react";
+
+
 type CreateFormType = {
   title?: string;
   description?: string;
@@ -7,15 +13,21 @@ type CreateFormType = {
   action: (formData: FormData) => void;
 };
 
-export default function CreateForm({
-  title,
-  description,
-  instructorName,
-  courseLogoUrl,
-  thumbnailUrl,
-  action,
-}: CreateFormType) {
+export default function CreateForm({ title, description, instructorName, courseLogoUrl, thumbnailUrl, action}: CreateFormType) {
+  const [showModal, setShowModal] = useState(false);
+
+
+
   return (
+    <>
+    <Modal show={showModal} onHide={() => {setShowModal(false)}} centered>
+      <Modal.Body>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center'}}>
+          <div className="spinner-border text-primary" role="status"/>
+          <div style={{ color: '#252525 !important'}} className="text-black">Submitting...</div>
+        </div>
+      </Modal.Body>
+    </Modal>
     <form name="create-course" className="mb-0" action={action} data-netlify="true">
       <div className="list-group list-group-form">
         <div className="list-group-item">
@@ -42,8 +54,8 @@ export default function CreateForm({
             <div className="col-sm-9">
               <textarea
                 name="description"
-                className="w-100 p-2"
-                style={{ height: "100px" }}
+                className="w-100 p-2 text-black"
+                style={{ height: "100px", backgroundColor: 'white' }}
                 defaultValue={description}
                 placeholder="Description ..."
               ></textarea>
@@ -100,8 +112,8 @@ export default function CreateForm({
         </div>
       </div>
       <div className="m-3">
-        <button className="btn btn-success btn-block">Submit</button>
+        <EditButton setShowModal={setShowModal} />
       </div>
     </form>
-  );
-}
+    </>
+)};
