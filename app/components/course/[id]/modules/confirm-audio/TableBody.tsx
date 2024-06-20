@@ -77,11 +77,11 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
         </div>
       </td>
       <td className="text-center js-lists-values-projects small">
-        <ReactAudioPlayer
-          src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+      {data.audioBlobUrl ?   <ReactAudioPlayer
+          src={data.audioBlobUrl}
           controls
           style={{ height: "35px" }}
-        />
+        /> : "No Audio"}
       </td>
       <td className="text-center js-lists-values-projects small ">
         <input

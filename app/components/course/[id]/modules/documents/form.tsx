@@ -8,6 +8,7 @@ import "react-quill/dist/quill.snow.css";
 import { useParams, useSearchParams } from "next/navigation";
 
 function EditForm({ module }: { module: IUnitStandard }) {
+  const [queryPrompt, setQueryPrompt] = useState<string>("");
   const [text, setText] = useState<string>(module.description);
   const { id: courseId, moduleId } = useParams<{ id: string; moduleId: string }>();
   const searchParams = useSearchParams();
@@ -18,9 +19,18 @@ function EditForm({ module }: { module: IUnitStandard }) {
     null,
     moduleId,
     text,
+    queryPrompt,
     courseId,
     courseTitle
   );
+
+
+  const handleQuery = (e:any) => {
+    const plainQuery =
+    e && e.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+    setQueryPrompt(plainQuery)  
+  }
+
 
   return (
     <form action={updateModuleWithParams} className="mb-0">
@@ -84,6 +94,43 @@ function EditForm({ module }: { module: IUnitStandard }) {
             </div>
           </div>
         </div>
+        <div className="list-group-item">
+          <div className="form-group row align-items-center mb-0">
+            <label className="form-label col-form-label col-sm-3">
+            AI Query Prompt
+            </label>
+            <div className="col-sm-9">
+            <ReactQuill
+              onChange={handleQuery}
+            />
+            </div>
+          </div>
+        </div>
+
+        <div className="list-group-item">
+          <div className="form-group row align-items-center mb-0">
+            <label className="form-label col-form-label col-sm-3">
+            Audio voices
+            </label>
+            <div className="col-sm-9">
+            <select
+              id="select01"
+              data-toggle="select"
+              className="form-control"
+              name="audioVoice"
+              defaultValue={module.audioVoice}
+            >
+
+              <option selected={false}>Select voice</option>
+              {tones.map((name: string) => (
+                <option selected={false}>{name}</option>
+              ))}
+            </select>
+            </div>
+          </div>
+        </div>
+     
+          
       </div>
       <div className="m-3">
         <button className="btn btn-success btn-block">Submit</button>

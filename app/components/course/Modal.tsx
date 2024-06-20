@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -11,23 +11,25 @@ function MyVerticallyCenteredModal(props: any) {
   const [description, setDescription] = useState("");
   const [queryPrompt, setQueryPrompt] = useState<string>("");
   const tones = ["Informal", "Formal", "Soft", "Strong"];
-  const submmitRef = useRef<HTMLInputElement>(null);
-  const titleRef = useRef<HTMLInputElement>(null);
-  const removeTags = (str: string) => str.replace(/<(?:\/)?[sp]+[^>]*>/g, "");
   const createModuleWithParams = createModule.bind(
     null,
-    removeTags(description),
-    removeTags(queryPrompt),
+    description,
+    queryPrompt,
     props.courseId,
     props.title
   );
 
-  const submit = () => {
-    submmitRef.current?.click();
-    if (titleRef.current?.value && titleRef.current?.value.length > 10) {
-      props.onHide();
-    }
-  };
+  const handleDescription = (e:any) => {
+    const plainDescription =
+    e && e.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+    setDescription(plainDescription)  
+  }
+
+  const handleQuery = (e:any) => {
+    const plainQuery =
+    e && e.replace(/<(?:\/)?[sp]+[^>]*>/g, '');
+    setQueryPrompt(plainQuery)  
+  }
 
   return (
     <Modal
@@ -49,15 +51,13 @@ function MyVerticallyCenteredModal(props: any) {
               name="title"
               className="form-control mb-3"
               placeholder="Enter your title here..."
-              required
-              ref={titleRef}
             />
           </div>
           <div>
             <h5>Description</h5>
             <ReactQuill
               value={description}
-              onChange={(value) => setDescription(value)}
+              onChange={handleDescription}
             />
           </div>
           <div className="mt-3">
@@ -89,7 +89,7 @@ function MyVerticallyCenteredModal(props: any) {
             <h5>AI Query Prompt</h5>
             <ReactQuill
               value={queryPrompt}
-              onChange={(value) => setQueryPrompt(value)}
+              onChange={handleQuery}
             />
           </div>
           <div className="mt-3">
@@ -108,11 +108,10 @@ function MyVerticallyCenteredModal(props: any) {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <input type="submit" hidden ref={submmitRef} />
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
-          <Button variant="success" onClick={() => submit()}>
+          <Button variant="success" onClick={props.onHide} type="submit">
             Submit
           </Button>
         </Modal.Footer>
