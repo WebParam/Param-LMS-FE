@@ -21,3 +21,6 @@ export const rQuizUrl =
 
 export const wAudioGenerateUrl =
   "https://khumla-development-audio-generate.azurewebsites.net/api/v1";
+
+export const rAnalyticUrl =
+  "https://khumla-development-activity-read.azurewebsites.net/api/v1";

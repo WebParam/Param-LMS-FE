@@ -1,7 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
-import { rCourseUrl, wCourseUrl } from "./endpoints";
+import { rAnalyticUrl, rCourseUrl, wCourseUrl } from "./endpoints";
 import { unstable_noStore as noStore } from "next/cache";
 import { Diagnostic } from "../logger/logger";
 
@@ -54,6 +54,22 @@ export const getCourse = async (id: string) => {
     throw err;
   }
 };
+
+
+export const getCourseGraphs = async (id: string) => {
+  try {
+    const resp = await get( `${rAnalyticUrl}/GraphData/CourseAnalytics/${id}`);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    throw err;
+  }
+};
+
+
+
 
 export const updateCourse = async (id: string, formData: FormData) => {
   const body = {
