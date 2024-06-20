@@ -26,13 +26,13 @@ ChartJS.register(
 
 const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export function CommentChart() {
+export function CompletionRateChart() {
   const data = () => {
     return {
       labels: labels,
       datasets: [
         {
-          label: "No of Comments",
+          label: "Average Completion Rate",
           data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
           fill: "start",
           pointRadius: 2,
