@@ -7,7 +7,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
     <>
       <tbody className="list" id="staff">
         {list &&
-          list.map((data: any, key) => <TableRow key={key} data={data} />)}
+          list.map((data: any, key) => <TableRow key={data.id} data={data} />)}
       </tbody>
     </>
   );
