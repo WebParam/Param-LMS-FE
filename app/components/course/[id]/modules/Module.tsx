@@ -1,15 +1,17 @@
 import Link from "next/link";
 
 type Props = {
-  moduleName: string;
-  moduleAnswer: string;
-  noOfFile: number;
+  name: string;
+  description: string;
+  noOfDocuments: number;
   url: string;
 };
+import { removeTags } from "@/app/lib/utils";
+
 export default function Module({
-  moduleName,
-  moduleAnswer,
-  noOfFile,
+  name,
+  description,
+  noOfDocuments,
   url,
 }: Props) {
   return (
@@ -17,7 +19,7 @@ export default function Module({
       <table className="table table-flush table--elevated">
         <thead>
           <tr>
-            <th>{moduleName}</th>
+            <th>{name}</th>
             <th>
               <div className="text-right w-100">
                 <div className="row">
@@ -30,7 +32,7 @@ export default function Module({
                     </div>
                   </div>
                   <div className="col-6 pt-2">
-                    <i className="material-icons">file_present</i>0 / {noOfFile}{" "}
+                    <i className="material-icons">file_present</i>{noOfDocuments}
                     files
                   </div>
                 </div>
@@ -40,7 +42,7 @@ export default function Module({
         </thead>
         <tbody>
           <tr>
-            <td className="py-2">{moduleAnswer}</td>
+            <td className="py-2">{removeTags(description || "")}</td>
             <td style={{ width: "300px" }} className="py-2">
               <ViewButton url={url} />
             </td>

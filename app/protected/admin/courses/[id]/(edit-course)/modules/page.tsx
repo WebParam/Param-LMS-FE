@@ -46,9 +46,9 @@ function Page({ params }: { params: { id: string } }) {
           return (
             <Module
               key={data.id}
-              moduleName={data.title}
-              moduleAnswer={data.description}
-              noOfFile={10}
+              name={data.title}
+              description={data.description}
+              noOfDocuments={data.noOfDocuments}
               url={url}
             />
           );
