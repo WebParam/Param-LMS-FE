@@ -3,8 +3,8 @@ import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import MyVerticallyCenteredModal from "./Modal";
 import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
-import { Modal } from "react-bootstrap";
-import { useParams } from "next/navigation";
+import { Badge, Modal } from "react-bootstrap";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { generateAudio } from "@/app/lib/actions/paraphrase";
 import { useSearchParams } from "next/navigation";
 
@@ -25,7 +25,12 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [closeLoader, setCloseLoader] = useState(false);
   const searchParams = useSearchParams();
-  const title = searchParams.get("title")
+  const pathname = usePathname();
+  const router = useRouter();
+  const title = searchParams.get("title");
+  const refreshId = searchParams.get("refreshId");
+  const [audioGenerateModal, setAudioGenerateModal] = useState(false);
+
   const {
     id: courseId,
     moduleId,
@@ -37,12 +42,11 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   }>();
 
   useEffect(() => {
-    if (data.status) {
-      setCloseLoader(false);
-    }
-  }, [data]);
+    setAudioGenerateModal(false);
+    setCloseLoader(false);
+  }, [refreshId]);
 
-  const Audiogenerator = async (id: string, text: string) => {
+  const AudioGenerator = async (id: string, text: string) => {
     const payload = {
       paraphraseId: id,
       text: text,
@@ -51,12 +55,35 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
       moduleId,
       documentTitle: title,
     };
-
+    setAudioGenerateModal(true);
     await generateAudio(payload);
+    const date = new Date().toString();
+    router.replace(`${pathname}?title=${title}&refreshId=${date}`);
   };
 
   return (
     <>
+      <Modal
+        show={audioGenerateModal}
+        onHide={() => setAudioGenerateModal(false)}
+        centered
+        backdrop="static"
+      >
+        <Modal.Body
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            gap: "10px",
+            height: "300px",
+          }}
+        >
+          <div className="spinner-border text-primary" role="status" />
+          <p style={{ color: "#252525" }}>Generating Audio...</p>
+        </Modal.Body>
+      </Modal>
+
       <Modal
         show={closeLoader}
         onHide={() => setCloseLoader(false)}
@@ -107,13 +134,19 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             </button>
           )}
         </td>
-        <td
-          onClick={() => Audiogenerator(data.id, data.description)}
-          className="text-center js-lists-values-projects small"
-        >
-          <button className="btn btn-success rounded-pill px-4 py-2">
+        <td className="text-center js-lists-values-projects small">
+          <button
+            onClick={() => AudioGenerator(data.id, data.description)}
+            className="btn btn-success rounded-pill px-4 py-2"
+          >
             Generate Audio
           </button>
+
+          {data.audioBlobUrl && (
+            <Badge pill bg="warning" className="success ml-2">
+              Generated
+            </Badge>
+          )}
         </td>
         <td
           onClick={() => setOpenModal(true)}
