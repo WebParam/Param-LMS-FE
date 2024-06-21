@@ -33,7 +33,7 @@ function EditDocumentModal(props: any) {
     >
       <form action={updateDocumentWithParams}>
         <Modal.Header closeButton>
-          <Modal.Title>Eidt Module</Modal.Title>
+          <Modal.Title>Edit Module</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>

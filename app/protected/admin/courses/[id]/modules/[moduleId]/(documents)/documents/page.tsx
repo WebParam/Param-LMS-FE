@@ -54,6 +54,7 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
   useEffect(() => {
     fetchDocuments();
     setAddFileModal(false);
+    setOpenModal(false);
   }, [refreshId]);
 
   const [openModal, setOpenModal] = useState<boolean>(false);

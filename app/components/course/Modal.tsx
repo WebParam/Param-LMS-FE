@@ -1,11 +1,12 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import { createModule } from "@/app/lib/actions/module";
+import { useSearchParams } from "next/navigation";
 
 function MyVerticallyCenteredModal(props: any) {
   const [description, setDescription] = useState("");
@@ -14,14 +15,19 @@ function MyVerticallyCenteredModal(props: any) {
   const tones = ["Informal", "Formal", "Soft", "Strong"];
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
-  const removeTags = (str: string) => str.replace(/<(?:\/)?[sp]+[^>]*>/g, "");
   const createModuleWithParams = createModule.bind(
     null,
-    removeTags(description),
-    removeTags(queryPrompt),
+    description,
+    queryPrompt,
     props.courseId,
     props.title
   );
+  const searchParams = useSearchParams();
+  const refreshId = searchParams.get("refreshId");
+
+  useEffect(() => {
+    setCreateUnitModal(false);
+  },[refreshId]);
 
   const submit = () => {
     submmitRef.current?.click();

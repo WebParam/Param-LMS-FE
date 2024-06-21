@@ -12,6 +12,7 @@ const TableRow = ({ document }: { document: IDocument }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
+  const refreshId = searchParams.get("refreshId");
   const [modalShow, setModalShow] = useState(false);
   const [isEditModal, setIsEditModal] = useState(false);
   const [paraphraseModal, setParaphraseModal] = useState(false);
@@ -20,6 +21,10 @@ const TableRow = ({ document }: { document: IDocument }) => {
   const arrUrl = pathname.split("/");
   arrUrl.pop();
   const url = arrUrl.join("/");
+
+  useEffect(() => {
+    setIsEditModal(false);
+  }, [refreshId]);
 
   const paraphrase = async (documentId: string, documentUrl: string) => {
     try {
@@ -178,10 +183,12 @@ const TableRow = ({ document }: { document: IDocument }) => {
         >
           <button
             className={`btn ${
-              !document.isSystemGenerated ? "btn-success" : "btn-secondary"
+              document.fileBlobUrl && document.fileBlobUrl !== ""
+                ? "btn-success"
+                : "btn-secondary"
             } rounded-pill px-4 py-2`}
             onClick={() => setModalShow(true)}
-            disabled={document.isSystemGenerated}
+            disabled={!(document.fileBlobUrl && document.fileBlobUrl !== "")}
           >
             Preview File
           </button>
@@ -206,8 +213,13 @@ const TableRow = ({ document }: { document: IDocument }) => {
             </Link>
           ) : (
             <button
-              className="btn btn-success rounded-pill px-4 py-2"
+              className={`btn ${
+                document.fileBlobUrl && document.fileBlobUrl !== ""
+                  ? "btn-success"
+                  : "btn-secondary"
+              } rounded-pill px-4 py-2`}
               onClick={() => paraphrase(document.id, document.fileBlobUrl)}
+              disabled={!(document.fileBlobUrl && document.fileBlobUrl !== "")}
             >
               Paraphase
             </button>

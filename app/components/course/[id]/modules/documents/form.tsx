@@ -16,16 +16,15 @@ function EditForm({ module }: { module: IUnitStandard }) {
   }>();
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
-  const removeTags = (str: string) => str.replace(/<(?:\/)?[sp]+[^>]*>/g, "");
 
   const tones = ["Informal", "Formal", "Soft", "Strong"];
   const updateModuleWithParams = updateModule.bind(
     null,
     moduleId,
-    removeTags(text),
-    removeTags(queryPrompt),
+    text,
     courseId,
-    courseTitle
+    courseTitle,
+    queryPrompt,
   );
 
   return (
