@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
-import { useParams, useSearchParams, usePathname } from "next/navigation";
-import { updateVideoLink } from "@/app/lib/actions/paraphrase";
 import EditOptionModal from "./EditOptionModal";
 import { Modal } from "react-bootstrap";
 import EditRubricModal from "./EditRubricModal";
@@ -10,33 +8,6 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [openOptionModal, setOpenOptionModal] = useState<boolean>(false);
   const [openRubricModal, setOpenRubricModal] = useState<boolean>(false);
   const [publishModal, setPublishModal] = useState(false);
-  const [url, setUrl] = useState(data.videoUrl || "");
-
-  const {
-    id: courseId,
-    moduleId,
-    assessmentId,
-  } = useParams<{
-    id: string;
-    moduleId: string;
-    assessmentId: string;
-  }>();
-
-  const searchParams = useSearchParams();
-  const title = searchParams.get("title") || "";
-
-  const submitVideoLink = async () => {
-    setPublishModal(true);
-    await updateVideoLink(
-      data.id,
-      url,
-      courseId,
-      moduleId,
-      assessmentId,
-      title
-    );
-    setPublishModal(false);
-  };
 
   return (
     <>
