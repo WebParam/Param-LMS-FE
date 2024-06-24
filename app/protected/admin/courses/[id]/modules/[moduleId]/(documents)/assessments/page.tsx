@@ -1,57 +1,38 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
 import Table from "@/components/course/[id]/modules/assessments/Table";
-import { ChangeEvent, useRef, useState, useEffect } from "react";
-import { uploadDocuments, getDocuments } from "@/app/lib/actions/document";
-import { IDocument } from "@/app/interfaces/course-document";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import Modal from "react-bootstrap/Modal";
 import CreateAssessmentModal from "@/components/course/[id]/modules/assessments/CreateAssessmentModal";
+import { Assessment } from "@/app/interfaces/assessments";
+import { getAssessments } from "@/app/lib/actions/assessments";
 
-const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
-  const { id: courseId, moduleId } = params;
+const Body = ({ params }: { params: { id: string } }) => {
+  const { id: courseId } = params;
   const searchParams = useSearchParams();
-  const courseTitle = searchParams.get("title") || "";
   const refreshId = searchParams.get("refreshId");
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const [files, setFiles] = useState<IDocument[]>([]);
+  const [assessments, setAssessments] = useState<Assessment[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [addFileModal, setAddFileModal] = useState(false);
   const ITEMSPERPAGE = 4;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems =
-    files && files.length > 0
-      ? files.slice(indexOfFirstItem, indexOfLastItem)
+    assessments && assessments.length > 0
+      ? assessments.slice(indexOfFirstItem, indexOfLastItem)
       : [];
 
-  const ref = useRef<HTMLInputElement>(null);
-
-  const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = event.target.files;
-
-    if (selectedFiles) {
-      const fileList = Array.from(selectedFiles);
-      const formData = new FormData();
-      for (const file of fileList) {
-        formData.append("files[]", file, file.name);
-      }
-      setAddFileModal(true);
-      await uploadDocuments(courseId, moduleId, courseTitle, formData);
-    }
-  };
-
-  const fetchDocuments = async () => {
-    const files = await getDocuments(moduleId);
-    setFiles(files);
+  const fetchAssessments = async () => {
+    const data = await getAssessments(courseId);
+    setAssessments(data);
   };
 
   useEffect(() => {
-    fetchDocuments();
-    setAddFileModal(false);
+    fetchAssessments();
+    setOpenModal(false);
   }, [refreshId]);
 
-  const [openModal, setOpenModal] = useState<boolean>(false);
 
   return (
     <>
@@ -61,26 +42,6 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
           setOpenModal(false);
         }}
       />
-
-      <Modal
-        show={addFileModal}
-        onHide={() => setAddFileModal(false)}
-        dialogClassName="modal-30h"
-        centered
-      >
-        <Modal.Body
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-            gap: "10px",
-          }}
-        >
-          <div className="spinner-border text-primary" role="status" />
-          <p style={{ color: "#252525" }}>Uploading File...</p>
-        </Modal.Body>
-      </Modal>
 
       <div className="page-separator my-4">
         <div className="page-separator__text">Asssessments</div>
@@ -111,7 +72,7 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
 
       <div className="card mb-0">
         <Pagination
-          listLength={files?.length}
+          listLength={assessments?.length}
           indexOfLastItem={indexOfLastItem}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}

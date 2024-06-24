@@ -2,28 +2,24 @@
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { createAssessment } from "@/app/lib/actions/assessments";
-import { CreateAssesssmentBtn } from "./Buttons";
+import { useParams, useSearchParams } from "next/navigation";
+import { updateDocument } from "@/app/lib/actions/document";
+import { useState, useEffect } from "react";
+import { CreateAssesssmentBtn, EditAssesssmentBtn } from "./Buttons";
+import { updateAssessment } from "@/app/lib/actions/assessments";
 
-function CreateAssessmentModal(props: any) {
+function EditAssessmentModal(props: any) {
   const { id: courseId, moduleId } = useParams<{
     id: string;
     moduleId: string;
   }>();
+
   const searchParams = useSearchParams();
+  const [closeEditModal, setCloseEditModal] = useState(false);
   const title = searchParams.get("title") || "";
-
-  const documentId = "6662f253961e396de00b89c4";
-  const pathname = usePathname();
-  const arrUrl = pathname.split("/");
-  arrUrl.pop();
-  const url = `${arrUrl.join(
-    "/"
-  )}/document/${documentId}/questions?title=${title}`;
-
-  const createAssessmentWithParams = createAssessment.bind(
+  const updateAssessmentWithParams = updateAssessment.bind(
     null,
+    props.assessmentId,
     courseId,
     moduleId,
     title
@@ -36,19 +32,20 @@ function CreateAssessmentModal(props: any) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <form action={createAssessmentWithParams}>
+      <form action={updateAssessmentWithParams}>
         <Modal.Header closeButton>
-          <Modal.Title>Create Assessment</Modal.Title>
+          <Modal.Title>Edit Assessment</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <div>
-            <h5>Name</h5>
+            <h5>Title</h5>
             <input
               minLength={10}
               className="form-control mb-3"
               placeholder="Enter your title here..."
               name="title"
+              defaultValue={props.title}
             />
           </div>
         </Modal.Body>
@@ -56,12 +53,12 @@ function CreateAssessmentModal(props: any) {
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
-          <CreateAssesssmentBtn />
+          <EditAssesssmentBtn />
         </Modal.Footer>
       </form>
     </Modal>
   );
 }
-export default dynamic(() => Promise.resolve(CreateAssessmentModal), {
+export default dynamic(() => Promise.resolve(EditAssessmentModal), {
   ssr: false,
 });
