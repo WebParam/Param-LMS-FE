@@ -9,12 +9,13 @@ import { createParaphrase } from "@/app/lib/actions/paraphrase";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
+import { createQuestion } from "@/app/lib/actions/questions";
 
 function CreateQuestionModal(props: any) {
-  const { id, moduleId, documentId } = useParams<{
+  const { id: courseId, moduleId, assessmentId } = useParams<{
     id: string;
     moduleId: string;
-    documentId: string;
+    assessmentId: string;
   }>();
 
   const searchParams = useSearchParams();
@@ -32,14 +33,14 @@ function CreateQuestionModal(props: any) {
   arrUrl.pop();
   const url = `${arrUrl.join(
     "/"
-  )}/document/${documentId}/questions?title=${title}`;
+  )}/document/${assessmentId}/questions?title=${title}`;
 
-  const createParaphraseWithParams = createParaphrase.bind(
+  const createParaphraseWithParams = createQuestion.bind(
     null,
     description,
-    id,
+    courseId,
     moduleId,
-    documentId,
+    assessmentId,
     title
   );
 
@@ -100,7 +101,7 @@ function CreateQuestionModal(props: any) {
                 id="select01"
                 data-toggle="select"
                 className="form-control"
-                name="documentTone"
+                name="questionType"
               >
                 <option selected={false}>Select Question Type</option>
                 {questionTypes.map((name: string) => (
@@ -113,7 +114,7 @@ function CreateQuestionModal(props: any) {
               <input
                 className="form-control mb-3"
                 placeholder="Enter Question Score..."
-                name="title"
+                name="score"
                 required
                 type="number"
                 ref={titleRef}

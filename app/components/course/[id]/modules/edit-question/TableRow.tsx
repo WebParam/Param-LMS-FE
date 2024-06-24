@@ -1,8 +1,6 @@
 import { useState } from "react";
 import VideoPopUpModal from "./VideoPopUpModal";
 import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
-import { useParams, useSearchParams } from "next/navigation";
-import { updateVideoLink } from "@/app/lib/actions/paraphrase";
 import EditTranscriptModal from "./EditTranscriptModal";
 import { Modal } from "react-bootstrap";
 
@@ -10,25 +8,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [openPreviewModal, setOpenPreviewModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [publishModal, setPublishModal] = useState(false);
-  const [url, setUrl] = useState(data.videoUrl || "");
-
-  const {
-    id: courseId,
-    moduleId,
-    documentId,
-  } = useParams<{
-    id: string;
-    moduleId: string;
-    documentId: string;
-  }>();
-  const searchParams = useSearchParams();
-  const title = searchParams.get("title") || "";
-
-  const submitVideoLink = async () => {
-    setPublishModal(true)
-    await updateVideoLink(data.id, url, courseId, moduleId, documentId, title);
-    setPublishModal(false);
-  };
+  const [url, setUrl] = useState(data.videoUrl || "")
 
   return (
     <>
@@ -78,7 +58,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
         {data.isSystemGenerated ? (
           <button
             className="btn btn-success rounded-pill px-4 py-2"
-            onClick={() => submitVideoLink()}
+            onClick={() => console.log("")}
           >
             Upload Link
             <i className="material-icons ml-1">publish</i>

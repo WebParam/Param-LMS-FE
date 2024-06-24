@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
 import { useParams, useSearchParams, usePathname } from "next/navigation";
-import { updateVideoLink } from "@/app/lib/actions/paraphrase";
 import EditQuestionModal from "./EditQuestionModal";
 import { Modal } from "react-bootstrap";
 import Link from "next/link";
@@ -13,8 +12,6 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const pathname = usePathname();
 
   const {
-    id: courseId,
-    moduleId,
     assessmentId,
   } = useParams<{
     id: string;
@@ -25,18 +22,6 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
 
-  const submitVideoLink = async () => {
-    setPublishModal(true);
-    await updateVideoLink(
-      data.id,
-      url,
-      courseId,
-      moduleId,
-      assessmentId,
-      title
-    );
-    setPublishModal(false);
-  };
 
   return (
     <>
