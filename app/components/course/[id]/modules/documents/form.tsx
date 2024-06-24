@@ -8,7 +8,7 @@ import "react-quill/dist/quill.snow.css";
 import { useParams, useSearchParams } from "next/navigation";
 
 function EditForm({ module }: { module: IUnitStandard }) {
-  const [queryPrompt, setQueryPrompt] = useState<string>("");
+  const [queryPrompt, setQueryPrompt] = useState<string>(module.queryPrompt);
   const [text, setText] = useState<string>(module.description);
   const { id: courseId, moduleId } = useParams<{
     id: string;

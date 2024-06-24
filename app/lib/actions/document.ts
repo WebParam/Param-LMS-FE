@@ -5,7 +5,6 @@ import {
   wCourseUrl,
   rCourseUrl,
   rDocumentParaphraseUrl,
-  wDocumentUrl,
 } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
 
@@ -16,7 +15,7 @@ export const uploadDocuments = async (
   formData: FormData
 ) => {
   try {
-    const res = await fetch(`${wDocumentUrl}/Modules/${moduleId}/upload`, {
+    const res = await fetch(`${wCourseUrl}/Document/Modules/${moduleId}/upload`, {
       method: "POST",
       body: formData,
     });

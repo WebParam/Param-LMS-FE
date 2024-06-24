@@ -82,6 +82,7 @@ export const updateModule = async (
     lengthOfParagraph: formData.get("lengthOfParagraph"),
   };
 
+  console.log("body",body)
   try {
     const data = await post(`${wCourseUrl}/Modules/UpdateModule`, body);
     Diagnostic("SUCCESS ON POST, returning", data);
