@@ -166,14 +166,7 @@ export const generateAudio = async (payload: any) => {
   redirect(url);
 };
 
-export const updateVideoLink = async (
-  id: string,
-  videoLink: string,
-  courseId: string,
-  moduleId: string,
-  documentId: string,
-  courseTitle: string
-) => {
+export const updateVideoLink = async (id: string, videoLink: string) => {
   try {
     const data = await put(`${wCourseUrl}/Paraphrase/UploadVideoLink`, {
       id,
@@ -185,9 +178,4 @@ export const updateVideoLink = async (
 
     throw error;
   }
-
-  const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/document/${documentId}/upload-link?title=${courseTitle}&refreshId=${date}`;
-  revalidatePath(url);
-  redirect(url);
 };

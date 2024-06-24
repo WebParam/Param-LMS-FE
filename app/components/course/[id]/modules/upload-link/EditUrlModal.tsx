@@ -3,40 +3,27 @@ import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { updateVideoLink } from "@/app/lib/actions/paraphrase";
 import {
-  updateVideoLink,
-} from "@/app/lib/actions/paraphrase";
-import { useParams, useSearchParams } from "next/navigation";
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 
 function EditUrlModal(props: any) {
-  const {
-    id: courseId,
-    moduleId,
-    documentId,
-  } = useParams<{
-    id: string;
-    moduleId: string;
-    documentId: string;
-  }>();
-
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
   const [url, setUrl] = useState(props.data.url);
   const submmitRef = useRef<HTMLInputElement>(null);
   const [buttonLoader, setButtonLoader] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const submitVideoLink = async () => {
     setButtonLoader(true);
-    await updateVideoLink(
-      props.data.id,
-      url,
-      courseId,
-      moduleId,
-      documentId,
-      title
-    );
-    setButtonLoader(false);
-    props.onHide();
+    await updateVideoLink(props.data.id, url);
+    const date = new Date().toString();
+    router.replace(`${pathname}?title=${title}&refreshId=${date}`);
   };
 
   return (
@@ -70,11 +57,7 @@ function EditUrlModal(props: any) {
             <Button variant="secondary" onClick={props.onHide}>
               Close
             </Button>
-            <Button
-              variant="success"
-              onClick={() => submitVideoLink()}
-              type="submit"
-            >
+            <Button variant="success" onClick={() => submitVideoLink()}>
               {buttonLoader ? (
                 <span className="spinner-border text-success" role="status" />
               ) : (
