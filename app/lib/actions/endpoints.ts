@@ -18,3 +18,12 @@ export const wQuizGenerateUrl =
 
 export const rQuizUrl =
   "https://khumla-development-quiz-read.azurewebsites.net/api/v1";
+
+export const wAudioGenerateUrl =
+  "https://khumla-development-audio-generate.azurewebsites.net/api/v1";
+
+export const wAssessmentUrl =
+  "https://khumla-development-assessment-write.azurewebsites.net/api/v1/Assessments";
+
+export const rAssessmentUrl =
+  "https://khumla-development-assessment-read.azurewebsites.net/api/Assessments";

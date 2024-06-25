@@ -8,7 +8,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
       <tbody className="list" id="staff">
         {list.length > 0 ? (
           list.map((document: IDocument, key) => (
-            <TableRow key={key} document={document} />
+            <TableRow key={document.id} document={document} />
           ))
         ) : (
           <tr className="selected">

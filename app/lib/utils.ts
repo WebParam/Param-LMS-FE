@@ -63,3 +63,5 @@ export function generateRandomUserId(length?: number) {
   }
   return result;
 }
+
+export const removeTags = (str: string) => str.replace(/<(?:\/)?[sp]+[^>]*>/g, "");

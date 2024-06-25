@@ -22,8 +22,22 @@ export default function PageHeader({ title }: { title: string }) {
   const arrUrl = pathname.split("/");
   const suffixPath = arrUrl.pop() || "";
 
-  const actionLinks = ["paraphrase-document", "confirm-audio", "upload-link", "generate-quizzes"];
-  const arrLink = ["edit", "documents", "audios", "videos", "quizzes"];
+  const actionLinks = [
+    "paraphrase-document",
+    "confirm-audio",
+    "upload-link",
+    "generate-quizzes",
+    "questions",
+    "edit-question",
+  ];
+  const arrLink = [
+    "edit",
+    "documents",
+    "audios",
+    "videos",
+    "quizzes",
+    "assessments",
+  ];
 
   const stepperMap: any = {
     "paraphrase-document": "Paraphrase Sections",
@@ -34,6 +48,9 @@ export default function PageHeader({ title }: { title: string }) {
     audios: "Audios",
     videos: "Videos",
     edit: "Edit",
+    assessments: "Assessments",
+    questions: "Questions",
+    "edit-question": "Edit Question",
   };
 
   const urlDocumentMap: any = {
@@ -41,6 +58,7 @@ export default function PageHeader({ title }: { title: string }) {
     "confirm-audio": "audios",
     "upload-link": "videos",
     "generate-quizzes": "quizzes",
+    questions: "assessments",
   };
 
   let backUrl = "";
@@ -61,15 +79,14 @@ export default function PageHeader({ title }: { title: string }) {
       if (actionLinks.indexOf(suffixPath) !== -1) {
         const arr = pathname.split("/");
         const urlSlice = arr.slice(0, -3);
-        backUrl = `${ urlSlice.join("/") }/${urlDocumentMap[suffixPath]}?title=${title}`; 
+        backUrl = `${urlSlice.join("/")}/${
+          urlDocumentMap[suffixPath]
+        }?title=${title}`;
         isEditDocument = true;
-      }
-      else if (arrLink.indexOf(suffixPath) !== -1) isEditModule = true;
+      } else if (arrLink.indexOf(suffixPath) !== -1) isEditModule = true;
 
       title =
-        name +
-        " - " +
-        (stepperMap[suffixPath] ? stepperMap[suffixPath] : "");
+        name + " - " + (stepperMap[suffixPath] ? stepperMap[suffixPath] : "");
     }
   }
 
@@ -133,10 +150,7 @@ export default function PageHeader({ title }: { title: string }) {
                 </button>
               )}
               {isEditDocument && (
-                <Link
-                  className="btn btn-success"
-                  href={backUrl}
-                >
+                <Link className="btn btn-success" href={backUrl}>
                   Documents
                 </Link>
               )}

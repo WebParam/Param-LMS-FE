@@ -6,15 +6,24 @@ import { IUnitStandard } from "@/app/interfaces/unit-standard";
 import { IResponseObject } from "@/app/lib/restapi/response";
 import { Diagnostic } from "../logger/logger";
 
-export const createModule = async (description: string, courseId: string, courseTitle: string, formData: FormData) => {
+export const createModule = async (
+  description: string,
+  queryPrompt: string,
+  courseId: string,
+  courseTitle: string,
+  formData: FormData
+) => {
   const body = {
     title: formData.get("title"),
+    audioVoice: formData.get("audioVoice"),
     description: description,
     courseId,
+    queryPrompt: queryPrompt,
     documentTone: formData.get("documentTone"),
     lengthOfParagraph: formData.get("lengthOfParagraph"),
   };
 
+  console.log("body", body)
   try {
     const data = await post(`${wCourseUrl}/Modules/Create`, body);
     Diagnostic("SUCCESS ON POST, returning", data);
@@ -59,6 +68,7 @@ export const updateModule = async (
   description: string,
   courseId: string,
   courseTitle: string,
+  queryPrompt:string,
   formData: FormData
 ) => {
   const body = {
@@ -66,10 +76,13 @@ export const updateModule = async (
     title: formData.get("title"),
     description: description,
     courseId,
+    audioVoice : formData.get("audioVoice"),
+    queryPrompt,
     documentTone: formData.get("documentTone"),
     lengthOfParagraph: formData.get("lengthOfParagraph"),
   };
 
+  console.log("body",body)
   try {
     const data = await post(`${wCourseUrl}/Modules/UpdateModule`, body);
     Diagnostic("SUCCESS ON POST, returning", data);

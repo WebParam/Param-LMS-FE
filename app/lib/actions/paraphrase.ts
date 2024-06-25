@@ -1,6 +1,6 @@
 "use server";
 import { get, post, put } from "../utils";
-import { rCourseUrl, wCourseUrl } from "./endpoints";
+import { rCourseUrl, wAudioGenerateUrl, wCourseUrl } from "./endpoints";
 import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 import { IResponseObject } from "@/app/lib/restapi/response";
 import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
@@ -13,7 +13,7 @@ export const createParaphrase = async (
   moduleId: string,
   documentId: string,
   courseTitle: string,
-  formData: FormData,
+  formData: FormData
 ) => {
   const body = {
     title: formData.get("title"),
@@ -23,7 +23,10 @@ export const createParaphrase = async (
   };
 
   try {
-    const data = await post(`${wCourseUrl}/Paraphrase/AddParaphrase/NonSystemGenerated`, body);
+    const data = await post(
+      `${wCourseUrl}/Paraphrase/AddParaphrase/NonSystemGenerated`,
+      body
+    );
     Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
@@ -46,7 +49,6 @@ export const updateParaphrase = async (
   courseTitle: string,
   formData: FormData
 ) => {
-
   const body = {
     id,
     title: formData.get("title"),
@@ -54,7 +56,10 @@ export const updateParaphrase = async (
     videoUrl: formData.get("videoUrl"),
   };
   try {
-    const resp = await put(`${wCourseUrl}/Paraphrase/UpdateParaphrase/NonSystemGenerated`, body);
+    const resp = await put(
+      `${wCourseUrl}/Paraphrase/UpdateParaphrase/NonSystemGenerated`,
+      body
+    );
     const data = await resp.data;
     Diagnostic("SUCCESS ON PUT, returning", data);
   } catch (err) {
@@ -140,14 +145,28 @@ export const confirmAudio = async (
   redirect(url);
 };
 
-export const updateVideoLink = async (
-  id: string,
-  videoLink: string,
-  courseId: string,
-  moduleId: string,
-  documentId: string,
-  courseTitle: string
-) => {
+export const generateAudio = async (payload: any) => {
+  const body = {
+    text: payload.text,
+    voice: "",
+    paraphraseId: payload.paraphraseId,
+  };
+
+  try {
+    const data = await post(`${wAudioGenerateUrl}/Audio/generate`, body);
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+
+    throw err;
+  }
+
+  const url = `/protected/admin/courses/${payload.courseId}/modules/${payload.moduleId}/document/${payload.documentId}/paraphrase-document?title=${payload.documentTitle}`;
+  revalidatePath(url);
+  redirect(url);
+};
+
+export const updateVideoLink = async (id: string, videoLink: string) => {
   try {
     const data = await put(`${wCourseUrl}/Paraphrase/UploadVideoLink`, {
       id,
@@ -159,9 +178,4 @@ export const updateVideoLink = async (
 
     throw error;
   }
-
-  const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/document/${documentId}/upload-link?title=${courseTitle}&refreshId=${date}`;
-  revalidatePath(url);
-  redirect(url);
 };

@@ -3,7 +3,9 @@ import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useParams, useSearchParams } from "next/navigation";
-import { createDocument, updateDocument } from "@/app/lib/actions/document";
+import { updateDocument } from "@/app/lib/actions/document";
+import { useState, useEffect } from "react";
+import EditModuleBtn from "./EditModuleBtn";
 
 function EditDocumentModal(props: any) {
   const { id: courseId, moduleId } = useParams<{
@@ -12,6 +14,7 @@ function EditDocumentModal(props: any) {
   }>();
 
   const searchParams = useSearchParams();
+  const [closeEditModal, setCloseEditModal] = useState(false);
   const title = searchParams.get("title") || "";
   const updateDocumentWithParams = updateDocument.bind(
     null,
@@ -30,7 +33,7 @@ function EditDocumentModal(props: any) {
     >
       <form action={updateDocumentWithParams}>
         <Modal.Header closeButton>
-          <Modal.Title>Eidt Module</Modal.Title>
+          <Modal.Title>Edit Module</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -43,15 +46,13 @@ function EditDocumentModal(props: any) {
               name="name"
               defaultValue={props.documentName}
             />
-          </div>          
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
-          <Button variant="success" onClick={props.onHide} type="submit">
-            Submit
-          </Button>
+          <EditModuleBtn setCloseEditModal={setCloseEditModal} />
         </Modal.Footer>
       </form>
     </Modal>

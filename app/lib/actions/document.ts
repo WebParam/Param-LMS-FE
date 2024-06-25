@@ -5,7 +5,6 @@ import {
   wCourseUrl,
   rCourseUrl,
   rDocumentParaphraseUrl,
-  wDocumentUrl,
 } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
 
@@ -16,7 +15,7 @@ export const uploadDocuments = async (
   formData: FormData
 ) => {
   try {
-    const res = await fetch(`${wDocumentUrl}/Modules/${moduleId}/upload`, {
+    const res = await fetch(`${wCourseUrl}/Document/Modules/${moduleId}/upload`, {
       method: "POST",
       body: formData,
     });
@@ -106,13 +105,5 @@ export const paraphraseDocument = async (
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
     console.error(err);
-  }
-};
-
-export const updateDocumentName = async () => {
-  try {
-    await put(`${wCourseUrl}/Document/Modules/UpdateDocumentName`, payload);
-  } catch (error) {
-    throw error;
   }
 };

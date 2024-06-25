@@ -1,10 +1,13 @@
 export interface IUnitStandard {
+    noOfDocuments: number;
     id?: string,
     title: string,
     description:string
     courseId: string,
     status: number,
     lengthOfParagraph: string,
+    queryPrompt:string;
+    audioVoice:string
     documentTone: string,
     createdAt?: string,
     updatedAt: string
@@ -34,4 +37,13 @@ export interface IParaPhraseResponseObject{
     isSystemGenerated: boolean;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface IGenerateAudio {
+    
+        text: string;
+        voice: string;
+        isSSML: boolean;
+        paraphraseId: string;
+
 }

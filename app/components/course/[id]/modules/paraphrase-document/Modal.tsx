@@ -7,7 +7,6 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import { confirmParaphrase } from "@/app/lib/actions/paraphrase";
 import { useParams, useSearchParams } from "next/navigation";
-import { useFormStatus } from 'react-dom';
 
 function MyVerticallyCenteredModal(props: any) {
   const { id, moduleId, documentId } = useParams<{
@@ -20,9 +19,6 @@ function MyVerticallyCenteredModal(props: any) {
   const title = searchParams.get("title") || "";
   const [description, setDescription] = useState(props.data.description);
 
-  const { pending } = useFormStatus();
-
-
   const confirmParaphraseWithParams = confirmParaphrase.bind(
     null,
     props.data.id,
@@ -32,9 +28,6 @@ function MyVerticallyCenteredModal(props: any) {
     documentId,
     title
   );
-
-  console.log('pending action form:', pending);
-
 
   return (
     <Modal
@@ -64,7 +57,7 @@ function MyVerticallyCenteredModal(props: any) {
             <ReactQuill
               value={description}
               onChange={(value) => setDescription(value)}
-              style={{color: '#252525'}}
+              style={{ color: "#252525" }}
             />
           </div>
         </Modal.Body>
@@ -72,7 +65,13 @@ function MyVerticallyCenteredModal(props: any) {
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
-          <Button variant="success" onClick={() => {props.onHide(), props.setCloseLoader(true)}} type="submit" >
+          <Button
+            variant="success"
+            onClick={() => {
+              props.onHide(), props.setCloseLoader(true);
+            }}
+            type="submit"
+          >
             Confirm
           </Button>
         </Modal.Footer>

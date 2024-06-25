@@ -8,7 +8,7 @@ import { getModules } from "@/app/lib/actions/module";
 
 function Page({ params }: { params: { id: string } }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 4;
+  const ITEMSPERPAGE = 3;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const [list, setList] = useState<IUnitStandard[]>([]);
@@ -46,9 +46,9 @@ function Page({ params }: { params: { id: string } }) {
           return (
             <Module
               key={data.id}
-              moduleName={data.title}
-              moduleAnswer={data.description}
-              noOfFile={10}
+              name={data.title}
+              description={data.description}
+              noOfDocuments={data.noOfDocuments}
               url={url}
             />
           );
