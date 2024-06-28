@@ -5,14 +5,14 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import { updateParaphrase } from "@/app/lib/actions/paraphrase";
 import { useParams, useSearchParams } from "next/navigation";
+import { updateQuestion } from "@/app/lib/actions/questions";
 
 function EditQuestionModal(props: any) {
-  const { id, moduleId, documentId } = useParams<{
+  const { id: courseId, moduleId, assessmentId } = useParams<{
     id: string;
     moduleId: string;
-    documentId: string;
+    assessmentId: string;
   }>();
 
   const searchParams = useSearchParams();
@@ -21,21 +21,22 @@ function EditQuestionModal(props: any) {
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const questionTypes = ["Long Text", "Quiz"];
-  const updateParaphraseWithParams = updateParaphrase.bind(
+  const updateQuestionWithParams = updateQuestion.bind(
     null,
     props.data.id,
     description,
-    id,
+    courseId,
     moduleId,
-    documentId,
+    assessmentId,
     title
-  );
+  )
 
   const submit = () => {
     submmitRef.current?.click();
-    if (titleRef.current?.value && titleRef.current?.value.length > 10) {
+    if (titleRef.current?.value && titleRef.current?.value.length > 5) {
       props.onHide();
-    }
+      props.setIsEditModal(true);
+    } 
   };
 
   return (
@@ -45,7 +46,7 @@ function EditQuestionModal(props: any) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <form action={updateParaphraseWithParams}>
+      <form action={updateQuestionWithParams}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Question</Modal.Title>
         </Modal.Header>
@@ -76,7 +77,8 @@ function EditQuestionModal(props: any) {
               id="select01"
               data-toggle="select"
               className="form-control"
-              name="documentTone"
+              name="questionType"
+              defaultValue={props.data.questionType}
             >
               <option selected={false}>Select Question Type</option>
               {questionTypes.map((name: string) => (
@@ -90,10 +92,9 @@ function EditQuestionModal(props: any) {
             <input
               className="form-control mb-3"
               placeholder="Enter Question Score..."
-              name="title"
-              required
+              name="score"
               type="number"
-              ref={titleRef}
+              defaultValue={props.data.score}
             />
           </div>
         </Modal.Body>

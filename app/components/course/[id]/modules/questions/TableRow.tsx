@@ -1,35 +1,29 @@
-import { useState } from "react";
-import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
-import { useParams, useSearchParams, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useSearchParams, usePathname } from "next/navigation";
 import EditQuestionModal from "./EditQuestionModal";
 import { Modal } from "react-bootstrap";
 import Link from "next/link";
+import { Question } from "@/app/interfaces/questions";
 
-const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
+const TableRow = ({ data }: { data: Question }) => {
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const [publishModal, setPublishModal] = useState(false);
-  const [url, setUrl] = useState(data.videoUrl || "");
+  const [isEditModal, setIsEditModal] = useState(false);
   const pathname = usePathname();
-
-  const {
-    assessmentId,
-  } = useParams<{
-    id: string;
-    moduleId: string;
-    assessmentId: string;
-  }>();
-
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const refreshId = searchParams.get("refreshId");
 
+  useEffect(() => {
+    setIsEditModal(false);
+  },[refreshId]);
 
   return (
     <>
       <Modal
         size="sm"
         centered
-        show={publishModal}
-        onHide={() => setPublishModal(false)}
+        show={isEditModal}
+        onHide={() => setIsEditModal(false)}
         backdrop={false}
         keyboard={false}
       >
@@ -45,7 +39,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             }}
           >
             <div className="spinner-grow text-primary" role="status" />
-            <p>Uploading Link...</p>
+            <p>Updating Question...</p>
           </div>
         </Modal.Body>
       </Modal>
@@ -64,14 +58,14 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
         </td>
         <td className="text-center js-lists-values-projects small ">
           <div className="d-flex align-items-center">
-            <p className="text-justify">Quiz or Long Text</p>
+            <p className="text-justify">{data.questionType}</p>
           </div>
         </td>
         <td
           style={{ width: "300px" }}
           className="text-center js-lists-values-projects small"
         >
-          30
+          {data.score}
         </td>
         <td
           style={{ width: "300px" }}
@@ -85,8 +79,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             <i className="material-icons ml-1">open_in_new</i>
           </button>
           <Link
-            // href={`${pathname}/${data.id}?title=${title}`}
-            href={`${pathname}/${assessmentId}/edit-question?title=${title}`}
+            href={`${pathname}/${data.id}/edit-question?title=${title}&type=${data.questionType}`}
             className="btn btn-success rounded-pill px-4 py-2 ml-2"
           >
             View
@@ -100,6 +93,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             show={openEditModal}
             onHide={() => setOpenEditModal(false)}
             data={data}
+            setIsEditModal={setIsEditModal}
           />
         </div>
       )}
