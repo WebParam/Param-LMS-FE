@@ -1,9 +1,14 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post, put } from "../utils";
-import { rAssessmentUrl, wOptionUrl, wQuestionUrl } from "./endpoints";
+import { formDataEntriesArray, get, post, put } from "../utils";
+import {
+  rAssessmentUrl,
+  wOptionUrl,
+  wQuestionUrl,
+  wRubricUrl,
+} from "./endpoints";
 import { Diagnostic } from "../logger/logger";
-import { IQuestion } from "@/app/interfaces/questions";
+import { IQuestion, FormObject } from "@/app/interfaces/questions";
 
 export const createQuestion = async (
   description: string,
@@ -19,52 +24,22 @@ export const createQuestion = async (
     description,
     assessmentId,
   };
-  const correctValue = formData.get("correctValue");
 
   const entries: any = formData.entries();
-  const objMap: { [key: string]: { [key: string]: FormDataEntryValue } } = {};
-
-  // Iterate over formData entries
-  for (const entry of entries) {
-    const [key, value] = entry;
-    const matches = key.match(/^options\[(\d+)\]\[(\w+)\]$/);
-    if (matches) {
-      const index = matches[1];
-      const propName = matches[2];
-
-      if (!objMap[index]) {
-        objMap[index] = {};
-      }
-
-      objMap[index][propName] = value;
-    }
-  }
-
-  // Convert the object map to an array of objects
-  const objArray: { [key: string]: FormDataEntryValue }[] =
-    Object.values(objMap);
-
   let question = {} as IQuestion;
   try {
     const data = await post(`${wQuestionUrl}/AddQuestion`, body);
     question = data.data;
     Diagnostic("SUCCESS ON POST, returning", data);
 
-    const promiseArray = [];
-    if (question && question.questionType == "Quiz") {
-      for (const obj of objArray) {
-        promiseArray.push(
-          post(`${wOptionUrl}/AddOption`, {
-            ...obj,
-            isCorrect: correctValue == obj.label,
-            questionId: question.id,
-          })
-        );
-      }
+    const correctValue: any = formData.get("correctValue") || "";
 
-      const response = await Promise.all(promiseArray);
-      Diagnostic("SUCCESS ON POST, returning", response);
-    }
+    createUpdateOptionRubric(
+      entries,
+      question.id!,
+      question.questionType,
+      correctValue
+    );
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
     console.error(err);
@@ -93,64 +68,22 @@ export const updateQuestion = async (
     assessmentId,
   };
 
-  const correctValue = formData.get("correctValue");
-
   const entries: any = formData.entries();
-  const objMap: { [key: string]: { [key: string]: FormDataEntryValue } } = {};
-
-  // Iterate over formData entries
-  for (const entry of entries) {
-    const [key, value] = entry;
-    const matches = key.match(/^options\[(\d+)\]\[(\w+)\]$/);
-    if (matches) {
-      const index = matches[1];
-      const propName = matches[2];
-
-      if (!objMap[index]) {
-        objMap[index] = {};
-      }
-
-      objMap[index][propName] = value;
-    }
-  }
-
-  // Convert the object map to an array of objects
-  const objArray: { [key: string]: FormDataEntryValue }[] =
-    Object.values(objMap);
 
   let question = {} as IQuestion;
   try {
     const data = await put(`${wQuestionUrl}/UpdateQuestion`, body);
     question = data.data;
-
     Diagnostic("SUCCESS ON PUT, returning", data);
 
-    const promiseArray = [];
-    if (question && question.questionType == "Quiz") {
-      console.log("objArray:", objArray);
-      for (const obj of objArray) {
-        if (obj && obj.id) {
-          promiseArray.push(
-            put(`${wOptionUrl}/UpdateOption`, {
-              ...obj,
-              questionId: question.id,
-              isCorrect: correctValue == obj.label,
-            })
-          );
-        } else if (obj.label !== "" && obj.description !== "") {
-          promiseArray.push(
-            post(`${wOptionUrl}/AddOption`, {
-              ...obj,
-              isCorrect: correctValue == obj.label,
-              questionId: question.id,
-            })
-          );
-        }
-      }
+    const correctValue: any = formData.get("correctValue") || "";
 
-      const response = await Promise.all(promiseArray);
-      Diagnostic("SUCCESS ON POST, returning", response);
-    }
+    createUpdateOptionRubric(
+      entries,
+      question.id!,
+      question.questionType,
+      correctValue
+    );
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
     console.error(err);
@@ -177,35 +110,42 @@ export const getQuestions = async (assessmentId: string) => {
   }
 };
 
-/* export const updateQuestion = async (
-  id: string,
-  description: string,
-  courseId: string,
-  moduleId: string,
-  assessmentId: string,
-  courseTitle: string,
-  formData: FormData
+export const createUpdateOptionRubric = async (
+  entries: any,
+  questionId: string,
+  questionType: string,
+  correctValue: string
 ) => {
-  const body = {
-    id,
-    title: formData.get("title"),
-    questionType: formData.get("questionType"),
-    score: formData.get("score"),
-    description,
-    assessmentId,
-  };
+  const objArray = formDataEntriesArray(entries);
+  const createUrl =
+    questionType == "Quiz"
+      ? `${wOptionUrl}/AddOption`
+      : `${wRubricUrl}/AddRubric`;
+  const updateUrl =
+    questionType == "Quiz"
+      ? `${wOptionUrl}/UpdateOption`
+      : `${wRubricUrl}/UpdateRubric`;
 
-  try {
-    const data = await put(`${wQuestionUrl}/UpdateQuestion`, body);
-    Diagnostic("SUCCESS ON PUT, returning", data);
-  } catch (err) {
-    Diagnostic("ERROR ON PUT, returning", err);
+  const promiseArray = [];
+  for (const obj of objArray) {
+    const body: FormObject =
+      questionType == "Quiz"
+        ? {
+            ...obj,
+            isCorrect: correctValue == obj.label,
+            questionId,
+          }
+        : {
+            ...obj,
+            questionId,
+          };
 
-    console.error(err);
+    if (body && body.id) {
+      promiseArray.push(put(updateUrl, body));
+    } else if (obj.label !== "" && obj.description !== "") {
+      promiseArray.push(post(createUrl, body));
+    }
+    const response = await Promise.all(promiseArray);
+    Diagnostic("SUCCESS ON POST, returning", response);
   }
-
-  const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/assessment/${assessmentId}/questions?title=${courseTitle}&refreshId=${date}`;
-  redirect(url);
 };
- */
