@@ -1,3 +1,5 @@
+import { AddBtn } from "./Buttons";
+
 export default function QuestionRubric() {
   return (
     <div
@@ -5,21 +7,20 @@ export default function QuestionRubric() {
       className="form-group d-flex mb-0 align-items-center"
     >
       <input
+        style={{ width: "750px" }}
         type="text"
         className="form-control"
         placeholder="Rubric ..."
-        name=""
-        id=""
+        name="options[1][label]"
       />
       <input
         style={{ width: "150px" }}
         type="number"
         className="form-control"
         placeholder="Points: E.g. 4"
-        name=""
-        id=""
+        name="options[1][description]"
       />
-      <i className="material-icons">add</i>
+      <AddBtn />
     </div>
   );
 }

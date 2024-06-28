@@ -1,12 +1,14 @@
-import { Button } from "react-bootstrap";
-import { useFormStatus } from "react-dom";
 import QuestionRubricDelete from "./QuestionRubricDelete";
 import QuestionRubricAdd from "./QuestionRubricAdd";
+import { Rubric } from "@/app/interfaces/rubric";
 
-export default function QuestionRubric() {
+export default function QuestionRubric({ rubrics }: { rubrics?: Rubric[] }) {
   return (
     <>
-      <QuestionRubricDelete />
+      {rubrics &&
+        rubrics.map((rubric: Rubric) => (
+          <QuestionRubricDelete key={rubric.id} rubric={rubric} />
+        ))}
       <QuestionRubricAdd />
     </>
   );

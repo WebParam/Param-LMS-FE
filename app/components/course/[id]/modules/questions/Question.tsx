@@ -8,12 +8,14 @@ import { IOption, IQuestion } from "@/app/interfaces/questions";
 import { getOptions } from "@/app/lib/actions/options";
 import { getRubrics } from "@/app/lib/actions/rubrics";
 import { EditBtn } from "./Buttons";
+import { Rubric } from "@/app/interfaces/rubric";
 
 export default function Question({ question }: { question: IQuestion }) {
   const [description, setDescription] = useState(question.description);
   const [questionType, setQuestionType] = useState(question.questionType);
   const [score, setScore] = useState(question.score);
   const [options, setOptions] = useState<IOption[]>([]);
+  const [rubrics, setRubrics] = useState<Rubric[]>([]);
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
   const refreshId = searchParams.get("refreshId");
@@ -27,7 +29,7 @@ export default function Question({ question }: { question: IQuestion }) {
 
   const fetchRubric = async () => {
     const data = await getRubrics(question.id!);
-    setOptions(data);
+    setRubrics(data);
   };
 
   useEffect(() => {
@@ -97,7 +99,7 @@ export default function Question({ question }: { question: IQuestion }) {
             {questionType == "Quiz" ? (
               <QuestionOptions options={options} />
             ) : (
-              <QuestionRubric />
+              <QuestionRubric rubrics={rubrics} />
             )}
           </div>
         </div>
