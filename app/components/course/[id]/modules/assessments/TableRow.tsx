@@ -61,18 +61,18 @@ const TableRow = ({ assessment }: { assessment: Assessment }) => {
           style={{ width: "300px" }}
           className="text-center js-lists-values-projects small"
         >
-          <Link
-            className="btn btn-success rounded-pill px-4 py-2"
-            href={`${url}/assessment/${assessment.id}/questions?title=${title}`}
-          >
-            View
-          </Link>
           <button
-            className="btn btn-success rounded-pill px-4 py-2 ml-2"
+            className="btn btn-success rounded-pill px-4 py-2"
             onClick={() => setIsEditModal(true)}
           >
             Edit
           </button>
+          <Link
+            className="btn btn-success rounded-pill px-4 py-2 ml-2"
+            href={`${url}/assessment/${assessment.id}/questions?title=${title}`}
+          >
+            View
+          </Link>
         </td>
       </tr>
     </>

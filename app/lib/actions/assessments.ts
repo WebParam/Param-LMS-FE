@@ -34,7 +34,7 @@ export const createAssessment = async (
 
 export const getAssessments = async (id: string) => {
   try {
-    const resp = await get(`${rAssessmentUrl}/GetNewAssessments/${id}`);
+    const resp = await get(`${rAssessmentUrl}/Assessments/GetNewAssessments/${id}`);
     console.log(resp)
     const data = resp.data;
     Diagnostic("SUCCESS ON GET, returning", data);
