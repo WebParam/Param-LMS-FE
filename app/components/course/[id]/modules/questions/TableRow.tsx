@@ -3,9 +3,9 @@ import { useSearchParams, usePathname } from "next/navigation";
 import EditQuestionModal from "./EditQuestionModal";
 import { Modal } from "react-bootstrap";
 import Link from "next/link";
-import { Question } from "@/app/interfaces/questions";
+import { IQuestion } from "@/app/interfaces/questions";
 
-const TableRow = ({ data }: { data: Question }) => {
+const TableRow = ({ data }: { data: IQuestion }) => {
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [isEditModal, setIsEditModal] = useState(false);
   const pathname = usePathname();

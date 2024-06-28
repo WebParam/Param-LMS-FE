@@ -6,7 +6,7 @@ import {
   rRubricUrl,
   wAssessmentUrl,
   wQuestionUrl,
-  wRubrictUrl,
+  wRubricUrl,
 } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
 
@@ -28,7 +28,7 @@ export const createRubric = async (
 
   console.log("body", body);
   try {
-    const data = await post(`${wRubrictUrl}/AddRubric`, body);
+    const data = await post(`${wRubricUrl}/AddRubric`, body);
     Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
