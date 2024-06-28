@@ -1,8 +1,25 @@
 import { IOption } from "@/app/interfaces/questions";
 import { useState } from "react";
 
-export default function CreateQuestionBtn({ option }: { option: IOption }) {
+export default function CreateQuestionBtn({
+  option,
+  selectedOption,
+  setSelectedOption,
+}: {
+  option: IOption;
+  selectedOption: string | null;
+  setSelectedOption: (value: any) => void;
+}) {
   const [label, setLabel] = useState(option.label);
+
+  const handleOptionChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    const value = event.target.value;
+    setSelectedOption((prevSelected: any) =>
+      prevSelected === value ? null : value
+    );
+  };
 
   return (
     <div
@@ -10,12 +27,12 @@ export default function CreateQuestionBtn({ option }: { option: IOption }) {
       className="form-group d-flex  align-items-center"
     >
       <input
-        style={{ width: "17px", height: "17px" }}
         type="radio"
         name="correctValue"
-        id=""
         value={label}
-        checked={option.isCorrect ? "true" : "false"}
+        checked={selectedOption === label}
+        onChange={handleOptionChange}
+        style={{ width: "17px", height: "17px" }}
         disabled={false}
       />
       <input type="hidden" name="options[0][id]" value={option.id} />
@@ -25,7 +42,6 @@ export default function CreateQuestionBtn({ option }: { option: IOption }) {
         className="form-control"
         placeholder="Label: E.g. A"
         name="options[0][label]"
-        id=""
         defaultValue={option.label}
         onChange={(e: any) => setLabel(e.target.value)}
       />
@@ -35,7 +51,6 @@ export default function CreateQuestionBtn({ option }: { option: IOption }) {
         className="form-control"
         placeholder="Option ..."
         name="options[0][description]"
-        id=""
         defaultValue={option.description}
       />
       <i className="material-icons">delete</i>
