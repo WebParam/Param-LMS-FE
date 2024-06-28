@@ -7,7 +7,7 @@ import { Modal } from "react-bootstrap";
 const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [openPreviewModal, setOpenPreviewModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const [publishModal, setPublishModal] = useState(false);
+  const [isCreateModal, setIsCreateModal] = useState(false);
   const [url, setUrl] = useState(data.videoUrl || "")
 
   return (
@@ -15,8 +15,8 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
     <Modal 
       size="sm"
       centered
-      show={publishModal}
-      onHide={() => setPublishModal(false)}
+      show={isCreateModal}
+      onHide={() => setIsCreateModal(false)}
       backdrop={false}
       keyboard={false}
     >
@@ -24,7 +24,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
       <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: '#252525', gap: '15px'}}>
         <div className="spinner-grow text-primary" role="status"/>
         <p>
-          Uploading Link...
+          Creating Quetion...
         </p>
       </div>
       </Modal.Body>

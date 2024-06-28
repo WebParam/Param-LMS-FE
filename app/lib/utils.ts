@@ -42,7 +42,7 @@ export const put = async (url: string, body: any) => {
 
 export const get = async (url: string) => {
   try {
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(url, { cache: "no-store" });
     const data = await res.json();
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
@@ -64,4 +64,8 @@ export function generateRandomUserId(length?: number) {
   return result;
 }
 
-export const removeTags = (str: string) => str.replace(/<(?:\/)?[sp]+[^>]*>/g, "");
+export const removeTags = (str: string) => {
+  const textArea = document.createElement("textarea");
+  textArea.innerHTML = str;
+  return textArea.value.replace(/<\/?[^>]+(>|$)/g, "");
+};
