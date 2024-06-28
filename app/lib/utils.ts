@@ -69,3 +69,28 @@ export const removeTags = (str: string) => {
   textArea.innerHTML = str;
   return textArea.value.replace(/<\/?[^>]+(>|$)/g, "");
 };
+
+export const formDataEntriesArray = (entries: any) => {
+  const objMap: { [key: string]: { [key: string]: FormDataEntryValue } } = {};
+
+  // Iterate over formData entries
+  for (const entry of entries) {
+    const [key, value] = entry;
+    const matches = key.match(/^options\[(\d+)\]\[(\w+)\]$/);
+    if (matches) {
+      const index = matches[1];
+      const propName = matches[2];
+
+      if (!objMap[index]) {
+        objMap[index] = {};
+      }
+
+      objMap[index][propName] = value;
+    }
+  }
+
+  // Convert the object map to an array of objects
+  const objArray: { [key: string]: FormDataEntryValue }[] =
+    Object.values(objMap);
+  return objArray;
+};

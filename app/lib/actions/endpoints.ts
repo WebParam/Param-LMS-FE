@@ -33,8 +33,8 @@ export const wQuestionUrl =
 export const rAssessmentUrl =
   `https://khumla-${env}-assessment-read.azurewebsites.net/api/v1`;
 
-export const wRubrictUrl =
-  `https://khumla-${env}-assessment-write.azurewebsites.net/api/v1/Rubrics`;
+export const wRubricUrl =
+  `https://khumla-${env}-assessment-write.azurewebsites.net/api/Rubrics`;
 
 export const rRubricUrl =
   `https://khumla-${env}-assessment-read.azurewebsites.net/api/v1/Rubrics`;
