@@ -13,7 +13,7 @@ export default function Module({
   url,
 }: Props) {
   return (
-    <div className="card table-responsive my-24pt">
+    <div className="card table-responsive my-24pt ">
       <table className="table table-flush table--elevated">
         <thead>
           <tr>

@@ -10,7 +10,6 @@ import { paraphraseDocument } from "@/app/lib/actions/document";
 import { useEffect, useState } from "react";
 import DocumentModal from "./DocumentModal";
 import { Button, Modal } from "react-bootstrap";
-import DocumentNameModal from "./DocNameModal";
 
 const TableRow = ({ document }: { document: IDocument }) => {
   const pathname = usePathname();
@@ -137,15 +136,7 @@ const TableRow = ({ document }: { document: IDocument }) => {
         onHide={() => setModalShow(false)}
       />
 
-      <DocumentNameModal
-        documentId={document.id}
-        documentName={name}
-        title={title}
-        courseId={courseId}
-        moduleId={moduleId}
-        show={openDocNameModal}
-        onHide={() => setOpenDocNameModal(false)}
-      />
+      
 
       <tr className="selected">
         <td

@@ -7,9 +7,8 @@ import withAuth from './AdminAuthWrapper'
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const sideTabs = [
-    { name: 'Course Dashboard', url: '/protected/admin/course-dashboard', icon: 'dashboard' },
-    { name: 'Course Graphs', url: '/protected/admin/course-dashboard/graphs/course', icon: 'show_chart' },
-    { name: 'Module Graphs', url: '/protected/admin/course-dashboard/graphs/module', icon: 'show_chart' },
+    { name: 'Student Analtics', url: '/protected/admin/course-dashboard', icon: 'dashboard' },
+    { name: 'Course Analytics', url: '/protected/admin/course-dashboard/graphs/course', icon: 'show_chart' },
 
     { name: 'Manage Courses', url: '/protected/admin/manage-courses', icon: 'assignment' },
     {name : 'Grouped Progress', url: `/protected/admin/grouped-progress/1/assessments`, icon : 'dashboard',},

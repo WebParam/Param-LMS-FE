@@ -8,10 +8,10 @@ import {
 } from "@/app/components/course-dashboard/graphs/avgPDFDownloaded/data";
 
 import {
-  options as OverallCorrectAnswersBarOptions,
-  data as OverallCorrectAnswersBarDataFn,
-  barDescriptions as OverallCorrectAnswersBarDescription,
-} from "@/app/components/course-dashboard/graphs/AvgCorrectAnswers/data";
+  options as OverallCompletionRateBarOptions,
+  data as OverallCompletionRateBarDataFn,
+  barDescriptions as OverallCompletionRateBarDescription,
+} from "@/app/components/course-dashboard/graphs/AvgCompletionRatePerModule/data";
 
 import {
   options as QuestionsAskedOptions,
@@ -31,19 +31,13 @@ import {
   barDescriptions as CommentsChartBarDescription,
 } from "@/app/components/course-dashboard/graphs/CommentsChart/data";
 
-import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/course-dashboard/graphs/StudentsProgressStatus/data";
-
 import ChartLayout from "@/app/components/course-dashboard/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/course-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
-import { StudentsProgressStatus } from "@/app/components/course-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
-import DataTabs from "@/app/components/course-dashboard/graphs/DataTabs";
-import { getCourseGraphs } from "@/app/lib/actions/course";
-import UnitStandardTable from "../(components)/unit-standard-table";
-import PageHeader from "../../PageHeader";
+import { getStudentModuleGraphs } from "@/app/lib/actions/module";
 
-export default async function Page() {
-  const courseId = "65e5d75f6944453739f276c3";
-  const data = await getCourseGraphs("courseId");
+export default async function Page({ params }: { params: { studentId: string, moduleId:string } }) {
+ 
+  const data = await getStudentModuleGraphs(params.moduleId,params.studentId);
 
   const OverallQuizBarData = await OverallQuizBarDataFn(
     data.averageCompletedQuizzes
@@ -55,19 +49,12 @@ export default async function Page() {
     data.averageNotesSubmitted
   );
   const PDFChartBarData = await OverallPDFBarDataFn(data.averagePdfDownloaded);
-  const correctAnswersChartBarData = await OverallCorrectAnswersBarDataFn(
-    data.averageCorrectAnswer
+  const CompletionRateChartBarData = await OverallCompletionRateBarDataFn(
+    data.averageCompletionRate
   );
 
   return (
     <>
-      <DataTabs
-        totalEnrollments={data.enrolledStudents}
-        totalModdules={0}
-        totalAssessments={0}
-        totalQuizzes={0}
-        documentsDownloaded={0}
-      />
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
@@ -75,18 +62,6 @@ export default async function Page() {
             barDescriptions={AvgTimeSpentBarDataDescription}
           >
             <AvgTimeSpent averageTimeSpent={data.averageTimeSpent} />
-          </ChartLayout>
-        </div>
-
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Progress Status"
-            barDescriptions={StudentsProgressStatusDescription}
-            type="pie"
-          >
-            <StudentsProgressStatus
-              studentCourseProgress={data.studentProgress}
-            />
           </ChartLayout>
         </div>
 
@@ -129,21 +104,13 @@ export default async function Page() {
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
-            title="Average of Correct Answers Submitted"
-            barDescriptions={OverallCorrectAnswersBarDescription}
-            options={OverallCorrectAnswersBarOptions}
-            data={correctAnswersChartBarData}
-            type="line"
+            title="Average Completed Rate (%)"
+            barDescriptions={OverallCompletionRateBarDescription}
+            options={OverallCompletionRateBarOptions}
+            data={CompletionRateChartBarData}
+            type="bar"
           />
         </div>
-      </div>
-
-      <div className="mb-24pt mb-sm-0 mr-sm-24pt">
-        <PageHeader title="Web Development Unit Standards" />
-      </div>
-
-      <div className="card p-relative o-hidden mb-0">
-        <UnitStandardTable path="course" />
       </div>
     </>
   );

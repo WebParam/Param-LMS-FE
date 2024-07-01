@@ -21,7 +21,6 @@ function EditForm({ module }: { module: IUnitStandard }) {
     text,
     queryPrompt,
     courseId,
-    courseTitle
   );
 
 

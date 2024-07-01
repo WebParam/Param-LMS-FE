@@ -8,10 +8,10 @@ import {
 } from "@/app/components/course-dashboard/graphs/avgPDFDownloaded/data";
 
 import {
-  options as OverallCompletionRateBarOptions,
-  data as OverallCompletionRateBarDataFn,
-  barDescriptions as OverallCompletionRateBarDescription,
-} from "@/app/components/course-dashboard/graphs/AvgCompletionRatePerModule/data";
+  options as OverallCorrectAnswersBarOptions,
+  data as OverallCorrectAnswersBarDataFn,
+  barDescriptions as OverallCorrectAnswersBarDescription,
+} from "@/app/components/course-dashboard/graphs/AvgCorrectAnswers/data";
 
 import {
   options as QuestionsAskedOptions,
@@ -31,13 +31,21 @@ import {
   barDescriptions as CommentsChartBarDescription,
 } from "@/app/components/course-dashboard/graphs/CommentsChart/data";
 
+import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/course-dashboard/graphs/StudentsProgressStatus/data";
+
 import ChartLayout from "@/app/components/course-dashboard/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/course-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
-import { getModuleGraphs } from "@/app/lib/actions/module";
+import { StudentsProgressStatus } from "@/app/components/course-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
+import {  getStudentCourseGraphsAnalytics } from "@/app/lib/actions/course";
+import UnitStandardTable from "../../(components)/unit-standard-table";
+import PageHeader from "../../../PageHeader";
 
-export default async function Page() {
-  const moduleId = "664a3f06c53933c3284043b6";
-  const data = await getModuleGraphs(moduleId);
+export default async function Page({params} : {params : {studentId:string}}) {
+  const studentId = params.studentId;
+  const courseId = "agsjvxhabsx"
+
+  const data = await getStudentCourseGraphsAnalytics( courseId,studentId,);
+
 
   const OverallQuizBarData = await OverallQuizBarDataFn(
     data.averageCompletedQuizzes
@@ -49,12 +57,13 @@ export default async function Page() {
     data.averageNotesSubmitted
   );
   const PDFChartBarData = await OverallPDFBarDataFn(data.averagePdfDownloaded);
-  const CompletionRateChartBarData = await OverallCompletionRateBarDataFn(
-    data.averageCompletionRate
+  const correctAnswersChartBarData = await OverallCorrectAnswersBarDataFn(
+    data.averageCorrectAnswer
   );
 
   return (
     <>
+    
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
@@ -62,6 +71,18 @@ export default async function Page() {
             barDescriptions={AvgTimeSpentBarDataDescription}
           >
             <AvgTimeSpent averageTimeSpent={data.averageTimeSpent} />
+          </ChartLayout>
+        </div>
+
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout
+            title="Progress Status"
+            barDescriptions={StudentsProgressStatusDescription}
+            type="pie"
+          >
+            <StudentsProgressStatus
+              studentCourseProgress={data.studentProgress}
+            />
           </ChartLayout>
         </div>
 
@@ -104,14 +125,24 @@ export default async function Page() {
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
-            title="Average Completed Rate (%)"
-            barDescriptions={OverallCompletionRateBarDescription}
-            options={OverallCompletionRateBarOptions}
-            data={CompletionRateChartBarData}
-            type="bar"
+            title="Average of Correct Answers Submitted"
+            barDescriptions={OverallCorrectAnswersBarDescription}
+            options={OverallCorrectAnswersBarOptions}
+            data={correctAnswersChartBarData}
+            type="line"
           />
         </div>
+       
       </div>
+      
+        <div className="mb-24pt mb-sm-0 mr-sm-24pt">
+        <PageHeader title="Web Developent Unit Standards"  />
+        </div>
+      
+      <div className="card p-relative o-hidden mb-0">
+      
+        <UnitStandardTable path="student"/>
+        </div>
     </>
   );
 }

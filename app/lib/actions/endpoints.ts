@@ -2,7 +2,7 @@ export const wCourseUrl =
   "https://khumla-development-newcourse-write.azurewebsites.net/api/v1";
 
 export const rCourseUrl =
-  "https://khumla-development-newcourse-read.azurewebsites.net/api/v1";
+  "https://khumla-dev-newcourse-read.azurewebsites.net/api/v1";
 
 export const wDocumentUrl =
   "https://khumla-development-document-write.azurewebsites.net/api/Documents";
@@ -23,4 +23,4 @@ export const wAudioGenerateUrl =
   "https://khumla-development-audio-generate.azurewebsites.net/api/v1";
 
 export const rAnalyticUrl =
-  "https://khumla-development-activity-read.azurewebsites.net/api/v1";
+  "https:khumla-dev-activity-read.azurewebsites.net/api/v1";

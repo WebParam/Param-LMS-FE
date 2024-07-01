@@ -104,3 +104,15 @@ export const getModuleGraphs = async (id: string) => {
   }
 };
 
+export const getStudentModuleGraphs = async (moduleId: string, studentId:string) => {
+  try {
+    const resp = await get( `${rAnalyticUrl}/GraphData/StudentModuleAnalytic/${moduleId}/${studentId}`);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    throw err;
+  }
+};
+

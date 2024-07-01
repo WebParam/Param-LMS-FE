@@ -68,8 +68,31 @@ export const getCourseGraphs = async (id: string) => {
   }
 };
 
+export const getCourseTableAnalytics = async (id:string) => {
+  try {
+    const resp = await get(`${rAnalyticUrl}/TableData/CourseTable/${id}`)
+    const data = resp.data;
+    console.log("Data data", data)
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (error) {
+    Diagnostic("ERROR ON GET, returning", error);
+    throw error;
+  }
+}
 
-
+export const getStudentCourseGraphsAnalytics = async (courseId:string, studentId:string) => {
+  try {
+    const resp = await get(`${rAnalyticUrl}/GraphData/StudentCourseAnalytic/${courseId}/${studentId}`)
+    const data = resp.data;
+    console.log("Data data", data)
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (error) {
+    Diagnostic("ERROR ON GET, returning", error);
+    throw error;
+  }
+}
 
 export const updateCourse = async (id: string, formData: FormData) => {
   const body = {
