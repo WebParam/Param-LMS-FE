@@ -40,6 +40,21 @@ export const put = async (url: string, body: any) => {
   }
 };
 
+export const del = async (url: string) => {
+  try {
+    const res = await fetch(url, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    Diagnostic("SUCCESS ON DELETE, returning", data);
+    return data;
+  } catch (err) {
+    console.log(`[API ERROR : Method: DELETE; Endpoint: ${url}]`, err);
+    Diagnostic("ERROR ON DELETE, returning", err);
+    return err;
+  }
+};
+
 export const get = async (url: string) => {
   try {
     const res = await fetch(url, { cache: "no-store" });
@@ -76,7 +91,7 @@ export const formDataEntriesArray = (entries: any) => {
   // Iterate over formData entries
   for (const entry of entries) {
     const [key, value] = entry;
-    const matches = key.match(/^options\[(\d+)\]\[(\w+)\]$/);
+    const matches = key.match(/^options\[(.+)\]\[(\w+)\]$/);
     if (matches) {
       const index = matches[1];
       const propName = matches[2];

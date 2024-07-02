@@ -1,13 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post, put } from "../utils";
-import {
-  rAssessmentUrl,
-  rRubricUrl,
-  wAssessmentUrl,
-  wQuestionUrl,
-  wRubricUrl,
-} from "./endpoints";
+import { get, post, del } from "../utils";
+import { rRubricUrl, wRubricUrl } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
 
 export const createRubric = async (
@@ -44,7 +38,6 @@ export const createRubric = async (
 export const getRubrics = async (questionId: string) => {
   try {
     const resp = await get(`${rRubricUrl}/GetRubrics/${questionId}`);
-    console.log(resp);
     const data = resp.data;
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
@@ -55,34 +48,15 @@ export const getRubrics = async (questionId: string) => {
   }
 };
 
-export const updateQuestion = async (
-  id: string,
-  description: string,
-  courseId: string,
-  moduleId: string,
-  assessmentId: string,
-  courseTitle: string,
-  formData: FormData
-) => {
-  const body = {
-    id,
-    title: formData.get("title"),
-    questionType: formData.get("questionType"),
-    score: formData.get("score"),
-    description,
-    assessmentId,
-  };
-
+export const deleteRubric = async (rubricId: string) => {
   try {
-    const data = await put(`${wQuestionUrl}/UpdateQuestion`, body);
-    Diagnostic("SUCCESS ON PUT, returning", data);
+    const resp = await del(`${wRubricUrl}/${rubricId}`);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON DELETE, returning", data);
+    return data;
   } catch (err) {
-    Diagnostic("ERROR ON PUT, returning", err);
+    Diagnostic("ERROR ON DELETE, returning", err);
 
     console.error(err);
   }
-
-  const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/assessment/${assessmentId}/questions?title=${courseTitle}&refreshId=${date}`;
-  redirect(url);
 };

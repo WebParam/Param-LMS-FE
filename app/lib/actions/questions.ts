@@ -1,6 +1,6 @@
 "use server";
 import { redirect } from "next/navigation";
-import { formDataEntriesArray, get, post, put } from "../utils";
+import { del, formDataEntriesArray, get, post, put } from "../utils";
 import {
   rAssessmentUrl,
   wOptionUrl,
@@ -110,6 +110,21 @@ export const getQuestions = async (assessmentId: string) => {
   }
 };
 
+export const deleteQuestion = async (questionId: string) => {
+  try {
+    const resp = await del(
+      `${wQuestionUrl}/questionId?questionId=${questionId}`
+    );
+    const data = resp.data;
+    Diagnostic("SUCCESS ON DELETE, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON DELETE, returning", err);
+
+    console.error(err);
+  }
+};
+
 export const createUpdateOptionRubric = async (
   entries: any,
   questionId: string,
@@ -117,6 +132,8 @@ export const createUpdateOptionRubric = async (
   correctValue: string
 ) => {
   const objArray = formDataEntriesArray(entries);
+  console.log("objArray: ", objArray);
+
   const createUrl =
     questionType == "Quiz"
       ? `${wOptionUrl}/AddOption`
@@ -145,7 +162,7 @@ export const createUpdateOptionRubric = async (
     } else if (obj.label !== "" && obj.description !== "") {
       promiseArray.push(post(createUrl, body));
     }
-    const response = await Promise.all(promiseArray);
-    Diagnostic("SUCCESS ON POST, returning", response);
   }
+  const response = await Promise.all(promiseArray);
+  Diagnostic("SUCCESS ON POST, returning", response);
 };

@@ -2,8 +2,13 @@ import ReactQuill from "react-quill";
 import { useEffect, useRef, useState } from "react";
 import QuestionOptions from "./QuestionOptions";
 import QuestionRubric from "./QuestionRubric";
-import { updateQuestion } from "@/app/lib/actions/questions";
-import { useParams, useSearchParams } from "next/navigation";
+import { deleteQuestion, updateQuestion } from "@/app/lib/actions/questions";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { IOption, IQuestion } from "@/app/interfaces/questions";
 import { getOptions } from "@/app/lib/actions/options";
 import { getRubrics } from "@/app/lib/actions/rubrics";
@@ -23,13 +28,25 @@ export default function Question({ question }: { question: IQuestion }) {
 
   const fetchOptions = async () => {
     const data = await getOptions(question.id!);
-    console.log("Options", data);
     setOptions(data);
   };
 
   const fetchRubric = async () => {
     const data = await getRubrics(question.id!);
     setRubrics(data);
+  };
+
+  const [isSpinner, setIsSpinner] = useState<boolean>(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const delQuestion = async () => {
+    setIsSpinner(true);
+    await deleteQuestion(question.id!);
+    const date = new Date().toString();
+    router.replace(`${pathname}?title=${title}&refreshId=${date}`, {
+      scroll: false,
+    });
   };
 
   useEffect(() => {
@@ -108,7 +125,13 @@ export default function Question({ question }: { question: IQuestion }) {
           className="col-1 card d-flex p-3 align-items-center"
         >
           <EditBtn />
-          <i className="material-icons">delete</i>
+          {isSpinner ? (
+            <span className="spinner-border text-success" role="status" />
+          ) : (
+            <i onClick={() => delQuestion()} className="material-icons">
+              delete
+            </i>
+          )}
         </div>
       </div>
     </form>

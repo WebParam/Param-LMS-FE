@@ -1,5 +1,7 @@
 import { IOption } from "@/app/interfaces/questions";
-import { useState } from "react";
+import { deleteOption } from "@/app/lib/actions/options";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function CreateQuestionBtn({
   option,
@@ -21,6 +23,26 @@ export default function CreateQuestionBtn({
     );
   };
 
+  const [isSpinner, setIsSpinner] = useState<boolean>(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const title = searchParams.get("title");
+  const refreshId = searchParams.get("refreshId");
+
+  const delOption = async () => {
+    setIsSpinner(true);
+    await deleteOption(option.id!);
+    const date = new Date().toString();
+    router.replace(`${pathname}?title=${title}&refreshId=${date}`, {
+      scroll: false,
+    });
+  };
+
+  useEffect(() => {
+    setIsSpinner(false);
+  }, [refreshId]);
+
   return (
     <div
       style={{ columnGap: "20px" }}
@@ -35,13 +57,17 @@ export default function CreateQuestionBtn({
         style={{ width: "17px", height: "17px" }}
         disabled={false}
       />
-      <input type="hidden" name="options[0][id]" value={option.id} />
+      <input
+        type="hidden"
+        name={`options[${option.id}][id]`}
+        value={option.id}
+      />
       <input
         style={{ width: "150px" }}
         type="text"
         className="form-control"
         placeholder="Label: E.g. A"
-        name="options[0][label]"
+        name={`options[${option.id}][label]`}
         defaultValue={option.label}
         onChange={(e: any) => setLabel(e.target.value)}
       />
@@ -50,10 +76,16 @@ export default function CreateQuestionBtn({
         type="text"
         className="form-control"
         placeholder="Option ..."
-        name="options[0][description]"
+        name={`options[${option.id}][description]`}
         defaultValue={option.description}
       />
-      <i className="material-icons">delete</i>
+      {isSpinner ? (
+        <span className="spinner-border text-success" role="status" />
+      ) : (
+        <i onClick={() => delOption()} className="material-icons">
+          delete
+        </i>
+      )}
     </div>
   );
 }

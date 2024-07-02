@@ -25470,7 +25470,8 @@ a.text-primary-pickled-bluewood:focus,a.text-primary-pickled-bluewood:hover {
 }
 
 .material-icons {
-    vertical-align: middle
+    vertical-align: middle;
+    cursor: pointer;
 }
 
 .icon-16pt {
