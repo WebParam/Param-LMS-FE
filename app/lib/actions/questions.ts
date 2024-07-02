@@ -132,8 +132,6 @@ export const createUpdateOptionRubric = async (
   correctValue: string
 ) => {
   const objArray = formDataEntriesArray(entries);
-  console.log("objArray: ", objArray);
-
   const createUrl =
     questionType == "Quiz"
       ? `${wOptionUrl}/AddOption`

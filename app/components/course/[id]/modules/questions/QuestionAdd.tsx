@@ -84,7 +84,6 @@ export default function QuestionAdd() {
           className="col-1 card d-flex p-3 align-items-center"
         >
           <AddBtn />
-          <i className="material-icons">delete</i>
         </div>
       </div>
     </form>
