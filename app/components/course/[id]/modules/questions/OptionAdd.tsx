@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddBtn } from "./Buttons";
+import { useSearchParams } from "next/navigation";
 
 export default function OptionAdd({
   selectedOption,
@@ -9,6 +10,9 @@ export default function OptionAdd({
   setSelectedOption: (value: any) => void;
 }) {
   const [label, setLabel] = useState("");
+  const searchParams = useSearchParams();
+  const refreshId = searchParams.get("refreshId");
+
   const handleOptionChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
@@ -18,6 +22,7 @@ export default function OptionAdd({
     );
   };
 
+  useEffect(() => setLabel(""), [refreshId]);
   return (
     <div
       style={{ columnGap: "20px" }}
@@ -37,8 +42,7 @@ export default function OptionAdd({
         type="text"
         className="form-control"
         placeholder="Label: E.g. A"
-        name="options[1][label]"
-        id=""
+        name="options[0][label]"
         onChange={(e: any) => setLabel(e.target.value)}
       />
       <input
@@ -46,8 +50,7 @@ export default function OptionAdd({
         type="text"
         className="form-control"
         placeholder="Option ..."
-        name="options[1][description]"
-        id=""
+        name="options[0][description]"
       />
       <AddBtn />
     </div>

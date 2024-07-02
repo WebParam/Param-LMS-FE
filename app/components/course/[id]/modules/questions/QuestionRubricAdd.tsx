@@ -11,14 +11,14 @@ export default function QuestionRubric() {
         type="text"
         className="form-control"
         placeholder="Rubric ..."
-        name="options[1][label]"
+        name="options[0][description]"
       />
       <input
         style={{ width: "150px" }}
         type="number"
         className="form-control"
         placeholder="Points: E.g. 4"
-        name="options[1][description]"
+        name="options[0][label]"
       />
       <AddBtn />
     </div>
