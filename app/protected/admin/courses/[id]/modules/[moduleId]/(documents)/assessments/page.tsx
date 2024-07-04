@@ -44,7 +44,7 @@ const Body = ({ params }: { params: { id: string } }) => {
       />
 
       <div className="page-separator my-4">
-        <div className="page-separator__text">Asssessments</div>
+        <div className="page-separator__text">Assessments</div>
       </div>
 
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">

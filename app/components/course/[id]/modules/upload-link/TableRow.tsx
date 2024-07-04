@@ -25,10 +25,19 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
           className="text-center mx-auto text-justify js-lists-values-projects small"
         >
           <div
-            style={{ marginLeft: "10em" }}
+            style={{ marginLeft: "5em" }}
             className="d-flex align-items-center"
           >
-            <p className="text-justify">{data.title}</p>
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                width: "350px",
+              }}
+              className="text-justify"
+            >
+              {data.title}
+            </p>
           </div>
         </td>
         <td

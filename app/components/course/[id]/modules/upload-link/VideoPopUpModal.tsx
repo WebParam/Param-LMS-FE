@@ -1,3 +1,4 @@
+import { removeTags } from "@/app/lib/utils";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -31,7 +32,7 @@ function VideoPopUpModal(props: any) {
             <div className="card-body">
               <label className="form-label">Description</label>
               <p>
-                {props.data.description}
+                {removeTags(props.data.description)}
               </p>
             </div>
           </div>

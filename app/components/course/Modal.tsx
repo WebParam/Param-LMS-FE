@@ -86,9 +86,9 @@ function MyVerticallyCenteredModal(props: any) {
               className="form-control"
               name="documentTone"
             >
-              <option selected={false}>Select Tone</option>
+              <option >Select Tone</option>
               {tones.map((name: string) => (
-                <option selected={false}>{name}</option>
+                <option key={name}>{name}</option>
               ))}
             </select>
           </div>

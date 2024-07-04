@@ -40,9 +40,24 @@ export const put = async (url: string, body: any) => {
   }
 };
 
+export const del = async (url: string) => {
+  try {
+    const res = await fetch(url, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    Diagnostic("SUCCESS ON DELETE, returning", data);
+    return data;
+  } catch (err) {
+    console.log(`[API ERROR : Method: DELETE; Endpoint: ${url}]`, err);
+    Diagnostic("ERROR ON DELETE, returning", err);
+    return err;
+  }
+};
+
 export const get = async (url: string) => {
   try {
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(url, { cache: "no-store" });
     const data = await res.json();
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
@@ -64,4 +79,33 @@ export function generateRandomUserId(length?: number) {
   return result;
 }
 
-export const removeTags = (str: string) => str.replace(/<(?:\/)?[sp]+[^>]*>/g, "");
+export const removeTags = (str: string) => {
+  const textArea = document.createElement("textarea");
+  textArea.innerHTML = str;
+  return textArea.value.replace(/<\/?[^>]+(>|$)/g, "");
+};
+
+export const formDataEntriesArray = (entries: any) => {
+  const objMap: { [key: string]: { [key: string]: FormDataEntryValue } } = {};
+
+  // Iterate over formData entries
+  for (const entry of entries) {
+    const [key, value] = entry;
+    const matches = key.match(/^options\[(.+)\]\[(\w+)\]$/);
+    if (matches) {
+      const index = matches[1];
+      const propName = matches[2];
+
+      if (!objMap[index]) {
+        objMap[index] = {};
+      }
+
+      objMap[index][propName] = value;
+    }
+  }
+
+  // Convert the object map to an array of objects
+  const objArray: { [key: string]: FormDataEntryValue }[] =
+    Object.values(objMap);
+  return objArray;
+};

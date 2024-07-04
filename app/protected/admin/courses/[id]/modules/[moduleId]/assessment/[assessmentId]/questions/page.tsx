@@ -1,74 +1,63 @@
 "use client";
-import Pagination from "@/app/components/Pagination";
-import Table from "@/components/course/[id]/modules/questions/Table";
 import { useEffect, useState } from "react";
-import { getParaphrases } from "@/app/lib/actions/paraphrase";
 import { useSearchParams } from "next/navigation";
-import CreateQuestionModal from "@/components/course/[id]/modules/questions/CreateQuestionModal";
+import { Modal } from "react-bootstrap";
+import { getQuestions } from "@/app/lib/actions/questions";
+import Question from "@/components/course/[id]/modules/questions/Question";
+import { IQuestion } from "@/app/interfaces/questions";
+import QuestionAdd from "@/components/course/[id]/modules/questions/QuestionAdd";
 
 const Body = ({ params }: { params: { assessmentId: string } }) => {
   const assessmentId = params.assessmentId;
   const [list, setList] = useState([]);
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId");
+  const [isCreateModal, setIsCreateModal] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 5;
-  const indexOfLastItem = currentPage * ITEMSPERPAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems =
-    list && list.length > 0
-      ? list.slice(indexOfFirstItem, indexOfLastItem)
-      : [];
-
-  const fetchParaphrases = async () => {
-    const response = await getParaphrases(assessmentId);
+  const fetchQuestions = async () => {
+    const response = await getQuestions(assessmentId);
     setList(response);
   };
 
   useEffect(() => {
-    fetchParaphrases();
+    fetchQuestions();
+    setIsCreateModal(false);
   }, [refreshId]);
-
-  const [openModal, setOpenModal] = useState<boolean>(false);
 
   return (
     <>
-      <CreateQuestionModal
-        show={openModal}
-        onHide={() => {
-          setOpenModal(false);
-        }}
-      />
-
+      <Modal
+        size="sm"
+        centered
+        show={isCreateModal}
+        onHide={() => setIsCreateModal(false)}
+      >
+        <Modal.Body>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "#252525",
+              gap: "15px",
+            }}
+          >
+            <div className="spinner-grow text-primary" role="status" />
+            <p>Creating Question...</p>
+          </div>
+        </Modal.Body>
+      </Modal>
       <div className="page-separator mb-4">
         <div className="page-separator__text">Questions</div>
       </div>
 
-      <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
-        <div className="mx-1">
-          <button
-            className="btn btn-success btn-block"
-            onClick={() => setOpenModal(true)}
-          >
-            Create Question
-          </button>
-        </div>
-      </div>
+      <QuestionAdd />
 
-      <div className="card mt-3 mb-3">
-        <Table list={currentItems} />
-      </div>
-
-      <div className="card mb-24pt">
-        <Pagination
-          listLength={list?.length}
-          indexOfLastItem={indexOfLastItem}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          ITEMSPERPAGE={ITEMSPERPAGE}
-        />
-      </div>
+      {list &&
+        list.map((question: IQuestion) => (
+          <Question key={question.id} question={question} />
+        ))}
     </>
   );
 };

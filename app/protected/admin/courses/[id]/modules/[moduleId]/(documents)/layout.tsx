@@ -42,12 +42,12 @@ function Layout({ children }: { children: React.ReactNode }) {
       url: `${url}/quizzes?title=${title}`,
       path: `${url}/quizzes`,
     },
-    // {
-    //   name: "assessments",
-    //   title: "Assessments",
-    //   url: `${url}/assessments?title=${title}`,
-    //   path: `${url}/assessments`,
-    // },
+    {
+      name: "assessments",
+      title: "Assessments",
+      url: `${url}/assessments?title=${title}`,
+      path: `${url}/assessments`,
+    },
   ];
 
   return (

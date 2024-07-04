@@ -3,8 +3,10 @@ import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
 import EditOptionModal from "./EditOptionModal";
 import { Modal } from "react-bootstrap";
 import EditRubricModal from "./EditRubricModal";
+import { Rubric } from "@/app/interfaces/rubric";
+import { removeTags } from "@/app/lib/utils";
 
-const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
+const TableRow = ({ data }: { data: Rubric }) => {
   const [openOptionModal, setOpenOptionModal] = useState<boolean>(false);
   const [openRubricModal, setOpenRubricModal] = useState<boolean>(false);
   const [publishModal, setPublishModal] = useState(false);
@@ -45,19 +47,13 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             style={{ marginLeft: "10em" }}
             className="d-flex align-items-center"
           >
-            <p className="text-justify">{data.title}</p>
+            <p className="text-justify">{data.label}</p>
           </div>
         </td>
         <td className="text-center js-lists-values-projects small ">
           <div className="d-flex align-items-center">
-            <p className="text-justify">Quiz or Long Text</p>
+            <p className="text-justify">{removeTags(data.description)}</p>
           </div>
-        </td>
-        <td
-          style={{ width: "300px" }}
-          className="text-center js-lists-values-projects small"
-        >
-          30
         </td>
         <td
           style={{ width: "300px" }}

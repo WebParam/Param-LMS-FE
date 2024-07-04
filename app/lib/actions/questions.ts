@@ -1,43 +1,105 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post, put } from "../utils";
-import { rAssessmentUrl, wAssessmentUrl } from "./endpoints";
+import { del, formDataEntriesArray, get, post, put } from "../utils";
+import {
+  rAssessmentUrl,
+  wOptionUrl,
+  wQuestionUrl,
+  wRubricUrl,
+} from "./endpoints";
 import { Diagnostic } from "../logger/logger";
+import { IQuestion, FormObject } from "@/app/interfaces/questions";
 
 export const createQuestion = async (
   description: string,
   courseId: string,
   moduleId: string,
-  courseTitle: string,
   assessmentId: string,
+  courseTitle: string,
   formData: FormData
 ) => {
   const body = {
-    title: formData.get("title"),
-    courseId,
+    questionType: formData.get("questionType"),
+    score: formData.get("score"),
+    description,
+    assessmentId,
   };
 
+  const entries: any = formData.entries();
+  let question = {} as IQuestion;
   try {
-    const data = await post(
-      `${wAssessmentUrl}/AddNewAssessment`,
-      body
-    );
+    const data = await post(`${wQuestionUrl}/AddQuestion`, body);
+    question = data.data;
     Diagnostic("SUCCESS ON POST, returning", data);
+
+    const correctValue: any = formData.get("correctValue") || "";
+
+    createUpdateOptionRubric(
+      entries,
+      question.id!,
+      question.questionType,
+      correctValue
+    );
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
-
     console.error(err);
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/assessments/${assessmentId}?title=${courseTitle}&refreshId=${date}`;
+  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/assessment/${assessmentId}/questions?title=${courseTitle}&refreshId=${date}`;
   redirect(url);
 };
 
-export const getAssessments = async (id: string) => {
+export const updateQuestion = async (
+  id: string,
+  description: string,
+  courseId: string,
+  moduleId: string,
+  assessmentId: string,
+  courseTitle: string,
+  formData: FormData
+) => {
+  const body = {
+    id,
+    title: formData.get("title"),
+    questionType: formData.get("questionType"),
+    score: formData.get("score"),
+    description,
+    assessmentId,
+  };
+
+  const entries: any = formData.entries();
+
+  let question = {} as IQuestion;
   try {
-    const resp = await get(`${rAssessmentUrl}/GetNewAssessments/${id}`);
-    console.log(resp)
+    const data = await put(`${wQuestionUrl}/UpdateQuestion`, body);
+    question = data.data;
+    Diagnostic("SUCCESS ON PUT, returning", data);
+
+    const correctValue: any = formData.get("correctValue") || "";
+
+    createUpdateOptionRubric(
+      entries,
+      question.id!,
+      question.questionType,
+      correctValue
+    );
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    console.error(err);
+  }
+
+  const date = new Date().toString();
+  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/assessment/${assessmentId}/questions?title=${courseTitle}&refreshId=${date}`;
+  redirect(url);
+};
+
+export const getQuestions = async (assessmentId: string) => {
+  try {
+    const resp = await get(
+      `${rAssessmentUrl}/Questions/GetQuestions/${assessmentId}`
+    );
+    console.log(resp);
     const data = resp.data;
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
@@ -48,31 +110,57 @@ export const getAssessments = async (id: string) => {
   }
 };
 
-export const updateAssessment = async (
-  id: string,
-  courseId: string,
-  moduleId: string,
-  courseTitle: string,
-  formData: FormData
-) => {
-  const body = {
-    id,
-    title: formData.get("title"),
-  };
-
+export const deleteQuestion = async (questionId: string) => {
   try {
-    const data = await put(
-      `${wAssessmentUrl}/UpdateNewAssessment`,
-      body
+    const resp = await del(
+      `${wQuestionUrl}/questionId?questionId=${questionId}`
     );
-    Diagnostic("SUCCESS ON PUT, returning", data);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON DELETE, returning", data);
+    return data;
   } catch (err) {
-    Diagnostic("ERROR ON PUT, returning", err);
+    Diagnostic("ERROR ON DELETE, returning", err);
 
     console.error(err);
   }
+};
 
-  const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/assessments?title=${courseTitle}&refreshId=${date}`;
-  redirect(url);
+export const createUpdateOptionRubric = async (
+  entries: any,
+  questionId: string,
+  questionType: string,
+  correctValue: string
+) => {
+  const objArray = formDataEntriesArray(entries);
+  const createUrl =
+    questionType == "Quiz"
+      ? `${wOptionUrl}/AddOption`
+      : `${wRubricUrl}/AddRubric`;
+  const updateUrl =
+    questionType == "Quiz"
+      ? `${wOptionUrl}/UpdateOption`
+      : `${wRubricUrl}/UpdateRubric`;
+
+  const promiseArray = [];
+  for (const obj of objArray) {
+    const body: FormObject =
+      questionType == "Quiz"
+        ? {
+            ...obj,
+            isCorrect: correctValue == obj.label,
+            questionId,
+          }
+        : {
+            ...obj,
+            questionId,
+          };
+
+    if (body && body.id) {
+      promiseArray.push(put(updateUrl, body));
+    } else if (obj.label !== "" && obj.description !== "") {
+      promiseArray.push(post(createUrl, body));
+    }
+  }
+  const response = await Promise.all(promiseArray);
+  Diagnostic("SUCCESS ON POST, returning", response);
 };

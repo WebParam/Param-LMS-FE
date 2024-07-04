@@ -10,7 +10,11 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [generateQuizModal, setGenerateQuizModal] = useState(false);
   const [viewQuizModal, setViewQuizModal] = useState(false);
   const [quizzes, setQuizzes] = useState([]);
-  const { id: courseId, moduleId, documentId } = useParams<{
+  const {
+    id: courseId,
+    moduleId,
+    documentId,
+  } = useParams<{
     id: string;
     moduleId: string;
     documentId: string;
@@ -32,50 +36,67 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
       setQuizzes(data);
       setOpenModal(true);
     }
-  }
+  };
 
-  const generateQuizzesFn = ({ id, description }: { id: string;  description: string}) => {
+  const generateQuizzesFn = ({
+    id,
+    description,
+  }: {
+    id: string;
+    description: string;
+  }) => {
     setGenerateQuizModal(true);
     generateQuizzes(id, description, courseId, moduleId, documentId, title);
-  }
-
+  };
 
   return (
     <>
-    <Modal 
-      size="sm"
-      centered
-      show={generateQuizModal}
-      onHide={() => setGenerateQuizModal(false)}
-      backdrop={false}
-      keyboard={false}
-    >
-      <Modal.Body>
-      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: '#252525', gap: '15px'}}>
-        <div className="spinner-grow text-primary" role="status"/>
-        <p>
-          Generating Quiz...
-        </p>
-      </div>
-      </Modal.Body>
-    </Modal>
-    <Modal 
-      size="sm"
-      centered
-      show={viewQuizModal}
-      onHide={() => setViewQuizModal(false)}
-      backdrop={false}
-      keyboard={false}
-    >
-      <Modal.Body>
-      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: '#252525', gap: '15px'}}>
-        <div className="spinner-grow text-primary" role="status"/>
-        <p>
-          loading preview...
-        </p>
-      </div>
-      </Modal.Body>
-    </Modal>
+      <Modal
+        size="sm"
+        centered
+        show={generateQuizModal}
+        onHide={() => setGenerateQuizModal(false)}
+        backdrop="static"
+      >
+        <Modal.Body>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "#252525",
+              gap: "15px",
+            }}
+          >
+            <div className="spinner-grow text-primary" role="status" />
+            <p>Generating Quiz...</p>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        size="sm"
+        centered
+        show={viewQuizModal}
+        onHide={() => setViewQuizModal(false)}
+        backdrop="static"
+      >
+        <Modal.Body>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "#252525",
+              gap: "15px",
+            }}
+          >
+            <div className="spinner-grow text-primary" role="status" />
+            <p>loading preview...</p>
+          </div>
+        </Modal.Body>
+      </Modal>
       {openModal && (
         <div className="card mb-0">
           <QuizzesModal
@@ -97,7 +118,16 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             style={{ marginLeft: "10em" }}
             className="d-flex align-items-center"
           >
-            <p className="text-justify">{data.title}</p>
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                width: "350px",
+              }}
+              className="text-justify"
+            >
+              {data.title}
+            </p>
           </div>
         </td>
         <td className="text-center js-lists-values-projects small">

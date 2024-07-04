@@ -1,5 +1,5 @@
 const TableHead = () => {
-  const headers = ["Name", "Question Type", "Score", "Action"];
+  const headers = ["Label", "Description", "Action"];
 
   return (
     <>

@@ -10,9 +10,14 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { createQuestion } from "@/app/lib/actions/questions";
+import CreateQuestionBtn from "./Buttons";
 
 function CreateQuestionModal(props: any) {
-  const { id: courseId, moduleId, assessmentId } = useParams<{
+  const {
+    id: courseId,
+    moduleId,
+    assessmentId,
+  } = useParams<{
     id: string;
     moduleId: string;
     assessmentId: string;
@@ -73,7 +78,7 @@ function CreateQuestionModal(props: any) {
       >
         <form action={createParaphraseWithParams}>
           <Modal.Header closeButton>
-            <Modal.Title>Create Question</Modal.Title>
+            <Modal.Title>Create Question asdffasd</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>
@@ -117,20 +122,15 @@ function CreateQuestionModal(props: any) {
                 name="score"
                 required
                 type="number"
-                ref={titleRef}
               />
             </div>
-
           </Modal.Body>
           <Modal.Footer>
             <input type="submit" hidden ref={submmitRef} />
             <Button variant="secondary" onClick={props.onHide}>
               Close
             </Button>
-            <Link className="btn btn-success" href={url} onClick={props.onHide}>
-            Submit
-          </Link>
-
+            <CreateQuestionBtn />
           </Modal.Footer>
         </form>
       </Modal>

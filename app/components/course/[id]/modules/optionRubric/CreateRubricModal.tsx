@@ -5,58 +5,46 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import { createParaphrase } from "@/app/lib/actions/paraphrase";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { useFormStatus } from "react-dom";
-import Link from "next/link";
+import { createRubric } from "@/app/lib/actions/rubrics";
 
 function CreateRubricModal(props: any) {
-  const { id, moduleId, documentId } = useParams<{
+  const {
+    id: courseId,
+    moduleId,
+    assessmentId,
+    questionId,
+  } = useParams<{
     id: string;
     moduleId: string;
-    documentId: string;
+    assessmentId: string;
+    questionId: string;
   }>();
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const type = searchParams.get("type") || "";
   const [description, setDescription] = useState("");
-  const [submitModal, setSubmitModal] = useState(false);
   const [errorSubmit, setErrorSubmit] = useState(false);
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
-  const formStat = useFormStatus();
-  const questionTypes = ["Long Text", "Quiz"];
 
-  const pathname = usePathname();
-  const arrUrl = pathname.split("/");
-  arrUrl.pop();
-  const url = `${arrUrl.join("/")}/edit-question?title=${title}`;
-
-  const createParaphraseWithParams = createParaphrase.bind(
+  const createRubricWithParams = createRubric.bind(
     null,
     description,
-    id,
+    courseId,
     moduleId,
-    documentId,
-    title
+    assessmentId,
+    questionId,
+    title,
+    type
   );
 
   const submit = () => {
-    setSubmitModal(true);
-    console.log("form stat:", formStat);
-
     submmitRef.current?.click();
-    if (titleRef.current?.value && titleRef.current?.value.length > 10) {
-      setErrorSubmit(false);
-      setTimeout(() => {
-        setSubmitModal(false);
-      }, 2000);
+    if (titleRef.current?.value && titleRef.current?.value.length > 5) {
       props.onHide();
-    } else {
-      setTimeout(() => {
-        setSubmitModal(false);
-        setErrorSubmit(true);
-      }, 3000);
+      props.setIsCreateRubricModal(true);
     }
   };
 
@@ -68,7 +56,7 @@ function CreateRubricModal(props: any) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <form action={createParaphraseWithParams}>
+        <form action={createRubricWithParams}>
           <Modal.Header closeButton>
             <Modal.Title>Create Rubric</Modal.Title>
           </Modal.Header>
@@ -78,8 +66,8 @@ function CreateRubricModal(props: any) {
               <input
                 minLength={10}
                 className="form-control mb-3"
-                placeholder="Enter your label here..."
-                name="title"
+                placeholder="Label: E.g 4 points, 2 points, etc..."
+                name="label"
                 required
                 ref={titleRef}
               />
@@ -92,59 +80,17 @@ function CreateRubricModal(props: any) {
                 style={{ color: "#252525" }}
               />
             </div>
-            <div className="mt-3">
-              <h5>Score</h5>
-              <input
-                className="form-control mb-3"
-                placeholder="Enter Rubric Score..."
-                name="title"
-                required
-                type="number"
-                ref={titleRef}
-              />
-            </div>
           </Modal.Body>
           <Modal.Footer>
             <input type="submit" hidden ref={submmitRef} />
             <Button variant="secondary" onClick={props.onHide}>
               Close
             </Button>
-            <Link className="btn btn-success" href={url} onClick={props.onHide}>
+            <Button variant="success" onClick={() => submit()}>
               Submit
-            </Link>
+            </Button>
           </Modal.Footer>
         </form>
-      </Modal>
-
-      <Modal
-        size="sm"
-        centered
-        show={submitModal}
-        onHide={() => setSubmitModal(false)}
-      >
-        <Modal.Body>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "#252525",
-              gap: "15px",
-            }}
-          >
-            {errorSubmit ? (
-              <div className="spinner-grow text-danger" role="status" />
-            ) : (
-              <div className="spinner-grow text-primary" role="status" />
-            )}
-            {errorSubmit ? (
-              <p>Cannot create with empty field(s)</p>
-            ) : (
-              <p>Creating Transcript...</p>
-            )}
-          </div>
-        </Modal.Body>
       </Modal>
     </>
   );
