@@ -16,9 +16,9 @@ export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api
 
 export const uploadImage = ""
 
-export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api";
+export const userWriteUrl = "https://khumla-development-user-write.azurewebsites.net/api/v1";
  
-export const userReadUrl="https://khmla-dev-user-read.azurewebsites.net/api";
+export const userReadUrl="https://khmla-development-user-read.azurewebsites.net/api/v1";
 
 export const commentReadUrl="https://khumla-develop-comments-read.azurewebsites.net/api";
 
