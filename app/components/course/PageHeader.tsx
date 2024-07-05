@@ -4,19 +4,25 @@ import { useSearchParams, usePathname } from "next/navigation";
 import Modal from "./Modal";
 import { useState } from "react";
 import { useParams } from "next/navigation";
+import KnowledgeModuleModal from "./KnowledgeModuleModal";
 
 export default function PageHeader({ title }: { title: string }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openKnowledgeModuleModal, setOpenKnowledgeModuleModal] =
+    useState<boolean>(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const name = searchParams.get("title");
 
   let isModule = false;
+  let isKnowledgeModule = false;
   let isCreateModule = false;
   let isEditModule = false;
+  let isEditKnowledgeModules = false;
   let isEditCourse = false;
   let isCourse = false;
   let isEditDocument = false;
+  let isEditKnowledgeTopic = false;
   const { id } = useParams<{ id: string }>();
 
   const arrUrl = pathname.split("/");
@@ -29,6 +35,7 @@ export default function PageHeader({ title }: { title: string }) {
     "generate-quizzes",
     "questions",
     "edit-question",
+    "topic-elements",
   ];
   const arrLink = [
     "edit",
@@ -37,6 +44,7 @@ export default function PageHeader({ title }: { title: string }) {
     "videos",
     "quizzes",
     "assessments",
+    "knowledge-topics",
   ];
 
   const stepperMap: any = {
@@ -51,6 +59,7 @@ export default function PageHeader({ title }: { title: string }) {
     assessments: "Assessments",
     questions: "Questions",
     "edit-question": "Edit Question",
+    "knowledge-topics": "Knowledge Topics",
   };
 
   const urlDocumentMap: any = {
@@ -59,6 +68,7 @@ export default function PageHeader({ title }: { title: string }) {
     "upload-link": "videos",
     "generate-quizzes": "quizzes",
     questions: "assessments",
+    "topic-elements": "knowledge-topics",
   };
 
   let backUrl = "";
@@ -71,7 +81,9 @@ export default function PageHeader({ title }: { title: string }) {
   } else if (pathname.indexOf("/modules/create") !== -1) {
     title = `Create Unit Standard`;
     isCreateModule = true;
-  } else if (pathname.indexOf("/modules") !== -1) {
+  } 
+  // Backward Compatibility for Unit Standard
+  else if (pathname.indexOf("/modules") !== -1) {
     title = `${name}`;
     if ([...arrLink, ...actionLinks].indexOf(suffixPath) === -1) {
       isModule = true;
@@ -88,6 +100,24 @@ export default function PageHeader({ title }: { title: string }) {
       title =
         name + " - " + (stepperMap[suffixPath] ? stepperMap[suffixPath] : "");
     }
+  } else if (pathname.indexOf("/knowledge-modules") !== -1) {
+    title = `${name}`;
+    if ([...arrLink, ...actionLinks].indexOf(suffixPath) === -1) {
+      isKnowledgeModule = true;
+    } else {
+      if (actionLinks.indexOf(suffixPath) !== -1) {
+        const arr = pathname.split("/");
+        const urlSlice = arr.slice(0, -3);
+        backUrl = `${urlSlice.join("/")}/${
+          urlDocumentMap[suffixPath]
+        }?title=${title}`;
+        isEditKnowledgeTopic = true;
+      } else if (arrLink.indexOf(suffixPath) !== -1)
+        isEditKnowledgeModules = true;
+
+      title =
+        name + " - " + (stepperMap[suffixPath] ? stepperMap[suffixPath] : "");
+    }
   }
 
   return (
@@ -95,6 +125,13 @@ export default function PageHeader({ title }: { title: string }) {
       <Modal
         show={openModal}
         onHide={() => setOpenModal(false)}
+        courseId={id}
+        title={name}
+      />
+
+      <KnowledgeModuleModal
+        show={openKnowledgeModuleModal}
+        onHide={() => setOpenKnowledgeModuleModal(false)}
         courseId={id}
         title={name}
       />
@@ -141,6 +178,14 @@ export default function PageHeader({ title }: { title: string }) {
                   Unit Standards
                 </Link>
               )}
+              {isEditKnowledgeModules && (
+                <Link
+                  className="btn btn-success"
+                  href={`/protected/admin/courses/${id}/knowledge-modules?title=${name}`}
+                >
+                  Knowledge Modules
+                </Link>
+              )}
               {isModule && (
                 <button
                   className="btn btn-success"
@@ -149,9 +194,22 @@ export default function PageHeader({ title }: { title: string }) {
                   Create Unit Standard
                 </button>
               )}
+              {isKnowledgeModule && (
+                <button
+                  className="btn btn-success"
+                  onClick={() => setOpenKnowledgeModuleModal(true)}
+                >
+                  Create Knowledge Module
+                </button>
+              )}
               {isEditDocument && (
                 <Link className="btn btn-success" href={backUrl}>
                   Documents
+                </Link>
+              )}
+              {isEditKnowledgeTopic && (
+                <Link className="btn btn-success" href={backUrl}>
+                  Knowledge Topic
                 </Link>
               )}
             </div>
