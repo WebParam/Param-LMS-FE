@@ -1,0 +1,78 @@
+.calendar-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .calendar {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%; /* Ensure the calendar takes full width */
+    max-width: 800px; /* Set a max width to maintain consistency */
+  }
+  
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .calendar-nav {
+    color: #28a745; /* Green color */
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .calendar-day-header {
+    font-weight: bold;
+    padding: 0.5rem;
+  }
+  
+  .calendar-day {
+    padding: 2.5rem; /* Increase the size of the date squares */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  .calendar-day:hover .create-button {
+    display: block;
+  }
+  
+  .calendar-day:hover span {
+    display: none;
+  }
+  
+  .calendar-day span {
+    display: block;
+  }
+  
+  .calendar-day.empty {
+    background-color: transparent;
+    border: none;
+    cursor: default;
+  }
+  
+  .create-button {
+    font-size: 1.5rem;
+    color: #28a745; /* Green color */
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: none;
+    position: absolute;
+  }

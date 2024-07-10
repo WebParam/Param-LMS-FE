@@ -58,7 +58,7 @@ function ScheduleClassForm() {
   return (
     <form onSubmit={handleSubmit} className="schedule-class-form">
       <div className="form-group">
-        <label htmlFor="title">Add title</label>
+        <label htmlFor="title">Class Title</label>
         <input
           type="text"
           id="title"

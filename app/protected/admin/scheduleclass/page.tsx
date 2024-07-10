@@ -1,11 +1,11 @@
 import React from "react";
-import ScheduleClassForm from "../../../components/ScheduleClassForm";
+import Calendar from "../../../components/ScheduleClass/Calendar";
 
 function ScheduleClassPage() {
   return (
     <div className="container">
       <h1>Schedule a Class</h1>
-      <ScheduleClassForm />
+      <Calendar />
     </div>
   );
 }
