@@ -1,8 +1,8 @@
-import { getModule } from "@/app/lib/actions/module";
-import EditForm from "@/components/course/[id]/modules/documents/form";
+import { getKnowledgeModule } from "@/app/lib/actions/knowledge-module";
+import EditForm from "@/components/course/[id]/knowledge-modules/form";
 
 const Body = async ({ params }: { params: { moduleId: string } }) => {
-  const module = await getModule(params.moduleId);
+  const module = await getKnowledgeModule(params.moduleId);
 
   return (
     <>
