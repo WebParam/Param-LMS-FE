@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import VideoPopUpModal from "./VideoPopUpModal";
 import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
 import { useSearchParams } from "next/navigation";
-import EditTranscriptModal from "./EditTranscriptModal";
 import EditUrlModal from "./EditUrlModal";
 
 const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
   const [openPreviewModal, setOpenPreviewModal] = useState<boolean>(false);
-  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [openUrlModal, setOpenUrlModal] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
@@ -85,16 +83,6 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
             Preview
             <i className="material-icons ml-1">open_in_new</i>
           </button>
-
-          {openEditModal && (
-            <div className="card mb-0">
-              <EditTranscriptModal
-                show={openEditModal}
-                onHide={() => setOpenEditModal(false)}
-                data={data}
-              />
-            </div>
-          )}
 
           {openUrlModal && (
             <div className="card mb-0">

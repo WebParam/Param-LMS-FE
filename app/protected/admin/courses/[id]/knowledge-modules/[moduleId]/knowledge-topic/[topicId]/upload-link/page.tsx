@@ -1,45 +1,46 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import { getKnowledgeTopics } from "@/app/lib/actions/knowledge-topic";
-import Table from "@/components/course/[id]/knowledge-modules/videos/Table";
-import { useSearchParams } from "next/navigation";
+import Table from "@/components/course/[id]/knowledge-modules/upload-link/Table";
 import { useEffect, useState } from "react";
+import { getKnowledgeElements } from "@/app/lib/actions/knowledge-elements";
+import { useSearchParams } from "next/navigation";
 
-const Body = ({ params }: { params: { moduleId: string } }) => {
+const Body = ({ params }: { params: { topicId: string } }) => {
+  const id = params.topicId;
+
+  const [list, setList] = useState([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 5;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const id = params.moduleId;
-  const [list, setList] = useState([]);
-
   const currentItems =
     list && list.length > 0
       ? list.slice(indexOfFirstItem, indexOfLastItem)
       : [];
 
-  const fetchKnowledgeTopics = async () => {
-    const list = await getKnowledgeTopics(id);
+  const fetchKnowledgeElements = async () => {
+    const list = await getKnowledgeElements(id);
     setList(list);
   };
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId");
 
   useEffect(() => {
-    fetchKnowledgeTopics();
-  }, []);
+    fetchKnowledgeElements();
+  }, [refreshId]);
 
   return (
     <>
-      <div className="page-separator my-4">
-        <div className="page-separator__text">Videos</div>
+      <div className="page-separator mb-4">
+        <div className="page-separator__text">Video Links</div>
       </div>
 
       <div className="card mt-3 mb-3 overflow-auto">
         <Table list={currentItems} />
       </div>
 
-      <div className="card mb-0">
+      <div className="card mb-24pt">
         <Pagination
           listLength={list?.length}
           indexOfLastItem={indexOfLastItem}
