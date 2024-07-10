@@ -19,7 +19,7 @@ function Layout({ children, params }: { children: React.ReactNode; params: {id :
     <>
       <div className="card p-relative o-hidden mb-0">
         <div
-          className="card-header card-header-tabs-basic nav px-0"
+          className="card-header card-headezr-tabs-basic nav px-0"
           role="tablist"
         >
           {links.map((l: any) => (
