@@ -1,10 +1,16 @@
+"use client"
+import { useSearchParams } from "next/navigation";
+
 export default function PageHeader({
   title,
-  mark,
+  facilitator,
 }: {
   title: string;
-  mark?: number;
+  facilitator?: boolean;
 }) {
+  const searchParams = useSearchParams();
+  const knowldegModule = searchParams.get("title");
+
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
@@ -19,13 +25,13 @@ export default function PageHeader({
                 </li>
 
                 <li className="breadcrumb-item active">{title}</li>
+                {knowldegModule && <li className="breadcrumb-item active">{knowldegModule}</li>}
+           
               </ol>
+              {facilitator && (
+                <h5 className="mt-2">Facilitator : MS K Ngubani</h5>
+              )}
             </div>
-            {mark && (
-              <div>
-                <h2 className="text-success">{mark}%</h2>
-              </div>
-            )}
           </div>
         </div>
       </div>

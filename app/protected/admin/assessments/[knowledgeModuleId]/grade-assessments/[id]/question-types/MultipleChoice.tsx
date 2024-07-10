@@ -26,34 +26,30 @@ export default function ({
         </thead>
         <tbody>
           <tr>
-            <td>{questionDescription}</td>
+            <td>1. {questionDescription}</td>
           </tr>
           <tr>
             <td>
-              <strong>ANSWER: </strong>
+              <strong>ANSWERS: </strong>
             </td>
             <td></td>
           </tr>
-          <tr>
-            <td className="py-1">{questionAnswer}</td>
-            {isGraded ? (
-              <td style={{ width: "170px" }} className="py-1">
+          <tr className="d-flex flex-column">
+            {['A', 'B', 'C', 'D'].map((choice, index) => (
+              <td key={index} className={`py-2 d-flex ${index == 2 ? "text-danger" : index == 3 && "text-success"}`}>
+                <input type="radio" disabled name="answer" value={index} />
+                <span className="ml-2">{choice}. {questionAnswer}</span>
+              </td>
+            ))}
+            
+            <td style={{ width: "170px" }} className="py-1 d-flex flex-row align-items-center align-self-end">
                 <Grade
+                questionType="short"
                   setIsGraded={setIsGraded}
                   grade={grade}
                   questionScore={questionScore}
                 />
               </td>
-            ) : (
-              <td style={{ width: "200px" }} className="py-1">
-                <GradeInput
-                  setIsGraded={setIsGraded}
-                  setGrade={setGrade}
-                  grade={grade}
-                  questionScore={questionScore}
-                />
-              </td>
-            )}
           </tr>
         </tbody>
       </table>
@@ -61,50 +57,16 @@ export default function ({
   );
 }
 
-function GradeInput({
-  setIsGraded,
-  setGrade,
-  grade,
-  questionScore,
-}: {
-  setIsGraded: (isGraded: boolean) => void;
-  setGrade: (grade: number) => void;
-  grade: number;
-  questionScore: number;
-}) {
-  return (
-    <div className="d-flex w-100">
-      <div className="d-flex w-75">
-        <input
-          type="number"
-          className="form-control"
-          defaultValue={grade}
-          min="0"
-          max={questionScore}
-          onChange={(e) => setGrade(+e.target.value)}
-        />
-        <div className="text-center w-100 py-2"> / {questionScore}</div>
-      </div>
-      <div>
-        <button
-          onClick={() => setIsGraded(true)}
-          type="button"
-          className="btn btn-success"
-        >
-          <i className="material-icons">check</i>
-        </button>
-      </div>
-    </div>
-  );
-}
 
 function Grade({
+  questionType,
   setIsGraded,
   grade,
   questionScore,
 }: {
   setIsGraded: (isGraded: boolean) => void;
   grade: number;
+  questionType?:string
   questionScore: number;
 }) {
   return (
@@ -112,15 +74,17 @@ function Grade({
       <div className="d-flex w-75">
         <div className="text-center w-100 py-2">Score: {grade} / {questionScore}</div>
       </div>
-      <div>
+      {! questionType &&
+        <div>
         <button
           onClick={() => setIsGraded(false)}
           type="button"
           className="btn btn-outline-success"
         >
-          <i className="material-icons">edit</i>
+         <i className="material-icons">edit</i>
         </button>
       </div>
+}
     </div>
   );
 }

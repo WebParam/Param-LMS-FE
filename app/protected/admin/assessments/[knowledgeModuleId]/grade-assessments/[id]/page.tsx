@@ -1,5 +1,5 @@
 "use client";
-import Question from "./Question";
+import Question from "./question-types/LongText";
 import { useState } from "react";
 import list from "./data";
 import Pagination from "@/app/components/Pagination";
@@ -53,3 +53,4 @@ function Page() {
 }
 
 export default Page;
+

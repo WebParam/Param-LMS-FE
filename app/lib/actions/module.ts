@@ -1,7 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post } from "../utils";
-import { rCourseUrl, wCourseUrl } from "./endpoints";
+import { rAnalyticUrl, rCourseUrl, wCourseUrl } from "./endpoints";
 import { IUnitStandard } from "@/app/interfaces/unit-standard";
 import { IResponseObject } from "@/app/lib/restapi/response";
 import { Diagnostic } from "../logger/logger";
@@ -93,4 +93,29 @@ export const updateModule = async (
 
   const url = `/protected/admin/courses/${courseId}/modules/${id}/edit?title=${courseTitle}`;
   redirect(url);
+};
+
+
+export const getModuleGraphs = async (id: string) => {
+  try {
+    const resp = await get( `${rAnalyticUrl}/GraphData/UnitStandardsAnalytics/${id}`);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    throw err;
+  }
+};
+
+export const getStudentModuleGraphs = async (moduleId: string, studentId:string) => {
+  try {
+    const resp = await get( `${rAnalyticUrl}/GraphData/StudentModuleAnalytic/${moduleId}/${studentId}`);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    throw err;
+  }
 };

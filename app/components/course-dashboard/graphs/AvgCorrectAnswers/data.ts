@@ -10,19 +10,19 @@ export const options = {
 };
 
 export const barDescriptions = [
-  { description: "Comments over time", color: "rgb(82 121 249)" },
+  { description: "Correct answers submitted over time", color: "rgb(82 121 249)" },
 ];
 
 const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export const data = async ( CommentsChartBarData: number[] ) => {
+export const data = async ( correctAnswersChartBarData: number[] ) => {
 "use server";
 return {
   labels,
   datasets: [
     {
-      label: "No of Comments",
-      data: CommentsChartBarData,
+      label: "No of Correct Answers Submitted",
+      data: correctAnswersChartBarData,
       backgroundColor: "rgb(82 121 249)",
       barPercentage: 0.3,
       borderRadius: 10,

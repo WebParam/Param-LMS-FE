@@ -3,6 +3,7 @@ import Pagination from "@/app/components/Pagination";
 import Table from "./(components)/Table";
 import { useState } from "react";
 import list from "./(components)/data";
+import AssessmentsNames from "./(components)/AssessmentsNames";
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,7 +14,11 @@ const Body = () => {
 
   return (
     <>
+    <div>
+      <AssessmentsNames/>
+    </div>
         <div className="card mb-0">
+          
           <div
             className="table-responsive"
             data-toggle="lists"
