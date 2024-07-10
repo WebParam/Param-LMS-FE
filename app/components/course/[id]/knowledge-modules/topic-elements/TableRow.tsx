@@ -1,27 +1,55 @@
 import { useEffect, useState } from "react";
-import MyVerticallyCenteredModal from "./Modal";
-import { IParaPhraseResponseObject } from "@/app/interfaces/unit-standard";
+import EditTopicElement from "./EditTopicElement";
 import { Badge, Modal } from "react-bootstrap";
-import { useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import CopyButton from "./CopyIcon";
+import { generateVideoScript } from "@/app/lib/actions/knowledge-elements";
 
-const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
+const TableRow = ({ data }: { data: any }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [closeLoader, setCloseLoader] = useState(false);
   const searchParams = useSearchParams();
+  const title = searchParams.get("title") || "";
   const refreshId = searchParams.get("refreshId");
-  const [audioGenerateModal, setAudioGenerateModal] = useState(false);
+  const [generateVideoScriptModal, setGenerateVideoScriptModal] =
+    useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const {
+    id: courseId,
+    moduleId,
+    topicId,
+  } = useParams<{
+    id: string;
+    moduleId: string;
+    topicId: string;
+  }>();
+
+  const generateVideoScriptWithParams = generateVideoScript.bind(
+    null,
+    data.id,
+    data.title,
+    courseId,
+    moduleId,
+    topicId,
+    title
+  );
 
   useEffect(() => {
-    setAudioGenerateModal(false);
+    setGenerateVideoScriptModal(false);
     setCloseLoader(false);
   }, [refreshId]);
 
   return (
     <>
       <Modal
-        show={audioGenerateModal}
-        onHide={() => setAudioGenerateModal(false)}
+        show={generateVideoScriptModal}
+        onHide={() => setGenerateVideoScriptModal(false)}
         centered
         backdrop="static"
       >
@@ -36,7 +64,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
           }}
         >
           <div className="spinner-border text-primary" role="status" />
-          <p style={{ color: "#252525" }}>Generating Audio...</p>
+          <p style={{ color: "#252525" }}>Generating Video Script...</p>
         </Modal.Body>
       </Modal>
 
@@ -61,7 +89,7 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
         </Modal.Body>
       </Modal>
 
-      <MyVerticallyCenteredModal
+      <EditTopicElement
         show={openModal}
         onHide={() => {
           setOpenModal(false);
@@ -71,60 +99,47 @@ const TableRow = ({ data }: { data: IParaPhraseResponseObject }) => {
       />
 
       <tr className="selected">
-        <td
-          style={{ width: "200px" }}
-          className="text-center mx-auto text-justify js-lists-values-projects small"
-        >
-          <div className="d-flex align-items-center ml-5">
+        <td style={{ width: "350px" }} className="py-0">
+          <div className="d-flex justify-content-center align-items-center">
             <p
               style={{
                 textOverflow: "ellipsis",
                 overflow: "hidden",
                 width: "350px",
               }}
-              className="text-justify"
+              className="text-center my-2"
             >
-              {data.description}
+              {data.elementCode}
             </p>
           </div>
         </td>
-        <td className="text-center js-lists-values-projects small">
-          {data.status ? (
-            <button className="btn btn-success rounded-pill px-4 py-2">
-              Confirmed
-            </button>
-          ) : (
-            <button className="btn btn-outline-success rounded-pill px-4 py-2">
-              Pending
-            </button>
-          )}
+        <td style={{ width: "350px" }} className="py-0">
+          <div className="d-flex justify-content-center align-items-center">
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                width: "350px",
+              }}
+              className="text-center my-2"
+            >
+              {data.title}
+            </p>
+          </div>
         </td>
-        <td className="text-center js-lists-values-projects small">
-          <button
-            onClick={() => console.log("")}
-            className="btn btn-success rounded-pill px-4 py-2"
-          >
-            Generate Video Script
-          </button>
-
-          {data.audioBlobUrl && (
-            <Badge pill bg="warning" className="success ml-2">
-              Generated
-            </Badge>
-          )}
-        </td>
-        <td
-          style={{ cursor: "pointer" }}
-          className="text-center js-lists-values-projects small"
-        >
-          <div className="d-flex">
+        <td style={{ cursor: "pointer" }} className="py-0">
+          <div className="text-center">
             <i
               className="material-icons mr-8pt"
               onClick={() => setOpenModal(true)}
             >
               edit
             </i>
-            <CopyButton textToCopy={data.description} />
+          </div>
+        </td>
+        <td className="py-0">
+          <div className="text-center">
+            <CopyButton textToCopy={data.videoScript} />
           </div>
         </td>
       </tr>
