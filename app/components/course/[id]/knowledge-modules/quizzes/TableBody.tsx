@@ -70,7 +70,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
               >
                 <Link
                   className="btn btn-success rounded-pill px-4 py-2"
-                  href={`${url}/document/${document.id}/generate-quizzes?title=${title}`}
+                  href={`${url}/knowledge-topic/${document.id}/generate-quizzes?title=${title}`}
                 >
                   View
                 </Link>

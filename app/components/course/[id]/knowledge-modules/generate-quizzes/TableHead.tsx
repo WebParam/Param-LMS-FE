@@ -1,5 +1,5 @@
 const TableHead = () => {
-  const headers = ["Paraphrased Title", "Action"];
+  const headers = ["Topic Elements", "Action"];
 
   return (
     <>
@@ -19,8 +19,6 @@ const TableHead = () => {
               </a>
             </th>
           ))}
-          <th></th>
-          <th></th>
         </tr>
       </thead>
     </>
