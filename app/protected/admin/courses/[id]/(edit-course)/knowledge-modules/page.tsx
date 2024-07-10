@@ -1,17 +1,16 @@
 "use client";
-import Module from "@/components/course/[id]/modules/Module";
+import Module from "@/components/course/[id]/knowledge-modules/Module";
 import { useEffect, useState } from "react";
 import Pagination from "@/components/Pagination";
 import { usePathname, useSearchParams } from "next/navigation";
-import { IUnitStandard } from "@/app/interfaces/unit-standard";
-import { getModules } from "@/app/lib/actions/module";
+import { getKnowledgeModules } from "@/app/lib/actions/knowledge-module";
 
 function Page({ params }: { params: { id: string } }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 3;
+  const ITEMSPERPAGE = 4;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const [list, setList] = useState<IUnitStandard[]>([]);
+  const [list, setList] = useState<any[]>([]);
 
   const currentItems =
     list && list.length > 0
@@ -26,7 +25,7 @@ function Page({ params }: { params: { id: string } }) {
   arrUrl.pop();
 
   const fetchModules = async () => {
-    const modules = await getModules(params.id);
+    const modules = await getKnowledgeModules(params.id);
     setList(modules);
   };
 
@@ -41,12 +40,6 @@ function Page({ params }: { params: { id: string } }) {
   return (
     <>
       <div className="my-3"></div>
-      <Module
-        name="Test"
-        description="Test Description"
-        noOfDocuments={1}
-        url={url}
-      />
 
       {currentItems.length > 0 ? (
         currentItems.map((data) => {
@@ -57,9 +50,10 @@ function Page({ params }: { params: { id: string } }) {
           return (
             <Module
               key={data.id}
+              id={data.id}
               name={data.title}
+              moduleCode={data.moduleCode}
               description={data.description}
-              noOfDocuments={data.noOfDocuments}
               url={url}
             />
           );

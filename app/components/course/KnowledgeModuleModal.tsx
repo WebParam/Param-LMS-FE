@@ -5,20 +5,17 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import { createModule } from "@/app/lib/actions/module";
 import { useSearchParams } from "next/navigation";
+import { createKnowledgeModule } from "@/app/lib/actions/knowledge-module";
 
 function KnowledgeModuleModal(props: any) {
   const [description, setDescription] = useState("");
   const [createUnitModal, setCreateUnitModal] = useState(false);
-  const [queryPrompt, setQueryPrompt] = useState<string>("");
-  const tones = ["Informal", "Formal", "Soft", "Strong"];
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
-  const createModuleWithParams = createModule.bind(
+  const createModuleWithParams = createKnowledgeModule.bind(
     null,
     description,
-    queryPrompt,
     props.courseId,
     props.title
   );
@@ -31,7 +28,7 @@ function KnowledgeModuleModal(props: any) {
 
   const submit = () => {
     submmitRef.current?.click();
-    if (titleRef.current?.value && titleRef.current?.value.length > 10) {
+    if (titleRef.current?.value && titleRef.current?.value.length > 5) {
       props.onHide();
       setCreateUnitModal(true);
     }
@@ -52,6 +49,7 @@ function KnowledgeModuleModal(props: any) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop="static"
       >
         <form action={createModuleWithParams}>
           <Modal.Header closeButton>
@@ -59,6 +57,15 @@ function KnowledgeModuleModal(props: any) {
           </Modal.Header>
 
           <Modal.Body>
+            <div>
+              <h5>Knowledge Module Code</h5>
+              <input
+                name="moduleCode"
+                className="form-control mb-3"
+                placeholder="Enter Module Code. E.g KM01"
+                required
+              />
+            </div>
             <div>
               <h5>Title</h5>
               <input
