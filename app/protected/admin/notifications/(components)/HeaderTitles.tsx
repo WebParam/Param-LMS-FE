@@ -2,7 +2,11 @@
 import Link from "next/link";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
-function HeaderTitles() {
+interface HeaderTitlesProps {
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function HeaderTitles({ setShowModal }: HeaderTitlesProps) {
   const searchParams = useSearchParams();
   const name = searchParams.get("title");
 
@@ -17,24 +21,30 @@ function HeaderTitles() {
   ];
 
   return (
-    <div className="card p-relative o-hidden mb-0">
-      <div
-        className="card-header flex d-flex card-header-tabs-basic nav px-0"
-        role="tablist"
-      >
-        {links.map((l: any) => (
-          <Link
-            className={`nav-link ${pathname === l.path ? "active" : ""} p-2`}
-            href={l.url}
-            key={l.name}
-          >
-            <span className="flex d-flex flex-column">
-              <strong className="card-title">{l.name}</strong>
-            </span>
-          </Link>
-        ))}
+    <>
+      {/* button with create notification */}
+      <div className="d-flex justify-content-center mb-3">
+        <button onClick={() => setShowModal(prev => !prev)} className="btn btn-success" style={{ width: '190px' }}>Create Notification</button>
       </div>
-    </div>
+      <div className="card p-relative o-hidden mb-0">
+        <div
+          className="card-header flex d-flex card-header-tabs-basic nav px-0"
+          role="tablist"
+        >
+          {links.map((l: any) => (
+            <Link
+              className={`nav-link ${pathname === l.path ? "active" : ""} p-2`}
+              href={l.url}
+              key={l.name}
+            >
+              <span className="flex d-flex flex-column">
+                <strong className="card-title">{l.name}</strong>
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 

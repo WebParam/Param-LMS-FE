@@ -1,17 +1,27 @@
+'use client' 
 import PageHeader from "@/components/Notifications/PageHeader";
 import Table from "@/components/Notifications/recent-notifications/Table";
 import HeaderTitles from "./(components)/HeaderTitles";
 import NotificationCard from "@/components/Notifications/notification_card";
+import { useState } from "react";
+import CreateNotificationModal from "@/components/Notifications/CreateNotificationModal";
 
 
 
 
 
 export default function Page() {
+  const [showModal, setShowModal] = useState(false);
   return (
 
     <>
-      <HeaderTitles />
+    <CreateNotificationModal
+        show={showModal}
+        onHide={() => {
+          setShowModal(false);
+        }}
+      />
+      <HeaderTitles setShowModal = {setShowModal}/>
 
       <div className="card mt-3">
 

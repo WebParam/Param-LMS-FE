@@ -24,7 +24,8 @@ export default function PageHeader({ title, contentTitle, buttonTitle } : PageHe
                 <li className="breadcrumb-item active">{contentTitle}</li>
               </ol>
             </div>
-            <button className="position-absolute right-0 btn btn-success">{buttonTitle}</button>
+            {/* button with create notification */}
+            {/* <button className="position-absolute right-0 btn btn-success">{}</button> */}
           </div>
         </div>
       </div>
