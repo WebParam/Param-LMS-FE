@@ -1,16 +1,16 @@
 import Link from "next/link";
-export default async function KnowledgeModules({ list }:any) {
+export default async function Assessments({ list }:any) {
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
           <div className="row card-group-row">
-            {list && list.map((knowledgeModule: any) => (
-              <KnowledgeModule
-                key={knowledgeModule.id}
-                imgUrl={knowledgeModule.avatar}
-                title={knowledgeModule.title}
-                url={`/protected/admin/assessments/${knowledgeModule.id}/grade-assessments`}
+            {list && list.map((assessment: any) => (
+              <Assessment
+                key={assessment.id}
+                imgUrl={assessment.avatar}
+                title={assessment.title}
+                url={`/protected/admin/assessments/${assessment.id}/grade-assessments`}
               />
             ))}
           </div>
@@ -20,7 +20,7 @@ export default async function KnowledgeModules({ list }:any) {
   );
 }
 
-const KnowledgeModule = ({
+const Assessment = ({
   imgUrl,
   url,
   title,

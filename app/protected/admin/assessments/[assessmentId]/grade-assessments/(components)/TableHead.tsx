@@ -22,6 +22,7 @@ const TableHead = () => {
               </a>
             </th>
           ))}
+          <th className="text-center">Action</th>
         </tr>
       </thead>
     </>

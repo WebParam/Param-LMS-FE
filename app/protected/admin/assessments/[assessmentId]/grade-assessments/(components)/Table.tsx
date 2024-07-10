@@ -1,8 +1,9 @@
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 import { NextPage } from "next";
+import { ICourseAssessment } from "@/app/interfaces/assessments";
 
-const Table: NextPage<{ list: any[] }> = ({
+const Table: NextPage<{ list: ICourseAssessment[] }> = ({
   list }) => {
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function PageHeader({
   assessment_name,
@@ -13,6 +13,9 @@ export default function PageHeader({
   title: string;
   mark?: boolean;
 }) {
+
+  const router = useRouter();
+
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
@@ -41,7 +44,8 @@ export default function PageHeader({
             )}
             {!mark && (
               <div>
-                <h2 className="text-success">{mark}78%</h2>
+                {/* <h2 className="text-success">{mark}78%</h2> */}
+                <button onClick = {() => router.back()} className="btn btn-success">Assessments</button>
               </div>
             )}
           </div>

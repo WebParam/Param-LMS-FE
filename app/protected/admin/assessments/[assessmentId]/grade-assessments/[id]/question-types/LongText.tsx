@@ -1,22 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+import { Assessment, IMarkStudentAssessment, IRubric } from "@/app/interfaces/assessments";
+import { useParams } from "next/navigation";
+import { markStudentAssessment } from "@/app/lib/actions/assessments";
 
 type Props = {
   questionName: string;
   questionDescription: string;
   questionAnswer: string;
   questionScore: number;
+  rubric: IRubric[]
 };
 export default function ({
   questionName,
   questionDescription,
   questionAnswer,
   questionScore,
+  rubric
 }: Props) {
-  const [grade, setGrade] = useState(0);
+  const [grades, setGrades] = useState<number[]>(Array(rubric.length).fill(0));
   const [isGraded, setIsGraded] = useState(false);
+  const totalGrade = grades.reduce((acc, grade) => acc + grade, 0);
+
+
+  useEffect(() => {
+    setIsGraded(totalGrade > 0);
+  }, [totalGrade]);
+
+  const handleGradeChange = async (index: number, grade: number) => {
+    const newGrades = [...grades];
+    newGrades[index] = grade;
+    setGrades(newGrades);
+    await markStudent(rubric[index].questionId, rubric[index].id, newGrades.reduce((acc, grade) => acc + grade, 0));
+  };
+  const { id: userId, assessmentId } = useParams<{
+    id: string;
+    assessmentId: string;
+  }>();
+
+  const markStudent = async (questionId:string,rubricId:string , mark: number) => {
+    const payload: IMarkStudentAssessment = {
+      assessmentId: assessmentId,
+      questionId: questionId,
+      rubricId: rubricId,
+      userId: userId,
+      creatingUserId: "someCreatingUserId",
+      mark: mark,
+      markType: 1
+    };
+    const markResponse = await markStudentAssessment(payload);
+  }
 
   return (
     <div className="card table-responsive my-24pt">
@@ -28,38 +63,42 @@ export default function ({
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1. {questionDescription}</td>
-          </tr>
+         
           <tr></tr>
           <tr className="d-flex flex-column">
             <td className="py-2">
               <div>
                 <h6>ANSWER:</h6>
-                <ReactQuill
+                <p>{questionAnswer}</p>
                 
-                value="" onChange={(value) => {}} />
               </div>
             </td>
           </tr>
           <tr>
           <td className="py-2">
               <div>
-                <h6>RUBRIC</h6>
+                <h6>RUBRIC:</h6>
               </div>
             </td>
             
           </tr>
-          <tr>
-          {[1, 2, 3, 4].map((choice, index) => (
-              <td key={index} className="py-2 d-flex">
-                <span className="ml-2">{choice}. {questionAnswer}</span>
+          <tr className="d-flex flex-column ">
+          {rubric.map((choice, index) => (
+              <td key={index} className="py-2 d-flex justify-content-between align-items-center">
+                <div className="d-flex flex-column align-items-start">
+                  <div className="text-success d-flex">
+                    {Array(grades[index]).fill(<i className="material-icons">check</i>).map((icon, i) => (
+                      <span key={i} className="mr-1">{icon}</span>
+                    ))}
+                  </div>
+                  <span className="ml-2">{choice.description}</span>
+                </div>
                 <td style={{ width: "200px" }} className="py-1">
                 <GradeInput
                   setIsGraded={setIsGraded}
-                  setGrade={setGrade}
-                  grade={grade}
-                  questionScore={questionScore}
+                  setGrade={(grade) => handleGradeChange(index, grade)}
+                  grade={grades[index] || choice.facilitatorScore}
+                  questionScore={Number(choice.label)}
                 />
               </td>
               </td>
@@ -68,7 +107,7 @@ export default function ({
                 <Grade
                 questionType="short"
                   setIsGraded={setIsGraded}
-                  grade={grade}
+                  grade={totalGrade}
                   questionScore={questionScore}
                 />
               </td>
@@ -95,7 +134,7 @@ function Grade({
     return (
       <div className="d-flex w-100">
         <div className="d-flex w-75">
-          <div className="text-center w-100 py-2">Score: {grade} / {questionScore}</div>
+          <div className={`text-center w-100 py-2 ${grade < (questionScore * 0.5) ? "text-danger" : "text-success"}`}>Score: {grade} / {questionScore}</div>
         </div>
         {! questionType &&
           <div>
@@ -133,7 +172,7 @@ function GradeInput({
           defaultValue={grade}
           min="0"
           max={questionScore}
-          onChange={(e) => setGrade(+e.target.value)}
+          onChange={(e) => setGrade(Number(e.target.value))}
         />
         <div className="text-center w-100 py-2"> / {questionScore}</div>
       </div>

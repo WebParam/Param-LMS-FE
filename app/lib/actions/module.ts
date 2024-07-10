@@ -1,7 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post } from "../utils";
-import { rAnalyticUrl, rCourseUrl, wCourseUrl } from "./endpoints";
+import { rAnalyticUrl, rCourseUrl, rKnowledgeModuleUrl, wCourseUrl } from "./endpoints";
 import { IUnitStandard } from "@/app/interfaces/unit-standard";
 import { IResponseObject } from "@/app/lib/restapi/response";
 import { Diagnostic } from "../logger/logger";
@@ -108,6 +108,18 @@ export const getModuleGraphs = async (id: string) => {
   }
 };
 
+export const getKnowledgeModules = async (courseId: string) => {
+  try {
+    const resp = await get( `${rKnowledgeModuleUrl}/KnowledgeModules/GetKnowledgeModules/${courseId}`);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    throw err;
+  }
+};
+
 export const getStudentModuleGraphs = async (moduleId: string, studentId:string) => {
   try {
     const resp = await get( `${rAnalyticUrl}/GraphData/StudentModuleAnalytic/${moduleId}/${studentId}`);
@@ -119,3 +131,4 @@ export const getStudentModuleGraphs = async (moduleId: string, studentId:string)
     throw err;
   }
 };
+
