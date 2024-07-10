@@ -13,12 +13,6 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   const tabs = [
     {
-      name: "edit",
-      title: "Edit Knowledge Module",
-      url: `${url}/edit?title=${title}`,
-      path: `${url}/edit`,
-    },
-    {
       name: "documents",
       title: "Knowledge Topics",
       url: `${url}/knowledge-topics?title=${title}`,

@@ -3,7 +3,6 @@ import { useFormStatus } from "react-dom";
 
 export default function EditModuleBtn({ setCloseEditModal }: any) {
   const formstatus = useFormStatus();
-  console.log(formstatus);
 
   if (formstatus.data) {
     setCloseEditModal(true);

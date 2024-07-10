@@ -3,10 +3,10 @@ import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useParams, useSearchParams } from "next/navigation";
-import { createDocument } from "@/app/lib/actions/document";
 import CreateModuleBtn from "./CreateModuleBtn";
+import { createKnowledgeTopic } from "@/app/lib/actions/knowledge-topic";
+import TopicElements from "./TopicElements";
 import { useState } from "react";
-import { AddBtn } from "./Buttons";
 
 function CreateKnowledgeTopicModal(props: any) {
   const { id: courseId, moduleId } = useParams<{
@@ -14,12 +14,10 @@ function CreateKnowledgeTopicModal(props: any) {
     moduleId: string;
   }>();
 
-  const searchParams = useSearchParams();
   const [closeModal, setCloseModal] = useState(false);
+  const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
-  const [topicElement, setTopicElement] = useState("");
-  const [topicElements, setTopicElements] = useState(["dfasdfasddasdda"]);
-  const createDocumentWithParams = createDocument.bind(
+  const createKnowledgeTopicWithParams = createKnowledgeTopic.bind(
     null,
     courseId,
     moduleId,
@@ -34,78 +32,55 @@ function CreateKnowledgeTopicModal(props: any) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <form action={createDocumentWithParams}>
+      <form action={createKnowledgeTopicWithParams}>
         <Modal.Header closeButton>
           <Modal.Title>Create Knowledge Topic</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <div className="row">
-            <div className="p-4 col-12">
+            <div className="col-12">
               <div className="form-group row mb-0">
                 <div className="col-sm-12">
+                  <label htmlFor="">Knowledge Topic Code/No.</label>
+                  <input
+                    className="w-100 form-control"
+                    type="text"
+                    name="topicCode"
+                    placeholder="Code of Knowledge Topic. E.g KT01..."
+                  />
+                </div>
+                <div className="col-sm-12 py-2">
                   <label htmlFor="">Name</label>
-                  <input className="w-100 form-control" type="text" />
+                  <input
+                    className="w-100 form-control"
+                    type="text"
+                    name="name"
+                    placeholder="Name of Knowledge Topic ..."
+                  />
                 </div>
                 <div className="col-sm-12 py-2">
                   <label htmlFor="">Description</label>
                   <textarea
                     style={{ height: "100px" }}
                     className="w-100 form-control"
+                    name="description"
+                    placeholder="Description of Knowledge Topic ..."
                   />
                 </div>
-              </div>
-              <div className="mt-2">
-                <label htmlFor="">Topic Elements</label>
-                {topicElements &&
-                  topicElements.map((description) => (
-                    <div
-                      style={{ columnGap: "20px" }}
-                      className="form-group d-flex mb-3 align-items-center"
-                    >
-                      <input
-                        type="text"
-                        className="form-control w-100"
-                        placeholder="Topic Element ..."
-                        name="options[0][description]"
-                        defaultValue={description}
-                      />
-                      <button className="btn p-0" type="submit">
-                        <i
-                          style={{ fontSize: "25px" }}
-                          className="material-icons"
-                        >
-                          delete
-                        </i>
-                      </button>
-                    </div>
-                  ))}
-                <div
-                  style={{ columnGap: "20px" }}
-                  className="form-group d-flex mb-0 align-items-center"
-                >
+                <div className="col-sm-12">
+                  <label htmlFor="">Length of Video Script</label>
                   <input
-                    type="text"
-                    className="form-control w-100"
-                    placeholder="Topic Element ..."
-                    name="options[0][description]"
-                    value={topicElement}
-                    onChange={(e: any) => setTopicElement(e.target.value)}
+                    className="w-100 form-control"
+                    type="number"
+                    name="lengthOfVideoScript"
+                    placeholder="E.g 50, 51, 52,..."
+                    min="50"
+                    defaultValue={50}
                   />
-                  <button className="btn p-0" type="button">
-                    <i
-                      style={{ fontSize: "25px" }}
-                      className="material-icons"
-                      onClick={() => {
-                        setTopicElements([...topicElements, topicElement]),
-                          setTopicElement("");
-                      }}
-                    >
-                      add
-                    </i>
-                  </button>
                 </div>
               </div>
+              <TopicElements />
             </div>
           </div>
         </Modal.Body>

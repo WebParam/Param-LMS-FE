@@ -1,5 +1,5 @@
 const TableHead = () => {
-  const headers = ["Knowledge Topic", "Status", "Action"];
+  const headers = ["Topic Code/No.","Knowledge Topic", "Action", "Icons"];
 
   return (
     <>
@@ -19,8 +19,6 @@ const TableHead = () => {
               </a>
             </th>
           ))}
-            <th></th>
-            <th></th>
         </tr>
       </thead>
     </>

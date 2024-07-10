@@ -37,7 +37,7 @@ export default function KnowlegeTopicAdd() {
   return (
     <form ref={ref} action={createQuestionWithParams}>
       <div className="row">
-        <div className="card p-4 col-11">
+        <div className="card col-11">
           <div className="form-group row mb-0">
             <div className="col-sm-12">
               <h4>Create Knowledge Topic</h4>
