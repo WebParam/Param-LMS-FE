@@ -1,8 +1,3 @@
-import { IResponseObject } from "../lib/restapi/response";
-import { IDocument } from "./document";
-import { IQuiz } from "./quiz";
-import { IUser } from "./user";
-
 export interface ICourse {
         id: string;
         title: string;
