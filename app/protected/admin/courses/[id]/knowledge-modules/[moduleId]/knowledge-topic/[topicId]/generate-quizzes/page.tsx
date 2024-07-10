@@ -1,13 +1,13 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import Table from "@/components/course/[id]/knowledge-modules/quizzes/Table";
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { getKnowledgeTopics } from "@/app/lib/actions/knowledge-topic";
+import Table from "@/components/course/[id]/knowledge-modules/generate-quizzes/Table";
+import { useEffect, useState } from "react";
+import { getKnowledgeElements } from "@/app/lib/actions/knowledge-elements";
 
-const Body = ({ params }: { params: { moduleId: string } }) => {
-  const id = params.moduleId;
+const Body = ({ params }: { params: { topicId: string } }) => {
+  const topicId = params.topicId;
   const [list, setList] = useState([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 5;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -17,19 +17,18 @@ const Body = ({ params }: { params: { moduleId: string } }) => {
       ? list.slice(indexOfFirstItem, indexOfLastItem)
       : [];
 
-  const fetchKnowledgeTopics = async () => {
-    const list = await getKnowledgeTopics(id);
+  const fetchKnowledgeElements = async () => {
+    const list = await getKnowledgeElements(topicId);
     setList(list);
   };
-  const searchParams = useSearchParams();
 
   useEffect(() => {
-    fetchKnowledgeTopics();
+    fetchKnowledgeElements();
   }, []);
 
   return (
     <>
-      <div className="page-separator my-4">
+      <div className="page-separator mb-4">
         <div className="page-separator__text">Quizzes</div>
       </div>
 
@@ -37,7 +36,7 @@ const Body = ({ params }: { params: { moduleId: string } }) => {
         <Table list={currentItems} />
       </div>
 
-      <div className="card mb-0">
+      <div className="card mb-24pt">
         <Pagination
           listLength={list?.length}
           indexOfLastItem={indexOfLastItem}
