@@ -133,7 +133,7 @@ const Body = ({ params }: { params: { questionId: string } }) => {
         )}
       </div>
 
-      <div className="card mt-3 mb-3">
+      <div className="card mt-3 mb-3 overflow-auto">
         <Table list={currentItems} />
       </div>
 
