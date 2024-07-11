@@ -15,4 +15,14 @@ export const getCourseStudents = async (courseId: string) => {
   
       console.error(err);
     }
-  };
+};
+
+export const getStudentInfo = async (studentId: string) => {
+    const resp = await get(`https://khumla-development-user-read.azurewebsites.net/api/v1/Profile/GetUserProfile/${studentId}`)
+    return resp.data
+}
+
+export const getStudentData = async (studentId: string) => {
+  const resp = await get(`https://khumla-development-user-read.azurewebsites.net/api/Student/GetStudentInformation/${studentId} `)
+  return resp.data
+}

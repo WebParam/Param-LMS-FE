@@ -1,7 +1,6 @@
 import { NextPage } from "next";
-import list, { applicantEmployment } from "./data";
 
-const TableBody: NextPage<{ list: applicantEmployment[] }> = ({ list }) => {
+const TableBody: NextPage<{ list: any }> = ({ list }) => {
   const align = {
     section_title: "pl-48pt text-left",
     time_spent: "text-left",
@@ -27,10 +26,10 @@ const TableBody: NextPage<{ list: applicantEmployment[] }> = ({ list }) => {
       <td>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Employment_Status}
+            <i className="bi-house list-group-icon" />: {list?.employmentStatus??"N/A"}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].DATE_OF_FISA}
+            <i className="bi-house list-group-icon" />: {list?.dateOfFisa??"N/A"}
           </li>
 
         </ul>

@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import list, { applicontact } from "./data";
 
-const TableBody: NextPage<{ list: applicontact[] }> = ({ list }) => {
+const TableBody: NextPage<{ list: any }> = ({ list }) => {
   const align = {
     section_title: "pl-48pt text-left",
     time_spent: "text-left",
@@ -39,25 +39,22 @@ const TableBody: NextPage<{ list: applicontact[] }> = ({ list }) => {
       <td>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Home_Address_1}
+            <i className="bi-house list-group-icon" />: {list?.homeAddress1??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Postal_Address_1}
+            <i className="bi-house list-group-icon" />: {list?.postalAddress1??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Postal_Address_2}
+            <i className="bi-house list-group-icon" />: {list?.postalAddress2??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Postal_Address_3}
+            <i className="bi-house list-group-icon" />: {list?.postalAddress3??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Learner_Home_Address_Postal_Code}
+            <i className="bi-house list-group-icon" />: {list?.learnerHomeAddressPostalCode??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Learner_Home_Address_Physical_Code}
-          </li>
-          <li className="list-group-item">
-              <i className="bi-house list-group-icon" />: {list[0].Learner_Fax_Number}
+              <i className="bi-house list-group-icon" />: {list?.learnerHomeAddressPhysicalCode??'N/A'}
           </li>
           
         </ul>

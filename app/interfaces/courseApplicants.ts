@@ -4,4 +4,5 @@ export type CourseApplicants = {
   name?: string|any;
   surname?: string|any;
   status: number;
+  title: string;
 };

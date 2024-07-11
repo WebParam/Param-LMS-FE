@@ -39,7 +39,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
               </td>
 
               <td className="text-center js-lists-values-projects small">
-                    {data.status}
+                    {data.title}
                     
               </td>
 

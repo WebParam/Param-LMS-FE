@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import list, { applicantprofile } from "./data";
 
-const TableBody: NextPage<{ list: applicantprofile[] }> = ({ list }) => {
+const TableBody: NextPage<{ list: any }> = ({ list }) => {
   const align = {
     section_title: "pl-48pt text-left",
     time_spent: "text-left",
@@ -9,6 +9,8 @@ const TableBody: NextPage<{ list: applicantprofile[] }> = ({ list }) => {
     no_of_comments: "text-center",
     points_collected: "text-center",
   };
+
+  console.log('list',list)
 
   return (
     <>
@@ -51,34 +53,34 @@ const TableBody: NextPage<{ list: applicantprofile[] }> = ({ list }) => {
       <td>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Full_name}
+            <i className="bi-house list-group-icon" />: {list?.firstName??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Email_Address}
+            <i className="bi-house list-group-icon" />: {list?.email??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].ID_Number}
+            <i className="bi-house list-group-icon" />: {list?.idNumber??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Gender}
+            <i className="bi-house list-group-icon" />: {list?.gender??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Country}
+            <i className="bi-house list-group-icon" />: {list?.country??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].City}
+            <i className="bi-house list-group-icon" />: {list?.city??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Province}
+            <i className="bi-house list-group-icon" />: {list?.province??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Date_Of_Birth}
+            <i className="bi-house list-group-icon" />: {list?.dateOfBirth.split('T')[0]??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Mobile_Number}
+            <i className="bi-house list-group-icon" />: {list?.phoneNumber??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Bio}
+            <i className="bi-house list-group-icon" />: {list?.bio??"N/A"}
           </li>
         </ul>
       </td>

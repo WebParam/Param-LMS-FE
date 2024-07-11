@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import list, { applicantDemographics } from "./data";
 
-const TableBody: NextPage<{ list: applicantDemographics[] }> = ({ list }) => {
+const TableBody: NextPage<{ list: any }> = ({ list }) => {
   const align = {
     section_title: "pl-48pt text-left",
     time_spent: "text-left",
@@ -9,6 +9,8 @@ const TableBody: NextPage<{ list: applicantDemographics[] }> = ({ list }) => {
     no_of_comments: "text-center",
     points_collected: "text-center",
   };
+
+  console.log('list', list)
 
   return (
     <>
@@ -51,34 +53,34 @@ const TableBody: NextPage<{ list: applicantDemographics[] }> = ({ list }) => {
       <td>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Equity_Code}
+            <i className="bi-house list-group-icon" />: {list?.equityCode??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Nationality_Code}
+            <i className="bi-house list-group-icon" />: {list?.nationalityCode??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Home_Language_Code}
+            <i className="bi-house list-group-icon" />: {list?.homeLanguageCode??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Citizen_Status_Code}
+            <i className="bi-house list-group-icon" />: {list?.citizenStatusCode??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Socioeconomic_Code}
+            <i className="bi-house list-group-icon" />: {list?.socioeconomicCode??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Disability_Code}
+            <i className="bi-house list-group-icon" />: {list?.disabilityCode??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Disability_Rating}
+            <i className="bi-house list-group-icon" />: {list?.disabilityRating??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Immigrant_Status}
+            <i className="bi-house list-group-icon" />: {list?.immigrantStatus??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].POPI_Act_Agreement}
+            <i className="bi-house list-group-icon" />: {list?.popiActAgree??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].POPI_Act_Date}
+            <i className="bi-house list-group-icon" />: {list?.popiActDate??'N/A'}
           </li>
         </ul>
       </td>

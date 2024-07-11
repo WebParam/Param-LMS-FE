@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import list, { applicantRegional } from "./data";
 
-const TableBody: NextPage<{ list: applicantRegional[] }> = ({ list }) => {
+const TableBody: NextPage<{ list: any }> = ({ list }) => {
   const align = {
     section_title: "pl-48pt text-left",
     time_spent: "text-left",
@@ -33,16 +33,16 @@ const TableBody: NextPage<{ list: applicantRegional[] }> = ({ list }) => {
       <td>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].STATSSA_Area_Code}
+            <i className="bi-house list-group-icon" />: {list?.statssAreaCode??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].SDP_Accreditation_Number}
+            <i className="bi-house list-group-icon" />: {list?.sdpAcreditationNumber??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Skills_Programme_ID}
+            <i className="bi-house list-group-icon" />: {list?.skillsProgrammeId??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list[0].Learner_Enrolled_Date}
+            <i className="bi-house list-group-icon" />: {list?.learnerEnrolledDate??'N/A'}
           </li>
         </ul>
       </td>

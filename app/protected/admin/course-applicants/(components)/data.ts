@@ -1,6 +1,6 @@
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 
-const list: CourseApplicants[] = [
+const list = [
   {
     id: "668fa466bf5a11257f144e95",
   userId: "668fa466bf5a11257f144e95",
