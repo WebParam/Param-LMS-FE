@@ -1,5 +1,5 @@
 .calendar-container {
-    margin-top: 0.5rem; /* Reduced margin-top to move the calendar up a bit */
+    margin-top: -1rem; /* Increased negative margin-top to move the calendar up */
     display: flex;
     justify-content: flex-start; /* Move the calendar to the left */
     margin-left: -2rem; /* Move the calendar further to the left */
@@ -49,7 +49,7 @@
     justify-content: flex-start; /* Align items to the top */
     align-items: center;
     position: relative;
-    height: 100px; /* Set a fixed height for consistency */
+    height: 80px; /* Decreased height for consistency */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
   }
   
