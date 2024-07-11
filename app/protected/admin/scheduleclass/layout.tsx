@@ -1,7 +1,7 @@
 "use client";
 import React, { ReactNode } from 'react';
 import { Container } from 'react-bootstrap';
-import PageHeader from "@/components/Notifications/PageHeader";
+import PageHeader from "@/app/protected/admin/notifications/PageHeader";
 
 interface MainLayoutProps {
   children: ReactNode;
