@@ -1,4 +1,4 @@
-const env = "development"; // "dev" || "development"
+const env = "dev"; // "dev" || "development"
 
 export const wCourseUrl = `https://khumla-${env}-newcourse-write.azurewebsites.net/api/v1`;
 

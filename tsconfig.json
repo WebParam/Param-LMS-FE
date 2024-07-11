@@ -3,6 +3,8 @@
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["use-sync-external-store", "yargs"],
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,

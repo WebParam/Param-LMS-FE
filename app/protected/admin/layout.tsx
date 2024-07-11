@@ -11,6 +11,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     { name: 'Course Graphs', url: '/protected/admin/course-dashboard/graphs', icon: 'show_chart' },
     { name: 'Manage Courses', url: '/protected/admin/manage-courses', icon: 'assignment' },
     {name : 'Grouped Progress', url: `/protected/admin/grouped-progress/1/assessments`, icon : 'dashboard',},
+    {name: 'Course Applicants', url: `/protected/admin/course-applicants`, icon : 'person',},
     {name : 'Courses', url: `/protected/admin/courses`, icon : 'create_new_folder',},
     {
       name: 'Assessments', url: '#', icon: 'list', children: [

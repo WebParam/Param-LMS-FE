@@ -33,7 +33,8 @@ export const getCourses = async () => {
   noStore();
   try {
     const resp = await get(`${rCourseUrl}/Courses/GetCoursesNew`);
-    const data = resp.map((res: any) => res.data);
+    console.log('resp', resp)
+    const data = resp?.map((res: any) => res.data);
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
   } catch (err) {

@@ -24,6 +24,7 @@
     "@types/redux": "^3.6.31",
     "axios": "^1.5.0",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "cache": "^3.0.0",
     "chart.js": "^4.4.2",
     "clean": "^4.0.2",
