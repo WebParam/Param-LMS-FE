@@ -20,7 +20,7 @@ const withAuth = <P extends object>(
         }
       };
 
-      // checkAuth();
+      checkAuth();
     }, [loggedInUser]);
 
     return (
