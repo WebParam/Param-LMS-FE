@@ -1,9 +1,13 @@
 "use client"; // Add this line at the top
-import "./ScheduleClassForm.css"; // Import the CSS file
+import "../../css/ScheduleClassForm.css"; // Import the CSS file
 
-import React, { useState, useEffect } from "react";
+import React, { useState, FormEvent } from "react";
 
-function ScheduleClassForm() {
+interface ScheduleClassModalProps {
+  onClose: () => void;
+}
+
+const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose }) => {
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -11,48 +15,11 @@ function ScheduleClassForm() {
   const [endTime, setEndTime] = useState("");
   const [location, setLocation] = useState("");
   const [link, setLink] = useState("");
-  const [guests, setGuests] = useState("");
-  const [guestPermissions, setGuestPermissions] = useState({
-    modify: false,
-    invite: true,
-    see: true,
-  });
 
-  useEffect(() => {
-    if (startTime) {
-      const timeIntervals: { [key: string]: string } = {
-        "15:00": "15:30",
-        "15:30": "16:00",
-        "15:45": "16:15",
-        "16:00": "17:00",
-        "16:30": "18:00",
-        "17:00": "19:00",
-      };
-      setEndTime(timeIntervals[startTime]);
-    }
-  }, [startTime]);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
-    console.log({
-      title,
-      startDate,
-      startTime,
-      endDate,
-      endTime,
-      location,
-      link,
-      guests,
-      guestPermissions,
-    });
-  };
-
-  const handleGuestPermissionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setGuestPermissions({
-      ...guestPermissions,
-      [e.target.name]: e.target.checked,
-    });
+    onClose();
   };
 
   return (
@@ -141,13 +108,9 @@ function ScheduleClassForm() {
           onChange={(e) => setLink(e.target.value)}
         />
       </div>
-      
-      
-      
-        
       <button type="submit" className="btn btn-success save-button">Save</button>
     </form>
   );
-}
+};
 
-export default ScheduleClassForm;
+export default ScheduleClassModal;

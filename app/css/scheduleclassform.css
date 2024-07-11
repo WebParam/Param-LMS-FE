@@ -1,5 +1,5 @@
 .schedule-class-form {
-  max-width: 800px;
+  max-width: 1000px; /* Increase the max-width as needed */
   margin: auto;
   padding: 20px;
   border: 1px solid #ddd;
@@ -15,6 +15,11 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
+}
+
+.schedule-class-form .date-time-group button.start-time {
+  width: 100%; /* Make the button take the full width of its container */
+  padding: 0.75rem; /* Increase padding for better appearance */
 }
 
 .schedule-class-form label {

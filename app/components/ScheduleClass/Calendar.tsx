@@ -3,10 +3,16 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import '../../css/calendar.css';
+import dynamic from 'next/dynamic';
+
+const ScheduleClassModal = dynamic(() => import('./ScheduleClassModal'), { ssr: false });
 
 const Calendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showModal, setShowModal] = useState(false);
+  const [startTime, setStartTime] = useState('');
+  const [duration, setDuration] = useState(30); // default duration in minutes
+  const [endTime, setEndTime] = useState('');
 
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -32,6 +38,29 @@ const Calendar: React.FC = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartTime(e.target.value);
+    calculateEndTime(e.target.value, duration);
+  };
+
+  const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newDuration = parseInt(e.target.value, 10);
+    setDuration(newDuration);
+    calculateEndTime(startTime, newDuration);
+  };
+
+  const calculateEndTime = (start: string, duration: number) => {
+    const [hours, minutes] = start.split(':').map(Number);
+    const startDate = new Date();
+    startDate.setHours(hours, minutes);
+
+    const endDate = new Date(startDate.getTime() + duration * 60000);
+    const endHours = endDate.getHours().toString().padStart(2, '0');
+    const endMinutes = endDate.getMinutes().toString().padStart(2, '0');
+
+    setEndTime(`${endHours}:${endMinutes}`);
   };
 
   const renderCalendar = () => {
@@ -70,12 +99,14 @@ const Calendar: React.FC = () => {
           {renderCalendar()}
         </div>
       </div>
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create Class</Modal.Title>
+      <Modal show={showModal} onHide={handleCloseModal} dialogClassName="modal-lg">
+        <Modal.Header className="d-flex justify-content-between">
+          <Modal.Title>Schedule Class</Modal.Title>
+          <Button variant="link" onClick={handleCloseModal} className="btn btn-sm">&times;</Button>
         </Modal.Header>
         <Modal.Body>
-          <Button variant="success" onClick={handleCloseModal}>Create Class</Button>
+          
+          <ScheduleClassModal onClose={handleCloseModal} />
         </Modal.Body>
       </Modal>
     </div>

@@ -1,7 +1,8 @@
 .calendar-container {
-    margin-top: 2rem;
+    margin-top: 0.5rem; /* Reduced margin-top to move the calendar up a bit */
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* Move the calendar to the left */
+    margin-left: -2rem; /* Move the calendar further to the left */
   }
   
   .calendar {
@@ -11,7 +12,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 100%; /* Ensure the calendar takes full width */
-    max-width: 800px; /* Set a max width to maintain consistency */
+    max-width: 1010px; /* Increased max width to maintain consistency */
   }
   
   .calendar-header {
@@ -39,7 +40,7 @@
   }
   
   .calendar-day {
-    padding: 2.5rem; /* Increase the size of the date squares */
+    padding: 1.5rem; /* Decreased padding to reduce height */
     border: 1px solid #ddd;
     border-radius: 8px;
     cursor: pointer;
@@ -76,3 +77,11 @@
     display: none;
     position: absolute;
   }
+
+.page-separator {
+    width: 65.5%; /* Increased width of the separator */
+    height: 0px; /* Further decreased height of the separator to make it thinner */
+    background-color: #bcc2c7;; /* Light gray color */
+    margin: 2rem auto; /* Space around the separator and center it */
+    transform: translateX(-6%); /* Adjusted to keep the separator centered */
+}
