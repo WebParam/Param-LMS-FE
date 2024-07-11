@@ -16,6 +16,35 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose }) => {
   const [location, setLocation] = useState("");
   const [link, setLink] = useState("");
 
+  const generateTimeOptions = () => {
+    const times = [];
+    for (let hour = 8; hour <= 17; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        const time = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+        times.push(time);
+      }
+    }
+    return times;
+  };
+
+  const calculateEndTime = (startTime: string) => {
+    const [hours, minutes] = startTime.split(":").map(Number);
+    const startDate = new Date();
+    startDate.setHours(hours, minutes);
+    startDate.setMinutes(startDate.getMinutes() + 60); // Add 60 minutes for 1 hour interval
+    const endHours = startDate.getHours().toString().padStart(2, "0");
+    const endMinutes = startDate.getMinutes().toString().padStart(2, "0");
+    return `${endHours}:${endMinutes}`;
+  };
+
+  const handleStartTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedTime = e.target.value;
+    setStartTime(selectedTime);
+
+    const endTime = calculateEndTime(selectedTime);
+    setEndTime(endTime);
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
@@ -53,16 +82,15 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose }) => {
             id="startTime"
             className="form-control"
             value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
+            onChange={handleStartTimeChange}
             required
           >
             <option value="">Select time</option>
-            <option value="15:00">3:00pm</option>
-            <option value="15:30">3:30pm (30 mins)</option>
-            <option value="15:45">3:45pm (45 mins)</option>
-            <option value="16:00">4:00pm (1 hr)</option>
-            <option value="16:30">4:30pm (1.5 hrs)</option>
-            <option value="17:00">5:00pm (2 hrs)</option>
+            {generateTimeOptions().map((time) => (
+              <option key={time} value={time}>
+                {time}
+              </option>
+            ))}
           </select>
         </div>
         <div>
