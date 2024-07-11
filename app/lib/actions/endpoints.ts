@@ -23,7 +23,7 @@ export const wAudioGenerateUrl =
   "https://khumla-development-audio-generate.azurewebsites.net/api/v1";
 
 export const wAssessmentUrl =
-  "https://khumla-development-assessment-write.azurewebsites.net/api/v1/Assessments";
+  "https://khumla-development-assessment-write.azurewebsites.net/api/v1";
 
 export const wQuestionUrl =
   "https://khumla-development-assessment-write.azurewebsites.net/api/Questions";

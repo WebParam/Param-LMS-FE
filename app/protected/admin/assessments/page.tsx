@@ -1,4 +1,4 @@
-import Assessments from "@/components/course/Assessments";
+import Assessments from "@/components/Assessment/Assessments";
 import PageHeader from "../facilitator/(components)/PageHeader";
 import { getAssessments } from "@/app/lib/actions/assessments";
 

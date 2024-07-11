@@ -19,7 +19,7 @@ const DashboardCards = () => {
     { link: "#", icon: "createAssessment", title: "Create Assessment" },
     { link: "#", icon: "leaderBoard", title: "Leader Board" },
     { link: "#", icon: "feedback", title: "Moderator Feedback" },
-    { link: `/protected/admin/assessments?title=${encodeURIComponent("KNOWLEDGE MODULES")}`, icon: "markAssessment", title: "Mark Assessment" },
+    { link: `/protected/admin/assessments?title=${encodeURIComponent("Mark Assessments")}`, icon: "markAssessment", title: "Mark Assessment" },
     { link: "#", icon: "logbook", title: "Logbook" },
   ];
 

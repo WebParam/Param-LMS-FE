@@ -2,11 +2,11 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "./(components)/Table";
 import { useEffect, useState } from "react";
-import AssessmentsNames from "./(components)/AssessmentsNames";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
 import { getStudentsAssessment } from "@/app/lib/actions/assessments";
+import SubmitForModeration from "@/components/Assessment/SubmitForModeration";
 
-const Body = ({params} : {params: {assessmentId:string}}) => {
+const Body = ({ params }: { params: { assessmentId: string } }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [list, setList] = useState<ICourseAssessment[]>([]);
   const ITEMSPERPAGE = 6;
@@ -18,17 +18,15 @@ const Body = ({params} : {params: {assessmentId:string}}) => {
   const getAssessments = async () => {
     const assessments = await getStudentsAssessment(assessmentId);
     setList(assessments);
-    console.log("Assessments",assessments)
+    console.log("Assessments", assessments);
+  };
 
-  }
-
-  useEffect( () => {
+  useEffect(() => {
     getAssessments();
   }, []);
 
   return (
     <>
-      
       <div className="card mb-0">
         <div
           className="table-responsive"

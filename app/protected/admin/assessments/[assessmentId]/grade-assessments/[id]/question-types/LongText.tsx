@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import { Assessment, IMarkStudentAssessment, IRubric } from "@/app/interfaces/assessments";
+import {  IMarkStudentAssessment, IRubric } from "@/app/interfaces/assessments";
 import { useParams } from "next/navigation";
 import { markStudentAssessment } from "@/app/lib/actions/assessments";
 
@@ -15,7 +14,6 @@ type Props = {
 };
 export default function ({
   questionName,
-  questionDescription,
   questionAnswer,
   questionScore,
   rubric
@@ -33,14 +31,14 @@ export default function ({
     const newGrades = [...grades];
     newGrades[index] = grade;
     setGrades(newGrades);
-    await markStudent(rubric[index].questionId, rubric[index].id, newGrades.reduce((acc, grade) => acc + grade, 0));
+    await markStudent(rubric[index].questionId, rubric[index].id, newGrades.reduce((acc, grade) => acc + grade, 0), rubric[index].label);
   };
   const { id: userId, assessmentId } = useParams<{
     id: string;
     assessmentId: string;
   }>();
 
-  const markStudent = async (questionId:string,rubricId:string , mark: number) => {
+  const markStudent = async (questionId:string,rubricId:string , mark: number, label:number) => {
     const payload: IMarkStudentAssessment = {
       assessmentId: assessmentId,
       questionId: questionId,
@@ -48,9 +46,11 @@ export default function ({
       userId: userId,
       creatingUserId: "someCreatingUserId",
       mark: mark,
-      markType: 1
+      markType: 1,
+      label : Number(label)
     };
     const markResponse = await markStudentAssessment(payload);
+    console.log("markResponse",markResponse)
   }
 
   return (

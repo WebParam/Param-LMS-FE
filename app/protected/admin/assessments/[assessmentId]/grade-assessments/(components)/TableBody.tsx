@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { NextPage } from "next";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
 
 const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const assessmentName = searchParams.get("assessment-name")!;
+
   const align = {
     student_name: "pl-48pt text-justify",
     student_surname: "pl-48pt text-left",
@@ -46,7 +49,7 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
               <td className={`${align.action} js-lists-values-projects small`}>
               <Link
                   className="chip chip-outline-success"
-                  href={`${pathname}/${data.userId}?assessment_name=${"Formative Assessment 1"}&name=${data.name}`}
+                  href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&name=${data.name}`}
                 >
                   Grade Assessment
                   <i className="material-icons ">assignment_turned_in</i>

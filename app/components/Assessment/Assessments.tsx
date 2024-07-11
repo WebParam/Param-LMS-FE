@@ -10,7 +10,7 @@ export default async function Assessments({ list }:any) {
                 key={assessment.id}
                 imgUrl={assessment.avatar}
                 title={assessment.title}
-                url={`/protected/admin/assessments/${assessment.id}/grade-assessments`}
+                url={`/protected/admin/assessments/${assessment.id}/grade-assessments?assessment-name=${assessment.title}`}
               />
             ))}
           </div>

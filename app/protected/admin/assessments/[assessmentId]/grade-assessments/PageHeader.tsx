@@ -1,6 +1,8 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import SubmitForModeration from "@/components/Assessment/SubmitForModeration";
+import {  useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function PageHeader({
   assessment_name,
@@ -15,9 +17,16 @@ export default function PageHeader({
 }) {
 
   const router = useRouter();
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   return (
     <>
+     <SubmitForModeration
+        show={openModal}
+        onHide={() => {
+          setOpenModal(false);
+        }}
+      />
       <div className="border-bottom-2 py-32pt position-relative z-1">
         <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
           <div className="flex d-flex justify-content-between flex-column flex-sm-row align-items-center mb-24pt mb-md-0">
@@ -32,17 +41,17 @@ export default function PageHeader({
                 <li className="breadcrumb-item active">{title}</li>
                 <li className="breadcrumb-item active">{assessment_name}</li>
               </ol>
-              {mark && <h5 className="mt-2">Facilitator : MS K Ngubani</h5>}
+              <h5 className="mt-2">Facilitator : MS K Ngubani</h5>
             </div>
 
-            {mark && (
+            {!mark && (
               <div className="position-relative">
-                <button className="btn btn-success">
+                <button onClick={() => setOpenModal(true)} className="btn btn-success">
                   Submit For Moderation
                 </button>
               </div>
             )}
-            {!mark && (
+            {mark && (
               <div>
                 {/* <h2 className="text-success">{mark}78%</h2> */}
                 <button onClick = {() => router.back()} className="btn btn-success">Assessments</button>

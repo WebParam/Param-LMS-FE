@@ -16,7 +16,7 @@ export interface Option {
     id: string ;
     facilitatorScore: number;
     moderatorScore: number;
-    label: string;
+    label: number;
     description: string;
     questionId: string;
   }
@@ -61,4 +61,5 @@ export interface Option {
     creatingUserId: string;
     mark: number;
     markType: number;
+    label:number;
 }

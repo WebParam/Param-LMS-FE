@@ -108,19 +108,20 @@ export const getStudentsAssessment = async (courseId: string) => {
 };
 
 export const markStudentAssessment = async (
-  payload:IMarkStudentAssessment
+  payload: IMarkStudentAssessment
 ) => {
-  
-
   try {
-    const data = await post(
+    const response = await post(
       `${wAssessmentUrl}/Marks/AddLongAnswerMark`,
       payload
     );
+
+    const data = response;
+
     Diagnostic("SUCCESS ON POST, returning", data);
+    return data;
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
-
     console.error(err);
   }
 };
