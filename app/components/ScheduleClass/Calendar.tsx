@@ -78,6 +78,12 @@ const Calendar: React.FC = () => {
       days.push(
         <div key={i} className="calendar-day">
           <span>{i}</span>
+          {i === 31  ? (
+            <div className="event">
+              <button className="event-dot"></button>
+              <span className="event-text">9am Pyth</span>
+            </div>
+          ) : null}
           <Button variant="link" className="create-button" onClick={() => handleDateClick(new Date(currentDate.getFullYear(), currentDate.getMonth(), i))}>+</Button>
         </div>
       );
