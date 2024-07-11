@@ -40,14 +40,21 @@
   }
   
   .calendar-day {
-    padding: 1.5rem; /* Decreased padding to reduce height */
+    padding: 2rem; /* Increase padding to make the boxes larger */
     border: 1px solid #ddd;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; /* Center items to keep the + button centered */
     position: relative;
+    height: 4rem; /* Increase height of the boxes */
+  }
+  
+  .calendar-day span {
+    display: block;
+    position: absolute;
+    top: 0.5rem; /* Move the date text up */
   }
   
   .calendar-day:hover .create-button {
@@ -56,10 +63,6 @@
   
   .calendar-day:hover span {
     display: none;
-  }
-  
-  .calendar-day span {
-    display: block;
   }
   
   .calendar-day.empty {
