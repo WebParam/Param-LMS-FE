@@ -1,10 +1,11 @@
 'use client'
 import { NextPage } from "next";
-import list, { applicantDocuments } from "./data";
+import listOfDocumentNames from "./data";
 import { Modal } from "react-bootstrap";
 import { useState } from "react";
+import Link from "next/link";
 
-const TableBody: NextPage<{ list: applicantDocuments[] }> = ({ list }) => {
+const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   const align = {
     section_title: "pl-48pt text-left",
     time_spent: "text-left",
@@ -26,6 +27,8 @@ const TableBody: NextPage<{ list: applicantDocuments[] }> = ({ list }) => {
   const handleClose = () => {
     setShow(false);
   };
+
+  console.log('list of documents', list)
 
   return (
     <>
@@ -50,7 +53,7 @@ const TableBody: NextPage<{ list: applicantDocuments[] }> = ({ list }) => {
           <td>
           <ul className="list-group list-group-flush">
             {
-              list.map((item) => (
+              listOfDocumentNames.map((item:any) => (
                 <li className="list-group-item p-4">
                 <i className="bi-house list-group-icon" /> {item.name}
               </li>
@@ -62,21 +65,21 @@ const TableBody: NextPage<{ list: applicantDocuments[] }> = ({ list }) => {
           <td>
           <ul className="list-group list-group-flush">
             {
-              list.map((item) => (
-                <li className="list-group-item p-4">
-                <i className="bi-house list-group-icon" /> {item.blobUrl}
+              list?.map((item:any) => (
+              <li className="list-group-item p-4">
+                    <i className="bi-house list-group-icon" /> {`${item.blobUrl.slice(0, 15)}... .pdf`}
               </li>
-            ))
-          }
+              ))
+            }
           </ul>
           </td>
           
           <td>
           <ul className="list-group list-group-flush">
           {
-            list.map((item) => (
+            list?.map((item:any) => (
               <li className="list-group-item p-4">
-                <i className="bi-house list-group-icon" /> {item.Status}
+                <i className="bi-house list-group-icon" /> {item.status??'Pending Review'}
               </li>
             ))
           }
@@ -86,10 +89,9 @@ const TableBody: NextPage<{ list: applicantDocuments[] }> = ({ list }) => {
           <td>
           <ul className="list-group list-group-flush">
             {
-              list.map((item) => (
+              list?.map((item:any) => (
                 <li className="list-group-item">
-    
-                    <button type="button" className="btn btn-light rounded-pill border-dark">View</button>
+                    <Link href={item.blobUrl} target="_blank" className="btn btn-light rounded-pill border-dark">View</Link>
                     <select
                      className="btn-success rounded-pill p-2 ml-2" 
                      style={{outline:'none', border:'none'}} 

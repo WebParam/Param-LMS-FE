@@ -26,3 +26,8 @@ export const getStudentData = async (studentId: string) => {
   const resp = await get(`https://khumla-development-user-read.azurewebsites.net/api/Student/GetStudentInformation/${studentId} `)
   return resp.data
 }
+
+export const getStudentDocuments = async (studentId: string) => {
+  const resp = await get(`https://khumla-development-user-read.azurewebsites.net/api/Documents/GetDocuments/${studentId} `)
+  return resp.data
+}
