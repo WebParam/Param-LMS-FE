@@ -92,6 +92,9 @@ const TableRow = ({ document }: { document: any }) => {
     } catch (e: any) {
       console.log("Error Generating Video Script");
       setProgress(100);
+      setTimeout(() => {
+        setIsProgress(false);
+      }, 7000);
     }
   };
 
