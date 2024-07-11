@@ -1,13 +1,14 @@
 "use client"; // Add this line at the top
 import "../../css/ScheduleClassForm.css"; // Import the CSS file
 
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 
 interface ScheduleClassModalProps {
   onClose: () => void;
+  selectedDate: Date | null;
 }
 
-const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose }) => {
+const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, selectedDate }) => {
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -15,6 +16,13 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose }) => {
   const [endTime, setEndTime] = useState("");
   const [location, setLocation] = useState("");
   const [link, setLink] = useState("");
+
+  useEffect(() => {
+    if (selectedDate) {
+      const formattedDate = selectedDate.toISOString().split('T')[0];
+      setStartDate(formattedDate);
+    }
+  }, [selectedDate]);
 
   const generateTimeOptions = () => {
     const times = [];

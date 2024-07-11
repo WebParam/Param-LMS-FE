@@ -10,6 +10,7 @@ const ScheduleClassModal = dynamic(() => import('./ScheduleClassModal'), { ssr: 
 const Calendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [startTime, setStartTime] = useState('');
   const [duration, setDuration] = useState(30); // default duration in minutes
   const [endTime, setEndTime] = useState('');
@@ -32,7 +33,8 @@ const Calendar: React.FC = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   };
 
-  const handleDateClick = () => {
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
     setShowModal(true);
   };
 
@@ -76,7 +78,7 @@ const Calendar: React.FC = () => {
       days.push(
         <div key={i} className="calendar-day">
           <span>{i}</span>
-          <Button variant="link" className="create-button" onClick={handleDateClick}>+</Button>
+          <Button variant="link" className="create-button" onClick={() => handleDateClick(new Date(currentDate.getFullYear(), currentDate.getMonth(), i))}>+</Button>
         </div>
       );
     }
@@ -105,8 +107,7 @@ const Calendar: React.FC = () => {
           <Button variant="link" onClick={handleCloseModal} className="btn btn-sm">&times;</Button>
         </Modal.Header>
         <Modal.Body>
-          
-          <ScheduleClassModal onClose={handleCloseModal} />
+          <ScheduleClassModal onClose={handleCloseModal} selectedDate={selectedDate} />
         </Modal.Body>
       </Modal>
     </div>
