@@ -14,6 +14,9 @@ const Calendar: React.FC = () => {
   const [startTime, setStartTime] = useState('');
   const [duration, setDuration] = useState(30); // default duration in minutes
   const [endTime, setEndTime] = useState('');
+  const [title, setTitle] = useState('');
+  const [link, setLink] = useState('');
+  const [isSpecialDate, setIsSpecialDate] = useState(false);
 
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -34,8 +37,23 @@ const Calendar: React.FC = () => {
   };
 
   const handleDateClick = (date: Date) => {
-    setSelectedDate(date);
-    setShowModal(true);
+    if (date.getDate() === 31 && date.getMonth() === 6 && date.getFullYear() === 2024) {
+      setSelectedDate(date);
+      setShowModal(true);
+      setStartTime("08:00");
+      setEndTime("09:00");
+      setTitle("Python Lesson");
+      setLink("https://meet.google.com/vca-twic-ijk");
+      setIsSpecialDate(true);
+    } else {
+      setSelectedDate(date);
+      setShowModal(true);
+      setStartTime("");
+      setEndTime("");
+      setTitle("");
+      setLink("");
+      setIsSpecialDate(false);
+    }
   };
 
   const handleCloseModal = () => {
@@ -109,11 +127,19 @@ const Calendar: React.FC = () => {
       </div>
       <Modal show={showModal} onHide={handleCloseModal} dialogClassName="modal-lg">
         <Modal.Header className="d-flex justify-content-between">
-          <Modal.Title>Schedule Class</Modal.Title>
+          <Modal.Title>{isSpecialDate ? "Class Details" : "Schedule Class"}</Modal.Title>
           <Button variant="link" onClick={handleCloseModal} className="btn btn-sm">&times;</Button>
         </Modal.Header>
         <Modal.Body>
-          <ScheduleClassModal onClose={handleCloseModal} selectedDate={selectedDate} />
+          <ScheduleClassModal
+            onClose={handleCloseModal}
+            selectedDate={selectedDate}
+            defaultTitle={title}
+            defaultStartTime={startTime}
+            defaultEndTime={endTime}
+            defaultLink={link}
+            isSpecialDate={isSpecialDate}
+          />
         </Modal.Body>
       </Modal>
     </div>

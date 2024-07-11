@@ -6,21 +6,27 @@ import React, { useState, FormEvent, useEffect } from "react";
 interface ScheduleClassModalProps {
   onClose: () => void;
   selectedDate: Date | null;
+  defaultTitle?: string;
+  defaultStartTime?: string;
+  defaultEndTime?: string;
+  defaultLink?: string;
+  isSpecialDate: boolean;
 }
 
-const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, selectedDate }) => {
-  const [title, setTitle] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [endTime, setEndTime] = useState("");
+const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, selectedDate, defaultTitle, defaultStartTime, defaultEndTime, defaultLink, isSpecialDate }) => {
+  const [title, setTitle] = useState(defaultTitle || "");
+  const [startDate, setStartDate] = useState(selectedDate ? selectedDate.toISOString().split('T')[0] : "");
+  const [startTime, setStartTime] = useState(defaultStartTime || "");
+  const [endDate, setEndDate] = useState(selectedDate ? selectedDate.toISOString().split('T')[0] : "");
+  const [endTime, setEndTime] = useState(defaultEndTime || "");
   const [location, setLocation] = useState("");
-  const [link, setLink] = useState("");
+  const [link, setLink] = useState(defaultLink || "");
 
   useEffect(() => {
     if (selectedDate) {
       const formattedDate = selectedDate.toISOString().split('T')[0];
       setStartDate(formattedDate);
+      setEndDate(formattedDate);
     }
   }, [selectedDate]);
 
@@ -144,7 +150,9 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, select
           onChange={(e) => setLink(e.target.value)}
         />
       </div>
-      <button type="submit" className="btn btn-success save-button">Save</button>
+      <button type="submit" className={`btn ${isSpecialDate ? "btn-danger" : "btn-success"} save-button`}>
+        {isSpecialDate ? "Cancel Class" : "Save Class"}
+      </button>
     </form>
   );
 };
