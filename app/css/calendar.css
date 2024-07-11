@@ -2,7 +2,7 @@
     margin-top: -1rem; /* Increased negative margin-top to move the calendar up */
     display: flex;
     justify-content: flex-start; /* Move the calendar to the left */
-    margin-left: -2rem; /* Move the calendar further to the left */
+    margin-left: -1.5rem; /* Move the calendar further to the left */
   }
   
   .calendar {
@@ -106,5 +106,5 @@
     height: 0px; /* Further decreased height of the separator to make it thinner */
     background-color: #bcc2c7;; /* Light gray color */
     margin: 2rem auto; /* Space around the separator and center it */
-    transform: translateX(-6%); /* Adjusted to keep the separator centered */
+    transform: translateX(-4%); /* Adjusted to keep the separator centered */
 }
