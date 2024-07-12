@@ -43,7 +43,30 @@ export default function Module({
         <thead>
           <tr>
             <th>
-              {name} - ({moduleCode || "N/A"})
+              <div className="w-75 d-flex">
+                <div
+                  style={{
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    maxWidth: "350px",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {name}
+                </div>
+                - (
+                <div
+                  style={{
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    maxWidth: "150px",
+                  }}
+                >
+                  {moduleCode || "N/A"}
+                </div>
+                )
+              </div>
             </th>
             <th>
               <div className="text-right w-100">
@@ -63,7 +86,12 @@ export default function Module({
         </thead>
         <tbody>
           <tr>
-            <td className="py-2">{removeTags(description || "")}</td>
+            <td style={{}} className="py-2">
+              <div>
+                {removeTags(description || "").slice(0, 200)}
+                {description.length > 200 && "..."}
+              </div>
+            </td>
             <td style={{ width: "300px" }} className="py-2">
               <ViewButton url={url} setIsEditModal={setIsEditModal} />
             </td>
