@@ -30,6 +30,7 @@ export default function AddTopicElement({
         className="form-control w-75"
         placeholder="Topic Element ..."
         value={topicElement}
+        name={`options[${topicElements.length}][title]`}
         onChange={(e: any) => setTopicElement(e.target.value)}
         onClick={() => setShowError(false)}
       />
