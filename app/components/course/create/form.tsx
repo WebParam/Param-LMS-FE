@@ -64,7 +64,7 @@ export default function CreateForm({ title, description, videoScriptTone, instru
         <div className="list-group-item">
           <div className="form-group row align-items-center mb-0">
             <label className="form-label col-form-label col-sm-3">
-              Video Script Query
+              Video Script Prompt
             </label>
             <div className="col-sm-9">
               <textarea
