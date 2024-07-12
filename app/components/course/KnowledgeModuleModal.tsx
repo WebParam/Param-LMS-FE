@@ -11,8 +11,12 @@ import { createKnowledgeModule } from "@/app/lib/actions/knowledge-module";
 function KnowledgeModuleModal(props: any) {
   const [description, setDescription] = useState("");
   const [createUnitModal, setCreateUnitModal] = useState(false);
+  const [titleError, setTitleError] = useState("");
+  const [moduleCodeError, setModuleCodeError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
+  const moduleCodeRef = useRef<HTMLInputElement>(null);
   const createModuleWithParams = createKnowledgeModule.bind(
     null,
     description,
@@ -28,7 +32,18 @@ function KnowledgeModuleModal(props: any) {
 
   const submit = () => {
     submmitRef.current?.click();
-    if (titleRef.current?.value && titleRef.current?.value.length > 5) {
+
+    if (description === "")
+      setDescriptionError("Please enter Module description");
+    if (titleRef.current?.value === "")
+      setTitleError(
+        "Please enter the Max Length of 30 characters for Module Title"
+      );
+    if (moduleCodeRef.current?.value === "")
+      setModuleCodeError(
+        "Please enter the Max Length of 10 characters for Module Code/No."
+      );
+    else {
       props.onHide();
       setCreateUnitModal(true);
     }
@@ -64,20 +79,30 @@ function KnowledgeModuleModal(props: any) {
                 className="form-control mb-3"
                 placeholder="Enter Module Code. E.g KM01"
                 required
+                minLength={1}
+                maxLength={10}
+                onClick={() => setModuleCodeError("")}
+                ref={moduleCodeRef}
               />
             </div>
+            {moduleCodeError && (
+              <div className="text-danger">{moduleCodeError}</div>
+            )}
             <div>
               <h5>Title</h5>
               <input
                 minLength={10}
+                maxLength={30}
                 name="title"
                 className="form-control mb-3"
                 placeholder="Enter your title here..."
                 required
                 ref={titleRef}
+                onClick={() => setTitleError("")}
               />
             </div>
-            <div>
+            {titleError && <div className="text-danger">{titleError}</div>}
+            <div onClick={() => setDescriptionError("")}>
               <h5>Description</h5>
               <ReactQuill
                 value={description}
@@ -85,6 +110,9 @@ function KnowledgeModuleModal(props: any) {
                 style={{ color: "#252525" }}
               />
             </div>
+            {descriptionError && (
+              <div className="text-danger">{descriptionError}</div>
+            )}
           </Modal.Body>
           <Modal.Footer>
             <input type="submit" hidden ref={submmitRef} />
