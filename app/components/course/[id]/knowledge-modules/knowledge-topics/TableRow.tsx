@@ -12,6 +12,7 @@ const TableRow = ({ document }: { document: any }) => {
   const [isEditModal, setIsEditModal] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isProgress, setIsProgress] = useState(false);
+  const [isGenerated, setIsGenerated] = useState(document.isGenerated);
   const [generateVideoScriptModal, setGenerateVideoScriptModal] =
     useState(false);
 
@@ -52,15 +53,7 @@ const TableRow = ({ document }: { document: any }) => {
       if (!reader) {
         throw new Error("Response body is null");
       }
-      const blob = await response.blob();
-
       // Get the size of the blob
-      const totalLength = blob.size;
-
-      console.log(`Content-Length: ${totalLength} bytes`);
-
-      // Optionally, convert the blob to text or other formats if needed
-      const text = await blob.text();
       let loaded = 0,
         estimatedTotal = 0;
 
@@ -82,19 +75,21 @@ const TableRow = ({ document }: { document: any }) => {
           100
         );
         setProgress(progress);
-
         push();
       };
 
       push().catch((err) => {
         console.error("Stream reading error:", err);
       });
-    } catch (e: any) {
-      console.log("Error Generating Video Script");
+
       setProgress(100);
       setTimeout(() => {
         setIsProgress(false);
-      }, 7000);
+        setIsGenerated(true);
+      }, 5000);
+
+    } catch (e: any) {
+      console.log("Error Generating Video Script");
     }
   };
 
@@ -156,9 +151,10 @@ const TableRow = ({ document }: { document: any }) => {
           </p>
         </td>
         <td style={{ width: "400px" }} className="py-0">
-          <div className="text-center my-2">
+          <div className="text-center my-2 w-100">
             {isProgress ? (
               <button
+                style={{ width: "185px" }}
                 type="button"
                 className="btn btn-outline-success btn-sm rounded-pill py-1 px-3 w-100"
               >
@@ -175,6 +171,7 @@ const TableRow = ({ document }: { document: any }) => {
               </button>
             ) : (
               <button
+                style={{ width: "185px" }}
                 type="button"
                 onClick={(e) => {
                   try {
@@ -187,7 +184,7 @@ const TableRow = ({ document }: { document: any }) => {
                 }}
                 className="btn btn-outline-success btn-sm rounded-pill py-1 px-3 w-100"
               >
-                Generate Video Script
+                {isGenerated ? "Regenerate" : "Generate Video Script"}
               </button>
             )}
           </div>
@@ -201,6 +198,7 @@ const TableRow = ({ document }: { document: any }) => {
             </Link>
             <Link
               className=""
+              prefetch={true}
               href={`${url}/knowledge-topic/${document.id}/topic-elements?title=${title}`}
             >
               <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
