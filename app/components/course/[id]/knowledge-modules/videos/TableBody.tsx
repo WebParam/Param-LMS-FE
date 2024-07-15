@@ -8,6 +8,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
+  const moduleTitle = searchParams.get("moduleTitle") || "";
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -72,7 +73,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
               >
                 <Link
                   className="btn btn-success rounded-pill px-4 py-2"
-                  href={`${url}/knowledge-topic/${document.id}/upload-link?title=${title}`}
+                  href={`${url}/knowledge-topic/${document.id}/upload-link?title=${title}&moduleTitle=${moduleTitle}&topicTitle=${document.name}`}
                 >
                   View
                 </Link>

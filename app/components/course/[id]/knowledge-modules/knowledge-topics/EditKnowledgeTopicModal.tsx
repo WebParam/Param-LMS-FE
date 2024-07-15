@@ -17,13 +17,15 @@ function EditKnowledgeTopicModal(props: any) {
   const searchParams = useSearchParams();
   const [closeEditModal, setCloseEditModal] = useState(false);
   const title = searchParams.get("title") || "";
+  const moduleTitle = searchParams.get("moduleTitle") || "";
   const updateKnowledgeTopicWithParams = updateKnowledgeTopic.bind(
     null,
     props.data.id,
     description,
     courseId,
     moduleId,
-    title
+    title,
+    moduleTitle,
   );
 
   return (
@@ -51,7 +53,7 @@ function EditKnowledgeTopicModal(props: any) {
           <div>
             <h5>Name</h5>
             <input
-              minLength={10}
+              minLength={2}
               className="form-control mb-3"
               placeholder="Enter your title here..."
               name="name"

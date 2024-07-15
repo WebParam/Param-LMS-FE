@@ -4,7 +4,9 @@ import { useSearchParams, usePathname } from "next/navigation";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
-  const title = searchParams.get("title");
+  const title = searchParams.get("title") || "";
+  const moduleTitle = searchParams.get("moduleTitle") || "";
+
   const pathname = usePathname();
 
   const arrUrl = pathname.split("/");
@@ -15,28 +17,27 @@ function Layout({ children }: { children: React.ReactNode }) {
     {
       name: "documents",
       title: "Knowledge Topics",
-      url: `${url}/knowledge-topics?title=${title}`,
+      url: `${url}/knowledge-topics?title=${title}&moduleTitle=${moduleTitle}`,
       path: `${url}/knowledge-topics`,
     },
     {
       name: "videos",
       title: "Video Links",
-      url: `${url}/videos?title=${title}`,
+      url: `${url}/videos?title=${title}&moduleTitle=${moduleTitle}`,
       path: `${url}/videos`,
     },
     {
       name: "quizzes",
       title: "Quizzes",
-      url: `${url}/quizzes?title=${title}`,
+      url: `${url}/quizzes?title=${title}&moduleTitle=${moduleTitle}`,
       path: `${url}/quizzes`,
     },
     {
       name: "assessments",
       title: "Assessments",
-      url: `${url}/assessments?title=${title}`,
+      url: `${url}/assessments?title=${title}&moduleTitle=${moduleTitle}`,
       path: `${url}/assessments`,
     },
-
   ];
 
   return (

@@ -13,6 +13,8 @@ export default function PageHeader({ title }: { title: string }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const name = searchParams.get("title");
+  const moduleTitle = searchParams.get("moduleTitle") || "";
+  const topicTitle = searchParams.get("topicTitle");
 
   let isModule = false;
   let isKnowledgeModule = false;
@@ -60,6 +62,8 @@ export default function PageHeader({ title }: { title: string }) {
     questions: "Questions",
     "edit-question": "Edit Question",
     "knowledge-topics": "Knowledge Topics",
+    quizzes: "Quizzes",
+    "topic-elements": "Topic Elements",
   };
 
   const urlDocumentMap: any = {
@@ -72,6 +76,7 @@ export default function PageHeader({ title }: { title: string }) {
   };
 
   let backUrl = "";
+  let newTitle = null;
 
   if (pathname == "/protected/admin/courses") {
     title = "Courses";
@@ -81,7 +86,7 @@ export default function PageHeader({ title }: { title: string }) {
   } else if (pathname.indexOf("/modules/create") !== -1) {
     title = `Create Unit Standard`;
     isCreateModule = true;
-  } 
+  }
   // Backward Compatibility for Unit Standard
   else if (pathname.indexOf("/modules") !== -1) {
     title = `${name}`;
@@ -110,13 +115,41 @@ export default function PageHeader({ title }: { title: string }) {
         const urlSlice = arr.slice(0, -3);
         backUrl = `${urlSlice.join("/")}/${
           urlDocumentMap[suffixPath]
-        }?title=${title}`;
+        }?title=${title}&moduleTitle=${moduleTitle}`;
         isEditKnowledgeTopic = true;
-      } else if (arrLink.indexOf(suffixPath) !== -1)
+        newTitle = (
+          <div className="d-flex">
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                maxWidth: "560px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {topicTitle}
+            </p>{" "}
+            - {stepperMap[suffixPath] ? stepperMap[suffixPath] : ""}
+          </div>
+        );
+      } else if (arrLink.indexOf(suffixPath) !== -1) {
         isEditKnowledgeModules = true;
-
-      title =
-        name + " - " + (stepperMap[suffixPath] ? stepperMap[suffixPath] : "");
+        newTitle = (
+          <div className="d-flex">
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                maxWidth: "560px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {moduleTitle}
+            </p>{" "}
+            - {stepperMap[suffixPath] ? stepperMap[suffixPath] : ""}
+          </div>
+        );
+      }
     }
   }
 
@@ -143,7 +176,7 @@ export default function PageHeader({ title }: { title: string }) {
               style={{ width: "850px" }}
               className="mb-24pt mb-sm-0 mr-sm-24pt"
             >
-              <h2 className="mb-0">{title}</h2>
+              <h2 className="mb-0">{newTitle ? newTitle : title}</h2>
 
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">

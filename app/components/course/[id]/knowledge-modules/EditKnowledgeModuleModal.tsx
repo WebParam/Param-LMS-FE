@@ -15,6 +15,7 @@ function EditKnowledgeTopicModal(props: any) {
   const [description, setDescription] = useState(props.description || "");
   const [titleError, setTitleError] = useState("");
   const [moduleCodeError, setModuleCodeError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
   const searchParams = useSearchParams();
   const [closeEditModal, setCloseEditModal] = useState(false);
   const title = searchParams.get("title") || "";
@@ -48,6 +49,10 @@ function EditKnowledgeTopicModal(props: any) {
             setTitleError(
               "Please enter the Max Length of 30 characters for Module Title"
             );
+            return;
+          } else if (description === "") {
+            setDescriptionError("Please enter Module description");
+            return;
           }
         }}
       >
@@ -74,7 +79,7 @@ function EditKnowledgeTopicModal(props: any) {
           <div>
             <h5>Title</h5>
             <input
-              maxLength={30}
+              maxLength={80}
               className="form-control mb-3"
               placeholder="Enter your title here..."
               name="title"
@@ -91,6 +96,7 @@ function EditKnowledgeTopicModal(props: any) {
               style={{ color: "#252525" }}
             />
           </div>
+          {descriptionError && <div className="text-danger">{descriptionError}</div>}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>

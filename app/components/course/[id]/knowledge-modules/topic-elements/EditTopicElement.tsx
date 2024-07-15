@@ -7,7 +7,7 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import { confirmParaphrase } from "@/app/lib/actions/paraphrase";
 import { useParams, useSearchParams } from "next/navigation";
-import { updateTopicElement } from "@/app/lib/actions/knowledge-elements";
+import { updateTopicElement } from "@/app/lib/actions/topic-elements";
 
 function EditTopicElement(props: any) {
   const {
@@ -22,6 +22,9 @@ function EditTopicElement(props: any) {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const moduleTitle = searchParams.get("moduleTitle") || "";
+  const topicTitle = searchParams.get("topicTitle") || "";
+
   const [description, setDescription] = useState(props.data.description);
   const [videoScript, setVideoScript] = useState(props.data.videoScript);
 
@@ -33,7 +36,9 @@ function EditTopicElement(props: any) {
     courseId,
     moduleId,
     topicId,
-    title
+    title,
+    moduleTitle,
+    topicTitle
   );
 
   return (

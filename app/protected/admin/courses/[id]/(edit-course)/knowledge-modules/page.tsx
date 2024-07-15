@@ -19,6 +19,7 @@ function Page({ params }: { params: { id: string } }) {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
+  const moduleTitle = searchParams.get("moduleTitle");
   const refreshId = searchParams.get("refreshId");
   const pathname = usePathname();
   const arrUrl = pathname.split("/");
@@ -45,7 +46,7 @@ function Page({ params }: { params: { id: string } }) {
         currentItems.map((data) => {
           const url =
             arrUrl.join("/") +
-            `/knowledge-modules/${data.id}/knowledge-topics?title=${title}`;
+            `/knowledge-modules/${data.id}/knowledge-topics?title=${title}&moduleTitle=${data.title}`;
 
           return (
             <Module

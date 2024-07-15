@@ -12,6 +12,8 @@ const TableRow = ({ assessment }: { assessment: Assessment }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
+  const moduleTitle = searchParams.get("moduleTitle") || "";
+
   const [viewQuizModal, setViewQuestionModal] = useState(false);
   const [questions, setQuestions] = useState<any>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -112,7 +114,7 @@ const TableRow = ({ assessment }: { assessment: Assessment }) => {
           </button>
           <Link
             className="btn btn-success rounded-pill px-4 py-2 ml-2"
-            href={`${url}/assessment/${assessment.id}/questions?title=${title}`}
+            href={`${url}/assessment/${assessment.id}/questions?title=${title}&moduleTitle=${moduleTitle}&topicTitle=${assessment.title}`}
           >
             View
           </Link>
