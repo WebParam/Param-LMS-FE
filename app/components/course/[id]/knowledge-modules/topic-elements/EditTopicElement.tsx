@@ -5,7 +5,6 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import { confirmParaphrase } from "@/app/lib/actions/paraphrase";
 import { useParams, useSearchParams } from "next/navigation";
 import { updateTopicElement } from "@/app/lib/actions/topic-elements";
 
