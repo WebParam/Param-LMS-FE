@@ -64,13 +64,17 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
 
           <td>
           <ul className="list-group list-group-flush">
-            {
+            {list.length < 0 ?
               list?.map((item:any) => (
               <li className="list-group-item p-4">
                     <i className="bi-house list-group-icon" /> {`${item.blobUrl.slice(0, 15)}... .pdf`}
               </li>
               ))
-            }
+            :['N/A', 'N/A', 'N/A', 'N/A'].map((item:any) => (
+              <li className="list-group-item p-4">
+                    <i className="bi-house list-group-icon" /> {item}
+              </li>
+            ))}
           </ul>
           </td>
           
@@ -88,7 +92,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
 
           <td>
           <ul className="list-group list-group-flush">
-            {
+            {list.length < 0 ?
               list?.map((item:any) => (
                 <li className="list-group-item">
                     <Link href={item.blobUrl} target="_blank" className="btn btn-light rounded-pill border-dark">View</Link>
@@ -105,7 +109,11 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                     </select>
                 </li>
             ))
-          }
+          :['N/A', 'N/A', 'N/A', 'N/A'].map((item:any) => (
+            <li className="list-group-item p-4">
+                    <i className="bi-house list-group-icon" /> {item}
+            </li>
+          ))}
           </ul>
           </td>
       </tr>
