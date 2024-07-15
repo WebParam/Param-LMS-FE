@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { updateVideoLink } from "@/app/lib/actions/knowledge-elements";
+import { updateVideoLink } from "@/app/lib/actions/topic-elements";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 function EditUrlModal(props: any) {

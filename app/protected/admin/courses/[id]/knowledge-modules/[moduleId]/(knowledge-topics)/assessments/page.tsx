@@ -1,9 +1,9 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import Table from "@/components/course/[id]/modules/assessments/Table";
+import Table from "@/components/course/[id]/knowledge-modules/assessments/Table";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import CreateAssessmentModal from "@/components/course/[id]/modules/assessments/CreateAssessmentModal";
+import CreateAssessmentModal from "@/components/course/[id]/knowledge-modules/assessments/CreateAssessmentModal";
 import { Assessment } from "@/app/interfaces/assessments";
 import { getAssessments } from "@/app/lib/actions/assessments";
 

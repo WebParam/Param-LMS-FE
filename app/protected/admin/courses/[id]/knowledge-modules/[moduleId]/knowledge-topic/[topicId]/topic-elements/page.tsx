@@ -1,6 +1,6 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import { getKnowledgeElements } from "@/app/lib/actions/knowledge-elements";
+import { getKnowledgeElements } from "@/app/lib/actions/topic-elements";
 import CreateTopicElementModal from "@/components/course/[id]/knowledge-modules/topic-elements/CreateTopicElementModal";
 import Table from "@/components/course/[id]/knowledge-modules/topic-elements/Table";
 import { useSearchParams } from "next/navigation";

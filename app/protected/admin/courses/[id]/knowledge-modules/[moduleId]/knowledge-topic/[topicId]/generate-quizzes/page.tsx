@@ -2,7 +2,7 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "@/components/course/[id]/knowledge-modules/generate-quizzes/Table";
 import { useEffect, useState } from "react";
-import { getKnowledgeElements } from "@/app/lib/actions/knowledge-elements";
+import { getKnowledgeElements } from "@/app/lib/actions/topic-elements";
 
 const Body = ({ params }: { params: { topicId: string } }) => {
   const topicId = params.topicId;
