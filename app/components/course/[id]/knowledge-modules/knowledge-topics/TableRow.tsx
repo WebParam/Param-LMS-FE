@@ -3,15 +3,20 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import EditKnowledgeTopicModal from "./EditKnowledgeTopicModal";
 import { Modal } from "react-bootstrap";
+import DeleteKnowledgeTopicModal from "./DeleteKnowledgeTopicModal";
 
 const TableRow = ({ document }: { document: any }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const moduleTitle = searchParams.get("moduleTitle") || "";
+
   const refreshId = searchParams.get("refreshId");
   const [isEditModal, setIsEditModal] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isProgress, setIsProgress] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+
   const [isGenerated, setIsGenerated] = useState(document.isGenerated);
   const [generateVideoScriptModal, setGenerateVideoScriptModal] =
     useState(false);
@@ -87,7 +92,6 @@ const TableRow = ({ document }: { document: any }) => {
         setIsProgress(false);
         setIsGenerated(true);
       }, 5000);
-
     } catch (e: any) {
       console.log("Error Generating Video Script");
     }
@@ -101,6 +105,13 @@ const TableRow = ({ document }: { document: any }) => {
         data={document}
         show={isEditModal}
         onHide={() => setIsEditModal(false)}
+      />
+
+      <DeleteKnowledgeTopicModal
+        id={document.id}
+        url={url}
+        show={deleteModal}
+        onHide={() => setDeleteModal(false)}
       />
 
       <Modal
@@ -199,10 +210,15 @@ const TableRow = ({ document }: { document: any }) => {
             <Link
               className=""
               prefetch={true}
-              href={`${url}/knowledge-topic/${document.id}/topic-elements?title=${title}`}
+              href={`${url}/knowledge-topic/${document.id}/topic-elements?title=${title}&moduleTitle=${moduleTitle}&topicTitle=${document.name}`}
             >
               <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
                 visibility
+              </i>
+            </Link>
+            <Link href="#" type="button" onClick={() => setDeleteModal(true)}>
+              <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
+                delete
               </i>
             </Link>
           </div>

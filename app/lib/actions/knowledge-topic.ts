@@ -1,6 +1,6 @@
 "use server";
 import { redirect } from "next/navigation";
-import { formDataEntriesArray, get, post, put } from "../utils";
+import { del, formDataEntriesArray, get, post, put } from "../utils";
 import { wCourseUrl, rCourseUrl, rDocumentParaphraseUrl } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
 import { FormObject, IQuestion } from "@/app/interfaces/questions";
@@ -10,6 +10,7 @@ export const createKnowledgeTopic = async (
   courseId: string,
   moduleId: string,
   courseTitle: string,
+  moduleTitle: string,
   formData: FormData
 ) => {
   const body = {
@@ -37,7 +38,7 @@ export const createKnowledgeTopic = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topics?title=${courseTitle}&refreshId=${date}`;
+  const url = `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topics?title=${courseTitle}&moduleTitle=${moduleTitle}&refreshId=${date}`;
   redirect(url);
 };
 
@@ -47,6 +48,7 @@ export const updateKnowledgeTopic = async (
   courseId: string,
   moduleId: string,
   courseTitle: string,
+  moduleTitle: string,
   formData: FormData
 ) => {
   const body = {
@@ -70,7 +72,7 @@ export const updateKnowledgeTopic = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topics?title=${courseTitle}&refreshId=${date}`;
+  const url = `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topics?title=${courseTitle}&moduleTitle=${moduleTitle}&refreshId=${date}`;
   redirect(url);
 };
 
@@ -119,4 +121,19 @@ export const createTopicElements = async (entries: any, topicId: string) => {
   }
   const response = await Promise.all(promiseArray);
   Diagnostic("SUCCESS ON POST, returning", response);
+};
+
+export const deleteKnowledgeTopic = async (topicId: string) => {
+  try {
+    const resp = await del(
+      `${wCourseUrl}/KnowledgeTopics/DeleteKnowledgeTopic/${topicId}`
+    );
+    const data = resp.data;
+    Diagnostic("SUCCESS ON DELETE, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON DELETE, returning", err);
+
+    console.error(err);
+  }
 };

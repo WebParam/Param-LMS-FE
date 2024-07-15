@@ -11,6 +11,7 @@ import { removeTags } from "@/app/lib/utils";
 import EditKnowledgeModuleModal from "./EditKnowledgeModuleModal";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import DeleteKnowledgeModuleModal from "./DeleteKnowledgeModuleModal";
 
 export default function Module({
   id,
@@ -20,11 +21,13 @@ export default function Module({
   url,
 }: Props) {
   const [isEditModal, setIsEditModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId");
 
   useEffect(() => {
     setIsEditModal(false);
+    setDeleteModal(false);
   }, [refreshId]);
 
   return (
@@ -37,6 +40,16 @@ export default function Module({
         url={url}
         show={isEditModal}
         onHide={() => setIsEditModal(false)}
+      />
+
+      <DeleteKnowledgeModuleModal
+        id={id}
+        name={name}
+        moduleCode={moduleCode}
+        description={description}
+        url={url}
+        show={deleteModal}
+        onHide={() => setDeleteModal(false)}
       />
 
       <table className="table table-flush table--elevated">
@@ -93,7 +106,7 @@ export default function Module({
               </div>
             </td>
             <td style={{ width: "300px" }} className="py-2">
-              <ViewButton url={url} setIsEditModal={setIsEditModal} />
+              <ViewButton url={url} setIsEditModal={setIsEditModal} setDeleteModal={setDeleteModal} />
             </td>
           </tr>
         </tbody>
@@ -105,9 +118,11 @@ export default function Module({
 function ViewButton({
   url,
   setIsEditModal,
+  setDeleteModal,
 }: {
   url: string;
   setIsEditModal: (isOpen: boolean) => void;
+  setDeleteModal: (isOpen: boolean) => void;
 }) {
   return (
     <div className="d-flex justify-content-end">
@@ -122,6 +137,18 @@ function ViewButton({
         <Link href={url} type="button" className="ml-2">
           <i className="material-icons icon-holder--outline-dark rounded-lg">
             visibility
+          </i>
+        </Link>
+      </div>
+      <div>
+        <Link
+          href="#"
+          type="button"
+          className="ml-2"
+          onClick={() => setDeleteModal(true)}
+        >
+          <i className="material-icons icon-holder--outline-dark rounded-lg">
+            delete
           </i>
         </Link>
       </div>

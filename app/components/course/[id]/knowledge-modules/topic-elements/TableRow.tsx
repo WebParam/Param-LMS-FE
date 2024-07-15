@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import EditTopicElement from "./EditTopicElement";
-import { Badge, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import {
   useParams,
   usePathname,
@@ -8,11 +8,12 @@ import {
   useSearchParams,
 } from "next/navigation";
 import CopyButton from "./CopyIcon";
-import { generateVideoScript } from "@/app/lib/actions/knowledge-elements";
+import DeleteTopicElementModal from "./DeleteTopicElementModal";
 
 const TableRow = ({ data }: { data: any }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [closeLoader, setCloseLoader] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
   const refreshId = searchParams.get("refreshId");
@@ -30,16 +31,6 @@ const TableRow = ({ data }: { data: any }) => {
     topicId: string;
   }>();
 
-  const generateVideoScriptWithParams = generateVideoScript.bind(
-    null,
-    data.id,
-    data.title,
-    courseId,
-    moduleId,
-    topicId,
-    title
-  );
-
   useEffect(() => {
     setGenerateVideoScriptModal(false);
     setCloseLoader(false);
@@ -47,6 +38,12 @@ const TableRow = ({ data }: { data: any }) => {
 
   return (
     <>
+      <DeleteTopicElementModal
+        id={data.id}
+        show={deleteModal}
+        onHide={() => setDeleteModal(false)}
+      />
+
       <Modal
         show={generateVideoScriptModal}
         onHide={() => setGenerateVideoScriptModal(false)}
@@ -99,13 +96,13 @@ const TableRow = ({ data }: { data: any }) => {
       />
 
       <tr className="selected">
-        <td style={{ width: "350px" }} className="py-0">
+        <td style={{ width: "250px" }} className="py-0">
           <div className="d-flex justify-content-center align-items-center">
             <p
               style={{
                 textOverflow: "ellipsis",
                 overflow: "hidden",
-                width: "350px",
+                width: "250px",
               }}
               className="text-center my-2"
             >
@@ -113,13 +110,13 @@ const TableRow = ({ data }: { data: any }) => {
             </p>
           </div>
         </td>
-        <td style={{ width: "350px" }} className="py-0">
+        <td style={{ width: "250px" }} className="py-0">
           <div className="d-flex justify-content-center align-items-center">
             <p
               style={{
                 textOverflow: "ellipsis",
                 overflow: "hidden",
-                width: "350px",
+                width: "250px",
               }}
               className="text-center my-2"
             >
@@ -127,19 +124,27 @@ const TableRow = ({ data }: { data: any }) => {
             </p>
           </div>
         </td>
-        <td style={{ cursor: "pointer" }} className="py-0">
-          <div className="text-center">
-            <i
-              className="material-icons mr-8pt"
-              onClick={() => setOpenModal(true)}
-            >
-              edit
-            </i>
-          </div>
-        </td>
-        <td className="py-0">
+        <td style={{ width: "200px" }} className="py-0">
           <div className="text-center">
             <CopyButton textToCopy={data.videoScript} />
+          </div>
+        </td>
+        <td style={{ cursor: "pointer", width: "230px" }} className="py-0">
+          <div className="text-center">
+            <div>
+              <i
+                className="material-icons icon-holder--outline-success rounded-lg mr-8pt"
+                onClick={() => setOpenModal(true)}
+              >
+                edit
+              </i>
+              <i
+                className="material-icons icon-holder--outline-success rounded-lg mr-8pt"
+                onClick={() => setDeleteModal(true)}
+              >
+                delete
+              </i>
+            </div>
           </div>
         </td>
       </tr>

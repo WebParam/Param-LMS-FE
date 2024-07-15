@@ -4,9 +4,8 @@ const TableHead = () => {
   const headers = [
     "Element Code",
     "Topic Element",
-    // "Action",
-    "Edit",
-    "Copy Video Script"
+    "Copy Video Script",
+    "Action",
   ];
 
   return (

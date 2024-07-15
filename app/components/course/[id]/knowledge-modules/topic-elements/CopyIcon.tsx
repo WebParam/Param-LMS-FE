@@ -22,7 +22,11 @@ const CopyButton: React.FC<CopyButtonProps> = ({ textToCopy }) => {
 
   return (
     <div>
-      <i className="material-icons mr-8pt" onClick={() => copyToClipboard()}>
+      <i
+        style={{ padding: "1px" }}
+        className="material-icons icon-holder--outline-success rounded-lg mr-8pt"
+        onClick={() => copyToClipboard()}
+      >
         content_copy
       </i>
       {copySuccess && <span>{copySuccess}</span>}
