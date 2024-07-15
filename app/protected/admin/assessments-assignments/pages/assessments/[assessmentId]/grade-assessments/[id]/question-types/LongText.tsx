@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import {  IMarkStudentAssessment, IRubric } from "@/app/interfaces/assessments";
 import { useParams } from "next/navigation";
@@ -18,10 +17,9 @@ export default function ({
   questionScore,
   rubric
 }: Props) {
-  const [grades, setGrades] = useState<number[]>(Array(rubric.length).fill(0));
+  const [grades, setGrades] = useState<number[]>(rubric.map(r => r.facilitatorScore || 0));
   const [isGraded, setIsGraded] = useState(false);
   const totalGrade = grades.reduce((acc, grade) => acc + grade, 0);
-
 
   useEffect(() => {
     setIsGraded(totalGrade > 0);
@@ -97,7 +95,7 @@ export default function ({
                 <GradeInput
                   setIsGraded={setIsGraded}
                   setGrade={(grade) => handleGradeChange(index, grade)}
-                  grade={grades[index] || choice.facilitatorScore}
+                  grade={ choice.facilitatorScore || grades[index] }
                   questionScore={Number(choice.label)}
                 />
               </td>

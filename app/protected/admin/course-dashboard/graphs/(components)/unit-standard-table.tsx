@@ -59,9 +59,9 @@ function UnitStandardTable({ path }: UnitStandardTableProps) {
           return (
             <Module
               key={data.id}
-              moduleName={data.title}
-              moduleAnswer={data.description}
-              noOfFile={10}
+              name={data.title}
+              description={data.description}
+              noOfDocuments={10}
               url={url}
             />
           );

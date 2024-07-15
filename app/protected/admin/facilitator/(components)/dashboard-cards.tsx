@@ -1,14 +1,21 @@
-"use client"
+"use client";
 import { Container, Row, Col } from "react-bootstrap";
 import CardComponent from "@/app/components/facilitator/Card/Card";
 import PageHeader from "./PageHeader";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-type IconType = "schedule" | "createAssessment" | "leaderBoard" | "feedback" | "markAssessment" | "logbook";
+type IconType =
+  | "schedule"
+  | "createAssessment"
+  | "leaderBoard"
+  | "feedback"
+  | "markAssessment"
+  | "logbook";
 
 const DashboardCards = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleClick = () => {
     router.push(`${pathname}?title=${encodeURIComponent("KNOWLEDGE MODULES")}`);
@@ -19,13 +26,19 @@ const DashboardCards = () => {
     { link: "#", icon: "createAssessment", title: "Create Assessment" },
     { link: "#", icon: "leaderBoard", title: "Leader Board" },
     { link: "#", icon: "feedback", title: "Moderator Feedback" },
-    { link: `/protected/admin/assessments?title=${encodeURIComponent("Mark Assessments")}`, icon: "markAssessment", title: "Mark Assessment" },
+    {
+      link: `/protected/admin/assessments-assignments/pages/assessments?title=${encodeURIComponent(
+        "Mark Assessments"
+      )}&homeTitle=Facilitator Dashboard&button-title=Dashboard`,
+      icon: "markAssessment",
+      title: `Mark\n Assessments \n& \n Assignments`,
+    },
     { link: "#", icon: "logbook", title: "Logbook" },
   ];
 
   return (
     <Container className="mt-5 m-auto">
-      <PageHeader title="Facilitator Dashboard" facilitator />
+      <PageHeader title="Facilitator Dashboard"/>
       <Row className="mt-4 ml-5 justify-content-center">
         {cardData.map((card, index) => (
           <Col key={index} md={6} lg={4} className="mb-4 mx-auto">

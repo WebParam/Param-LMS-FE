@@ -35,7 +35,14 @@ const CardComponent = ({ icon, title, link, handleClick }: CardComponentProps) =
       <Card className={`text-center ${styles.cardCustomSize}`} onClick={handleClick}>
         <Card.Body className={styles.cardBodyCentered}>
           <div className={styles.iconWrapper}>{icons[icon]}</div>
-          <Card.Title>{title}</Card.Title>
+          <Card.Title>
+            {title.split('\n').map((line, index) => (
+              <span key={index}>
+                {line}
+                {index < title.split('\n').length - 1 && <br />}
+              </span>
+            ))}
+          </Card.Title>
         </Card.Body>
       </Card>
     </Link>

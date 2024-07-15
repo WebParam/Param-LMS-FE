@@ -29,7 +29,7 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
               <td
                 className={`${align.student_surname} js-lists-values-projects small`}
               >
-                {data.userId}
+                {data.userId.slice(0, 6) + '...'}
               </td>
               <td
                 className={`${align.assessment_name} js-lists-values-projects small`}
@@ -48,8 +48,8 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
               </td>
               <td className={`${align.action} js-lists-values-projects small`}>
               <Link
-                  className="chip chip-outline-success"
-                  href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&name=${data.name}`}
+                  className={`chip chip-outline-success text ${align.student_name}`}
+                  href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&title=${data.name}&homeTitle=${assessmentName}`}
                 >
                   Grade Assessment
                   <i className="material-icons ">assignment_turned_in</i>

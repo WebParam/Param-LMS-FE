@@ -43,7 +43,11 @@ import PageHeader from "../../PageHeader";
 
 export default async function Page() {
   const courseId = "65e5d75f6944453739f276c3";
-  const data = await getCourseGraphs("courseId");
+  const data = await getCourseGraphs(courseId);
+  if (!data || data.averageCompletedQuizzes === undefined) {
+    console.error('Data fetch failed or averageCompletedQuizzes is undefined');
+    return; // Handle the error appropriately
+  }
 
   const OverallQuizBarData = await OverallQuizBarDataFn(
     data.averageCompletedQuizzes
@@ -58,6 +62,8 @@ export default async function Page() {
   const correctAnswersChartBarData = await OverallCorrectAnswersBarDataFn(
     data.averageCorrectAnswer
   );
+
+
 
   return (
     <>

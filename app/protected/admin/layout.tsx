@@ -13,7 +13,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     {name : 'Manage Courses', url: `/protected/admin/courses`, icon : 'create_new_folder',},
     {name : 'Edit Course', url: `/protected/admin/courses`, icon : 'create_new_folder',},
     {name : 'Create Course', url: `/protected/admin/courses`, icon : 'create_new_folder',},
-    {name : 'Facilitator', url: `/protected/admin/facilitator`, icon : 'dashboard',},
+    {name : 'Facilitator', url: `/protected/admin/facilitator?title=Facilitator Dashboard&homeTitle=HOME`, icon : 'dashboard',},
     
     
   ];

@@ -1,5 +1,4 @@
 import Assessments from "@/components/Assessment/Assessments";
-import PageHeader from "../facilitator/(components)/PageHeader";
 import { getAssessments } from "@/app/lib/actions/assessments";
 
 const Page = async () => {
@@ -12,7 +11,6 @@ const Page = async () => {
   return (
     <>
       <div className="card mb-0">
-      <PageHeader title="Facilitator Dashboard" facilitator />
         <div
           className="table-responsive"
           data-toggle="lists"

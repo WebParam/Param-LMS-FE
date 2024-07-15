@@ -8,21 +8,26 @@ import MyVerticallyCenteredModal from "./Modal";
 import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import { getStudentAssessmentAnswers } from "@/app/lib/actions/assessments";
 import { IAssessmentStudentAnswers } from "@/app/interfaces/assessments";
+import { useRouter } from "next/navigation";
 
-function Page({ params }: { params: { assessmentId: string , id:string} }) {
-  const [studentAssessment, setStudentAssessment] = useState<IAssessmentStudentAnswers | null>(null);
+function Page({ params }: { params: { assessmentId: string; id: string } }) {
+  const [studentAssessment, setStudentAssessment] =
+    useState<IAssessmentStudentAnswers | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 2;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems = studentAssessment?.answers.slice(indexOfFirstItem, indexOfLastItem) || [];
+  const currentItems =
+    studentAssessment?.answers.slice(indexOfFirstItem, indexOfLastItem) || [];
   const [modalShow, setModalShow] = useState(false);
   const assessmentId = params.assessmentId;
   const userId = params.id;
+  const router = useRouter();
 
   const getAssessments = async () => {
     try {
-      const assessments: IAssessmentStudentAnswers = await getStudentAssessmentAnswers(userId, assessmentId);
+      const assessments: IAssessmentStudentAnswers =
+        await getStudentAssessmentAnswers(userId, assessmentId);
       console.log("API Response:", assessments);
       if (assessments && assessments.answers) {
         setStudentAssessment(assessments);
@@ -44,7 +49,7 @@ function Page({ params }: { params: { assessmentId: string , id:string} }) {
       <div className="page-separator">
         <div className="page-separator__text">Questions</div>
       </div>
-      {currentItems.map((data) => (
+      {currentItems.map((data) =>
         data.questionType === "Quiz" ? (
           <MultipleChoiceQuestion
             key={data.questionId}
@@ -64,7 +69,7 @@ function Page({ params }: { params: { assessmentId: string , id:string} }) {
             rubric={data.rubrics}
           />
         )
-      ))}
+      )}
 
       <div className="card mb-24pt">
         <Pagination
@@ -82,7 +87,11 @@ function Page({ params }: { params: { assessmentId: string , id:string} }) {
 
         <MyVerticallyCenteredModal
           show={modalShow}
-          onHide={() => setModalShow(false)}
+          onHide={() => {
+            setModalShow(false);
+
+           
+          }}
         />
       </div>
     </>

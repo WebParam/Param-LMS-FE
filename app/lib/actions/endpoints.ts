@@ -38,7 +38,7 @@ export const rRubricUrl = `https://khumla-${env}-assessment-read.azurewebsites.n
 
 export const wOptionUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/Options`;
 
-const rOptionUrl = `https://khumla-${env}-assessment-read.azurewebsites.net/api/v1/Options`;
+export const rOptionUrl = `https://khumla-${env}-assessment-read.azurewebsites.net/api/v1/Options`;
 export const rKnowledgeModuleUrl = `https://khumla-${env}-newcourse-read.azurewebsites.net/api/v1`;
 
 export const rAnalyticUrl =

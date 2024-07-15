@@ -1,18 +1,21 @@
 import Link from "next/link";
-export default async function Assessments({ list }:any) {
+export default async function Assessments({ list }: any) {
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
           <div className="row card-group-row">
-            {list && list.map((assessment: any) => (
-              <Assessment
-                key={assessment.id}
-                imgUrl={assessment.avatar}
-                title={assessment.title}
-                url={`/protected/admin/assessments/${assessment.id}/grade-assessments?assessment-name=${assessment.title}`}
-              />
-            ))}
+            {list &&
+              list.map((assessment: any) => (
+                <Assessment
+                  key={assessment.id}
+                  imgUrl={assessment.avatar}
+                  title={assessment.title}
+                  url={`/protected/admin/assessments-assignments/pages/assessments/${assessment.id}
+                  /grade-assessments?assessment-name=${assessment.title}
+                  &homeTitle=Mark Assessments&title=${assessment.title}&button-title=Assessments`}
+                />
+              ))}
           </div>
         </div>
       </div>
@@ -68,6 +71,6 @@ const titleShort = (title: string) => {
   const strArr = title.split(" ");
 
   if (strArr.length > 1 && strArr[1][0])
-    return (strArr[0][0].toUpperCase() + strArr[1][0].toUpperCase())
+    return strArr[0][0].toUpperCase() + strArr[1][0].toUpperCase();
   return strArr[0][0].toUpperCase();
 };
