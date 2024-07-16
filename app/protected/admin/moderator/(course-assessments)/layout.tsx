@@ -20,13 +20,14 @@ function Layout({ children, params }: { children: React.ReactNode; params: {id :
   return (
     <>
      { 
-    !pathname.includes(`/protected/admin/assessments-assignments/pages/${path}/`) &&
-     !pathname.includes("/grade-assessments") &&
+     pathname.includes(`/protected/admin/assessments-assignments/pages/${path}/`) &&
+     pathname.includes("/grade-assessments") &&
      <div className="card p-relative o-hidden mb-2">
         <div
           className="card-header card-header-tabs-basic nav px-0"
           role="tablist"
         >
+          
           {links.map((l: any) => (
             <Link
               className={pathname === l.path ? "active" : ""}

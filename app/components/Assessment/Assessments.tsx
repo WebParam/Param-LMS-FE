@@ -1,5 +1,13 @@
+"use client"
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 export default async function Assessments({ list }: any) {
+
+const baseUrl = "/protected/admin/"
+  const pathName = usePathname();
+  const pageUrl = pathName === "/protected/admin/moderator" ? `${baseUrl}/moderator` :  `${baseUrl}/assessments-assignments/pages/assessments`
+  const homeTitle = "homeTitle=Mark Assessments";
+  const buttonTitle = "button-title=Assessments"
   return (
     <>
       <div className="page-section bg-alt border-top-2">
@@ -11,9 +19,7 @@ export default async function Assessments({ list }: any) {
                   key={assessment.id}
                   imgUrl={assessment.avatar}
                   title={assessment.title}
-                  url={`/protected/admin/assessments-assignments/pages/assessments/${assessment.id}
-                  /grade-assessments?assessment-name=${assessment.title}
-                  &homeTitle=Mark Assessments&title=${assessment.title}&button-title=Assessments`}
+                  url={`${pageUrl}/${assessment.id}/grade-assessments?assessment-name=${assessment.title}&${homeTitle}&title=${assessment.title}&${buttonTitle}`}
                 />
               ))}
           </div>
