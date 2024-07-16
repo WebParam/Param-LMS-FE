@@ -7,16 +7,15 @@ import { useEffect, useState } from "react";
 type CreateFormType = {
   title?: string;
   description?: string;
+  videoScriptTone?: string;
   instructorName?: string;
   courseLogoUrl?: string;
   thumbnailUrl?: string;
   action: (formData: FormData) => void;
 };
 
-export default function CreateForm({ title, description, instructorName, courseLogoUrl, thumbnailUrl, action}: CreateFormType) {
+export default function CreateForm({ title, description, videoScriptTone, instructorName, courseLogoUrl, thumbnailUrl, action}: CreateFormType) {
   const [showModal, setShowModal] = useState(false);
-
-
 
   return (
     <>
@@ -58,6 +57,22 @@ export default function CreateForm({ title, description, instructorName, courseL
                 style={{ height: "100px", backgroundColor: 'white' }}
                 defaultValue={description}
                 placeholder="Description ..."
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div className="list-group-item">
+          <div className="form-group row align-items-center mb-0">
+            <label className="form-label col-form-label col-sm-3">
+              Video Script Prompt
+            </label>
+            <div className="col-sm-9">
+              <textarea
+                name="videoScriptTone"
+                className="w-100 p-2 text-black"
+                style={{ height: "100px", backgroundColor: 'white' }}
+                defaultValue={videoScriptTone}
+                placeholder="Video Script Query ..."
               ></textarea>
             </div>
           </div>

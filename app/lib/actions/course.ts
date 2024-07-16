@@ -9,6 +9,7 @@ export const createCourse = async (formData: FormData) => {
   const body = {
     title: formData.get("title"),
     description: formData.get("description"),
+    videoScriptTone: formData.get("videoScriptTone"),
     instructorName: formData.get("instructorName"),
     courseLogoUrl: formData.get("courseLogoUrl"),
     thumbnailUrl: formData.get("thumbnailUrl"),
@@ -60,6 +61,7 @@ export const updateCourse = async (id: string, formData: FormData) => {
     id: id,
     title: formData.get("title"),
     description: formData.get("description"),
+    videoScriptTone: formData.get("videoScriptTone"),
     instructorName: formData.get("instructorName"),
     courseLogoUrl: formData.get("courseLogoUrl"),
     thumbnailUrl: formData.get("thumbnailUrl"),
