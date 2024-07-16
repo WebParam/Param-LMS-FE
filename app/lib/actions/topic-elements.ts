@@ -15,6 +15,7 @@ export const createTopicElement = async (
   courseTitle: string,
   moduleTitle: string,
   topicTitle: string,
+  isPractical: boolean,
   formData: FormData
 ) => {
   const body = {
@@ -36,7 +37,10 @@ export const createTopicElement = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`;
+
+  const url = isPractical
+    ? `/protected/admin/courses/${courseId}/practical-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`
+    : `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`;
   redirect(url);
 };
 
@@ -50,6 +54,7 @@ export const updateTopicElement = async (
   courseTitle: string,
   moduleTitle: string,
   topicTitle: string,
+  isPractical: boolean,
   formData: FormData
 ) => {
   const body = {
@@ -75,7 +80,9 @@ export const updateTopicElement = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`;
+  const url = isPractical
+    ? `/protected/admin/courses/${courseId}/practical-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`
+    : `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`;
   redirect(url);
 };
 
