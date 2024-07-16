@@ -1,5 +1,5 @@
 import { Diagnostic } from "../logger/logger";
-import { get } from "../utils";
+import { get, put } from "../utils";
 
 export const getCourseStudents = async (courseId: string) => {
     try {
@@ -29,5 +29,10 @@ export const getStudentData = async (studentId: string) => {
 
 export const getStudentDocuments = async (studentId: string) => {
   const resp = await get(`https://khumla-development-user-read.azurewebsites.net/api/Documents/GetDocuments/${studentId} `)
+  return resp.data
+}
+
+export const changeDocumentStatus = async (payload:any) => {
+  const resp = await put(`https://khumla-development-user-write.azurewebsites.net/api/Documents/UpdateDocumentStatus `, payload);
   return resp.data
 }

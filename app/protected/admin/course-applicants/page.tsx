@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import list from "./(components)/data";
 import { getCourseStudents } from "@/app/lib/actions/courseStudents";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
+import Loading from "./loading";
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,7 +32,7 @@ const Body = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <Loading />; 
   }
 
   return (

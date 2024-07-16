@@ -13,13 +13,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
             <tr key={data.id} className="selected">
               
               <td className="text-center js-lists-values-projects small">
-                <div className="d-flex align-items-center">
-                  <a href="#">
-                    <i className="material-icons mr-8pt">edit</i>
-                  </a>
-                  <a href="#">
-                    <i className="material-icons mr-8pt">delete</i>
-                  </a>
+                <div className="d-flex align-items-center justify-content-center ">
                   <Link
                     href={{
                       pathname: `/protected/admin/course-applicants/${data.id}/profiles`,
@@ -31,7 +25,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                 </div>
               </td>
               <td className="text-center js-lists-values-projects small">
-                {data.id}
+                {data.id.substring(0, 5)}
               </td>
 
               <td className="text-center js-lists-values-projects small">

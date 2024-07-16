@@ -3,7 +3,7 @@ const TableHead = () => {
     "StudentID",
     "Student Name",
     "Course Applied",
-    "Application Status"
+    "Status"
   ];
 
   return (
