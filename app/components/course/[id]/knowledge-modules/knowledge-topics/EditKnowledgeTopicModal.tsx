@@ -18,6 +18,8 @@ function EditKnowledgeTopicModal(props: any) {
   const [closeEditModal, setCloseEditModal] = useState(false);
   const title = searchParams.get("title") || "";
   const moduleTitle = searchParams.get("moduleTitle") || "";
+  const isPractical = false;
+
   const updateKnowledgeTopicWithParams = updateKnowledgeTopic.bind(
     null,
     props.data.id,
@@ -26,6 +28,7 @@ function EditKnowledgeTopicModal(props: any) {
     moduleId,
     title,
     moduleTitle,
+    isPractical
   );
 
   return (
@@ -89,6 +92,4 @@ function EditKnowledgeTopicModal(props: any) {
     </Modal>
   );
 }
-export default dynamic(() => Promise.resolve(EditKnowledgeTopicModal), {
-  ssr: false,
-});
+export default EditKnowledgeTopicModal;

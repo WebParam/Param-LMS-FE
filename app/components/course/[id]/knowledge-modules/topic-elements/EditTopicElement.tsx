@@ -26,6 +26,7 @@ function EditTopicElement(props: any) {
 
   const [description, setDescription] = useState(props.data.description);
   const [videoScript, setVideoScript] = useState(props.data.videoScript);
+  const isPractical = false;
 
   const updateTopicElementWithParams = updateTopicElement.bind(
     null,
@@ -37,7 +38,8 @@ function EditTopicElement(props: any) {
     topicId,
     title,
     moduleTitle,
-    topicTitle
+    topicTitle,
+    isPractical
   );
 
   return (

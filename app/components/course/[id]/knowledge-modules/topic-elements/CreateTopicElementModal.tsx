@@ -27,6 +27,7 @@ function CreateTopicElementModal(props: any) {
   const [errorSubmit, setErrorSubmit] = useState(false);
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
+  const isPractical = false;
   const createTopicElementWithParams = createTopicElement.bind(
     null,
     courseId,
@@ -34,7 +35,8 @@ function CreateTopicElementModal(props: any) {
     topicId,
     title,
     moduleTitle,
-    topicTitle
+    topicTitle,
+    isPractical
   );
 
   return (

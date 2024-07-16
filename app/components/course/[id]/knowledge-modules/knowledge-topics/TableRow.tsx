@@ -200,7 +200,7 @@ const TableRow = ({ document }: { document: any }) => {
             )}
           </div>
         </td>
-        <td style={{ cursor: "pointer", width: "700px" }} className="py-0">
+        <td style={{ width: "700px" }} className="py-0">
           <div className="d-flex justify-content-center">
             <Link href="#" onClick={() => setIsEditModal(true)}>
               <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">

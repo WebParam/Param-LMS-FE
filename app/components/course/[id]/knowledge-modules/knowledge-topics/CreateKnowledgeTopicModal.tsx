@@ -18,12 +18,15 @@ function CreateKnowledgeTopicModal(props: any) {
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
   const moduleTitle = searchParams.get("moduleTitle") || "";
+  const isPractical = false;
+
   const createKnowledgeTopicWithParams = createKnowledgeTopic.bind(
     null,
     courseId,
     moduleId,
     title,
     moduleTitle,
+    isPractical
   );
 
   return (

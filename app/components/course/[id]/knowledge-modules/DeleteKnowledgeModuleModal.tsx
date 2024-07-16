@@ -11,9 +11,6 @@ import { useState } from "react";
 import { deleteKnowledgeModule } from "@/app/lib/actions/knowledge-module";
 
 function DeleteKnowledgeModuleModal(props: any) {
-  const { id: courseId } = useParams<{
-    id: string;
-  }>();
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
