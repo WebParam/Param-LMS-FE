@@ -5,11 +5,14 @@ import Modal from "./Modal";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import KnowledgeModuleModal from "./KnowledgeModuleModal";
+import PracticalModuleModal from "./PracticalModuleModal";
 
 export default function PageHeader({ title }: { title: string }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openPracticalModuleModal, setOpenPracticalModuleModal] =
+    useState(false);
   const [openKnowledgeModuleModal, setOpenKnowledgeModuleModal] =
-    useState<boolean>(false);
+    useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const name = searchParams.get("title");
@@ -18,9 +21,11 @@ export default function PageHeader({ title }: { title: string }) {
 
   let isModule = false;
   let isKnowledgeModule = false;
+  let isPracticalModule = false;
   let isCreateModule = false;
   let isEditModule = false;
   let isEditKnowledgeModules = false;
+  let isEditPracticalModules = false;
   let isEditCourse = false;
   let isCourse = false;
   let isEditDocument = false;
@@ -151,6 +156,52 @@ export default function PageHeader({ title }: { title: string }) {
         );
       }
     }
+  } else if (pathname.indexOf("/practical-modules") !== -1) {
+    title = `${name}`;
+    if ([...arrLink, ...actionLinks].indexOf(suffixPath) === -1) {
+      isPracticalModule = true;
+    } else {
+      if (actionLinks.indexOf(suffixPath) !== -1) {
+        const arr = pathname.split("/");
+        const urlSlice = arr.slice(0, -3);
+        backUrl = `${urlSlice.join("/")}/${
+          urlDocumentMap[suffixPath]
+        }?title=${title}&moduleTitle=${moduleTitle}`;
+        isEditKnowledgeTopic = true;
+        newTitle = (
+          <div className="d-flex">
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                maxWidth: "560px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {topicTitle}
+            </p>{" "}
+            - {stepperMap[suffixPath] ? stepperMap[suffixPath] : ""}
+          </div>
+        );
+      } else if (arrLink.indexOf(suffixPath) !== -1) {
+        isEditPracticalModules = true;
+        newTitle = (
+          <div className="d-flex">
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                maxWidth: "560px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {moduleTitle}
+            </p>{" "}
+            - {stepperMap[suffixPath] ? stepperMap[suffixPath] : ""}
+          </div>
+        );
+      }
+    }
   }
 
   return (
@@ -165,6 +216,13 @@ export default function PageHeader({ title }: { title: string }) {
       <KnowledgeModuleModal
         show={openKnowledgeModuleModal}
         onHide={() => setOpenKnowledgeModuleModal(false)}
+        courseId={id}
+        title={name}
+      />
+
+      <PracticalModuleModal
+        show={openPracticalModuleModal}
+        onHide={() => setOpenPracticalModuleModal(false)}
         courseId={id}
         title={name}
       />
@@ -219,6 +277,14 @@ export default function PageHeader({ title }: { title: string }) {
                   Knowledge Modules
                 </Link>
               )}
+              {isEditPracticalModules && (
+                <Link
+                  className="btn btn-success"
+                  href={`/protected/admin/courses/${id}/practical-modules?title=${name}`}
+                >
+                  Practical Modules
+                </Link>
+              )}
               {isModule && (
                 <button
                   className="btn btn-success"
@@ -233,6 +299,14 @@ export default function PageHeader({ title }: { title: string }) {
                   onClick={() => setOpenKnowledgeModuleModal(true)}
                 >
                   Create Knowledge Module
+                </button>
+              )}
+              {isPracticalModule && (
+                <button
+                  className="btn btn-success"
+                  onClick={() => setOpenPracticalModuleModal(true)}
+                >
+                  Create Practical Module
                 </button>
               )}
               {isEditDocument && (
