@@ -16,13 +16,15 @@ function EditForm({ module }: { module: any }) {
   }>();
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
+  const isPractical = false;
 
   const updateKnowledgeModuleWithParams = updateKnowledgeModule.bind(
     null,
     moduleId,
     description,
     courseId,
-    courseTitle
+    courseTitle,
+    isPractical
   );
 
   return (
