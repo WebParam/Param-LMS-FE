@@ -22,7 +22,15 @@ interface Student {
 const students: Student[] = [
   { name: 'Jane Smith', logbooks: [{ daysLogged: 4, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 0, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
   { name: 'John Doe', logbooks: [{ daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
-  // Add more students as needed
+  { name: 'Sihle Nkosi', logbooks: [{ daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
+  { name: 'Johannes Pile', logbooks: [{ daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
+  { name: 'Buhle Avenaant', logbooks: [{ daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
+  { name: 'Lesego Nkosi', logbooks: [{ daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
+  { name: 'Akani Maluleka', logbooks: [{ daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
+  { name: 'Bontle Smith', logbooks: [{ daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
+  { name: 'Mohapi Nku', logbooks: [{ daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
+  { name: 'Sithole Nkomo', logbooks: [{ daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
+  
 ];
 
 export default function Logbook() {
