@@ -1,7 +1,12 @@
 import { getCourse } from "@/app/lib/actions/course";
-import { wGenerateVideoScriptUrl } from "@/app/lib/actions/endpoints";
+import {
+  wCourseUrl,
+  wGenerateVideoScriptUrl,
+} from "@/app/lib/actions/endpoints";
 import { getKnowledgeModule } from "@/app/lib/actions/knowledge-module";
 import { getKnowledgeTopic } from "@/app/lib/actions/knowledge-topic";
+import { getKnowledgeElements } from "@/app/lib/actions/topic-elements";
+import { post, put } from "@/app/lib/utils";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -9,52 +14,44 @@ export async function POST(req: NextRequest) {
     const reqBody = await req.json();
     const { documentId, courseId, moduleId } = reqBody;
 
-    const [course, module, topic] = await Promise.all([
+    const [course, module, topic, topicElements] = await Promise.all([
       getCourse(courseId),
       getKnowledgeModule(moduleId),
       getKnowledgeTopic(documentId),
+      getKnowledgeElements(documentId),
     ]);
 
-    const body = {
-      moduleTitle: module.title,
-      moduleDescription: module.description,
-      topicTitle: topic.name,
-      topicId: topic.id,
-      topicDescription: topic.description,
-      lengthOfVideoScript: topic.lengthOfVideoScript || 50,
-      tone: course.videoScriptTone,
-    };
+    const promiseArray = [];
+    for (const element of topicElements) {
+      if (element.elementCode == "" || element.title == "") continue;
 
-    // Make a fetch request to an external server
-    const response = await fetch(
-      `${wGenerateVideoScriptUrl}/topicElement/generate`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      }
-    );
+      const body = {
+        moduleTitle: module.title,
+        moduleDescription: module.description,
+        topicTitle: topic.name,
+        topicId: topic.id,
+        topicDescription: topic.description,
+        lengthOfVideoScript: topic.lengthOfVideoScript,
+        tone: course.videoScriptTone,
+        elementTitle: element.title,
+        elementCode: element.elementCode,
+        elementId: element.id,
+      };
 
-    // Read the response as a blob
-    const blob = await response.blob();
+      promiseArray.push(
+        post(
+          `${wGenerateVideoScriptUrl}/topicElement/generateUpdateSingle`,
+          body
+        )
+      );
+    }
 
-    // Get the size of the blob
-    const totalLength = blob.size;
+    await Promise.all(promiseArray);
+    const body = { ...topic, isGenerated: true };
+    await put(`${wCourseUrl}/KnowledgeTopics/UpdateKnowledgeTopic`, body);
 
-    console.log(`Content-Length: ${totalLength} bytes`);
-
-    // Optionally, convert the blob to text or other formats if needed
-    const text = await blob.text();
-    console.log("Response data:", text);
-
-    return new Response(blob, {
-      headers: {
-        "Content-Type": "application/json",
-        "Transfer-Encoding": "chunked",
-      },
+    return new Response("Success!", {
+      status: 200,
     });
   } catch (error) {
     console.error("Error fetching data:", error);
