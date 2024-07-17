@@ -1,9 +1,9 @@
 "use server";
 import { redirect } from "next/navigation";
 import { del, formDataEntriesArray, get, post, put } from "../utils";
-import { wCourseUrl, rCourseUrl, rDocumentParaphraseUrl } from "./endpoints";
+import { wCourseUrl, rCourseUrl } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
-import { FormObject, IQuestion } from "@/app/interfaces/questions";
+import { FormObject } from "@/app/interfaces/questions";
 import { KnowledgeModule } from "@/app/interfaces/modules";
 
 export const createKnowledgeTopic = async (
@@ -18,21 +18,21 @@ export const createKnowledgeTopic = async (
     name: formData.get("name"),
     description: formData.get("description"),
     topicCode: formData.get("topicCode"),
-    lengthOfVideoScript: formData.get("lengthOfVideoScript") || 0,
+    lengthOfVideoScript: formData.get("lengthOfVideoScript") || 100,
     moduleId,
   };
 
   const entries: any = formData.entries();
-  let KnowledgeTopic = {} as KnowledgeModule;
+  let knowledgeTopic = {} as KnowledgeModule;
   try {
     const data = await post(
       `${wCourseUrl}/KnowledgeTopics/AddKnowledgeTopic`,
       body
     );
-    KnowledgeTopic = data.data;
+    knowledgeTopic = data.data;
     Diagnostic("SUCCESS ON POST, returning", data);
 
-    createTopicElements(entries, KnowledgeTopic.id);
+    createTopicElements(entries, knowledgeTopic.id);
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
     console.error(err);

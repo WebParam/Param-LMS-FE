@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import EditKnowledgeTopicModal from "./EditKnowledgeTopicModal";
-import { Modal } from "react-bootstrap";
 import DeleteKnowledgeTopicModal from "./DeleteKnowledgeTopicModal";
 
 const TableRow = ({ document }: { document: any }) => {
@@ -18,8 +17,6 @@ const TableRow = ({ document }: { document: any }) => {
   const [deleteModal, setDeleteModal] = useState(false);
 
   const [isGenerated, setIsGenerated] = useState(document.isGenerated);
-  const [generateVideoScriptModal, setGenerateVideoScriptModal] =
-    useState(false);
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -114,26 +111,6 @@ const TableRow = ({ document }: { document: any }) => {
         onHide={() => setDeleteModal(false)}
       />
 
-      <Modal
-        show={generateVideoScriptModal}
-        onHide={() => setGenerateVideoScriptModal(false)}
-        centered
-        backdrop="static"
-      >
-        <Modal.Body
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-            gap: "10px",
-            height: "300px",
-          }}
-        >
-          <div className="spinner-border text-primary" role="status" />
-          <p style={{ color: "#252525" }}>Generating Video Script...</p>
-        </Modal.Body>
-      </Modal>
       <tr className="selected">
         <td style={{ width: "250px" }} className="py-0">
           <div className="d-flex align-items-center justify-content-center">

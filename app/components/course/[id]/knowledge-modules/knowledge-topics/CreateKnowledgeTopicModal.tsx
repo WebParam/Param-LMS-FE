@@ -1,5 +1,4 @@
 "use client";
-import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useParams, useSearchParams } from "next/navigation";
@@ -99,6 +98,4 @@ function CreateKnowledgeTopicModal(props: any) {
     </Modal>
   );
 }
-export default dynamic(() => Promise.resolve(CreateKnowledgeTopicModal), {
-  ssr: false,
-});
+export default CreateKnowledgeTopicModal;
