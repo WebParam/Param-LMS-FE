@@ -109,3 +109,32 @@ export const formDataEntriesArray = (entries: any) => {
     Object.values(objMap);
   return objArray;
 };
+
+export const exportToExcel = (
+  url: string,
+  filename: string,
+  setExportModal: (isBool: boolean) => void
+) => {
+  setExportModal(true);
+  fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.blob())
+    .then((blob) => {
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.setAttribute("download", filename + ".xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setExportModal(false);
+    })
+    .catch((error) => {
+      console.error("Error exporting knowledge topics:", error);
+    });
+};
