@@ -109,17 +109,16 @@ const feedbacks: { [key: string]: Feedback[] } = {
 
 const StudentLogbook: FC<StudentLogbookProps> = ({ student, week }) => {
   const currentLogbook = student.logbooks[week];
-  const studentFeedbacks = feedbacks[student.name] || [];
-  const displayedFeedbacks = studentFeedbacks.slice(0, currentLogbook.daysLogged);
+  const displayedFeedbacks = feedbacks[student.name].slice(0, currentLogbook.daysLogged);
 
   return (
     <div className="student-logbook">
       <div className="logbook-header">
         <h6>{student.name}</h6>
         <h6>Week {week + 1} Logbook</h6>
-        <DownloadButton studentName={student.name} week={week} feedbacks={studentFeedbacks} />
+        <DownloadButton studentName={student.name} week={week} feedbacks={displayedFeedbacks} />
       </div>
-      <FeedbackBox feedbacks={studentFeedbacks} />
+      <FeedbackBox feedbacks={displayedFeedbacks} />
     </div>
   );
 };
