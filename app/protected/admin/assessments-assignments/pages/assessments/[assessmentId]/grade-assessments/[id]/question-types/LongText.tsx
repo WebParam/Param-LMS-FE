@@ -42,16 +42,14 @@ export default function ({
       questionId: questionId,
       rubricId: rubricId,
       userId: userId,
-      creatingUserId: "someCreatingUserId",
+      creatingUserId: "6580051b2b3b4e16f159792d",
       mark: mark,
       markType: 1,
       label : Number(label)
     };
     const markResponse = await markStudentAssessment(payload);
-    console.log("markResponse",markResponse)
   }
 
-  console.log("markResponse",rubric)
   return (
     <div className="card table-responsive my-24pt">
       <table className="table table-flush table--elevated">

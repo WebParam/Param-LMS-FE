@@ -9,6 +9,7 @@ const Table: NextPage<{ list: ICourseAssessment[] }> = ({
 
   return (
     <>
+     
       <table className="table mb-0 thead-border-top-0 table-nowrap">
         <TableHead />
         <TableBody list={list} />
