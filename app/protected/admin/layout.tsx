@@ -13,7 +13,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         { name: 'List of Assessments', url: '/protected/admin/assessments', icon: '' },
         { name: 'Grade Assessments', url: '/protected/admin/assessments/grade-assessments', icon: '' }
       ]
-    }
+    },
+    { name: 'Logbook', url: '/protected/admin/logbook?title=Logbook', icon: 'assignment' },
   ];
 
   return (

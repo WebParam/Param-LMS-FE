@@ -20,8 +20,8 @@ interface Student {
 }
 
 const students: Student[] = [
-  { name: 'Ellion Johes', logbooks: [{ daysLogged: 4, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 0, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
-  { name: 'Mbali Maseko', logbooks: [{ daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
+  { name: 'Jane Smith', logbooks: [{ daysLogged: 4, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 0, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
+  { name: 'John Doe', logbooks: [{ daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }, { daysLogged: 5, totalDays: 5 }] },
   // Add more students as needed
 ];
 

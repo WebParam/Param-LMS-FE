@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import FeedbackBox from './FeedbackBox';
+import FeedbackBox from './FeedBackBox';
+import DownloadButton from './DownloadButton';
 
 interface Logbook {
   daysLogged: number;
@@ -16,7 +17,13 @@ interface StudentLogbookProps {
   week: number;
 }
 
-const feedbacks = {
+interface Feedback {
+  day: string;
+  feedback: string;
+  mood: 'Happy' | 'Neutral' | 'Sad';
+}
+
+const feedbacks: { [key: string]: Feedback[] } = {
   'John Doe': [
     {
       day: 'Monday',
@@ -73,41 +80,48 @@ const feedbacks = {
   ],
   'Alice Johnson': [
     {
-const feedbacks = [
-  {
-    day: 'Monday',
-    feedback: 'The class was very engaging and I learned a lot about algebra.',
-    mood: 'Happy',
-    moodImage: 'path/to/happy.png',
-  },
-  {
-    day: 'Tuesday',
-    feedback: 'The class was okay, but I found the topic on geometry a bit challenging.',
-    mood: 'Neutral',
-    moodImage: 'path/to/neutral.png',
-  },
-  {
-    day: 'Wednesday',
-    feedback: 'Today\'s class on calculus was very difficult to follow.',
-    mood: 'Sad',
-    moodImage: 'path/to/sad.png',
-  },
-  {
-    day: 'Thursday',
-    feedback: 'The class on statistics was interesting, and I enjoyed the group activities.',
-    mood: 'Happy',
-    moodImage: 'path/to/happy.png',
-  },
-];
+      day: 'Monday',
+      feedback: 'The class was very engaging and I learned a lot about algebra.',
+      mood: 'Happy',
+    },
+    {
+      day: 'Tuesday',
+      feedback: 'The class was okay, but I found the topic on geometry a bit challenging.',
+      mood: 'Neutral',
+    },
+    {
+      day: 'Wednesday',
+      feedback: 'Today\'s class on calculus was very difficult to follow.',
+      mood: 'Sad',
+    },
+    {
+      day: 'Thursday',
+      feedback: 'The class on statistics was interesting, and I enjoyed the group activities.',
+      mood: 'Happy',
+    },
+    {
+      day: 'Friday',
+      feedback: 'The class on trigonometry was very informative and well-taught.',
+      mood: 'Happy',
+    },
+  ],
+};
 
 const StudentLogbook: FC<StudentLogbookProps> = ({ student, week }) => {
+  const currentLogbook = student.logbooks[week];
+  const studentFeedbacks = feedbacks[student.name] || [];
+  const displayedFeedbacks = studentFeedbacks.slice(0, currentLogbook.daysLogged);
+
   return (
-    <div>
-      <h6>{student.name}</h6>
-      <h6>Week {week + 1} Logbook</h6>
-      <FeedbackBox feedbacks={feedbacks} />
+    <div className="student-logbook">
+      <div className="logbook-header">
+        <h6>{student.name}</h6>
+        <h6>Week {week + 1} Logbook</h6>
+        <DownloadButton studentName={student.name} week={week} feedbacks={studentFeedbacks} />
+      </div>
+      <FeedbackBox feedbacks={studentFeedbacks} />
     </div>
   );
-}
+};
 
 export default StudentLogbook;

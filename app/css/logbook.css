@@ -52,26 +52,26 @@
     text-align: left;
 }
 
-.logbook-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .nav-button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    margin: 0 40px; /* Increased the margin to create more space */
-  }
-  
-  .month-name {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-  }
 
+.nav-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  margin: 0 70px; /* Add space between the buttons */
+}
+
+.month-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-left: 500px;
+}
+
+.download-icon {
+  cursor: pointer;
+  font-size: 24px;
+  color: green; /* Optional: Change the color of the icon */
+}
   .feedback-box {
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -96,3 +96,10 @@
   .feedback-mood span {
     margin-left: 8px;
   }
+  
+.logbook-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px; /* Add some space below the header */
+}
