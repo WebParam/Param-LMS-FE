@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import list, { applicantRegional } from "./data";
 
 const TableBody: NextPage<{ list: any }> = ({ list }) => {
   const align = {

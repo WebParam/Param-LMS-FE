@@ -6,16 +6,13 @@ function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const name = searchParams.get("name");
   const router = useRouter();
-
   const tabs = [
-    { name: "profiles", title: "Profile", url: `/protected/admin/course-applicants/${id}/profiles` },
-    { name: "demographics", title: "Demographics", url: `/protected/admin/course-applicants/${id}/demographics` },
-    { name: "contacts", title: "Contacts", url: `/protected/admin/course-applicants/${id}/contacts` },
-    { name: "regional", title: "Regional", url: `/protected/admin/course-applicants/${id}/regional` },
-    { name: "employment", title: "Employment", url: `/protected/admin/course-applicants/${id}/employment` },
-    { name: "documents", title: "Documents", url: `/protected/admin/course-applicants/${id}/documents` },
+    { name: "analytics", title: "Analytics", url: `/protected/admin/enrollments/${id}/analytics` },
+    { name: "profile", title: "profile", url: `/protected/admin/enrollments/${id}/profile` },
+    { name: "sor", title: "SOR", url: `/protected/admin/enrollments/${id}/sor` },
+    { name: "assessment", title: "Assessment", url: `/protected/admin/enrollments/${id}/assessment` },
+    { name: "assignment", title: "Assignment", url: `/protected/admin/enrollments/${id}/assignment` },
   ];
   
   return (
@@ -28,7 +25,7 @@ function Layout({ children }: { children: React.ReactNode }) {
           {tabs.map((tab) => (
             <a
               key={tab.name}
-              onClick={()=> router.replace(`${tab.url}?id=${id}&name=${name}`)}
+              onClick={()=> router.replace(`${tab.url}?id=${id}`)}
               className={pathname.includes(tab.name) ? "active" : ""}
               data-toggle="tab"
               role="tab"
@@ -46,17 +43,8 @@ function Layout({ children }: { children: React.ReactNode }) {
       <div className="card mt-3">
         {children}
       </div>
-      <div className="card-footer p-8pt">
-        <button className="btn btn-primary">
-        <div className="tom-select-custom" style={{background:'transparent', border:'none'}}>
-          <select className="js-select form-select" style={{background:'transparent', border:'none'}}>
-            <option value="">Pending review</option>
-            <option value="1">Accepted</option>
-          <option value="2">Rejected</option>
-          </select>
-        </div>
-        </button>
-      </div>
+      {/* <div className="card-footer p-8pt">
+      </div> */}
     </>
   );
 };

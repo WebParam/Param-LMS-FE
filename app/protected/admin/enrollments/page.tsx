@@ -3,9 +3,9 @@ import Pagination from "@/app/components/Pagination";
 import Table from "./(components)/Table";
 import { useEffect, useState } from "react";
 import list from "./(components)/data";
-import { getCourseStudents } from "@/app/lib/actions/courseStudents";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import Loading from "./loading";
+import { getEnrollments } from "@/app/lib/actions/enrollments";
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +18,7 @@ const Body = () => {
   useEffect(() => {
     const asyncFetch = async () => {
       try {
-        const fetchedData = await getCourseStudents('6669f0ff8759b480859c10a7');
+        const fetchedData = await getEnrollments('6669f0ff8759b480859c10a7');
         debugger;
         setData(fetchedData);
         console.log('data is here', fetchedData);

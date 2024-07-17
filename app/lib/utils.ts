@@ -138,3 +138,32 @@ export const exportToExcel = (
       console.error("Error exporting knowledge topics:", error);
     });
 };
+
+// utils/xlsxWorker.js
+export function processXlsFile(file:any) {
+  return new Promise((resolve, reject) => {
+    const worker = new Worker('/xlsx.worker.js');
+
+    worker.onmessage = (e) => {
+      const { data } = e;
+      if (data.error) {
+        reject(data.error);
+      } else {
+        resolve(data.json);
+      }
+      worker.terminate();
+    };
+
+    worker.onerror = (e) => {
+      reject(e.message);
+      worker.terminate();
+    };
+
+    const reader = new FileReader();
+    reader.onload = (event:any) => {
+      const binaryString = event?.target.result;
+      worker.postMessage(binaryString);
+    };
+    reader.readAsBinaryString(file);
+  });
+}

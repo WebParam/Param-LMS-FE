@@ -1,20 +1,13 @@
 "use client";
-import Pagination from "@/app/components/Pagination";
+
 import Table from "./Table";
 import { useEffect, useState } from "react";
-import list from "./data";
 import { usePathname } from "next/navigation";
 import { getStudentData } from "@/app/lib/actions/courseStudents";
 
 const Body = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 6;
-  const indexOfLastItem = currentPage * ITEMSPERPAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
-
-  const [data, setData] = useState<any>()
   const pathname = usePathname();
+  const [data, setData] = useState([]);
 
   async function studentInformation() {
     const id = pathname.split('/')[4];
@@ -24,9 +17,9 @@ const Body = () => {
     setData(response)
   }
 
-  useEffect(() => {
-    studentInformation()
-  }, [])
+useEffect(() => {
+  // studentInformation()
+}, [])
 
 
   return (
@@ -39,6 +32,8 @@ const Body = () => {
         >
           <Table list={data} />
         </div>
+
+     
     </>
   );
 };

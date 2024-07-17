@@ -16,7 +16,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                 <div className="d-flex align-items-center justify-content-center ">
                   <Link
                     href={{
-                      pathname: `/protected/admin/course-applicants/${data.id}/profiles`,
+                      pathname: `/protected/admin/enrollments/${data.id}/analytics`,
                       query: { id: data.id, name: data.name },
                     }}
                   >

@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import list, { applicantDemographics } from "./data";
 
 const TableBody: NextPage<{ list: any }> = ({ list }) => {
   const align = {
@@ -10,7 +9,7 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
     points_collected: "text-center",
   };
 
-  console.log('list', list)
+  console.log('list',list)
 
   return (
     <>
@@ -19,68 +18,68 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
        <td>
             <ul className="list-group list-group-flush">
         <li className="list-group-item">
-          <i className="bi-house list-group-icon" /> Equity Code
+          <i className="bi-house list-group-icon" /> Full Name
         </li>
         <li className="list-group-item">
-          <i className="bi-person list-group-icon" /> Nationality Code
+          <i className="bi-person list-group-icon" /> Email
         </li>
         <li className="list-group-item">
-          <i className="bi-list-task list-group-icon" /> Home Language Code
+          <i className="bi-list-task list-group-icon" /> ID Number
         </li>
         <li className="list-group-item">
-          <i className="bi-layers list-group-icon" /> Citizen Status Code
+          <i className="bi-layers list-group-icon" /> Gender
         </li>
         <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> Socioeconomic Code
+          <i className="bi-people list-group-icon" /> Country
         </li>
         <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> Disability Code
+          <i className="bi-people list-group-icon" /> City
         </li>
         <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> Disability Rating
+          <i className="bi-people list-group-icon" /> Province
         </li>
         <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> Immigrant Status
+          <i className="bi-people list-group-icon" /> Date of Birth
         </li>
         <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> POPI Act Agreement
+          <i className="bi-people list-group-icon" /> Mobile Number
         </li>
         <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> POPI Act Date
+          <i className="bi-people list-group-icon" /> Bio
         </li>
       </ul>
       </td>
       <td>
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.equityCode??'N/A'}
+            <i className="bi-house list-group-icon" />: {list?.firstName??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.nationalityCode??'N/A'}
+            <i className="bi-house list-group-icon" />: {list?.email??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.homeLanguageCode??'N/A'}
+            <i className="bi-house list-group-icon" />: {list?.idNumber??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.citizenStatusCode??'N/A'}
+            <i className="bi-house list-group-icon" />: {list?.gender??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.socioeconomicCode??'N/A'}
+            <i className="bi-house list-group-icon" />: {list?.country??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.disabilityCode??'N/A'}
+            <i className="bi-house list-group-icon" />: {list?.city??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.disabilityRating??'N/A'}
+            <i className="bi-house list-group-icon" />: {list?.province??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.immigrantStatus??'N/A'}
+            <i className="bi-house list-group-icon" />: {list?.dateOfBirth.split('T')[0]??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.popiActAgree??'N/A'}
+            <i className="bi-house list-group-icon" />: {list?.phoneNumber??'N/A'}
           </li>
           <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.popiActDate??'N/A'}
+            <i className="bi-house list-group-icon" />: {list?.bio??"N/A"}
           </li>
         </ul>
       </td>
