@@ -32,7 +32,9 @@ function Layout({ children }: { children: React.ReactNode }) {
 
     const res = await post(`https://khumla-dev-newcourse-write.azurewebsites.net/api/v1/Enrollments/AddEnrollment`, payload)
 
-  
+    if (res) {
+      router.push('/protected/admin/enrollments')
+    }
     console.log(res);
 
   }
