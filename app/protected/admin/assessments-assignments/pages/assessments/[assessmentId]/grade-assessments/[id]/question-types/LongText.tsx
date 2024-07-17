@@ -29,7 +29,7 @@ export default function ({
     const newGrades = [...grades];
     newGrades[index] = grade;
     setGrades(newGrades);
-    await markStudent(rubric[index].questionId, rubric[index].id, newGrades.reduce((acc, grade) => acc + grade, 0), rubric[index].label);
+    await markStudent(rubric[index].questionId, rubric[index].id, grade, rubric[index].label);
   };
   const { id: userId, assessmentId } = useParams<{
     id: string;
@@ -51,6 +51,7 @@ export default function ({
     console.log("markResponse",markResponse)
   }
 
+  console.log("markResponse",rubric)
   return (
     <div className="card table-responsive my-24pt">
       <table className="table table-flush table--elevated">

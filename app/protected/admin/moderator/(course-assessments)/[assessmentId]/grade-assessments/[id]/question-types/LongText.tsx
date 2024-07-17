@@ -31,7 +31,7 @@ export default function ({
     const newGrades = [...moderatorGrades];
     newGrades[index] = grade;
     setModeratorGrades(newGrades);
-    await markStudent(rubric[index].questionId, rubric[index].id, newGrades.reduce((acc, grade) => acc + grade, 0), rubric[index].label);
+    await markStudent(rubric[index].questionId, rubric[index].id, grade, rubric[index].label);
   };
 
   const { id: userId, assessmentId } = useParams<{ id: string; assessmentId: string }>();
