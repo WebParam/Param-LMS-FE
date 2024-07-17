@@ -4,13 +4,13 @@ import { useSearchParams, usePathname } from "next/navigation";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
-  const name = searchParams.get("name");
+  const name = searchParams.get("studentname");
   const pathname = usePathname();
 
   let title =
     pathname == "/protected/admin/course-dashboard"
-      ? "Course Dashboard - Web Development"
-      : `Web Development - ${name}`;
+      ? "Student Analytics - Web Development"
+      : `Web Development - ${name ? name : "Analytics"}`;
 
   if (pathname == "/protected/admin/course-dashboard/graphs")
     title = "Sanlam Dashboard Analytics - Web Development";

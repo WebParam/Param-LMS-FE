@@ -13,17 +13,17 @@ const withAuth = <P extends object>(
     const isAuthorised = () => (loggedInUser && (loggedInUser.role == "Student" || loggedInUser.role == "Customer" ) );
 
     useEffect(() => {
-      const checkAuth = async () => {
-        if (!loggedInUser) {
-          router.replace("/auth/login");
-        }
+      // const checkAuth = async () => {
+      //   if (!loggedInUser) {
+      //     router.replace("/auth/login");
+      //   }
 
-        else if (!isAuthorised()) {
-          router.replace("/protected/admin/manage-courses");
-        }
-      };
+      //   else if (!isAuthorised()) {
+      //     router.replace("/protected/admin/manage-courses");
+      //   }
+      // };
 
-      checkAuth();
+      // checkAuth();
     }, [loggedInUser]);
 
     if (!isAuthorised()) {

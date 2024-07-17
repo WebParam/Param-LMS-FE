@@ -1,3 +1,3 @@
 export const barDescriptions = [
-  { description: "Average time Spent over time", color: "rgb(82 121 249)" },
+  { description: "Average time spent over time", color: "rgb(82 121 249)" },
 ];
