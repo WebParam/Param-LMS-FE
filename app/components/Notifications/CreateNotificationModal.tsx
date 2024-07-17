@@ -3,8 +3,16 @@ import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Select, { SingleValue } from "react-select";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+
+const students = [
+  { value: "Ellion Ridge", label: "Ellion Ridge - 227654" },
+  { value: "Sipho Nkosi", label: "Sipho Nkosi -229865 " },
+  { value: "John Doe", label: "John Doe - 228897" },
+  // Add more students as needed
+];
 
 function CreateNotificationModal(props: any) {
   const [description, setDescription] = useState("");
@@ -12,6 +20,8 @@ function CreateNotificationModal(props: any) {
   const [queryPrompt, setQueryPrompt] = useState<string>("");
   const [reminder, setReminder] = useState(false);
   const [targetGroup, setTargetGroup] = useState("Select Group");
+  const [reminderTime, setReminderTime] = useState("1 hour after sent");
+  const [selectedStudent, setSelectedStudent] = useState<SingleValue<{ value: string; label: string; }>>(null);
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
 
@@ -75,7 +85,7 @@ function CreateNotificationModal(props: any) {
               />
             </div>
             <div className="mt-3">
-              <h6>Notification Target</h6>
+              <h6>Recipient</h6>
               <select
                 className="form-control"
                 value={targetGroup}
@@ -84,9 +94,21 @@ function CreateNotificationModal(props: any) {
                 <option>Select Group</option>
                 <option>Course Students</option>
                 <option>Individual Student</option>
-                
               </select>
             </div>
+            {targetGroup === "Individual Student" && (
+              <div className="mt-3">
+                <h6>Select Student</h6>
+                <Select
+                  options={students}
+                  value={selectedStudent}
+                  onChange={(selectedOption) => setSelectedStudent(selectedOption)}
+                  placeholder="Search and select a student..."
+                  isSearchable
+                  noOptionsMessage={() => "No student found"}
+                />
+              </div>
+            )}
             <div className="mt-3 d-flex justify-content-between align-items-center">
               <h6 style={{ marginBottom: "0" }}>Notification Reminder?</h6>
               <input
@@ -101,6 +123,21 @@ function CreateNotificationModal(props: any) {
                 }}
               />
             </div>
+            {reminder && (
+              <div className="mt-3">
+                <p>Select when the reminder should be sent:</p>
+                <select
+                  className="form-control"
+                  value={reminderTime}
+                  onChange={(e) => setReminderTime(e.target.value)}
+                >
+                  <option>1 hour after sent</option>
+                  <option>2 hours after sent</option>
+                  <option>1 day after sent</option>
+                  <option>2 days after sent</option>
+                </select>
+              </div>
+            )}
           </Modal.Body>
           <Modal.Footer>
             <input type="send" hidden ref={submmitRef} />

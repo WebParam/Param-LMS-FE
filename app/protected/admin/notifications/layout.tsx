@@ -12,7 +12,11 @@ function Layout({ children }: { children: React.ReactNode }) {
     <>
       <div className="mdk-header-layout__content page-content ">
         <div className="mdk-header-layout__content page-content ">
-          <PageHeader contentTitle="Recent Notications" />
+          <PageHeader 
+            headerTitle="Notifications" 
+            buttonTitle="Create Notification" 
+            contentTitle={name || "Default Title"} 
+          />
           <div className="container page__container page__container page-section">
             {children}
           </div>

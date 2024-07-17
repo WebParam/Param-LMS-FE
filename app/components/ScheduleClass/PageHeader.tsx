@@ -35,7 +35,7 @@ export default function PageHeader({
                   <a href="#">Home</a>
                 </li>
 
-                <li className="breadcrumb-item active">NOTIFICATIONS</li>
+                <li className="breadcrumb-item active">Schedule Classes</li>
               </ol>
             </div>
             {/* button with create notification */}
