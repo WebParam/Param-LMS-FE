@@ -17,11 +17,13 @@ function KnowledgeModuleModal(props: any) {
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const moduleCodeRef = useRef<HTMLInputElement>(null);
+  const isPractical = false;
   const createModuleWithParams = createKnowledgeModule.bind(
     null,
     description,
     props.courseId,
-    props.title
+    props.title,
+    isPractical
   );
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId");

@@ -11,13 +11,14 @@ export const createKnowledgeTopic = async (
   moduleId: string,
   courseTitle: string,
   moduleTitle: string,
+  isPractical: boolean,
   formData: FormData
 ) => {
   const body = {
     name: formData.get("name"),
     description: formData.get("description"),
     topicCode: formData.get("topicCode"),
-    lengthOfVideoScript: formData.get("lengthOfVideoScript"),
+    lengthOfVideoScript: formData.get("lengthOfVideoScript") || 0,
     moduleId,
   };
 
@@ -38,7 +39,10 @@ export const createKnowledgeTopic = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topics?title=${courseTitle}&moduleTitle=${moduleTitle}&refreshId=${date}`;
+
+  const url = isPractical
+    ? `/protected/admin/courses/${courseId}/practical-modules/${moduleId}/knowledge-topics?title=${courseTitle}&moduleTitle=${moduleTitle}&refreshId=${date}`
+    : `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topics?title=${courseTitle}&moduleTitle=${moduleTitle}&refreshId=${date}`;
   redirect(url);
 };
 
@@ -49,12 +53,13 @@ export const updateKnowledgeTopic = async (
   moduleId: string,
   courseTitle: string,
   moduleTitle: string,
+  isPractical: boolean,
   formData: FormData
 ) => {
   const body = {
     name: formData.get("name"),
     topicCode: formData.get("topicCode"),
-    lengthOfVideoScript: formData.get("lengthOfVideoScript"),
+    lengthOfVideoScript: formData.get("lengthOfVideoScript") || 0,
     id,
     moduleId,
     description,
@@ -72,7 +77,9 @@ export const updateKnowledgeTopic = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topics?title=${courseTitle}&moduleTitle=${moduleTitle}&refreshId=${date}`;
+  const url = isPractical
+    ? `/protected/admin/courses/${courseId}/practical-modules/${moduleId}/knowledge-topics?title=${courseTitle}&moduleTitle=${moduleTitle}&refreshId=${date}`
+    : `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topics?title=${courseTitle}&moduleTitle=${moduleTitle}&refreshId=${date}`;
   redirect(url);
 };
 

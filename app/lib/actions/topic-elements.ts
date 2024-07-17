@@ -15,6 +15,7 @@ export const createTopicElement = async (
   courseTitle: string,
   moduleTitle: string,
   topicTitle: string,
+  isPractical: boolean,
   formData: FormData
 ) => {
   const body = {
@@ -36,7 +37,59 @@ export const createTopicElement = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`;
+
+  const url = isPractical
+    ? `/protected/admin/courses/${courseId}/practical-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`
+    : `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`;
+  redirect(url);
+};
+
+export const createGenerateTopicElement = async (
+  courseId: string,
+  moduleId: string,
+  topicId: string,
+  courseTitle: string,
+  moduleTitle: string,
+  topicTitle: string,
+  isPractical: boolean,
+  formData: FormData
+) => {
+  const [course, module, topic] = await Promise.all([
+    getCourse(courseId),
+    getKnowledgeModule(moduleId),
+    getKnowledgeTopic(topicId),
+  ]);
+
+  const body = {
+    moduleTitle: module.title,
+    moduleDescription: module.description,
+    topicTitle: topic.name,
+    topicId: topic.id,
+    topicDescription: topic.description,
+    lengthOfVideoScript: topic.lengthOfVideoScript || 50,
+    tone: course.videoScriptTone,
+    elementTitle: formData.get("title"),
+    elementCode: formData.get("elementCode"),
+  };
+
+  console.log("body:", body)
+  try {
+    const data = await post(
+      `${wGenerateVideoScriptUrl}/topicElement/generateSingle`,
+      body
+    );
+
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    console.error(err);
+  }
+
+  const date = new Date().toString();
+
+  const url = isPractical
+    ? `/protected/admin/courses/${courseId}/practical-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`
+    : `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`;
   redirect(url);
 };
 
@@ -50,6 +103,7 @@ export const updateTopicElement = async (
   courseTitle: string,
   moduleTitle: string,
   topicTitle: string,
+  isPractical: boolean,
   formData: FormData
 ) => {
   const body = {
@@ -75,7 +129,9 @@ export const updateTopicElement = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`;
+  const url = isPractical
+    ? `/protected/admin/courses/${courseId}/practical-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`
+    : `/protected/admin/courses/${courseId}/knowledge-modules/${moduleId}/knowledge-topic/${topicId}/topic-elements?title=${courseTitle}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`;
   redirect(url);
 };
 

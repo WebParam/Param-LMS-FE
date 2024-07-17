@@ -19,12 +19,14 @@ function EditKnowledgeTopicModal(props: any) {
   const searchParams = useSearchParams();
   const [closeEditModal, setCloseEditModal] = useState(false);
   const title = searchParams.get("title") || "";
+  const isPractical = false;
   const updateKnowledgeTopicWithParams = updateKnowledgeModule.bind(
     null,
     props.id,
     description,
     courseId,
-    title
+    title,
+    isPractical
   );
 
   return (

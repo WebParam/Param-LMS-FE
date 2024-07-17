@@ -8,6 +8,7 @@ export const createKnowledgeModule = async (
   description: string,
   courseId: string,
   courseTitle: string,
+  isPractical = false,
   formData: FormData
 ) => {
   const body = {
@@ -15,6 +16,7 @@ export const createKnowledgeModule = async (
     moduleCode: formData.get("moduleCode"),
     description: description,
     courseId,
+    isPractical,
   };
 
   try {
@@ -30,7 +32,9 @@ export const createKnowledgeModule = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/knowledge-modules?title=${courseTitle}&refreshId=${date}`;
+  const url = isPractical
+    ? `/protected/admin/courses/${courseId}/practical-modules?title=${courseTitle}&refreshId=${date}`
+    : `/protected/admin/courses/${courseId}/knowledge-modules?title=${courseTitle}&refreshId=${date}`;
   redirect(url);
 };
 
@@ -38,6 +42,21 @@ export const getKnowledgeModules = async (id: string) => {
   try {
     const resp = await get(
       `${rCourseUrl}/KnowledgeModules/GetKnowledgeModules/${id}`
+    );
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+
+    console.error(err);
+  }
+};
+
+export const getPracticalModules = async (id: string) => {
+  try {
+    const resp = await get(
+      `${rCourseUrl}/KnowledgeModules/GetPracticalKnowledgeModules/${id}`
     );
     const data = resp.data;
     Diagnostic("SUCCESS ON GET, returning", data);
@@ -68,6 +87,7 @@ export const updateKnowledgeModule = async (
   description: string,
   courseId: string,
   courseTitle: string,
+  isPractical : boolean = false,
   formData: FormData
 ) => {
   const body = {
@@ -91,7 +111,9 @@ export const updateKnowledgeModule = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/knowledge-modules?title=${courseTitle}&refreshId=${date}`;
+  const url = isPractical
+    ? `/protected/admin/courses/${courseId}/practical-modules?title=${courseTitle}&refreshId=${date}`
+    : `/protected/admin/courses/${courseId}/knowledge-modules?title=${courseTitle}&refreshId=${date}`;
   redirect(url);
 };
 
