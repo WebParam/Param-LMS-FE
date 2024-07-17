@@ -1,11 +1,10 @@
 "use client";
 import React, { useRef, useState } from "react";
-import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import "react-quill/dist/quill.snow.css";
 import { useParams, useSearchParams } from "next/navigation";
-import { createTopicElement } from "@/app/lib/actions/topic-elements";
+import { createGenerateTopicElement } from "@/app/lib/actions/topic-elements";
 import { AddBtn } from "./Buttons";
 
 function CreateTopicElementModal(props: any) {
@@ -23,12 +22,10 @@ function CreateTopicElementModal(props: any) {
   const title = searchParams.get("title") || "";
   const moduleTitle = searchParams.get("moduleTitle") || "";
   const topicTitle = searchParams.get("topicTitle") || "";
-  const [submitModal, setSubmitModal] = useState(false);
-  const [errorSubmit, setErrorSubmit] = useState(false);
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const isPractical = false;
-  const createTopicElementWithParams = createTopicElement.bind(
+  const createTopicElementWithParams = createGenerateTopicElement.bind(
     null,
     courseId,
     moduleId,
@@ -83,6 +80,4 @@ function CreateTopicElementModal(props: any) {
     </>
   );
 }
-export default dynamic(() => Promise.resolve(CreateTopicElementModal), {
-  ssr: false,
-});
+export default CreateTopicElementModal;
