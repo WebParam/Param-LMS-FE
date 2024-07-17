@@ -10,7 +10,6 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 import { useEffect, useState } from "react";
 import { changeDocumentStatus } from "@/app/lib/actions/courseStudents";
-import Cookies from "universal-cookie";
 
 const pdfVersion = "3.10.111";
 const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
@@ -34,13 +33,13 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   const [isChangingStateLoader, setIsChangingStateLoader] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const cookies = new Cookies();
-
   const handleShow = async (name: string, status: string) => {
       debugger;
       setDocumentName(name);
     
     setDocumentStatus(status);
+    console.log('document name', name)
+    console.log('document status', status)
     setShow(true);
   };
 
@@ -49,16 +48,14 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   }
 
   useEffect(() => {
-    console.log('document list: ',list);
+    console.log('document list: ',list)
   }, [list])
-  
+
   const handleClose = () => {
     setShow(false);
   };
-  
-  console.log('list of documents',list)
-  const docsComplete = list && list.find(item => item.status == "Declined");
-  cookies.set("documentsCompled", docsComplete);
+
+  console.log('list of documents', list)
 
   async function handleSubmit(){
     const doc =  list.find((item:any) => item.blobUrl === documentName);

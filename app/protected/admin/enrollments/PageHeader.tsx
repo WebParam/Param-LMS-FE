@@ -20,16 +20,9 @@ export default function PageHeader({ title } : { title: string }) {
               </ol>
             </div>
            <div className="d-flex justify-content-center align-items-center">
-              {pathname !== '/protected/admin/enrollments' && 
-                <div>
-                  <button className="btn btn-primary m-3">
-                  <Link href="/protected/admin/course-applicants">Enrollments</Link>
-                  </button>
-                  <button className="btn btn-primary">
-                    <Link href="/protected/admin/course-applicants">All Students</Link>
-                  </button>
-                </div>
-              }
+              {pathname !== '/protected/admin/course-applicants' && <button className="btn btn-primary">
+                <Link href="/protected/admin/course-applicants">All Applicants</Link>
+              </button>}
             </div>
           </div>
         </div>

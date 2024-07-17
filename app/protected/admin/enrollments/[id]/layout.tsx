@@ -1,14 +1,8 @@
 "use client";
-import './layout.scss'
-import { post } from '@/app/lib/utils';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
-
-import Cookies from 'universal-cookie';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 
 function Layout({ children }: { children: React.ReactNode }) {
-  const [loading, setLoading] = useState(false);
-  const cookies = new Cookies();
+
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -23,23 +17,6 @@ function Layout({ children }: { children: React.ReactNode }) {
     { name: "employment", title: "Employment", url: `/protected/admin/course-applicants/${id}/employment` },
     { name: "documents", title: "Documents", url: `/protected/admin/course-applicants/${id}/documents` },
   ];
-
-  async function enrollStudent() {
-    const payload = {
-      userId: id,
-      course: '6669f0ff8759b480859c10a7',
-    };
-
-    const res = await post(`https://khumla-dev-newcourse-write.azurewebsites.net/api/v1/Enrollments/AddEnrollment`, payload)
-
-  
-    console.log(res);
-
-  }
-
-  let allDocsAccepted = cookies.get("documentsCompled")??"";
-
-  console.log("are docs complete?", allDocsAccepted)
   
   return (
     <>
@@ -70,12 +47,14 @@ function Layout({ children }: { children: React.ReactNode }) {
         {children}
       </div>
       <div className="card-footer p-8pt">
-        <button 
-        className="btn btn-primary enrolBtn" 
-        onClick={enrollStudent}
-        disabled={allDocsAccepted}
-        >
-            {loading ? <div className="spinner-border text-light spinner-border-sm" role="status" />:'Enroll Student'}
+        <button className="btn btn-primary">
+        <div className="tom-select-custom" style={{background:'transparent', border:'none'}}>
+          <select className="js-select form-select" style={{background:'transparent', border:'none'}}>
+            <option value="">Pending review</option>
+            <option value="1">Accepted</option>
+          <option value="2">Rejected</option>
+          </select>
+        </div>
         </button>
       </div>
     </>

@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import list, { applicantprofile } from "./data";
 
 const TableBody: NextPage<{ list: any }> = ({ list }) => {
   const align = {
