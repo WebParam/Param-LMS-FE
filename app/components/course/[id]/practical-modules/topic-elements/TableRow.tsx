@@ -124,12 +124,7 @@ const TableRow = ({ data }: { data: any }) => {
             </p>
           </div>
         </td>
-        <td style={{ width: "200px" }} className="py-0">
-          <div className="text-center">
-            <CopyButton textToCopy={data.videoScript} />
-          </div>
-        </td>
-        <td style={{ cursor: "pointer", width: "230px" }} className="py-0">
+        <td style={{ width: "230px" }} className="py-0">
           <div className="text-center">
             <div>
               <i

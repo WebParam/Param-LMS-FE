@@ -1,12 +1,7 @@
 import { Title } from "chart.js";
 
 const TableHead = () => {
-  const headers = [
-    "Element Code",
-    "Topic Element",
-    "Copy Video Script",
-    "Action",
-  ];
+  const headers = ["Element Code", "Topic Element", "Action"];
 
   return (
     <>
