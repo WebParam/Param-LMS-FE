@@ -1,0 +1,98 @@
+.container {
+    max-width: 960px;
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.btn-link {
+    font-size: 1.5rem;
+    padding: 0;
+}
+
+.btn-outline-primary {
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.h4, .h5 {
+    margin: 0;
+}
+
+
+
+
+.logbook-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-custom-green {
+    background-color: #28a745; /* Custom green color */
+    border-color: #1f9de6; /* Custom green color */
+    color:green;
+}
+
+.btn-custom-green:hover {
+    background-color: #218838; /* Darker shade for hover */
+    border-color: #1e7e34; /* Darker shade for hover */
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.table th {
+    text-align: left;
+}
+
+.logbook-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .nav-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    margin: 0 40px; /* Increased the margin to create more space */
+  }
+  
+  .month-name {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .feedback-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  
+  .feedback-item {
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+  }
+  
+  .feedback-item:last-child {
+    border-bottom: none;
+  }
+  
+  .feedback-mood {
+    display: flex;
+    align-items: center;
+  }
+  
+  .feedback-mood span {
+    margin-left: 8px;
+  }
