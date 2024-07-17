@@ -34,7 +34,7 @@ export const getCourses = async () => {
   noStore();
   try {
     const resp = await get(`${rCourseUrl}/Courses/GetCoursesNew`);
-    const data = resp.map((res: any) => res.data);
+    const data = resp.length > 0 ? resp.map((res: any) => res.data) : [];
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
   } catch (err) {
