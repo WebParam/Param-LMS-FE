@@ -42,8 +42,6 @@ const Body = () => {
     return <Loading />; 
   }
 
-
-
   return (
     <>
       <div className="card mb-0">

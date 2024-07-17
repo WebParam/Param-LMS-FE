@@ -23,6 +23,11 @@ function Layout({
       path: `${baseUrl}/knowledge-modules`,
       url: `${baseUrl}/knowledge-modules?title=${name}`,
     },
+    {
+      name: "Practical Skills Modules",
+      path: `${baseUrl}/practical-modules`,
+      url: `${baseUrl}/practical-modules?title=${name}`,
+    },
   ];
 
   return (

@@ -3,10 +3,10 @@ import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useParams, useSearchParams } from "next/navigation";
-import { updateDocument } from "@/app/lib/actions/document";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import EditModuleBtn from "./EditModuleBtn";
 import ReactQuill from "react-quill";
+import { updateKnowledgeTopic } from "@/app/lib/actions/knowledge-topic";
 
 function EditKnowledgeTopicModal(props: any) {
   const { id: courseId, moduleId } = useParams<{
@@ -17,12 +17,18 @@ function EditKnowledgeTopicModal(props: any) {
   const searchParams = useSearchParams();
   const [closeEditModal, setCloseEditModal] = useState(false);
   const title = searchParams.get("title") || "";
-  const updateDocumentWithParams = updateDocument.bind(
+  const moduleTitle = searchParams.get("moduleTitle") || "";
+  const isPractical = false;
+
+  const updateKnowledgeTopicWithParams = updateKnowledgeTopic.bind(
     null,
-    props.documentId,
+    props.data.id,
+    description,
     courseId,
     moduleId,
-    title
+    title,
+    moduleTitle,
+    isPractical
   );
 
   return (
@@ -32,16 +38,25 @@ function EditKnowledgeTopicModal(props: any) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <form action={updateDocumentWithParams}>
+      <form action={updateKnowledgeTopicWithParams}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Knowledge Topic</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <div>
+            <h5>Topic Code/No.</h5>
+            <input
+              className="form-control mb-3"
+              placeholder="Enter your Topic Code. E.g KT01"
+              name="topicCode"
+              defaultValue={props.data.topicCode}
+            />
+          </div>
+          <div>
             <h5>Name</h5>
             <input
-              minLength={10}
+              minLength={2}
               className="form-control mb-3"
               placeholder="Enter your title here..."
               name="name"
@@ -56,6 +71,16 @@ function EditKnowledgeTopicModal(props: any) {
               style={{ color: "#252525" }}
             />
           </div>
+          <div className="mt-3">
+            <h5>Length of Video Script</h5>
+            <input
+              className="form-control mb-3"
+              placeholder="Enter the length of VideoScript title here..."
+              name="lengthOfVideoScript"
+              type="number"
+              defaultValue={props.data.lengthOfVideoScript}
+            />
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>
@@ -67,6 +92,4 @@ function EditKnowledgeTopicModal(props: any) {
     </Modal>
   );
 }
-export default dynamic(() => Promise.resolve(EditKnowledgeTopicModal), {
-  ssr: false,
-});
+export default EditKnowledgeTopicModal;

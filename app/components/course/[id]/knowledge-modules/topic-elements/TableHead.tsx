@@ -2,10 +2,10 @@ import { Title } from "chart.js";
 
 const TableHead = () => {
   const headers = [
+    "Element Code",
     "Topic Element",
-    "Status",
+    "Copy Video Script",
     "Action",
-    "Icons"
   ];
 
   return (

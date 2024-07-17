@@ -23,7 +23,7 @@ export default function PageHeader({ title } : { title: string }) {
               {pathname !== '/protected/admin/enrollments' && 
                 <div>
                   <button className="btn btn-primary m-3">
-                  <Link href="/protected/admin/course-applicants">Enrollments</Link>
+                  <Link href="/protected/admin/enrollment">Enrollments</Link>
                   </button>
                   <button className="btn btn-primary">
                     <Link href="/protected/admin/course-applicants">All Students</Link>

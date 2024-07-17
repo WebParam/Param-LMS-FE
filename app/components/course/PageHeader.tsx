@@ -5,20 +5,27 @@ import Modal from "./Modal";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import KnowledgeModuleModal from "./KnowledgeModuleModal";
+import PracticalModuleModal from "./PracticalModuleModal";
 
 export default function PageHeader({ title }: { title: string }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openPracticalModuleModal, setOpenPracticalModuleModal] =
+    useState(false);
   const [openKnowledgeModuleModal, setOpenKnowledgeModuleModal] =
-    useState<boolean>(false);
+    useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const name = searchParams.get("title");
+  const moduleTitle = searchParams.get("moduleTitle") || "";
+  const topicTitle = searchParams.get("topicTitle");
 
   let isModule = false;
   let isKnowledgeModule = false;
+  let isPracticalModule = false;
   let isCreateModule = false;
   let isEditModule = false;
   let isEditKnowledgeModules = false;
+  let isEditPracticalModules = false;
   let isEditCourse = false;
   let isCourse = false;
   let isEditDocument = false;
@@ -60,6 +67,8 @@ export default function PageHeader({ title }: { title: string }) {
     questions: "Questions",
     "edit-question": "Edit Question",
     "knowledge-topics": "Knowledge Topics",
+    quizzes: "Quizzes",
+    "topic-elements": "Topic Elements",
   };
 
   const urlDocumentMap: any = {
@@ -72,6 +81,7 @@ export default function PageHeader({ title }: { title: string }) {
   };
 
   let backUrl = "";
+  let newTitle = null;
 
   if (pathname == "/protected/admin/courses") {
     title = "Courses";
@@ -81,7 +91,7 @@ export default function PageHeader({ title }: { title: string }) {
   } else if (pathname.indexOf("/modules/create") !== -1) {
     title = `Create Unit Standard`;
     isCreateModule = true;
-  } 
+  }
   // Backward Compatibility for Unit Standard
   else if (pathname.indexOf("/modules") !== -1) {
     title = `${name}`;
@@ -110,13 +120,87 @@ export default function PageHeader({ title }: { title: string }) {
         const urlSlice = arr.slice(0, -3);
         backUrl = `${urlSlice.join("/")}/${
           urlDocumentMap[suffixPath]
-        }?title=${title}`;
+        }?title=${title}&moduleTitle=${moduleTitle}`;
         isEditKnowledgeTopic = true;
-      } else if (arrLink.indexOf(suffixPath) !== -1)
+        newTitle = (
+          <div className="d-flex">
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                maxWidth: "560px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {topicTitle}
+            </p>{" "}
+            - {stepperMap[suffixPath] ? stepperMap[suffixPath] : ""}
+          </div>
+        );
+      } else if (arrLink.indexOf(suffixPath) !== -1) {
         isEditKnowledgeModules = true;
-
-      title =
-        name + " - " + (stepperMap[suffixPath] ? stepperMap[suffixPath] : "");
+        newTitle = (
+          <div className="d-flex">
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                maxWidth: "560px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {moduleTitle}
+            </p>{" "}
+            - {stepperMap[suffixPath] ? stepperMap[suffixPath] : ""}
+          </div>
+        );
+      }
+    }
+  } else if (pathname.indexOf("/practical-modules") !== -1) {
+    title = `${name}`;
+    if ([...arrLink, ...actionLinks].indexOf(suffixPath) === -1) {
+      isPracticalModule = true;
+    } else {
+      if (actionLinks.indexOf(suffixPath) !== -1) {
+        const arr = pathname.split("/");
+        const urlSlice = arr.slice(0, -3);
+        backUrl = `${urlSlice.join("/")}/${
+          urlDocumentMap[suffixPath]
+        }?title=${title}&moduleTitle=${moduleTitle}`;
+        isEditKnowledgeTopic = true;
+        newTitle = (
+          <div className="d-flex">
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                maxWidth: "560px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {topicTitle}
+            </p>{" "}
+            - {stepperMap[suffixPath] ? stepperMap[suffixPath] : ""}
+          </div>
+        );
+      } else if (arrLink.indexOf(suffixPath) !== -1) {
+        isEditPracticalModules = true;
+        newTitle = (
+          <div className="d-flex">
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                maxWidth: "560px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {moduleTitle}
+            </p>{" "}
+            - {stepperMap[suffixPath] ? stepperMap[suffixPath] : ""}
+          </div>
+        );
+      }
     }
   }
 
@@ -136,6 +220,13 @@ export default function PageHeader({ title }: { title: string }) {
         title={name}
       />
 
+      <PracticalModuleModal
+        show={openPracticalModuleModal}
+        onHide={() => setOpenPracticalModuleModal(false)}
+        courseId={id}
+        title={name}
+      />
+
       <div className="border-bottom-2 py-32pt position-relative z-1">
         <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
           <div className="flex d-flex justify-content-between flex-column flex-sm-row align-items-center mb-24pt mb-md-0">
@@ -143,7 +234,7 @@ export default function PageHeader({ title }: { title: string }) {
               style={{ width: "850px" }}
               className="mb-24pt mb-sm-0 mr-sm-24pt"
             >
-              <h2 className="mb-0">{title}</h2>
+              <h2 className="mb-0">{newTitle ? newTitle : title}</h2>
 
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">
@@ -186,6 +277,14 @@ export default function PageHeader({ title }: { title: string }) {
                   Knowledge Modules
                 </Link>
               )}
+              {isEditPracticalModules && (
+                <Link
+                  className="btn btn-success"
+                  href={`/protected/admin/courses/${id}/practical-modules?title=${name}`}
+                >
+                  Practical Modules
+                </Link>
+              )}
               {isModule && (
                 <button
                   className="btn btn-success"
@@ -200,6 +299,14 @@ export default function PageHeader({ title }: { title: string }) {
                   onClick={() => setOpenKnowledgeModuleModal(true)}
                 >
                   Create Knowledge Module
+                </button>
+              )}
+              {isPracticalModule && (
+                <button
+                  className="btn btn-success"
+                  onClick={() => setOpenPracticalModuleModal(true)}
+                >
+                  Create Practical Module
                 </button>
               )}
               {isEditDocument && (

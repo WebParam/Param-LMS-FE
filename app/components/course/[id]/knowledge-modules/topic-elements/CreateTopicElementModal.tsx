@@ -1,56 +1,40 @@
 "use client";
 import React, { useRef, useState } from "react";
-import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import { createParaphrase } from "@/app/lib/actions/paraphrase";
 import { useParams, useSearchParams } from "next/navigation";
-import { useFormStatus } from "react-dom";
+import { createGenerateTopicElement } from "@/app/lib/actions/topic-elements";
+import { AddBtn } from "./Buttons";
 
 function CreateTopicElementModal(props: any) {
-  const { id, moduleId, documentId } = useParams<{
+  const {
+    id: courseId,
+    moduleId,
+    topicId,
+  } = useParams<{
     id: string;
     moduleId: string;
-    documentId: string;
+    topicId: string;
   }>();
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
-  const [description, setDescription] = useState("");
-  const [submitModal, setSubmitModal] = useState(false);
-  const [errorSubmit, setErrorSubmit] = useState(false);
+  const moduleTitle = searchParams.get("moduleTitle") || "";
+  const topicTitle = searchParams.get("topicTitle") || "";
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
-  const formStat = useFormStatus();
-  const createParaphraseWithParams = createParaphrase.bind(
+  const isPractical = false;
+  const createTopicElementWithParams = createGenerateTopicElement.bind(
     null,
-    description,
-    id,
+    courseId,
     moduleId,
-    documentId,
-    title
+    topicId,
+    title,
+    moduleTitle,
+    topicTitle,
+    isPractical
   );
-
-  const submit = () => {
-    setSubmitModal(true);
-    console.log("form stat:", formStat);
-
-    submmitRef.current?.click();
-    if (titleRef.current?.value && titleRef.current?.value.length > 10) {
-      setErrorSubmit(false);
-      setTimeout(() => {
-        setSubmitModal(false);
-      }, 2000);
-      props.onHide();
-    } else {
-      setTimeout(() => {
-        setSubmitModal(false);
-        setErrorSubmit(true);
-      }, 3000);
-    }
-  };
 
   return (
     <>
@@ -60,17 +44,27 @@ function CreateTopicElementModal(props: any) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <form action={createParaphraseWithParams}>
+        <form action={createTopicElementWithParams}>
           <Modal.Header closeButton>
             <Modal.Title>Create Topic Element</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>
-              <h5>Topic ELement</h5>
-              <ReactQuill
-                value={description}
-                onChange={(value) => setDescription(value)}
-                style={{ color: "#252525" }}
+              <h5>Topic Element Code/No.</h5>
+              <input
+                ref={titleRef}
+                type="text"
+                name="elementCode"
+                className="form-control"
+              />
+            </div>
+            <div className="mt-3">
+              <h5>Topic Element</h5>
+              <input
+                ref={titleRef}
+                type="text"
+                name="title"
+                className="form-control"
               />
             </div>
           </Modal.Body>
@@ -79,49 +73,11 @@ function CreateTopicElementModal(props: any) {
             <Button variant="secondary" onClick={props.onHide}>
               Close
             </Button>
-            <Button variant="success" onClick={() => submit()}>
-              Submit
-            </Button>
+            <AddBtn />
           </Modal.Footer>
         </form>
       </Modal>
-
-      {/* creating transcript modal */}
-      <Modal
-        size="sm"
-        centered
-        show={submitModal}
-        onHide={() => setSubmitModal(false)}
-      >
-        <Modal.Body>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "#252525",
-              gap: "15px",
-            }}
-          >
-            {errorSubmit ? (
-              <div className="spinner-grow text-danger" role="status" />
-            ) : (
-              <div className="spinner-grow text-primary" role="status" />
-            )}
-            {errorSubmit ? (
-              <p>Cannot create with empty field(s)</p>
-            ) : (
-              <p>Creating Transcript...</p>
-            )}
-          </div>
-        </Modal.Body>
-      </Modal>
-
-      {/* error values on submit */}
     </>
   );
 }
-export default dynamic(() => Promise.resolve(CreateTopicElementModal), {
-  ssr: false,
-});
+export default CreateTopicElementModal;

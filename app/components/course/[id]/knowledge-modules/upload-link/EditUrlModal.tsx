@@ -3,16 +3,14 @@ import React, { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { updateVideoLink } from "@/app/lib/actions/paraphrase";
-import {
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { updateVideoLink } from "@/app/lib/actions/topic-elements";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 function EditUrlModal(props: any) {
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const moduleTitle = searchParams.get("moduleTitle") || "";
+  const topicTitle = searchParams.get("topicTitle") || "";
   const [url, setUrl] = useState(props.data.url);
   const submmitRef = useRef<HTMLInputElement>(null);
   const [buttonLoader, setButtonLoader] = useState(false);
@@ -23,7 +21,7 @@ function EditUrlModal(props: any) {
     setButtonLoader(true);
     await updateVideoLink(props.data.id, url);
     const date = new Date().toString();
-    router.replace(`${pathname}?title=${title}&refreshId=${date}`);
+    router.replace(`${pathname}?title=${title}&moduleTitle=${moduleTitle}&topicTitle=${topicTitle}&refreshId=${date}`);
   };
 
   return (

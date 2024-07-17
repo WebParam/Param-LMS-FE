@@ -18,6 +18,7 @@ export default async function Course({ params }: { params: { id: string } }) {
             <EditForm
               title={course.title}
               description={course.description}
+              videoScriptTone={course.videoScriptTone}
               instructorName={course.instructorName}
               courseLogoUrl={course.courseLogoUrl}
               thumbnailUrl={course.thumbnailUrl}
