@@ -1,19 +1,25 @@
 import Link from "next/link";
-export default async function Courses({ list }:any) {
+export default async function Courses({ list }: any) {
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
-          <div className="row card-group-row">
-            {list && list.map((course: any) => (
-              <Course
-                key={course.id}
-                imgUrl={course.avatar}
-                title={course.title}
-                url={`/protected/admin/courses/${course.id}?title=${course.title}`}
-              />
-            ))}
-          </div>
+          {list.length > 0 ? (
+            <div className="row card-group-row">
+              {list.map((course: any) => (
+                <Course
+                  key={course.id}
+                  imgUrl={course.avatar}
+                  title={course.title}
+                  url={`/protected/admin/courses/${course.id}?title=${course.title}`}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="card my-24pt text-center py-3">
+              No Courses Available...
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -68,6 +74,6 @@ const titleShort = (title: string) => {
   const strArr = title.split(" ");
 
   if (strArr.length > 1 && strArr[1][0])
-    return (strArr[0][0].toUpperCase() + strArr[1][0].toUpperCase())
+    return strArr[0][0].toUpperCase() + strArr[1][0].toUpperCase();
   return strArr[0][0].toUpperCase();
 };

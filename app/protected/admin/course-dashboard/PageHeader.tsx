@@ -1,4 +1,14 @@
+"use client"
+
+import { useSearchParams } from "next/navigation";
+
+interface PageHeaderProps {
+  title : string
+}
+
 export default function PageHeader({ title } : { title: string }) {
+    const searchParams = useSearchParams();
+  const studentName = searchParams.get("studentname");
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
@@ -9,10 +19,10 @@ export default function PageHeader({ title } : { title: string }) {
 
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">
-                  <a href="#">Home</a>
+                  <a href="#">Dashboard</a>
                 </li>
 
-                <li className="breadcrumb-item active">{title}</li>
+                <li className="breadcrumb-item active">{title} </li>
               </ol>
             </div>
             

@@ -1,0 +1,14 @@
+.enrolBtn {
+    transition: .5s all ease-in-out;
+    position: relative;
+
+    &:hover::after {
+        position: absolute;
+        content: "Check if all documents are correct and accept them to continue";
+        left: 150px;
+        width: 300px;
+        color: #252525;
+        opacity: .8;
+        text-align: left;
+    }
+}

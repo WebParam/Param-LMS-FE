@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -8,6 +8,7 @@ import "react-quill/dist/quill.snow.css";
 import { createParaphrase } from "@/app/lib/actions/paraphrase";
 import { useParams, useSearchParams } from "next/navigation";
 import { useFormStatus } from "react-dom";
+import { fetchCaptionTracks, fetchCaptions, fetchVideoMetadata } from "@/app/lib/actions/transcript";
 
 function CreateTranscriptModal(props: any) {
   const { id, moduleId, documentId } = useParams<{
@@ -15,6 +16,13 @@ function CreateTranscriptModal(props: any) {
     moduleId: string;
     documentId: string;
   }>();
+  const [videoId, setVideoId] = useState('iOWWmfMRqs0');
+  const [videoData, setVideoData] = useState(null);
+  const [error, setError] = useState<any>(null);
+  const [videoLink, setVideoLink] = useState("")
+  const [captions, setCaptions] = useState<any>('');
+  const [accessToken, setAccessToken] = useState('ya29.a0AXooCgtXa1JUkAUN3YM8fZ7r3WQPyKVs8eqxNrZKSxiLIQjwdpuPVQwn-PyB_Q-25l-qGR4ZiP7Cbq4Khdw0B-BCOJady-3Mrw7ez2lvfGo6arKAnvCnhf67t6_JTyTN3Mbufjh-Qa8B33a4rEeTG-AQXCiNr3NEGiBeaCgYKAQQSARESFQHGX2Mi2NBPhHoVVLySi2uJbeStBA0171'); // Replace with your actual access token
+
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
@@ -52,6 +60,34 @@ function CreateTranscriptModal(props: any) {
     }
   }
 
+
+  const handleFetchMetadata = async () => {
+    const data = await fetchVideoMetadata(videoId);
+    if (data) {
+      setVideoData(data);
+      setError(null);
+
+      const captionTracks = await fetchCaptionTracks(videoId, accessToken);
+      if (captionTracks && captionTracks.length > 0) {
+        const captionsData = await fetchCaptions(captionTracks[0].id, accessToken);
+        setCaptions(captionsData || 'No captions available.');
+      } else {
+        setCaptions('No captions available for this video.');
+      }
+    } else {
+      setError('Failed to fetch video metadata. Please check the video ID and try again.');
+      setVideoData(null);
+      setCaptions('');
+    }
+  };
+
+
+  useEffect(() => {
+    handleFetchMetadata();
+  }, [videoLink])
+  
+
+
   return (
     <>
     
@@ -84,6 +120,9 @@ function CreateTranscriptModal(props: any) {
               className="form-control mb-3"
               placeholder="Enter your Video Link here. E.g https://..."
               name="videoUrl"
+              value={videoLink}
+              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setVideoLink(e.target.value)}
+              
             />
           </div>{" "}
           <div>

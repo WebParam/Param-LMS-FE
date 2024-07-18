@@ -12,7 +12,7 @@ const TableHead = () => {
     <>
       <thead>
         <tr>          
-          <th className="text-center">Actions</th>
+          <th className="text-center">Action</th>
           {headers.map((name) => (
             <th key={name} className="text-center">
               <a

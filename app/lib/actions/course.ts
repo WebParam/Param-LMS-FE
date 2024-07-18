@@ -1,7 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
-import { rCourseUrl, wCourseUrl } from "./endpoints";
+import { rAnalyticUrl, rCourseUrl, wCourseUrl } from "./endpoints";
 import { unstable_noStore as noStore } from "next/cache";
 import { Diagnostic } from "../logger/logger";
 
@@ -9,6 +9,7 @@ export const createCourse = async (formData: FormData) => {
   const body = {
     title: formData.get("title"),
     description: formData.get("description"),
+    videoScriptTone: formData.get("videoScriptTone"),
     instructorName: formData.get("instructorName"),
     courseLogoUrl: formData.get("courseLogoUrl"),
     thumbnailUrl: formData.get("thumbnailUrl"),
@@ -33,7 +34,7 @@ export const getCourses = async () => {
   noStore();
   try {
     const resp = await get(`${rCourseUrl}/Courses/GetCoursesNew`);
-    const data = resp.map((res: any) => res.data);
+    const data = resp.length > 0 ? resp.map((res: any) => res.data) : [];
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
   } catch (err) {
@@ -60,6 +61,7 @@ export const updateCourse = async (id: string, formData: FormData) => {
     id: id,
     title: formData.get("title"),
     description: formData.get("description"),
+    videoScriptTone: formData.get("videoScriptTone"),
     instructorName: formData.get("instructorName"),
     courseLogoUrl: formData.get("courseLogoUrl"),
     thumbnailUrl: formData.get("thumbnailUrl"),
@@ -80,3 +82,42 @@ export const updateCourse = async (id: string, formData: FormData) => {
 
   redirect(url);
 };
+
+
+export const getCourseGraphs = async (id: string) => {
+  try {
+    const resp = await get( `${rAnalyticUrl}/GraphData/CourseAnalytics/${id}`);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    throw err;
+  }
+};
+
+export const getCourseTableAnalytics = async (id:string) => {
+  try {
+    const resp = await get(`${rAnalyticUrl}/TableData/CourseTable/${id}`)
+    const data = resp.data;
+    console.log("Data data", data)
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (error) {
+    Diagnostic("ERROR ON GET, returning", error);
+    throw error;
+  }
+}
+
+export const getStudentCourseGraphsAnalytics = async (courseId:string, studentId:string) => {
+  try {
+    const resp = await get(`${rAnalyticUrl}/GraphData/StudentCourseAnalytic/${courseId}/${studentId}`)
+    const data = resp.data;
+    console.log("Data data", data)
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (error) {
+    Diagnostic("ERROR ON GET, returning", error);
+    throw error;
+  }
+}

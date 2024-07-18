@@ -2,17 +2,32 @@
 import Link from "next/link";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
-function Layout({ children, params }: { children: React.ReactNode; params: {id : string} }) {
+function Layout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: { id: string };
+}) {
   const searchParams = useSearchParams();
   const name = searchParams.get("title");
 
   const pathname = usePathname();
   const router = useRouter();
-  
+
   const baseUrl = `/protected/admin/courses/${params.id}`;
   const links = [
-    { name: "Edit Course", path: baseUrl, url: `${baseUrl}?title=${name}`},
-    { name: "Unit Standards", path: `${baseUrl}/modules`, url: `${baseUrl}/modules?title=${name}` },
+    { name: "Edit Course", path: baseUrl, url: `${baseUrl}?title=${name}` },
+    {
+      name: "Knowledge Modules",
+      path: `${baseUrl}/knowledge-modules`,
+      url: `${baseUrl}/knowledge-modules?title=${name}`,
+    },
+    {
+      name: "Practical Skills Modules",
+      path: `${baseUrl}/practical-modules`,
+      url: `${baseUrl}/practical-modules?title=${name}`,
+    },
   ];
 
   return (
@@ -24,6 +39,7 @@ function Layout({ children, params }: { children: React.ReactNode; params: {id :
         >
           {links.map((l: any) => (
             <Link
+              key={l.id}
               className={pathname === l.path ? "active" : ""}
               href={l.url}
             >
@@ -31,7 +47,7 @@ function Layout({ children, params }: { children: React.ReactNode; params: {id :
                 <strong className="card-title">{l.name}</strong>
               </span>
             </Link>
-          ))}          
+          ))}
         </div>
       </div>
       {children}
