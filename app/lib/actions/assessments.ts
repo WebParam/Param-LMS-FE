@@ -1,8 +1,9 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
-import { rAssessmentUrl, wAssessmentUrl } from "./endpoints";
+import { rAggregatorAssessmentUrl, rAssessmentUrl, wAssessmentUrl } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
+import { IMarkStudentAssessment } from "@/app/interfaces/assessments";
 
 export const createAssessment = async (
   courseId: string,
@@ -73,4 +74,54 @@ export const updateAssessment = async (
   const date = new Date().toString();
   const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/assessments?title=${courseTitle}&refreshId=${date}`;
   redirect(url);
+};
+
+
+
+export const getStudentAssessmentAnswers = async ( userId:string,assessmentId: string,) => {
+  try {
+    const resp = await get(`${rAssessmentUrl}/StudentAnswers/GetStudentAssessmentAnswer/${userId}/${assessmentId}`);
+   console.log(resp)
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+
+    console.error(err);
+  }
+};
+
+
+export const getStudentsAssessment = async (courseId: string) => {
+  try {
+    const resp = await get(`${rAggregatorAssessmentUrl}/StudentAssessment/StudentsAssessments/${courseId}`);
+    console.log(resp)
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+
+    console.error(err);
+  }
+};
+
+export const markStudentAssessment = async (
+  payload: IMarkStudentAssessment
+) => {
+  try {
+    const response = await post(
+      `${wAssessmentUrl}/Marks/AddLongAnswerMark`,
+      payload
+    );
+
+    const data = response;
+
+    Diagnostic("SUCCESS ON POST, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    console.error(err);
+  }
 };

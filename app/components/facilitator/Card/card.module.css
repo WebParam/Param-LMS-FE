@@ -1,0 +1,23 @@
+.cardIcon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+  }
+
+.cardCustomSize {
+  width: 200px; 
+  height: 200px; 
+  cursor: pointer;
+}
+
+.cardBodyCentered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.iconWrapper {
+  margin-bottom: 10px; 
+}
