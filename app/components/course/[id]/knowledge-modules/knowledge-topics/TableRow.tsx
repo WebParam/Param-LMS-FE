@@ -3,6 +3,9 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import EditKnowledgeTopicModal from "./EditKnowledgeTopicModal";
 import DeleteKnowledgeTopicModal from "./DeleteKnowledgeTopicModal";
+import {
+  generateVideoScript,
+} from "@/app/lib/actions/knowledge-topic";
 
 const TableRow = ({ document }: { document: any }) => {
   const pathname = usePathname();
@@ -33,7 +36,52 @@ const TableRow = ({ document }: { document: any }) => {
   }, [refreshId]);
 
   const generateVideoScriptWithProgress = async (e: any) => {
+    setProgress(25);
+    try {
+      await generateVideoScript(courseId, moduleId, document.id);
+      setProgress(100);
+      setTimeout(() => {
+        setIsProgress(false);
+        setIsGenerated(true);
+      }, 5000);
+    } catch (e: any) {
+      setIsTryAgain(true);
+    }
+  };
+
+  /* const generateVideoScriptWithProgress = async (e: any) => {
     e.preventDefault();
+    const [course, module, topic, topicElements] = await Promise.all([
+      getCourse(courseId),
+      getKnowledgeModule(moduleId),
+      getKnowledgeTopic(document.id),
+      getKnowledgeElements(document.id),
+    ]);
+
+    for (const element of topicElements) {
+      const body = {
+        moduleTitle: module.title,
+        moduleDescription: module.description,
+        topicTitle: topic.name,
+        topicId: topic.id,
+        topicDescription: topic.description,
+        lengthOfVideoScript: topic.lengthOfVideoScript,
+        tone: course.videoScriptTone,
+        elementTitle: element.title,
+        elementCode: element.elementCode,
+        elementId: element.id,
+      };
+
+      await post(
+        `${wGenerateVideoScriptUrl}/topicElement/generateUpdateSingle`,
+        body
+      ); 
+    }
+
+    const body = { ...topic, isGenerated: true };
+    await put(`${wCourseUrl}/KnowledgeTopics/UpdateKnowledgeTopic`, body);
+
+
     const data = JSON.stringify({
       documentId: document.id,
       documentTitle: document.title,
@@ -95,7 +143,7 @@ const TableRow = ({ document }: { document: any }) => {
         setIsTryAgain(true);
         console.log("Error Generating Video Script");
       });
-  };
+  }; */
 
   return (
     <>
