@@ -114,7 +114,6 @@ export const getKnowledgeTopic = async (topicId: string) => {
 export const createTopicElements = async (entries: any, topicId: string) => {
   const objArray = formDataEntriesArray(entries);
 
-  const promiseArray = [];
   for (const obj of objArray) {
     if (obj.elementCode == "" || obj.title == "") continue;
     const body: FormObject = {
@@ -122,12 +121,9 @@ export const createTopicElements = async (entries: any, topicId: string) => {
       topicId,
     };
 
-    promiseArray.push(
-      post(`${wCourseUrl}/TopicElements/AddTopicElement`, body)
-    );
+    await post(`${wCourseUrl}/TopicElements/AddTopicElement`, body);
   }
-  const response = await Promise.all(promiseArray);
-  Diagnostic("SUCCESS ON POST, returning", response);
+  Diagnostic("SUCCESS ON POST, returning", "Success !");
 };
 
 export const deleteKnowledgeTopic = async (topicId: string) => {

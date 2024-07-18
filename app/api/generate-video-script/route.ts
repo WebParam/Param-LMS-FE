@@ -21,10 +21,7 @@ export async function POST(req: NextRequest) {
       getKnowledgeElements(documentId),
     ]);
 
-    const promiseArray = [];
     for (const element of topicElements) {
-      if (element.elementCode == "" || element.title == "") continue;
-
       const body = {
         moduleTitle: module.title,
         moduleDescription: module.description,
@@ -38,15 +35,12 @@ export async function POST(req: NextRequest) {
         elementId: element.id,
       };
 
-      promiseArray.push(
-        post(
-          `${wGenerateVideoScriptUrl}/topicElement/generateUpdateSingle`,
-          body
-        )
-      );
+      await post(
+        `${wGenerateVideoScriptUrl}/topicElement/generateUpdateSingle`,
+        body
+      ); 
     }
 
-    await Promise.all(promiseArray);
     const body = { ...topic, isGenerated: true };
     await put(`${wCourseUrl}/KnowledgeTopics/UpdateKnowledgeTopic`, body);
 

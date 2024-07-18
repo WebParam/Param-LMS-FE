@@ -14,6 +14,7 @@ const TableRow = ({ document }: { document: any }) => {
   const [isEditModal, setIsEditModal] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isProgress, setIsProgress] = useState(false);
+  const [isTryAgain, setIsTryAgain] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
   const [isGenerated, setIsGenerated] = useState(document.isGenerated);
@@ -41,57 +42,59 @@ const TableRow = ({ document }: { document: any }) => {
       title,
     });
 
-    try {
-      setProgress(25);
-      const response = await fetch("/api/generate-video-script", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: data,
-      });
-
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error("Response body is null");
-      }
-      // Get the size of the blob
-      let loaded = 0,
-        estimatedTotal = 0;
-
-      const push = async () => {
+    setProgress(25);
+    fetch("/api/generate-video-script", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: data,
+    })
+      .then((response) => {
+        const reader = response.body?.getReader();
         if (!reader) {
-          throw new Error("Reader is undefined");
+          throw new Error("Response body is null");
         }
-        const { done, value } = await reader.read();
-        if (done) {
-          console.log("Done");
-          return;
-        }
+        // Get the size of the blob
+        let loaded = 0,
+          estimatedTotal = 0;
 
-        loaded += value.length;
-        estimatedTotal += value.length; // Estimate total size incrementally
+        const push = async () => {
+          if (!reader) {
+            throw new Error("Reader is undefined");
+          }
+          const { done, value } = await reader.read();
+          if (done) {
+            console.log("Done");
+            return;
+          }
 
-        const progress = Math.min(
-          Math.round((loaded / estimatedTotal) * 100),
-          100
-        );
-        setProgress(progress);
-        push();
-      };
+          loaded += value.length;
+          estimatedTotal += value.length; // Estimate total size incrementally
 
-      push().catch((err) => {
-        console.error("Stream reading error:", err);
+          const progress = Math.min(
+            Math.round((loaded / estimatedTotal) * 100),
+            100
+          );
+          setProgress(progress);
+          push();
+        };
+
+        push().catch((err) => {
+          console.error("Stream reading error:", err);
+          throw err;
+        });
+
+        setProgress(100);
+        setTimeout(() => {
+          setIsProgress(false);
+          setIsGenerated(true);
+        }, 5000);
+      })
+      .catch((error) => {
+        setIsTryAgain(true);
+        console.log("Error Generating Video Script");
       });
-
-      setProgress(100);
-      setTimeout(() => {
-        setIsProgress(false);
-        setIsGenerated(true);
-      }, 5000);
-    } catch (e: any) {
-      console.log("Error Generating Video Script");
-    }
   };
 
   return (
@@ -172,9 +175,14 @@ const TableRow = ({ document }: { document: any }) => {
                 }}
                 className="btn btn-outline-success btn-sm rounded-pill py-1 px-3 w-100"
               >
-                {isGenerated ? "Regenerate" : "Generate Video Script"}
+                {isTryAgain
+                  ? "Network Error: Try Again"
+                  : isGenerated
+                  ? "Regenerate"
+                  : "Generate Video Script"}
               </button>
             )}
+            {isTryAgain}
           </div>
         </td>
         <td style={{ width: "700px" }} className="py-0">
