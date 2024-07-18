@@ -9,6 +9,7 @@ import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import { getStudentAssessmentAnswers } from "@/app/lib/actions/assessments";
 import { IAssessmentStudentAnswers } from "@/app/interfaces/assessments";
 import { useRouter } from "next/navigation";
+import FeebbackTextBox from "./FeebbackTextBox";
 
 function Page({ params }: { params: { assessmentId: string; id: string } }) {
   const [studentAssessment, setStudentAssessment] =
@@ -60,18 +61,23 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
             studentMultipleChoiceAnswer={data.studentMultipleChoiceAnswer!}
           />
         ) : (
-          <LongQuestion
-            key={data.questionId}
-            questionName={data.description}
-            questionDescription={data.description}
-            questionAnswer={data.studentLongTextAnswer!}
-            questionScore={data.score}
-            rubric={data.rubrics}
-          />
+          <>
+            <LongQuestion
+              key={data.questionId}
+              questionName={data.description}
+              questionDescription={data.description}
+              questionAnswer={data.studentLongTextAnswer!}
+              questionScore={data.score}
+              rubric={data.rubrics}
+            />
+            <FeebbackTextBox 
+            questionId = {data.questionId}
+            />
+          </>
         )
       )}
 
-      <div className="card mb-24pt">
+      <div className="card mb-24pt mt-5">
         <Pagination
           listLength={studentAssessment?.answers.length || 0}
           indexOfLastItem={indexOfLastItem}
@@ -89,8 +95,6 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
           show={modalShow}
           onHide={() => {
             setModalShow(false);
-
-           
           }}
         />
       </div>

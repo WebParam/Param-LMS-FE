@@ -11,7 +11,7 @@ export default function PageHeader({
   const router = useRouter();
   const searchParams = useSearchParams();
   const home_title = searchParams.get("homeTitle");
-  const buttonTitle = searchParams.get("button-title");
+  const buttonTitle = searchParams.get("button-title") ?? "Go Back";
   const pathName = usePathname();
   const isDashboard = pathName.includes("/protected/admin/facilitator")  && true;
   return (

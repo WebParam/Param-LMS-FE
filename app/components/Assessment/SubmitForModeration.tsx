@@ -1,34 +1,77 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import { FaUser } from "react-icons/fa";
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import "react-quill/dist/quill.snow.css";
 import Pagination from "@/app/components/Pagination";
+import { submitForModeration } from "@/app/lib/actions/assessments";
+import { useParams, useRouter } from "next/navigation";
+import { getUsersByRole } from "@/app/lib/actions/users";
 
 function SubmitForModeration(props: any) {
   const [dueDate, setDueDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [selectedModerator, setSelectedModerator] = useState<IUser | any>();
   const [currentPage, setCurrentPage] = useState(1);
-  const [moderators] = useState([
-    { name: "Ms Billy Mokoena", email: "BillyMok@thooto.com" },
-    { name: "Mr Leonard Messi", email: "Messileo@thooto.com" },
-    { name: "Dr Jane Doe", email: "JaneDoe@thooto.com" },
-    { name: "Prof John Smith", email: "JohnSmith@thooto.com" },
-    { name: "Ms Alice Johnson", email: "AliceJ@thooto.com" },
-    { name: "Mr Bob Brown", email: "BobB@thooto.com" },
-    { name: "Ms Carol White", email: "CarolW@thooto.com" },
-    { name: "Mr Dave Black", email: "DaveB@thooto.com" },
-  ]);
+  const [moderators, setModerators] = useState<IUser[]>([]);
+  const [formError, setFormError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const ITEMSPERPAGE = 3;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = moderators.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handleModeratorChange = (e: any) => {
+    setSelectedModerator(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const router = useRouter();
+  const { assessmentId, id } = useParams<{ assessmentId: string; id: string }>();
+
+  const submitModeration = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    formData.append("moderatorId", selectedModerator.id);
+    formData.append("assessmentId", assessmentId);
+    formData.append("studentId", "6674335c5f6ceeb4980ebb68");
+
+    try {
+      const submitResponse = await submitForModeration(formData);
+      if (!submitResponse.id) {
+        setErrorMessage("Failed to submit moderation");
+        setSuccessMessage("");
+        return;
+      }
+      setSuccessMessage("Moderation submitted successfully");
+ 
+      setTimeout(() => {
+        setErrorMessage("");
+
+        props.onHide();
+        router.back();
+            }, 3000);
+    } catch (error) {
+      console.error("Error submitting moderation:", error);
+      setErrorMessage("Failed to submit moderation");
+      setSuccessMessage("");
+    }
+  };
+
+  const getUser = async () => {
+    const users = await getUsersByRole("moderator");
+    setModerators(users);
+    console.log("users", users);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <>
@@ -38,20 +81,36 @@ function SubmitForModeration(props: any) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <form>
+        <form onSubmit={submitModeration}>
           <Modal.Header closeButton>
-            <Modal.Title className="text-center m-auto">Select Moderator</Modal.Title>
+            <Modal.Title className="text-center m-auto">
+              Select Moderator
+            </Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
+            {successMessage && (
+              <div className="alert alert-success">{successMessage}</div>
+            )}
+            {errorMessage && (
+              <div className="alert alert-danger">{errorMessage}</div>
+            )}
             <div>
-              <h5>Names and Email Addresses</h5>
-              {currentItems.map((moderator, index) => (
-                <div className="d-flex align-items-center mb-3" key={index} style={{ border: "1px solid #ccc", padding: "10px", borderRadius:"10px" }}>
-                  <FaUser className="mr-2" />
-                  <span>{index + 1}. {moderator.name} - {moderator.email}</span>
-                </div>
-              ))}
+              <Form.Group controlId="moderatorSelect">
+                <Form.Label>Moderator</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={selectedModerator}
+                  onChange={handleModeratorChange}
+                >
+                  <option value="">Select a moderator...</option>
+                  {moderators.map((moderator: IUser, index) => (
+                    <option key={index} value={moderator.id}>
+                      {moderator.firstName} {moderator.lastName} - {moderator.email}
+                    </option>
+                  ))}
+                </Form.Control>
+              </Form.Group>
               <h5>Moderation Due Date</h5>
               <Form.Group controlId="dueDate">
                 <Form.Label>Due Date</Form.Label>
@@ -83,15 +142,12 @@ function SubmitForModeration(props: any) {
           </Modal.Body>
           <Modal.Footer>
             <div className="d-flex justify-content-between w-100">
-              <Pagination
-                listLength={moderators.length}
-                indexOfLastItem={indexOfLastItem}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                ITEMSPERPAGE={ITEMSPERPAGE}
-              />
               <div>
-                <Button variant="secondary" onClick={props.onHide} className="mr-2">
+                <Button
+                  variant="secondary"
+                  onClick={props.onHide}
+                  className="mr-2"
+                >
                   Cancel
                 </Button>
                 <Button variant="success" type="submit">
@@ -109,3 +165,26 @@ function SubmitForModeration(props: any) {
 export default dynamic(() => Promise.resolve(SubmitForModeration), {
   ssr: false,
 });
+
+export interface IUser {
+  id: string;
+  reference: string | null;
+  firstName: string;
+  lastName: string;
+  username: string | null;
+  email: string;
+  password: string;
+  image: string;
+  createdOn: string;
+  createdBy: string;
+  changedOn: string;
+  changedBy: string;
+  status: number;
+  otp: string;
+  role: string;
+  loginType: number;
+  headLine: string | null;
+  summary: string | null;
+  organizationId: string | null;
+  isEmailVerified: boolean;
+}

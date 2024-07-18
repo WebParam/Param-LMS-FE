@@ -4,6 +4,7 @@ import { IMarkStudentAssessment, IRubric } from "@/app/interfaces/assessments";
 import { useParams } from "next/navigation";
 import { markStudentAssessment } from "@/app/lib/actions/assessments";
 
+
 type Props = {
   questionName: string;
   questionDescription: string;
@@ -42,13 +43,12 @@ export default function ({
       questionId: questionId,
       rubricId: rubricId,
       userId: userId,
-      creatingUserId: "someCreatingUserId",
+      creatingUserId: "c1d2e3f4567890b1c2d3e4f5",
       mark: mark,
       markType: 0,
       label: Number(label)
     };
     const markResponse = await markStudentAssessment(payload);
-    console.log("markResponse", markResponse);
   };
 
   return (
@@ -85,15 +85,16 @@ export default function ({
             {rubric.map((choice, index) => (
               <td key={index} className="py-2 d-flex justify-content-between align-items-center">
                 <div className="d-flex flex-column align-items-start">
-                <div className="text-success d-flex">
-                    {Array(facilitatorGrades[index]).fill(<i className="material-icons">check</i>).map((icon, i) => (
-                      <span key={i} className="mr-1">{icon}</span>
-                    ))}
-                  </div>
-                  <span className="ml-2">{choice.description}</span>
-                  <div className="text-danger d-flex mt-2">
+                <div className="text-danger d-flex mt-2">
                     {Array.from({ length: moderatorGrades[index] || 0 }).map((_, i) => (
                       <i key={i} className="material-icons">check</i>
+                    ))}
+                  </div>
+                
+                  <span className="ml-2">{choice.description}</span>
+                  <div className="text-success d-flex">
+                    {Array(facilitatorGrades[index]).fill(<i className="material-icons">check</i>).map((icon, i) => (
+                      <span key={i} className="mr-1">{icon}</span>
                     ))}
                   </div>
                 </div>

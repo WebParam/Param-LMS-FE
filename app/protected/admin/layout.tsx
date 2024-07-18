@@ -16,8 +16,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     {name : 'Edit Course', url: `/protected/admin/courses`, icon : 'create_new_folder',},
     {name : 'Create Course', url: `/protected/admin/courses`, icon : 'create_new_folder',},
     {name : 'Facilitator', url: `/protected/admin/facilitator?title=Facilitator Dashboard&homeTitle=HOME`, icon : 'dashboard',},
-    {name : 'Moderator', url: `/protected/admin/moderator?title=Mark Assessments&homeTitle=HOME`, icon : 'dashboard',},
-    
+    {name : 'Moderator', url: `/protected/admin/moderator?title=Mark Assessments&homeTitle=HOME`, icon : 'dashboard',},   
+    {name : 'Live Classes', url: `/protected/admin/live-classes?title=Live Classes Analytics`, icon : 'dashboard',},
     
   ];
 

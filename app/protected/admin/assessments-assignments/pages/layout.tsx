@@ -8,20 +8,20 @@ function Layout({ children, params }: { children: React.ReactNode; params: {id :
 
   const pathname = usePathname();
   const router = useRouter();
-  
+  const homeTitle = "homeTitle=FACILITATOR DASHBOARD";
   const baseUrl = `/protected/admin/assessments-assignments/pages`;
   const links = [
-    { name: "Assessments", path: `${baseUrl}/assessments`, url: `${baseUrl}/assessments?title=Mark%20Assessments`},
-    { name: "Assignments", path: `${baseUrl}/assignments`, url: `${baseUrl}/assignments?title=Mark%20Assignments` },
+    { name: "Assessments", path: `${baseUrl}/assessments`, url: `${baseUrl}/assessments?title=Mark%20Assessments&${homeTitle}`},
+    { name: "Assignments", path: `${baseUrl}/assignments`, url: `${baseUrl}/assignments?title=Mark%20Assignments&${homeTitle}` },
   ];
 
-  const path = "assessments" ?? "assignments"
+  const path = "assessments" && "assignments"
 
   return (
     <>
      { 
     !pathname.includes(`/protected/admin/assessments-assignments/pages/${path}/`) &&
-     !pathname.includes("/grade-assessments") &&
+     !pathname.includes("/grade-assignments") &&
      <div className="card p-relative o-hidden mb-2">
         <div
           className="card-header card-header-tabs-basic nav px-0"
