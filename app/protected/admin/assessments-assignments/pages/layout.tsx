@@ -12,16 +12,15 @@ function Layout({ children, params }: { children: React.ReactNode; params: {id :
   const baseUrl = `/protected/admin/assessments-assignments/pages`;
   const links = [
     { name: "Assessments", path: `${baseUrl}/assessments`, url: `${baseUrl}/assessments?title=Mark%20Assessments&${homeTitle}`},
-    { name: "Assignments", path: `${baseUrl}/assignments`, url: `${baseUrl}/assignments?title=Mark%20Assignments&${homeTitle}` },
+    { name: "Assignments", path: `${baseUrl}/assignments`, url: `#${baseUrl}/assignments?title=Mark%20Assignments&${homeTitle}` },
   ];
 
+  const path = name == "Mark Assesments" ? "assessments" : "assignments"
 
   return (
     <>
      { 
-    !pathname.includes(`/protected/admin/assessments-assignments/pages/assessment/`) ||
-    !pathname.includes(`/protected/admin/assessments-assignments/pages/assignments/`) &&
-     !pathname.includes("/grade-assignments") &&
+    name == "Mark Assessment" &&
      <div className="card p-relative o-hidden mb-2">
         <div
           className="card-header card-header-tabs-basic nav px-0"

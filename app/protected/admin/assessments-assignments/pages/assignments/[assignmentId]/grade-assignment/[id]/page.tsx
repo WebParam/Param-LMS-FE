@@ -50,16 +50,7 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
         <div className="page-separator__text">Questions</div>
       </div>
       {currentItems.map((data) =>
-        data.questionType === "Quiz" ? (
-          <MultipleChoiceQuestion
-            key={data.questionId}
-            questionName={data.description}
-            questionDescription={data.description}
-            answers={data.options!}
-            questionScore={data.score}
-            studentMultipleChoiceAnswer={data.studentMultipleChoiceAnswer!}
-          />
-        ) : (
+        data.questionType !== "Quiz" &&  (
           <LongQuestion
             key={data.questionId}
             questionName={data.description}

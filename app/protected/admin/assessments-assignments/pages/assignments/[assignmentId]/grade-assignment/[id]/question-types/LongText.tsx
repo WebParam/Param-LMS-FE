@@ -29,7 +29,7 @@ export default function ({
     const newGrades = [...grades];
     newGrades[index] = grade;
     setGrades(newGrades);
-    await markStudent(rubric[index].questionId, rubric[index].id, grade, rubric[index].label);
+    //await markStudent(rubric[index].questionId, rubric[index].id, grade, rubric[index].label);
   };
   const { id: userId, assessmentId } = useParams<{
     id: string;
