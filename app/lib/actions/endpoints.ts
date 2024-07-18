@@ -1,5 +1,6 @@
 const env = "development";
 const envDev = "dev";
+const test  = "testing"
 
 export const wCourseUrl = `https://khumla-${envDev}-newcourse-write.azurewebsites.net/api/v1`;
 
@@ -19,8 +20,16 @@ export const rQuizUrl = `https://khumla-${envDev}-quiz-read.azurewebsites.net/ap
 
 export const wAudioGenerateUrl = `https://khumla-${envDev}-audio-generate.azurewebsites.net/api/v1`;
 
-export const wAssessmentUrl = `https://khumla-${envDev}-assessment-write.azurewebsites.net/api/v1/Assessments`;
+export const wAssessmentUrl =
+  "https://khumla-development-assessment-write.azurewebsites.net/api/v1";
 
+  export const twAssessmentUrl =
+  `https://khumla-${test}-assessment-write.azurewebsites.net/api/v1`;
+
+  
+export const rAssessmentUrl = `https://khumla-${env}-assessment-read.azurewebsites.net/api/v1`;
+
+export const rAggregatorAssessmentUrl = `https://khumla-${env}-api-aggregator.azurewebsites.net/api/v1`;
 export const wQuestionUrl = `https://khumla-${envDev}-assessment-write.azurewebsites.net/api/Questions`;
   
 export const rAssessmentUrl = `https://khumla-${envDev}-assessment-read.azurewebsites.net/api/v1`;

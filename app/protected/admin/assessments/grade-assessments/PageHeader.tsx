@@ -1,19 +1,10 @@
-"use client";
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
 export default function PageHeader({
   title,
+  mark,
 }: {
   title: string;
- 
+  mark?: number;
 }) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const home_title = searchParams.get("homeTitle");
-  const buttonTitle = searchParams.get("button-title") ?? "Go Back";
-  const pathName = usePathname();
-  const isDashboard = pathName.includes("/protected/admin/facilitator")  && true;
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
@@ -24,20 +15,18 @@ export default function PageHeader({
 
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">
-                  <a href="#">{home_title}</a>
+                  <a href="#">Home</a>
                 </li>
 
                 <li className="breadcrumb-item active">{title}</li>
               </ol>
-
-              <h5 className="mt-2">Facilitator : MS K Ngubani</h5>
             </div>
+            {mark && (
+              <div>
+                <h2 className="text-success">{mark}%</h2>
+              </div>
+            )}
           </div>
-          {!isDashboard && (
-            <button onClick={() => router.back()} className="btn btn-success">
-              {buttonTitle}
-            </button>
-          )}
         </div>
       </div>
     </>

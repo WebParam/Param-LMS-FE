@@ -63,3 +63,9 @@ export interface Option {
     markType: number;
     label:number;
 }
+
+export interface ISubmitFacilitatorAssessment {
+  assessmentId: string;
+  studentId: string;
+  facilitatorId: string;
+}

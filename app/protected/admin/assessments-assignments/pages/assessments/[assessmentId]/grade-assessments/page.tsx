@@ -8,6 +8,7 @@ import SubmitForModeration from "@/components/Assessment/SubmitForModeration";
 
 const Body = ({ params }: { params: { assessmentId: string } }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [openModal, setOpenModal] = useState<boolean>(false)
   const [list, setList] = useState<ICourseAssessment[]>([]);
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -27,6 +28,20 @@ const Body = ({ params }: { params: { assessmentId: string } }) => {
 
   return (
     <>
+     <SubmitForModeration
+        show={openModal}
+        onHide={() => {
+          setOpenModal(false);
+        }}
+      />
+
+      <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+        <div className="mx-1">
+          <button className="btn btn-success btn-block" onClick={() => {setOpenModal(true)}}>
+            Submit for moderation
+          </button>
+        </div>
+      </div>
       <div className="card mb-0">
         <div
           className="table-responsive"

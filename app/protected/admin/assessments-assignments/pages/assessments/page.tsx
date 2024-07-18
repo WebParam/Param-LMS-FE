@@ -4,9 +4,7 @@ import { getAssessments } from "@/app/lib/actions/assessments";
 const Page = async () => {
     const courseId = "65dfa6c48d42c66c74d3940c";
     const assessments = await getAssessments(courseId);
-    console.log("Assessments",assessments)
-
-    
+ 
  
   return (
     <>
