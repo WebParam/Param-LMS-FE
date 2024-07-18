@@ -29,10 +29,10 @@ export const wAssessmentUrl =
   
 export const rAssessmentUrl = `https://khumla-${env}-assessment-read.azurewebsites.net/api/v1`;
 
-export const rAggregatorAssessmentUrl = `https://khumla-${env}-api-aggregator.azurewebsites.net/api/v1`;
+
 export const wQuestionUrl = `https://khumla-${envDev}-assessment-write.azurewebsites.net/api/Questions`;
   
-export const rAssessmentUrl = `https://khumla-${envDev}-assessment-read.azurewebsites.net/api/v1`;
+export const rUsersUrl = `https://khumla-${env}-user-read.azurewebsites.net/api/v1`
 
 export const rAggregatorAssessmentUrl = `https://khumla-${env}-api-aggregator.azurewebsites.net/api/v1`;
 

@@ -4,21 +4,20 @@ import Table from "./(components)/Table";
 import { useEffect, useState } from "react";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
 import { getStudentsAssessment } from "@/app/lib/actions/assessments";
-import dynamic from "next/dynamic";
-import FeedbackModal from "./(components)/FeedbackModal";
+import SubmitForModeration from "@/components/Assessment/SubmitForModeration";
 
-const Body = ({ params }: { params: { assessmentId: string } }) => {
+const Body = ({ params }: { params: { assignmentId: string } }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState<boolean>(false)
   const [list, setList] = useState<ICourseAssessment[]>([]);
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
-  const assessmentId = params.assessmentId;
+  const assignmentId = params.assignmentId;
 
   const getAssessments = async () => {
-    const assessments = await getStudentsAssessment(assessmentId);
+    const assessments = await getStudentsAssessment(assignmentId);
     setList(assessments);
     console.log("Assessments", assessments);
   };
@@ -29,19 +28,17 @@ const Body = ({ params }: { params: { assessmentId: string } }) => {
 
   return (
     <>
-      <FeedbackModal
+     <SubmitForModeration
         show={openModal}
         onHide={() => {
           setOpenModal(false);
         }}
       />
+
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
         <div className="mx-1">
-          <button
-            className="btn btn-success btn-block"
-            onClick={() => setOpenModal(true)}
-          >
-            Submit moderation feedback
+          <button className="btn btn-success btn-block" onClick={() => {setOpenModal(true)}}>
+            Submit for moderation
           </button>
         </div>
       </div>

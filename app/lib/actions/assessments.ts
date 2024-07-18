@@ -144,7 +144,7 @@ export const submitFacilitatorAssessment = async (payload:FormData) => {
 
 export const submitForModeration = async (payload:FormData) => {
   const body ={
-     facilitatorId : payload.get("facilitatorId") ?? "",
+     moderatorId : payload.get("moderatorId") ?? "",
      assessmentId : payload.get("assessmentId"),
      studentId : payload.get("studentId"),
    }
@@ -158,3 +158,36 @@ export const submitForModeration = async (payload:FormData) => {
      throw err;
    }
  };
+
+
+ export const getModeratorStudentsAssessment = async (courseId: string) => {
+  try {
+    const resp = await get(`${rAggregatorAssessmentUrl}/StudentAssessment/StudentsAssessments/${courseId}`);
+    console.log(resp)
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+
+    console.error(err);
+  }
+};
+
+export const  submitModeratorFeedback = async (payload:FormData) => {
+  const body ={
+    moderatorFeedBack : payload.get("moderatorFeedBack") ?? "",
+    questionId : payload.get("questionId"),
+   }
+   console.log("body",body)
+   try {
+     const data = await post(`${twAssessmentUrl}/StudentAnswers/AddModeratorFeedBack`, body);
+     Diagnostic("SUCCESS ON POST, returning", data);
+     return data.data;
+   } catch (err) {
+     Diagnostic("ERROR ON POST, returning", err);
+     console.error('Error in submitFacilitatorAssessment:', err);
+     throw err;
+   }
+ };
+

@@ -2,13 +2,18 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export default function PageHeader({ title }: { title: string }) {
+export default function PageHeader({
+  title,
+}: {
+  title: string;
+ 
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const home_title = searchParams.get("homeTitle");
-  const buttonTitle = searchParams.get("button-title");
+  const buttonTitle = searchParams.get("button-title") ?? "Go Back";
   const pathName = usePathname();
-  const isDashboard = pathName.includes("/protected/admin/moderator");
+  const isDashboard = pathName === ("/protected/admin/moderator");
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">

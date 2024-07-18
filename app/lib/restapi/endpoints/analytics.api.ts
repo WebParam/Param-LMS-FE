@@ -1,7 +1,6 @@
 import { IActivity } from "@/app/interfaces/analytics";
 import { GET, POST, PUT, DELETE } from "../client";
 import { IResponseObject } from "../response";
-import { UpdateProgressRequestModel } from "@/app/interfaces/Enrollment";
 
 export const analyticsRead =
   "https://khumla-development-api-aggregator.azurewebsites.net/api";
@@ -22,7 +21,7 @@ export const AnalyticsApi = {
   },
 
   POST_CourseProgress: async (
-    payload: UpdateProgressRequestModel
+    payload: any
   ): Promise<any> => {
     try {
       const response = await POST(

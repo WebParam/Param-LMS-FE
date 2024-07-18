@@ -1,8 +1,10 @@
 const TableHead = () => {
   const headers = [
-    { name: "Name", align: "w-25 text-center" },
-    { name: "Surname", align: "text-center" },
-    { name: "Course", align: "pl-112pt text-left" },
+    { name: "Student Name", align: "text-center" },
+    { name: "Student ID", align: " text-center" },
+    { name: "Date of Submission", align: "text-center" },
+    { name: "Facilitator Mark", align: "text-center" },
+    { name: "Moderator Mark", align: "text-center" },
   ];
 
   return (

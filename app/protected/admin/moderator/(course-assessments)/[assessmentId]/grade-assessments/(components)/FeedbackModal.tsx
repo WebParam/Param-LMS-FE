@@ -5,11 +5,12 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-export default function MyVerticallyCenteredModal(props: any) {
+export default function FeedbackModal(props: any) {
   const router = useRouter();
   const facilitatorId = "6580051b2b3b4e16f159792d";
   const { assessmentId, id } = useParams<{ assessmentId: string; id: string }>();
   const [formError, setFormError] = useState("");
+  const [formSuccess, setFormSuccess] = useState("");
 
   const submitFacilitatorAssessmentWithParams = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,14 +24,20 @@ export default function MyVerticallyCenteredModal(props: any) {
       const submitResponse = await submitFacilitatorAssessment(formData);
       if (!submitResponse.id) {
         setFormError("Failed to submit assessment");
+        setFormSuccess(""); // Clear success message if there is an error
         return;
       }
-      props.onHide();
-      console.log("response", submitResponse);
-      router.back();
+      setFormError(""); // Clear error message if successful
+      setFormSuccess("Assessment submitted successfully");
+      setTimeout(() => {
+        setFormSuccess(""); // Clear success message after a few seconds
+        props.onHide();
+        router.back();
+      }, 3000);
     } catch (error) {
       console.error("Error submitting assessment:", error);
       setFormError("Failed to submit assessment");
+      setFormSuccess(""); // Clear success message if there is an error
     }
   };
 
@@ -44,15 +51,16 @@ export default function MyVerticallyCenteredModal(props: any) {
       <form onSubmit={submitFacilitatorAssessmentWithParams}>
         <div className="modal-header">
           <div className="modal-title h4" id="contained-modal-title-vcenter">
-            Submit Grading
+            Submit Feedback
           </div>
           <button onClick={props.onHide} type="button" className="btn btn-icon">
             <i className="material-icons">close</i>
           </button>
         </div>
         <Modal.Body>
-          <p className="font-size-16pt">Are you sure you want to submit this grading?</p>
+          <p className="font-size-16pt">Are you sure you want to submit this feedback?</p>
           {formError && <div className="text-danger">{formError}</div>}
+          {formSuccess && <div className="text-success">{formSuccess}</div>}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>
