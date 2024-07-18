@@ -43,11 +43,12 @@ export default function Logbook() {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <MonthSelector selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
       </div>
+      
       <div className="d-flex justify-content-around mb-3">
-        <button className="btn btn-custom-green" onClick={() => setSelectedWeek(0)}>Week 1</button>
-        <button className="btn btn-custom-green" onClick={() => setSelectedWeek(1)}>Week 2</button>
-        <button className="btn btn-custom-green" onClick={() => setSelectedWeek(2)}>Week 3</button>
-        <button className="btn btn-custom-green" onClick={() => setSelectedWeek(3)}>Week 4</button>
+        <button className="btn btn-custom-green btn-custom-focus" onClick={() => setSelectedWeek(0)}>Week 1</button>
+        <button className="btn btn-custom-green btn-custom-focus" onClick={() => setSelectedWeek(1)}>Week 2</button>
+        <button className="btn btn-custom-green btn-custom-focus" onClick={() => setSelectedWeek(2)}>Week 3</button>
+        <button className="btn btn-custom-green btn-custom-focus" onClick={() => setSelectedWeek(3)}>Week 4</button>
       </div>
       <div className="row">
         <div className="col-md-6">
@@ -57,14 +58,14 @@ export default function Logbook() {
                 <thead>
                   <tr>
                     <th>Student Name</th>
-                    <th>Attendance Logged</th>
+                    <th className="text-center">Attendance Logged</th>
                   </tr>
                 </thead>
                 <tbody>
                   {students.map((student, index) => (
                     <tr key={index} onClick={() => setSelectedStudent(student)}>
                       <td>{student.name}</td>
-                      <td>{student.logbooks[selectedWeek].daysLogged}/{student.logbooks[selectedWeek].totalDays}</td>
+                      <td className="text-center">{student.logbooks[selectedWeek].daysLogged}/{student.logbooks[selectedWeek].totalDays}</td>
                     </tr>
                   ))}
                 </tbody>
