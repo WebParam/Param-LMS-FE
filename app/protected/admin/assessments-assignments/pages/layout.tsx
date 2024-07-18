@@ -15,7 +15,7 @@ function Layout({ children, params }: { children: React.ReactNode; params: {id :
     { name: "Assignments", path: `${baseUrl}/assignments`, url: `${baseUrl}/assignments?title=Mark%20Assignments&${homeTitle}` },
   ];
 
-  const path = "assessments" && "assignments"
+  const path = "assessments" ?? "assignments"
 
   return (
     <>
