@@ -15,12 +15,12 @@ function Layout({ children, params }: { children: React.ReactNode; params: {id :
     { name: "Assignments", path: `${baseUrl}/assignments`, url: `${baseUrl}/assignments?title=Mark%20Assignments&${homeTitle}` },
   ];
 
-  const path = "assessments" ?? "assignments"
 
   return (
     <>
      { 
-    !pathname.includes(`/protected/admin/assessments-assignments/pages/${path}/`) &&
+    !pathname.includes(`/protected/admin/assessments-assignments/pages/assessment/`) &&
+    !pathname.includes(`/protected/admin/assessments-assignments/pages/assignments/`) &&
      !pathname.includes("/grade-assignments") &&
      <div className="card p-relative o-hidden mb-2">
         <div
