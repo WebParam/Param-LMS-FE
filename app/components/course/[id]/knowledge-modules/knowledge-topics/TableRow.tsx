@@ -5,7 +5,13 @@ import EditKnowledgeTopicModal from "./EditKnowledgeTopicModal";
 import DeleteKnowledgeTopicModal from "./DeleteKnowledgeTopicModal";
 import {
   generateVideoScript,
+  getKnowledgeTopic,
 } from "@/app/lib/actions/knowledge-topic";
+import { getCourse } from "@/app/lib/actions/course";
+import { getKnowledgeModule } from "@/app/lib/actions/knowledge-module";
+import { getKnowledgeElements } from "@/app/lib/actions/topic-elements";
+import { post } from "@/app/lib/utils";
+import { wGenerateVideoScriptUrl } from "@/app/lib/actions/endpoints";
 
 const TableRow = ({ document }: { document: any }) => {
   const pathname = usePathname();
@@ -36,16 +42,45 @@ const TableRow = ({ document }: { document: any }) => {
   }, [refreshId]);
 
   const generateVideoScriptWithProgress = async (e: any) => {
-    setProgress(25);
     try {
-      await generateVideoScript(courseId, moduleId, document.id);
-      setProgress(100);
+      const [course, module, topic, topicElements] = await Promise.all([
+        getCourse(courseId),
+        getKnowledgeModule(moduleId),
+        getKnowledgeTopic(document.id),
+        getKnowledgeElements(document.id),
+      ]);
+
+      const acc = Math.floor(100 / topicElements.length);
+      let total = 0;
+      for (const element of topicElements) {
+        const body = {
+          moduleTitle: module.title,
+          moduleDescription: module.description,
+          topicTitle: topic.name,
+          topicId: topic.id,
+          topicDescription: topic.description,
+          lengthOfVideoScript: topic.lengthOfVideoScript,
+          tone: course.videoScriptTone,
+          elementTitle: element.title,
+          elementCode: element.elementCode,
+          elementId: element.id,
+        };
+
+        await post(
+          `${wGenerateVideoScriptUrl}/topicElement/generateUpdateSingle`,
+          body
+        );
+        total += acc;
+        setProgress(total);
+      }
+
       setTimeout(() => {
         setIsProgress(false);
         setIsGenerated(true);
       }, 5000);
-    } catch (e: any) {
+    } catch (err) {
       setIsTryAgain(true);
+      console.error(err);
     }
   };
 
