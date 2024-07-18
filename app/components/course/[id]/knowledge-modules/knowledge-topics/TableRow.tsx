@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import EditKnowledgeTopicModal from "./EditKnowledgeTopicModal";
 import DeleteKnowledgeTopicModal from "./DeleteKnowledgeTopicModal";
 import {
-  generateVideoScript,
   getKnowledgeTopic,
 } from "@/app/lib/actions/knowledge-topic";
 import { getCourse } from "@/app/lib/actions/course";
