@@ -33,7 +33,12 @@ useEffect(() => {
           <Table list={data} />
         </div>
 
-     
+          <button 
+        className="btn btn-primary enrolBtn m-2 " 
+        style={{cursor:'pointer'}}
+      >
+        Add module
+      </button> 
     </>
   );
 };

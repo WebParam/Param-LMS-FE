@@ -13,78 +13,45 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
 
   return (
     <>
-      <tbody className="list" id="staff">
-        <tr>
-       <td>
-            <ul className="list-group list-group-flush">
-        <li className="list-group-item">
-          <i className="bi-house list-group-icon" /> Equity Code
-        </li>
-        <li className="list-group-item">
-          <i className="bi-person list-group-icon" /> Nationality Code
-        </li>
-        <li className="list-group-item">
-          <i className="bi-list-task list-group-icon" /> Home Language Code
-        </li>
-        <li className="list-group-item">
-          <i className="bi-layers list-group-icon" /> Citizen Status Code
-        </li>
-        <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> Socioeconomic Code
-        </li>
-        <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> Disability Code
-        </li>
-        <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> Disability Rating
-        </li>
-        <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> Immigrant Status
-        </li>
-        <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> POPI Act Agreement
-        </li>
-        <li className="list-group-item">
-          <i className="bi-people list-group-icon" /> POPI Act Date
-        </li>
-      </ul>
-      </td>
-      <td>
-        <ul className="list-group list-group-flush">
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.equityCode??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.nationalityCode??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.homeLanguageCode??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.citizenStatusCode??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.socioeconomicCode??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.disabilityCode??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.disabilityRating??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.immigrantStatus??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.popiActAgree??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.popiActDate??'N/A'}
-          </li>
-        </ul>
-      </td>
-      </tr>
-      </tbody>
+         <thead>
+    <tr>
+      <th>Year</th>
+      <th>Code</th>
+      <th>Assignment Name</th>
+      <th>Final Mark</th>
+      <th>Results</th>
+    </tr>
+  </thead>
+  <tbody className="list" id="staff">
+    <tr>
+      <td>2024</td>
+      <td>2001476</td>
+      <td>assignment 1</td>
+      <td>86%</td>
+      <td>Competent</td>
+    </tr>
+    <tr>
+      <td>2024</td>
+      <td>2001434</td>
+      <td>assignment 2</td>
+      <td>86%</td>
+      <td>Competent</td>
+    </tr>
+    <tr>
+      <td>2024</td>
+      <td>2001511</td>
+      <td>assignment 2</td>
+      <td>94%</td>
+      <td>Competent</td>
+    </tr>
+    <tr>
+      <td>2024</td>
+      <td>2001588</td>
+      <td>assignment 5</td>
+      <td>94%</td>
+      <td>Competent</td>
+    </tr>
+  </tbody>
     </>
   );
 };

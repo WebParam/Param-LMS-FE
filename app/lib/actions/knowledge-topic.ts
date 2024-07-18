@@ -1,9 +1,9 @@
 "use server";
 import { redirect } from "next/navigation";
 import { del, formDataEntriesArray, get, post, put } from "../utils";
-import { wCourseUrl, rCourseUrl, rDocumentParaphraseUrl } from "./endpoints";
+import { wCourseUrl, rCourseUrl } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
-import { FormObject, IQuestion } from "@/app/interfaces/questions";
+import { FormObject } from "@/app/interfaces/questions";
 import { KnowledgeModule } from "@/app/interfaces/modules";
 
 export const createKnowledgeTopic = async (
@@ -18,21 +18,21 @@ export const createKnowledgeTopic = async (
     name: formData.get("name"),
     description: formData.get("description"),
     topicCode: formData.get("topicCode"),
-    lengthOfVideoScript: formData.get("lengthOfVideoScript") || 0,
+    lengthOfVideoScript: formData.get("lengthOfVideoScript") || 100,
     moduleId,
   };
 
   const entries: any = formData.entries();
-  let KnowledgeTopic = {} as KnowledgeModule;
+  let knowledgeTopic = {} as KnowledgeModule;
   try {
     const data = await post(
       `${wCourseUrl}/KnowledgeTopics/AddKnowledgeTopic`,
       body
     );
-    KnowledgeTopic = data.data;
+    knowledgeTopic = data.data;
     Diagnostic("SUCCESS ON POST, returning", data);
 
-    createTopicElements(entries, KnowledgeTopic.id);
+    createTopicElements(entries, knowledgeTopic.id);
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
     console.error(err);
@@ -114,7 +114,6 @@ export const getKnowledgeTopic = async (topicId: string) => {
 export const createTopicElements = async (entries: any, topicId: string) => {
   const objArray = formDataEntriesArray(entries);
 
-  const promiseArray = [];
   for (const obj of objArray) {
     if (obj.elementCode == "" || obj.title == "") continue;
     const body: FormObject = {
@@ -122,12 +121,9 @@ export const createTopicElements = async (entries: any, topicId: string) => {
       topicId,
     };
 
-    promiseArray.push(
-      post(`${wCourseUrl}/TopicElements/AddTopicElement`, body)
-    );
+    await post(`${wCourseUrl}/TopicElements/AddTopicElement`, body);
   }
-  const response = await Promise.all(promiseArray);
-  Diagnostic("SUCCESS ON POST, returning", response);
+  Diagnostic("SUCCESS ON POST, returning", "Success !");
 };
 
 export const deleteKnowledgeTopic = async (topicId: string) => {

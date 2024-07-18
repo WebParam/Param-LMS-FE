@@ -29,21 +29,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
               </td>
 
               <td className="text-center js-lists-values-projects small">
-                {data.name} {data.surname}
-              </td>
-
-              <td className="text-center js-lists-values-projects small">
-                    {data.title}
-                    
-              </td>
-
-              <td className="text-center js-lists-values-projects small">
-                <div className="align-items-center">
-                {data.status === 3 && <span className="badge badge-warning " style={{ fontSize: '1.25em' }}>Review Pending</span>}
-                {data.status === 2 && <span className="badge badge-success " style={{ fontSize: '1.25em' }}>Completed</span>}
-                {data.status === 1 && <span className="badge badge-danger " style={{ fontSize: '1.25em' }}>Deleted</span>}
-                {data.status === 0 && <span className="badge badge-info " style={{ fontSize: '1.25em' }}>Enrolled</span>}
-                </div>
+                {data.name??"name"} {data.surname??"surname"}
               </td>
             </tr>
           ))}
@@ -53,3 +39,4 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
 };
 
 export default TableBody;
+
