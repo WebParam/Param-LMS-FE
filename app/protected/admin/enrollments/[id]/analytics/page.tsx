@@ -53,7 +53,7 @@ const Body = () => {
             title="Average Time Spent"
             barDescriptions={AvgTimeSpentBarDataDescription}
           >
-            <AvgTimeSpent />
+            <AvgTimeSpent averageTimeSpent={undefined} />
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
@@ -71,7 +71,7 @@ const Body = () => {
             barDescriptions={StudentsProgressStatusDescription}
             type="pie"
           >
-            <StudentsProgressStatus />
+            <StudentsProgressStatus studentCourseProgress={undefined} />
           </ChartLayout>
         </div>
 
