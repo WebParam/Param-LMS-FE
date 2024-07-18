@@ -1,9 +1,18 @@
+"use client"
 import Link from "next/link";
 import { NextPage } from "next";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
+import { Modal } from "react-bootstrap";
+import { useState } from "react";
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
+
+
 
 const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+  const [showDocumentModal, setShowDocumentModal] = useState(false)
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const assessmentName = searchParams.get("assessment-name")!;
@@ -14,10 +23,29 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
     assessment_name: "pl-48pt text-left",
     action: "text-center",
   };
+  
+const pdfVersion = "3.10.111";
+const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
 
   return (
     <>
-
+      <Modal  
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered show={showDocumentModal} onHide={() => setShowDocumentModal(false)}
+      >
+      <Modal.Header closeButton>
+        <Modal.Title>Document Preview</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+      <Worker workerUrl={pdfWorkerUrl}>
+          <Viewer
+            fileUrl="https://example.com/document2"
+            plugins={[defaultLayoutPluginInstance]}
+          />
+        </Worker>
+      </Modal.Body>
+    </Modal>
       <tbody className="list" id="staff">
         {list &&
           list.map((data: ICourseAssessment) => (
@@ -27,9 +55,7 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
               >
                 {data.name}
               </td>
-              <td
-                className={`${align.action} js-lists-values-projects small`}
-              >
+              <td className={`${align.action} js-lists-values-projects small`}>
                 {data.userId.slice(0, 6) + "..."}
               </td>
               <td
@@ -55,19 +81,19 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
                   {data.moderatorMark}/{data.totalMark}
                 </p>
               </td>
-              <td className={`${align.action} js-lists-values-projects small d-flex justify-content-center align-items-center`}>
-              <i className="material-icons mr-8pt text-center  chip-outline-success ">
-                    visibility
-                  </i>
+              <td
+                className={`${align.action} js-lists-values-projects small d-flex justify-content-center align-items-center`}
+              >
+                <i onClick={() => setShowDocumentModal(true)} className="material-icons mr-8pt text-center  chip-outline-success ">
+                  visibility
+                </i>
 
-                  <Link
+                <Link
                   className={`chip-outline-success `}
                   href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&title=${data.name}&homeTitle=${assessmentName}`}
                 >
-              <i className="material-icons  ">assignment_turned_in</i>
-
+                  <i className="material-icons  ">assignment_turned_in</i>
                 </Link>
-
               </td>
             </tr>
           ))}
