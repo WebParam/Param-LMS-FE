@@ -1,9 +1,7 @@
 const TableHead = () => {
   const headers = [
     "StudentID",
-    "Student Name",
-    "Course Applied",
-    "Status"
+    "Name",
   ];
 
   return (

@@ -20,7 +20,7 @@ export const barDescriptions = [
 ];
 
 export const data = async ({ pending, completed }: { pending: number[];  completed: number[]}) => {
-  "use server";
+  // "use server";
 
   return {
     labels,

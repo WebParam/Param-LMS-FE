@@ -11,55 +11,45 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
 
   return (
     <>
-      <tbody className="list" id="staff">
-        <tr>
-       <td>
-            <ul className="list-group list-group-flush">
-        <li className="list-group-item">
-          <i className="bi-house list-group-icon" /> Home Address 1
-        </li>
-        <li className="list-group-item">
-          <i className="bi-person list-group-icon" /> Postal Address 1
-        </li>
-        <li className="list-group-item">
-          <i className="bi-list-task list-group-icon" /> Postal Address 2
-        </li>
-        <li className="list-group-item">
-          <i className="bi-layers list-group-icon" /> Postal Address 3
-        </li>
-        <li className="list-group-item">
-          <i className="bi-house list-group-icon" /> Learner Home Address Postal Code
-        </li>
-        <li className="list-group-item">
-          <i className="bi-house list-group-icon" /> Learner Home Address Physical Code
-        </li>
-      </ul>
-      </td>
-      <td>
-        <ul className="list-group list-group-flush">
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.homeAddress1??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.postalAddress1??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.postalAddress2??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.postalAddress3??'N/A'}
-          </li>
-          <li className="list-group-item">
-            <i className="bi-house list-group-icon" />: {list?.learnerHomeAddressPostalCode??'N/A'}
-          </li>
-          <li className="list-group-item">
-              <i className="bi-house list-group-icon" />: {list?.learnerHomeAddressPhysicalCode??'N/A'}
-          </li>
-          
-        </ul>
-      </td>
-      </tr>
-      </tbody>
+       <thead>
+    <tr>
+      <th>Year</th>
+      <th>Code</th>
+      <th>Assessment Name</th>
+      <th>Final Mark</th>
+      <th>Results</th>
+    </tr>
+  </thead>
+  <tbody className="list" id="staff">
+    <tr>
+      <td>2024</td>
+      <td>2001476</td>
+      <td>assessment 1</td>
+      <td>86%</td>
+      <td>Competent</td>
+    </tr>
+    <tr>
+      <td>2024</td>
+      <td>2001434</td>
+      <td>assessment 2</td>
+      <td>86%</td>
+      <td>Competent</td>
+    </tr>
+    <tr>
+      <td>2024</td>
+      <td>2001511</td>
+      <td>assessment 2</td>
+      <td>94%</td>
+      <td>Competent</td>
+    </tr>
+    <tr>
+      <td>2024</td>
+      <td>2001588</td>
+      <td>assessment 5</td>
+      <td>94%</td>
+      <td>Competent</td>
+    </tr>
+  </tbody>
     </>
   );
 };
