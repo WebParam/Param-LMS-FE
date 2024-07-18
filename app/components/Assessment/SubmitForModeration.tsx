@@ -8,6 +8,8 @@ import { FaUser } from "react-icons/fa";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import Pagination from "@/app/components/Pagination";
+import { submitForModeration } from "@/app/lib/actions/assessments";
+import { useParams, useRouter } from "next/navigation";
 
 function SubmitForModeration(props: any) {
   const [dueDate, setDueDate] = useState("");
@@ -35,6 +37,35 @@ function SubmitForModeration(props: any) {
     setSelectedModerator(e.target.value);
   };
 
+
+  const router = useRouter();
+  const facilitatorId = "6580051b2b3b4e16f159792d";
+  const { assessmentId, id } = useParams<{ assessmentId: string; id: string }>();
+  const [formError, setFormError] = useState("");
+
+  const submitModeration = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    formData.append('facilitatorId', facilitatorId);
+    formData.append('assessmentId', assessmentId);
+    formData.append('studentId', id);
+
+    try {
+      const submitResponse = await submitForModeration(formData);
+      if (!submitResponse.id) {
+        setFormError("Failed to submit assessment");
+        return;
+      }
+      props.onHide();
+      console.log("response", submitResponse);
+      router.back();
+    } catch (error) {
+      console.error("Error submitting assessment:", error);
+      setFormError("Failed to submit assessment");
+    }
+  };
+
   return (
     <>
       <Modal
@@ -43,7 +74,7 @@ function SubmitForModeration(props: any) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <form>
+        <form onSubmit = {submitModeration}>
           <Modal.Header closeButton>
             <Modal.Title className="text-center m-auto">Select Moderator</Modal.Title>
           </Modal.Header>
