@@ -14,13 +14,13 @@ const withAuth = <P extends object>(
     useEffect(() => {
       const checkAuth = async () => {
         if (!loggedInUser) {
-          // router.replace("/auth/login");
+          router.replace("/auth/login");
         } else if (!isAuthorised()) {
-          // router.replace("/protected/student/course/all-courses");
+          router.replace("/protected/student/course/all-courses");
         }
       };
 
-      // checkAuth();
+      checkAuth();
     }, [loggedInUser]);
 
     return (
