@@ -7,7 +7,7 @@ const baseUrl = "/protected/admin/"
   const pathName = usePathname();
   const pageUrl = pathName === "/protected/admin/moderator" ? `${baseUrl}/moderator` :  `${baseUrl}/assessments-assignments/pages/assessments`
   const homeTitle = "homeTitle=Mark Assessments";
-  const buttonTitle = "button-title=Assessments"
+  const buttonTitle = "button-title=Assessments";
   return (
     <>
       <div className="page-section bg-alt border-top-2">

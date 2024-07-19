@@ -45,6 +45,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   };
 
   async function viewDocument(docId: string) {
+    console.log(docId)
     setDocumentToView(docId)
   }
 

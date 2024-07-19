@@ -19,7 +19,7 @@ const baseUrl = "/protected/admin/"
                   key={assignment.id}
                   imgUrl={assignment.avatar}
                   title="Formative Extended Assignment"
-                  url={`${pageUrl}/${assignment.id}/grade-assignment?assessment-name=Formative Extended Assignment&${homeTitle}&title=${assignment.title}&${buttonTitle}`}
+                  url={`${pageUrl}/${assignment.id}/grade-assignment?assessment-name=Formative Extended Assignment&${homeTitle}&title=Formative Extended Assignment&${buttonTitle}`}
                 />
               ))}
           </div>

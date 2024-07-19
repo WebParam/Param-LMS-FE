@@ -19,6 +19,8 @@ function SubmitForModeration(props: any) {
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false)
+
 
   const ITEMSPERPAGE = 3;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -40,14 +42,20 @@ function SubmitForModeration(props: any) {
     formData.append("moderatorId", selectedModerator.id);
     formData.append("assessmentId", assessmentId);
     formData.append("studentId", "6674335c5f6ceeb4980ebb68");
+    setLoading(true)
 
     try {
       const submitResponse = await submitForModeration(formData);
+  
       if (!submitResponse.id) {
+        setLoading(false)
+
         setErrorMessage("Failed to submit moderation");
         setSuccessMessage("");
         return;
       }
+      setLoading(false)
+
       setSuccessMessage("Moderation submitted successfully");
  
       setTimeout(() => {
@@ -57,6 +65,8 @@ function SubmitForModeration(props: any) {
         router.back();
             }, 3000);
     } catch (error) {
+      setLoading(false)
+
       console.error("Error submitting moderation:", error);
       setErrorMessage("Failed to submit moderation");
       setSuccessMessage("");
@@ -151,7 +161,7 @@ function SubmitForModeration(props: any) {
                   Cancel
                 </Button>
                 <Button variant="success" type="submit">
-                  Send
+                {!loading ? "Submit" : <div className="spinner-border text-white" role="status" /> }
                 </Button>
               </div>
             </div>

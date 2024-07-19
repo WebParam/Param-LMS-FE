@@ -142,6 +142,25 @@ export const submitFacilitatorAssessment = async (payload:FormData) => {
   }
 };
 
+
+export const submitModeratorAssessment = async (payload:FormData) => {
+  const body ={
+     moderatorId : payload.get("facilitatorId") ?? "",
+     assessmentId : payload.get("assessmentId"),
+     studentId : payload.get("studentId"),
+   }
+   try {
+     const data = await post(`${twAssessmentUrl}/StudentAnswers/FacilitatorSubmit`, body);
+     Diagnostic("SUCCESS ON POST, returning", data);
+     return data.data;
+   } catch (err) {
+     Diagnostic("ERROR ON POST, returning", err);
+     console.error('Error in submitFacilitatorAssessment:', err);
+     throw err;
+   }
+ };
+ 
+
 export const submitForModeration = async (payload:FormData) => {
   const body ={
      moderatorId : payload.get("moderatorId") ?? "",
@@ -176,8 +195,9 @@ export const submitForModeration = async (payload:FormData) => {
 
 export const  submitModeratorFeedback = async (payload:FormData) => {
   const body ={
+    id:"668bc5b9ab353d951018b589",
     moderatorFeedBack : payload.get("moderatorFeedBack") ?? "",
-    questionId : payload.get("questionId"),
+    questionId :"5f8d0d55b54764421b7160e0"
    }
    console.log("body",body)
    try {

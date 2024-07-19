@@ -48,6 +48,7 @@ export default function ({
       label : Number(label)
     };
     const markResponse = await markStudentAssessment(payload);
+    console.log(markResponse)
   }
 
   return (

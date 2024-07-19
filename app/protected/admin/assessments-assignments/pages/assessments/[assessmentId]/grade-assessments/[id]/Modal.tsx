@@ -11,6 +11,7 @@ export default function FeedbackModal(props: any) {
   const { assessmentId, id } = useParams<{ assessmentId: string; id: string }>();
   const [formError, setFormError] = useState("");
   const [formSuccess, setFormSuccess] = useState("");
+  const [loading, setLoading] = useState(false)
 
   const submitFacilitatorAssessmentWithParams = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -21,20 +22,25 @@ export default function FeedbackModal(props: any) {
     formData.append('studentId', id);
 
     try {
+      setLoading(true)
       const submitResponse = await submitFacilitatorAssessment(formData);
       if (!submitResponse.id) {
+        setLoading(false)
         setFormError("Failed to submit assessment");
         setFormSuccess("");
         return;
       }
+      setLoading(false)
       setFormError("");
       setFormSuccess("Assessment submitted successfully");
+    
       setTimeout(() => {
         setFormSuccess(""); 
         props.onHide();
         router.back();
       }, 3000);
     } catch (error) {
+      setLoading(false)
       console.error("Error submitting assessment:", error);
       setFormError("Failed to submit assessment");
       setFormSuccess(""); 
@@ -67,7 +73,7 @@ export default function FeedbackModal(props: any) {
             Close
           </Button>
           <Button variant="success" type="submit">
-            Submit
+          {!loading ? "Submit" : <div className="spinner-border text-white" role="status" /> }
           </Button>
         </Modal.Footer>
       </form>
