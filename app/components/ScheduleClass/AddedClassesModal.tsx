@@ -1,5 +1,5 @@
 "use client"; // Add this line at the top
-import "../../css/ScheduleClassForm.css"; // Import the CSS file
+import "../../css/scheduleclassform.css"; // Import the CSS file
 
 import React, { useState, FormEvent, useEffect } from "react";
 

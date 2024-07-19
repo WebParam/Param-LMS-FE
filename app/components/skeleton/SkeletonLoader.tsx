@@ -1,5 +1,5 @@
 import React from 'react';
-import '@/app/css/LongQuestionSkeleton.css';
+import '@/app/css/longQuestionSkeleton.css';
 
 const SkeletonLoader: React.FC<{ width?: string; height?: string; style?: React.CSSProperties }> = ({ width = "100%", height = "1em", style = {} }) => {
   return (
