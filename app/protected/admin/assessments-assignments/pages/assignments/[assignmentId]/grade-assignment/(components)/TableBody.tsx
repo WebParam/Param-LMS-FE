@@ -5,8 +5,11 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
 import { Modal } from "react-bootstrap";
 import { useState } from "react";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import SkeletonLoader from "@/components/skeleton/SkeletonLoader";
 
 
 
@@ -18,14 +21,14 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   const assessmentName = searchParams.get("assessment-name")!;
 
   const align = {
-    student_name: "pl-12pt text-justify",
+    student_name: "pl-12pt text-center",
     student_surname: "pl-48pt text-left",
     assessment_name: "pl-48pt text-left",
     action: "text-center",
   };
   
 const pdfVersion = "3.10.111";
-const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
+const pdfWorkerUrl = `https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min.js`;
 
   return (
     <>
@@ -40,14 +43,14 @@ const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion
       <Modal.Body>
       <Worker workerUrl={pdfWorkerUrl}>
           <Viewer
-            fileUrl="https://example.com/document2"
+            fileUrl="https://khumla-development-user-read.azurewebsites.net/api/Documents/PreviewDocument/66754b17c66474c142f6b9f6"
             plugins={[defaultLayoutPluginInstance]}
           />
         </Worker>
       </Modal.Body>
     </Modal>
       <tbody className="list" id="staff">
-        {list &&
+        {list.length > 0 ?
           list.map((data: ICourseAssessment) => (
             <tr key={data.assessmentId} className="selected">
               <td
@@ -96,7 +99,25 @@ const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion
                 </Link>
               </td>
             </tr>
-          ))}
+          )): <>
+          <tr className="selected">
+         <td colSpan={10}>
+           <SkeletonLoader width="100%" height="2em" />
+         </td>
+         
+       </tr>
+       <tr className="selected">
+         <td colSpan={10}>
+           <SkeletonLoader width="100%" height="2em" />
+         </td>
+         
+       </tr> <tr className="selected">
+         <td colSpan={10}>
+           <SkeletonLoader width="100%" height="2em" />
+         </td>
+         
+       </tr>
+         </>}
       </tbody>
     </>
   );

@@ -10,6 +10,7 @@ function FeedbackTextBox({ questionId }: any) {
   const [feedback, setFeedback] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [loading, setLoading] = useState(false)
   const router = useRouter();
 
   const submitFeedback = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -27,11 +28,12 @@ function FeedbackTextBox({ questionId }: any) {
     const formData = new FormData(event.currentTarget);
     formData.append("questionId", questionId);
     formData.append("moderatorFeedBack", plainFeedback);
-
+      setLoading(true)
     try {
       const submitResponse = await submitModeratorFeedback(formData);
       if (!submitResponse.id) {
-        setErrorMessage("Failed to submit feedback");
+        setLoading(false)
+        setErrorMessage("Failed to submitted Feedback");
         setSuccessMessage("");
         return;
       }
@@ -43,8 +45,9 @@ function FeedbackTextBox({ questionId }: any) {
         router.back();
       }, 3000);
     } catch (error) {
-      console.error("Error submitting feedback:", error);
-      setErrorMessage("Failed to submit feedback");
+      setLoading(false)
+      console.error("Feedback submitted successfully:", error);
+      setErrorMessage("Failed to submitted Feedback");
       setSuccessMessage("");
     }
   };
@@ -56,13 +59,14 @@ function FeedbackTextBox({ questionId }: any) {
           <div className="alert alert-success">{successMessage}</div>
         )}
         {errorMessage && (
-          <div className="alert alert-danger">{errorMessage}</div>
+          <div className="alert  alert-danger">{errorMessage}</div>
         )}
         <div>
           <div className="d-flex justify-content-between align-items-center">
             <h5>Reason For Overriding</h5>
             <button type="submit" className="btn btn-success">
-              Submit Feedback
+            {!loading ? "Submit Feedback" : <div className="spinner-border text-white" role="status" /> }
+
             </button>
           </div>
           <ReactQuill

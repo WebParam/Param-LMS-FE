@@ -4,23 +4,23 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 function Layout({ children, params }: { children: React.ReactNode; params: {id : string} }) {
   const searchParams = useSearchParams();
-  const name = searchParams.get("title");
+  const page = searchParams.get("page");
 
   const pathname = usePathname();
   const router = useRouter();
   const homeTitle = "homeTitle=FACILITATOR DASHBOARD";
   const baseUrl = `/protected/admin/assessments-assignments/pages`;
+  const buttonTitle="Dashboard"
   const links = [
-    { name: "Assessments", path: `${baseUrl}/assessments`, url: `${baseUrl}/assessments?title=Mark%20Assessments&${homeTitle}`},
-    { name: "Assignments", path: `${baseUrl}/assignments`, url: `#${baseUrl}/assignments?title=Mark%20Assignments&${homeTitle}` },
+    { name: "Assessments", path: `${baseUrl}/assessments`, url: `${baseUrl}/assessments?title=Mark%20Assessments&${homeTitle}&page=grouped&button-title=${buttonTitle}`},
+    { name: "Assignments", path: `${baseUrl}/assignments`, url: `${baseUrl}/assignments?title=Mark%20Assignments&${homeTitle}&page=grouped&button-title=${buttonTitle}` },
   ];
 
-  const path = name == "Mark Assesments" ? "assessments" : "assignments"
 
   return (
     <>
      { 
-    name == "Mark Assessment" &&
+   page &&
      <div className="card p-relative o-hidden mb-2">
         <div
           className="card-header card-header-tabs-basic nav px-0"

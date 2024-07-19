@@ -24,20 +24,20 @@ export default function FeedbackModal(props: any) {
       const submitResponse = await submitFacilitatorAssessment(formData);
       if (!submitResponse.id) {
         setFormError("Failed to submit assessment");
-        setFormSuccess(""); // Clear success message if there is an error
+        setFormSuccess(""); 
         return;
       }
-      setFormError(""); // Clear error message if successful
+      setFormError(""); 
       setFormSuccess("Assessment submitted successfully");
       setTimeout(() => {
-        setFormSuccess(""); // Clear success message after a few seconds
+        setFormSuccess(""); 
         props.onHide();
         router.back();
       }, 3000);
     } catch (error) {
       console.error("Error submitting assessment:", error);
       setFormError("Failed to submit assessment");
-      setFormSuccess(""); // Clear success message if there is an error
+      setFormSuccess(""); 
     }
   };
 

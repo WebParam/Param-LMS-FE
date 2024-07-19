@@ -2,6 +2,7 @@ import Link from "next/link";
 import { NextPage } from "next";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
+import SkeletonLoader from "@/components/skeleton/SkeletonLoader";
 
 const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   const pathname = usePathname();
@@ -18,7 +19,7 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   return (
     <>
       <tbody className="list" id="staff">
-        {list &&
+        {list.length > 0 ?
           list.map((data: ICourseAssessment) => (
             <tr key={data.assessmentId} className="selected">
               <td
@@ -56,7 +57,28 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
                 </Link>
               </td>
             </tr>
-          ))}
+          )):  <>
+           <tr className="selected">
+          <td colSpan={10}>
+            <SkeletonLoader width="100%" height="2em" />
+          </td>
+          
+        </tr>
+        <tr className="selected">
+          <td colSpan={10}>
+            <SkeletonLoader width="100%" height="2em" />
+          </td>
+          
+        </tr> <tr className="selected">
+          <td colSpan={10}>
+            <SkeletonLoader width="100%" height="2em" />
+          </td>
+          
+        </tr>
+          </>
+          
+          
+          }
       </tbody>
     </>
   );
