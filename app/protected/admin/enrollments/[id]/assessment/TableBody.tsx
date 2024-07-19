@@ -24,29 +24,29 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
     <tr>
       <td>2024</td>
       <td>2001476</td>
-      <td>assessment 1</td>
+      <td>Operational Efficiency Analysis</td>
       <td>86%</td>
       <td>Competent</td>
     </tr>
     <tr>
       <td>2024</td>
       <td>2001434</td>
-      <td>assessment 2</td>
-      <td>86%</td>
+      <td>Project Feasibility Study</td>
+      <td>63%</td>
       <td>Competent</td>
     </tr>
     <tr>
       <td>2024</td>
       <td>2001511</td>
-      <td>assessment 2</td>
+      <td>Strategic Planning</td>
       <td>94%</td>
       <td>Competent</td>
     </tr>
     <tr>
       <td>2024</td>
       <td>2001588</td>
-      <td>assessment 5</td>
-      <td>94%</td>
+      <td>Risk Assessment</td>
+      <td>71%</td>
       <td>Competent</td>
     </tr>
   </tbody>

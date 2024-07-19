@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+"use server";
 
 export const options = {
   responsive: true,
@@ -20,7 +21,6 @@ export const barDescriptions = [
 ];
 
 export const data = async ({ pending, completed }: { pending: number[];  completed: number[]}) => {
-  // "use server";
 
   return {
     labels,

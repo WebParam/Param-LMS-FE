@@ -1,7 +1,7 @@
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
-import { NextPage } from "next";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
+
 async function Table({ list }: { list: CourseApplicants[] }) {
 
   return (

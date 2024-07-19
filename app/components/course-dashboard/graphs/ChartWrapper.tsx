@@ -36,7 +36,7 @@ export default function ChartWrapper({
           id="repeatCustomerRateChartLegend"
           className="chart-legend chart-legend--horizontal mt-16pt"
         >
-          {barDescriptions.map((data: barDescriptionType) => (
+          {barDescriptions && barDescriptions?.map((data: barDescriptionType) => (
             <span key={data.color} className="chart-legend-item">
               <i
                 className="chart-legend-indicator"
