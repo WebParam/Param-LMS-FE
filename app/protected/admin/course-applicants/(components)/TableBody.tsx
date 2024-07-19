@@ -5,11 +5,22 @@ import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
   const PASSMARK = 50;
 
+  const people = [
+    { name: "Alice", surname: "Smith" },
+    { name: "Bob", surname: "Johnson" },
+    { name: "Charlie", surname: "Williams" },
+    { name: "Diana", surname: "Jones" },
+    { name: "Edward", surname: "Brown" },
+    { name: "Fiona", surname: "Davis" },
+    { name: "George", surname: "Miller" },
+    {name:"Maxwell", surname:"mhlanga"}
+  ];
+
   return (
     <>
       <tbody className="list" id="staff">
         {list &&
-          list.map((data: any) => (
+          list.map((data: any, index:number) => (
             <tr key={data.id} className="selected">
               
               <td className="text-center js-lists-values-projects small">
@@ -29,7 +40,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
               </td>
 
               <td className="text-center js-lists-values-projects small">
-                {data.name} {data.surname}
+                {data.name||people[index % people.length]?.name} {data.surname||people[index % people.length]?.surname}
               </td>
 
               <td className="text-center js-lists-values-projects small">

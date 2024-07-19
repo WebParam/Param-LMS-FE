@@ -1,6 +1,6 @@
-import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 
-const list = [
+
+export const listData = [
   {
     id: "668fa466bf5a11257f144e95",
   userId: "668fa466bf5a11257f144e95",
@@ -10,16 +10,23 @@ const list = [
   {
     id: "668fa266bf5a11257f144e95",
   userId: "668fa466bf5a11257f144e95",
-  name: undefined,
-  surname: undefined,
+  name: 'Sihle',
+  surname: 'Ncube',
   status: 3},
   {
     id: "668fa466bf5a11257f144e95",
   userId: "668fa466bf5a11257f144e95",
-  name: undefined,
-  surname: undefined,
+  name: 'Michelle',
+  surname: 'Mdluli',
+  status: 3
+},
+{
+  id: "668fa466bf5a11257f334e95",
+  userId: "668fa466bf5a11257f144e95",
+  name: 'Siphosethu',
+  surname: 'Ndaba',
   status: 3
 }
 ]
   
-export default list;
+export default listData;

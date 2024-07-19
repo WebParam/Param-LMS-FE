@@ -16,6 +16,14 @@ const listOfDocumentNames = [
  {
   _id: '66754b17c66474c142f6b9f6',
   name: 'Learning Agreement',
+ },
+ {
+  _id:'66754b17c66474c142f6b9f6',
+  name: 'contracts'
+ },
+ {
+  _id:'66754b17c66474c142f6b9f6',
+  name: 'other'
  }
 ]
 

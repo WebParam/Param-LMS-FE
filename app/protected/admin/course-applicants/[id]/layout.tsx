@@ -73,9 +73,9 @@ function Layout({ children }: { children: React.ReactNode }) {
       </div>
       <div className="card-footer p-8pt">
         <button 
-        className="btn btn-primary enrolBtn" 
+        className="btn btn-primary enrolBtn notComplete" 
         onClick={enrollStudent}
-        disabled={allDocsAccepted}
+        // disabled={allDocsAccepted}
         >
             {loading ? <div className="spinner-border text-light spinner-border-sm" role="status" />:'Enroll Student'}
         </button>

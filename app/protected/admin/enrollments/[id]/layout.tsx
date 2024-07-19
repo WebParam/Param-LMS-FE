@@ -8,8 +8,8 @@ function Layout({ children }: { children: React.ReactNode }) {
   const id = searchParams.get("id");
   const router = useRouter();
   const tabs = [
-    { name: "analytics", title: "Analytics", url: `/protected/admin/enrollments/${id}/analytics` },
-    { name: "profile", title: "profile", url: `/protected/admin/enrollments/${id}/profile` },
+    // { name: "analytics", title: "Analytics", url: `/protected/admin/enrollments/${id}/analytics` },
+    // { name: "profile", title: "profile", url: `/protected/admin/enrollments/${id}/profile` },
     { name: "sor", title: "SOR", url: `/protected/admin/enrollments/${id}/sor` },
     { name: "assessment", title: "Assessment", url: `/protected/admin/enrollments/${id}/assessment` },
     { name: "assignment", title: "Assignment", url: `/protected/admin/enrollments/${id}/assignment` },
