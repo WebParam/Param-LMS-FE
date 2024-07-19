@@ -85,6 +85,8 @@ export const updateCourse = async (id: string, formData: FormData) => {
 
 
 export const getCourseGraphs = async (id: string) => {
+  noStore();
+
   try {
     const resp = await get( `${rAnalyticUrl}/GraphData/CourseAnalytics/${id}`);
     const data = resp.data;

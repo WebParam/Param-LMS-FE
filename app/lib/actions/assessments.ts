@@ -4,6 +4,7 @@ import { get, post, put } from "../utils";
 import { rAggregatorAssessmentUrl, rAssessmentUrl, twAssessmentUrl, wAssessmentUrl } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
 import { IMarkStudentAssessment, ISubmitFacilitatorAssessment } from "@/app/interfaces/assessments";
+import { unstable_noStore as noStore } from "next/cache";
 
 export const createAssessment = async (
   courseId: string,
@@ -34,6 +35,8 @@ export const createAssessment = async (
 };
 
 export const getAssessments = async (id: string) => {
+  noStore();
+
   try {
     const resp = await get(`${rAssessmentUrl}/Assessments/GetNewAssessments/${id}`);
     console.log(resp)
