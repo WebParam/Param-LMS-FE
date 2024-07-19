@@ -16,7 +16,6 @@ function UnitStandardTable({ path }: UnitStandardTableProps) {
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const [list, setList] = useState<IUnitStandard[]>([]);
-
   const courseId = "66433416a454f78732f274ba";
 
   const { studentId  } = useParams<{
@@ -54,8 +53,6 @@ function UnitStandardTable({ path }: UnitStandardTableProps) {
             path === "course"
               ? arrUrl.join("/") + `/live-classes/${data.id}?title=${data.title}&home_title=Live Classes Analytics` :    
               arrUrl.join("/") + `${studentId}/${data.id}?title=${data.title}`
-
-
           return (
             <Module
               key={data.id}

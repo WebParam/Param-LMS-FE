@@ -10,10 +10,11 @@ import { getStudentAssessmentAnswers } from "@/app/lib/actions/assessments";
 import { IAssessmentStudentAnswers } from "@/app/interfaces/assessments";
 import { useRouter } from "next/navigation";
 import LongQuestionSkeleton from "@/components/skeleton/LongQuestionSkeleton";
+import {data} from "./data"
 
 function Page({ params }: { params: { assignmentId: string; id: string } }) {
   const [studentAssessment, setStudentAssessment] =
-    useState<IAssessmentStudentAnswers | null>(null);
+    useState<IAssessmentStudentAnswers >(data);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 2;

@@ -27,7 +27,7 @@ const Menu: NextPage<{ sideTabs: SideTab[] }> = ({ sideTabs }) => {
               <li
                 key={tab.url}
                 className={`sidebar-menu-item ${
-                  pathname == tab.url ? "active" : ""
+                  pathname === tab.url ? "active" : ""
                 }`}
               >
                 <a className="sidebar-menu-button" href={tab.url}>

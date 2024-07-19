@@ -5,15 +5,17 @@ import { useEffect, useState } from "react";
 import Pagination from "@/app/components/Pagination";
 import Button from "react-bootstrap/Button";
 import MyVerticallyCenteredModal from "./Modal";
+import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import { getStudentAssessmentAnswers } from "@/app/lib/actions/assessments";
 import { IAssessmentStudentAnswers } from "@/app/interfaces/assessments";
 import { useRouter } from "next/navigation";
+import FeebbackTextBox from "./FeebbackTextBox";
 import LongQuestionSkeleton from "@/components/skeleton/LongQuestionSkeleton";
 import {data} from "./data"
 
 function Page({ params }: { params: { assessmentId: string; id: string } }) {
   const [studentAssessment, setStudentAssessment] =
-    useState<IAssessmentStudentAnswers | null>(data);
+    useState<IAssessmentStudentAnswers>(data);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 2;
@@ -28,19 +30,21 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
 
   const getAssessments = async () => {
     try {
+     
       const assessments: IAssessmentStudentAnswers =
         await getStudentAssessmentAnswers(userId, assessmentId);
       console.log("API Response:", assessments);
       if (assessments && assessments.answers) {
-        setLoading(false);
+        setLoading(false)
         setStudentAssessment(assessments);
         console.log("State Updated:", assessments);
       } else {
-        setLoading(false);
+
+        setLoading(false)
         console.error("Unexpected response structure:", assessments);
       }
     } catch (error) {
-      setLoading(false);
+      setLoading(false)
       console.error("Error fetching assessments:", error);
     }
   };
@@ -71,19 +75,23 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
               studentMultipleChoiceAnswer={data.studentMultipleChoiceAnswer!}
             />
           ) : (
-            <LongQuestion
-              key={data.questionId}
-              questionName={data.description}
-              questionDescription={data.description}
-              questionAnswer={data.studentLongTextAnswer!}
-              questionScore={data.score}
-              rubric={data.rubrics}
-            />
+            <>
+              <LongQuestion
+                key={data.questionId}
+                questionName={data.description}
+                questionDescription={data.description}
+                questionAnswer={data.studentLongTextAnswer!}
+                questionScore={data.score}
+                rubric={data.rubrics}
+              />
+              <FeebbackTextBox questionId={data.questionId} />
+            </>
           )
         )
       )}
+      {}
 
-      <div className="card mb-24pt">
+      <div className="card mb-24pt mt-5">
         <Pagination
           listLength={studentAssessment?.answers.length || 0}
           indexOfLastItem={indexOfLastItem}
@@ -92,19 +100,7 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
           ITEMSPERPAGE={ITEMSPERPAGE}
         />
       </div>
-      <div className="card mb-0">
-        <Button variant="success" onClick={() => setModalShow(true)}>
-          Submit
-        </Button>
-
-        <MyVerticallyCenteredModal
-          show={modalShow}
-          onHide={() => {
-            setModalShow(false);
-          }}
-        />
-      </div>
-    </>
+         </>
   );
 }
 
