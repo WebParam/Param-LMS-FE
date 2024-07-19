@@ -5,8 +5,8 @@ export default async function Assessments({ list }: any) {
 
 const baseUrl = "/protected/admin/"
   const pathName = usePathname();
-  const pageUrl = pathName === "/protected/admin/moderator" ? `${baseUrl}/moderator` :  `${baseUrl}/assessments-assignments/pages/assessments`
-  const homeTitle = "homeTitle=Mark Assessments";
+  const pageUrl = pathName === "/protected/admin/moderator" ? `${baseUrl}/moderator` :  pathName === "/protected/admin/moderator-feedback" ? `${baseUrl}/moderator-feedback` :  `${baseUrl}/assessments-assignments/pages/assessments`
+  const homeTitle = pathName === "/protected/admin/moderator-feedback" ? "homeTitle=Assessment feedback" : "homeTitle=Mark Assessments"
   const buttonTitle = "button-title=Assessments";
   return (
     <>

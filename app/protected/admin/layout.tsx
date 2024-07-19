@@ -10,7 +10,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     {
       name: "Analytics",
       url: "#",
-      icon: "list",
+      icon: "show_chart",
+
       children: [
         {
           name: "Course Analytics",
@@ -27,11 +28,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           url: `/protected/admin/grouped-progress/1/assessments`,
           icon: "show_chart",
         },
-        {
-          name: "Live Classes",
-          url: `/protected/admin/live-classes?title=Live Classes Analytics&home_title=Home`,
-          icon: "dashboard",
-        },
+       
       ],
     },
     {
@@ -42,7 +39,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         {
           name: "Manage Courses",
           url: `/protected/admin/courses`,
-          icon: "create_new_folder",
+          icon: "folder_open",
         },
         {
           name: "Course Applicants",
@@ -51,21 +48,22 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         },
         {
           name: "Edit Course",
-          url: `/protected/admin/courses`,
-          icon: "create_new_folder",
+          url: `#/protected/admin/courses`,
+          icon: "edit",
         },
         {
           name: "Create Course",
-          url: `/protected/admin/courses`,
-          icon: "create_new_folder",
+          url: `/protected/admin/courses/create`,
+          icon: "add_box",
         },
         {
           name: "Enrollments",
           url: `/protected/admin/enrollments`,
-          icon: "apps",
+          icon: "assignment_turned_in",
         },
       ],
-    },
+    }
+,    
 
     {
       name: "Facilitator",
@@ -73,10 +71,16 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       icon: "dashboard",
     },
     {
-      name: "Moderator",
-      url: `/protected/admin/moderator?title=Mark Assessments&homeTitle=HOME`,
-      icon: "dashboard",
-    },
+    name: "Moderator",
+    url: "#",
+    icon: "supervisor_account",
+    children: [
+      {
+        name: "Assessments",
+        url: `/protected/admin/moderator?title=Mark Assessments&homeTitle=HOME`,
+        icon: "assignment_ind",
+      },
+    ]}
   ];
 
   return (

@@ -25,9 +25,7 @@ const DashboardCards = () => {
     { link: "#", icon: "schedule", title: "Schedule Class" },
     { link: "#", icon: "createAssessment", title: "Create Assessment" },
     { link: "#", icon: "leaderBoard", title: "Leader Board" },
-    { link: `/protected/admin/feedback/page?title=${encodeURIComponent(
-        "Moderator Feedback"
-      )}&homeTitle=Home`, icon: "feedback", title: "Moderator Feedback" },
+    { link: `/protected/admin/moderator-feedback?title=Assessments Feedback&homeTitle=HOME`, icon: "feedback", title: "Moderator Feedback" },
     {
       link: `/protected/admin/assessments-assignments/pages/assessments?title=${encodeURIComponent(
         "Mark Assessments"

@@ -31,6 +31,12 @@ import {
   barDescriptions as CommentsChartBarDescription,
 } from "@/app/components/course-dashboard/graphs/CommentsChart/data";
 
+import {
+  options as LiveClassesOptions,
+  data as LiveClassesdData,
+  barDescriptions as LiveClassesDescription,
+} from "@/app/components/course-dashboard/graphs/LiveClasses/data";
+
 import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/course-dashboard/graphs/StudentsProgressStatus/data";
 
 import ChartLayout from "@/app/components/course-dashboard/graphs/ChartLayout";
@@ -142,6 +148,16 @@ export default async function Page() {
             type="line"
           />
         </div>
+        <div
+      className="col-lg-6 w-100 col-md-12 card-group-row__col">
+        <ChartWrapper
+          title="Live Classes Attended"
+          barDescriptions={LiveClassesDescription}
+          options={LiveClassesOptions}
+          data={LiveClassesdData}
+          type="bar"
+        />
+      </div>
       </div>
 
       <div className="mb-24pt mb-sm-0 mr-sm-24pt">
