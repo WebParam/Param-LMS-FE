@@ -11,25 +11,26 @@ const MonthSelector: FC<MonthSelectorProps> = ({ selectedMonth, setSelectedMonth
     'January', 'February', 'March', 'April', 'May', 'June', 
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  const currentMonthIndex = months.indexOf(selectedMonth);
+
+  const handlePreviousMonth = () => {
+    const currentIndex = months.indexOf(selectedMonth);
+    const previousIndex = (currentIndex === 0) ? months.length - 1 : currentIndex - 1;
+    setSelectedMonth(months[previousIndex]);
+  };
+
+  const handleNextMonth = () => {
+    const currentIndex = months.indexOf(selectedMonth);
+    const nextIndex = (currentIndex === months.length - 1) ? 0 : currentIndex + 1;
+    setSelectedMonth(months[nextIndex]);
+  };
 
   return (
     <div className="logbook-header">
-      <button
-        className="nav-button"
-        onClick={() => setSelectedMonth(months[Math.max(currentMonthIndex - 1, 0)])}
-      >
-        &lt;
-      </button>
+      <button className="nav-button-prev" onClick={handlePreviousMonth}>&lt;</button>
       <div className="month-name">
         {selectedMonth} Logbook
       </div>
-      <button
-        className="nav-button"
-        onClick={() => setSelectedMonth(months[Math.min(currentMonthIndex + 1, months.length - 1)])}
-      >
-        &gt;
-      </button>
+      {/* <button className="nav-button-next nav-button-right" onClick={handleNextMonth}   >  &gt;</button> */}
     </div>
   );
 }
