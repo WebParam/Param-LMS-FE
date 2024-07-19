@@ -29,21 +29,21 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
 
   const getAssessments = async () => {
     try {
+     
       const assessments: IAssessmentStudentAnswers =
         await getStudentAssessmentAnswers(userId, assessmentId);
       console.log("API Response:", assessments);
       if (assessments && assessments.answers) {
-        setLoading(false);
+        setLoading(false)
         setStudentAssessment(assessments);
         console.log("State Updated:", assessments);
       } else {
-        setLoading(false);
 
+        setLoading(false)
         console.error("Unexpected response structure:", assessments);
       }
     } catch (error) {
-      setLoading(false);
-
+      setLoading(false)
       console.error("Error fetching assessments:", error);
     }
   };

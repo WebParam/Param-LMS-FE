@@ -21,13 +21,13 @@ export const rQuizUrl = `https://khumla-${envDev}-quiz-read.azurewebsites.net/ap
 export const wAudioGenerateUrl = `https://khumla-${envDev}-audio-generate.azurewebsites.net/api/v1`;
 
 export const wAssessmentUrl =
-  "https://khumla-development-assessment-write.azurewebsites.net/api/v1";
+  "https://khumla-dev-assessment-write.azurewebsites.net/api/v1";
 
   export const twAssessmentUrl =
   `https://khumla-${test}-assessment-write.azurewebsites.net/api/v1`;
 
   
-export const rAssessmentUrl = `https://khumla-${env}-assessment-read.azurewebsites.net/api/v1`;
+export const rAssessmentUrl = `https://khumla-testing-assessment-write.azurewebsites.net/api/v1`;
 
 
 export const wQuestionUrl = `https://khumla-${envDev}-assessment-write.azurewebsites.net/api/Questions`;
