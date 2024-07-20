@@ -8,7 +8,6 @@ import MyVerticallyCenteredModal from "./Modal";
 import { getStudentAssessmentAnswers } from "@/app/lib/actions/assessments";
 import { IAssessmentStudentAnswers } from "@/app/interfaces/assessments";
 import { useRouter } from "next/navigation";
-import LongQuestionSkeleton from "@/components/skeleton/LongQuestionSkeleton";
 import {data} from "./data"
 
 function Page({ params }: { params: { assessmentId: string; id: string } }) {
@@ -54,12 +53,8 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
       <div className="page-separator">
         <div className="page-separator__text">Questions</div>
       </div>
-      {loading ? (
-        <>
-          <LongQuestionSkeleton />
-          <LongQuestionSkeleton />
-        </>
-      ) : (
+      {
+       
         currentItems.map((data) =>
           data.questionType === "Quiz" ? (
             <MultipleChoiceQuestion
@@ -81,7 +76,7 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
             />
           )
         )
-      )}
+      }
 
       <div className="card mb-24pt">
         <Pagination

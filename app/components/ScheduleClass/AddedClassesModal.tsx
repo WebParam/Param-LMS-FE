@@ -1,5 +1,5 @@
-"use client"; // Add this line at the top
-import "../../css/scheduleclassform.css"; // Import the CSS file
+"use client"; 
+import "../../css/scheduleclassform.css"; 
 
 import React, { useState, FormEvent, useEffect } from "react";
 
@@ -39,7 +39,7 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, select
     const [hours, minutes] = startTime.split(":").map(Number);
     const startDate = new Date();
     startDate.setHours(hours, minutes);
-    startDate.setMinutes(startDate.getMinutes() + 60); // Add 60 minutes for 1 hour interval
+    startDate.setMinutes(startDate.getMinutes() + 60); 
     const endHours = startDate.getHours().toString().padStart(2, "0");
     const endMinutes = startDate.getMinutes().toString().padStart(2, "0");
     return `${endHours}:${endMinutes}`;
@@ -55,7 +55,6 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, select
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
     onClose();
   };
 

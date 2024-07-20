@@ -9,7 +9,6 @@ import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import { getStudentAssessmentAnswers } from "@/app/lib/actions/assessments";
 import { IAssessmentStudentAnswers } from "@/app/interfaces/assessments";
 import { useRouter } from "next/navigation";
-import LongQuestionSkeleton from "@/components/skeleton/LongQuestionSkeleton";
 import {data} from "./data"
 
 function Page({ params }: { params: { assignmentId: string; id: string } }) {
@@ -55,9 +54,7 @@ function Page({ params }: { params: { assignmentId: string; id: string } }) {
       <div className="page-separator">
         <div className="page-separator__text">Questions</div>
       </div>
-      {loading
-        ? [1, 2].map((data) => <LongQuestionSkeleton />)
-        : currentItems.map(
+      { currentItems.map(
             (data) =>
               data.questionType !== "Quiz" && (
                 <LongQuestion
