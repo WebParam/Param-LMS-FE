@@ -12,15 +12,15 @@ const withAuth = <P extends object>(
     const isAuthorised = () => loggedInUser && loggedInUser.role == "Admin";
 
     useEffect(() => {
-      // const checkAuth = async () => {
-      //   if (!loggedInUser) {
-      //     router.replace("/auth/login");
-      //   } else if (!isAuthorised()) {
-      //     router.replace("/protected/student/course/all-courses");
-      //   }
-      // };
+      const checkAuth = async () => {
+        if (!loggedInUser) {
+          router.replace("/auth/login");
+        } else if (!isAuthorised()) {
+          router.replace("/protected/student/course/all-courses");
+        }
+      };
 
-      // checkAuth();
+      checkAuth();
     }, [loggedInUser]);
 
     return (

@@ -1,5 +1,5 @@
 "use client"; 
-import "../../css/ScheduleClassForm.css"; 
+import "../../css/scheduleclassform.css"; 
 
 import React, { useState, FormEvent, useEffect } from "react";
 
