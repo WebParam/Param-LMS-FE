@@ -83,9 +83,9 @@ const Body = () => {
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: 112 },
     { name: "Matriculated", icon: "book", data: 5 },
-    { name: "Graduated", icon: "help", data: 10 },
+    { name: "Graduated", icon: "school", data: 79 },
     { name: "Employed", icon: "list", data: 4 },
-    { name: "Unemployed", icon: "cloud_download", data: 79 },
+    { name: "Unemployed", icon: "help", data: 10 },
   ];
   return (
     <>
