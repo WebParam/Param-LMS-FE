@@ -31,6 +31,7 @@ import { barDescriptions as StudentsProgressStatusDescription } from "@/app/comp
 import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/AvgTimeSpent";
 import { StudentsProgressStatus } from "@/app/components/course-analytics/graphs/StudentsProgressStatus/StudentsProgressStatus";
+import Link from 'next/link';
 
 function Layout({ children }: { children: React.ReactNode }) {
 
@@ -107,24 +108,20 @@ function Layout({ children }: { children: React.ReactNode }) {
           />
         </div>
       </div>
-      <div className="card p-relative o-hidden mb-0">
+      <div className="card  mb-0">
         <div
           className="card-header card-header-tabs-basic nav px-0"
-          role="tablist"
         >
           {tabs.map((tab) => (
-            <a
+            <Link
               key={tab.name}
-              onClick={()=> router.replace(`${tab.url}?id=${id}&name=${name}`)}
+              href={`${tab.url}?id=${id}&name=${name}`}
               className={pathname.includes(tab.name) ? "active" : ""}
-              data-toggle="tab"
-              role="tab"
-              aria-selected="true"
             >
               <span className="flex d-flex flex-column">
                 <strong className="card-title">{tab.title}</strong>
               </span>
-            </a>
+            </Link>
           ))}          
         </div>
       </div>
