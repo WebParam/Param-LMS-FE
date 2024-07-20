@@ -25,7 +25,11 @@ const DashboardCards = () => {
     { link: "#", icon: "schedule", title: "Schedule Class" },
     { link: "#", icon: "createAssessment", title: "Create Assessment" },
     { link: "#", icon: "leaderBoard", title: "Leader Board" },
-    { link: `/protected/admin/moderator-feedback?title=Assessments Feedback&homeTitle=HOME`, icon: "feedback", title: "Moderator Feedback" },
+    {
+      link: `/protected/admin/moderator-feedback/pages/assessments?title=Assessments Feedback&homeTitle=HOME&page=grouped&button-title=Dashboard`,
+      icon: "feedback",
+      title: "Moderator Feedback",
+    },
     {
       link: `/protected/admin/assessments-assignments/pages/assessments?title=${encodeURIComponent(
         "Mark Assessments"
@@ -38,7 +42,7 @@ const DashboardCards = () => {
 
   return (
     <Container className="mt-5 m-auto">
-      <PageHeader title="Facilitator Dashboard"/>
+      <PageHeader title="Facilitator Dashboard" />
       <Row className="mt-4 ml-5 justify-content-center">
         {cardData.map((card, index) => (
           <Col key={index} md={6} lg={4} className="mb-4 mx-auto">

@@ -1,43 +1,102 @@
 "use client";
 import Link from "next/link";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Dropdown from 'react-bootstrap/Dropdown';
 
-function Layout({ children, params }: { children: React.ReactNode; params: {id : string} }) {
+
+function Layout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: { id: string };
+}) {
   const searchParams = useSearchParams();
   const page = searchParams.get("page");
+  const title = searchParams.get("title");
+  const [pageTitle, setPageTitle] = useState<string>("");
+  const [tabName, setTabName] = useState<string>("Pending")
 
   const pathname = usePathname();
   const router = useRouter();
   const homeTitle = "homeTitle=FACILITATOR DASHBOARD";
   const baseUrl = `/protected/admin/assessments-assignments/pages`;
-  const buttonTitle="Dashboard"
+  const buttonTitle = "Dashboard";
+
+  
   const links = [
-    { name: "Assessments", path: `${baseUrl}/assessments`, url: `${baseUrl}/assessments?title=Mark%20Assessments&${homeTitle}&page=grouped&button-title=${buttonTitle}`},
-    { name: "Assignments", path: `${baseUrl}/assignments`, url: `${baseUrl}/assignments?title=Mark%20Assignments&${homeTitle}&page=grouped&button-title=${buttonTitle}` },
+    {
+      name: "Pending",
+      path: `Pending`,
+      url: `${baseUrl}/${pageTitle}?${pageTitle === "assessments" ? "title=Mark%20Assessments" : "title=Mark%20Assignments"}&page=grouped&homeTitle=HOME&${buttonTitle}`
+    },
+    {
+      name: "Completed",
+      path: `Completed`,
+      url: `${baseUrl}/${pageTitle}?${pageTitle === "assessments" ? "title=Mark%20Assessments" : "title=Mark%20Assignments"}&page=grouped&homeTitle=HOME&${buttonTitle}`
+    }
   ];
 
+  useEffect(() => {
+    if (title == "Mark Assessments") {
+      setPageTitle("assessments");
+      return;
+    }
+    setPageTitle("assignments");
+  }, [title]);
+
+
+  const chooseTask = () => {
+    if(title == "Mark Assessments"){
+      router.push(`${baseUrl}/assignments?title=Mark%20Assignments&${homeTitle}&page=grouped&button-title=${buttonTitle}`)
+      return;
+    }
+    router.push(`${baseUrl}/assessments?title=Mark%20Assessments&${homeTitle}&page=grouped&button-title=${buttonTitle}`)
+
+  }
 
   return (
     <>
-     { 
-   page &&
-     <div className="card p-relative o-hidden mb-2">
-        <div
-          className="card-header card-header-tabs-basic nav px-0"
-          role="tablist"
-        >
-          {links.map((l: any) => (
+      {page && (
+        <div className="card p-relative  mb-2 position-relative">
+          <div
+            className="card-header card-header-tabs-basic nav px-0"
+            role="tablist"
+          >
+        {links.map((l: any) => (
             <Link
-              className={pathname === l.path ? "active" : ""}
+            onClick={() => setTabName(l.path)}
+              className={tabName === l.path ? "active" : tabName === l.path ? "active" : ""}
               href={l.url}
             >
               <span className="flex d-flex flex-column">
                 <strong className="card-title">{l.name}</strong>
               </span>
             </Link>
-          ))}          
+          ))}   
+          </div>
+          <div
+            className="card-header card-header-tabs-basic nav px-0 position-absolute right-0 mt-2 mr-2 top-10"
+            role="tablist"
+          >
+     <Dropdown>
+      <Dropdown.Toggle  variant="success" id="dropdown-basic">
+        Choose Task
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item onClick={chooseTask} href="#/action-1">
+        Assessments
+        </Dropdown.Item>
+        <Dropdown.Item onClick={chooseTask} href="#/action-2">Assignments</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+
+          
+          </div>
         </div>
-      </div>}
+      )}
       {children}
     </>
   );

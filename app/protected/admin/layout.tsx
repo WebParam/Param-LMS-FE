@@ -77,7 +77,12 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     children: [
       {
         name: "Assessments",
-        url: `/protected/admin/moderator?title=Mark Assessments&homeTitle=HOME`,
+        url: `/protected/admin/moderator/pages/assessment?title=Mark Assessments&homeTitle=HOME&page=grouped`,
+        icon: "assignment_ind",
+      },
+      {
+        name: "Assignments",
+        url: `/protected/admin/moderator/pages/assignments?title=Mark Assignments&homeTitle=HOME&page=grouped`,
         icon: "assignment_ind",
       },
     ]}

@@ -13,7 +13,8 @@ export default function PageHeader({
   const home_title = searchParams.get("homeTitle");
   const buttonTitle = searchParams.get("button-title") ?? "Go Back";
   const pathName = usePathname();
-  const isDashboard = pathName.includes("/protected/admin/facilitator")  && true;
+  const page = searchParams.get("page");
+  const isDashboard = pathName === ("/protected/admin/facilitator");
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
@@ -30,20 +31,11 @@ export default function PageHeader({
                 <li className="breadcrumb-item active">{title}</li>
               </ol>
 
-              <h5 className="mt-2">Facilitator : MS K Ngubani</h5>
+              <h5 className="mt-2">Moderator : MS K Ngubani</h5>
             </div>
           </div>
           {!isDashboard && (
-            <button onClick={() => 
-           {
-            if(buttonTitle == "Dashboard"){
-                router.push("/protected/admin/facilitator?title=Facilitator Dashboard&homeTitle=HOME")
-              return
-              }
-              router.back();
-           }
-
-            } className="btn btn-success">
+            <button onClick={() => router.back()} className="btn btn-success">
               {buttonTitle}
             </button>
           )}

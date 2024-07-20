@@ -5,7 +5,7 @@ export default async function Assessments({ list }: any) {
 
 const baseUrl = "/protected/admin/"
   const pathName = usePathname();
-  const pageUrl = pathName === "/protected/admin/moderator" ? `${baseUrl}/moderator` :  pathName === "/protected/admin/moderator-feedback" ? `${baseUrl}/moderator-feedback` :  `${baseUrl}/assessments-assignments/pages/assessments`
+  const pageUrl = pathName === "/protected/admin/moderator/pages/assessment" ? `${baseUrl}/moderator/pages/assessment` :  pathName === "/protected/admin/moderator-feedback/pages/assessments" ? `${baseUrl}/moderator-feedback/pages/assessments` :  `${baseUrl}/assessments-assignments/pages/assessments`
   const homeTitle = pathName === "/protected/admin/moderator-feedback" ? "homeTitle=Assessment feedback" : "homeTitle=Mark Assessments"
   const buttonTitle = "button-title=Assessments";
   return (
@@ -59,9 +59,25 @@ const Assessment = ({
           <div className="d-flex flex-column flex">
             <div className="posts-card-popular__title card-body">
               <small className="text-muted text-uppercase">blog</small>
-              <h4 className="card-title m-0">
+              <h6 
+              className="card-title m-0 mb-2">
                 <a href={url}>{title}</a>
-              </h4>
+              </h6>
+              <h6
+                   style={{fontSize:"10px"}}
+              className=" m-0">
+                <a href={url}>Assigned by : MS Khululeka</a>
+              </h6>
+              <h6
+                   style={{fontSize:"10px"}}
+              className=" m-0">
+                <a href={url}>At : 12 July 2023</a>
+              </h6>
+              <h6
+                   style={{fontSize:"10px"}}
+              className=" m-0">
+                <a href={url}>Due : 5 August 2023</a>
+              </h6>
             </div>
           </div>
           <Link href={url}>
