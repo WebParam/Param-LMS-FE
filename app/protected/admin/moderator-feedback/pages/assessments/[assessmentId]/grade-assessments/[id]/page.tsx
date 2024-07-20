@@ -94,18 +94,7 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
           ITEMSPERPAGE={ITEMSPERPAGE}
         />
       </div>
-      <div className="card mb-0">
-        <Button variant="success" onClick={() => setModalShow(true)}>
-          Submit
-        </Button>
-
-        <MyVerticallyCenteredModal
-          show={modalShow}
-          onHide={() => {
-            setModalShow(false);
-          }}
-        />
-      </div>
+     
     </>
   );
 }

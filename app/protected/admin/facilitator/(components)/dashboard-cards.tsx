@@ -26,7 +26,7 @@ const DashboardCards = () => {
     { link: "#", icon: "createAssessment", title: "Create Assessment" },
     { link: "#", icon: "leaderBoard", title: "Leader Board" },
     {
-      link: `/protected/admin/moderator-feedback/pages/assessments?title=Assessments Feedback&homeTitle=HOME&page=grouped&button-title=Dashboard`,
+      link: `/protected/admin/moderator-feedback/pages/assessments?title=Assessments Feedback&homeTitle=Facilitator Dashboard&page=grouped&button-title=Dashboard`,
       icon: "feedback",
       title: "Moderator Feedback",
     },

@@ -48,11 +48,10 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
               </td>
               <td className={`${align.action} js-lists-values-projects small`}>
               <Link
-                  className={`chip chip-outline-success text ${align.student_name}`}
+                  className={`chip chip-outline-success text-center`}
                   href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&title=${data.name}&homeTitle=${assessmentName}`}
                 >
-                  Grade Assessment
-                  <i className="material-icons ">assignment_turned_in</i>
+                 View Assessment
                 </Link>
               </td>
             </tr>

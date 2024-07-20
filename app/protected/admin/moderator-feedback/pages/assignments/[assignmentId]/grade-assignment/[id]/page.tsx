@@ -10,6 +10,7 @@ import { getStudentAssessmentAnswers } from "@/app/lib/actions/assessments";
 import { IAssessmentStudentAnswers } from "@/app/interfaces/assessments";
 import { useRouter } from "next/navigation";
 import {data} from "./data"
+import FeedbackTextBox from "./question-types/FeedbackTextBox";
 
 function Page({ params }: { params: { assignmentId: string; id: string } }) {
   const [studentAssessment, setStudentAssessment] =
@@ -57,6 +58,7 @@ function Page({ params }: { params: { assignmentId: string; id: string } }) {
       { currentItems.map(
             (data) =>
               data.questionType !== "Quiz" && (
+               <>
                 <LongQuestion
                   key={data.questionId}
                   questionName={data.description}
@@ -65,10 +67,17 @@ function Page({ params }: { params: { assignmentId: string; id: string } }) {
                   questionScore={data.score}
                   rubric={data.rubrics}
                 />
+                  <div className="mb-5">
+                  <FeedbackTextBox questionId={data.questionId} />
+
+
+                  </div>
+               </>
+
               )
           )}
 
-      <div className="card mb-24pt">
+      <div className="card mb-24pt ">
         <Pagination
           listLength={studentAssessment?.answers.length || 0}
           indexOfLastItem={indexOfLastItem}
@@ -77,18 +86,7 @@ function Page({ params }: { params: { assignmentId: string; id: string } }) {
           ITEMSPERPAGE={ITEMSPERPAGE}
         />
       </div>
-      <div className="card mb-0">
-        <Button variant="success" onClick={() => setModalShow(true)}>
-          Submit
-        </Button>
-
-        <MyVerticallyCenteredModal
-          show={modalShow}
-          onHide={() => {
-            setModalShow(false);
-          }}
-        />
-      </div>
+     
     </>
   );
 }

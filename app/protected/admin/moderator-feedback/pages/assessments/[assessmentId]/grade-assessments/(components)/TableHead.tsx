@@ -1,7 +1,7 @@
 const TableHead = () => {
   const headers = [
     { name: "Student Name", align: "text-center" },
-    { name: "Student ID", align: "w-25 text-center" },
+    { name: "Student ID", align: "text-center" },
     { name: "Date of Submission", align: "text-center" },
     { name: "Facilitator Mark", align: "text-center" },
     { name: "Moderator Mark", align: "text-center" },

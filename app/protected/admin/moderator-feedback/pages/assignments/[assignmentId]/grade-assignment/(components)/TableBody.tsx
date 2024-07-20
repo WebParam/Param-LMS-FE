@@ -86,15 +86,17 @@ const pdfWorkerUrl = `https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min
               <td
                 className={`${align.action} js-lists-values-projects small d-flex justify-content-center align-items-center`}
               >
-                <i onClick={() => setShowDocumentModal(true)} className="material-icons mr-8pt text-center  chip-outline-success ">
-                  visibility
-                </i>
+                 <i  onClick={() => setShowDocumentModal(true)}  className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
+                visibility
+              </i>
 
                 <Link
-                  className={`chip-outline-success `}
+                 
                   href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&title=${data.name}&homeTitle=${assessmentName}`}
                 >
-                  <i className="material-icons  ">assignment_turned_in</i>
+                <i  className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
+                assignment_turned_in
+              </i>
                 </Link>
               </td>
             </tr>
