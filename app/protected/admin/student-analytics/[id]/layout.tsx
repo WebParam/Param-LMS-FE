@@ -1,3 +1,5 @@
+"use client";
+import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import ChartWrapper from "@/app/components/course-analytics/graphs/ChartWrapper";
 import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/data";
 
@@ -30,46 +32,25 @@ import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/AvgTimeSpent";
 import { StudentsProgressStatus } from "@/app/components/course-analytics/graphs/StudentsProgressStatus/StudentsProgressStatus";
 
-type DataTiles = {
-  name: string;
-  icon: string;
-  data: number;
-};
+function Layout({ children }: { children: React.ReactNode }) {
 
-import UnitStandardTable from "../(components)/unit-standard-table";
-import PageHeader from "../../PageHeader";
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const name = searchParams.get("name");
+  const router = useRouter();
 
-export default async function Page() {
-  const dataTiles: DataTiles[] = [
-    { name: "Students", icon: "person_outline", data: 112 },
-    { name: "Modules", icon: "book", data: 5 },
-    { name: "Quizzes", icon: "help", data: 10 },
-    { name: "Assessments", icon: "list", data: 4 },
-    { name: "Documents Downloaded", icon: "cloud_download", data: 79 },
+  const tabs = [
+    { name: "sections", title: "Sections", url: `/protected/admin/student-analytics/${id}/sections` },
+    {
+      name: "assessments", title: "Assessments",
+      url: `/protected/admin/student-analytics/${id}/assessments`,
+    },
+    { name: "quizzes", title: "Quizzes", url: `/protected/admin/student-analytics/${id}/quizzes` },
   ];
-
+  
   return (
     <>
-      <div className="row mb-lg-8pt">
-        {dataTiles.map((data: DataTiles) => (
-          <div key={data.name} className="col-lg-3">
-            <div className="card">
-              <div
-                data-toggle="tab"
-                role="tab"
-                aria-selected="true"
-                className="dashboard-area-tabs__tab card-body text-center active"
-              >
-                <span className="font-weight-bold">{data.name}</span>
-                <i className="material-icons text-success icon-48pt">
-                  {data.icon}
-                </i>
-                <span className="h2 mb-0 mt-n1">{data.data}</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
@@ -126,14 +107,33 @@ export default async function Page() {
           />
         </div>
       </div>
-
-      <div className="mb-24pt mb-sm-0 mr-sm-24pt">
-        <PageHeader title="Web Development Unit Standards" />
+      <div className="card p-relative o-hidden mb-0">
+        <div
+          className="card-header card-header-tabs-basic nav px-0"
+          role="tablist"
+        >
+          {tabs.map((tab) => (
+            <a
+              key={tab.name}
+              onClick={()=> router.replace(`${tab.url}?id=${id}&name=${name}`)}
+              className={pathname.includes(tab.name) ? "active" : ""}
+              data-toggle="tab"
+              role="tab"
+              aria-selected="true"
+            >
+              <span className="flex d-flex flex-column">
+                <strong className="card-title">{tab.title}</strong>
+              </span>
+            </a>
+          ))}          
+        </div>
       </div>
 
-      <div className="card p-relative o-hidden mb-0">
-        <UnitStandardTable path="course" />
+      <div className="card mt-3">
+        {children}
       </div>
     </>
   );
-}
+};
+
+export default Layout;

@@ -1,19 +1,16 @@
 const TableHead = () => {
+
   const headers = [
-    { name: "Name", align: "pl-48pt text-left" }, 
-    { name: "Completion", align: "text-center" }, 
-    { name: "Time Spent", align: "text-left" },
-    { name: "Points", align: "text-center" },  
-    { name: "Activeness", align: "text-center" }, 
-    { name: "Questions", align: "text-center" }, 
-    { name: "Notes", align: "text-center" }, 
-    { name: "Downloads", align: "text-center" }, 
+    { name: "Assessment Name", align: "w-25 text-center" }, 
+    { name: "Attempts", align: "text-center" }, 
+    { name: "Result", align: "text-center" }, 
+    { name: "Time Spent", align: "text-center" }, 
   ];
 
   return (
     <>
       <thead>
-        <tr>
+        <tr>          
           {headers.map((header) => (
             <th key={header.name} className={header.align}>
               <a

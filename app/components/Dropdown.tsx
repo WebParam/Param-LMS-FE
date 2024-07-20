@@ -28,7 +28,7 @@ export default function Dropdown({
           <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
             {l.icon}
           </span>
-          <span className="sidebar-menu-text">{l.name}</span>
+          <span className="pl-2 sidebar-menu-text">{l.name}</span>
         </a>
       </li>
     );
