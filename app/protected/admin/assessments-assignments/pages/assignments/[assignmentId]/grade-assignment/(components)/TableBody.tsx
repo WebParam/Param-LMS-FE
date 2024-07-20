@@ -50,7 +50,7 @@ const pdfWorkerUrl = `https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min
       </Modal.Body>
     </Modal>
       <tbody className="list" id="staff">
-        {list.length > 0 ?
+        {list && 
           list.map((data: ICourseAssessment) => (
             <tr key={data.assessmentId} className="selected">
               <td
@@ -99,25 +99,8 @@ const pdfWorkerUrl = `https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min
                 </Link>
               </td>
             </tr>
-          )): <>
-          <tr className="selected">
-         <td colSpan={10}>
-           <SkeletonLoader width="100%" height="2em" />
-         </td>
-         
-       </tr>
-       <tr className="selected">
-         <td colSpan={10}>
-           <SkeletonLoader width="100%" height="2em" />
-         </td>
-         
-       </tr> <tr className="selected">
-         <td colSpan={10}>
-           <SkeletonLoader width="100%" height="2em" />
-         </td>
-         
-       </tr>
-         </>}
+          ))
+         }
       </tbody>
     </>
   );

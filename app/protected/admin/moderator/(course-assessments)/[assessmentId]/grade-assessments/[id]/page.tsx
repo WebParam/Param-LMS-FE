@@ -58,12 +58,7 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
       <div className="page-separator">
         <div className="page-separator__text">Questions</div>
       </div>
-      {loading ? (
-        <>
-          <LongQuestionSkeleton />
-          <LongQuestionSkeleton />
-        </>
-      ) : (
+  {
         currentItems.map((data) =>
           data.questionType === "Quiz" ? (
             <MultipleChoiceQuestion
@@ -87,11 +82,11 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
               <FeebbackTextBox questionId={data.questionId} />
             </>
           )
-        )
-      )}
-      {}
+        )}
 
       <div className="card mb-24pt mt-5">
+       
+
         <Pagination
           listLength={studentAssessment?.answers.length || 0}
           indexOfLastItem={indexOfLastItem}

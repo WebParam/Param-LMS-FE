@@ -19,7 +19,7 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   return (
     <>
       <tbody className="list" id="staff">
-        {list.length > 0 ?
+        {list &&
           list.map((data: ICourseAssessment) => (
             <tr key={data.assessmentId} className="selected">
               <td
@@ -49,33 +49,14 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
               </td>
               <td className={`${align.action} js-lists-values-projects small`}>
               <Link
-                  className={`chip chip-outline-success text ${align.student_name}`}
+                  className={`chip chip-outline-success text-center`}
                   href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&title=${data.name}&homeTitle=${assessmentName}`}
                 >
-                  Grade Assessment
-                  <i className="material-icons ">assignment_turned_in</i>
+                  View Assessment
                 </Link>
               </td>
             </tr>
-          )): <>
-          <tr className="selected">
-         <td colSpan={10}>
-           <SkeletonLoader width="100%" height="2em" />
-         </td>
-         
-       </tr>
-       <tr className="selected">
-         <td colSpan={10}>
-           <SkeletonLoader width="100%" height="2em" />
-         </td>
-         
-       </tr> <tr className="selected">
-         <td colSpan={10}>
-           <SkeletonLoader width="100%" height="2em" />
-         </td>
-         
-       </tr>
-         </>}
+          ))}
       </tbody>
     </>
   );

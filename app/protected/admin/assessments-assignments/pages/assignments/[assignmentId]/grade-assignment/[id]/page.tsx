@@ -55,9 +55,7 @@ function Page({ params }: { params: { assignmentId: string; id: string } }) {
       <div className="page-separator">
         <div className="page-separator__text">Questions</div>
       </div>
-      {loading
-        ? [1, 2].map((data) => <LongQuestionSkeleton />)
-        : currentItems.map(
+      { currentItems.map(
             (data) =>
               data.questionType !== "Quiz" && (
                 <LongQuestion

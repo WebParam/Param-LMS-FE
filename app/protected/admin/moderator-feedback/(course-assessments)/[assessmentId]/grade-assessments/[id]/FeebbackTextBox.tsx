@@ -67,6 +67,7 @@ function FeedbackTextBox({ questionId }: any) {
                     </div>
           <ReactQuill
           readOnly
+          placeholder="The student did not provid comprehensive details about the question asked."
             value={feedback}
             onChange={(value) => setFeedback(value)}
             style={{ color: "#252525", height: "100px" }}
