@@ -52,7 +52,7 @@ export default async function Page() {
   const data = await getCourseGraphs(courseId);
   if (!data || data.averageCompletedQuizzes === undefined) {
     console.error('Data fetch failed or averageCompletedQuizzes is undefined');
-    return; // Handle the error appropriately
+    return; 
   }
 
   const OverallQuizBarData = await OverallQuizBarDataFn(
