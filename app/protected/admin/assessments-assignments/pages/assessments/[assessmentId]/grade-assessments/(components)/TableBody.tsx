@@ -2,7 +2,6 @@ import Link from "next/link";
 import { NextPage } from "next";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
-import SkeletonLoader from "@/components/skeleton/SkeletonLoader";
 
 const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   const pathname = usePathname();

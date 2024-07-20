@@ -9,7 +9,6 @@ import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import { getStudentAssessmentAnswers } from "@/app/lib/actions/assessments";
 import { IAssessmentStudentAnswers } from "@/app/interfaces/assessments";
 import { useRouter } from "next/navigation";
-import LongQuestionSkeleton from "@/components/skeleton/LongQuestionSkeleton";
 import {data} from "./data"
 
 function Page({ params }: { params: { assignmentId: string; id: string } }) {

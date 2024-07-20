@@ -4,8 +4,6 @@ import Table from "./(components)/Table";
 import { useEffect, useState } from "react";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
 import { getStudentsAssessment } from "@/app/lib/actions/assessments";
-import dynamic from "next/dynamic";
-import FeedbackModal from "./(components)/FeedbackModal";
 
 
 const Body = ({ params }: { params: { assessmentId: string } }) => {
