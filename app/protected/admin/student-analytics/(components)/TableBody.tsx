@@ -21,7 +21,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                   </a>
                   <Link
                     href={{
-                      pathname: `/protected/admin/student-analytics/${data.student_id}/sections`,
+                      pathname: `/protected/admin/student-analytics/${data.student_id}`,
                       query: { id: data.student_id, name: data.student_name },
                     }}
                   >
