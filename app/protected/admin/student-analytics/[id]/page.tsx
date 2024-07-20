@@ -38,7 +38,7 @@ import Pagination from "@/app/components/Pagination";
 import Table from "./(resources)/sections/Table";
 import list from "./(resources)/sections/data";
 
-function Layout({ children }: { children: React.ReactNode }) {
+function Page() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -168,4 +168,4 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default Layout;
+export default Page;
