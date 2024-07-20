@@ -19,8 +19,8 @@ export default function ({
   questionScore,
   rubric
 }: Props) {
-  const [facilitatorGrades, setFacilitatorGrades] = useState<number[]>(rubric.map(r => r.facilitatorScore || 0));
-  const [moderatorGrades, setModeratorGrades] = useState<number[]>(rubric.map(r => r.moderatorScore || 0));
+  const [facilitatorGrades, setFacilitatorGrades] = useState<number[]>([5,3,4]);//rubric.map(r => r.facilitatorScore || 0)
+  const [moderatorGrades, setModeratorGrades] = useState<number[]>([2,1,3]);//rubric.map(r => r.moderatorScore || 0)
   const [isGraded, setIsGraded] = useState(false);
   const totalGrade = moderatorGrades.reduce((acc, grade) => acc + grade, 0);
 
@@ -77,7 +77,7 @@ export default function ({
               </div>
               <div className="d-flex flex-row justify-content-between mr-5">
                 <h6 className="mr-5 text-success">Facilitator</h6>
-                <h6 className="mr-4 text-danger">Moderator</h6>
+                <h6 className="mr-3 text-danger">Moderator</h6>
               </div>
             </td>
           </tr>
@@ -108,8 +108,9 @@ export default function ({
                       questionScore={Number(choice.label)}
                     />
                   </div>
-                  <div className="w-75">
+                  <div className="w-50">
                     <GradeInput
+                      isFacilitator
                       setIsGraded={setIsGraded}
                       setGrade={(grade) => handleGradeChange(index, grade)}
                       grade={moderatorGrades[index]}
