@@ -68,17 +68,21 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       icon: "dashboard",
     },
     {
-      name: "Moderator",
-      url: "#",
-      icon: "supervisor_account",
-      children: [
-        {
-          name: "Assessments",
-          url: `/protected/admin/moderator?title=Mark Assessments&homeTitle=HOME`,
-          icon: "assignment_ind",
-        },
-      ],
-    },
+    name: "Moderator",
+    url: "#",
+    icon: "supervisor_account",
+    children: [
+      {
+        name: "Assessments",
+        url: `/protected/admin/moderator/pages/assessment?title=Mark Assessments&homeTitle=HOME&page=grouped`,
+        icon: "assignment_ind",
+      },
+      {
+        name: "Assignments",
+        url: `/protected/admin/moderator/pages/assignments?title=Mark Assignments&homeTitle=HOME&page=grouped`,
+        icon: "assignment_ind",
+      },
+    ]}
   ];
 
   return (

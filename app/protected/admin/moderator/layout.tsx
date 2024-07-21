@@ -1,5 +1,5 @@
 "use client";
-import PageHeader from "@/app/protected/admin/moderator/(course-assessments)/PageHeader";
+import PageHeader from "./PageHeader";
 import { useSearchParams, usePathname } from "next/navigation";
 
 function Layout({ children , params}: { children: React.ReactNode, params:{assessmentId : string} }) {
