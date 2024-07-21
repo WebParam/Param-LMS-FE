@@ -22,7 +22,7 @@ function Layout({
   const router = useRouter();
   const homeTitle = "homeTitle=FACILITATOR DASHBOARD";
   const baseUrl = `/protected/admin/assessments-assignments/pages`;
-  const buttonTitle = "Dashboard";
+  const buttonTitle = "button-title=Dashboard";
 
   
   const links = [
