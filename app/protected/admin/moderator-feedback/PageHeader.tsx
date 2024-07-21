@@ -35,7 +35,13 @@ export default function PageHeader({
             </div>
           </div>
           {!isDashboard && (
-            <button onClick={() => router.back()} className="btn btn-success">
+            <button onClick={() => {
+              if(buttonTitle == "Dashboard"){
+                router.push("/protected/admin/facilitator?title=Facilitator Dashboard&homeTitle=HOME")
+              }else{
+                router.back();
+              }
+            }} className="btn btn-success">
               {buttonTitle}
             </button>
           )}

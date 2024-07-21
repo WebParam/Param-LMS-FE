@@ -11,7 +11,7 @@ function Layout({ children, params }: { children: React.ReactNode; params: {id :
   const baseUrl = `/protected/admin/moderator-feedback/pages`;
   const links = [
     { name: "Assessments", path: `${baseUrl}/assessments`, url: `${baseUrl}/assessments?title=Assessments Feedback&page=grouped&homeTitle=Facilitator Dashboard&button-title=Dashboard`},
-    { name: "Assignments", path: `${baseUrl}/assignments`, url: `${baseUrl}/assignments?title=Assignemnts Feedback&page=grouped&homeTitle=Facilitator Dashboard&button-title=Dashboard` },
+    { name: "Assignments", path: `${baseUrl}/assignments`, url: `${baseUrl}/assignments?title=Assignments Feedback&page=grouped&homeTitle=Facilitator Dashboard&button-title=Dashboard` },
   ];
 
 
