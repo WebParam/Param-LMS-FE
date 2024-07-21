@@ -10,7 +10,7 @@ export const options = {
 };
 
 export const barDescriptions = [
-  { description: "# of Students", color: "rgb(82 121 249)" },
+  { description: "Disabilities of Students", color: "rgb(82 121 249)" },
 ];
 
 const labels = ["Blind", "Deaf", "Dumb", "Physical", "Emotional", "Intellectual", "Multiple Disabilites"];

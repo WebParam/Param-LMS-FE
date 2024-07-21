@@ -21,7 +21,7 @@ const labels = [
 ];
 
 export const barDescriptions = [
-  { description: "# of Students", color: "rgb(82 121 249)" },
+  { description: "Socio Economic Status of Students", color: "rgb(82 121 249)" },
 ];
 
 export const data = {
