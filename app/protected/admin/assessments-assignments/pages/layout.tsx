@@ -29,12 +29,12 @@ function Layout({
     {
       name: "Pending",
       path: `Pending`,
-      url: `${baseUrl}/${pageTitle}?${pageTitle === "assessments" ? "title=Mark%20Assessments" : "title=Mark%20Assignments"}&page=grouped&homeTitle=HOME&${buttonTitle}`
+      url: `${baseUrl}/${pageTitle}?${pageTitle === "assessments" ? "title=Mark%20Assessments" : "title=Mark%20Assignments"}&page=grouped&homeTitle=Facilitator Dashboard&${buttonTitle}`
     },
     {
       name: "Completed",
       path: `Completed`,
-      url: `${baseUrl}/${pageTitle}?${pageTitle === "assessments" ? "title=Mark%20Assessments" : "title=Mark%20Assignments"}&page=grouped&homeTitle=HOME&${buttonTitle}`
+      url: `${baseUrl}/${pageTitle}?${pageTitle === "assessments" ? "title=Mark%20Assessments" : "title=Mark%20Assignments"}&page=grouped&homeTitle=Facilitator Dashboard&${buttonTitle}`
     }
   ];
 
@@ -49,10 +49,10 @@ function Layout({
 
   const chooseTask = () => {
     if(title == "Mark Assessments"){
-      router.push(`${baseUrl}/assignments?title=Mark%20Assignments&${homeTitle}&page=grouped&button-title=${buttonTitle}`)
+      router.push(`${baseUrl}/assignments?title=Mark%20Assignments&${homeTitle}&page=grouped&${buttonTitle}`)
       return;
     }
-    router.push(`${baseUrl}/assessments?title=Mark%20Assessments&${homeTitle}&page=grouped&button-title=${buttonTitle}`)
+    router.push(`${baseUrl}/assessments?title=Mark%20Assessments&${homeTitle}&page=grouped&${buttonTitle}`)
 
   }
 
