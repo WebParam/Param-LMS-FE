@@ -167,7 +167,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
           <td>
           <ul className="list-group list-group-flush">
             {list?.length > 0 ?
-              list?.map((item:any) => (
+              list?.slice(0,6).map((item:any) => (
               <li className="list-group-item p-4">
                     <i className="bi-house list-group-icon" /> {`${item.blobUrl.slice(0, 15)}... .pdf`}
               </li>
@@ -183,7 +183,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
           <td>
           <ul className="list-group list-group-flush">
           {list?.length > 0 ?
-            list?.map((item:any) => (
+            list?.slice(0,6).map((item:any) => (
               <li className="list-group-item p-4">
                 <i className="bi-house list-group-icon" /> {item.status??'Pending Review'}
               </li>
@@ -199,7 +199,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
           <td>
           <ul className="list-group list-group-flush">
             {list?.length > 0 ?
-              list?.map((item:any) => (
+              list?.slice(0,6).map((item:any) => (
                 <li className="list-group-item">
                     <button  onClick={() => {setDocumentToView(item.blobUrl), setShowDocumentModal(true), viewDocument(item.id)}} className="btn btn-light rounded-pill border-dark">View</button>
                     <select

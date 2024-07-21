@@ -38,7 +38,6 @@ function Layout({ children }: { children: React.ReactNode }) {
       router.push('/protected/admin/course-applicants')
       setLoading(false)
     }
-    console.log(res);
     setLoading(false);
 
   }
