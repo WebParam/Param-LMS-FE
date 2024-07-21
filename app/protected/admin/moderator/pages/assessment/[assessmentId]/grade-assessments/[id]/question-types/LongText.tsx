@@ -19,8 +19,8 @@ export default function ({
   questionScore,
   rubric
 }: Props) {
-  const [facilitatorGrades, setFacilitatorGrades] = useState<number[]>(rubric.map(r => r.facilitatorScore || 0));
-  const [moderatorGrades, setModeratorGrades] = useState<number[]>(rubric.map(r => r.moderatorScore || 0));
+  const [facilitatorGrades, setFacilitatorGrades] = useState<number[]>([5,3,4]);//rubric.map(r => r.facilitatorScore || 0)
+  const [moderatorGrades, setModeratorGrades] = useState<number[]>([2,1,3]);//rubric.map(r => r.moderatorScore || 0)
   const [isGraded, setIsGraded] = useState(false);
   const totalGrade = moderatorGrades.reduce((acc, grade) => acc + grade, 0);
 
