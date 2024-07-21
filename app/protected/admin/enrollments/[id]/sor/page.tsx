@@ -4,22 +4,16 @@ import Table from "./Table";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { getStudentData } from "@/app/lib/actions/courseStudents";
+import { sampleKnowledgeModules, samplePracticalSkillsModules, sampleWorkExperienceModules } from "../../(components)/data";
+import KnowledgeModules from "../../(components)/KnowledgeModule";
+import PracticalSkillsModules from "../../(components)/PracticalsModule";
+import WorkExperienceModules from "../../(components)/WorkExperienceModule";
+import { Button } from "react-bootstrap";
 
 const Body = () => {
   const pathname = usePathname();
-  const [data, setData] = useState([]);
 
-  async function studentInformation() {
-    const id = pathname.split('/')[4];
-    console.log('id from parameter', id)
-    const response = await getStudentData(id)
-    console.log('response', response)
-    setData(response)
-  }
-
-useEffect(() => {
-  // studentInformation()
-}, [])
+  console.log(pathname.split('/').includes('sor'))
 
 
   return (
@@ -30,15 +24,11 @@ useEffect(() => {
           data-lists-sort-by="js-lists-values-employee-name"
           data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
         >
-          <Table list={data} />
         </div>
-
-          <button 
-        className="btn btn-primary enrolBtn m-2 " 
-        style={{cursor:'pointer'}}
-      >
-        Add module
-      </button> 
+     
+        <KnowledgeModules />
+        <PracticalSkillsModules  />
+        <WorkExperienceModules />
     </>
   );
 };

@@ -172,7 +172,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                     <i className="bi-house list-group-icon" /> {`${item.blobUrl.slice(0, 15)}... .pdf`}
               </li>
               ))
-            :['no url', 'no url', 'no url', 'no url'].map((item:any) => (
+            :['no url', 'no url', 'no url', 'no url','no url','no url'].map((item:any) => (
               <li className="list-group-item p-4">
                     <i className="bi-house list-group-icon" /> {item}
               </li>
@@ -188,7 +188,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                 <i className="bi-house list-group-icon" /> {item.status??'Pending Review'}
               </li>
             ))
-          :['N/A', 'N/A', 'N/A', 'N/A'].map((item:any) => (
+          :['N/A', 'N/A', 'N/A', 'N/A','N/A','N/A'].map((item:any) => (
             <li className="list-group-item p-4">
                     <i className="bi-house list-group-icon" /> {item}
             </li>
@@ -215,7 +215,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                     </select>
                 </li>
             ))
-          :['N/A', 'N/A', 'N/A', 'N/A'].map((item:any) => (
+          :['N/A', 'N/A', 'N/A', 'N/A','N/A','N/A'].map((item:any) => (
             <li className="list-group-item p-4">
                     <i className="bi-house list-group-icon" /> {item}
             </li>
