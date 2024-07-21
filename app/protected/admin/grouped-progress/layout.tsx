@@ -10,7 +10,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   const title =
     pathname == "/protected/admin/course-dashboard"
       ? "Course Dashboard - Web Development"
-      : `Web Development`;
+      : `Web Development - Analytic Averages`;
 
   return (
     <>

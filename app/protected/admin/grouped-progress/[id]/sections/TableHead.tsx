@@ -1,13 +1,13 @@
 const TableHead = () => {
   const headers = [
-    { name: "Section Name", align: "pl-48pt text-left" }, 
-    { name: " Average Completion Rate", align: "text-center" }, 
-    { name: "Average Time Spent", align: "text-left" },
-    { name: "Average Points Collected", align: "text-center" },  
-    { name: "Active Students", align: "text-center" }, 
-    { name: "Questions Launched", align: "text-center" }, 
+    { name: "Name", align: "pl-48pt text-left" }, 
+    { name: "Completion", align: "text-center" }, 
+    { name: "Time Spent", align: "text-left" },
+    { name: "Points", align: "text-center" },  
+    { name: "Activeness", align: "text-center" }, 
+    { name: "Questions", align: "text-center" }, 
     { name: "Notes", align: "text-center" }, 
-    { name: "Downloaded Content", align: "text-center" }, 
+    { name: "Downloads", align: "text-center" }, 
   ];
 
   return (

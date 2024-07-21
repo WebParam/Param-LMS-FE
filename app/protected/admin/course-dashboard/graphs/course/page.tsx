@@ -1,110 +1,106 @@
-import ChartWrapper from "@/app/components/course-dashboard/graphs/ChartWrapper";
-import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/components/course-dashboard/graphs/AvgTimeSpentBar/data";
+import ChartWrapper from "@/app/components/course-analytics/graphs/ChartWrapper";
+import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/data";
 
 import {
-  options as OverallPDFBarOptions,
-  data as OverallPDFBarDataFn,
-  barDescriptions as OverallPDFBarDescription,
-} from "@/app/components/course-dashboard/graphs/avgPDFDownloaded/data";
-
-import {
-  options as OverallCorrectAnswersBarOptions,
-  data as OverallCorrectAnswersBarDataFn,
-  barDescriptions as OverallCorrectAnswersBarDescription,
-} from "@/app/components/course-dashboard/graphs/AvgCorrectAnswers/data";
-
+  options as OverallAssessmentBarOptions,
+  data as OverallAssessmentBarData,
+  barDescriptions as OverallAssessmentBarDescription,
+} from "@/app/components/course-analytics/graphs/OverallAssessment/data";
 import {
   options as QuestionsAskedOptions,
-  data as QuestionsAskedDataFn,
+  data as QuestionsAskedData,
   barDescriptions as QuestionsAskedDescription,
-} from "@/app/components/course-dashboard/graphs/QuestionsAsked/data";
+} from "@/app/components/course-analytics/graphs/QuestionsAsked/data";
 
 import {
   options as OverallQuizBarOptions,
-  data as OverallQuizBarDataFn,
+  data as OverallQuizBarData,
   barDescriptions as OverallQuizBarDescription,
-} from "@/app/components/course-dashboard/graphs/OverallQuiz/data";
+} from "@/app/components/course-analytics/graphs/OverallQuiz/data";
 
 import {
   options as CommentsChartBarOptions,
-  data as CommentsChartBarDataFn,
+  data as CommentsChartBarData,
   barDescriptions as CommentsChartBarDescription,
-} from "@/app/components/course-dashboard/graphs/CommentsChart/data";
+} from "@/app/components/course-analytics/graphs/CommentsChart/data";
 
-import {
-  options as LiveClassesOptions,
-  data as LiveClassesdData,
-  barDescriptions as LiveClassesDescription,
-} from "@/app/components/course-dashboard/graphs/LiveClasses/data";
+import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/course-analytics/graphs/StudentsProgressStatus/data";
 
-import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/course-dashboard/graphs/StudentsProgressStatus/data";
+import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
+import { AvgTimeSpent } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/AvgTimeSpent";
+import { StudentsProgressStatus } from "@/app/components/course-analytics/graphs/StudentsProgressStatus/StudentsProgressStatus";
 
-import ChartLayout from "@/app/components/course-dashboard/graphs/ChartLayout";
-import { AvgTimeSpent } from "@/app/components/course-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
-import { StudentsProgressStatus } from "@/app/components/course-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
-import DataTabs from "@/app/components/course-dashboard/graphs/DataTabs";
-import { getCourseGraphs } from "@/app/lib/actions/course";
+type DataTiles = {
+  name: string;
+  icon: string;
+  data: number;
+};
+
 import UnitStandardTable from "../(components)/unit-standard-table";
 import PageHeader from "../../PageHeader";
 
 export default async function Page() {
-  const courseId = "65e5d75f6944453739f276c3";
-  const data = await getCourseGraphs(courseId);
-  if (!data || data.averageCompletedQuizzes === undefined) {
-    console.error('Data fetch failed or averageCompletedQuizzes is undefined');
-    return; 
-  }
-
-  const OverallQuizBarData = await OverallQuizBarDataFn(
-    data.averageCompletedQuizzes
-  );
-  const QuestionsAskedData = await QuestionsAskedDataFn(
-    data.averageQuestionsAsked
-  );
-  const CommentsChartBarData = await CommentsChartBarDataFn(
-    data.averageNotesSubmitted
-  );
-  const PDFChartBarData = await OverallPDFBarDataFn(data.averagePdfDownloaded);
-  const correctAnswersChartBarData = await OverallCorrectAnswersBarDataFn(
-    data.averageCorrectAnswer
-  );
-
-
+  const dataTiles: DataTiles[] = [
+    { name: "Students", icon: "person_outline", data: 112 },
+    { name: "Modules", icon: "book", data: 5 },
+    { name: "Quizzes", icon: "help", data: 10 },
+    { name: "Assessments", icon: "list", data: 4 },
+    { name: "Documents Downloaded", icon: "cloud_download", data: 79 },
+  ];
 
   return (
     <>
-      <DataTabs
-        totalEnrollments={data.enrolledStudents}
-        totalModdules={0}
-        totalAssessments={0}
-        totalQuizzes={0}
-        documentsDownloaded={0}
-      />
+      <div className="row mb-lg-8pt">
+        {dataTiles.map((data: DataTiles) => (
+          <div key={data.name} className="col-lg-3">
+            <div className="card">
+              <div
+                data-toggle="tab"
+                role="tab"
+                aria-selected="true"
+                className="dashboard-area-tabs__tab card-body text-center active"
+              >
+                <span className="font-weight-bold">{data.name}</span>
+                <i className="material-icons text-success icon-48pt">
+                  {data.icon}
+                </i>
+                <span className="h2 mb-0 mt-n1">{data.data}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
             title="Average Time Spent"
             barDescriptions={AvgTimeSpentBarDataDescription}
           >
-            <AvgTimeSpent averageTimeSpent={data.averageTimeSpent} />
+            <AvgTimeSpent />
           </ChartLayout>
         </div>
-
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartWrapper
+            title="Assessment Completed"
+            barDescriptions={OverallAssessmentBarDescription}
+            options={OverallAssessmentBarOptions}
+            data={OverallAssessmentBarData}
+            type="bar"
+          />
+        </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
             title="Progress Status"
             barDescriptions={StudentsProgressStatusDescription}
             type="pie"
           >
-            <StudentsProgressStatus
-              studentCourseProgress={data.studentProgress}
-            />
+            <StudentsProgressStatus />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
-            title="Average Completed Quizzes"
+            title="Quiz Attempts"
             barDescriptions={OverallQuizBarDescription}
             options={OverallQuizBarOptions}
             data={OverallQuizBarData}
@@ -113,7 +109,7 @@ export default async function Page() {
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
-            title="Average Questions Asked"
+            title="Questions Asked"
             barDescriptions={QuestionsAskedDescription}
             options={QuestionsAskedOptions}
             data={QuestionsAskedData}
@@ -122,42 +118,13 @@ export default async function Page() {
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
-            title="Average Notes Submitted"
+            title="Comments"
             barDescriptions={CommentsChartBarDescription}
             options={CommentsChartBarOptions}
             data={CommentsChartBarData}
             type="bar"
           />
         </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Average PDFs downloaded"
-            barDescriptions={OverallPDFBarDescription}
-            options={OverallPDFBarOptions}
-            data={PDFChartBarData}
-            type="line"
-          />
-        </div>
-
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Average of Correct Answers Submitted"
-            barDescriptions={OverallCorrectAnswersBarDescription}
-            options={OverallCorrectAnswersBarOptions}
-            data={correctAnswersChartBarData}
-            type="line"
-          />
-        </div>
-        <div
-      className="col-lg-6 w-100 col-md-12 card-group-row__col">
-        <ChartWrapper
-          title="Live Classes Attended"
-          barDescriptions={LiveClassesDescription}
-          options={LiveClassesOptions}
-          data={LiveClassesdData}
-          type="bar"
-        />
-      </div>
       </div>
 
       <div className="mb-24pt mb-sm-0 mr-sm-24pt">
