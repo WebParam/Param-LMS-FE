@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 export default async function Assignments({ list }: any) {
 
 const baseUrl = "/protected/admin/"
@@ -38,6 +39,21 @@ const Assignment = ({
   url: string;
   title: string;
 }) => {
+
+  const [isFacilitator, setIsFacilitator] = useState(false)
+
+  const baseUrl = "/protected/admin/"
+  const pathName = usePathname();
+  useEffect(() => {
+    if( pathName === `/protected/admin/assessments-assignments/pages/assessments` || pathName === `/protected/admin/assessments-assignments/pages/assignments`  ){
+      setIsFacilitator(true)
+      return
+    }
+    setIsFacilitator(false)
+
+
+   }, [pathName])
+   
   return (
     <div className="col-lg-3 card-group-row__col">
       <div className="card card-group-row__card">
@@ -63,6 +79,8 @@ const Assignment = ({
               className="card-title m-0 mb-2">
                 <a href={url}>{title}</a>
               </h6>
+            {
+            !isFacilitator && <>
               <h6
                    style={{fontSize:"10px"}}
               className=" m-0">
@@ -78,6 +96,8 @@ const Assignment = ({
               className=" m-0">
                 <a href={url}>Due : 5 August 2023</a>
               </h6>
+            </>
+            }
             </div>
           </div>
           <Link href={url}>
