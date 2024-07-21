@@ -16,19 +16,18 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         {
           name: "Course Analytics",
           url: "/protected/admin/course-dashboard/graphs/course",
-          icon: "show_chart",
+          icon: "list",
         },
         {
           name: "Student Analytics",
-          url: "/protected/admin/course-dashboard/student-table",
-          icon: "show_chart",
+          url: "/protected/admin/student-analytics",
+          icon: "person",
         },
         {
-          name: "Grouped Analytics",
+          name: "Analytic Averages",
           url: `/protected/admin/grouped-progress/1/assessments`,
           icon: "show_chart",
         },
-       
       ],
     },
     {
@@ -62,9 +61,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           icon: "assignment_turned_in",
         },
       ],
-    }
-,    
-
+    },
     {
       name: "Facilitator",
       url: `/protected/admin/facilitator?title=Facilitator Dashboard&homeTitle=HOME`,

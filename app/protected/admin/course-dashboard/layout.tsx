@@ -10,7 +10,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   let title =
     pathname == "/protected/admin/course-dashboard"
       ? "Student Analytics - Web Development"
-      : `Web Development - ${name ? name : "Analytics"}`;
+      : `Web Development - ${name ? name : "Dashboard Analytics"}`;
 
   if (pathname == "/protected/admin/course-dashboard/graphs")
     title = "Sanlam Dashboard Analytics - Web Development";
