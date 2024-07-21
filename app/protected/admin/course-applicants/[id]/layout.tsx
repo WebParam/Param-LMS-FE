@@ -3,6 +3,7 @@ import './layout.scss'
 import { post } from '@/app/lib/utils';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Modal } from 'react-bootstrap';
 
 import Cookies from 'universal-cookie';
 
@@ -25,6 +26,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   async function enrollStudent() {
+    setLoading(true);
     const payload = {
       userId: id,
       course: '6669f0ff8759b480859c10a7',
@@ -33,9 +35,11 @@ function Layout({ children }: { children: React.ReactNode }) {
     const res = await post(`https://khumla-dev-newcourse-write.azurewebsites.net/api/v1/Enrollments/AddEnrollment`, payload)
 
     if (res) {
-      router.push('/protected/admin/enrollments')
+      router.push('/protected/admin/course-applicants')
+      setLoading(false)
     }
     console.log(res);
+    setLoading(false);
 
   }
 
@@ -45,13 +49,21 @@ function Layout({ children }: { children: React.ReactNode }) {
   
   return (
     <>
+      <Modal show={loading} keyboard={false} centered>
+        <Modal.Body>
+            <div className='text-dark d-flex flex-column justify-content-center align-items-center gap-2'>
+            <div className="spinner-border text-dark spinner-border-md" role="status" />
+            <p>Enrolling student...</p>
+            </div>
+        </Modal.Body>
+      </Modal>
       <div className="card p-relative o-hidden mb-0">
         <div
           className="card-header card-header-tabs-basic nav px-0"
           role="tablist"
         >
           {tabs.map((tab) => (
-            <a
+            <a 
               key={tab.name}
               onClick={()=> router.replace(`${tab.url}?id=${id}&name=${name}`)}
               className={pathname.includes(tab.name) ? "active" : ""}
@@ -75,7 +87,6 @@ function Layout({ children }: { children: React.ReactNode }) {
         <button 
         className="btn btn-primary enrolBtn notComplete" 
         onClick={enrollStudent}
-        // disabled={allDocsAccepted}
         >
             {loading ? <div className="spinner-border text-light spinner-border-sm" role="status" />:'Enroll Student'}
         </button>

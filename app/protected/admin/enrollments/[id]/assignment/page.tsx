@@ -30,6 +30,12 @@ const Body = () => {
         >
           <Table list={data} />
         </div>
+        <button 
+        className="btn btn-primary primary btn-dark enrolBtn m-2" 
+        style={{cursor:'pointer'}}
+      >
+        Download
+      </button> 
     </>
   );
 };
