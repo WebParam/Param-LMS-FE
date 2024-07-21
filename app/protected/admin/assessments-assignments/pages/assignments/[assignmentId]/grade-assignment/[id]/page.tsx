@@ -10,6 +10,7 @@ import { getStudentAssessmentAnswers } from "@/app/lib/actions/assessments";
 import { IAssessmentStudentAnswers } from "@/app/interfaces/assessments";
 import { useRouter } from "next/navigation";
 import {data} from "./data"
+import LongQuestionSkeleton from "@/components/skeleton/LongQuestionSkeleton";
 
 function Page({ params }: { params: { assignmentId: string; id: string } }) {
   const [studentAssessment, setStudentAssessment] =
@@ -54,7 +55,9 @@ function Page({ params }: { params: { assignmentId: string; id: string } }) {
       <div className="page-separator">
         <div className="page-separator__text">Questions</div>
       </div>
-      { currentItems.map(
+      {loading
+        ? [1, 2].map((data) => <LongQuestionSkeleton />)
+        : currentItems.map(
             (data) =>
               data.questionType !== "Quiz" && (
                 <LongQuestion
@@ -67,6 +70,7 @@ function Page({ params }: { params: { assignmentId: string; id: string } }) {
                 />
               )
           )}
+
 
       <div className="card mb-24pt">
         <Pagination

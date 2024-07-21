@@ -9,6 +9,7 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import SkeletonLoader from "@/components/skeleton/skeletonLoader";
 
 
 
@@ -49,7 +50,7 @@ const pdfWorkerUrl = `https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min
       </Modal.Body>
     </Modal>
       <tbody className="list" id="staff">
-        {list && 
+        {list.length > 0 ? 
           list.map((data: ICourseAssessment) => (
             <tr key={data.assessmentId} className="selected">
               <td
@@ -100,7 +101,25 @@ const pdfWorkerUrl = `https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min
                 </Link>
               </td>
             </tr>
-          ))
+          )) :   <>
+          <tr className="selected">
+         <td colSpan={10}>
+           <SkeletonLoader width="100%" height="2em" />
+         </td>
+         
+       </tr>
+       <tr className="selected">
+         <td colSpan={10}>
+           <SkeletonLoader width="100%" height="2em" />
+         </td>
+         
+       </tr> <tr className="selected">
+         <td colSpan={10}>
+           <SkeletonLoader width="100%" height="2em" />
+         </td>
+         
+       </tr>
+       </>
          }
       </tbody>
     </>
