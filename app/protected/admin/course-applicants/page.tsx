@@ -2,7 +2,6 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "./(components)/Table";
 import { useEffect, useState } from "react";
-import list from "./(components)/data";
 import { getCourseStudents } from "@/app/lib/actions/courseStudents";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import Loading from "./loading";
@@ -14,6 +13,9 @@ import * as XLSX from 'xlsx';
 import ChartWrapper from "@/app/components/enrolment-dashboard/graphs/ChartWrapper";
 import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/data";
 
+
+import { barDescriptions as AvgLangSpokenDescription } from "@/app/components/enrolment-dashboard/graphs/AvgLangOfStudent/data";
+
 import {
   options as OverallAssessmentBarOptions,
   data as OverallAssessmentBarData,
@@ -24,12 +26,6 @@ import {
   data as QuestionsAskedData,
   barDescriptions as QuestionsAskedDescription,
 } from "@/app/components/enrolment-dashboard/graphs/QuestionsAsked/data";
-
-import {
-  options as OverallQuizBarOptions,
-  data as OverallQuizBarData,
-  barDescriptions as OverallQuizBarDescription,
-} from "@/app/components/enrolment-dashboard/graphs/OverallQuiz/data";
 
 import {
   options as CommentsChartBarOptions,
@@ -48,8 +44,10 @@ import { barDescriptions as StudentRacesDescription } from "@/app/components/enr
 
 import ChartLayout from "@/app/components/enrolment-dashboard/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
+import { AvgLangSpoken } from "@/app/components/enrolment-dashboard/graphs/AvgLangOfStudent/AvgLanguages";
 import { StudentsProgressStatus } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
 import { StudentRaces } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/StudentRaces";
+import {mockData} from "./(components)/data"
 
 type DataTiles = {
   name: string;
@@ -59,22 +57,24 @@ type DataTiles = {
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [data, setData] = useState<CourseApplicants[]>(mockData);
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const [data, setData] = useState<CourseApplicants[]>([]);
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const cookies = new Cookies();
+  const courseId = "6669f0ff8759b480859c10a7"
 
   useEffect(() => {
     const asyncFetch = async () => {
       try {
-        const fetchedData = await getCourseStudents('6669f0ff8759b480859c10a7');
+        const fetchedData = await getCourseStudents(courseId);
         debugger;
-        setData(fetchedData);
+       // setData(fetchedData);
         const courseTitle = fetchedData[0].title;
-        console.log('data is here', courseTitle);
+        console.log('data is here', fetchedData);
         cookies.set("courseTitle", courseTitle);
         router.push(`/protected/admin/course-applicants?courseTitle=${courseTitle}`);
       } catch (error) {
@@ -86,7 +86,7 @@ const Body = () => {
     asyncFetch();
   }, []);
 
-  const courseId ='6669f0ff8759b480859c10a7';
+
   
   function downloadAsXls() {
     fetch(`https://khumla-dev-user-read.azurewebsites.net/api/Student/ExportStudentInformation/${courseId}`)
@@ -116,14 +116,13 @@ const Body = () => {
 
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: 112 },
-    { name: "Matriculated", icon: "book", data: 5 },
-    { name: "Graduated", icon: "school", data: 79 },
     { name: "Employed", icon: "list", data: 4 },
     { name: "Unemployed", icon: "help", data: 10 },
+    { name: "Disability", icon: "help", data: 10 },
   ];
   return (
     <>
-      <div className="row mb-lg-8pt">
+      <div className="d-flex justify-content-between align-items-center mb-lg-8pt">
         {dataTiles.map((data: DataTiles) => (
           <div key={data.name} className="col-lg-3">
             <div className="card">
@@ -207,6 +206,15 @@ const Body = () => {
             type="bar"
           />
         </div>
+
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout
+            title="Languages"
+            barDescriptions={AvgLangSpokenDescription}
+          >
+            <AvgLangSpoken />
+          </ChartLayout>
+        </div>
       </div>
       <div className="card mb-0">
         <div
@@ -215,16 +223,16 @@ const Body = () => {
           data-lists-sort-by="js-lists-values-employee-name"
           data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
         >
-          {data ? <Table list={data} /> : <h3 style={{textAlign:'center', height:'50px', lineHeight:'50px'}}>No data</h3>}
+          {data ? <Table list={currentItems} /> : <h3 style={{textAlign:'center', height:'50px', lineHeight:'50px'}}>No data</h3>}
         </div>
 
-        <Pagination
-          listLength={list.length}
-          indexOfLastItem={indexOfLastItem}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          ITEMSPERPAGE={ITEMSPERPAGE}
-        />
+       <Pagination
+            listLength={data.length}
+            indexOfLastItem={indexOfLastItem}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            ITEMSPERPAGE={ITEMSPERPAGE}
+          />
       </div>
       <button 
         className="btn btn-primary enrolBtn m-3" 

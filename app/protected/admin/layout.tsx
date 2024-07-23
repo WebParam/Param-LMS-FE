@@ -7,29 +7,29 @@ import withAuth from "./AdminAuthWrapper";
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const sideTabs = [
-    {
-      name: "Analytics",
-      url: "#",
-      icon: "show_chart",
+    // {
+    //   name: "Analytics",
+    //   url: "#",
+    //   icon: "show_chart",
 
-      children: [
-        {
-          name: "Course Analytics",
-          url: "/protected/admin/course-dashboard/graphs/course",
-          icon: "list",
-        },
-        {
-          name: "Student Analytics",
-          url: "/protected/admin/student-analytics",
-          icon: "person",
-        },
-        {
-          name: "Analytic Averages",
-          url: `/protected/admin/grouped-progress/1/assessments`,
-          icon: "show_chart",
-        },
-      ],
-    },
+    //   children: [
+    //     {
+    //       name: "Course Analytics",
+    //       url: "/protected/admin/course-dashboard/graphs/course",
+    //       icon: "list",
+    //     },
+    //     {
+    //       name: "Student Analytics",
+    //       url: "/protected/admin/student-analytics",
+    //       icon: "person",
+    //     },
+    //     {
+    //       name: "Analytic Averages",
+    //       url: `/protected/admin/grouped-progress/1/assessments`,
+    //       icon: "show_chart",
+    //     },
+    //   ],
+    // },
     {
       name: "Course",
       url: "#",
@@ -41,7 +41,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           icon: "person",
         },
         {
-          name: "Enrollments",
+          name: "Enrollned Students",
           url: `/protected/admin/enrollments`,
           icon: "assignment_turned_in",
         },
@@ -62,28 +62,28 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         },
       ],
     },
-    {
-      name: "Facilitator",
-      url: `/protected/admin/facilitator?title=Facilitator Dashboard&homeTitle=HOME`,
-      icon: "dashboard",
-    },
-    {
-      name: "Moderator",
-      url: "#",
-      icon: "supervisor_account",
-      children: [
-        {
-          name: "Assessments",
-          url: `/protected/admin/moderator/pages/assessment?title=Mark Assessments&homeTitle=HOME&page=grouped`,
-          icon: "assignment_ind",
-        },
-        {
-          name: "Assignments",
-          url: `/protected/admin/moderator/pages/assignments?title=Mark Assignments&homeTitle=HOME&page=grouped`,
-          icon: "assignment_ind",
-        },
-      ],
-    },
+    // {
+    //   name: "Facilitator",
+    //   url: `/protected/admin/facilitator?title=Facilitator Dashboard&homeTitle=HOME`,
+    //   icon: "dashboard",
+    // },
+    // {
+    //   name: "Moderator",
+    //   url: "#",
+    //   icon: "supervisor_account",
+    //   children: [
+    //     {
+    //       name: "Assessments",
+    //       url: `/protected/admin/moderator/pages/assessment?title=Mark Assessments&homeTitle=HOME&page=grouped`,
+    //       icon: "assignment_ind",
+    //     },
+    //     {
+    //       name: "Assignments",
+    //       url: `/protected/admin/moderator/pages/assignments?title=Mark Assignments&homeTitle=HOME&page=grouped`,
+    //       icon: "assignment_ind",
+    //     },
+    //   ],
+    // },
   ];
 
   return (

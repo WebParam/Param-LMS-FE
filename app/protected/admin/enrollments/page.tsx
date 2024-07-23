@@ -2,7 +2,7 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "./(components)/Table";
 import { useEffect, useState } from "react";
-import list from "./(components)/data";
+import {mockData} from "./(components)/data";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import Loading from "./loading";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
@@ -45,6 +45,9 @@ import ChartLayout from "@/app/components/enrolment-dashboard/graphs/ChartLayout
 import { AvgTimeSpent } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
 import { StudentsProgressStatus } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
 import { StudentRaces } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/StudentRaces";
+import { barDescriptions as AvgLangSpokenDescription } from "@/app/components/enrolment-dashboard/graphs/AvgLangOfStudent/data";
+import { AvgLangSpoken } from "@/app/components/enrolment-dashboard/graphs/AvgLangOfStudent/AvgLanguages";
+
 
 type DataTiles = {
   name: string;
@@ -54,18 +57,20 @@ type DataTiles = {
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [data, setData] = useState<CourseApplicants[]>(mockData);
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const [data, setData] = useState<CourseApplicants[]>([]);
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
   const [loading, setLoading] = useState(true);
+  const courseId = "6669f0ff8759b480859c10a7"
 
   useEffect(() => {
     const asyncFetch = async () => {
       try {
-        const fetchedData = await getEnrollments("6669f0ff8759b480859c10a7");
+        const fetchedData = await getEnrollments(courseId);
         debugger;
-        setData(fetchedData);
+    //    setData(fetchedData);
         console.log("data is here", fetchedData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -82,14 +87,13 @@ const Body = () => {
 
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: 112 },
-    { name: "Matriculated", icon: "book", data: 5 },
-    { name: "Graduated", icon: "school", data: 79 },
     { name: "Employed", icon: "list", data: 4 },
     { name: "Unemployed", icon: "help", data: 10 },
+    { name: "Disability", icon: "help", data: 10 },
   ];
   return (
     <>
-      <div className="row mb-lg-8pt">
+      <div className="d-flex justify-content-between align-items-center mb-lg-8pt">
         {dataTiles.map((data: DataTiles) => (
           <div key={data.name} className="col-lg-3">
             <div className="card">
@@ -173,6 +177,15 @@ const Body = () => {
             type="bar"
           />
         </div>
+        
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout
+            title="Languages"
+            barDescriptions={AvgLangSpokenDescription}
+          >
+            <AvgLangSpoken />
+          </ChartLayout>
+        </div>
       </div>
       <div className="card mb-0">
         <div
@@ -181,11 +194,11 @@ const Body = () => {
           data-lists-sort-by="js-lists-values-employee-name"
           data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
         >
-          <Table list={data} />
+          <Table list={currentItems} />
         </div>
 
         <Pagination
-          listLength={list.length}
+          listLength={data.length}
           indexOfLastItem={indexOfLastItem}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
