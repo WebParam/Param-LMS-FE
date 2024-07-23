@@ -136,7 +136,7 @@ export const CreateCourseAssessmentModal: React.FC<
       modifiedAt  : _assessmentFromState.modifiedAt, 
        dueDate  : dueDate,
        courseTitle: _assessmentFromState.courseTitle,
-       instructorName:"John Doe",
+       instructorName:"Khanyi Ngubani",
        instructorId:"656f1335650c740ce0ae4d65",
        status : _assessmentFromState.status,
        isRetaken : isRetaken === "Yes" ? true : false 
@@ -156,7 +156,7 @@ export const CreateCourseAssessmentModal: React.FC<
       modifiedAt  : _assessmentFromState.modifiedAt, 
        dueDate  : _assessmentFromState.dueDate,
        courseTitle: _assessmentFromState.courseTitle,
-       instructorName:"John Doe",
+       instructorName:"Khanyi Ngubani",
        instructorId:"656f1335650c740ce0ae4d65",
        status : _assessmentFromState.status,
        isRetaken : isRetaken === "0" ? true : false 

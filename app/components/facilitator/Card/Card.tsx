@@ -12,12 +12,12 @@ import styles from "./card.module.css";
 import Link from "next/link";
 
 const icons = {
-  schedule: <FaChalkboardTeacher color="#77c13a" size={50} />,
-  createAssessment: <FaClipboardList color="#77c13a" size={50} />,
-  leaderBoard: <FaTrophy color="#77c13a" size={50} />,
-  feedback: <FaCommentDots color="#77c13a" size={50} />,
-  markAssessment: <FaPercentage color="#77c13a" size={50} />,
-  logbook: <FaBook color="#77c13a" size={50} />,
+  schedule: <FaChalkboardTeacher color="#24345c" size={50} />,
+  createAssessment: <FaClipboardList color="#24345c" size={50} />,
+  leaderBoard: <FaTrophy color="#24345c" size={50} />,
+  feedback: <FaCommentDots color="#24345c" size={50} />,
+  markAssessment: <FaPercentage color="#24345c" size={50} />,
+  logbook: <FaBook color="#24345c" size={50} />,
 };
 
 type IconKey = keyof typeof icons;
