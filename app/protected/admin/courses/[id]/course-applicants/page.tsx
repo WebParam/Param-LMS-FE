@@ -141,7 +141,7 @@ const Body = () => {
                 className="dashboard-area-tabs__tab card-body text-center active"
               >
                 <span className="font-weight-bold">{data.name}</span>
-                <i className="material-icons text-success icon-48pt">
+                <i className="material-icons  icon-48pt" style={{color:'#24345c'}}>
                   {data.icon}
                 </i>
                 <span className="h2 mb-0 mt-n1">{data.data}</span>
