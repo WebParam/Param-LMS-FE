@@ -1,6 +1,6 @@
 "use client";
 import Drawer from "@/app/topbar-components/Drawer";
-import HeadNav from "@/app/topbar-components/HeadNav";
+import HeadNav from "@/app/topbar-components/HeadNavDrawer";
 import { useState } from "react";
 import withAuth from './StudentAuthWrapper'
 import SideTab from '@/app/interfaces/sideTabs';
