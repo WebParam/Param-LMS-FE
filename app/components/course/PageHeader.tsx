@@ -354,8 +354,8 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isEditCourse && (
                 <Link
-                  className="btn" style={{color: '#24345c'}}
-                  href={`/protected/admin/courses`}
+                  className="btn btn-success"
+                  href={`/protected/home/courses`}
                 >
                   All Courses
                 </Link>
@@ -410,8 +410,8 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isAllCourse && (
                 <Link
-                  className="btn" style={{color: '#24345c'}}
-                  href={`/protected/admin/courses`}
+                  className="btn btn-success"
+                  href={`/protected/home/courses`}
                 >
                   All Courses
                 </Link>

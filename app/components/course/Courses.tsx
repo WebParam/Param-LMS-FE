@@ -45,7 +45,12 @@ const Course = ({
           >
             <p
               className="bg-success d-flex align-items-center justify-content-center font-size-32pt font-weight-bold"
-              style={{ borderRadius: "50%", width: "130px", height: "130px" }}
+              style={{
+                borderRadius: "50%",
+                width: "130px",
+                height: "130px",
+                color: "white",
+              }}
             >
               {title && titleShort(title)}
             </p>
