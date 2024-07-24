@@ -6,7 +6,7 @@ const Body = () => {
   const description = "Mathematical Calculation and derivations of formulas";
   const videoScriptTone =
     "Video Script of Mathematical Calculation and derivations of formulas";
-  const instructorName = "John Doe";
+  const instructorName = "Khanyi Ngubani";
   const courseLogoUrl =
     "https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg";
   const thumbnailUrl =

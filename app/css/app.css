@@ -20,7 +20,7 @@
     --gray-dark: #343a40;
     --primary: #5567ff;
     --secondary: #868e96;
-    --success: #77c13a;
+    --success: #24345c;
     --info: #17a2b8;
     --warning: #e4a93c;
     --danger: #d9534f;
@@ -3440,8 +3440,8 @@ a.btn.disabled,fieldset:disabled a.btn {
 }
 
 [dir] .btn-success {
-    background-color: #77c13a;
-    border-color: #77c13a;
+    background-color: #24345c;
+    border-color: #24345c;
     box-shadow: inset 0 1px 0 hsla(0,0%,100%,.15),0 1px 1px rgba(39,44,51,.075)
 }
 
@@ -3450,8 +3450,8 @@ a.btn.disabled,fieldset:disabled a.btn {
 }
 
 [dir] .btn-success:hover {
-    background-color: #65a431;
-    border-color: #5f9a2e
+    background-color: #5e6a86;
+    border-color: #5e6a86
 }
 
 .btn-success.focus,.btn-success:focus {
@@ -3459,8 +3459,8 @@ a.btn.disabled,fieldset:disabled a.btn {
 }
 
 [dir] .btn-success.focus,[dir] .btn-success:focus {
-    background-color: #65a431;
-    border-color: #5f9a2e;
+    background-color: #24345c;
+    border-color: ;
     box-shadow: inset 0 1px 0 hsla(0,0%,100%,.15),0 1px 1px rgba(39,44,51,.075),0 0 0 1px rgba(106,170,55,.5)
 }
 
@@ -3478,8 +3478,8 @@ a.btn.disabled,fieldset:disabled a.btn {
 }
 
 [dir] .btn-success:not(:disabled):not(.disabled).active,[dir] .btn-success:not(:disabled):not(.disabled):active,[dir] .show>.btn-success.dropdown-toggle {
-    background-color: #5f9a2e;
-    border-color: #59902b
+    background-color: #24345c;
+    border-color: #24345c
 }
 
 [dir] .btn-success:not(:disabled):not(.disabled).active:focus,[dir] .btn-success:not(:disabled):not(.disabled):active:focus,[dir] .show>.btn-success.dropdown-toggle:focus {
@@ -7196,7 +7196,7 @@ input[type=button].btn-block,input[type=reset].btn-block,input[type=submit].btn-
 }
 
 .navbar-dark .navbar-toggler {
-    color: #858d94
+    color: white
 }
 
 [dir] .navbar-dark .navbar-toggler {
@@ -7808,7 +7808,7 @@ a.badge-success:focus,a.badge-success:hover {
 }
 
 [dir] a.badge-success:focus,[dir] a.badge-success:hover {
-    background-color: #5f9a2e
+    background-color: #24345c
 }
 
 a.badge-success.focus,a.badge-success:focus {
@@ -10877,7 +10877,7 @@ a.close.disabled {
 }
 
 [dir] a.bg-success:focus,[dir] a.bg-success:hover,[dir] button.bg-success:focus,[dir] button.bg-success:hover {
-    background-color: #5f9a2e!important
+    background-color: #24345c!important
 }
 
 [dir] a.bg-info:focus,[dir] a.bg-info:hover,[dir] button.bg-info:focus,[dir] button.bg-info:hover {
@@ -22245,11 +22245,11 @@ a.text-secondary:focus,a.text-secondary:hover {
 }
 
 .text-success {
-    color: #77c13a!important
+    color: #24345c!important
 }
 
 a.text-success:focus,a.text-success:hover {
-    color: #538628!important
+    color: #24345c!important
 }
 
 .text-info {
@@ -27259,7 +27259,7 @@ body,html {
 }
 
 .alert-soft-success .alert-link {
-    color: #5f9a2e
+    color: #24345c
 }
 
 .alert-soft-info {
@@ -30121,7 +30121,7 @@ code.django .hljs-template-tag {
 
 [dir] .chip-success:hover {
     background-color: #65a431;
-    border-color: #5f9a2e
+    border-color: #24345c
 }
 
 .chip-success.focus,.chip-success:focus {
@@ -30130,7 +30130,7 @@ code.django .hljs-template-tag {
 
 [dir] .chip-success.focus,[dir] .chip-success:focus {
     background-color: #65a431;
-    border-color: #5f9a2e;
+    border-color: #24345c;
     box-shadow: inset 0 1px 0 hsla(0,0%,100%,.15),0 1px 1px rgba(39,44,51,.075),0 0 0 1px rgba(106,170,55,.5)
 }
 
@@ -30148,7 +30148,7 @@ code.django .hljs-template-tag {
 }
 
 [dir] .chip-success:not(:disabled):not(.disabled).active,[dir] .chip-success:not(:disabled):not(.disabled):active,[dir] .show>.chip-success.dropdown-toggle {
-    background-color: #5f9a2e;
+    background-color: #24345c;
     border-color: #59902b
 }
 
@@ -32280,7 +32280,7 @@ code.django .hljs-template-tag {
 }
 
 [dir] .navbar-dark .navbar-search,[dir] .search-form--black {
-    background-color: #272c33;
+    background-color: #24345c;
     border-color: #272c33
 }
 
@@ -36528,7 +36528,7 @@ label {
 }
 
 [dir] .dashboard-area-tabs__tab.active:before {
-    background-color: #5567ff
+    background-color: #24345c
 }
 
 [dir=ltr] .dashboard-area-tabs__tab.active:before,[dir=rtl] .dashboard-area-tabs__tab.active:before {

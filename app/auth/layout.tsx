@@ -19,13 +19,13 @@ export default function RootLayout({
   children,
 }: {
   children?: React.ReactNode;
-  }) {
+}) {
   let bannerName = '';
   const pathname = usePathname();
-  if (pathname == "/auth/admin/login") bannerName = "Khumla Admin Login"
-  else if (pathname == "/auth/admin/register") bannerName = "Khumla Admin Register"
-  else if (pathname == "/" || pathname == "/auth/login" ) bannerName = "Khumla Login"
-  else bannerName = "Khumla Register"
+  if (pathname == "/auth/admin/login") bannerName = "Thooto Admin Login"
+  else if (pathname == "/auth/admin/register") bannerName = "Thooto Admin Register"
+  else if (pathname == "/" || pathname == "/auth/login" ) bannerName = "Thooto Admin Portal"
+  else bannerName = "Thooto Admin Register"
 
   return (
     <>
@@ -36,7 +36,7 @@ export default function RootLayout({
         >
           {/* Header Layout Content */}
           <div
-            className="mdk-header-layout__content page-content "
+            className="mdk-header-layout__content page-content"
             style={false ? { paddingTop: 64 } : {}}
           >
             <div
@@ -55,8 +55,8 @@ export default function RootLayout({
                   <span className="material-icons">people_outline</span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbar-submenu2">
-                  <div className="navbar-collapse__content pb-16pt pb-sm-0">
-                    <h1>{bannerName}</h1>
+                  <div className="navbar-collapse__content pb-16pt pb-sm-0 text-center">
+                    <h1 className="w-100 text-center" style={{ fontSize: '1.8rem' }}>{bannerName}</h1>
                   </div>
                 </div>
               </div>
