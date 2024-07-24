@@ -10,27 +10,26 @@ export default function PageHeader() {
               style={{ width: "850px" }}
               className="mb-24pt mb-sm-0 mr-sm-24pt"
             >
-              <h2 className="mb-0">Courses</h2>
+              <h2 className="mb-0">Create Course</h2>
 
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">
                   <a href="#">Home</a>
                 </li>
-
-                <li className="breadcrumb-item active">Courses</li>
+                <li className="breadcrumb-item active">Create Course</li>
               </ol>
             </div>
             <div>
               <Link
                 className="btn btn-success"
-                href={`/protected/home/courses/create`}
+                href={`/protected/home/courses`}
               >
-                Create Course
+                Back To Courses
               </Link>
             </div>
           </div>
         </div>
-      </div>{" "}
+      </div>
     </>
   );
 }
