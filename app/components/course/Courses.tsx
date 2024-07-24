@@ -11,7 +11,7 @@ export default async function Courses({ list }: any) {
                   key={course.id}
                   imgUrl={course.avatar}
                   title={course.title}
-                  url={`/protected/admin/courses/${course.id}?title=${course.title}`}
+                  url={`/protected/admin/courses/${course.id}/course-applicants?title=${course.title}`}
                 />
               ))}
             </div>

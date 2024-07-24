@@ -25,22 +25,10 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
       <div id="header" className="mdk-header js-mdk-header mb-0" data-fixed>
         <div className="mdk-header__content">
           <div
-            className="navbar navbar-expand px-0 nav-bar-bg navbar-dark"
+            className="navbar navbar-expand nav-bar-bg navbar-dark"
             id="default-navbar"
             data-primary
           >
-            {/* <!-- Navbar toggler --> */}
-            <button
-              className="navbar-toggler d-block rounded-0"
-              onClick={() => {
-                setIsOpen(!isOpen);
-              }}
-              type="button"
-              data-toggle="sidebar"
-            >
-              <span className="material-icons">menu</span>
-            </button>
-
             {/* <!-- Navbar Brand --> */}
             <a className="navbar-brand mr-16pt">
               <span className=" d-lg-block">Khumla</span>
@@ -48,7 +36,7 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
 
             <div className="flex"></div>
 
-            <div className="nav navbar-nav flex-nowrap d-flex ml-0 mr-16pt">
+            <div className="nav navbar-nav flex-nowrap d-flex ml-0">
               <div className="nav-item dropdown d-none d-sm-flex">
                 <a
                   href="#"
