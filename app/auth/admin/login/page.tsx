@@ -78,7 +78,7 @@ export default function Login() {
             path: "/",
           });
 
-          router.push("/protected/admin/manage-courses");
+          router.push("/protected/home/courses");
         } else {
           const errorString = user?.data?.id
             ? "Not an Admin"

@@ -1,14 +1,16 @@
 import { NextPage } from "next";
 import Cookies from "universal-cookie";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
+const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   setIsOpen,
   isOpen,
 }) => {
   const cookies = new Cookies();
   const loggedInUser = cookies.get("param-lms-user");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const courseTitle = searchParams.get("title") || "";
 
   const logout = () => {
     cookies.remove("param-lms-user", {
@@ -25,18 +27,39 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
       <div id="header" className="mdk-header js-mdk-header mb-0" data-fixed>
         <div className="mdk-header__content">
           <div
-            className="navbar navbar-expand nav-bar-bg navbar-dark"
+            className="navbar navbar-expand px-0 nav-bar-bg navbar-dark"
             id="default-navbar"
             data-primary
           >
+            {/* <!-- Navbar toggler --> */}
+            <button
+              className="navbar-toggler d-block rounded-0"
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
+              type="button"
+              data-toggle="sidebar"
+            >
+              <span className="material-icons">menu</span>
+            </button>
+
             {/* <!-- Navbar Brand --> */}
             <a className="navbar-brand mr-16pt">
-              <span className=" d-lg-block">Thooto</span>
+              <span
+                className=" d-lg-block"
+                style={{
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  width: "450px",
+                }}
+              >
+                Khumla - {courseTitle}
+              </span>
             </a>
 
             <div className="flex"></div>
 
-            <div className="nav navbar-nav flex-nowrap d-flex ml-0">
+            <div className="nav navbar-nav flex-nowrap d-flex ml-0 mr-16pt">
               <div className="nav-item dropdown d-none d-sm-flex">
                 <a
                   href="#"
@@ -75,4 +98,4 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   );
 };
 
-export default HeadNav;
+export default HeadNavDrawer;

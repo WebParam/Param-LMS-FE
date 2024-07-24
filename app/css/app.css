@@ -3436,7 +3436,7 @@ a.btn.disabled,fieldset:disabled a.btn {
 }
 
 .btn-success {
-    color: #212529
+    color: #24345c
 }
 
 [dir] .btn-success {
@@ -24202,7 +24202,7 @@ a.text-primary-pickled-bluewood:focus,a.text-primary-pickled-bluewood:hover {
 }
 
 [dir] .bg-success {
-    background-color: #77c13a!important
+    background-color: #24345c!important
 }
 
 [dir] .bg-info {

@@ -1,7 +1,6 @@
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
-import Preloader from "@/app/components/Preloader";
 
 const withAuth = <P extends object>(
   WrappedComponent: React.ComponentType<P>
@@ -10,27 +9,25 @@ const withAuth = <P extends object>(
     const router = useRouter();
     const cookies = new Cookies();
     const loggedInUser = cookies.get("param-lms-user");
-    const isAuthorised = () =>
-      loggedInUser &&
-      (loggedInUser.role == "Student" || loggedInUser.role == "Customer");
+    const isAuthorised = () => loggedInUser && loggedInUser.role == "Admin";
 
     useEffect(() => {
       const checkAuth = async () => {
         if (!loggedInUser) {
           router.replace("/auth/login");
         } else if (!isAuthorised()) {
-          router.replace("/protected/home/courses");
+          router.replace("/protected/student/course/all-courses");
         }
       };
 
       checkAuth();
     }, [loggedInUser]);
 
-    if (!isAuthorised()) {
-      return <Preloader />;
-    }
-
-    return <WrappedComponent {...props} />;
+    return (
+      <Suspense>
+        <WrappedComponent {...props} />
+      </Suspense>
+    );
   };
 
   return AuthComponent;

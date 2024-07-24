@@ -1,88 +1,43 @@
 "use client";
 import Drawer from "@/app/topbar-components/Drawer";
-import HeadNav from "@/app/topbar-components/HeadNav";
+import HeadNav from "@/app/topbar-components/HeadNavDrawer";
 import { useState } from "react";
 import withAuth from "./AdminAuthWrapper";
+import { useParams, useSearchParams } from "next/navigation";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const params = useParams();
+  const courseId = params.id;
+  const courseTitle = searchParams.get("title") || "";
+
   const sideTabs = [
     {
-      name: "Analytics",
-      url: "#",
-      icon: "show_chart",
+      name: "Back To Courses",
+      url: `/protected/home/courses`,
+      icon: "home",
+    },
+    {
+      name: "Course Applicants",
+      url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}`,
+      icon: "person",
+    },
+    {
+      name: "Enrolled Students",
+      url: `/protected/admin/courses/${courseId}/enrollments?title=${courseTitle}`,
+      icon: "group",
+    },
+    {
+      name: "Edit Course",
+      url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
+      icon: "edit",
+    },
 
-      children: [
-        {
-          name: "Course Analytics",
-          url: "/protected/admin/course-dashboard/graphs/course",
-          icon: "list",
-        },
-        {
-          name: "Student Analytics",
-          url: "/protected/admin/student-analytics",
-          icon: "person",
-        },
-        {
-          name: "Analytic Averages",
-          url: `/protected/admin/grouped-progress/1/assessments`,
-          icon: "show_chart",
-        },
-      ],
-    },
     {
-      name: "Course",
-      url: "#",
-      icon: "list",
-      children: [
-        {
-          name: "Course Applicants",
-          url: `/protected/admin/course-applicants`,
-          icon: "person",
-        },
-        {
-          name: "Enrollments",
-          url: `/protected/admin/enrollments`,
-          icon: "assignment_turned_in",
-        },
-        {
-          name: "Manage Courses",
-          url: `/protected/admin/courses`,
-          icon: "folder_open",
-        },
-        {
-          name: "Create Course",
-          url: `/protected/admin/courses/create`,
-          icon: "add_box",
-        },
-        {
-          name: "Edit Course",
-          url: `#/protected/admin/courses`,
-          icon: "edit",
-        },
-      ],
-    },
-    {
-      name: "Facilitator",
-      url: `/protected/admin/facilitator?title=Facilitator Dashboard&homeTitle=HOME`,
-      icon: "dashboard",
-    },
-    {
-      name: "Moderator",
-      url: "#",
-      icon: "supervisor_account",
-      children: [
-        {
-          name: "Assessments",
-          url: `/protected/admin/moderator/pages/assessment?title=Mark Assessments&homeTitle=HOME&page=grouped`,
-          icon: "assignment_ind",
-        },
-        {
-          name: "Assignments",
-          url: `/protected/admin/moderator/pages/assignments?title=Mark Assignments&homeTitle=HOME&page=grouped`,
-          icon: "assignment_ind",
-        },
-      ],
+      name: "Create Course",
+      url: `/protected/admin/courses/create`,
+      icon: "add_box",
     },
   ];
 
