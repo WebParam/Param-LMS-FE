@@ -160,7 +160,7 @@ function  Page() {
               <span className="material-icons">sync_alt</span>
             </a>
             <a href="index.html" className="sidebar-brand ">
-              <img className="sidebar-brand-icon" src="assets/images/logo/accent-teal-100@2x.png" alt="Khumla" />
+              <img className="sidebar-brand-icon" src="assets/images/logo/accent-teal-100@2x.png" alt="Thooto" />
               <span>Thooto</span>
             </a>
             <div className="sidebar-account mx-16pt mb-16pt dropdown">

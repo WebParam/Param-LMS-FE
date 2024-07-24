@@ -53,7 +53,7 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                   width: "450px",
                 }}
               >
-                Khumla - {courseTitle}
+                Thooto - {courseTitle}
               </span>
             </a>
 
