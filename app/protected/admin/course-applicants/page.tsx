@@ -1,37 +1,34 @@
-"use client";
-import Pagination from "@/app/components/Pagination";
-import Table from "./(components)/Table";
-import { useEffect, useState } from "react";
-import { getCourseStudents } from "@/app/lib/actions/courseStudents";
-import { CourseApplicants } from "@/app/interfaces/courseApplicants";
-import Loading from "./loading";
-import { useRouter } from "next/navigation";
-import Cookies from "universal-cookie";
-import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
-
+"use server";
+import { getEnrollments } from "@/app/lib/actions/enrollments";
 import ChartWrapper from "@/app/components/enrolment-dashboard/graphs/ChartWrapper";
-import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/data";
-
-
-import { barDescriptions as AvgLangSpokenDescription } from "@/app/components/enrolment-dashboard/graphs/AvgLangOfStudent/data";
-
 import {
   options as OverallAssessmentBarOptions,
   data as OverallAssessmentBarData,
   barDescriptions as OverallAssessmentBarDescription,
 } from "@/app/components/enrolment-dashboard/graphs/OverallAssessment/data";
 import {
-  options as QuestionsAskedOptions,
-  data as QuestionsAskedData,
-  barDescriptions as QuestionsAskedDescription,
-} from "@/app/components/enrolment-dashboard/graphs/QuestionsAsked/data";
+  options as SocioEcoStatusOptions,
+  data as SocioEcoStatusDataFn,
+  barDescriptions as SocioEcoStatusDescription,
+} from "@/app/components/enrolment-dashboard/graphs/SocioEcoStatus/data";
 
 import {
-  options as CommentsChartBarOptions,
-  data as CommentsChartBarData,
-  barDescriptions as CommentsChartBarDescription,
-} from "@/app/components/enrolment-dashboard/graphs/CommentsChart/data";
+  options as StudentProvincesOptions,
+  data as StudentProvincesDataFn,
+  barDescriptions as StudentProvincesDescription,
+} from "@/app/components/enrolment-dashboard/graphs/AvgStudentInProvince/data";
+
+import {
+  options as StudentDisabilityOptions,
+  data as StudentDisabilityDataFn,
+  barDescriptions as StudentDisabilityDescription,
+} from "@/app/components/enrolment-dashboard/graphs/AvgStudentDisabilities/data";
+
+import {
+  options as StudentLangOptions,
+  data as StudentLangDataFn,
+  barDescriptions as StudentLangDescription,
+} from "@/app/components/enrolment-dashboard/graphs/AvgLangOfStudent/data";
 
 import {
   options as CitizenshipChartOptions,
@@ -39,15 +36,16 @@ import {
   barDescriptions as CitizenshipChartDescription,
 } from "@/app/components/enrolment-dashboard/graphs/CitizenshipChart/data";
 
-import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/data";
+import { barDescriptions as StudentsProgressStatusDescription } from "@/components/enrolment-dashboard/graphs/StudentGenderRoles/data";
 import { barDescriptions as StudentRacesDescription } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/data";
 
 import ChartLayout from "@/app/components/enrolment-dashboard/graphs/ChartLayout";
-import { AvgTimeSpent } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
-import { AvgLangSpoken } from "@/app/components/enrolment-dashboard/graphs/AvgLangOfStudent/AvgLanguages";
-import { StudentsProgressStatus } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
+import { StudentGenderRoles } from "@/components/enrolment-dashboard/graphs/StudentGenderRoles/StudentGenderPie";
 import { StudentRaces } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/StudentRaces";
-import {mockData} from "./(components)/data"
+import { IStudentsData } from "@/app/interfaces/courseApplicants";
+import TablePagination from "../enrollments/(components)/TablePagination";
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
 
 type DataTiles = {
   name: string;
@@ -55,71 +53,154 @@ type DataTiles = {
   data: number;
 };
 
-const Body = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState<CourseApplicants[]>(mockData);
-  const ITEMSPERPAGE = 6;
-  const indexOfLastItem = currentPage * ITEMSPERPAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const cookies = new Cookies();
-  const courseId = "6669f0ff8759b480859c10a7"
+const Body = async () => {
+  const courseId = "6669f0ff8759b480859c10a7";
 
-  useEffect(() => {
-    const asyncFetch = async () => {
-      try {
-        const fetchedData = await getCourseStudents(courseId);
-        debugger;
-       // setData(fetchedData);
-        const courseTitle = fetchedData[0].title;
-        console.log('data is here', fetchedData);
-        cookies.set("courseTitle", courseTitle);
-        router.push(`/protected/admin/course-applicants?courseTitle=${courseTitle}`);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    asyncFetch();
-  }, []);
-
-
-  
   function downloadAsXls() {
-    fetch(`https://khumla-dev-user-read.azurewebsites.net/api/Student/ExportStudentInformation/${courseId}`)
-      .then(response => response.blob())
-      .then(blob => {
+    fetch(
+      `https://khumla-dev-user-read.azurewebsites.net/api/Student/ExportStudentInformation/${courseId}`
+    )
+      .then((response) => response.blob())
+      .then((blob) => {
         const reader = new FileReader();
-        reader.onload = (event:any) => {
+        reader.onload = (event: any) => {
           const data = event.target.result;
-          const workbook = XLSX.read(data, { type: 'binary' });
+          const workbook = XLSX.read(data, { type: "binary" });
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
           const xlsData = XLSX.utils.sheet_to_json(worksheet);
           const newWorkbook = XLSX.utils.book_new();
           const newWorksheet = XLSX.utils.json_to_sheet(xlsData);
-          XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, 'Sheet1');
-          const xlsArray = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
-          const xlsBlob = new Blob([xlsArray], { type: 'application/octet-stream' });
-          saveAs(xlsBlob, 'students.xlsx');
+          XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, "Sheet1");
+          const xlsArray = XLSX.write(newWorkbook, {
+            bookType: "xlsx",
+            type: "array",
+          });
+          const xlsBlob = new Blob([xlsArray], {
+            type: "application/octet-stream",
+          });
+          saveAs(xlsBlob, "students.xlsx");
         };
         reader.readAsBinaryString(blob);
       })
-      .catch(error => console.error('Error downloading XLS file:', error));
+      .catch((error) => console.error("Error downloading XLS file:", error));
   }
 
-  if (loading) {
-    return <Loading />; 
-  }
+  const fetchedData: IStudentsData = await getEnrollments(courseId, false);
 
   const dataTiles: DataTiles[] = [
-    { name: "Students", icon: "person_outline", data: 112 },
-    { name: "Employed", icon: "list", data: 4 },
-    { name: "Unemployed", icon: "help", data: 10 },
-    { name: "Disability", icon: "help", data: 10 },
+    {
+      name: "Students",
+      icon: "person_outline",
+      data: fetchedData?.numberOfStudents!,
+    },
+    {
+      name: "Employed",
+      icon: "list",
+      data: fetchedData?.numbetOfStudentsEmployed!,
+    },
+    {
+      name: "Unemployed",
+      icon: "help",
+      data: fetchedData?.numberOfStudentsUnemployed!,
+    },
+    {
+      name: "Disability",
+      icon: "help",
+      data: fetchedData?.numberOfStudentsWithDisabilities!,
+    },
   ];
+
+  const studentsByProvinceData: any = [
+    fetchedData?.numberOfStudentsByProvince.gauteng!,
+    fetchedData?.numberOfStudentsByProvince.westernCape!,
+    fetchedData?.numberOfStudentsByProvince.easternCape!,
+    fetchedData?.numberOfStudentsByProvince.northernCape!,
+    fetchedData?.numberOfStudentsByProvince.limpopo!,
+    fetchedData?.numberOfStudentsByProvince.mpumalanga!,
+    fetchedData?.numberOfStudentsByProvince.kwaZuluNatal!,
+    fetchedData?.numberOfStudentsByProvince.freeState!,
+    fetchedData?.numberOfStudentsByProvince.northWest!,
+  ];
+
+  const StudentRacesData = [
+    fetchedData?.numberOfStudentsByEquityGroup.black!,
+    fetchedData?.numberOfStudentsByEquityGroup.coloured!,
+    fetchedData?.numberOfStudentsByEquityGroup.indian!,
+    fetchedData?.numberOfStudentsByEquityGroup.white!,
+    fetchedData?.numberOfStudentsByEquityGroup.asian!,
+    fetchedData?.numberOfStudentsByEquityGroup.other!,
+    fetchedData?.numberOfStudentsByEquityGroup.notSpecified!,
+  ];
+
+  const genderRolesData = [
+    fetchedData?.numberOfStudentsByGender.male!,
+    fetchedData?.numberOfStudentsByGender.female!,
+  ];
+
+  const SocioEcoStatusData: any = [
+    fetchedData?.numberOfStudentsByProvince.gauteng!,
+    fetchedData?.numberOfStudentsByProvince.westernCape!,
+    fetchedData?.numberOfStudentsByProvince.easternCape!,
+    fetchedData?.numberOfStudentsByProvince.northernCape!,
+    fetchedData?.numberOfStudentsByProvince.limpopo!,
+    fetchedData?.numberOfStudentsByProvince.mpumalanga!,
+    fetchedData?.numberOfStudentsByProvince.kwaZuluNatal!,
+    fetchedData?.numberOfStudentsByProvince.freeState!,
+    fetchedData?.numberOfStudentsByProvince.northWest!,
+  ];
+
+  const StudentDisabiltyData: any = [
+    fetchedData?.numberOfStudentsByDisability.deaf!,
+    fetchedData?.numberOfStudentsByDisability.blind!,
+    fetchedData?.numberOfStudentsByDisability.dumb!,
+    fetchedData?.numberOfStudentsByDisability.physicallyDisabled!,
+    fetchedData?.numberOfStudentsByDisability.intellectuallyDisabled!,
+    fetchedData?.numberOfStudentsByDisability.multipleDisabilities!,
+  ];
+
+  const StudentCitizenshipData: any = [
+    fetchedData?.numberOfStudentsByNationality.southAfrican!,
+    fetchedData?.numberOfStudentsByNationality.southAfrican!,
+    fetchedData?.numberOfStudentsByNationality.others!,
+    fetchedData?.numberOfStudentsByNationality.pernamentResident!,
+    fetchedData?.numberOfStudentsByNationality.unknown!,
+  ];
+
+  const StudentLanguagesData: any = [
+    fetchedData?.numberOfStudentsByLanguage.english!,
+
+    fetchedData?.numberOfStudentsByLanguage.afrikaans!,
+
+    fetchedData?.numberOfStudentsByLanguage.zulu!,
+
+    fetchedData?.numberOfStudentsByLanguage.xhosa!,
+
+    fetchedData?.numberOfStudentsByLanguage.tswana!,
+    fetchedData?.numberOfStudentsByLanguage.sotho!,
+    fetchedData?.numberOfStudentsByLanguage.venda!,
+    fetchedData?.numberOfStudentsByLanguage.tsonga!,
+    fetchedData?.numberOfStudentsByLanguage.swati!,
+    fetchedData?.numberOfStudentsByLanguage.ndebele!,
+    fetchedData?.numberOfStudentsByLanguage.signLanguage!,
+    fetchedData?.numberOfStudentsByLanguage.pedi!,
+  ];
+
+  const StudentProvincesBarData = await StudentProvincesDataFn(
+    studentsByProvinceData
+  );
+
+  const StudentDisabilityBarData = await StudentDisabilityDataFn(
+    StudentDisabiltyData
+  );
+
+  const StudentSocioEcoStatusBarData = await SocioEcoStatusDataFn(
+    SocioEcoStatusData
+  );
+
+  const StudentCitizenData = await CitizenshipChartData(StudentCitizenshipData);
+
+  const StudentLangData = await StudentLangDataFn(StudentLanguagesData);
+
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-lg-8pt">
@@ -144,12 +225,13 @@ const Body = () => {
       </div>
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
+          <ChartWrapper
             title="Student Provinces"
-            barDescriptions={AvgTimeSpentBarDataDescription}
-          >
-            <AvgTimeSpent />
-          </ChartLayout>
+            barDescriptions={StudentProvincesDescription}
+            options={StudentProvincesOptions}
+            data={StudentProvincesBarData}
+            type="bar"
+          />
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
@@ -166,81 +248,68 @@ const Body = () => {
             barDescriptions={StudentsProgressStatusDescription}
             type="pie"
           >
-            <StudentsProgressStatus />
+            <StudentGenderRoles StudentRoles={genderRolesData} />
           </ChartLayout>
         </div>
+
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
             title="Different Races"
             barDescriptions={StudentRacesDescription}
             type="pie"
           >
-            <StudentRaces />
+            <StudentRaces studentRacesData={StudentRacesData} />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
             title="Socio Economic Status"
-            barDescriptions={QuestionsAskedDescription}
-            options={QuestionsAskedOptions}
-            data={QuestionsAskedData}
+            barDescriptions={SocioEcoStatusDescription}
+            options={SocioEcoStatusOptions}
+            data={StudentSocioEcoStatusBarData}
             type="bar"
           />
         </div>
+
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
             title="Disabilities"
-            barDescriptions={CommentsChartBarDescription}
-            options={CommentsChartBarOptions}
-            data={CommentsChartBarData}
+            barDescriptions={StudentDisabilityDescription}
+            options={StudentDisabilityOptions}
+            data={StudentDisabilityBarData}
             type="bar"
           />
         </div>
+
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
             title="Citizenship"
             barDescriptions={CitizenshipChartDescription}
             options={CitizenshipChartOptions}
-            data={CitizenshipChartData}
+            data={StudentCitizenData}
             type="bar"
           />
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Languages"
-            barDescriptions={AvgLangSpokenDescription}
-          >
-            <AvgLangSpoken />
-          </ChartLayout>
-        </div>
-      </div>
-      <div className="card mb-0">
-        <div
-          className="table-responsive"
-          data-toggle="lists"
-          data-lists-sort-by="js-lists-values-employee-name"
-          data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
-        >
-          {data ? <Table list={currentItems} /> : <h3 style={{textAlign:'center', height:'50px', lineHeight:'50px'}}>No data</h3>}
-        </div>
-
-       <Pagination
-            listLength={data.length}
-            indexOfLastItem={indexOfLastItem}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            ITEMSPERPAGE={ITEMSPERPAGE}
+          <ChartWrapper
+            title="Student Languages"
+            barDescriptions={StudentLangDescription}
+            options={StudentLangOptions}
+            data={StudentLangData}
+            type="bar"
           />
+        </div>
       </div>
-      <button 
-        className="btn btn-primary enrolBtn m-3" 
+      <TablePagination data={fetchedData.courseApplicants} />
+      {/* <button
+        className="btn btn-primary enrolBtn m-3"
         onClick={downloadAsXls}
-        style={{cursor:'pointer'}}
+        style={{ cursor: "pointer" }}
       >
         Download As XLS
-      </button> 
+      </button> */}
     </>
   );
 };

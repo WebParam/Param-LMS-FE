@@ -3,19 +3,6 @@ import { NextPage } from "next";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 
 const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
-  const PASSMARK = 50;
-
-  const people = [
-    { name: "Alice", surname: "Smith" },
-    { name: "Bob", surname: "Johnson" },
-    { name: "Charlie", surname: "Williams" },
-    { name: "Diana", surname: "Jones" },
-    { name: "Edward", surname: "Brown" },
-    { name: "Fiona", surname: "Davis" },
-    { name: "George", surname: "Miller" },
-    { name: "Maxwell", surname: "mhlanga" },
-  ];
-
   return (
     <>
       <tbody className="list" id="staff">
@@ -44,7 +31,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                 {data.disability}
               </td>
               <td className="text-center js-lists-values-projects small">
-                {data.employmentStatus}
+                {data.employmentStatus ?? "N/A"}
               </td>
               <td className="text-center js-lists-values-projects small">
                 {data.province}
