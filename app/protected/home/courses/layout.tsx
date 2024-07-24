@@ -15,10 +15,7 @@ function Layout({ children }: { children: React.ReactNode }) {
     <>
       <div className="mdk-header-layout__content page-content ">
         <div className="mdk-header-layout__content page-content ">
-          <PageHeader />
-          <div className="container page__container page__container page-section">
-            {children}
-          </div>
+          {children}
         </div>
       </div>
     </>
