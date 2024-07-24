@@ -18,21 +18,35 @@ export interface StudentProvincesData {
   }[];
 }
 
+
 export const barDescriptions = [
-  {     description: "Average no. of Student Citezinship",
+  {     description: "Average no. of students Languages",
     color: "rgb(82 121 249)" },
 ];
 
 export const data = async (QuestionsAskedData: number[]): Promise<StudentProvincesData> => {
   "use server";
-  const labels = ["South Africa", "Other", "Dual(SA Plus Other)", "Permanent Residence", "Unknown"];
+  const labels = [
+    "english",
+      "afrikaans",
+      "zulu",
+      "xhosa",
+      "tswana",
+      "sotho",
+      "venda",
+      "tsonga",
+      "swati",
+      "ndebele",
+      "signLanguage",
+      "pedi"
 
+  ]
 
   return {
     labels,
     datasets: [
       {
-        label: "No of Students",
+        label: "# of Languages",
         data: QuestionsAskedData,
         backgroundColor: "rgb(82 121 249)",
         barPercentage: 0.3,

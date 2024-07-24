@@ -1,30 +1,35 @@
-"use client";
-import Pagination from "@/app/components/Pagination";
-import Table from "@/components/course/[id]/enrollments/Table";
-import { useEffect, useState } from "react";
-import list from "@/components/course/[id]/enrollments/data";
-import { CourseApplicants } from "@/app/interfaces/courseApplicants";
-import Loading from "./loading";
+"use server";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
 import ChartWrapper from "@/app/components/enrolment-dashboard/graphs/ChartWrapper";
-import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/data";
-
 import {
   options as OverallAssessmentBarOptions,
   data as OverallAssessmentBarData,
   barDescriptions as OverallAssessmentBarDescription,
 } from "@/app/components/enrolment-dashboard/graphs/OverallAssessment/data";
-import {
-  options as QuestionsAskedOptions,
-  data as QuestionsAskedData,
-  barDescriptions as QuestionsAskedDescription,
-} from "@/app/components/enrolment-dashboard/graphs/QuestionsAsked/data";
 
 import {
-  options as CommentsChartBarOptions,
-  data as CommentsChartBarData,
-  barDescriptions as CommentsChartBarDescription,
-} from "@/app/components/enrolment-dashboard/graphs/CommentsChart/data";
+  options as SocioEcoStatusOptions,
+  data as SocioEcoStatusDataFn,
+  barDescriptions as SocioEcoStatusDescription,
+} from "@/app/components/enrolment-dashboard/graphs/SocioEcoStatus/data";
+
+import {
+  options as StudentProvincesOptions,
+  data as StudentProvincesDataFn,
+  barDescriptions as StudentProvincesDescription,
+} from "@/app/components/enrolment-dashboard/graphs/AvgStudentInProvince/data";
+
+import {
+  options as StudentDisabilityOptions,
+  data as StudentDisabilityDataFn,
+  barDescriptions as StudentDisabilityDescription,
+} from "@/app/components/enrolment-dashboard/graphs/AvgStudentDisabilities/data";
+
+import {
+  options as StudentLangOptions,
+  data as StudentLangDataFn,
+  barDescriptions as StudentLangDescription,
+} from "@/app/components/enrolment-dashboard/graphs/AvgLangOfStudent/data";
 
 import {
   options as CitizenshipChartOptions,
@@ -32,14 +37,16 @@ import {
   barDescriptions as CitizenshipChartDescription,
 } from "@/app/components/enrolment-dashboard/graphs/CitizenshipChart/data";
 
-import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/data";
+import { barDescriptions as StudentsProgressStatusDescription } from "@/components/enrolment-dashboard/graphs/StudentGenderRoles/data";
 import { barDescriptions as StudentRacesDescription } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/data";
 
 import ChartLayout from "@/app/components/enrolment-dashboard/graphs/ChartLayout";
-import { AvgTimeSpent } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
-import { StudentsProgressStatus } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
+import { StudentGenderRoles } from "@/components/enrolment-dashboard/graphs/StudentGenderRoles/StudentGenderPie";
 import { StudentRaces } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/StudentRaces";
-import { useParams, useSearchParams } from "next/navigation";
+import { IStudentsData } from "@/app/interfaces/courseApplicants";
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
+import TablePagination from "@/components/enrollments/TablePagination";
 
 type DataTiles = {
   name: string;
@@ -47,45 +54,130 @@ type DataTiles = {
   data: number;
 };
 
-const Body = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 6;
-  const indexOfLastItem = currentPage * ITEMSPERPAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const [data, setData] = useState<CourseApplicants[]>([]);
-  const [loading, setLoading] = useState(true);
-  const params = useParams<{ id: string }>();
-  const id = params.id;
+const Body = async () => {
+  const courseId = "6669f0ff8759b480859c10a7";
 
-  useEffect(() => {
-    const asyncFetch = async () => {
-      try {
-        const fetchedData = await getEnrollments(id);
-        setData(fetchedData);
-        console.log("data is here", fetchedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    asyncFetch();
-  }, []);
 
-  if (loading) {
-    return <Loading />;
-  }
+
+  const fetchedData: IStudentsData = await getEnrollments(courseId, true);
 
   const dataTiles: DataTiles[] = [
-    { name: "Students", icon: "person_outline", data: 112 },
-    { name: "Matriculated", icon: "book", data: 5 },
-    { name: "Graduated", icon: "school", data: 79 },
-    { name: "Employed", icon: "list", data: 4 },
-    { name: "Unemployed", icon: "help", data: 10 },
+    {
+      name: "Students",
+      icon: "person_outline",
+      data: fetchedData?.numberOfStudents!,
+    },
+    {
+      name: "Employed",
+      icon: "list",
+      data: fetchedData?.numbetOfStudentsEmployed!,
+    },
+    {
+      name: "Unemployed",
+      icon: "help",
+      data: fetchedData?.numberOfStudentsUnemployed!,
+    },
+    {
+      name: "Disability",
+      icon: "help",
+      data: fetchedData?.numberOfStudentsWithDisabilities!,
+    },
   ];
+
+  const studentsByProvinceData: any = [
+    fetchedData?.numberOfStudentsByProvince.gauteng!,
+    fetchedData?.numberOfStudentsByProvince.westernCape!,
+    fetchedData?.numberOfStudentsByProvince.easternCape!,
+    fetchedData?.numberOfStudentsByProvince.northernCape!,
+    fetchedData?.numberOfStudentsByProvince.limpopo!,
+    fetchedData?.numberOfStudentsByProvince.mpumalanga!,
+    fetchedData?.numberOfStudentsByProvince.kwaZuluNatal!,
+    fetchedData?.numberOfStudentsByProvince.freeState!,
+    fetchedData?.numberOfStudentsByProvince.northWest!,
+  ];
+
+  const StudentRacesData = [
+    fetchedData?.numberOfStudentsByEquityGroup.black!,
+    fetchedData?.numberOfStudentsByEquityGroup.coloured!,
+    fetchedData?.numberOfStudentsByEquityGroup.indian!,
+    fetchedData?.numberOfStudentsByEquityGroup.white!,
+    fetchedData?.numberOfStudentsByEquityGroup.asian!,
+    fetchedData?.numberOfStudentsByEquityGroup.other!,
+    fetchedData?.numberOfStudentsByEquityGroup.notSpecified!,
+  ];
+
+  const genderRolesData = [
+    fetchedData?.numberOfStudentsByGender.male!,
+    fetchedData?.numberOfStudentsByGender.female!,
+  ];
+
+  const SocioEcoStatusData: any = [
+    fetchedData?.numberOfStudentsByProvince.gauteng!,
+    fetchedData?.numberOfStudentsByProvince.westernCape!,
+    fetchedData?.numberOfStudentsByProvince.easternCape!,
+    fetchedData?.numberOfStudentsByProvince.northernCape!,
+    fetchedData?.numberOfStudentsByProvince.limpopo!,
+    fetchedData?.numberOfStudentsByProvince.mpumalanga!,
+    fetchedData?.numberOfStudentsByProvince.kwaZuluNatal!,
+    fetchedData?.numberOfStudentsByProvince.freeState!,
+    fetchedData?.numberOfStudentsByProvince.northWest!,
+  ];
+
+  const StudentDisabiltyData: any = [
+    fetchedData?.numberOfStudentsByDisability.deaf!,
+    fetchedData?.numberOfStudentsByDisability.blind!,
+    fetchedData?.numberOfStudentsByDisability.dumb!,
+    fetchedData?.numberOfStudentsByDisability.physicallyDisabled!,
+    fetchedData?.numberOfStudentsByDisability.intellectuallyDisabled!,
+    fetchedData?.numberOfStudentsByDisability.multipleDisabilities!,
+  ];
+
+  const StudentCitizenshipData: any = [
+    fetchedData?.numberOfStudentsByNationality.southAfrican!,
+    fetchedData?.numberOfStudentsByNationality.southAfrican!,
+    fetchedData?.numberOfStudentsByNationality.others!,
+    fetchedData?.numberOfStudentsByNationality.pernamentResident!,
+    fetchedData?.numberOfStudentsByNationality.unknown!,
+  ];
+
+  const StudentLanguagesData: any = [
+    fetchedData?.numberOfStudentsByLanguage.english!,
+
+    fetchedData?.numberOfStudentsByLanguage.afrikaans!,
+
+    fetchedData?.numberOfStudentsByLanguage.zulu!,
+
+    fetchedData?.numberOfStudentsByLanguage.xhosa!,
+
+    fetchedData?.numberOfStudentsByLanguage.tswana!,
+    fetchedData?.numberOfStudentsByLanguage.sotho!,
+    fetchedData?.numberOfStudentsByLanguage.venda!,
+    fetchedData?.numberOfStudentsByLanguage.tsonga!,
+    fetchedData?.numberOfStudentsByLanguage.swati!,
+    fetchedData?.numberOfStudentsByLanguage.ndebele!,
+    fetchedData?.numberOfStudentsByLanguage.signLanguage!,
+    fetchedData?.numberOfStudentsByLanguage.pedi!,
+  ];
+
+  const StudentProvincesBarData = await StudentProvincesDataFn(
+    studentsByProvinceData
+  );
+
+  const StudentDisabilityBarData = await StudentDisabilityDataFn(
+    StudentDisabiltyData
+  );
+
+  const StudentSocioEcoStatusBarData = await SocioEcoStatusDataFn(
+    SocioEcoStatusData
+  );
+
+  const StudentCitizenData = await CitizenshipChartData(StudentCitizenshipData);
+
+  const StudentLangData = await StudentLangDataFn(StudentLanguagesData);
+
   return (
     <>
-      <div className="row mb-lg-8pt">
+      <div className="d-flex justify-content-between align-items-center mb-lg-8pt">
         {dataTiles.map((data: DataTiles) => (
           <div key={data.name} className="col-lg-3">
             <div className="card">
@@ -107,12 +199,13 @@ const Body = () => {
       </div>
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
+          <ChartWrapper
             title="Student Provinces"
-            barDescriptions={AvgTimeSpentBarDataDescription}
-          >
-            <AvgTimeSpent />
-          </ChartLayout>
+            barDescriptions={StudentProvincesDescription}
+            options={StudentProvincesOptions}
+            data={StudentProvincesBarData}
+            type="bar"
+          />
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
@@ -129,65 +222,62 @@ const Body = () => {
             barDescriptions={StudentsProgressStatusDescription}
             type="pie"
           >
-            <StudentsProgressStatus />
+            <StudentGenderRoles StudentRoles={genderRolesData} />
           </ChartLayout>
         </div>
+
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
             title="Different Races"
             barDescriptions={StudentRacesDescription}
             type="pie"
           >
-            <StudentRaces />
+            <StudentRaces studentRacesData={StudentRacesData} />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
             title="Socio Economic Status"
-            barDescriptions={QuestionsAskedDescription}
-            options={QuestionsAskedOptions}
-            data={QuestionsAskedData}
+            barDescriptions={SocioEcoStatusDescription}
+            options={SocioEcoStatusOptions}
+            data={StudentSocioEcoStatusBarData}
             type="bar"
           />
         </div>
+
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
             title="Disabilities"
-            barDescriptions={CommentsChartBarDescription}
-            options={CommentsChartBarOptions}
-            data={CommentsChartBarData}
+            barDescriptions={StudentDisabilityDescription}
+            options={StudentDisabilityOptions}
+            data={StudentDisabilityBarData}
             type="bar"
           />
         </div>
+
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
             title="Citizenship"
             barDescriptions={CitizenshipChartDescription}
             options={CitizenshipChartOptions}
-            data={CitizenshipChartData}
+            data={StudentCitizenData}
+            type="bar"
+          />
+        </div>
+
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartWrapper
+            title="Student Languages"
+            barDescriptions={StudentLangDescription}
+            options={StudentLangOptions}
+            data={StudentLangData}
             type="bar"
           />
         </div>
       </div>
-      <div className="card mb-0">
-        <div
-          className="table-responsive"
-          data-toggle="lists"
-          data-lists-sort-by="js-lists-values-employee-name"
-          data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
-        >
-          <Table list={data} />
-        </div>
-
-        <Pagination
-          listLength={list.length}
-          indexOfLastItem={indexOfLastItem}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          ITEMSPERPAGE={ITEMSPERPAGE}
-        />
-      </div>
+      <TablePagination data={fetchedData.courseApplicants} />
+  
     </>
   );
 };

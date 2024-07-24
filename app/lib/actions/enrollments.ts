@@ -1,10 +1,11 @@
 import { Diagnostic } from "../logger/logger";
 import { get } from "../utils";
+import { rAggregator } from "./endpoints";
 
-export const getEnrollments = async (courseId: string) => {
+export const getEnrollments = async (courseId: string,enrolled:boolean) => {
     try {
       const resp = await get(
-        `https://khumla-dev-newcourse-read.azurewebsites.net/api/v1/Enrollments/GetCourseEnrollements/${courseId}`
+        `${rAggregator}/StudentCourse/GetStudentInfoSummary/${courseId}?enrolled=${enrolled}`
       );
       console.log(resp);
       const data = resp.data;

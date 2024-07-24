@@ -11,7 +11,6 @@ import {
   Filler,
   BarElement,
 } from "chart.js";
-import { faker } from "@faker-js/faker";
 
 ChartJS.register(
   CategoryScale,
@@ -26,19 +25,19 @@ ChartJS.register(
 
 const labels = ["Gauteng", "Western Cape", "Eastern Cape", "Northern Cape", "Limpopo", "Mpumalanga", "KZN", "Free State", "North West"];
 
-export function AvgTimeSpent() {
+export function AvgTimeSpent({ averageTimeSpent }:any) {
   const data = () => {
     return {
       labels: labels,
       datasets: [
         {
           label: "# of Students",
-          data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
+          data: averageTimeSpent,
           fill: "start",
           pointRadius: 2,
           lineTension: 0.4,
           borderWidth: 1,
-          backgroundColor: (context) => {
+          backgroundColor: (context:any) => {
             const ctx = context.chart.ctx;
             const gradient = ctx.createLinearGradient(0, 0, 0, 400);
             gradient.addColorStop(0, "rgb(33, 138, 253)");
@@ -53,7 +52,7 @@ export function AvgTimeSpent() {
     };
   };
 
-  const options = {
+  const options:any = {
     responsive: true,
     plugins: {
       legend: {
@@ -64,7 +63,7 @@ export function AvgTimeSpent() {
       y: {
         beginAtZero: true,
         ticks: {
-          callback: (value) => value + "",
+          callback: (value:any) => value + "hr",
         },
       },
     },
@@ -72,5 +71,3 @@ export function AvgTimeSpent() {
 
   return <Bar options={options} data={data()} />;
 }
-
-
