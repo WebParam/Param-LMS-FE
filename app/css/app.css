@@ -22249,7 +22249,7 @@ a.text-secondary:focus,a.text-secondary:hover {
 }
 
 a.text-success:focus,a.text-success:hover {
-    color: #538628!important
+    color: #24345c!important
 }
 
 .text-info {
@@ -32280,7 +32280,7 @@ code.django .hljs-template-tag {
 }
 
 [dir] .navbar-dark .navbar-search,[dir] .search-form--black {
-    background-color: #272c33;
+    background-color: #24345c;
     border-color: #272c33
 }
 
