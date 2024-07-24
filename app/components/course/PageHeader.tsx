@@ -355,7 +355,7 @@ export default function PageHeader({ title }: { title: string }) {
               {isEditCourse && (
                 <Link
                   className="btn btn-success"
-                  href={`/protected/admin/courses`}
+                  href={`/protected/home/courses`}
                 >
                   All Courses
                 </Link>
