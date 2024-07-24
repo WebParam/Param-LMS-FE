@@ -141,7 +141,7 @@ const Body = () => {
                 className="dashboard-area-tabs__tab card-body text-center active"
               >
                 <span className="font-weight-bold">{data.name}</span>
-                <i className="material-icons  icon-48pt" style={{color:'#24345c'}}>
+                <i className="material-icons text-succes icon-48pt" >
                   {data.icon}
                 </i>
                 <span className="h2 mb-0 mt-n1">{data.data}</span>
@@ -246,7 +246,7 @@ const Body = () => {
         />
       </div>
       <button
-        className="btn btn-primary enrolBtn m-3"
+        className="btn btn-success enrolBtn m-3"
         onClick={downloadAsXls}
         style={{ cursor: "pointer" }}
       >

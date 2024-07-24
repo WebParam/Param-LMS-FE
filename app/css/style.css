@@ -26,7 +26,7 @@
 
 .side-bar-bg,
 .nav-bar-bg {
-  background: black !important;
+  background: #24345c !important;
 }
 
 .mdk-drawer__content {
@@ -36,7 +36,7 @@
 .mdk-drawer__content .material-icons,
 .mdk-drawer__content .sidebar-menu-button:hover,
 .sidebar-brand:hover {
-  color: #24345c;
+  color: #6184c5;
 }
 
 .arrow-right {

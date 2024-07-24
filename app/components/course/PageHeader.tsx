@@ -362,7 +362,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isEditModule && (
                 <Link
-                  className="btn" style={{color: '#24345c'}}
+                  className="btn btn-success" 
                   href={`/protected/admin/courses/${id}/modules?title=${name}`}
                 >
                   Unit Standards
@@ -370,7 +370,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isEditKnowledgeModules && (
                 <Link
-                  className="btn" style={{color: '#24345c'}}
+                className="btn btn-success"
                   href={`/protected/admin/courses/${id}/knowledge-modules?title=${name}`}
                 >
                   Knowledge Modules
@@ -378,7 +378,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isEditPracticalModules && (
                 <Link
-                  className="btn" style={{color: '#24345c'}}
+                className="btn btn-success" 
                   href={`/protected/admin/courses/${id}/practical-modules?title=${name}`}
                 >
                   Practical Modules
@@ -386,7 +386,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isModule && (
                 <button
-                  className="btn" style={{color: '#24345c'}}
+                  className="btn btn-success" 
                   onClick={() => setOpenModal(true)}
                 >
                   Create Unit Standard
@@ -394,7 +394,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isKnowledgeModule && (
                 <button
-                  className="btn" style={{color: '#24345c'}}
+                className="btn btn-success"
                   onClick={() => setOpenKnowledgeModuleModal(true)}
                 >
                   Create Knowledge Module
@@ -402,7 +402,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isPracticalModule && (
                 <button
-                  className="btn" style={{color: '#24345c'}}
+                className="btn btn-success"
                   onClick={() => setOpenPracticalModuleModal(true)}
                 >
                   Create Practical Module
@@ -418,7 +418,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isViewCourseApplicants && (
                 <Link
-                  className="btn" style={{color: '#24345c'}}
+                  className="btn btn-success" 
                   href={`/protected/admin/courses/${id}/course-applicants?title=${name}`}
                 >
                   Course Applicants
@@ -426,19 +426,19 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isViewEnrolledStudents && (
                 <Link
-                  className="btn" style={{color: '#24345c'}}
+                className="btn btn-success"
                   href={`/protected/admin/courses/${id}/enrollments?title=${name}`}
                 >
                   Enrolled Students
                 </Link>
               )}
               {isEditDocument && (
-                <Link className="btn" style={{color: '#24345c'}} href={backUrl}>
+                <Link className="btn btn-success" href={backUrl}>
                   Documents
                 </Link>
               )}
               {isEditKnowledgeTopic && (
-                <Link className="btn" style={{color: '#24345c'}} href={backUrl}>
+                <Link className="btn btn-success"  href={backUrl}>
                   Knowledge Topic
                 </Link>
               )}
