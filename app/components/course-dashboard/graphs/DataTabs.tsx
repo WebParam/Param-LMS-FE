@@ -37,7 +37,6 @@ export default function DataTab({
                 aria-selected="true"
                 className="dashboard-area-tabs__tab card-body text-center active"
               >
-                <span className="font-weight-bold">{data.name}</span>
                 <i className="material-icons text-success icon-48pt">
                   {data.icon}
                 </i>

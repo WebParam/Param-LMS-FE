@@ -10,7 +10,7 @@ import "react-quill/dist/quill.snow.css";
 const students = [
   { value: "Ellion Ridge", label: "Ellion Ridge - 227654" },
   { value: "Sipho Nkosi", label: "Sipho Nkosi -229865 " },
-  { value: "John Doe", label: "John Doe - 228897" },
+  { value: "Khanyi Ngubani", label: "Khanyi Ngubani - 228897" },
   // Add more students as needed
 ];
 

@@ -36,7 +36,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
     {
       name: "Create Course",
-      url: `/protected/admin/courses/create`,
+      url: `/protected/home/courses/create`,
       icon: "add_box",
     },
   ];

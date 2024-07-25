@@ -1,7 +1,7 @@
 const list: applicantprofile[] = [
   {
     "id": 1,
-    "Full_name": "John Doe",
+    "Full_name": "Khanyi Ngubani",
     "ID_Number": "1234567890",
     "Email_Address": "john.doe@gmail.com",
     "Gender": "Male",
