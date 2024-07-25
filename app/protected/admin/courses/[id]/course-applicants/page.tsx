@@ -3,8 +3,8 @@ import { getEnrollments } from "@/app/lib/actions/enrollments";
 import ChartWrapper from "@/app/components/enrolment-dashboard/graphs/ChartWrapper";
 import {
   options as OverallAssessmentBarOptions,
-  data as OverallAssessmentBarData,
   barDescriptions as OverallAssessmentBarDescription,
+  transformData,
 } from "@/app/components/enrolment-dashboard/graphs/OverallAssessment/data";
 
 import {
@@ -44,8 +44,6 @@ import ChartLayout from "@/app/components/enrolment-dashboard/graphs/ChartLayout
 import { StudentGenderRoles } from "@/components/enrolment-dashboard/graphs/StudentGenderRoles/StudentGenderPie";
 import { StudentRaces } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/StudentRaces";
 import { IStudentsData } from "@/app/interfaces/courseApplicants";
-import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";
 import TablePagination from "@/components/enrollments/TablePagination";
 
 type DataTiles = {
@@ -54,37 +52,10 @@ type DataTiles = {
   data: number;
 };
 
-const Body = async () => {
-  const courseId = "6669f0ff8759b480859c10a7";
 
-  function downloadAsXls() {
-    fetch(
-      `https://khumla-dev-user-read.azurewebsites.net/api/Student/ExportStudentInformation/${courseId}`
-    )
-      .then((response) => response.blob())
-      .then((blob) => {
-        const reader = new FileReader();
-        reader.onload = (event: any) => {
-          const data = event.target.result;
-          const workbook = XLSX.read(data, { type: "binary" });
-          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const xlsData = XLSX.utils.sheet_to_json(worksheet);
-          const newWorkbook = XLSX.utils.book_new();
-          const newWorksheet = XLSX.utils.json_to_sheet(xlsData);
-          XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, "Sheet1");
-          const xlsArray = XLSX.write(newWorkbook, {
-            bookType: "xlsx",
-            type: "array",
-          });
-          const xlsBlob = new Blob([xlsArray], {
-            type: "application/octet-stream",
-          });
-          saveAs(xlsBlob, "students.xlsx");
-        };
-        reader.readAsBinaryString(blob);
-      })
-      .catch((error) => console.error("Error downloading XLS file:", error));
-  }
+
+const Body = async ({params}:{params : {id:string}}) => {
+  const courseId = params.id;
 
   const fetchedData: IStudentsData = await getEnrollments(courseId, false);
 
@@ -202,6 +173,10 @@ const Body = async () => {
 
   const StudentLangData = await StudentLangDataFn(StudentLanguagesData);
 
+
+  const ageRangeGenderDistribution = fetchedData?.AgeRangeGenderDistribution || [];
+  const OverallAssessmentBarData = transformData(ageRangeGenderDistribution);
+
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-lg-8pt">
@@ -303,14 +278,8 @@ const Body = async () => {
           />
         </div>
       </div>
-      <TablePagination data={fetchedData.courseApplicants} />
-      {/* <button
-        className="btn btn-primary enrolBtn m-3"
-        onClick={downloadAsXls}
-        style={{ cursor: "pointer" }}
-      >
-        Download As XLS
-      </button> */}
+      <TablePagination courseId={courseId} data={fetchedData.courseApplicants} />
+   
     </>
   );
 };

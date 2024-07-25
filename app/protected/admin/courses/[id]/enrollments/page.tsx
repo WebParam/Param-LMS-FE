@@ -3,8 +3,8 @@ import { getEnrollments } from "@/app/lib/actions/enrollments";
 import ChartWrapper from "@/app/components/enrolment-dashboard/graphs/ChartWrapper";
 import {
   options as OverallAssessmentBarOptions,
-  data as OverallAssessmentBarData,
   barDescriptions as OverallAssessmentBarDescription,
+  transformData,
 } from "@/app/components/enrolment-dashboard/graphs/OverallAssessment/data";
 
 import {
@@ -174,6 +174,9 @@ const Body = async () => {
   const StudentCitizenData = await CitizenshipChartData(StudentCitizenshipData);
 
   const StudentLangData = await StudentLangDataFn(StudentLanguagesData);
+
+  const ageRangeGenderDistribution = fetchedData?.AgeRangeGenderDistribution || [];
+  const OverallAssessmentBarData = transformData(ageRangeGenderDistribution);
 
   return (
     <>

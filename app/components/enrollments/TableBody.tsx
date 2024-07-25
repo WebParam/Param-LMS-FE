@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { NextPage } from "next";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
-
   const pathName = usePathname();
-  const isEnrollment = pathName.includes("enrollment") && true;
+  const isEnrollment = pathName.includes("enrollment") ? true : false;
+  const { id } = useParams<{
+    id: string;
+  }>();
 
   return (
     <>
@@ -110,17 +112,16 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
 
               <td className="text-center js-lists-values-projects small">
                 <div className="d-flex align-items-center justify-content-center ">
-                <Link
-  href={{
-    pathname: isEnrollment 
-      ? `/protected/admin/courses/3/enrollments/${data.id}/profile` 
-      : `/protected/admin/courses/3/course-applicants/${data.id}/profiles`,
-    query: { id: data.id, name: data.name },
-  }}
->
-  <i className="material-icons mr-8pt">visibility</i>
-</Link>
-
+                  <Link
+                    href={{
+                      pathname: isEnrollment
+                        ? `/protected/admin/courses/${id}/enrollments/${data.id}/profile`
+                        : `/protected/admin/courses/${id}/course-applicants/${data.id}/profiles`,
+                      query: { id: data.id, name: data.name },
+                    }}
+                  >
+                    <i className="material-icons mr-8pt">visibility</i>
+                  </Link>
                 </div>
               </td>
             </tr>

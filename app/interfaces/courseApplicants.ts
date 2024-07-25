@@ -11,6 +11,12 @@ export type CourseApplicants = {
   status: number;
   age:number;
 };
+
+export interface AgeRangeGenderDistribution {
+  ageRange: string;
+  maleCount: number;
+  femaleCount: number;
+}
 export interface IStudentsData {
   numberOfStudents: number;
   numbetOfStudentsEmployed: number;
@@ -69,5 +75,6 @@ export interface IStudentsData {
     intellectuallyDisabled: number;
     multipleDisabilities: number;
   };
+  AgeRangeGenderDistribution:AgeRangeGenderDistribution[]
   courseApplicants: CourseApplicants[];
 }
