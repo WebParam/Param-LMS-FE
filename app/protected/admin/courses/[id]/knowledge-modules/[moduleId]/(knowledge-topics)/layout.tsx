@@ -50,11 +50,17 @@ function Layout({ children }: { children: React.ReactNode }) {
           {tabs.map((tab) => (
             <Link
               key={tab.name}
-              className={tab.path === pathname ? "active" : ""}
+              className={pathname == tab.path ? "bg-success" : ""}
               href={tab.url}
             >
               <span className="flex d-flex flex-column">
-                <strong className="card-title">{tab.title}</strong>
+                <strong
+                  className={`card-title ${
+                    pathname == tab.path ? "text-white" : ""
+                  }`}
+                >
+                  {tab.title}
+                </strong>
               </span>
             </Link>
           ))}
