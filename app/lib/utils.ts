@@ -110,9 +110,10 @@ export const formDataEntriesArray = (entries: any) => {
   return objArray;
 };
 
-export const exportToExcel = (
+export const downloadFile = (
   url: string,
   filename: string,
+  fileExtension: string,
   setExportModal: (isBool: boolean) => void
 ) => {
   setExportModal(true);
@@ -128,7 +129,7 @@ export const exportToExcel = (
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = downloadUrl;
-      link.setAttribute("download", filename + ".xlsx");
+      link.setAttribute("download", filename + "." + fileExtension);
       document.body.appendChild(link);
       link.click();
       link.remove();

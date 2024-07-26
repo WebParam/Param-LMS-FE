@@ -1,16 +1,15 @@
 "use client";
 import Link from "next/link";
 import "./layout.scss";
-import {
-  usePathname,
-  useSearchParams,
-  useParams,
-} from "next/navigation";
+import { usePathname, useSearchParams, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import EnrollStudentModal from "@/components/course/[id]/course-applicants/EnrollStudentModal";
 import RejectStudentModal from "@/components/course/[id]/course-applicants/RejectStudentModal";
 import RequestModificationModal from "@/components/course/[id]/course-applicants/RequestModificationModal";
 import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
+import { rCourseUrl } from "@/app/lib/actions/endpoints";
+import { downloadFile } from "@/app/lib/utils";
+import { Modal } from "react-bootstrap";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -26,8 +25,12 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [rejectModal, setRejectModal] = useState<boolean>(false);
   const [requestModal, setRequestModal] = useState<boolean>(false);
   const [documents, setDocuments] = useState([]);
+  const [exportModal, setExportModal] = useState(false);
 
-  const baseLayoutUrl = `/protected/admin/courses/${courseId}/course-applicants/${studentId}`;
+  const arrUrl = pathname.split("/");
+  arrUrl.pop();
+  const baseLayoutUrl = arrUrl.join("/");
+
   const tabs = [
     {
       title: "Profile",
@@ -66,6 +69,13 @@ function Layout({ children }: { children: React.ReactNode }) {
     setDocuments(response);
   }
 
+  const exportStudentDocuments = () => {
+    const filename = "student_information";
+    const fileExtension = "zip";
+    // const url = `${rCourseUrl}/KnowledgeTopics/ExportKnowledgeTopics?studentId=${studentId}`;
+    // downloadFile(url, filename, fileExtension, setExportModal);
+  };
+
   useEffect(() => {
     studentInformation();
     setRejectModal(false);
@@ -94,6 +104,15 @@ function Layout({ children }: { children: React.ReactNode }) {
         onHide={() => setRejectModal(false)}
       />
 
+      <Modal show={exportModal} keyboard={false} centered>
+        <Modal.Body>
+          <div className="d-flex justify-content-center align-items-center flex-column gap-5">
+            <div className="spinner-border text-primary" role="status" />
+            <p style={{ color: "#252525" }}>Exporting Zip file...</p>
+          </div>
+        </Modal.Body>
+      </Modal>
+
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
         <div className="mx-1">
           <button
@@ -116,11 +135,60 @@ function Layout({ children }: { children: React.ReactNode }) {
         </div>
         <div className="mx-1">
           <button
+            className={`btn btn-block mx-1 ${
+              documents.length > 0 ? "btn-success" : "btn-secondary"
+            }`}
+            onClick={() => exportStudentDocuments()}
+            disabled={!(documents.length > 0)}
+          >
+            Download Documents
+          </button>
+        </div>
+        <div className="mx-1">
+          <button
             className="btn btn-danger btn-block"
             onClick={() => setRejectModal(true)}
           >
             Reject Application
           </button>
+        </div>
+        <div className="mx-1 d-flex align-items-center">
+          <div className="dropdown ml-auto">
+            <a
+              href="#"
+              data-toggle="dropdown"
+              data-caret="false"
+              className="text-muted"
+            >
+              <i className="material-icons">more_vert</i>
+            </a>
+            <div
+              style={{ cursor: "pointer" }}
+              className="dropdown-menu dropdown-menu-right"
+            >
+              {documents.length > 0 ? (
+                <>
+                  <div
+                    onClick={() => setRequestModal(true)}
+                    className="dropdown-item"
+                  >
+                    Request Modification
+                  </div>
+                  <div
+                    onClick={() => exportStudentDocuments()}
+                    className="dropdown-item"
+                  >
+                    Download Documents
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="dropdown-item">Loading ...</div>
+                  <div className="dropdown-item">Loading ...</div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 

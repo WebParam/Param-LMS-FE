@@ -7,7 +7,7 @@ import { getKnowledgeTopics } from "@/app/lib/actions/knowledge-topic";
 import { useSearchParams } from "next/navigation";
 import { Modal } from "react-bootstrap";
 import { rCourseUrl } from "@/app/lib/actions/endpoints";
-import { exportToExcel } from "@/app/lib/utils";
+import { downloadFile } from "@/app/lib/utils";
 
 const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
   const id = params.moduleId;
@@ -37,8 +37,10 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
   }, [refreshId]);
 
   const exportKnowledgeTopics = () => {
+    const filename = "knowledge_topics";
+    const fileExtension = "xlsx";
     const url = `${rCourseUrl}/KnowledgeTopics/ExportKnowledgeTopics?moduleId=${id}`;
-    exportToExcel(url, "knowledge_topics", setExportModal);
+    downloadFile(url, filename, fileExtension, setExportModal);
   };
 
   return (
@@ -63,7 +65,7 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
         <div className="page-separator__text">Knowledge Topics</div>
       </div>
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
-      <div className="mx-1">
+        <div className="mx-1">
           <button
             className={`btn ${
               currentItems.length > 0 ? "btn-success" : "btn-secondary"
