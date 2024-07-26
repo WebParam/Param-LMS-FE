@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import AcceptDocumentModal from "./AcceptDocumentModal";
-import RejectDocumentModal from "./RejectDocumentModal";
 import DocumentModal from "./DocumentModal";
 
 const TableRow = ({ document }: { document: any }) => {
@@ -21,21 +19,6 @@ const TableRow = ({ document }: { document: any }) => {
 
   return (
     <>
-      <AcceptDocumentModal
-        documentName={document.name}
-        documentId={document.id}
-        data={document}
-        show={acceptDocumentModal}
-        onHide={() => setAcceptDocumentModal(false)}
-      />
-
-      <RejectDocumentModal
-        documentId={document.id}
-        documentName={document.name}
-        show={rejectDocumentModal}
-        onHide={() => setRejectDocumentModal(false)}
-      />
-
       <DocumentModal
         documentId={document.id}
         documentName={document.name}
