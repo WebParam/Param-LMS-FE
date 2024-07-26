@@ -1,18 +1,15 @@
 const TableHead = () => {
-  const headers = [
-    "StudentID",
-    "Name",
-    "Course Applied",
-    "Statuses"
-  ];
+  const headers = ["Document Name","Status", "Icons"];
 
   return (
     <>
       <thead>
-        <tr>          
-          <th className="text-center">Actions</th>
+        <tr>
           {headers.map((name) => (
             <th key={name} className="text-center">
+              {name === "Embedded Link" && (
+                <i className="material-icons mr-8pt">link</i>
+              )}
               <a
                 key={name}
                 className="sort"

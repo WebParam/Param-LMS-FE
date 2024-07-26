@@ -1,9 +1,9 @@
-import TableHead from "./TableHead";
 import TableBody from "./TableBody";
-import { CourseApplicants } from "@/app/interfaces/courseApplicants";
+import { NextPage } from "next";
+import { applicantDocuments } from "./data";
+import TableHead from "./TableHead";
 
-async function Table({ list }: { list: CourseApplicants[] }) {
-
+const Table: NextPage<{ list: applicantDocuments[] }> = ({ list }) => {
   return (
     <>
       <table className="table mb-0 thead-border-top-0 table-nowrap">
