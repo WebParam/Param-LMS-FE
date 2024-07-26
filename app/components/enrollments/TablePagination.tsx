@@ -1,11 +1,10 @@
 "use client";
-import React, { useState, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Table from "./Table";
 import Pagination from "@/app/components/Pagination";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
-import debounce from "lodash.debounce";
 
 const provinces = [
   "Gauteng",
@@ -71,21 +70,20 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
     disability: "",
   });
 
-  const debouncedSearch = useCallback(
-    debounce((term) => {
-      applyFilters(term, selectedFilters);
-    }, 300),
-    [data, selectedFilters]
-  );
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  function applyFilters(term: any, filters: any) {
+  useEffect(() => {
+    applyFilters();
+  }, [data, selectedFilters, searchTerm]);
+
+  const applyFilters = () => {
     let newFilteredData = data.filter((applicant) =>
       Object.values(applicant).some((value) =>
-        String(value).toLowerCase().includes(term.toLowerCase())
+        String(value).toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
 
-    Object.entries(filters).forEach(([key, value]) => {
+    Object.entries(selectedFilters).forEach(([key, value]) => {
       if (value) {
         newFilteredData = newFilteredData.filter(
           (applicant: any) => applicant[key] === value
@@ -94,36 +92,32 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
     });
 
     setFilteredData(newFilteredData);
-  }
+  };
 
-  function handleFilterChange(
+  const handleFilterChange = (
     e: React.ChangeEvent<HTMLSelectElement>,
     filterKey: string
-  ) {
+  ) => {
     const newFilters = {
       ...selectedFilters,
       [filterKey]: e.target.value,
     };
 
     setSelectedFilters(newFilters);
-    applyFilters(searchTerm, newFilters);
-  }
+  };
 
-  function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const term = e.target.value;
-    setSearchTerm(term);
-    debouncedSearch(term);
-  }
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
 
-  function removeFilter(filterKey: string) {
+  const removeFilter = (filterKey: string) => {
     const newFilters = {
       ...selectedFilters,
       [filterKey]: "",
     };
 
     setSelectedFilters(newFilters);
-    applyFilters(searchTerm, newFilters);
-  }
+  };
 
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
@@ -132,7 +126,7 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
     indexOfFirstItem + ITEMSPERPAGE
   );
 
-  function downloadAsXls(e: React.MouseEvent<HTMLButtonElement>) {
+  const downloadAsXls = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
     fetch(
@@ -162,10 +156,10 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
         reader.readAsBinaryString(blob);
       })
       .catch((error) => console.error("Error downloading XLS file:", error));
-  }
+  };
 
   return (
-    <>
+    <div ref={containerRef}>
       <div className="filters-container mb-2 d-flex align-items-center">
         <input
           placeholder="Search"
@@ -296,7 +290,7 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
           cursor: pointer;
         }
       `}</style>
-    </>
+    </div>
   );
 }
 

@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import { NextPage } from "next";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
