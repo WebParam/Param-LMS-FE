@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { NextPage } from "next";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
@@ -111,16 +111,15 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                   <Link
                     href={{
                       pathname: isEnrollment
-                        ? `/protected/admin/courses/${id}/enrollments/${data.id}/student-details/profiles`
-                        : `/protected/admin/courses/${id}/course-applicants/${data.id}/profiles`,
+                        ? `/protected/admin/courses/${id}/enrollments/${data.userId}/student-details/profiles`
+                        : `/protected/admin/courses/${id}/course-applicants/${data.userId}/profiles`,
                       query: {
-                        id: data.id,
-                        studentName: data.name,
                         title: title,
+                        studentName: data.name,
                       },
                     }}
                   >
-                    <i className="material-icons mr-8pt">visibility</i>
+                    <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">visibility</i>
                   </Link>
                 </div>
               </td>
