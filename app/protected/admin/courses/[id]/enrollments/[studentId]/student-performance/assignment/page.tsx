@@ -1,5 +1,5 @@
 "use client";
-import Table from "@/components/course/[id]/enrollments/assignment/Table";
+import Table from "@/components/course/[id]/enrollments/student-performance/assignment/Table";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { getStudentData } from "@/app/lib/actions/courseStudents";

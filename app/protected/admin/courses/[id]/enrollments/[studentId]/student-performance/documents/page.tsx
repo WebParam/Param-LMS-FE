@@ -1,10 +1,10 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import Table from "@/components/course/[id]/enrollments/profile/Table";
+import Table from "@/components/course/[id]/enrollments/student-performance/documents/Table";
 import { useEffect, useState } from "react";
-import list from "@/components/course/[id]/enrollments/profile/data";
-import { getStudentInfo } from "@/app/lib/actions/courseStudents";
+import list from "@/components/course/[id]/enrollments/student-performance/documents/data";
 import { usePathname } from "next/navigation";
+import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,13 +18,15 @@ const Body = () => {
   async function studentInformation() {
     const id = pathname.split('/')[4];
     console.log('id from parameter', id)
-    const response = await getStudentInfo(id)
+    const response = await getStudentDocuments(id)
+    console.log('response', response)
     setData(response)
   }
 
   useEffect(() => {
     studentInformation()
   }, [])
+
 
   return (
     <>
@@ -41,4 +43,3 @@ const Body = () => {
 };
 
 export default Body;
-

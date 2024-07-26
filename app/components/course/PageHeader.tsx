@@ -143,8 +143,7 @@ export default function PageHeader({ title }: { title: string }) {
     );
     title = `Course Applicants - ${name}`;
   } else if (
-    pathname ==
-    `/protected/admin/courses/${id}/enrollments/${studentId}/profile`
+    pathname.includes(`/protected/admin/courses/${id}/enrollments/${studentId}/student-details`) || pathname.includes(`/protected/admin/courses/${id}/enrollments/${studentId}/student-performance`)
   ) {
     isViewEnrolledStudents = true;
     newTitle = (

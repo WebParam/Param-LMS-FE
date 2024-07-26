@@ -19,27 +19,24 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
           list.map((data: CourseApplicants, index: number) => (
             <tr key={data.id} className="selected">
               <td className="text-center js-lists-values-projects small">
-                {data.name}
+                {data.name ?? "N/A"}
               </td>
               <td className="text-center js-lists-values-projects small">
-                {data.gender}
-              </td>
-              <td className="text-center js-lists-values-projects small">
-                {data.age}
+                {data.gender ?? "N/A"}
               </td>
 
               <td className="text-center js-lists-values-projects small">
-                {data.race}
+                {data.race ?? "N/A"}
               </td>
 
               <td className="text-center js-lists-values-projects small">
-                {data.disability}
+                {data.disability ?? "N/A"}
               </td>
               <td className="text-center js-lists-values-projects small">
                 {data.employmentStatus ?? "N/A"}
               </td>
               <td className="text-center js-lists-values-projects small">
-                {data.province}
+                {data.province ?? "N/A"}
               </td>
               <td className="text-center js-lists-values-projects small">
                 <div
@@ -113,7 +110,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                   <Link
                     href={{
                       pathname: isEnrollment
-                        ? `/protected/admin/courses/${id}/enrollments/${data.id}/profile`
+                        ? `/protected/admin/courses/${id}/enrollments/${data.id}/student-details/profiles`
                         : `/protected/admin/courses/${id}/course-applicants/${data.id}/profiles`,
                       query: {
                         id: data.id,

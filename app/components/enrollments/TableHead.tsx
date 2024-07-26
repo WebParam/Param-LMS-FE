@@ -2,11 +2,10 @@ const TableHead = () => {
     const headers = [
       "Name",
       "Gender",
-      "Age",
       "Race",
       "Disability",
       "Employement Status",
-      "Provice",
+      "Province",
       "Status"
     ];
   
