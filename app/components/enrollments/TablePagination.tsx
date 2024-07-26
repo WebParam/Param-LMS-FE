@@ -97,7 +97,7 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
           ITEMSPERPAGE={ITEMSPERPAGE}
         />
       </div>
-      {courseId && (
+    
         <button
           className="btn btn-primary enrolBtn m-3"
           onClick={downloadAsXls}
@@ -109,7 +109,7 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
             "Download As XLS"
           )}
         </button>
-      )}
+    
     </>
   );
 }

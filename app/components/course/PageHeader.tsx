@@ -34,7 +34,7 @@ export default function PageHeader({ title }: { title: string }) {
   let isCourse = false;
   let isEditDocument = false;
   let isEditKnowledgeTopic = false;
-  const { id } = useParams<{ id: string }>();
+  const { id, studentId } = useParams<{ id: string; studentId: string }>();
 
   const arrUrl = pathname.split("/");
   const suffixPath = arrUrl.pop() || "";
@@ -120,7 +120,54 @@ export default function PageHeader({ title }: { title: string }) {
   } else if (pathname.indexOf("/modules/create") !== -1) {
     title = `Create Unit Standard`;
     isCreateModule = true;
+  } else if (
+    pathname ==
+    `/protected/admin/courses/${id}/course-applicants/${studentId}/profiles`
+  ) {
+    isViewCourseApplicants = true;
+    newTitle = (
+      <div className="d-flex">
+        <p
+          style={{
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            maxWidth: "560px",
+            whiteSpace: "nowrap",
+          }}
+          className="mr-2"
+        >
+          {studentName}
+        </p>
+        - {stepperMap[suffixPath] ? stepperMap[suffixPath] : "Student Profile"}
+      </div>
+    );
+    title = `Course Applicants - ${name}`;
+  } else if (
+    pathname ==
+    `/protected/admin/courses/${id}/enrollments/${studentId}/profile`
+  ) {
+    isViewEnrolledStudents = true;
+    newTitle = (
+      <div className="d-flex">
+        <p
+          style={{
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            maxWidth: "560px",
+            whiteSpace: "nowrap",
+          }}
+          className="mr-2"
+        >
+          {studentName}
+        </p>
+        - {stepperMap[suffixPath] ? stepperMap[suffixPath] : "Student Profile"}
+      </div>
+    );
+    title = `Enrolled Students - ${name}`;
   }
+
+
+  
   // Backward Compatibility for Unit Standard
   else if (pathname.indexOf("/modules") !== -1) {
     title = `${name}`;
@@ -231,66 +278,6 @@ export default function PageHeader({ title }: { title: string }) {
         );
       }
     }
-  } else if (pathname.indexOf("/course-applicants") !== -1) {
-    title = `${name}`;
-    if ([...arrLink, ...actionLinks].indexOf(suffixPath) === -1) {
-      isAllCourse = true;
-    } else {
-      if (actionLinks.indexOf(suffixPath) !== -1) {
-        const arr = pathname.split("/");
-        const urlSlice = arr.slice(0, -3);
-        backUrl = `${urlSlice.join("/")}/${
-          urlDocumentMap[suffixPath]
-        }?title=${title}&moduleTitle=${moduleTitle}`;
-        isViewCourseApplicants = true;
-        newTitle = (
-          <div className="d-flex">
-            <p
-              style={{
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-                maxWidth: "560px",
-                whiteSpace: "nowrap",
-              }}
-              className="mr-2"
-            >
-              {studentName}
-            </p>
-            - {stepperMap[suffixPath] ? stepperMap[suffixPath] : ""}
-          </div>
-        );
-      }
-    }
-  } else if (pathname.indexOf("/enrollments") !== -1) {
-    title = `${name}`;
-    if ([...arrLink, ...actionLinks].indexOf(suffixPath) === -1) {
-      isAllCourse = true;
-    } else {
-      if (actionLinks.indexOf(suffixPath) !== -1) {
-        const arr = pathname.split("/");
-        const urlSlice = arr.slice(0, -3);
-        backUrl = `${urlSlice.join("/")}/${
-          urlDocumentMap[suffixPath]
-        }?title=${title}&moduleTitle=${moduleTitle}`;
-        isViewEnrolledStudents = true;
-        newTitle = (
-          <div className="d-flex">
-            <p
-              style={{
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-                maxWidth: "560px",
-                whiteSpace: "nowrap",
-              }}
-              className="mr-2"
-            >
-              {studentName}
-            </p>
-            - {stepperMap[suffixPath] ? stepperMap[suffixPath] : ""}
-          </div>
-        );
-      }
-    }
   }
 
   return (
@@ -346,7 +333,8 @@ export default function PageHeader({ title }: { title: string }) {
             <div>
               {isCourse && (
                 <Link
-                  className="btn" style={{color: '#24345c'}}
+                  className="btn"
+                  style={{ color: "#24345c" }}
                   href={`/protected/admin/courses/create`}
                 >
                   Create Course
@@ -362,7 +350,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isEditModule && (
                 <Link
-                  className="btn btn-success" 
+                  className="btn btn-success"
                   href={`/protected/admin/courses/${id}/modules?title=${name}`}
                 >
                   Unit Standards
@@ -370,7 +358,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isEditKnowledgeModules && (
                 <Link
-                className="btn btn-success"
+                  className="btn btn-success"
                   href={`/protected/admin/courses/${id}/knowledge-modules?title=${name}`}
                 >
                   Knowledge Modules
@@ -378,7 +366,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isEditPracticalModules && (
                 <Link
-                className="btn btn-success" 
+                  className="btn btn-success"
                   href={`/protected/admin/courses/${id}/practical-modules?title=${name}`}
                 >
                   Practical Modules
@@ -386,7 +374,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isModule && (
                 <button
-                  className="btn btn-success" 
+                  className="btn btn-success"
                   onClick={() => setOpenModal(true)}
                 >
                   Create Unit Standard
@@ -394,7 +382,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isKnowledgeModule && (
                 <button
-                className="btn btn-success"
+                  className="btn btn-success"
                   onClick={() => setOpenKnowledgeModuleModal(true)}
                 >
                   Create Knowledge Module
@@ -402,7 +390,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isPracticalModule && (
                 <button
-                className="btn btn-success"
+                  className="btn btn-success"
                   onClick={() => setOpenPracticalModuleModal(true)}
                 >
                   Create Practical Module
@@ -418,7 +406,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isViewCourseApplicants && (
                 <Link
-                  className="btn btn-success" 
+                  className="btn btn-success"
                   href={`/protected/admin/courses/${id}/course-applicants?title=${name}`}
                 >
                   Course Applicants
@@ -426,7 +414,7 @@ export default function PageHeader({ title }: { title: string }) {
               )}
               {isViewEnrolledStudents && (
                 <Link
-                className="btn btn-success"
+                  className="btn btn-success"
                   href={`/protected/admin/courses/${id}/enrollments?title=${name}`}
                 >
                   Enrolled Students
@@ -438,7 +426,7 @@ export default function PageHeader({ title }: { title: string }) {
                 </Link>
               )}
               {isEditKnowledgeTopic && (
-                <Link className="btn btn-success"  href={backUrl}>
+                <Link className="btn btn-success" href={backUrl}>
                   Knowledge Topic
                 </Link>
               )}
