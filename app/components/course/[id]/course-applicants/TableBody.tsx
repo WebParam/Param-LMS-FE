@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { NextPage } from "next";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 
 const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
   const PASSMARK = 50;
@@ -9,6 +9,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
   const id = params.id;
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
+  const pathname = usePathname();
 
   const people = [
     { name: "Alice", surname: "Smith" },
@@ -29,17 +30,14 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
             const name = data.name || people[index % people.length]?.name;
             const surname =
               data.surname || people[index % people.length]?.surname;
+            const nameSurname = name + " " + surname;
 
             return (
               <tr key={data.id} className="selected">
                 <td className="text-center js-lists-values-projects small">
                   <div className="d-flex align-items-center justify-content-center ">
                     <Link
-                      href={`/protected/admin/courses/${id}/course-applicants/${
-                        data.id
-                      }/profiles?title=${courseTitle}&studentName=${
-                        name + " " + surname
-                      }`}
+                      href={`${pathname}/${data.id}/profiles?title=${courseTitle}&studentName=${nameSurname}`}
                     >
                       <i className="material-icons mr-8pt">visibility</i>
                     </Link>
@@ -50,7 +48,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                 </td>
 
                 <td className="text-center js-lists-values-projects small">
-                  {name + " " + surname}
+                  {nameSurname}
                 </td>
 
                 <td className="text-center js-lists-values-projects small">

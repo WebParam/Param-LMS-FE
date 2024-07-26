@@ -6,8 +6,7 @@ import list from "@/components/course/[id]/course-applicants/data";
 import { getCourseStudents } from "@/app/lib/actions/courseStudents";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import Loading from "./loading";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import Cookies from "universal-cookie";
+import { useParams } from "next/navigation";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 
@@ -59,34 +58,17 @@ const Body = () => {
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const [data, setData] = useState<CourseApplicants[]>([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const params = useParams<{ id: string }>();
-  const id = params.id;
-  const searchParams = useSearchParams();
-  const courseTitle = searchParams.get("title") || "";
+  const { id: courseId } = useParams<{ id: string }>();
 
-  const cookies = new Cookies();
+  const asyncFetch = async () => {
+    const data = await getCourseStudents(courseId);
+    setData(data);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const asyncFetch = async () => {
-      try {
-        const fetchedData = await getCourseStudents(id);
-        console.log("Data:", fetchedData);
-        setData(fetchedData);
-        cookies.set("courseTitle", courseTitle);
-        router.push(
-          `/protected/admin/courses/${id}/course-applicants?title=${courseTitle}`
-        );
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     asyncFetch();
   }, []);
-
-  const courseId = "6669f0ff8759b480859c10a7";
 
   function downloadAsXls() {
     fetch(
@@ -141,7 +123,7 @@ const Body = () => {
                 className="dashboard-area-tabs__tab card-body text-center active"
               >
                 <span className="font-weight-bold">{data.name}</span>
-                <i className="material-icons text-success icon-48pt" >
+                <i className="material-icons text-success icon-48pt">
                   {data.icon}
                 </i>
                 <span className="h2 mb-0 mt-n1">{data.data}</span>
