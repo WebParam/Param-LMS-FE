@@ -3,7 +3,6 @@ const TableHead = () => {
       "Name",
       "Gender",
       "Age",
-      "Home Language",
       "Race",
       "Disability",
       "Employement Status",

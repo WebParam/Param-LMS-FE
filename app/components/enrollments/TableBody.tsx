@@ -29,10 +29,6 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
               </td>
 
               <td className="text-center js-lists-values-projects small">
-                {data.homeLanguage}
-              </td>
-
-              <td className="text-center js-lists-values-projects small">
                 {data.race}
               </td>
 
@@ -114,16 +110,20 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
 
               <td className="text-center js-lists-values-projects small">
                 <div className="d-flex align-items-center justify-content-center ">
-                <Link
-  href={{
-    pathname: isEnrollment
-      ? `/protected/admin/courses/${id}/enrollments/${data.id}/profile`
-      : `/protected/admin/courses/${id}/course-applicants/${data.id}/profiles`,
-    query: { id: data.id, studentName: data.name ,title:title},
-  }}
->
-  <i className="material-icons mr-8pt">visibility</i>
-</Link>
+                  <Link
+                    href={{
+                      pathname: isEnrollment
+                        ? `/protected/admin/courses/${id}/enrollments/${data.id}/profile`
+                        : `/protected/admin/courses/${id}/course-applicants/${data.id}/profiles`,
+                      query: {
+                        id: data.id,
+                        studentName: data.name,
+                        title: title,
+                      },
+                    }}
+                  >
+                    <i className="material-icons mr-8pt">visibility</i>
+                  </Link>
                 </div>
               </td>
             </tr>
