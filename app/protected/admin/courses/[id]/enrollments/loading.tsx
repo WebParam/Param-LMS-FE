@@ -1,3 +1,5 @@
+import { NextPage } from "next";
+import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 
 export default function Loading() {
   return (

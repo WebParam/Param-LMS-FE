@@ -2,10 +2,14 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "@/components/course/[id]/enrollments/Table";
 import { useEffect, useState } from "react";
-import list from "@/components/course/[id]/enrollments/data";
+import list from "@/components/course/[id]/course-applicants/data";
+import { getCourseStudents } from "@/app/lib/actions/courseStudents";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import Loading from "./loading";
-import { getEnrollments } from "@/app/lib/actions/enrollments";
+import { useParams } from "next/navigation";
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
+
 import ChartWrapper from "@/app/components/enrolment-dashboard/graphs/ChartWrapper";
 import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/data";
 
@@ -14,6 +18,7 @@ import {
   data as OverallAssessmentBarData,
   barDescriptions as OverallAssessmentBarDescription,
 } from "@/app/components/enrolment-dashboard/graphs/OverallAssessment/data";
+
 import {
   options as QuestionsAskedOptions,
   data as QuestionsAskedData,
@@ -39,7 +44,6 @@ import ChartLayout from "@/app/components/enrolment-dashboard/graphs/ChartLayout
 import { AvgTimeSpent } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
 import { StudentsProgressStatus } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
 import { StudentRaces } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/StudentRaces";
-import { useParams, useSearchParams } from "next/navigation";
 
 type DataTiles = {
   name: string;
@@ -54,23 +58,46 @@ const Body = () => {
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const [data, setData] = useState<CourseApplicants[]>([]);
   const [loading, setLoading] = useState(true);
-  const params = useParams<{ id: string }>();
-  const id = params.id;
+  const { id: courseId } = useParams<{ id: string }>();
+
+  const asyncFetch = async () => {
+    const data = await getCourseStudents(courseId);
+    setData(data);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const asyncFetch = async () => {
-      try {
-        const fetchedData = await getEnrollments(id);
-        setData(fetchedData);
-        console.log("data is here", fetchedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     asyncFetch();
   }, []);
+
+  function downloadAsXls() {
+    fetch(
+      `https://khumla-dev-user-read.azurewebsites.net/api/Student/ExportStudentInformation/${courseId}`
+    )
+      .then((response) => response.blob())
+      .then((blob) => {
+        const reader = new FileReader();
+        reader.onload = (event: any) => {
+          const data = event.target.result;
+          const workbook = XLSX.read(data, { type: "binary" });
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          const xlsData = XLSX.utils.sheet_to_json(worksheet);
+          const newWorkbook = XLSX.utils.book_new();
+          const newWorksheet = XLSX.utils.json_to_sheet(xlsData);
+          XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, "Sheet1");
+          const xlsArray = XLSX.write(newWorkbook, {
+            bookType: "xlsx",
+            type: "array",
+          });
+          const xlsBlob = new Blob([xlsArray], {
+            type: "application/octet-stream",
+          });
+          saveAs(xlsBlob, "students.xlsx");
+        };
+        reader.readAsBinaryString(blob);
+      })
+      .catch((error) => console.error("Error downloading XLS file:", error));
+  }
 
   if (loading) {
     return <Loading />;
@@ -177,7 +204,19 @@ const Body = () => {
           data-lists-sort-by="js-lists-values-employee-name"
           data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
         >
-          <Table list={data} />
+          {data ? (
+            <Table list={data} />
+          ) : (
+            <h3
+              style={{
+                textAlign: "center",
+                height: "50px",
+                lineHeight: "50px",
+              }}
+            >
+              No data
+            </h3>
+          )}
         </div>
 
         <Pagination
@@ -188,6 +227,13 @@ const Body = () => {
           ITEMSPERPAGE={ITEMSPERPAGE}
         />
       </div>
+      <button
+        className="btn btn-success enrolBtn m-3"
+        onClick={downloadAsXls}
+        style={{ cursor: "pointer" }}
+      >
+        Download As XLS
+      </button>
     </>
   );
 };
