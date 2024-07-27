@@ -18,6 +18,17 @@ export interface StudentProvincesData {
   }[];
 }
 
+export interface StudentProvincesData {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor: string;
+    barPercentage: number;
+    borderRadius: number;
+  }[];
+}
+
 export const barDescriptions = [
   {
     description: "Average no. of Student Citezinship",
