@@ -117,21 +117,21 @@ export const tilesData = (fetchedData: any) => [
   {
     name: "Students",
     icon: "person_outline",
-    data: fetchedData?.numberOfStudents!,
+    data: fetchedData?.numberOfStudents! || 0,
   },
   {
     name: "Employed",
     icon: "list",
-    data: fetchedData?.numbetOfStudentsEmployed!,
+    data: fetchedData?.numbetOfStudentsEmployed! || 0,
   },
   {
     name: "Unemployed",
     icon: "help",
-    data: fetchedData?.numberOfStudentsUnemployed!,
+    data: fetchedData?.numberOfStudentsUnemployed! || 0,
   },
   {
     name: "Disability",
     icon: "help",
-    data: fetchedData?.numberOfStudentsWithDisabilities!,
+    data: fetchedData?.numberOfStudentsWithDisabilities! || 0,
   },
 ];
