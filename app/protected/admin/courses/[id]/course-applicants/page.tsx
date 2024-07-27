@@ -1,4 +1,3 @@
-"use server";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
 import ChartWrapper from "@/app/components/enrolment-dashboard/graphs/ChartWrapper";
 import {
@@ -66,7 +65,6 @@ const Body = async ({ params }: { params: { id: string } }) => {
   const courseId = params.id;
 
   const fetchedData: IStudentsData = await getEnrollments(courseId, false);
-  console.log("fetchedData---------------------------------------------------------------------", fetchedData);
   const dataTiles: DataTiles[] = tilesData(fetchedData);
   const studentsByProvinceData: any = provinceData(fetchedData);
   const StudentRacesData = racesData(fetchedData);

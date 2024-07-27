@@ -5,6 +5,13 @@ export const options = {
       position: "top" as const,
     },
   },
+  scales: {
+    y: {
+      beginAtZero: true,
+      suggestedMin: 0,
+      suggestedMax: 100,
+    },
+  },
 };
 
 export interface StudentProvincesData {
@@ -18,29 +25,31 @@ export interface StudentProvincesData {
   }[];
 }
 
-
 export const barDescriptions = [
-  {     description: "Average no. of students Languages",
-    color: "rgb(82 121 249)" },
+  {
+    description: "Average no. of students Languages",
+    color: "rgb(82 121 249)",
+  },
 ];
 
-export const data = async (QuestionsAskedData: number[]): Promise<StudentProvincesData> => {
+export const data = async (
+  QuestionsAskedData: number[]
+): Promise<StudentProvincesData> => {
   "use server";
   const labels = [
     "english",
-      "afrikaans",
-      "zulu",
-      "xhosa",
-      "tswana",
-      "sotho",
-      "venda",
-      "tsonga",
-      "swati",
-      "ndebele",
-      "signLanguage",
-      "pedi"
-
-  ]
+    "afrikaans",
+    "zulu",
+    "xhosa",
+    "tswana",
+    "sotho",
+    "venda",
+    "tsonga",
+    "swati",
+    "ndebele",
+    "signLanguage",
+    "pedi",
+  ];
 
   return {
     labels,

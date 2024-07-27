@@ -5,6 +5,13 @@ export const options = {
       position: "top" as const,
     },
   },
+  scales: {
+    y: {
+      beginAtZero: true,
+      suggestedMin: 0,
+      suggestedMax: 100,
+    },
+  },
 };
 
 export interface StudentProvincesData {

@@ -5,6 +5,13 @@ export const options = {
       position: "top" as const,
     },
   },
+  scales: {
+    y: {
+      beginAtZero: true,
+      suggestedMin: 0,
+      suggestedMax: 100,
+    },
+  },
 };
 
 export interface StudentProvincesData {
@@ -18,7 +25,6 @@ export interface StudentProvincesData {
   }[];
 }
 
-
 const labels = [
   "Gauteng",
   "Western Cape",
@@ -31,22 +37,26 @@ const labels = [
   "North West",
 ];
 export const barDescriptions = [
-  {     description: "Average no. of students in Province",
-    color: "rgb(82 121 249)" },
+  {
+    description: "Average no. of students in Province",
+    color: "rgb(82 121 249)",
+  },
 ];
 
-export const data = async (QuestionsAskedData: number[]): Promise<StudentProvincesData> => {
+export const data = async (
+  QuestionsAskedData: number[]
+): Promise<StudentProvincesData> => {
   "use server";
   const labels = [
-    "Gauteng", 
-    "Western Cape", 
-    "Eastern Cape", 
-    "Northern Cape", 
-    "Limpopo", 
-    "Mpumalanga", 
-    "KZN", 
-    "Free State", 
-    "North West"
+    "Gauteng",
+    "Western Cape",
+    "Eastern Cape",
+    "Northern Cape",
+    "Limpopo",
+    "Mpumalanga",
+    "KZN",
+    "Free State",
+    "North West",
   ];
 
   return {

@@ -74,7 +74,7 @@ export default function TableFilter({
   return (
     <>
       <div className="table-responsive mb-0">
-        <div className="card-header">
+        <div className="card-header h-100">
           <form className="form-inline">
             <label className="mr-sm-2 form-label" htmlFor="inlineFormFilterBy">
               Filter by:
