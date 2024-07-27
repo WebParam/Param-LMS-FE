@@ -1,10 +1,9 @@
 "use client";
-import Pagination from "@/app/components/Pagination";
 import Table from "@/components/course/[id]/course-applicants/profiles/Table";
 import { useEffect, useState } from "react";
 import list from "@/components/course/[id]/course-applicants/profiles/data";
 import { getStudentInfo } from "@/app/lib/actions/courseStudents";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);

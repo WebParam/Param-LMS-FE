@@ -332,8 +332,7 @@ export default function PageHeader({ title }: { title: string }) {
             <div>
               {isCourse && (
                 <Link
-                  className="btn"
-                  style={{ color: "#24345c" }}
+                  className="btn btn-success"
                   href={`/protected/admin/courses/create`}
                 >
                   Create Course

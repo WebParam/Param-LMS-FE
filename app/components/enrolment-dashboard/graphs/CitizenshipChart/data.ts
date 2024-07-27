@@ -24,7 +24,6 @@ export const barDescriptions = [
 ];
 
 export const data = async (QuestionsAskedData: number[]): Promise<StudentProvincesData> => {
-  "use server";
   const labels = ["South Africa", "Other", "Dual(SA Plus Other)", "Permanent Residence", "Unknown"];
 
 

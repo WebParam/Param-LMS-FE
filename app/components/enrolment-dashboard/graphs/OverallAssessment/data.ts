@@ -28,14 +28,14 @@ export const barDescriptions = [
 ];
 
 // Function to transform real data
-export const transformData = (data: AgeRangeGenderDistribution[]): ChartData<'bar'> => {
+export const transformData = (data?: AgeRangeGenderDistribution[]): ChartData<'bar'> => {
   const maleData = labels.map(label => {
-    const entry = data.find(item => item.ageRange === label);
+    const entry = data!.find(item => item.ageRange === label);
     return entry ? entry.maleCount : 0;
   });
 
   const femaleData = labels.map(label => {
-    const entry = data.find(item => item.ageRange === label);
+    const entry = data!.find(item => item.ageRange === label);
     return entry ? entry.femaleCount : 0;
   });
 

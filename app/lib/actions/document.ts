@@ -1,11 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
-import {
-  wCourseUrl,
-  rCourseUrl,
-  rDocumentParaphraseUrl,
-} from "./endpoints";
+import { wCourseUrl, rCourseUrl, rDocumentParaphraseUrl } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
 
 export const uploadDocuments = async (
@@ -15,10 +11,13 @@ export const uploadDocuments = async (
   formData: FormData
 ) => {
   try {
-    const res = await fetch(`${wCourseUrl}/Document/Modules/${moduleId}/upload`, {
-      method: "POST",
-      body: formData,
-    });
+    const res = await fetch(
+      `${wCourseUrl}/Document/Modules/${moduleId}/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
     const data = await res.json();
     Diagnostic("SUCCESS ON POST, returning", data);
@@ -68,7 +67,10 @@ export const updateDocument = async (
   };
 
   try {
-    const resp = await put(`${wCourseUrl}/Document/Modules/UpdateDocumentName`, body);
+    const resp = await put(
+      `${wCourseUrl}/Document/Modules/UpdateDocumentName`,
+      body
+    );
 
     Diagnostic("SUCCESS ON PUT, returning", resp);
   } catch (err) {
@@ -100,6 +102,40 @@ export const paraphraseDocument = async (
     const data = await post(`${rDocumentParaphraseUrl}/parse`, {
       documentUrl,
       documentId,
+    });
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    console.error(err);
+  }
+};
+
+export const updateDocumentStatus = async (
+  documentId: string,
+  status: string,
+  reason: string
+) => {
+  try {
+    const data = await post(`${rDocumentParaphraseUrl}/parse`, {
+      documentId,
+      status,
+      reason,
+    });
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    console.error(err);
+  }
+};
+
+export const requestDocumentsUpdate = async (
+  selectedDocuments: string[],
+  studentId: string
+) => {
+  try {
+    const data = await post(`${rDocumentParaphraseUrl}/parse`, {
+      selectedDocuments,
+      studentId,
     });
     Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
