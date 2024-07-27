@@ -17,6 +17,7 @@ const Body = () => {
   const studentInformation = async () => {
     const response = await getStudentInfo(studentId);
     setData(response);
+    console.log("My response",response)
   };
 
   useEffect(() => {

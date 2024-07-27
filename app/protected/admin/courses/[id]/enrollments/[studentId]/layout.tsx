@@ -3,9 +3,6 @@ import Link from "next/link";
 import "./layout.scss";
 import { usePathname, useSearchParams, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import EnrollStudentModal from "@/components/course/[id]/course-applicants/EnrollStudentModal";
-import RejectStudentModal from "@/components/course/[id]/course-applicants/RejectStudentModal";
-import RequestModificationModal from "@/components/course/[id]/course-applicants/RequestModificationModal";
 import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
 import { rCourseUrl } from "@/app/lib/actions/endpoints";
 import { downloadFile } from "@/app/lib/utils";
@@ -21,9 +18,6 @@ function Layout({ children }: { children: React.ReactNode }) {
     id: string;
     studentId: string;
   }>();
-  const [enrollModal, setEnrollModal] = useState<boolean>(false);
-  const [rejectModal, setRejectModal] = useState<boolean>(false);
-  const [requestModal, setRequestModal] = useState<boolean>(false);
   const [documents, setDocuments] = useState([]);
   const [exportModal, setExportModal] = useState(false);
 
@@ -78,9 +72,6 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     studentInformation();
-    setRejectModal(false);
-    setEnrollModal(false);
-    setRequestModal(false);
   }, [refreshId]);
 
   return (
@@ -136,7 +127,6 @@ function Layout({ children }: { children: React.ReactNode }) {
           ))}
         </div>
       </div>
-
       <div className="card mt-3">{children}</div>
     </>
   );

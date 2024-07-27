@@ -1,5 +1,3 @@
-import { faker } from "@faker-js/faker";
-
 export const options = {
   responsive: true,
   plugins: {
@@ -9,21 +7,45 @@ export const options = {
   },
 };
 
+export interface StudentProvincesData {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor: string;
+    barPercentage: number;
+    borderRadius: number;
+  }[];
+}
+
 export const barDescriptions = [
-  { description: "Citizenship of Students", color: "rgb(82 121 249)" },
+  {
+    description: "Average no. of Student Citezinship",
+    color: "rgb(82 121 249)",
+  },
 ];
 
-const labels = ["South Africa", "Other", "Dual(SA Plus Other)", "Permanent Residence", "Unknown"];
+export const data = async (
+  QuestionsAskedData: number[]
+): Promise<StudentProvincesData> => {
+  const labels = [
+    "South Africa",
+    "Other",
+    "Dual(SA Plus Other)",
+    "Permanent Residence",
+    "Unknown",
+  ];
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "# of Students",
-      data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
-      backgroundColor: "rgb(82 121 249)",
-      barPercentage: 0.3,
-      borderRadius: 10,
-    }
-  ],
+  return {
+    labels,
+    datasets: [
+      {
+        label: "No of Students",
+        data: QuestionsAskedData,
+        backgroundColor: "rgb(82 121 249)",
+        barPercentage: 0.3,
+        borderRadius: 10,
+      },
+    ],
+  };
 };

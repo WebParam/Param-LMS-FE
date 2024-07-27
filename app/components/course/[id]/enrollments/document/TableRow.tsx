@@ -27,14 +27,14 @@ const TableRow = ({ document }: { document: any }) => {
       />
 
       <tr className="selected">
-        <td style={{ width: "250px" }} className="py-0">
+        <td style={{ width: "350px" }} className="py-0">
           <div className="d-flex align-items-center justify-content-center">
             <p
               className="text-center my-2"
               style={{
                 textOverflow: "ellipsis",
                 overflow: "hidden",
-                width: "250px",
+                width: "350px",
               }}
             >
               {document.name || "N/A"}
@@ -53,7 +53,7 @@ const TableRow = ({ document }: { document: any }) => {
             {document.status || "N/A"}
           </p>
         </td>
-        <td style={{ width: "700px" }} className="py-0">
+        <td style={{ width: "300px" }} className="py-0">
           <div className="d-flex justify-content-center">
             <div onClick={() => setDocumentShowModal(true)}>
               <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
