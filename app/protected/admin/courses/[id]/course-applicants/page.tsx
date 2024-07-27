@@ -45,6 +45,16 @@ import { StudentGenderRoles } from "@/components/enrolment-dashboard/graphs/Stud
 import { StudentRaces } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/StudentRaces";
 import { IStudentsData } from "@/app/interfaces/courseApplicants";
 import TablePagination from "@/components/enrollments/TablePagination";
+import {
+  citizenshipData,
+  disabilitiesData,
+  genderData,
+  languagesData,
+  provinceData,
+  racesData,
+  socioEconomicData,
+  tilesData,
+} from "@/components/enrollments/data";
 
 type DataTiles = {
   name: string;
@@ -52,110 +62,19 @@ type DataTiles = {
   data: number;
 };
 
-
-
-const Body = async ({params}:{params : {id:string}}) => {
+const Body = async ({ params }: { params: { id: string } }) => {
   const courseId = params.id;
 
   const fetchedData: IStudentsData = await getEnrollments(courseId, false);
-
-  const dataTiles: DataTiles[] = [
-    {
-      name: "Students",
-      icon: "person_outline",
-      data: fetchedData?.numberOfStudents!,
-    },
-    {
-      name: "Employed",
-      icon: "list",
-      data: fetchedData?.numbetOfStudentsEmployed!,
-    },
-    {
-      name: "Unemployed",
-      icon: "help",
-      data: fetchedData?.numberOfStudentsUnemployed!,
-    },
-    {
-      name: "Disability",
-      icon: "help",
-      data: fetchedData?.numberOfStudentsWithDisabilities!,
-    },
-  ];
-
-  const studentsByProvinceData: any = [
-    fetchedData?.numberOfStudentsByProvince.gauteng!,
-    fetchedData?.numberOfStudentsByProvince.westernCape!,
-    fetchedData?.numberOfStudentsByProvince.easternCape!,
-    fetchedData?.numberOfStudentsByProvince.northernCape!,
-    fetchedData?.numberOfStudentsByProvince.limpopo!,
-    fetchedData?.numberOfStudentsByProvince.mpumalanga!,
-    fetchedData?.numberOfStudentsByProvince.kwaZuluNatal!,
-    fetchedData?.numberOfStudentsByProvince.freeState!,
-    fetchedData?.numberOfStudentsByProvince.northWest!,
-  ];
-
-  const StudentRacesData = [
-    fetchedData?.numberOfStudentsByEquityGroup.black!,
-    fetchedData?.numberOfStudentsByEquityGroup.coloured!,
-    fetchedData?.numberOfStudentsByEquityGroup.indian!,
-    fetchedData?.numberOfStudentsByEquityGroup.white!,
-    fetchedData?.numberOfStudentsByEquityGroup.asian!,
-    fetchedData?.numberOfStudentsByEquityGroup.other!,
-    fetchedData?.numberOfStudentsByEquityGroup.notSpecified!,
-  ];
-
-  const genderRolesData = [
-    fetchedData?.numberOfStudentsByGender.male!,
-    fetchedData?.numberOfStudentsByGender.female!,
-  ];
-
-  const SocioEcoStatusData: any = [
-    fetchedData?.numberOfStudentsByProvince.gauteng!,
-    fetchedData?.numberOfStudentsByProvince.westernCape!,
-    fetchedData?.numberOfStudentsByProvince.easternCape!,
-    fetchedData?.numberOfStudentsByProvince.northernCape!,
-    fetchedData?.numberOfStudentsByProvince.limpopo!,
-    fetchedData?.numberOfStudentsByProvince.mpumalanga!,
-    fetchedData?.numberOfStudentsByProvince.kwaZuluNatal!,
-    fetchedData?.numberOfStudentsByProvince.freeState!,
-    fetchedData?.numberOfStudentsByProvince.northWest!,
-  ];
-
-  const StudentDisabiltyData: any = [
-    fetchedData?.numberOfStudentsByDisability.deaf!,
-    fetchedData?.numberOfStudentsByDisability.blind!,
-    fetchedData?.numberOfStudentsByDisability.dumb!,
-    fetchedData?.numberOfStudentsByDisability.physicallyDisabled!,
-    fetchedData?.numberOfStudentsByDisability.intellectuallyDisabled!,
-    fetchedData?.numberOfStudentsByDisability.multipleDisabilities!,
-  ];
-
-  const StudentCitizenshipData: any = [
-    fetchedData?.numberOfStudentsByNationality.southAfrican!,
-    fetchedData?.numberOfStudentsByNationality.southAfrican!,
-    fetchedData?.numberOfStudentsByNationality.others!,
-    fetchedData?.numberOfStudentsByNationality.pernamentResident!,
-    fetchedData?.numberOfStudentsByNationality.unknown!,
-  ];
-
-  const StudentLanguagesData: any = [
-    fetchedData?.numberOfStudentsByLanguage.english!,
-
-    fetchedData?.numberOfStudentsByLanguage.afrikaans!,
-
-    fetchedData?.numberOfStudentsByLanguage.zulu!,
-
-    fetchedData?.numberOfStudentsByLanguage.xhosa!,
-
-    fetchedData?.numberOfStudentsByLanguage.tswana!,
-    fetchedData?.numberOfStudentsByLanguage.sotho!,
-    fetchedData?.numberOfStudentsByLanguage.venda!,
-    fetchedData?.numberOfStudentsByLanguage.tsonga!,
-    fetchedData?.numberOfStudentsByLanguage.swati!,
-    fetchedData?.numberOfStudentsByLanguage.ndebele!,
-    fetchedData?.numberOfStudentsByLanguage.signLanguage!,
-    fetchedData?.numberOfStudentsByLanguage.pedi!,
-  ];
+  console.log("fetchedData---------------------------------------------------------------------", fetchedData);
+  const dataTiles: DataTiles[] = tilesData(fetchedData);
+  const studentsByProvinceData: any = provinceData(fetchedData);
+  const StudentRacesData = racesData(fetchedData);
+  const genderRolesData = genderData(fetchedData);
+  const SocioEcoStatusData: any = socioEconomicData(fetchedData);
+  const StudentDisabiltyData: any = disabilitiesData(fetchedData);
+  const StudentCitizenshipData: any = citizenshipData(fetchedData);
+  const StudentLanguagesData: any = languagesData(fetchedData);
 
   const StudentProvincesBarData = await StudentProvincesDataFn(
     studentsByProvinceData
@@ -170,11 +89,10 @@ const Body = async ({params}:{params : {id:string}}) => {
   );
 
   const StudentCitizenData = await CitizenshipChartData(StudentCitizenshipData);
-
   const StudentLangData = await StudentLangDataFn(StudentLanguagesData);
 
-
-  const ageRangeGenderDistribution = fetchedData?.AgeRangeGenderDistribution || [];
+  const ageRangeGenderDistribution =
+    fetchedData?.AgeRangeGenderDistribution || [];
   const OverallAssessmentBarData = transformData(ageRangeGenderDistribution);
 
   return (
@@ -278,8 +196,10 @@ const Body = async ({params}:{params : {id:string}}) => {
           />
         </div>
       </div>
-      <TablePagination courseId={courseId} data={fetchedData.courseApplicants} />
-   
+      <TablePagination
+        courseId={courseId}
+        data={fetchedData.courseApplicants}
+      />
     </>
   );
 };
