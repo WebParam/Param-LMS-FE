@@ -54,10 +54,8 @@ type DataTiles = {
   data: number;
 };
 
-const Body = async () => {
-  const courseId = "6669f0ff8759b480859c10a7";
-
-
+const Body = async ({ params }: { params: { id: string } }) => {
+  const courseId = params.id;
 
   const fetchedData: IStudentsData = await getEnrollments(courseId, true);
 
@@ -175,7 +173,8 @@ const Body = async () => {
 
   const StudentLangData = await StudentLangDataFn(StudentLanguagesData);
 
-  const ageRangeGenderDistribution = fetchedData?.AgeRangeGenderDistribution || [];
+  const ageRangeGenderDistribution =
+    fetchedData?.AgeRangeGenderDistribution || [];
   const OverallAssessmentBarData = transformData(ageRangeGenderDistribution);
 
   return (
@@ -279,8 +278,14 @@ const Body = async () => {
           />
         </div>
       </div>
-      <TablePagination data={fetchedData.courseApplicants} />
-  
+      <TablePagination
+        courseId={courseId}
+        data={
+          fetchedData && fetchedData.courseApplicants
+            ? fetchedData.courseApplicants
+            : []
+        }
+      />
     </>
   );
 };

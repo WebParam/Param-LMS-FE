@@ -42,9 +42,12 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
         <div className="mx-1">
           <button
-            className="btn btn-success"
             onClick={downloadAsXls}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: data.length > 0 ? "pointer" : "" }}
+            className={`btn ${
+              data.length > 0 ? "btn-success" : "btn-secondary"
+            }`}
+            disabled={!(data.length > 0)}
           >
             {loading ? (
               <div className="spinner-border text-white" role="status" />
@@ -57,7 +60,7 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
 
       <div className="card mb-0" style={{ height: "400px" }}>
         <TableFilter data={data} setFilteredData={setFilteredData} />
-        
+
         <div className="page-separator mb-1">
           <div className="page-separator__text"></div>
         </div>

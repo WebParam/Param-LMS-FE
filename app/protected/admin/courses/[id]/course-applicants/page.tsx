@@ -196,7 +196,11 @@ const Body = async ({ params }: { params: { id: string } }) => {
       </div>
       <TablePagination
         courseId={courseId}
-        data={fetchedData.courseApplicants}
+        data={
+          fetchedData && fetchedData.courseApplicants
+            ? fetchedData.courseApplicants
+            : []
+        }
       />
     </>
   );
