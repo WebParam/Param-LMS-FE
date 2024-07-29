@@ -37,32 +37,32 @@ function Layout({ children }: { children: React.ReactNode }) {
   const tabs = [
     {
       title: "Profile",
-      url: `${baseLayoutUrl}/profiles?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/profiles?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/profiles`,
     },
     {
       title: "Demographics",
-      url: `${baseLayoutUrl}/demographics?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/demographics?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/demographics`,
     },
     {
       title: "Contacts",
-      url: `${baseLayoutUrl}/contacts?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/contacts?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/contacts`,
     },
     {
       title: "Regional",
-      url: `${baseLayoutUrl}/regional?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/regional?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/regional`,
     },
     {
       title: "Employment",
-      url: `${baseLayoutUrl}/employment?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/employment?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/employment`,
     },
     {
       title: "Documents",
-      url: `${baseLayoutUrl}/document?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/document?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/document`,
     },
   ];

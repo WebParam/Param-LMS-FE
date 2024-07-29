@@ -28,12 +28,6 @@ const Body = () => {
     const response = await getStudentData(studentId);
     setData(response);
 
-  router.replace(
-      `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}&isEnrolled=${isEnrolled}`,
-      {
-        scroll: false,
-      }
-    );
   }
 
   useEffect(() => {

@@ -27,13 +27,7 @@ const Body = () => {
     const response = await getStudentDocuments(studentId);
     setData(response);
 
-    router.replace(
-        `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}&isEnrolled=${isEnrolled}`,
-        {
-          scroll: false,
-        }
-      );
-
+    
     console.log("response",response)
   }
 

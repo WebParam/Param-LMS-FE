@@ -26,12 +26,7 @@ const Body = () => {
     const response = await getStudentInfo(studentId);
     setData(response);
     localStorage.setItem("email",response.email)
-     router.replace(
-    `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}&isEnrolled=${isEnrolled}`,
-    {
-      scroll: false,
-    }
-  );
+    
   };
 
   useEffect(() => {
