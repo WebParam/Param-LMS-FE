@@ -20,8 +20,7 @@ const TableRow = ({ document }: { document: any }) => {
  
 
   useEffect(() => {
-    setAcceptDocumentModal(false);
-    setRejectDocumentModal(false);
+
     setDocumentShowModal(false);
   }, [refreshId]);
 

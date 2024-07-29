@@ -1,8 +1,7 @@
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
-
-async function Table({ list }: { list: CourseApplicants[] }) {
+ function Table({ list }: { list: CourseApplicants[] }) {
 
   return (
     <>

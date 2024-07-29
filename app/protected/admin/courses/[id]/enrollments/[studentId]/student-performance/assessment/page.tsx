@@ -1,6 +1,6 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import Table from "@/components/course/[id]/enrolled-with-assessments/assessment/Table";
+import Table from "@/components/course/[id]/enrollments/student-performance/assessment/Table";
 import { useState } from "react";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";

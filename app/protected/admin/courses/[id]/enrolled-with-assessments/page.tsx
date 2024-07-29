@@ -9,11 +9,11 @@ import { getEnrollments } from "@/app/lib/actions/enrollments";
 import ChartWrapper from "@/app/components/enrolment-dashboard/graphs/ChartWrapper";
 import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/data";
 
-import {
-  options as OverallAssessmentBarOptions,
-  transformData as OverallAssessmentBarData,
-  barDescriptions as OverallAssessmentBarDescription,
-} from "@/app/components/enrolment-dashboard/graphs/OverallAssessment/data";
+// import {
+//   options as OverallAssessmentBarOptions,
+//   data as OverallAssessmentBarData,
+//   barDescriptions as OverallAssessmentBarDescription,
+// } from "@/app/components/enrolment-dashboard/graphs/OverallAssessment/data";
 import {
   options as QuestionsAskedOptions,
   data as QuestionsAskedData,
@@ -32,12 +32,12 @@ import {
   barDescriptions as CitizenshipChartDescription,
 } from "@/app/components/enrolment-dashboard/graphs/CitizenshipChart/data";
 
-import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/data";
+// import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/data";
 import { barDescriptions as StudentRacesDescription } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/data";
 
 import ChartLayout from "@/app/components/enrolment-dashboard/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
-import { StudentsProgressStatus } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
+// import { StudentsProgressStatus } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
 import { StudentRaces } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/StudentRaces";
 import { useParams } from "next/navigation";
 
@@ -57,7 +57,7 @@ const Body = () => {
   const params = useParams<{ id: string }>();
   const id = params.id;
 
-  useEffect(() => {
+  /* useEffect(() => {
     const asyncFetch = async () => {
       try {
         const fetchedData = await getEnrollments(id,true);
@@ -70,7 +70,7 @@ const Body = () => {
       }
     };
     asyncFetch();
-  }, []);
+  }, []); */
 
   if (loading) {
     return <Loading />;
@@ -114,7 +114,7 @@ const Body = () => {
             <AvgTimeSpent />
           </ChartLayout>
         </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        {/* <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
             title="Gender vs Age Group Category"
             barDescriptions={OverallAssessmentBarDescription}
@@ -122,7 +122,7 @@ const Body = () => {
             data={OverallAssessmentBarData}
             type="bar"
           />
-        </div>
+        </div> */}
         {/* <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
             title="Gender"
@@ -132,7 +132,7 @@ const Body = () => {
             <StudentsProgressStatus />
           </ChartLayout>
         </div> */}
-        {/* <div className="col-lg-6 col-md-12 card-group-row__col">
+{/*         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
             title="Different Races"
             barDescriptions={StudentRacesDescription}

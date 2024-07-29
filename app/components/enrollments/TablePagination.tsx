@@ -1,55 +1,11 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import Table from "./Table";
 import Pagination from "@/app/components/Pagination";
-import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
-
-const provinces = [
-  "Gauteng",
-  "Western Cape",
-  "Eastern Cape",
-  "Northern Cape",
-  "Limpopo",
-  "Mpumalanga",
-  "KZN",
-  "Free State",
-  "North West",
-];
-
-const genders = ["Male", "Female"];
-
-const races = [
-  "black",
-  "coloured",
-  "indian",
-  "white",
-  "asian",
-  "other",
-  "notSpecified",
-];
-
-const employmentStatuses = [
-  "Employed",
-  "Unemployed",
-  "Home Maker",
-  "Scholar",
-  "Unemployed(Disabled)",
-  "Employed(Disabled)",
-  "Other",
-  "Unspecified",
-];
-
-const disabilities = [
-  "deaf",
-  "blind",
-  "dumb",
-  "physicallyDisabled",
-  "intellectuallyDisabled",
-  "multipleDisabilities",
-];
-
+import TableFilter from "./TableFilter";
+import { downloadFile } from "@/app/lib/utils";
+import { rUserUrl } from "@/app/lib/actions/endpoints";
 interface TablePaginationProps {
   data: CourseApplicants[];
   courseId?: string;
@@ -58,70 +14,12 @@ interface TablePaginationProps {
 function TablePagination({ data, courseId }: TablePaginationProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 6;
-  const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState(data);
   const [loading, setLoading] = useState(false);
 
-  const [selectedFilters, setSelectedFilters] = useState({
-    province: "",
-    gender: "",
-    race: "",
-    employmentStatus: "",
-    disability: "",
-  });
-
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    applyFilters();
-  }, [data, selectedFilters, searchTerm]);
-
-  const applyFilters = () => {
-    let newFilteredData = data.filter((applicant) =>
-      Object.values(applicant).some((value) =>
-        String(value).toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-
-    Object.entries(selectedFilters).forEach(([key, value]) => {
-      if (value) {
-        newFilteredData = newFilteredData.filter(
-          (applicant: any) => applicant[key] === value
-        );
-      }
-    });
-
-    setFilteredData(newFilteredData);
-  };
-
-  const handleFilterChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-    filterKey: string
-  ) => {
-    const newFilters = {
-      ...selectedFilters,
-      [filterKey]: e.target.value,
-    };
-
-    setSelectedFilters(newFilters);
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const removeFilter = (filterKey: string) => {
-    const newFilters = {
-      ...selectedFilters,
-      [filterKey]: "",
-    };
-
-    setSelectedFilters(newFilters);
-  };
-
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems = filteredData && filteredData.slice(
+  const currentItems = filteredData.slice(
     indexOfFirstItem,
     indexOfFirstItem + ITEMSPERPAGE
   );
@@ -129,168 +27,55 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
   const downloadAsXls = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
-    fetch(
-      `https://khumla-dev-user-read.azurewebsites.net/api/Student/ExportStudentInformation/${courseId}`
-    )
-      .then((response) => response.blob())
-      .then((blob) => {
-        const reader = new FileReader();
-        reader.onload = (event: any) => {
-          const data = event.target.result;
-          const workbook = XLSX.read(data, { type: "binary" });
-          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const xlsData = XLSX.utils.sheet_to_json(worksheet);
-          const newWorkbook = XLSX.utils.book_new();
-          const newWorksheet = XLSX.utils.json_to_sheet(xlsData);
-          XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, "Sheet1");
-          const xlsArray = XLSX.write(newWorkbook, {
-            bookType: "xlsx",
-            type: "array",
-          });
-          const xlsBlob = new Blob([xlsArray], {
-            type: "application/octet-stream",
-          });
-          saveAs(xlsBlob, "students.xlsx");
-          setLoading(false);
-        };
-        reader.readAsBinaryString(blob);
-      })
-      .catch((error) => console.error("Error downloading XLS file:", error));
+    const filename = "students";
+    const fileExtension = "xlsx";
+    const url = `${rUserUrl}/Student/ExportStudentInformation/${courseId}`;
+    downloadFile(url, filename, fileExtension, setLoading);
   };
 
   return (
-    <div ref={containerRef}>
-      <div className="filters-container mb-2 d-flex align-items-center">
-        <input
-          placeholder="Search"
-          type="text"
-          className="form-control search-input"
-          id="datatable-search-input"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-        <select
-          onChange={(e) => handleFilterChange(e, "province")}
-          className="form-control ml-2"
-        >
-          <option value="">Select Province</option>
-          {provinces.map((province) => (
-            <option key={province} value={province}>
-              {province}
-            </option>
-          ))}
-        </select>
-        <select
-          onChange={(e) => handleFilterChange(e, "gender")}
-          className="form-control ml-2"
-        >
-          <option value="">Select Gender</option>
-          {genders.map((gender) => (
-            <option key={gender} value={gender}>
-              {gender}
-            </option>
-          ))}
-        </select>
-        <select
-          onChange={(e) => handleFilterChange(e, "race")}
-          className="form-control ml-2"
-        >
-          <option value="">Select Race</option>
-          {races.map((race) => (
-            <option key={race} value={race}>
-              {race}
-            </option>
-          ))}
-        </select>
-        <select
-          onChange={(e) => handleFilterChange(e, "employmentStatus")}
-          className="form-control ml-2"
-        >
-          <option value="">Select Employment Status</option>
-          {employmentStatuses.map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
-        <select
-          onChange={(e) => handleFilterChange(e, "disability")}
-          className="form-control ml-2"
-        >
-          <option value="">Select Disability</option>
-          {disabilities.map((disability) => (
-            <option key={disability} value={disability}>
-              {disability}
-            </option>
-          ))}
-        </select>
+    <>
+      <div className="page-separator">
+        <div className="page-separator__text">Course Applicants</div>
       </div>
-      <div className="ml-3 selected-filters mb-3">
-        {Object.entries(selectedFilters).map(([key, value]) => {
-          return value ? (
-            <span key={key} className="badge badge-primary">
-              {key}: {value}
-              <button type="button" onClick={() => removeFilter(key)}>
-                &times;
-              </button>
-            </span>
-          ) : null;
-        })}
+
+      <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+        <div className="mx-1">
+          <button
+            onClick={downloadAsXls}
+            style={{ cursor: data.length > 0 ? "pointer" : "" }}
+            className={`btn ${
+              data.length > 0 ? "btn-success" : "btn-secondary"
+            }`}
+            disabled={!(data.length > 0)}
+          >
+            {loading ? (
+              <div className="spinner-border text-white" role="status" />
+            ) : (
+              "Export Students"
+            )}
+          </button>
+        </div>
       </div>
-      <div className="card mb-0">
-        <div className="table-responsive">
-          <Table list={currentItems} />
+
+      <div className="card mb-0" style={{ height: "400px" }}>
+        <TableFilter data={data} setFilteredData={setFilteredData} />
+
+        <div className="page-separator mb-1">
+          <div className="page-separator__text"></div>
         </div>
 
+        <Table list={currentItems} />
+
         <Pagination
-          listLength={filteredData && filteredData.length}
+          listLength={filteredData.length}
           indexOfLastItem={indexOfLastItem}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           ITEMSPERPAGE={ITEMSPERPAGE}
         />
       </div>
-
-      <button
-        className="btn btn-primary enrolBtn m-3"
-        onClick={downloadAsXls}
-        style={{ cursor: "pointer" }}
-      >
-        {loading ? (
-          <div className="spinner-border text-white" role="status" />
-        ) : (
-          "Download As XLS"
-        )}
-      </button>
-      <style jsx>{`
-        .filters-container {
-          display: flex;
-          align-items: center;
-        }
-        .search-input {
-          max-width: 200px;
-        }
-        .form-control {
-          margin-left: 8px;
-        }
-        .selected-filters {
-          display: flex;
-          flex-wrap: wrap;
-        }
-        .badge {
-          margin-right: 8px;
-          margin-bottom: 8px;
-          display: flex;
-          align-items: center;
-        }
-        .badge button {
-          background: none;
-          border: none;
-          margin-left: 4px;
-          cursor: pointer;
-        }
-      `}</style>
-    </div>
+    </>
   );
 }
 

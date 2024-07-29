@@ -50,7 +50,6 @@ function EnrollStudentModal(props: any) {
         }
       );
       router.push(homePath);
-   
       return;
     }
 

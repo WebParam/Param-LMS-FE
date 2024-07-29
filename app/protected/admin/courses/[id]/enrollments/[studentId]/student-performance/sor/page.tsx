@@ -1,9 +1,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import KnowledgeModules from "@/components/course/[id]/enrolled-with-assessments/sor/KnowledgeModule";
-import PracticalSkillsModules from "@/components/course/[id]/enrolled-with-assessments/sor/PracticalsModule";
-import WorkExperienceModules from "@/components/course/[id]/enrolled-with-assessments/sor/WorkExperienceModule";
+import KnowledgeModules from "@/components/course/[id]/enrollments/student-performance/sor/KnowledgeModule";
+import PracticalSkillsModules from "@/components/course/[id]/enrollments/student-performance/sor/PracticalsModule";
+import WorkExperienceModules from "@/components/course/[id]/enrollments/student-performance/sor/WorkExperienceModule";
 
 const Body = () => {
   const pathname = usePathname();

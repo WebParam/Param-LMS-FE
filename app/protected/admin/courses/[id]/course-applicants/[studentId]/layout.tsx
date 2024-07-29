@@ -94,9 +94,6 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     studentInformation();
-    setRejectModal(false);
-    setEnrollModal(false);
-   
   }, [refreshId]);
 
   return (

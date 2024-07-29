@@ -19,6 +19,8 @@ function RejectDocumentModal(props: any) {
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
@@ -48,6 +50,7 @@ function RejectDocumentModal(props: any) {
         reason: selectedReason
       }
        await changeDocumentStatus(payload);
+       setSuccessMessage("Document Rejected Successfully");
       const date = new Date().toString();
       router.replace(
         `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
@@ -55,6 +58,9 @@ function RejectDocumentModal(props: any) {
           scroll: false,
         }
       );
+    setTimeout(() => {
+      props.onHide();
+    },2000)
     } else {
       setReasonError("Please select a reason");
     }
@@ -64,6 +70,8 @@ function RejectDocumentModal(props: any) {
     setIsSpinner(false);
     setReasonError("")
     setSelectedReason("");
+    setSuccessMessage("");
+
   }, [refreshId]);
 
   return (
@@ -72,7 +80,7 @@ function RejectDocumentModal(props: any) {
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-    >
+        >
       <Modal.Header style={{ background: "#24345c" }} closeButton>
       <Modal.Title style={{ color: "white" }}>
           Reject Document - {props.documentName || "File - " + props.documentId}
@@ -100,6 +108,12 @@ function RejectDocumentModal(props: any) {
         {reasonError && <p className="text-danger">{reasonError}</p>}
       </Modal.Body>
       <Modal.Footer>
+      {successMessage && (
+          <div className="alert alert-success">{successMessage}</div>
+        )}
+        {errorMessage && (
+          <div className="alert  alert-danger">{errorMessage}</div>
+        )}
         <Button variant="secondary" onClick={props.onHide}>
           Cancel
         </Button>

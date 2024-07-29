@@ -62,7 +62,6 @@ function RejectStudentModal(props: any) {
           }
         );
         router.push(homePath);
-      
         return;
       }
   

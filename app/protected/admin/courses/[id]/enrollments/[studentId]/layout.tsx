@@ -22,9 +22,6 @@ function Layout({ children }: { children: React.ReactNode }) {
     id: string;
     studentId: string;
   }>();
-  const [enrollModal, setEnrollModal] = useState<boolean>(false);
-  const [rejectModal, setRejectModal] = useState<boolean>(false);
-  const [requestModal, setRequestModal] = useState<boolean>(false);
   const [documents, setDocuments] = useState([]);
   const [exportModal, setExportModal] = useState(false);
 
@@ -90,9 +87,6 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     studentInformation();
-    setRejectModal(false);
-    setEnrollModal(false);
-    setRequestModal(false);
   }, [refreshId]);
 
   return (
@@ -148,7 +142,6 @@ function Layout({ children }: { children: React.ReactNode }) {
           ))}
         </div>
       </div>
-
       <div className="card mt-3">{children}</div>
     </>
   );

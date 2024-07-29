@@ -86,7 +86,7 @@ function RequestModificationModal(props: any) {
           <h5>Please select the Documents to be Modified below:</h5>
         </div>
         <div>
-          {props.documents.map((document: any) => (
+          {props.documents.filter((doc:any) => doc.status == "Rejected").map((document: any) => (
             <div key={document.id} className="d-flex">
               <div className="d-flex mr-2">
                 <input
