@@ -28,6 +28,9 @@ function RejectDocumentModal(props: any) {
   const refreshId = searchParams.get("refreshId") || "";
   const [selectedReason, setSelectedReason] = useState("");
   const [reasonError, setReasonError] = useState("");
+  const isEnrolled =  searchParams.get("isEnrolled");
+  const [disableBtn, setDisableBtn] = useState(false)
+
 
   const arrReasons = [
     "Invalid document",
@@ -42,6 +45,7 @@ function RejectDocumentModal(props: any) {
   ];
 
   const declineDocumentFn = async () => {
+    setDisableBtn(true)
     if (selectedReason !== "") {
       setIsSpinner(true);
       const payload = {
@@ -53,7 +57,7 @@ function RejectDocumentModal(props: any) {
        setSuccessMessage("Document Rejected Successfully");
       const date = new Date().toString();
       router.replace(
-        `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
+        `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}&isEnrolled=${isEnrolled}`,
         {
           scroll: false,
         }
@@ -62,6 +66,7 @@ function RejectDocumentModal(props: any) {
       props.onHide();
     },2000)
     } else {
+      setDisableBtn(false)
       setReasonError("Please select a reason");
     }
   };
@@ -99,6 +104,7 @@ function RejectDocumentModal(props: any) {
                   onChange={(e: any) => setSelectedReason(e.target.value)}
                   name="reason"
                   id=""
+                  value={selectedReason}
                 />
               </div>
               <div>{reason}</div>
@@ -117,7 +123,7 @@ function RejectDocumentModal(props: any) {
         <Button variant="secondary" onClick={props.onHide}>
           Cancel
         </Button>
-        <button className="btn btn-danger" onClick={() => declineDocumentFn()}>
+        <button disabled={disableBtn} className="btn btn-danger" onClick={() => declineDocumentFn()}>
           {isSpinner ? (
             <span className="spinner-border text-white" role="status" />
           ) : (

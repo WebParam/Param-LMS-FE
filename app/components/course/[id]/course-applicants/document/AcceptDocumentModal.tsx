@@ -25,6 +25,9 @@ function AcceptDocumentModal(props: any) {
   const refreshId = searchParams.get("refreshId") || "";
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const isEnrolled =  searchParams.get("isEnrolled");
+  const [disabled, setDisabled] = useState(false)
+
 
   const acceptDocumentFn = async () => {
     setErrorMessage("");
@@ -37,11 +40,12 @@ function AcceptDocumentModal(props: any) {
     };
 
     try {
+      setDisabled(true)
       await changeDocumentStatus(payload);
       setSuccessMessage("Document Accepted Successfully");
       const date = new Date().toString();
       router.replace(
-        `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
+        `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}&isEnrolled=${isEnrolled}`,
         {
           scroll: false,
         }
@@ -50,6 +54,7 @@ function AcceptDocumentModal(props: any) {
       props.onHide();
     },2000)
     } catch (error) {
+      setDisabled(false)
       console.log("Error", error);
       setErrorMessage("Failed to Accept Document");
     }
@@ -86,7 +91,7 @@ function AcceptDocumentModal(props: any) {
         <Button variant="secondary" onClick={props.onHide}>
           Cancel
         </Button>
-        <button className="btn btn-success" onClick={() => acceptDocumentFn()}>
+        <button disabled={disabled} className="btn btn-success" onClick={() => acceptDocumentFn()}>
           {isSpinner ? (
             <span className="spinner-border text-white" role="status" />
           ) : (

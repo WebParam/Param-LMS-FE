@@ -3,30 +3,19 @@ import Pagination from "@/app/components/Pagination";
 import Table from "@/components/course/[id]/course-applicants/regional/Table";
 import { useEffect, useState } from "react";
 import list from "@/components/course/[id]/course-applicants/regional/data";
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+} from "next/navigation";
 import { getStudentData } from "@/app/lib/actions/courseStudents";
 
 const Body = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 6;
-  const indexOfLastItem = currentPage * ITEMSPERPAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
   const { studentId } = useParams<{ studentId: string }>();
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const title = searchParams.get("title");
-  const studentName = searchParams.get("studentName");
-  const isEnrolled = searchParams.get("isEnrolled");
-  const date = new Date();
 
   const [data, setData] = useState([]);
 
   async function studentInformation() {
     const response = await getStudentData(studentId);
     setData(response);
-    
   }
 
   useEffect(() => {
