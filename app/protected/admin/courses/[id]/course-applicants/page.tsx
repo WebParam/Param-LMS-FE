@@ -5,7 +5,7 @@ import Graphs from "@/components/course/[id]/course-applicants/graphs/Graphs";
 
 const Body = async ({ params }: { params: { id: string } }) => {
   const courseId = params.id;
-  const fetchedData: IStudentsData = await getEnrollments(courseId, true);
+  const fetchedData: IStudentsData = await getEnrollments(courseId, false);
 
   return (
     <>
