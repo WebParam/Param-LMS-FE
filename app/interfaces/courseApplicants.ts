@@ -76,6 +76,6 @@ export interface IStudentsData {
     intellectuallyDisabled: number;
     multipleDisabilities: number;
   };
-  AgeRangeGenderDistribution:AgeRangeGenderDistribution[]
+  ageRangeGenderDistribution:AgeRangeGenderDistribution[]
   courseApplicants: CourseApplicants[];
 }

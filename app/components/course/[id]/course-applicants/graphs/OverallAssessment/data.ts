@@ -41,15 +41,13 @@ export const barDescriptions = [
 export const transformData = (
   data: AgeRangeGenderDistribution[]
 ): ChartData<"bar"> => {
-  const maleData = labels.map((label) => {
-    const entry = data.find((item) => item.ageRange === label);
-    return entry ? entry.maleCount : 0;
-  });
-
-  const femaleData = labels.map((label) => {
-    const entry = data.find((item) => item.ageRange === label);
-    return entry ? entry.femaleCount : 0;
-  });
+  
+  const maleData = [];
+  const femaleData = [];
+  for (const entry of data) {
+    maleData.push(entry.maleCount);
+    femaleData.push(entry.femaleCount);
+  }
 
   return {
     labels,
