@@ -62,7 +62,26 @@ const TableRow = ({ document }: { document: any }) => {
             </div>
           </div>
         </td>
-      </tr>
+        </tr>
+      {/*  : <>
+          <tr className="selected">
+         <td colSpan={10}>
+           <SkeletonLoader width="100%" height="2em" />
+         </td>
+         
+       </tr>
+       <tr className="selected">
+         <td colSpan={10}>
+           <SkeletonLoader width="100%" height="2em" />
+         </td>
+         
+       </tr> <tr className="selected">
+         <td colSpan={10}>
+           <SkeletonLoader width="100%" height="2em" />
+         </td>
+         
+       </tr>
+         </> */}
     </>
   );
 };

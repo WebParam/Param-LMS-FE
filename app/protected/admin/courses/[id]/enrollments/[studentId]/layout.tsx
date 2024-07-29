@@ -3,10 +3,14 @@ import Link from "next/link";
 import "./layout.scss";
 import { usePathname, useSearchParams, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
+import EnrollStudentModal from "@/components/course/[id]/course-applicants/EnrollStudentModal";
+import RejectStudentModal from "@/components/course/[id]/course-applicants/RejectStudentModal";
+import RequestModificationModal from "@/components/course/[id]/course-applicants/RequestModificationModal";
+import { downloadStudentDocs, getStudentDocuments } from "@/app/lib/actions/courseStudents";
 import { rCourseUrl } from "@/app/lib/actions/endpoints";
 import { downloadFile } from "@/app/lib/utils";
 import { Modal } from "react-bootstrap";
+import { saveAs } from 'file-saver';
 
 function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -63,12 +67,23 @@ function Layout({ children }: { children: React.ReactNode }) {
     setDocuments(response);
   }
 
-  const exportStudentDocuments = () => {
-    const filename = "student_information";
-    const fileExtension = "zip";
-    // const url = `${rCourseUrl}/KnowledgeTopics/ExportKnowledgeTopics?studentId=${studentId}`;
-    // downloadFile(url, filename, fileExtension, setExportModal);
+  const exportStudentDocuments = async () => {
+    try {
+      const filename = "student_information.zip";
+      const response = await downloadStudentDocs(studentId);
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const blob = await response.blob();
+      saveAs(blob, filename);
+      console.log("File downloaded successfully");
+    } catch (error) {
+      console.error("Error downloading the file:", error);
+    }
   };
+
 
   useEffect(() => {
     studentInformation();

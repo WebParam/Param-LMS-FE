@@ -1,9 +1,8 @@
 "use client";
-import Pagination from "@/app/components/Pagination";
 import Table from "@/components/course/[id]/course-applicants/document/Table";
 import { useEffect, useState } from "react";
 import list from "@/components/course/[id]/course-applicants/document/data";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
 
 const Body = () => {
@@ -13,17 +12,28 @@ const Body = () => {
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
   const { studentId } = useParams<{ studentId: string }>();
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const title = searchParams.get("title");
+  const studentName = searchParams.get("studentName");
+  const refreshId = searchParams.get("refreshId")
+  const date = new Date();
 
   const [data, setData] = useState([]);
+  const isEnrolled = searchParams.get("isEnrolled");
 
   async function studentInformation() {
     const response = await getStudentDocuments(studentId);
     setData(response);
+
+    
+    console.log("response",response)
   }
 
   useEffect(() => {
     studentInformation();
-  }, []);
+  }, [refreshId]);
 
   return (
     <>

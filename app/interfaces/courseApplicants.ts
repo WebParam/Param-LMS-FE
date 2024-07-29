@@ -2,7 +2,7 @@ export type CourseApplicants = {
   id?:string;
   userId?:string;
   name: string;
-  surname: string;
+  surname?:string
   gender: string;
   homeLanguage: string;
   race: string;

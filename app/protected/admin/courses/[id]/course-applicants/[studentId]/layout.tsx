@@ -5,8 +5,9 @@ import { usePathname, useSearchParams, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import EnrollStudentModal from "@/components/course/[id]/course-applicants/EnrollStudentModal";
 import RejectStudentModal from "@/components/course/[id]/course-applicants/RejectStudentModal";
+import { saveAs } from 'file-saver';
 import RequestModificationModal from "@/components/course/[id]/course-applicants/RequestModificationModal";
-import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
+import { downloadStudentDocs, getStudentDocuments } from "@/app/lib/actions/courseStudents";
 import { rCourseUrl } from "@/app/lib/actions/endpoints";
 import { downloadFile } from "@/app/lib/utils";
 import { Modal } from "react-bootstrap";
@@ -26,6 +27,8 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [requestModal, setRequestModal] = useState<boolean>(false);
   const [documents, setDocuments] = useState([]);
   const [exportModal, setExportModal] = useState(false);
+  const [isSpinner, setIsSpinner] = useState<boolean>(false);
+  const isEnrolled = searchParams.get("isEnrolled")
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -34,32 +37,32 @@ function Layout({ children }: { children: React.ReactNode }) {
   const tabs = [
     {
       title: "Profile",
-      url: `${baseLayoutUrl}/profiles?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/profiles?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/profiles`,
     },
     {
       title: "Demographics",
-      url: `${baseLayoutUrl}/demographics?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/demographics?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/demographics`,
     },
     {
       title: "Contacts",
-      url: `${baseLayoutUrl}/contacts?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/contacts?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/contacts`,
     },
     {
       title: "Regional",
-      url: `${baseLayoutUrl}/regional?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/regional?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/regional`,
     },
     {
       title: "Employment",
-      url: `${baseLayoutUrl}/employment?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/employment?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/employment`,
     },
     {
       title: "Documents",
-      url: `${baseLayoutUrl}/document?title=${courseTitle}&studentName=${studentName}`,
+      url: `${baseLayoutUrl}/document?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/document`,
     },
   ];
@@ -69,18 +72,29 @@ function Layout({ children }: { children: React.ReactNode }) {
     setDocuments(response);
   }
 
-  const exportStudentDocuments = () => {
-    const filename = "student_information";
-    const fileExtension = "zip";
-    // const url = `${rCourseUrl}/KnowledgeTopics/ExportKnowledgeTopics?studentId=${studentId}`;
-    // downloadFile(url, filename, fileExtension, setExportModal);
+  const exportStudentDocuments = async () => {
+    setIsSpinner(true)
+    try {
+
+      const filename = "student_information.zip";
+      const response = await downloadStudentDocs(studentId);
+  
+      if (!response.ok) {
+        setIsSpinner(false)
+        throw new Error('Network response was not ok');
+      }
+      setIsSpinner(false)
+      const blob = await response.blob();
+      saveAs(blob, filename);
+    } catch (error) {
+      setIsSpinner(false);
+      console.error("Error downloading the file:", error);
+    }
   };
+  
 
   useEffect(() => {
     studentInformation();
-    setRejectModal(false);
-    setEnrollModal(false);
-    setRequestModal(false);
   }, [refreshId]);
 
   return (
@@ -114,6 +128,9 @@ function Layout({ children }: { children: React.ReactNode }) {
       </Modal>
 
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+      {
+        Number(isEnrolled) > 0 && <>
+        
         <div className="mx-1">
           <button
             className="btn btn-success btn-block mx-1"
@@ -133,6 +150,9 @@ function Layout({ children }: { children: React.ReactNode }) {
             Request Modification
           </button>
         </div>
+        </>
+      }
+
         <div className="mx-1">
           <button
             className={`btn btn-block mx-1 ${
@@ -144,14 +164,24 @@ function Layout({ children }: { children: React.ReactNode }) {
             Download Documents
           </button>
         </div>
-        <div className="mx-1">
-          <button
-            className="btn btn-danger btn-block"
-            onClick={() => setRejectModal(true)}
-          >
-            Reject Application
-          </button>
-        </div>
+       
+            
+           {
+            Number(isEnrolled) > 0 && <>
+               
+               <div className="mx-1">
+              <button
+                className="btn btn-danger btn-block"
+                onClick={() => setRejectModal(true)}
+              >
+                Reject Application
+              </button>
+            </div>
+            
+            </>
+           }
+            
+
         <div className="mx-1 d-flex align-items-center">
           <div className="dropdown ml-auto">
             <a
@@ -178,7 +208,10 @@ function Layout({ children }: { children: React.ReactNode }) {
                     onClick={() => exportStudentDocuments()}
                     className="dropdown-item"
                   >
-                    Download Documents
+                    {
+                      isSpinner ?  <span className="spinner-border text-white" role="status" /> :   "Download Documents"
+                    }
+                  
                   </div>
                 </>
               ) : (

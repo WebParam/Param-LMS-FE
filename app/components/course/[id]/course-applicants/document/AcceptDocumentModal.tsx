@@ -9,6 +9,7 @@ import {
 } from "next/navigation";
 import { useEffect, useState } from "react";
 import { updateDocumentStatus } from "@/app/lib/actions/document";
+import { changeDocumentStatus } from "@/app/lib/actions/courseStudents";
 
 function AcceptDocumentModal(props: any) {
   const { id: courseId } = useParams<{
@@ -22,17 +23,36 @@ function AcceptDocumentModal(props: any) {
   const title = searchParams.get("title") || "";
   const studentName = searchParams.get("studentName") || "";
   const refreshId = searchParams.get("refreshId") || "";
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const acceptDocumentFn = async () => {
+    setErrorMessage("");
+    setSuccessMessage("");
     setIsSpinner(true);
-    // await updateDocumentStatus(props.id, "Accepted", "");
-    const date = new Date().toString();
-    router.replace(
-      `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
-      {
-        scroll: false,
-      }
-    );
+    const payload = {
+      documentId: props.documentId,
+      status: "Accepted",
+      reason: "",
+    };
+
+    try {
+      await changeDocumentStatus(payload);
+      setSuccessMessage("Document Accepted Successfully");
+      const date = new Date().toString();
+      router.replace(
+        `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
+        {
+          scroll: false,
+        }
+      );
+    setTimeout(() => {
+      props.onHide();
+    },2000)
+    } catch (error) {
+      console.log("Error", error);
+      setErrorMessage("Failed to Accept Document");
+    }
   };
 
   useEffect(() => {
@@ -57,6 +77,12 @@ function AcceptDocumentModal(props: any) {
         </div>
       </Modal.Body>
       <Modal.Footer>
+        {successMessage && (
+          <div className="alert alert-success">{successMessage}</div>
+        )}
+        {errorMessage && (
+          <div className="alert  alert-danger">{errorMessage}</div>
+        )}
         <Button variant="secondary" onClick={props.onHide}>
           Cancel
         </Button>

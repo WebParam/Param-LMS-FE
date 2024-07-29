@@ -1,8 +1,8 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import Table from "@/components/course/[id]/enrollments/student-performance/documents/Table";
+import Table from "@/components/course/[id]/enrolled-with-assessments/documents/Table";
 import { useEffect, useState } from "react";
-import list from "@/components/course/[id]/enrollments/student-performance/documents/data";
+import list from "@/components/course/[id]/enrolled-with-assessments/documents/data";
 import { usePathname } from "next/navigation";
 import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
 

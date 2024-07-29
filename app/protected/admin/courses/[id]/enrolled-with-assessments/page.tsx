@@ -39,7 +39,7 @@ import ChartLayout from "@/app/components/enrolment-dashboard/graphs/ChartLayout
 import { AvgTimeSpent } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
 // import { StudentsProgressStatus } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
 import { StudentRaces } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/StudentRaces";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 type DataTiles = {
   name: string;
@@ -60,7 +60,7 @@ const Body = () => {
   /* useEffect(() => {
     const asyncFetch = async () => {
       try {
-        const fetchedData = await getEnrollments(id);
+        const fetchedData = await getEnrollments(id,true);
         setData(fetchedData);
         console.log("data is here", fetchedData);
       } catch (error) {

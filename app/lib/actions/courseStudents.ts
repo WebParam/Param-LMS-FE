@@ -1,5 +1,6 @@
+import { IUpdateEnrollment } from "@/app/interfaces/Enrollment";
 import { Diagnostic } from "../logger/logger";
-import { get, put } from "../utils";
+import { get, post, put } from "../utils";
 
 export const getCourseStudents = async (courseId: string) => {
     try {
@@ -17,26 +18,11 @@ export const getCourseStudents = async (courseId: string) => {
     }
 };
 
-export const enrollStudent = async (studentId: string) => {
-    try {
-      const resp = await get(
-        `https://khumla-dev-api-aggregator.azurewebsites.net/api/v1/StudentCourse/GetCourseStudents/${studentId}`
-      );
-      console.log(resp);
-      const data = resp.data;
-      Diagnostic("SUCCESS ON GET, returning", data);
-      return data;
-    } catch (err) {
-      Diagnostic("ERROR ON GET, returning", err);
-  
-      console.error(err);
-    }
-};
+export const updateEnrollmentStatus = async (payload:IUpdateEnrollment) => {
 
-export const declineStudent = async (studentId: string, selectedReason: string) => {
     try {
-      const resp = await get(
-        `https://khumla-dev-api-aggregator.azurewebsites.net/api/v1/StudentCourse/GetCourseStudents/${studentId}`
+      const resp = await put(
+        `https://khumla-dev-newcourse-write.azurewebsites.net/api/v1/Enrollments/UpdateEnrollmentStatus`,payload
       );
       console.log(resp);
       const data = resp.data;
@@ -65,6 +51,36 @@ export const getStudentDocuments = async (studentId: string) => {
 }
 
 export const changeDocumentStatus = async (payload:any) => {
-  const resp = await put(`https://khumla-development-user-write.azurewebsites.net/api/Documents/UpdateDocumentStatus `, payload);
+  const resp = await put(`https://khumla-testing-user-write.azurewebsites.net/api/Documents/UpdateDocumentStatus `, payload);
   return resp.data
 }
+
+export const downloadStudentDocs = async (userId: any) => {
+  const resp = await fetch(`https://khumla-testing-user-read.azurewebsites.net/api/Documents/DownloadDocuments/${userId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/zip'
+    }
+  });
+  return resp;
+};
+
+
+
+export const sendDocRejectionEmail = async (
+  userId: string,
+ 
+) => {
+  try {
+    const data = await post(`https://khumla-testing-user-write.azurewebsites.net/api/Documents/SendDocumentRejectionEmail/${userId}`, {
+      userId,
+      
+    });
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    console.error(err);
+  }
+};
+
+
