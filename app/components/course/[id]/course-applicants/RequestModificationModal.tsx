@@ -28,9 +28,13 @@ function RequestModificationModal(props: any) {
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [hidePopUp, setHidePopUp] = useState(false)
+  const [disableBtn, setDisableBtn] = useState(false);
+  const isEnrolled =  searchParams.get("isEnrolled");
+
 
   const requestDocumentUpdateFn = async () => {
     setSuccessMessage("")
+    setDisableBtn(true)
     if (selectedDocuments.length > 0) {
       setIsSpinner(true);
       console.log("selectedDocuments", selectedDocuments)
@@ -39,7 +43,7 @@ function RequestModificationModal(props: any) {
        setIsSpinner(false);
       const date = new Date().toString();
       router.replace(
-        `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
+        `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}&}&isEnrolled=${isEnrolled}`,
         {
           scroll: false,
         }
@@ -47,9 +51,10 @@ function RequestModificationModal(props: any) {
     setTimeout(() => {
       setSuccessMessage("")
       props.onHide();
+      setDisableBtn(false)
     },2000)
     } else {
-      
+      setDisableBtn(false)
     }
   };
 
@@ -115,6 +120,7 @@ function RequestModificationModal(props: any) {
         </Button>
         <button
           className="btn btn-danger"
+          disabled={disableBtn}
           onClick={() => requestDocumentUpdateFn()}
         >
           {isSpinner ? (

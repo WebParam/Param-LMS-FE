@@ -52,6 +52,9 @@ function AcceptDocumentModal(props: any) {
       );
     setTimeout(() => {
       props.onHide();
+      setDisabled(false);
+      setErrorMessage("")
+      setSuccessMessage("");
     },2000)
     } catch (error) {
       setDisabled(false)
@@ -62,6 +65,7 @@ function AcceptDocumentModal(props: any) {
 
   useEffect(() => {
     setIsSpinner(false);
+  
   }, [refreshId]);
 
   return (

@@ -29,7 +29,7 @@ function RejectStudentModal(props: any) {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const date = new Date().toString();
   const homePath = `/protected/admin/courses/${courseId}/course-applicants?title=${title}&refreshId=${date}`
-
+  const [disabled, setDisabled] = useState(false)
 
   const arrReasons = [
     "Illegible Application",
@@ -40,7 +40,9 @@ function RejectStudentModal(props: any) {
   ];
 
   const declineStudentFn = async () => {
+    setDisabled(true)
     if (selectedReason !== "") {
+     
       setIsSpinner(true);
       const email = localStorage.getItem("email")!;
       const payload = {
@@ -66,7 +68,9 @@ function RejectStudentModal(props: any) {
       }
   
       setErrorMessage("Failed Enrolling Student");
+      return;
           }
+          setDisabled(false)
   };
 
   useEffect(() => {
@@ -117,7 +121,7 @@ function RejectStudentModal(props: any) {
         <Button variant="secondary" onClick={props.onHide}>
           Cancel
         </Button>
-        <button className="btn btn-danger" onClick={() => declineStudentFn()}>
+        <button disabled={disabled} className="btn btn-danger" onClick={() => declineStudentFn()}>
           {isSpinner ? (
             <span className="spinner-border text-white" role="status" />
           ) : (

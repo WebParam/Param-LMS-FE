@@ -64,6 +64,9 @@ function RejectDocumentModal(props: any) {
       );
     setTimeout(() => {
       props.onHide();
+      setErrorMessage("")
+      setDisableBtn(false)
+    setSuccessMessage("");
     },2000)
     } else {
       setDisableBtn(false)
@@ -75,7 +78,6 @@ function RejectDocumentModal(props: any) {
     setIsSpinner(false);
     setReasonError("")
     setSelectedReason("");
-    setSuccessMessage("");
 
   }, [refreshId]);
 
