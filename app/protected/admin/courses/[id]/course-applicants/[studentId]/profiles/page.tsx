@@ -18,15 +18,16 @@ const Body = () => {
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
   const studentName = searchParams.get("studentName");
+  const isEnrolled = searchParams.get("isEnrolled");
   const date = new Date();
  
 
   const studentInformation = async () => {
     const response = await getStudentInfo(studentId);
     setData(response);
-    console.log("My response",response)
+    localStorage.setItem("email",response.email)
      router.replace(
-    `${pathname}?title=${title}&studentName=${studentName}&email=${response?.email}&refreshId=${date}`,
+    `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}&isEnrolled=${isEnrolled}`,
     {
       scroll: false,
     }

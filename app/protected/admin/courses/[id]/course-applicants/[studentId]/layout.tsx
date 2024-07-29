@@ -28,6 +28,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [documents, setDocuments] = useState([]);
   const [exportModal, setExportModal] = useState(false);
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
+  const isEnrolled = searchParams.get("isEnrolled")
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -127,6 +128,9 @@ function Layout({ children }: { children: React.ReactNode }) {
       </Modal>
 
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+      {
+        Number(isEnrolled) > 0 && <>
+        
         <div className="mx-1">
           <button
             className="btn btn-success btn-block mx-1"
@@ -146,6 +150,9 @@ function Layout({ children }: { children: React.ReactNode }) {
             Request Modification
           </button>
         </div>
+        </>
+      }
+
         <div className="mx-1">
           <button
             className={`btn btn-block mx-1 ${
@@ -157,14 +164,24 @@ function Layout({ children }: { children: React.ReactNode }) {
             Download Documents
           </button>
         </div>
-        <div className="mx-1">
-          <button
-            className="btn btn-danger btn-block"
-            onClick={() => setRejectModal(true)}
-          >
-            Reject Application
-          </button>
-        </div>
+       
+            
+           {
+            Number(isEnrolled) > 0 && <>
+               
+               <div className="mx-1">
+              <button
+                className="btn btn-danger btn-block"
+                onClick={() => setRejectModal(true)}
+              >
+                Reject Application
+              </button>
+            </div>
+            
+            </>
+           }
+            
+
         <div className="mx-1 d-flex align-items-center">
           <div className="dropdown ml-auto">
             <a

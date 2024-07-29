@@ -22,16 +22,18 @@ const Body = () => {
   const date = new Date();
 
   const [data, setData] = useState([]);
+  const isEnrolled = searchParams.get("isEnrolled");
 
   async function studentInformation() {
     const response = await getStudentData(studentId);
     setData(response);
-    router.replace(
-      `${pathname}?title=${title}&studentName=${studentName}&email=${response?.email}&refreshId=${date}`,
+
+  router.replace(
+      `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}&isEnrolled=${isEnrolled}`,
       {
         scroll: false,
       }
-    )
+    );
   }
 
   useEffect(() => {

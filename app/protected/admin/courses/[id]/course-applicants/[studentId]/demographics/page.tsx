@@ -19,16 +19,18 @@ const Body = () => {
   const title = searchParams.get("title");
   const studentName = searchParams.get("studentName");
   const date = new Date();
+  const isEnrolled = searchParams.get("isEnrolled");
 
   async function studentInformation() {
     const response = await getStudentData(studentId);
     setData(response);
+
     router.replace(
-      `${pathname}?title=${title}&studentName=${studentName}&email=${response?.email}&refreshId=${date}`,
-      {
-        scroll: false,
-      }
-    )
+        `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}&isEnrolled=${isEnrolled}`,
+        {
+          scroll: false,
+        }
+      );
 
   }
 

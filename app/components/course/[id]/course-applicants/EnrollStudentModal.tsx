@@ -24,7 +24,6 @@ function EnrollStudentModal(props: any) {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
-  const email = searchParams.get("email") || "";
   const studentName = searchParams.get("studentName") || "";
   const refreshId = searchParams.get("refreshId") || "";
   const date = new Date().toString();
@@ -32,6 +31,7 @@ function EnrollStudentModal(props: any) {
 
   const delKnowledgeTopic = async () => {
     setIsSpinner(true);
+    const email = localStorage.getItem("email")!;
     const payload = {
       userId: studentId,
       status: 0,

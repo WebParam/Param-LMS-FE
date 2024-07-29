@@ -28,7 +28,6 @@ function RejectStudentModal(props: any) {
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const date = new Date().toString();
-  const email = searchParams.get("email") || "";
   const homePath = `/protected/admin/courses/${courseId}/course-applicants?title=${title}&refreshId=${date}`
 
 
@@ -43,6 +42,7 @@ function RejectStudentModal(props: any) {
   const declineStudentFn = async () => {
     if (selectedReason !== "") {
       setIsSpinner(true);
+      const email = localStorage.getItem("email")!;
       const payload = {
         userId: studentId,
         status: 1,
