@@ -16,11 +16,11 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
   return (
     <>
       <tbody className="list" id="staff">
-        {list &&
+        {list.length > 0 ?
           list.map((data: CourseApplicants, index: number) => (
             <tr key={data.id} className="selected">
               <td className="text-center js-lists-values-projects small">
-                {data.name ?? "N/A"}
+                {data.name ?? "N/A"}  {data?.surname ?? "N/A"}
               </td>
               <td className="text-center js-lists-values-projects small">
                 {data.gender ?? "N/A"}
@@ -86,7 +86,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                         textAlign: "center",
                       }}
                     >
-                      Deleted
+                      Declined
                     </span>
                   )}
                   {data.status === 0 && (
@@ -111,12 +111,13 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                   <Link
                     href={{
                       pathname: isEnrollment
-                        ? `/protected/admin/courses/${id}/enrollments/${data.id}/student-details/profiles`
-                        : `/protected/admin/courses/${id}/course-applicants/${data.id}/profiles`,
+                        ? `/protected/admin/courses/${id}/enrollments/${data.userId}/student-details/profiles`
+                        : `/protected/admin/courses/${id}/course-applicants/${data.userId}/profiles`,
                       query: {
                         id: data.id,
-                        studentName: data.name,
+                        studentName: data.name +" " + data.surname,
                         title: title,
+                        
                       },
                     }}
                   >
@@ -125,7 +126,25 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                 </div>
               </td>
             </tr>
-          ))}
+          )) :  (
+            <tr className="selected">
+              <td
+                style={{ width: "300px" }}
+                className="text-center mx-auto text-justify js-lists-values-projects small"
+              ></td>
+              <td
+              colSpan={10}
+                style={{ width: "600px" }}
+                className="text-center js-lists-values-projects small"
+              >
+                No Students Applications...
+              </td>
+              <td
+                style={{ width: "300px" }}
+                className="text-center js-lists-values-projects small"
+              ></td>
+            </tr>
+          )}
       </tbody>
     </>
   );

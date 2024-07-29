@@ -9,6 +9,7 @@ import {
 } from "next/navigation";
 import { useEffect, useState } from "react";
 import { requestDocumentsUpdate } from "@/app/lib/actions/document";
+import { sendDocRejectionEmail } from "@/app/lib/actions/courseStudents";
 
 function RequestModificationModal(props: any) {
   const { studentId } = useParams<{
@@ -24,12 +25,18 @@ function RequestModificationModal(props: any) {
   const title = searchParams.get("title") || "";
   const studentName = searchParams.get("studentName") || "";
   const refreshId = searchParams.get("refreshId") || "";
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [hidePopUp, setHidePopUp] = useState(false)
 
   const requestDocumentUpdateFn = async () => {
+    setSuccessMessage("")
     if (selectedDocuments.length > 0) {
       setIsSpinner(true);
       console.log("selectedDocuments", selectedDocuments)
-      // await requestDocumentsUpdate(selectedDocuments, studentId);
+       await sendDocRejectionEmail(studentId);
+       setSuccessMessage("Request Successfully sent")
+       setIsSpinner(false);
       const date = new Date().toString();
       router.replace(
         `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
@@ -37,8 +44,12 @@ function RequestModificationModal(props: any) {
           scroll: false,
         }
       );
+    setTimeout(() => {
+      setSuccessMessage("")
+      props.onHide();
+    },2000)
     } else {
-      setDocumentsError("Please select at least a document");
+      
     }
   };
 
@@ -63,6 +74,7 @@ function RequestModificationModal(props: any) {
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
+      onHide={hidePopUp}
     >
       <Modal.Header style={{ background: "#24345c" }} closeButton>
         <Modal.Title style={{ color: "white" }}>
@@ -91,6 +103,13 @@ function RequestModificationModal(props: any) {
         {documentsError && <p className="text-danger">{documentsError}</p>}
       </Modal.Body>
       <Modal.Footer>
+
+      {successMessage && (
+          <div className="alert alert-success">{successMessage}</div>
+        )}
+        {errorMessage && (
+          <div className="alert  alert-danger">{errorMessage}</div>
+        )}
         <Button variant="secondary" onClick={props.onHide}>
           Cancel
         </Button>

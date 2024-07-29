@@ -8,10 +8,11 @@ import {
   useSearchParams,
 } from "next/navigation";
 import { useEffect, useState } from "react";
-import { declineStudent } from "@/app/lib/actions/courseStudents";
+import { updateEnrollmentStatus } from "@/app/lib/actions/courseStudents";
 
 function RejectStudentModal(props: any) {
-  const { studentId } = useParams<{
+  const { id : courseId, studentId } = useParams<{
+    id:string;
     studentId: string;
   }>();
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
@@ -24,6 +25,12 @@ function RejectStudentModal(props: any) {
   const refreshId = searchParams.get("refreshId") || "";
   const [selectedReason, setSelectedReason] = useState("");
   const [reasonError, setReasonError] = useState("");
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const date = new Date().toString();
+  const email = searchParams.get("email") || "";
+  const homePath = `/protected/admin/courses/${courseId}/course-applicants?title=${title}&refreshId=${date}`
+
 
   const arrReasons = [
     "Illegible Application",
@@ -36,17 +43,31 @@ function RejectStudentModal(props: any) {
   const declineStudentFn = async () => {
     if (selectedReason !== "") {
       setIsSpinner(true);
-      // await declineStudent(studentId, selectedReason);
-      const date = new Date().toString();
-      router.replace(
-        `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
-        {
-          scroll: false,
-        }
-      );
-    } else {
-      setReasonError("Please select a reason");
-    }
+      const payload = {
+        userId: studentId,
+        status: 1,
+        fullName: studentName,
+        email: email,
+        courseTitle: title,
+        rejectionReason:selectedReason
+      }
+      const resp = await updateEnrollmentStatus(payload);
+      if (resp.enrollmentStatus == 1) {
+        setIsSpinner(false);
+        setSuccessMessage("Student Rejected Successfully");
+        router.replace(
+          `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
+          {
+            scroll: false,
+          }
+        );
+        router.push(homePath);
+      
+        return;
+      }
+  
+      setErrorMessage("Failed Enrolling Student");
+          }
   };
 
   useEffect(() => {
@@ -75,6 +96,7 @@ function RejectStudentModal(props: any) {
               <div className="d-flex mr-2">
                 <input
                   type="radio"
+                  value={reason}
                   onChange={(e: any) => setSelectedReason(e.target.value)}
                   name="reason"
                   id=""
@@ -87,6 +109,12 @@ function RejectStudentModal(props: any) {
         {reasonError && <p className="text-danger">{reasonError}</p>}
       </Modal.Body>
       <Modal.Footer>
+      {successMessage && (
+          <div className="alert alert-success postion-abolute left-0">{successMessage}</div>
+        )}
+        {errorMessage && (
+          <div className="alert  alert-danger">{errorMessage}</div>
+        )}
         <Button variant="secondary" onClick={props.onHide}>
           Cancel
         </Button>

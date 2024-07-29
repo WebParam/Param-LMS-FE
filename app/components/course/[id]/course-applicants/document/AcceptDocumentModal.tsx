@@ -9,6 +9,7 @@ import {
 } from "next/navigation";
 import { useEffect, useState } from "react";
 import { updateDocumentStatus } from "@/app/lib/actions/document";
+import { changeDocumentStatus } from "@/app/lib/actions/courseStudents";
 
 function AcceptDocumentModal(props: any) {
   const { id: courseId } = useParams<{
@@ -25,7 +26,12 @@ function AcceptDocumentModal(props: any) {
 
   const acceptDocumentFn = async () => {
     setIsSpinner(true);
-    // await updateDocumentStatus(props.id, "Accepted", "");
+    const payload = {
+      documentId: props.documentId,
+      status: "Accepted",
+      reason: ""
+    }
+     await changeDocumentStatus(payload);
     const date = new Date().toString();
     router.replace(
       `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,

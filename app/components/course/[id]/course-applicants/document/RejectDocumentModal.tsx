@@ -9,6 +9,8 @@ import {
 } from "next/navigation";
 import { useEffect, useState } from "react";
 import { deleteKnowledgeTopic } from "@/app/lib/actions/knowledge-topic";
+import { updateDocumentStatus } from "@/app/lib/actions/document";
+import { changeDocumentStatus } from "@/app/lib/actions/courseStudents";
 
 function RejectDocumentModal(props: any) {
   const { id: courseId } = useParams<{
@@ -40,7 +42,12 @@ function RejectDocumentModal(props: any) {
   const declineDocumentFn = async () => {
     if (selectedReason !== "") {
       setIsSpinner(true);
-      // await updateDocumentStatus(props.id, "Declined", selectedReason);
+      const payload = {
+        documentId: props.documentId,
+        status: "Rejected",
+        reason: selectedReason
+      }
+       await changeDocumentStatus(payload);
       const date = new Date().toString();
       router.replace(
         `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,

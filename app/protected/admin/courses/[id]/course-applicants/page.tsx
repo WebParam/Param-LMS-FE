@@ -278,7 +278,7 @@ const Body = async ({params}:{params : {id:string}}) => {
           />
         </div>
       </div>
-      <TablePagination courseId={courseId} data={fetchedData.courseApplicants} />
+      <TablePagination courseId={courseId} data={fetchedData?.courseApplicants} />
    
     </>
   );

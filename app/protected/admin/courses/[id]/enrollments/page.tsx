@@ -54,8 +54,9 @@ type DataTiles = {
   data: number;
 };
 
-const Body = async () => {
-  const courseId = "6669f0ff8759b480859c10a7";
+
+const Body = async ({params}:{params : {id:string}}) => {
+  const courseId = params.id;
 
 
 
@@ -279,7 +280,7 @@ const Body = async () => {
           />
         </div>
       </div>
-      <TablePagination data={fetchedData.courseApplicants} />
+      <TablePagination data={fetchedData?.courseApplicants} />
   
     </>
   );

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import AcceptDocumentModal from "./AcceptDocumentModal";
 import RejectDocumentModal from "./RejectDocumentModal";
@@ -8,16 +8,42 @@ import DocumentModal from "./DocumentModal";
 const TableRow = ({ document }: { document: any }) => {
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId");
-
   const [acceptDocumentModal, setAcceptDocumentModal] = useState(false);
   const [rejectDocumentModal, setRejectDocumentModal] = useState(false);
   const [documentShowModal, setDocumentShowModal] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const title = searchParams.get("title");
+  const studentName = searchParams.get("studentName");
+  const email = searchParams.get("email")
+  const date = new Date();
+ 
 
   useEffect(() => {
     setAcceptDocumentModal(false);
     setRejectDocumentModal(false);
     setDocumentShowModal(false);
   }, [refreshId]);
+
+  const acceptDoc = () => {
+    setAcceptDocumentModal(true)
+    router.replace(
+      `${pathname}?title=${title}&studentName=${studentName}&email=${email}&refreshId=${date}`,
+      {
+        scroll: false,
+      }
+    )
+  }
+
+  const rejectDoc = () => {
+    setRejectDocumentModal(true)
+    router.replace(
+      `${pathname}?title=${title}&studentName=${studentName}&email=${email}&refreshId=${date}`,
+      {
+        scroll: false,
+      }
+    )
+  }
 
   return (
     <>
@@ -74,14 +100,14 @@ const TableRow = ({ document }: { document: any }) => {
           <div className="text-center my-2 w-100">
             <button
               type="button"
-              onClick={() => setAcceptDocumentModal(true)}
+              onClick={() => acceptDoc()}
               className="btn btn-outline-success btn-sm rounded-pill py-1 px-3 mr-2"
             >
               Accept
             </button>
             <button
               type="button"
-              onClick={() => setRejectDocumentModal(true)}
+              onClick={() => rejectDoc()}
               className="btn btn-outline-danger btn-sm rounded-pill py-1 px-3"
             >
               Reject

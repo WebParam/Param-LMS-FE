@@ -121,7 +121,7 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
 
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems = filteredData.slice(
+  const currentItems = filteredData && filteredData.slice(
     indexOfFirstItem,
     indexOfFirstItem + ITEMSPERPAGE
   );
@@ -243,7 +243,7 @@ function TablePagination({ data, courseId }: TablePaginationProps) {
         </div>
 
         <Pagination
-          listLength={filteredData.length}
+          listLength={filteredData && filteredData.length}
           indexOfLastItem={indexOfLastItem}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}

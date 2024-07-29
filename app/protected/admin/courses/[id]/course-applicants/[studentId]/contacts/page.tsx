@@ -4,7 +4,7 @@ import Table from "@/components/course/[id]/course-applicants/contacts/Table";
 import { useState } from "react";
 import list from "@/components/course/[id]/course-applicants/contacts/data";
 import { useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getStudentData } from "@/app/lib/actions/courseStudents";
 
 const Body = () => {
@@ -14,12 +14,24 @@ const Body = () => {
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
   const { studentId } = useParams<{ studentId: string }>();
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const title = searchParams.get("title");
+  const studentName = searchParams.get("studentName");
+  const date = new Date();
 
   const [data, setData] = useState([]);
 
   async function studentInformation() {
     const response = await getStudentData(studentId);
     setData(response);
+    router.replace(
+      `${pathname}?title=${title}&studentName=${studentName}&email=${response?.email}&refreshId=${date}`,
+      {
+        scroll: false,
+      }
+    )
   }
 
   useEffect(() => {

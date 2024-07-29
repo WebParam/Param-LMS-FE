@@ -121,9 +121,9 @@ export default function PageHeader({ title }: { title: string }) {
     title = `Create Unit Standard`;
     isCreateModule = true;
   } else if (
-    pathname ==
-    `/protected/admin/courses/${id}/course-applicants/${studentId}/profiles`
-  ) {
+    pathname.includes(
+    `/protected/admin/courses/${id}/course-applicants/${studentId}`
+  )) {
     isViewCourseApplicants = true;
     newTitle = (
       <div className="d-flex">

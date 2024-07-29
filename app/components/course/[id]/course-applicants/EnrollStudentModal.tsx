@@ -9,11 +9,14 @@ import {
 } from "next/navigation";
 import { useEffect, useState } from "react";
 import { deleteKnowledgeTopic } from "@/app/lib/actions/knowledge-topic";
-import { enrollStudent } from "@/app/lib/actions/courseStudents";
+import { updateEnrollmentStatus } from "@/app/lib/actions/courseStudents";
 
 function EnrollStudentModal(props: any) {
-  const { id: courseId } = useParams<{
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const { id: courseId, studentId } = useParams<{
     id: string;
+    studentId: string;
   }>();
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
   const router = useRouter();
@@ -21,19 +24,37 @@ function EnrollStudentModal(props: any) {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const email = searchParams.get("email") || "";
   const studentName = searchParams.get("studentName") || "";
   const refreshId = searchParams.get("refreshId") || "";
+  const date = new Date().toString();
+  const homePath = `/protected/admin/courses/${courseId}/course-applicants?title=${title}&refreshId=${date}`
 
   const delKnowledgeTopic = async () => {
     setIsSpinner(true);
-    // await enrollStudent(props.id!);
-    const date = new Date().toString();
-    router.replace(
-      `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
-      {
-        scroll: false,
-      }
-    );
+    const payload = {
+      userId: studentId,
+      status: 0,
+      fullName: studentName,
+      email: email,
+      courseTitle: title,
+    }
+    const resp = await updateEnrollmentStatus(payload);
+    if (resp.enrollmentStatus == 0) {
+      setIsSpinner(false);
+      setSuccessMessage("Student Enrolled Successfully");
+      router.replace(
+        `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
+        {
+          scroll: false,
+        }
+      );
+      router.push(homePath);
+   
+      return;
+    }
+
+    setErrorMessage("Failed Enrolling Student");
   };
 
   useEffect(() => {
@@ -56,6 +77,12 @@ function EnrollStudentModal(props: any) {
         </div>
       </Modal.Body>
       <Modal.Footer>
+        {successMessage && (
+          <div className="alert alert-success">{successMessage}</div>
+        )}
+        {errorMessage && (
+          <div className="alert  alert-danger">{errorMessage}</div>
+        )}
         <Button variant="secondary" onClick={props.onHide}>
           Cancel
         </Button>

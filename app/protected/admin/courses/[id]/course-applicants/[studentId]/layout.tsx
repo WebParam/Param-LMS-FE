@@ -5,8 +5,9 @@ import { usePathname, useSearchParams, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import EnrollStudentModal from "@/components/course/[id]/course-applicants/EnrollStudentModal";
 import RejectStudentModal from "@/components/course/[id]/course-applicants/RejectStudentModal";
+import { saveAs } from 'file-saver';
 import RequestModificationModal from "@/components/course/[id]/course-applicants/RequestModificationModal";
-import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
+import { downloadStudentDocs, getStudentDocuments } from "@/app/lib/actions/courseStudents";
 import { rCourseUrl } from "@/app/lib/actions/endpoints";
 import { downloadFile } from "@/app/lib/utils";
 import { Modal } from "react-bootstrap";
@@ -26,6 +27,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [requestModal, setRequestModal] = useState<boolean>(false);
   const [documents, setDocuments] = useState([]);
   const [exportModal, setExportModal] = useState(false);
+  const [isSpinner, setIsSpinner] = useState<boolean>(false);
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -69,18 +71,32 @@ function Layout({ children }: { children: React.ReactNode }) {
     setDocuments(response);
   }
 
-  const exportStudentDocuments = () => {
-    const filename = "student_information";
-    const fileExtension = "zip";
-    // const url = `${rCourseUrl}/KnowledgeTopics/ExportKnowledgeTopics?studentId=${studentId}`;
-    // downloadFile(url, filename, fileExtension, setExportModal);
+  const exportStudentDocuments = async () => {
+    setIsSpinner(true)
+    try {
+
+      const filename = "student_information.zip";
+      const response = await downloadStudentDocs(studentId);
+  
+      if (!response.ok) {
+        setIsSpinner(false)
+        throw new Error('Network response was not ok');
+      }
+      setIsSpinner(false)
+      const blob = await response.blob();
+      saveAs(blob, filename);
+    } catch (error) {
+      setIsSpinner(false);
+      console.error("Error downloading the file:", error);
+    }
   };
+  
 
   useEffect(() => {
     studentInformation();
     setRejectModal(false);
     setEnrollModal(false);
-    setRequestModal(false);
+   
   }, [refreshId]);
 
   return (
@@ -178,7 +194,10 @@ function Layout({ children }: { children: React.ReactNode }) {
                     onClick={() => exportStudentDocuments()}
                     className="dropdown-item"
                   >
-                    Download Documents
+                    {
+                      isSpinner ?  <span className="spinner-border text-white" role="status" /> :   "Download Documents"
+                    }
+                  
                   </div>
                 </>
               ) : (
