@@ -104,7 +104,7 @@ function RejectDocumentModal(props: any) {
                   onChange={(e: any) => setSelectedReason(e.target.value)}
                   name="reason"
                   id=""
-                  value={selectedReason}
+                  value={reason}
                 />
               </div>
               <div>{reason}</div>
