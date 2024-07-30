@@ -1,6 +1,6 @@
 const env = "development";
-const envDev = "dev";
 const test = "testing";
+const envDev = process.env.NODE_ENV == "development" ? "dev" : "dev1";
 
 export const wCourseUrl = `https://khumla-${envDev}-newcourse-write.azurewebsites.net/api/v1`;
 
