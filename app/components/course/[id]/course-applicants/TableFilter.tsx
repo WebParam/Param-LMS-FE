@@ -61,9 +61,10 @@ export default function TableFilter({
     e: React.ChangeEvent<HTMLSelectElement>,
     filterKey: string
   ) => {
+    const value = e.target.value;
     const newFilters = {
       ...selectedFilters,
-      [filterKey]: filterKey === 'status' ? Number(e.target.value) : e.target.value,
+      [filterKey]: filterKey === 'status' ? (value === "" ? "" : Number(value)) : value,
     };
 
     setSelectedFilters(newFilters);
@@ -168,6 +169,7 @@ export default function TableFilter({
       id="inlineFormRole"
       className="custom-select mb-2 mr-sm-2 mb-sm-0"
       onChange={(e) => handleFilterChange(e, "status")}
+      value={selectedFilters.status}
     >
       <option value="">Select Status</option>
       {statuses.map((status) => (
@@ -185,7 +187,7 @@ export default function TableFilter({
             {Object.entries(selectedFilters).map(([key, value]) => {
               return value ? (
                 <span key={key} className="badge badge-primary mr-2">
-                  {key}: {value}
+                  {key}: {key === 'status' ? statuses.find(s => s.value === value)?.label : value}
                   <div onClick={() => removeFilter(key)}>&times;</div>
                 </span>
               ) : null;
