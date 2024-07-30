@@ -180,6 +180,9 @@ function Layout({ children }: { children: React.ReactNode }) {
            }
             
 
+{
+ Number(isEnrolled) == 0 ||  Number(isEnrolled) == 1  ? null : 
+
         <div className="mx-1 d-flex align-items-center">
           <div className="dropdown ml-auto">
             <a
@@ -221,6 +224,7 @@ function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </div>
+        }
       </div>
 
       <div className="card p-relative o-hidden mb-0">
