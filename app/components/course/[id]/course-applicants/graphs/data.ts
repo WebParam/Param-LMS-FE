@@ -25,23 +25,37 @@ export const races = [
 
 export const employmentStatuses = [
   "Employed",
-  "Unemployed",
-  "Home Maker",
-  "Scholar",
-  "Unemployed(Disabled)",
-  "Employed(Disabled)",
-  "Other",
-  "Unspecified",
+  "Unemployed, looking for work",
+  "Not working – not looking for work",
+  "Home-maker (not working)",
+  "Scholar/student (not working)",
+  "Pensioner /retired (not working)",
+  "Not working – disabled person",
+  "Not working – not wishing to work",
+  "Not working – Not elsewhere classified",
+  "N/A: Aged <15",
+  "N/A: Institution",
+  "Unspecified"
 ];
 
 export const disabilities = [
-  "deaf",
-  "blind",
-  "dumb",
-  "physicallyDisabled",
-  "intellectuallyDisabled",
-  "multipleDisabilities",
+  "None",
+  "Hearing (even with hearing aid",
+  "Sight (even with glasses)",
+  "Communication (talking, listening)",
+  "Physical (moving, standing, grasping)",
+  "Intellectual (difficulties in learning); retardation",
+  "Emotional (behavioural or pyschological)",
+  "Multiple Disabilities",
+  "Unspecified"
 ];
+
+export const statuses = [
+  "Enrolled",
+  "Deleted",
+  "Review Pending",
+  "Completed"
+]
 
 export const provinceData = (fetchedData: any) => [
   fetchedData?.numberOfStudentsByProvince.gauteng!,
