@@ -2,12 +2,12 @@
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
-import { rUsersUrl } from "./endpoints";
+import { rUserUrl } from "./endpoints";
 
 
 export const getUsersByRole = async (role: string) => {
     try {
-      const resp = await get(`${rUsersUrl}/Users/ByRole/${role}`);
+      const resp = await get(`${rUserUrl}/Users/ByRole/${role}`);
       console.log(resp);
       const data = resp.data;
   

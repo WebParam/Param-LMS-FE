@@ -29,8 +29,6 @@ export const rAssessmentUrl = `https://khumla-${env}-assessment-read.azurewebsit
 
 export const wQuestionUrl = `https://khumla-${envDev}-assessment-write.azurewebsites.net/api/Questions`;
 
-export const rUsersUrl = `https://khumla-${env}-user-read.azurewebsites.net/api/v1`;
-
 export const rAggregatorAssessmentUrl = `https://khumla-${env}-api-aggregator.azurewebsites.net/api/v1`;
 
 export const rAggregator = `https://khumla-${test}-aggregator.azurewebsites.net/api/v1`
@@ -41,11 +39,13 @@ export const rRubricUrl = `https://khumla-${envDev}-assessment-read.azurewebsite
 
 export const wOptionUrl = `https://khumla-${envDev}-assessment-write.azurewebsites.net/api/Options`;
 
-export const rOptionUrl = `https://khumla-${env}-assessment-read.azurewebsites.net/api/v1/Options`;
+export const rOptionUrl = `https://khumla-${envDev}-assessment-read.azurewebsites.net/api/v1/Options`;
 
-export const rKnowledgeModuleUrl = `https://khumla-${env}-newcourse-read.azurewebsites.net/api/v1`;
+export const rKnowledgeModuleUrl = `https://khumla-${envDev}-newcourse-read.azurewebsites.net/api/v1`;
 
-export const rUserUrl = `https://khumla-${env}-user-read.azurewebsites.net/api`;
+export const rUserUrl = `https://khumla-${envDev}-user-read.azurewebsites.net/api/v1`;
+
+export const wUserUrl = `https://khumla-${envDev}-user-write.azurewebsites.net/api/v1`;
 
 export const rAnalyticUrl =
   "https:khumla-dev-activity-read.azurewebsites.net/api/v1";
