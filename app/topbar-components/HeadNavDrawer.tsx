@@ -17,7 +17,7 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
       path: "/",
     });
 
-    if (loggedInUser?.role == "Admin") router.replace("/auth/admin/login");
+    if (loggedInUser?.role == "Admin") router.replace("/");
     else router.replace("/");
   };
 
