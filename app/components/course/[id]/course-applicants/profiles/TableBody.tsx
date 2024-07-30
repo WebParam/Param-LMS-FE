@@ -15,6 +15,11 @@ export interface codeStructure {
 }
 
 const TableBody: NextPage<{ list: any }> = ({ list }) => {
+  let studentName = "";
+  if (list && list.firstName && list.surname)
+    studentName = list.firstName + " " + list.surname;
+  else studentName = "N/A";
+
   const [codes, setCodes] = useState<codeStructure[]>([]);
 
   useEffect(() => {
@@ -86,7 +91,7 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
           <td>
             <ul className="list-group list-group-flush">
               <li className="list-group-item">
-                <i className="bi-house list-group-icon" />: {list?.firstName ?? 'N/A'}
+                <i className="bi-house list-group-icon" />: {studentName}
               </li>
               <li className="list-group-item">
                 <i className="bi-house list-group-icon" />: {list?.email ?? 'N/A'}
