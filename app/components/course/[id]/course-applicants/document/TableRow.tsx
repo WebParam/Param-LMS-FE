@@ -16,6 +16,7 @@ const TableRow = ({ document }: { document: any }) => {
   const title = searchParams.get("title");
   const studentName = searchParams.get("studentName");
   const email = searchParams.get("email")
+  const isEnrolled =  searchParams.get("isEnrolled")
   const date = new Date();
  
 
@@ -27,7 +28,7 @@ const TableRow = ({ document }: { document: any }) => {
   const acceptDoc = () => {
     setAcceptDocumentModal(true)
     router.replace(
-      `${pathname}?title=${title}&studentName=${studentName}&email=${email}&refreshId=${date}`,
+      `${pathname}?title=${title}&studentName=${studentName}&email=${email}&refreshId=${date}&isEnrolled=${isEnrolled}`,
       {
         scroll: false,
       }
@@ -37,7 +38,7 @@ const TableRow = ({ document }: { document: any }) => {
   const rejectDoc = () => {
     setRejectDocumentModal(true)
     router.replace(
-      `${pathname}?title=${title}&studentName=${studentName}&email=${email}&refreshId=${date}`,
+      `${pathname}?title=${title}&studentName=${studentName}&email=${email}&refreshId=${date}&isEnrolled=${isEnrolled}`,
       {
         scroll: false,
       }

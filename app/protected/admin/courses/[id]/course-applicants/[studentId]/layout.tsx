@@ -8,8 +8,6 @@ import RejectStudentModal from "@/components/course/[id]/course-applicants/Rejec
 import { saveAs } from 'file-saver';
 import RequestModificationModal from "@/components/course/[id]/course-applicants/RequestModificationModal";
 import { downloadStudentDocs, getStudentDocuments } from "@/app/lib/actions/courseStudents";
-import { rCourseUrl } from "@/app/lib/actions/endpoints";
-import { downloadFile } from "@/app/lib/utils";
 import { Modal } from "react-bootstrap";
 
 function Layout({ children }: { children: React.ReactNode }) {

@@ -21,7 +21,7 @@ function EnrollStudentModal(props: any) {
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
-
+const [disabled, setDisabled] = useState(false)
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
   const studentName = searchParams.get("studentName") || "";
@@ -31,6 +31,7 @@ function EnrollStudentModal(props: any) {
 
   const delKnowledgeTopic = async () => {
     setIsSpinner(true);
+    setDisabled(true);
     const email = localStorage.getItem("email")!;
     const payload = {
       userId: studentId,
@@ -85,7 +86,7 @@ function EnrollStudentModal(props: any) {
         <Button variant="secondary" onClick={props.onHide}>
           Cancel
         </Button>
-        <button className="btn btn-success" onClick={() => delKnowledgeTopic()}>
+        <button disabled={disabled} className="btn btn-success" onClick={() => delKnowledgeTopic()}>
           {isSpinner ? (
             <span className="spinner-border text-white" role="status" />
           ) : (
