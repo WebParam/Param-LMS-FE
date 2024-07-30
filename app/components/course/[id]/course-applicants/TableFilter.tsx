@@ -187,7 +187,7 @@ export default function TableFilter({
             {Object.entries(selectedFilters).map(([key, value]) => {
               return value ? (
                 <span key={key} className="badge badge-primary mr-2">
-                  {key}: {key === 'status' ? statuses.find(s => s.value === value)?.label : value}
+                  {key}: {key === 'status' ? statuses.find((s:any) => s.value === value)?.label : value}
                   <div onClick={() => removeFilter(key)}>&times;</div>
                 </span>
               ) : null;
