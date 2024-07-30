@@ -13,14 +13,15 @@ export const provinces = [
 export const genders = ["Male", "Female"];
 
 export const races = [
-  "black",
-  "coloured",
-  "indian",
-  "white",
-  "asian",
-  "other",
-  "notSpecified",
+  "Black African",
+  "Coloured",
+  "White",
+  "Indian/Asian",
+  "Other",
+  "Unknown",
+  "NotSpecified",
 ];
+
 
 export const employmentStatuses = [
   "Employed",

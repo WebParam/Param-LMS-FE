@@ -127,7 +127,7 @@ function Layout({ children }: { children: React.ReactNode }) {
 
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
       {
-        Number(isEnrolled) > 0 && <>
+        Number(isEnrolled) == 0 ||  Number(isEnrolled) == 1 ? null : <>
         
         <div className="mx-1">
           <button
@@ -165,7 +165,7 @@ function Layout({ children }: { children: React.ReactNode }) {
        
             
            {
-            Number(isEnrolled) > 0 && <>
+             Number(isEnrolled) == 0 ||  Number(isEnrolled) == 1  ? null : <>
                
                <div className="mx-1">
               <button

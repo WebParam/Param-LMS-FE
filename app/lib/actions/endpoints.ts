@@ -49,3 +49,5 @@ export const rUserUrl = `https://khumla-${env}-user-read.azurewebsites.net/api`;
 
 export const rAnalyticUrl =
   "https:khumla-dev-activity-read.azurewebsites.net/api/v1";
+
+  export const getCodesUrl = "https://khumla-dev-user-read.azurewebsites.net/api"

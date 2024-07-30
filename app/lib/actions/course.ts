@@ -1,9 +1,11 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
-import { rAnalyticUrl, rCourseUrl, wCourseUrl } from "./endpoints";
+import { getCodesUrl, rAnalyticUrl, rCourseUrl, wCourseUrl } from "./endpoints";
 import { unstable_noStore as noStore } from "next/cache";
 import { Diagnostic } from "../logger/logger";
+import { IResponseObject } from "../restapi/response";
+import { codeStructure } from "@/components/course/[id]/course-applicants/demographics/TableBody";
 
 export const createCourse = async (formData: FormData) => {
   const body = {
@@ -116,6 +118,18 @@ export const getStudentCourseGraphsAnalytics = async (courseId:string, studentId
     const resp = await get(`${rAnalyticUrl}/GraphData/StudentCourseAnalytic/${courseId}/${studentId}`)
     const data = resp.data;
     console.log("Data data", data)
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (error) {
+    Diagnostic("ERROR ON GET, returning", error);
+    throw error;
+  }
+}
+
+export const getCodes = async ()  =>  {
+  try {
+    const resp = await get(`${getCodesUrl}/Student/GetCodes`)
+    const data = resp.data;
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
   } catch (error) {

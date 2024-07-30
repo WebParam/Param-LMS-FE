@@ -1,17 +1,35 @@
+import { useEffect, useState } from "react";
 import { NextPage } from "next";
-import list, { applicantDemographics } from "./data";
-import { codes } from "./data"; 
+import { getCodes } from "@/app/lib/actions/course";
+
+interface Code {
+  code: string;
+  description: string;
+}
+
+export interface codeStructure {
+  id: string;
+  type: number;
+  codes: Code[];
+}
 
 const TableBody: NextPage<{ list: any }> = ({ list }) => {
-  const align = {
-    section_title: "pl-48pt text-left",
-    time_spent: "text-left",
-    completion_rate: "text-left",
-    no_of_comments: "text-center",
-    points_collected: "text-center",
-  };
+  const [codes, setCodes] = useState<codeStructure[]>([]);
 
-  const getDescription = (codeType:any, code:any) => {
+  useEffect(() => {
+    const fetchCodes = async () => {
+      try {
+      const response = await getCodes();
+        setCodes(response);
+      } catch (error) {
+        console.error("Error fetching codes:", error);
+      }
+    };
+
+    fetchCodes();
+  }, []);
+
+  const getDescription = (codeType: number, code: string) => {
     const codeCategory = codes.find(c => c.type === codeType);
     if (!codeCategory) return 'N/A';
     const codeObj = codeCategory.codes.find(c => c.code === code);
@@ -61,28 +79,28 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
           <td>
             <ul className="list-group list-group-flush">
               <li className="list-group-item">
-                <i className="bi-house list-group-icon" />: {getDescription("Equity Code", list?.equityCode)}
+                <i className="bi-house list-group-icon" />: {getDescription(1, list?.equityCode)}
               </li>
               <li className="list-group-item">
-                <i className="bi-house list-group-icon" />: {getDescription("Nationality Code Allowed", list?.nationalityCode)}
+                <i className="bi-house list-group-icon" />: {getDescription(2, list?.nationalityCode)}
               </li>
               <li className="list-group-item">
-                <i className="bi-house list-group-icon" />: {getDescription("Home Language Code", list?.homeLanguageCode)}
+                <i className="bi-house list-group-icon" />: {getDescription(3, list?.homeLanguageCode)}
               </li>
               <li className="list-group-item">
-                <i className="bi-house list-group-icon" />: {getDescription("Citizen Resident Status Code", list?.citizenStatusCode)}
+                <i className="bi-house list-group-icon" />: {getDescription(4, list?.citizenStatusCode)}
               </li>
               <li className="list-group-item">
-                <i className="bi-house list-group-icon" />: {getDescription("Socioeconomic Status Code", list?.socioeconomicCode)}
+                <i className="bi-house list-group-icon" />: {getDescription(5, list?.socioeconomicCode)}
               </li>
               <li className="list-group-item">
-                <i className="bi-house list-group-icon" />: {getDescription("Disability Status Code", list?.disabilityCode)}
+                <i className="bi-house list-group-icon" />: {getDescription(6, list?.disabilityCode)}
               </li>
               <li className="list-group-item">
-                <i className="bi-house list-group-icon" />: {getDescription("Disability Rating", list?.disabilityRating)}
+                <i className="bi-house list-group-icon" />: {getDescription(8, list?.disabilityRating)}
               </li>
               <li className="list-group-item">
-                <i className="bi-house list-group-icon" />: {getDescription("Immigrant Status", list?.immigrantStatus)}
+                <i className="bi-house list-group-icon" />: {getDescription(9, list?.immigrantStatus)}
               </li>
               <li className="list-group-item">
                 <i className="bi-house list-group-icon" />: {list?.popiActAgree ?? 'N/A'}
