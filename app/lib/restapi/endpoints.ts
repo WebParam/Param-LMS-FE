@@ -9,6 +9,7 @@ import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import { IMarks, IQuiz } from "@/app/interfaces/quiz";
 import { IAssessment } from "@/app/interfaces/assessment";
 import { IDocument } from "@/app/interfaces/document";
+import { wUsersUrl } from "../actions/endpoints";
 
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
@@ -161,20 +162,20 @@ DELETE_CourseById: async (
   POST_Login: async (
     payload: IUserLoginModel
   ): Promise<IResponseObject<IUserRegisterModel>> => {
-    const response = await POST(`${userWriteUrl}/Users/Login`, payload);
+    const response = await POST(`${wUsersUrl}/Users/Login`, payload);
     return response;
   },
 
   POST_Register: async (
     payload: IUserRegisterModel
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${userWriteUrl}/Users/AddUser`, payload);
+    const response = await POST(`${wUsersUrl}/Users/AddUser`, payload);
     return response;
   },
   POST_RegisterAdmin: async (
     payload: IUserRegisterModel
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${userWriteUrl}/Users/AddAdmin`, payload);
+    const response = await POST(`${wUsersUrl}/Users/AddAdmin`, payload);
     return response;
   },
 
