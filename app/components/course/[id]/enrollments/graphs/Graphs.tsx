@@ -91,7 +91,7 @@ export default async function Graphs({
   const StudentLangData = await StudentLangDataFn(StudentLanguagesData);
 
   const ageRangeGenderDistribution =
-    fetchedData?.AgeRangeGenderDistribution || [];
+    fetchedData?.ageRangeGenderDistribution || [];
   const OverallAssessmentBarData = transformData(ageRangeGenderDistribution);
 
   return (
