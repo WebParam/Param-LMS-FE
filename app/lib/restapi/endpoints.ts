@@ -174,7 +174,7 @@ DELETE_CourseById: async (
   POST_RegisterAdmin: async (
     payload: IUserRegisterModel
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`https://e9c7-165-16-191-211.ngrok-free.app/api/v1/Users/AddAdmin`, payload);
+    const response = await POST(`${userWriteUrl}/Users/AddAdmin`, payload);
     return response;
   },
 
