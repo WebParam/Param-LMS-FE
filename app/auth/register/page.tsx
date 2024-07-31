@@ -104,13 +104,13 @@ export default function Register() {
           changedBy: "",
           changedOn: date,
           Otp: "",
-          role: "Student",
+          role: "Admin",
           LoginType: 0,
         } as IUserRegisterModel;
 
         try {
           let user;
-          if (payload.role === "Student") {
+          if (payload.role === "Admin") {
             user = await Api.POST_RegisterAdmin(payload);
           } else {
             user = await Api.POST_Register(payload);
