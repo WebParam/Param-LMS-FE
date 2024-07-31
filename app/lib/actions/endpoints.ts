@@ -1,6 +1,6 @@
 const envDev = "development";
 const test = "testing";
-const env = process.env.API_ENV == "production" ? "prod" : "dev";
+const env = process.env.NEXT_PUBLIC_API_ENV == "production" ? "prod" : "dev";
 
 export const wCourseUrl = `https://khumla-${env}-newcourse-write.azurewebsites.net/api/v1`;
 
