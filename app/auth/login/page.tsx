@@ -1,12 +1,11 @@
-'use client';
-import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Api } from '../../lib/restapi/endpoints';
-import { IUserLoginModel } from '../../interfaces/user';
-import Cookies from 'universal-cookie';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+"use client";
+import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Api } from "../../lib/restapi/endpoints";
+import { IUserLoginModel } from "../../interfaces/user";
+import Cookies from "universal-cookie";
+import { useRouter } from "next/navigation";
 
 const cookies = new Cookies();
 const axios = require("axios").default;
@@ -18,20 +17,20 @@ export default function Login() {
 
   const onChangeEmail = (e: any) => {
     setEmail(e.target.value);
-  }
+  };
 
   const onChangePassword = (e: any) => {
     setPassword(e.target.value);
-  }
+  };
 
   const router = useRouter();
 
   const navigateToRegister = () => {
-    router.push('/auth/register');
+    router.push("/auth/register");
   };
 
   async function LoginUser(event: any) {
-    cookies.remove('param-lms-user');
+    cookies.remove("param-lms-user");
     setDisable(true);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -72,11 +71,13 @@ export default function Login() {
             isLoading: false,
           });
 
-          cookies.set('param-lms-user', JSON.stringify(user.data), { path: '/' });
+          cookies.set("param-lms-user", JSON.stringify(user.data), {
+            path: "/",
+          });
 
           console.log(user.data);
           console.log("Role", user?.data?.role);
-          router.push('/protected/student/course/all-courses');
+          router.push("/protected/student/course/all-courses");
         } else {
           toast.update(_id, {
             render: "Invalid login credentials",
@@ -108,10 +109,15 @@ export default function Login() {
   return (
     <>
       <ToastContainer />
-      <div className="d-flex justify-content-center align-items-center vh-100" style={{ marginTop: '20px' }}>
-        <div className="card p-4" style={{ width: '450px', height: '480px' }}>
+      <div
+        className="d-flex justify-content-center align-items-center vh-100"
+        style={{ marginTop: "20px" }}
+      >
+        <div className="card p-4" style={{ width: "450px", height: "480px" }}>
           <h2 className="text-center mb-4">Log in to your account</h2>
-          <p className="text-center mb-4">Welcome back! Please enter your details</p>
+          <p className="text-center mb-4">
+            Welcome back! Please enter your details
+          </p>
           <form>
             <div className="form-group mb-3">
               <input
@@ -121,7 +127,7 @@ export default function Login() {
                 onChange={onChangeEmail}
                 className="form-control"
                 placeholder="Enter Email *"
-                style={{ height: '50px', fontSize: '16px' }}
+                style={{ height: "50px", fontSize: "16px" }}
               />
             </div>
             <div className="form-group mb-3">
@@ -132,33 +138,35 @@ export default function Login() {
                 onChange={onChangePassword}
                 className="form-control"
                 placeholder="Enter Password *"
-                style={{ height: '50px', fontSize: '16px' }}
+                style={{ height: "50px", fontSize: "16px" }}
               />
             </div>
-            <div className="d-flex justify-content-between align-items-center mb-3" style={{ marginTop: '20px' }}>
-              <div className="form-check">
-                <input type="checkbox" className="form-check-input" id="rememberMe" />
-                <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
-              </div>
-              <Link href="/auth/forgot-password" className="text-decoration-none">Lost your password?</Link>
-            </div>
-            <div className="d-grid mb-3" style={{ marginTop: '40px', textAlign: 'center' }}>
+            <div
+              className="d-flex justify-content-between align-items-center mb-3"
+              style={{ marginTop: "20px" }}
+            ></div>
+            <div
+              className="d-grid mb-3"
+              style={{ marginTop: "40px", textAlign: "center" }}
+            >
               <button
                 disabled={disable}
                 onClick={LoginUser}
                 className="btn btn-primary"
-                style={{ backgroundColor: '#24345c', borderColor: '#24345c', height: '50px', fontSize: '16px', width: '80%' }}
+                style={{
+                  backgroundColor: "#24345c",
+                  borderColor: "#24345c",
+                  height: "50px",
+                  fontSize: "16px",
+                  width: "80%",
+                }}
               >
                 Log In
               </button>
             </div>
           </form>
-          <div className="d-flex justify-content-between mt-4 pt-2">
-            <span>Don't have an account?</span>
-            <span style={{ cursor: "pointer", color: "#24345c" }} onClick={navigateToRegister}>Register</span>
-          </div>
         </div>
       </div>
     </>
-  )
+  );
 }

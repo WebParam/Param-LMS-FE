@@ -1,6 +1,11 @@
+"use client"
 import Link from "next/link";
+import Cookies from "universal-cookie";
 
 export default function PageHeader() {
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("param-lms-user");
+
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
@@ -21,12 +26,14 @@ export default function PageHeader() {
               </ol>
             </div>
             <div>
-              <Link
-                className="btn btn-success"
-                href={`/protected/home/courses/create`}
-              >
-                Create Course
-              </Link>
+              {loggedInUser && loggedInUser.role == "SuperAdmin" && (
+                <Link
+                  className="btn btn-success"
+                  href={`/protected/home/courses/create`}
+                >
+                  Create Course
+                </Link>
+              )}
             </div>
           </div>
         </div>
