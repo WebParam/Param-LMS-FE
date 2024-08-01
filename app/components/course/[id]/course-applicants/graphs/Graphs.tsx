@@ -98,7 +98,7 @@ export default async function Graphs({
     <>
       <div className="d-flex justify-content-between align-items-center mb-lg-8pt">
         {dataTiles.map((data: DataTiles) => (
-          <div key={data.name} className="col-lg-3">
+          <div key={data.name} style={{width: "250px"}}>
             <div className="card">
               <div
                 data-toggle="tab"
