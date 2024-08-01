@@ -9,7 +9,9 @@ const withAuth = <P extends object>(
     const router = useRouter();
     const cookies = new Cookies();
     const loggedInUser = cookies.get("param-lms-user");
-    const isAuthorised = () => loggedInUser && loggedInUser.role == "Admin";
+    const isAuthorised = () =>
+      loggedInUser &&
+      (loggedInUser.role == "Admin" || loggedInUser.role == "SuperAdmin");
 
     useEffect(() => {
       const checkAuth = async () => {

@@ -17,27 +17,32 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       name: "Back To Courses",
       url: `/protected/home/courses`,
       icon: "home",
+      roles: ["Admin", "SuperAdmin"],
     },
     {
       name: "Course Applicants",
       url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}`,
       icon: "person",
+      roles: ["Admin", "SuperAdmin"],
     },
     {
       name: "Enrolled Students",
       url: `/protected/admin/courses/${courseId}/enrollments?title=${courseTitle}`,
       icon: "group",
+      roles: ["Admin", "SuperAdmin"],
     },
     {
       name: "Edit Course",
       url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
       icon: "edit",
+      roles: ["SuperAdmin"],
     },
 
     {
       name: "Create Course",
       url: `/protected/home/courses/create`,
       icon: "add_box",
+      roles: ["SuperAdmin"],
     },
   ];
 
