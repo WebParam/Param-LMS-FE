@@ -3,5 +3,5 @@ export default interface SideTab {
   url?: string;
   icon?: string;
   children?: SideTab[];
-  roles: string[];
+  roles?: string[];
 }
