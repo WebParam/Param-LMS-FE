@@ -9,18 +9,36 @@ const Body = async ({ params }: { params: { id: string } }) => {
   const fetchedData: IStudentsData = await getEnrollments(courseId, false);
   const devUrl = `https://web-param-param-lms-student-qa.vercel.app/register?courseId=${courseId}`;
   const prodUrl = `https://web-param-param-lms-student-main.vercel.app/register?courseId=${courseId}`;
+  const loginDevUrl = `https://web-param-param-lms-student-qa.vercel.app/login`;
+  const loginProdUrl = `https://web-param-param-lms-student-main.vercel.app/login`;
   const registrationUrl =
     process.env.NEXT_PUBLIC_API_ENV == "production" ? prodUrl : devUrl;
+  const loginUrl =
+    process.env.NEXT_PUBLIC_API_ENV == "production"
+      ? loginProdUrl
+      : loginDevUrl;
 
   return (
     <>
-      <div className="d-flex align-items-center px-3 mb-3">
-        <div className="h5 mb-1 text-underline mr-2">
-          Student Registration:{" "}
-        </div>{" "}
-        <Link target="_blank" className="text-underline" href={registrationUrl}>
-          {registrationUrl}
-        </Link>
+      <div className="d-flex card flex-column p-3 mb-3">
+        <div className="d-flex align-items-center">
+          <div className="font-weight-bolder text-underline mr-2">
+            Student Registration:{" "}
+          </div>{" "}
+          <Link
+            target="_blank"
+            className="text-underline"
+            href={registrationUrl}
+          >
+            {registrationUrl}
+          </Link>
+        </div>
+        <div className="d-flex align-items-center">
+          <div className="font-weight-bolder text-underline mr-2">Student Login: </div>{" "}
+          <Link target="_blank" className="text-underline" href={loginUrl}>
+            {loginUrl}
+          </Link>
+        </div>
       </div>
 
       <Graphs fetchedData={fetchedData} />
