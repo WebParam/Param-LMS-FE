@@ -65,7 +65,9 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
           <div className="page-separator__text"></div>
         </div>
 
-        <Table list={currentItems} />
+        <div className="table-responsive">
+          <Table list={currentItems} />
+        </div>
 
         <Pagination
           listLength={filteredData.length}
