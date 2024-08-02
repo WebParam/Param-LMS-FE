@@ -5,7 +5,7 @@ import Pagination from "@/app/components/Pagination";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import TableFilter from "./TableFilter";
 import { downloadFile } from "@/app/lib/utils";
-import { rAggregator, rUserUrl } from "@/app/lib/actions/endpoints";
+import { rAggregatorUrl } from "@/app/lib/actions/endpoints";
 interface TablePaginationProps {
   data: CourseApplicants[];
   courseId?: string;
@@ -29,7 +29,7 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
     setLoading(true);
     const filename = "students";
     const fileExtension = "xlsx";
-    const url = `${rAggregator}/StudentCourse/ExportStudentInformation/${courseId}`;
+    const url = `${rAggregatorUrl}/StudentCourse/ExportStudentInformation/${courseId}`;
     downloadFile(url, filename, fileExtension, setLoading);
   };
 
