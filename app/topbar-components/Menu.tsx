@@ -28,7 +28,10 @@ const Menu: NextPage<{ sideTabs: SideTab[] }> = ({ sideTabs }) => {
 
             return (
               <>
-                {tab.roles && tab.roles.includes(loggedInUser.role) ? (
+                {loggedInUser &&
+                loggedInUser.role &&
+                tab.roles &&
+                tab.roles.includes(loggedInUser.role) ? (
                   <li
                     key={tab.url}
                     className={`sidebar-menu-item ${
