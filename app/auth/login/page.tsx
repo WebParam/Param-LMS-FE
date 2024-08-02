@@ -140,7 +140,7 @@ export default function Login() {
                 <input type="checkbox" className="form-check-input" id="rememberMe" />
                 <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
               </div>
-              <Link href="/auth/forgot-password" className="text-decoration-none">Lost your password?</Link>
+              <Link href="/auth/login/reset-password" className="text-decoration-none">Lost your password?</Link>
             </div>
             <div className="d-grid mb-3" style={{ marginTop: '40px', textAlign: 'center' }}>
               <button

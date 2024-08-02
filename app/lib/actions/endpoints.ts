@@ -47,6 +47,9 @@ export const rKnowledgeModuleUrl = `https://khumla-${env}-newcourse-read.azurewe
 
 export const rUserUrl = `https://khumla-${env}-user-read.azurewebsites.net/api`;
 
+export const wUserUrl = `https://khumla-development-user-write.azurewebsites.net/api/v1/Users`;
+
+
 export const rAnalyticUrl =
   "https:khumla-dev-activity-read.azurewebsites.net/api/v1";
 
