@@ -59,6 +59,10 @@ function Layout({ children }: { children: React.ReactNode }) {
       title: "Documents",
       url: `${baseLayoutUrl}/document?title=${courseTitle}&studentName=${studentName}`,
       path: `${baseLayoutUrl}/document`,
+    },    {
+      title: "Internship Details",
+      url: `${baseLayoutUrl}/internship-details?title=${courseTitle}&studentName=${studentName}`,
+      path: `${baseLayoutUrl}/internship-details`,
     },
   ];
 
