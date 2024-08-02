@@ -22,7 +22,7 @@ export default function ResetPassword() {
           </div>
           <p className="d-sm-none" />
           {step === 'sendOtp' ? (
-            <a href="/auth/login" className="btn btn-primary">
+            <a href="/" className="btn btn-primary">
               Login
             </a>
           ) : step === 'verifyOtp' ? (

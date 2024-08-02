@@ -47,7 +47,7 @@ export default function ChangePasswordForm({
         isLoading: false,
       });
       setTimeout(() => {
-        router.push("/auth/admin/login");
+        router.push("/");
         toast.dismiss(_id);
       }, 2000);
     } catch (error) {
