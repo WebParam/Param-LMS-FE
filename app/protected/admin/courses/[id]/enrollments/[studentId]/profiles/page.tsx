@@ -2,7 +2,7 @@
 import Table from "@/components/course/[id]/enrollments/profiles/Table";
 import { useEffect, useState } from "react";
 import list from "@/components/course/[id]/enrollments/profiles/data";
-import { getStudentInfo } from "@/app/lib/actions/courseStudents";
+import { getStudentProfile } from "@/app/lib/actions/courseStudents";
 import { useParams, useSearchParams } from "next/navigation";
 
 const Body = () => {
@@ -15,7 +15,7 @@ const Body = () => {
   const { studentId } = useParams<{ studentId: string }>();
 
   const studentInformation = async () => {
-    const response = await getStudentInfo(studentId);
+    const response = await getStudentProfile(studentId);
     setData(response);
   };
 

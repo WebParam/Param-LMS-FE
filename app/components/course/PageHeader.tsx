@@ -56,6 +56,7 @@ export default function PageHeader({ title }: { title: string }) {
     "sor",
     "assessment",
     "assignment",
+    "internship-details",
   ];
   const arrLink = [
     "edit",
@@ -92,6 +93,7 @@ export default function PageHeader({ title }: { title: string }) {
     sor: "SOR",
     assessment: "Assessments",
     assignment: "Assignments",
+    "internship-details": "Internship Details",
   };
 
   const urlDocumentMap: any = {

@@ -1,7 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
-import { rAggregatorAssessmentUrl, rAssessmentUrl, twAssessmentUrl, wAssessmentUrl } from "./endpoints";
+import { rAggregatorUrl, rAssessmentUrl, twAssessmentUrl, wAssessmentUrl } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
 import { IMarkStudentAssessment, ISubmitFacilitatorAssessment } from "@/app/interfaces/assessments";
 import { unstable_noStore as noStore } from "next/cache";
@@ -98,7 +98,7 @@ export const getStudentAssessmentAnswers = async ( userId:string,assessmentId: s
 
 export const getStudentsAssessment = async (courseId: string) => {
   try {
-    const resp = await get(`${rAggregatorAssessmentUrl}/StudentAssessment/StudentsAssessments/${courseId}`);
+    const resp = await get(`${rAggregatorUrl}/StudentAssessment/StudentsAssessments/${courseId}`);
     console.log(resp)
     const data = resp.data;
     Diagnostic("SUCCESS ON GET, returning", data);
@@ -184,7 +184,7 @@ export const submitForModeration = async (payload:FormData) => {
 
  export const getModeratorStudentsAssessment = async (courseId: string) => {
   try {
-    const resp = await get(`${rAggregatorAssessmentUrl}/StudentAssessment/StudentsAssessments/${courseId}`);
+    const resp = await get(`${rAggregatorUrl}/StudentAssessment/StudentsAssessments/${courseId}`);
     console.log(resp)
     const data = resp.data;
     Diagnostic("SUCCESS ON GET, returning", data);
