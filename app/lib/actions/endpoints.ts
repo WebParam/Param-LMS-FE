@@ -29,9 +29,9 @@ export const rAssessmentUrl = `https://khumla-${env}-assessment-read.azurewebsit
 
 export const wQuestionUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/Questions`;
 
-export const rAggregatorAssessmentUrl = `https://khumla-${env}-api-aggregator.azurewebsites.net/api/v1`;
+export const rAggregatorUrl = `https://khumla-${env}-api-aggregator.azurewebsites.net/api/v1`;
 
-export const rAggregator = `https://khumla-${test}-aggregator.azurewebsites.net/api/v1`
+export const rAggregator = `https://khumla-${test}-aggregator.azurewebsites.net/api/v1`;
 
 export const wRubricUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/Rubrics`;
 
@@ -50,4 +50,4 @@ export const wUserUrl = `https://khumla-${env}-user-write.azurewebsites.net/api/
 export const rAnalyticUrl =
   "https:khumla-dev-activity-read.azurewebsites.net/api/v1";
 
-  export const getCodesUrl = "https://khumla-dev-user-read.azurewebsites.net/api"
+export const getCodesUrl = "https://khumla-dev-user-read.azurewebsites.net/api";

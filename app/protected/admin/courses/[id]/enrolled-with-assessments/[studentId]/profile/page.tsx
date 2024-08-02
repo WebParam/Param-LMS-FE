@@ -3,7 +3,7 @@ import Pagination from "@/app/components/Pagination";
 import Table from "@/components/course/[id]/enrolled-with-assessments/profile/Table";
 import { useEffect, useState } from "react";
 import list from "@/components/course/[id]/enrolled-with-assessments/profile/data";
-import { getStudentInfo } from "@/app/lib/actions/courseStudents";
+import { getStudentProfile } from "@/app/lib/actions/courseStudents";
 import { usePathname } from "next/navigation";
 
 const Body = () => {
@@ -18,7 +18,7 @@ const Body = () => {
   async function studentInformation() {
     const id = pathname.split('/')[4];
     console.log('id from parameter', id)
-    const response = await getStudentInfo(id)
+    const response = await getStudentProfile(id)
     setData(response)
   }
 

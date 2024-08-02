@@ -2,7 +2,7 @@
 import Table from "@/components/course/[id]/course-applicants/profiles/Table";
 import { useEffect, useState } from "react";
 import list from "@/components/course/[id]/course-applicants/profiles/data";
-import { getStudentInfo } from "@/app/lib/actions/courseStudents";
+import { getStudentProfile } from "@/app/lib/actions/courseStudents";
 import { useParams } from "next/navigation";
 
 const Body = () => {
@@ -12,7 +12,7 @@ const Body = () => {
 
 
   const studentInformation = async () => {
-    const response = await getStudentInfo(studentId);
+    const response = await getStudentProfile(studentId);
     setData(response);
     localStorage.setItem("email",response.email)
     
