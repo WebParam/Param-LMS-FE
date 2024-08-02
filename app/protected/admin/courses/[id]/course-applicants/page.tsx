@@ -20,7 +20,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      <div className="d-flex card flex-column p-3 mb-3">
+      <div className="d-flex card flex-column p-3 mb-3 text-success">
         <div className="d-flex align-items-center">
           <div className="font-weight-bolder text-underline mr-2">
             Student Registration:{" "}
