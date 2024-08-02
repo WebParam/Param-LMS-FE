@@ -1,4 +1,3 @@
-const envDev = "development";
 const test = "testing";
 const env = process.env.NEXT_PUBLIC_API_ENV == "production" ? "prod" : "dev";
 
@@ -20,8 +19,7 @@ export const rQuizUrl = `https://khumla-${env}-quiz-read.azurewebsites.net/api/v
 
 export const wAudioGenerateUrl = `https://khumla-${env}-audio-generate.azurewebsites.net/api/v1`;
 
-export const wAssessmentUrl =
-  "https://khumla-development-assessment-write.azurewebsites.net/api/v1";
+export const wAssessmentUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/v1`;
 
 export const twAssessmentUrl = `https://khumla-${test}-assessment-write.azurewebsites.net/api/v1`;
 
@@ -30,8 +28,6 @@ export const rAssessmentUrl = `https://khumla-${env}-assessment-read.azurewebsit
 export const wQuestionUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/Questions`;
 
 export const rAggregatorUrl = `https://khumla-${env}-api-aggregator.azurewebsites.net/api/v1`;
-
-export const rAggregator = `https://khumla-${test}-aggregator.azurewebsites.net/api/v1`;
 
 export const wRubricUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/Rubrics`;
 
@@ -47,7 +43,4 @@ export const rUserUrl = `https://khumla-${env}-user-read.azurewebsites.net/api/v
 
 export const wUserUrl = `https://khumla-${env}-user-write.azurewebsites.net/api/v1`;
 
-export const rAnalyticUrl =
-  "https:khumla-dev-activity-read.azurewebsites.net/api/v1";
-
-export const getCodesUrl = "https://khumla-dev-user-read.azurewebsites.net/api";
+export const rAnalyticUrl = `https:khumla-${env}-activity-read.azurewebsites.net/api/v1`;
