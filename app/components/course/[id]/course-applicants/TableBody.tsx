@@ -88,7 +88,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                           textAlign: "center",
                         }}
                       >
-                        Deleted
+                        Rejected
                       </span>
                     )}
                     {data.status === 0 && (
