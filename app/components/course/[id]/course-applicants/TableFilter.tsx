@@ -9,7 +9,7 @@ import {
 
 const statuses = [
   { value: 0, label: "Enrolled" },
-  { value: 1, label: "Deleted" },
+  { value: 1, label: "Rejected" },
   { value: 2, label: "Completed" },
   { value: 3, label: "Review Pending" },
 ];
