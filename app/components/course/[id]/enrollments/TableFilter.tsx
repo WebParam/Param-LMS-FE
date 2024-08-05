@@ -165,14 +165,17 @@ export default function TableFilter({
               </select>
               <button
                 className="btn btn-success"
-                onClick={() =>
-                  setSelectedFilters({
-                    province: "",
-                    gender: "",
-                    race: "",
-                    employmentStatus: "",
-                    disability: "",
-                  })
+                onClick={(e:any) =>
+               {
+                e.preventDefault();
+                setSelectedFilters({
+                  province: "",
+                  gender: "",
+                  race: "",
+                  employmentStatus: "",
+                  disability: "",
+                })
+               }
                 }
               >
                 <i className="material-icons" style={{ fontSize: "15px" }}>

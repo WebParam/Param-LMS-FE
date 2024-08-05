@@ -12,7 +12,7 @@ const TableHead = () => {
       <thead>
         <tr>
           {headers.map((name) => (
-            (name !== "Icons" || (Number(isEnrolled) !== 0 && Number(isEnrolled) !== 1)) && (
+            (name !== "Action" || (Number(isEnrolled) !== 0 && Number(isEnrolled) !== 1)) && (
               <th key={name} className="text-center">
                 {name === "Embedded Link" && (
                   <i className="material-icons mr-8pt">link</i>
