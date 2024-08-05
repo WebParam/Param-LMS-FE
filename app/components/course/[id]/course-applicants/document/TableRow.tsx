@@ -15,35 +15,33 @@ const TableRow = ({ document }: { document: any }) => {
   const router = useRouter();
   const title = searchParams.get("title");
   const studentName = searchParams.get("studentName");
-  const email = searchParams.get("email")
-  const isEnrolled =  searchParams.get("isEnrolled")
+  const email = searchParams.get("email");
+  const isEnrolled = searchParams.get("isEnrolled");
   const date = new Date();
- 
 
   useEffect(() => {
-
     setDocumentShowModal(false);
   }, [refreshId]);
 
   const acceptDoc = () => {
-    setAcceptDocumentModal(true)
+    setAcceptDocumentModal(true);
     router.replace(
       `${pathname}?title=${title}&studentName=${studentName}&email=${email}&refreshId=${date}&isEnrolled=${isEnrolled}`,
       {
         scroll: false,
       }
-    )
-  }
+    );
+  };
 
   const rejectDoc = () => {
-    setRejectDocumentModal(true)
+    setRejectDocumentModal(true);
     router.replace(
       `${pathname}?title=${title}&studentName=${studentName}&email=${email}&refreshId=${date}&isEnrolled=${isEnrolled}`,
       {
         scroll: false,
       }
-    )
-  }
+    );
+  };
 
   return (
     <>
@@ -96,24 +94,28 @@ const TableRow = ({ document }: { document: any }) => {
             {document.status || "N/A"}
           </p>
         </td>
-        <td style={{ width: "400px" }} className="py-0">
-          <div className="text-center my-2 w-100">
-            <button
-              type="button"
-              onClick={() => acceptDoc()}
-              className="btn btn-outline-success btn-sm rounded-pill py-1 px-3 mr-2"
-            >
-              Accept
-            </button>
-            <button
-              type="button"
-              onClick={() => rejectDoc()}
-              className="btn btn-outline-danger btn-sm rounded-pill py-1 px-3"
-            >
-              Reject
-            </button>
-          </div>
-        </td>
+        {(Number(isEnrolled) == 0 || Number(isEnrolled) == 1) ? null : (
+  <td style={{ width: "400px" }} className="py-0">
+    <div className="text-center my-2 w-100">
+      <button
+        type="button"
+        onClick={() => acceptDoc()}
+        className="btn btn-outline-success btn-sm rounded-pill py-1 px-3 mr-2"
+      >
+        Accept
+      </button>
+      <button
+        type="button"
+        onClick={() => rejectDoc()}
+        className="btn btn-outline-danger btn-sm rounded-pill py-1 px-3"
+      >
+        Reject
+      </button>
+    </div>
+  </td>
+)}
+
+
         <td style={{ width: "700px" }} className="py-0">
           <div className="d-flex justify-content-center">
             <div onClick={() => setDocumentShowModal(true)}>

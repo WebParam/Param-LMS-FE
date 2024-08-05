@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import "./layout.scss";
-import { usePathname, useSearchParams, useParams } from "next/navigation";
+import { usePathname, useSearchParams, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import EnrollStudentModal from "@/components/course/[id]/course-applicants/EnrollStudentModal";
 import RejectStudentModal from "@/components/course/[id]/course-applicants/RejectStudentModal";
@@ -13,20 +13,18 @@ import { Modal } from "react-bootstrap";
 function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const courseTitle = searchParams.get("title");
   const studentName = searchParams.get("studentName");
   const refreshId = searchParams.get("refreshId");
-  const { id: courseId, studentId } = useParams<{
-    id: string;
-    studentId: string;
-  }>();
+  const { id: courseId, studentId } = useParams<{ id: string; studentId: string }>();
   const [enrollModal, setEnrollModal] = useState<boolean>(false);
   const [rejectModal, setRejectModal] = useState<boolean>(false);
   const [requestModal, setRequestModal] = useState<boolean>(false);
   const [documents, setDocuments] = useState([]);
   const [exportModal, setExportModal] = useState(false);
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
-  const isEnrolled = searchParams.get("isEnrolled")
+  const isEnrolled = searchParams.get("isEnrolled");
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -71,17 +69,16 @@ function Layout({ children }: { children: React.ReactNode }) {
   }
 
   const exportStudentDocuments = async () => {
-    setIsSpinner(true)
+    setIsSpinner(true);
     try {
-
       const filename = "student_information.zip";
       const response = await downloadStudentDocs(studentId);
-  
+
       if (!response.ok) {
-        setIsSpinner(false)
+        setIsSpinner(false);
         throw new Error('Network response was not ok');
       }
-      setIsSpinner(false)
+      setIsSpinner(false);
       const blob = await response.blob();
       saveAs(blob, filename);
     } catch (error) {
@@ -89,11 +86,16 @@ function Layout({ children }: { children: React.ReactNode }) {
       console.error("Error downloading the file:", error);
     }
   };
-  
 
   useEffect(() => {
     studentInformation();
   }, [refreshId]);
+
+  const updateIsEnrolled = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('isEnrolled', '5');
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <>
@@ -126,48 +128,53 @@ function Layout({ children }: { children: React.ReactNode }) {
       </Modal>
 
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
-      {
-        Number(isEnrolled) == 0 ||  Number(isEnrolled) == 1 ? null : <>
-        
-        <div className="mx-1">
-          <button
-            className="btn btn-success btn-block mx-1"
-            onClick={() => setEnrollModal(true)}
-          >
-            Enroll Student
-          </button>
-        </div>
-        <div className="mx-1">
-          <button
-            className={`btn btn-block mx-1 ${
-              documents.length > 0 ? "btn-success" : "btn-secondary"
-            }`}
-            onClick={() => setRequestModal(true)}
-            disabled={!(documents.length > 0)}
-          >
-            Request Modification
-          </button>
-        </div>
-        </>
-      }
+        {
+          Number(isEnrolled) === 0 || Number(isEnrolled) === 1 ? null : <>
+            <div className="mx-1">
+              <button
+                className="btn btn-success btn-block mx-1"
+                onClick={() => setEnrollModal(true)}
+              >
+                Enroll Student
+              </button>
+            </div>
+            <div className="mx-1">
+              <button
+                className={`btn btn-block mx-1 ${documents.length > 0 ? "btn-success" : "btn-secondary"}`}
+                onClick={() => setRequestModal(true)}
+                disabled={!(documents.length > 0)}
+              >
+                Request Modification
+              </button>
+            </div>
+          </>
+        }
+
+        {
+          Number(isEnrolled) !== 0 || Number(isEnrolled) !== 1 &&
+          <div className="mx-1">
+            <button
+              className="btn btn-block mx-1 btn-success"
+              onClick={updateIsEnrolled}
+            >
+              Revise
+            </button>
+          </div>
+        }
 
         <div className="mx-1">
           <button
-            className={`btn btn-block mx-1 ${
-              documents.length > 0 ? "btn-success" : "btn-secondary"
-            }`}
+            className={`btn btn-block mx-1 ${documents.length > 0 ? "btn-success" : "btn-secondary"}`}
             onClick={() => exportStudentDocuments()}
             disabled={!(documents.length > 0)}
           >
             Download Documents
           </button>
         </div>
-       
-            
-           {
-             Number(isEnrolled) == 0 ||  Number(isEnrolled) == 1  ? null : <>
-               
-               <div className="mx-1">
+
+        {
+          Number(isEnrolled) === 0 || Number(isEnrolled) === 1 ? null : <>
+            <div className="mx-1">
               <button
                 className="btn btn-danger btn-block"
                 onClick={() => setRejectModal(true)}
@@ -175,55 +182,51 @@ function Layout({ children }: { children: React.ReactNode }) {
                 Reject Application
               </button>
             </div>
-            
-            </>
-           }
-            
+          </>
+        }
 
-{
- Number(isEnrolled) == 0 ||  Number(isEnrolled) == 1  ? null : 
-
-        <div className="mx-1 d-flex align-items-center">
-          <div className="dropdown ml-auto">
-            <a
-              href="#"
-              data-toggle="dropdown"
-              data-caret="false"
-              className="text-muted"
-            >
-              <i className="material-icons">more_vert</i>
-            </a>
-            <div
-              style={{ cursor: "pointer" }}
-              className="dropdown-menu dropdown-menu-right"
-            >
-              {documents.length > 0 ? (
-                <>
-                  <div
-                    onClick={() => setRequestModal(true)}
-                    className="dropdown-item"
-                  >
-                    Request Modification
-                  </div>
-                  <div
-                    onClick={() => exportStudentDocuments()}
-                    className="dropdown-item"
-                  >
-                    {
-                      isSpinner ?  <span className="spinner-border text-white" role="status" /> :   "Download Documents"
-                    }
-                  
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="dropdown-item">Loading ...</div>
-                  <div className="dropdown-item">Loading ...</div>
-                </>
-              )}
+        {
+          Number(isEnrolled) === 0 || Number(isEnrolled) === 1 ? null :
+            <div className="mx-1 d-flex align-items-center">
+              <div className="dropdown ml-auto">
+                <a
+                  href="#"
+                  data-toggle="dropdown"
+                  data-caret="false"
+                  className="text-muted"
+                >
+                  <i className="material-icons">more_vert</i>
+                </a>
+                <div
+                  style={{ cursor: "pointer" }}
+                  className="dropdown-menu dropdown-menu-right"
+                >
+                  {documents.length > 0 ? (
+                    <>
+                      <div
+                        onClick={() => setRequestModal(true)}
+                        className="dropdown-item"
+                      >
+                        Request Modification
+                      </div>
+                      <div
+                        onClick={() => exportStudentDocuments()}
+                        className="dropdown-item"
+                      >
+                        {
+                          isSpinner ? <span className="spinner-border text-white" role="status" /> : "Download Documents"
+                        }
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="dropdown-item">Loading ...</div>
+                      <div className="dropdown-item">Loading ...</div>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
         }
       </div>
 
@@ -244,9 +247,7 @@ function Layout({ children }: { children: React.ReactNode }) {
             >
               <span className="flex d-flex flex-column">
                 <strong
-                  className={`card-title ${
-                    pathname == tab.path ? "text-white" : ""
-                  }`}
+                  className={`card-title ${pathname == tab.path ? "text-white" : ""}`}
                 >
                   {tab.title}
                 </strong>
