@@ -98,36 +98,6 @@ const Body = () => {
     asyncFetch();
   }, []);
 
-  const courseId = "6669f0ff8759b480859c10a7";
-
-  function downloadAsXls() {
-    fetch(
-      `https://khumla-dev-user-read.azurewebsites.net/api/Student/ExportStudentInformation/${courseId}`
-    )
-      .then((response) => response.blob())
-      .then((blob) => {
-        const reader = new FileReader();
-        reader.onload = (event: any) => {
-          const data = event.target.result;
-          const workbook = XLSX.read(data, { type: "binary" });
-          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const xlsData = XLSX.utils.sheet_to_json(worksheet);
-          const newWorkbook = XLSX.utils.book_new();
-          const newWorksheet = XLSX.utils.json_to_sheet(xlsData);
-          XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, "Sheet1");
-          const xlsArray = XLSX.write(newWorkbook, {
-            bookType: "xlsx",
-            type: "array",
-          });
-          const xlsBlob = new Blob([xlsArray], {
-            type: "application/octet-stream",
-          });
-          saveAs(xlsBlob, "students.xlsx");
-        };
-        reader.readAsBinaryString(blob);
-      })
-      .catch((error) => console.error("Error downloading XLS file:", error));
-  }
 
   if (loading) {
     return <Loading />;
@@ -235,13 +205,6 @@ const Body = () => {
         </h3>
       )}
 
-      <button
-        className="btn btn-primary enrolBtn m-3"
-        onClick={downloadAsXls}
-        style={{ cursor: "pointer" }}
-      >
-        Download As XLS
-      </button>
     </>
   );
 };
