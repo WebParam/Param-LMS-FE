@@ -1,4 +1,3 @@
-
 "use client";
 import Link from "next/link";
 import { NextPage } from "next";
@@ -16,9 +15,14 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
         {list &&
           list.map((data: CourseApplicants) => {
             let studentName = "";
+            const mockName = "John Doe";
+            
             if (data.name && data.surname)
               studentName = data.name + " " + data.surname;
-            else studentName = "N/A";
+            else if (data.name) 
+              studentName = data.name;
+            else 
+              studentName = mockName;
 
             return (
               <tr key={data.id} className="selected">

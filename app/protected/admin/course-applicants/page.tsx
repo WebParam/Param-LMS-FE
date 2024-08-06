@@ -53,6 +53,7 @@ import { StudentRaces } from "@/app/components/enrolment-dashboard/graphs/Studen
 import EnrolledTable from "./(components)/ApplicantsTable";
 import mockData from "./(components)/data";
 import ApplicantsTable from "./(components)/ApplicantsTable";
+import { getEnrollments } from "@/app/lib/actions/enrollments";
 
 type DataTiles = {
   name: string;
@@ -65,15 +66,21 @@ const Body = () => {
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const [data, setData] = useState<CourseApplicants[]>([]);
+  const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const cookies = new Cookies();
+  const [courseApplications, setCourseApplications] = useState<CourseApplicants[]>([])
 
   useEffect(() => {
     const asyncFetch = async () => {
       try {
         const fetchedData = await getCourseStudents("6669f0ff8759b480859c10a7");
+
+        const applicantsData = await getEnrollments("6669f0ff8759b480859c10a7", false);
+
+        setCourseApplications(applicantsData.courseApplicants)
+
         debugger;
         setData(fetchedData);
         const courseTitle = fetchedData[0].title;
@@ -221,7 +228,7 @@ const Body = () => {
         </div>
       </div>
       {data ? (
-        <ApplicantsTable data={mockData} />
+        <ApplicantsTable data={courseApplications} />
       ) : (
         <h3 style={{ textAlign: "center", height: "50px", lineHeight: "50px" }}>
           No data

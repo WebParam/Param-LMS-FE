@@ -1,3 +1,4 @@
+
 const TableHead = () => {
   const headers = [
     "Name",
@@ -24,6 +25,7 @@ const TableHead = () => {
               </a>
             </th>
           ))}
+          <th className="text-center">Actions</th>
         </tr>
       </thead>
     </>

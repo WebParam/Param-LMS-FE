@@ -58,16 +58,18 @@ const Body = () => {
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const [data, setData] = useState<CourseApplicants[]>([]);
+  const [data, setData] = useState();
+  const [courseApplications, setCourseApplications] = useState<CourseApplicants[]>([])
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const asyncFetch = async () => {
       try {
-        const fetchedData = await getEnrollments("6669f0ff8759b480859c10a7");
+        const applicantsData = await getEnrollments("6669f0ff8759b480859c10a7", true);
         debugger;
-        setData(fetchedData);
-        console.log("data is here", fetchedData);
+        setData(applicantsData);
+        setCourseApplications(applicantsData.courseApplicants)
+        console.log("data is here", applicantsData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -175,7 +177,7 @@ const Body = () => {
           />
         </div>
       </div>
-      <EnrolledTable data={mockData} />
+      <EnrolledTable data={courseApplications} />
 
     </>
   );
