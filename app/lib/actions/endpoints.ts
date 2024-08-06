@@ -46,3 +46,4 @@ export const rOptionUrl = `https://khumla-${envDev}-assessment-read.azurewebsite
 export const rKnowledgeModuleUrl = `https://khumla-${envDev}-newcourse-read.azurewebsites.net/api/v1`;
 
 export const rAnalyticUrl = `https:khumla-${envDev}-activity-read.azurewebsites.net/api/v1`;
+export const rAggregatorUrl = `https://khumla-${envDev}-api-aggregator.azurewebsites.net/api/v1`;
