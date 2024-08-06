@@ -1,6 +1,6 @@
 // components/KnowledgeModules.tsx
-import React, { useState, ChangeEvent } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import React, { useState, ChangeEvent } from "react";
+import { Modal, Button, Form } from "react-bootstrap";
 
 interface Module {
   date: string;
@@ -12,17 +12,29 @@ interface Module {
 
 const KnowledgeModules: React.FC = () => {
   const [modules, setModules] = useState<Module[]>([
-    { date: '2023-01-01', assessment: '90%', name: 'Module 1', credits: '10', achievement: 'A' },
-    { date: '2023-02-01', assessment: '85%', name: 'Module 2', credits: '8', achievement: 'B' },
+    {
+      date: "2023-01-01",
+      assessment: "90%",
+      name: "Module 1",
+      credits: "10",
+      achievement: "A",
+    },
+    {
+      date: "2023-02-01",
+      assessment: "85%",
+      name: "Module 2",
+      credits: "8",
+      achievement: "B",
+    },
   ]);
 
   const [show, setShow] = useState(false);
   const [newModule, setNewModule] = useState<Module>({
-    date: '',
-    assessment: '',
-    name: '',
-    credits: '',
-    achievement: '',
+    date: "",
+    assessment: "",
+    name: "",
+    credits: "",
+    achievement: "",
   });
 
   const handleClose = () => setShow(false);
@@ -36,25 +48,25 @@ const KnowledgeModules: React.FC = () => {
   const addModule = () => {
     setModules([...modules, newModule]);
     setNewModule({
-      date: '',
-      assessment: '',
-      name: '',
-      credits: '',
-      achievement: '',
+      date: "",
+      assessment: "",
+      name: "",
+      credits: "",
+      achievement: "",
     });
     handleClose();
   };
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center gap-2 p-2">
-        <div className="d-flex justify-content-between align-items-center w-100">
-            <h2>Knowledge Modules</h2>
-            <Button variant="primary btn-dark" onClick={handleShow} >
-                +
-            </Button>
-        </div>
-      <table className="table mb-0 thead-border-top-0 table-nowrap">
-        <thead>
+    <div className="card m-3 d-flex flex-column justify-content-center align-items-center gap-2 p-4">
+      <div className="mb-3 d-flex justify-content-between align-items-center w-100">
+        <p className="h5">Knowledge Modules</p>
+        <Button variant="primary btn-dark" onClick={handleShow}>
+          Add Module
+        </Button>
+      </div>
+      <table className="rbt-table table table-borderless">
+        <thead className="thead-light">
           <tr>
             <th>Date</th>
             <th>% Assessment</th>
@@ -122,15 +134,18 @@ const KnowledgeModules: React.FC = () => {
                 placeholder="Enter credits"
               />
             </Form.Group>
-            <Form.Group controlId="formAchievement">
-              <Form.Label>Achievement</Form.Label>
-              <Form.Control
-                type="text"
-                name="achievement"
-                value={newModule.achievement}
-                onChange={handleChange}
-                placeholder="Enter achievement"
-              />
+            <Form.Group
+              className="d-flex flex-column"
+              controlId="formAchievement"
+            >
+              <Form.Label>Competency</Form.Label>
+              <Form.Select
+                className="form-inline p-2"
+                style={{ height: "40px", opacity: "0.3", borderRadius: "4px" }}
+              >
+                <option>Competent</option>
+                <option>Incompetent</option>
+              </Form.Select>
             </Form.Group>
           </Form>
         </Modal.Body>
@@ -139,7 +154,7 @@ const KnowledgeModules: React.FC = () => {
             Close
           </Button>
           <Button variant="primary btn-dark" onClick={addModule}>
-            Add Module
+            Submit
           </Button>
         </Modal.Footer>
       </Modal>
