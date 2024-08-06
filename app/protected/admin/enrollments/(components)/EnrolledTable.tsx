@@ -66,7 +66,7 @@ function EnrolledTable({ data }: TablePaginationProps) {
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
         <div className="mx-1">
           <button
-           
+           onClick={downloadAsXls}
             style={{ cursor: data.length > 0 ? "pointer" : "" }}
             className={`btn ${
               data.length > 0 ? "btn-success" : "btn-secondary"
