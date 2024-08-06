@@ -2,7 +2,6 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "./(components)/Table";
 import { useEffect, useState } from "react";
-import list from "./(components)/data";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import Loading from "./loading";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
@@ -45,6 +44,8 @@ import ChartLayout from "@/app/components/enrolment-dashboard/graphs/ChartLayout
 import { AvgTimeSpent } from "@/app/components/enrolment-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
 import { StudentsProgressStatus } from "@/app/components/enrolment-dashboard/graphs/StudentsProgressStatus/StudentsProgressStatus";
 import { StudentRaces } from "@/app/components/enrolment-dashboard/graphs/StudentRaces/StudentRaces";
+import EnrolledTable from "./(components)/EnrolledTable";
+import mockData from "./(components)/data";
 
 type DataTiles = {
   name: string;
@@ -174,24 +175,8 @@ const Body = () => {
           />
         </div>
       </div>
-      <div className="card mb-0">
-        <div
-          className="table-responsive"
-          data-toggle="lists"
-          data-lists-sort-by="js-lists-values-employee-name"
-          data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
-        >
-          <Table list={data} />
-        </div>
+      <EnrolledTable data={mockData} />
 
-        <Pagination
-          listLength={list.length}
-          indexOfLastItem={indexOfLastItem}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          ITEMSPERPAGE={ITEMSPERPAGE}
-        />
-      </div>
     </>
   );
 };
