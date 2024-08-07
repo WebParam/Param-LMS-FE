@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from "react";
 import Table from "./Table";
@@ -25,7 +24,6 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
     indexOfFirstItem,
     indexOfFirstItem + ITEMSPERPAGE
   );
-
 
   const Id = "6669f0ff8759b480859c10a7";
 
@@ -58,23 +56,20 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
       .catch((error) => console.error("Error downloading XLS file:", error));
   }
 
-
   return (
     <>
       <div className="page-separator">
         <div className="page-separator__text">Course Applicants</div>
       </div>
 
-
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
         <div className="mx-1">
           <button
-           onClick={downloadAsXls}
+            onClick={downloadAsXls}
             style={{ cursor: data.length > 0 ? "pointer" : "" }}
             className={`btn ${
               data.length > 0 ? "btn-success" : "btn-secondary"
             }`}
-         
           >
             {loading ? (
               <div className="spinner-border text-white" role="status" />
@@ -84,7 +79,7 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
           </button>
         </div>
       </div>
- 
+
       <div className="card mb-0" style={{ height: "510px" }}>
         <TableFilter data={data} setFilteredData={setFilteredData} />
 
@@ -96,13 +91,15 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
           <Table list={currentItems} />
         </div>
 
-        <Pagination
-          listLength={filteredData.length}
-          indexOfLastItem={indexOfLastItem}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          ITEMSPERPAGE={ITEMSPERPAGE}
-        />
+        <div className="w-100" style={{ position: "absolute", bottom: 0 }}>
+          <Pagination
+            listLength={filteredData.length}
+            indexOfLastItem={indexOfLastItem}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            ITEMSPERPAGE={ITEMSPERPAGE}
+          />
+        </div>
       </div>
     </>
   );

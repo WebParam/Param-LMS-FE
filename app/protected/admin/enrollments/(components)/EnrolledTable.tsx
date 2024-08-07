@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from "react";
 import Table from "./Table";
@@ -25,7 +24,6 @@ function EnrolledTable({ data }: TablePaginationProps) {
     indexOfFirstItem + ITEMSPERPAGE
   );
 
-  
   const Id = "6669f0ff8759b480859c10a7";
 
   function downloadAsXls() {
@@ -66,12 +64,11 @@ function EnrolledTable({ data }: TablePaginationProps) {
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
         <div className="mx-1">
           <button
-           onClick={downloadAsXls}
+            onClick={downloadAsXls}
             style={{ cursor: data.length > 0 ? "pointer" : "" }}
             className={`btn ${
               data.length > 0 ? "btn-success" : "btn-secondary"
             }`}
-           
           >
             {loading ? (
               <div className="spinner-border text-white" role="status" />
@@ -88,16 +85,17 @@ function EnrolledTable({ data }: TablePaginationProps) {
           <div className="page-separator__text"></div>
         </div>
 
-
         <Table list={currentItems} />
 
-        <Pagination
-          listLength={filteredData.length}
-          indexOfLastItem={indexOfLastItem}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          ITEMSPERPAGE={ITEMSPERPAGE}
-        />
+        <div className="w-100" style={{ position: "absolute", bottom: 0 }}>
+          <Pagination
+            listLength={filteredData.length}
+            indexOfLastItem={indexOfLastItem}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            ITEMSPERPAGE={ITEMSPERPAGE}
+          />
+        </div>
       </div>
     </>
   );
