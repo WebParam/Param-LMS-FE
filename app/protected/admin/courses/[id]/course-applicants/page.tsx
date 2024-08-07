@@ -7,16 +7,13 @@ import Link from "next/link";
 const Body = async ({ params }: { params: { id: string } }) => {
   const courseId = params.id;
   const fetchedData: IStudentsData = await getEnrollments(courseId, false);
-  const devUrl = `https://web-param-param-lms-student-qa.vercel.app/register?courseId=${courseId}`;
-  const prodUrl = `https://web-param-param-lms-student-main.vercel.app/register?courseId=${courseId}`;
-  const loginDevUrl = `https://web-param-param-lms-student-qa.vercel.app/login`;
-  const loginProdUrl = `https://web-param-param-lms-student-main.vercel.app/login`;
-  const registrationUrl =
-    process.env.NEXT_PUBLIC_API_ENV == "production" ? prodUrl : devUrl;
-  const loginUrl =
-    process.env.NEXT_PUBLIC_API_ENV == "production"
-      ? loginProdUrl
-      : loginDevUrl;
+  const baseUrl =
+    process.env.NEXT_PUBLIC_STUDENT_SITE !== ""
+      ? process.env.NEXT_PUBLIC_STUDENT_SITE
+      : "https://web-param-param-lms-student-qa.vercel.app";
+
+  const registrationUrl = `${baseUrl}/register?courseId=${courseId}`;
+  const loginUrl = `${baseUrl}/login`;
 
   return (
     <>
@@ -34,7 +31,9 @@ const Body = async ({ params }: { params: { id: string } }) => {
           </Link>
         </div>
         <div className="d-flex align-items-center">
-          <div className="font-weight-bolder text-underline mr-2">Student Login: </div>{" "}
+          <div className="font-weight-bolder text-underline mr-2">
+            Student Login:{" "}
+          </div>{" "}
           <Link target="_blank" className="text-underline" href={loginUrl}>
             {loginUrl}
           </Link>
