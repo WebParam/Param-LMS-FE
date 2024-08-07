@@ -41,8 +41,6 @@ export const rKnowledgeModuleUrl = `https://khumla-${env}-newcourse-read.azurewe
 
 export const rUserUrl = `https://khumla-${env}-user-read.azurewebsites.net/api/v1`;
 
-export const boundlessExcelUrl = `https://khumla-${test}-user-read.azurewebsites.net/api/v1`
-
 export const wUserUrl = `https://khumla-${env}-user-write.azurewebsites.net/api/v1`;
 
 export const rAnalyticUrl = `https:khumla-${env}-activity-read.azurewebsites.net/api/v1`;
