@@ -20,7 +20,7 @@ const Pagination: NextPage<Props> = ({
 
   return (
     <>
-      <div className="card-footer p-8pt">
+      <div className="card-footer p-8pt w-100" style={{ position: "absolute", bottom: 0 }}>
         <ul className="pagination justify-content-start pagination-xsm m-0">
           <li className={`page-item ${currentPage == 1 ? "disabled" : ""}`}>
             <a
