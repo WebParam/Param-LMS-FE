@@ -16,13 +16,11 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
           list.map((data: CourseApplicants) => {
             let studentName = "";
             const mockName = "John Doe";
-            
+
             if (data.name && data.surname)
               studentName = data.name + " " + data.surname;
-            else if (data.name) 
-              studentName = data.name;
-            else 
-              studentName = mockName;
+            else if (data.name) studentName = data.name;
+            else studentName = mockName;
 
             return (
               <tr key={data.id} className="selected">
@@ -116,7 +114,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                 <td className="text-center js-lists-values-projects small">
                   <div className="d-flex align-items-center justify-content-center ">
                     <Link
-                      href={`${pathname}/${data.userId}/profiles?title=${courseTitle}&studentName=${studentName}&isEnrolled=${data.status}`}
+                      href={`${pathname}/${data.userId}/profiles?id=${data.userId}&title=${courseTitle}&studentName=${studentName}&isEnrolled=${data.status}`}
                     >
                       <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
                         visibility
