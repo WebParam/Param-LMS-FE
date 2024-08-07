@@ -21,7 +21,13 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
 
             return (
               <tr key={data.id} className="selected">
-                <td className="text-center js-lists-values-projects small">
+                <td 
+                         style={{
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                          width: "200px",
+                        }}
+                className="text-center js-lists-values-projects small">
                   {studentName}
                 </td>
                 <td className="text-center js-lists-values-projects small">
