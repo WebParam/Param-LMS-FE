@@ -58,7 +58,7 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
         </div>
       </div>
 
-      <div className="card mb-0" style={{ height: "510px" }}>
+      <div className="card mb-0">
         <TableFilter data={data} setFilteredData={setFilteredData} />
 
         <div className="page-separator mb-1">
