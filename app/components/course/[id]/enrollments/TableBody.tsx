@@ -26,7 +26,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                 style={{
                   textOverflow: "ellipsis",
                   overflow: "hidden",
-                  width: "200px",
+                  width: "150px",
                 }}
                 className="text-center js-lists-values-projects small">
                   {studentName}

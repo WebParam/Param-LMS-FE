@@ -40,6 +40,7 @@ export const rOptionUrl = `https://khumla-${env}-assessment-read.azurewebsites.n
 export const rKnowledgeModuleUrl = `https://khumla-${env}-newcourse-read.azurewebsites.net/api/v1`;
 
 export const rUserUrl = `https://khumla-${env}-user-read.azurewebsites.net/api/v1`;
+
 export const boundlessExcelUrl = `https://khumla-${test}-user-read.azurewebsites.net/api/v1`
 
 export const wUserUrl = `https://khumla-${env}-user-write.azurewebsites.net/api/v1`;

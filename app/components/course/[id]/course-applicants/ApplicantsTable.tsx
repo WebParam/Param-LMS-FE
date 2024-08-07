@@ -27,7 +27,7 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
   const downloadAsXls = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
-    const filename = "students";
+    const filename = "boundless-student-data";
     const fileExtension = "xlsx";
     const url = `${boundlessExcelUrl}/Student/ExportStudentInformation/boundless/${courseId}`;
     downloadFile(url, filename, fileExtension, setLoading);
