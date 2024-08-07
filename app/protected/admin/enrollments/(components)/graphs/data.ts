@@ -14,7 +14,7 @@ export const provinces = [
   export const genders = ["Male", "Female"];
   
   export const races = [
-    "black",
+    "Black African",
     "coloured",
     "indian",
     "white",

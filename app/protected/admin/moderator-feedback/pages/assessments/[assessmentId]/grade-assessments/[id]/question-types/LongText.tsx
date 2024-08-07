@@ -76,7 +76,7 @@ export default function ({
                 <h6>RUBRIC:</h6>
               </div>
               <div className="d-flex flex-row justify-content-between mr-5">
-                <h6 className="mr-5 text-success">Facilitator</h6>
+                <h6 className="mr-5 text-success">Accessor</h6>
                 <h6 className="mr-3 text-danger">Moderator</h6>
               </div>
             </td>
