@@ -18,7 +18,7 @@ const NavToggler: NextPage<{ setIsOpen?: any; isOpen?: boolean }> = ({
       </a>
 
       <a href="#" className="sidebar-brand ">
-        <span>Thooto</span>
+        <span>thooto</span>
       </a>
     </>
   );
