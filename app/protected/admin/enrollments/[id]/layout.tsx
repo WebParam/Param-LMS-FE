@@ -9,7 +9,7 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   const tabs = [
     {
-      name: "profiles",
+      name: "profile",
       title: "Profile",
       url: `/protected/admin/enrollments/${id}/profiles`,
     },
