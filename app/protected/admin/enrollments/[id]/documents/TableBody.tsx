@@ -10,6 +10,7 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 import { useEffect, useState } from "react";
 import { changeDocumentStatus } from "@/app/lib/actions/courseStudents";
+import Cookies from "universal-cookie";
 
 const pdfVersion = "3.10.111";
 const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
@@ -33,29 +34,32 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   const [isChangingStateLoader, setIsChangingStateLoader] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const cookies = new Cookies();
+
   const handleShow = async (name: string, status: string) => {
       debugger;
       setDocumentName(name);
     
     setDocumentStatus(status);
-    console.log('document name', name)
-    console.log('document status', status)
     setShow(true);
   };
 
   async function viewDocument(docId: string) {
+    console.log(docId)
     setDocumentToView(docId)
   }
 
   useEffect(() => {
-    console.log('document list: ',list)
+    console.log('document list: ',list);
   }, [list])
-
+  
   const handleClose = () => {
     setShow(false);
   };
-
-  console.log('list of documents', list)
+  
+  console.log('list of documents',list)
+  const docsComplete = list && list.find(item => item.status == "Declined");
+  cookies.set("documentsCompled", docsComplete);
 
   async function handleSubmit(){
     const doc =  list.find((item:any) => item.blobUrl === documentName);
@@ -163,12 +167,12 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
           <td>
           <ul className="list-group list-group-flush">
             {list?.length > 0 ?
-              list?.map((item:any) => (
+              list?.slice(0,6).map((item:any) => (
               <li className="list-group-item p-4">
                     <i className="bi-house list-group-icon" /> {`${item.blobUrl.slice(0, 15)}... .pdf`}
               </li>
               ))
-            :['no url', 'no url', 'no url', 'no url'].map((item:any) => (
+            :['no url', 'no url', 'no url', 'no url','no url','no url'].map((item:any) => (
               <li className="list-group-item p-4">
                     <i className="bi-house list-group-icon" /> {item}
               </li>
@@ -179,12 +183,12 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
           <td>
           <ul className="list-group list-group-flush">
           {list?.length > 0 ?
-            list?.map((item:any) => (
+            list?.slice(0,6).map((item:any) => (
               <li className="list-group-item p-4">
                 <i className="bi-house list-group-icon" /> {item.status??'Pending Review'}
               </li>
             ))
-          :['N/A', 'N/A', 'N/A', 'N/A'].map((item:any) => (
+          :['N/A', 'N/A', 'N/A', 'N/A','N/A','N/A'].map((item:any) => (
             <li className="list-group-item p-4">
                     <i className="bi-house list-group-icon" /> {item}
             </li>
@@ -195,7 +199,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
           <td>
           <ul className="list-group list-group-flush">
             {list?.length > 0 ?
-              list?.slice(0, 4).map((item:any) => (
+              list?.slice(0,6).map((item:any) => (
                 <li className="list-group-item">
                     <button  onClick={() => {setDocumentToView(item.blobUrl), setShowDocumentModal(true), viewDocument(item.id)}} className="btn btn-light rounded-pill border-dark">View</button>
                     <select
@@ -211,7 +215,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                     </select>
                 </li>
             ))
-          :['N/A', 'N/A', 'N/A', 'N/A'].map((item:any) => (
+          :['N/A', 'N/A', 'N/A', 'N/A','N/A','N/A'].map((item:any) => (
             <li className="list-group-item p-4">
                     <i className="bi-house list-group-icon" /> {item}
             </li>
