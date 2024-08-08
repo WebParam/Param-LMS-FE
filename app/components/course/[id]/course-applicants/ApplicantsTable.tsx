@@ -29,7 +29,8 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
     setLoading(true);
     const filename = "boundless-student-data";
     const fileExtension = "xlsx";
-    const url = `${rUserUrl}/Student/ExportStudentInformation/boundless/${courseId}`;
+    const status = 3;
+    const url = `${rUserUrl}/Student/ExportStudentInformation/boundless/${courseId}/${status}`;
     downloadFile(url, filename, fileExtension, setLoading);
   };
 
