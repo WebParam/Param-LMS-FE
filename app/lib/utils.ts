@@ -115,9 +115,10 @@ export const downloadFile = (
 ) => {
   setExportModal(true);
   fetch(url, {
-    method: "POST",
+    method: fileExtension == "zip" ? "GET" : "POST",
     headers: {
-      Accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+      Accept:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "Content-Type": "application/json",
     },
   })
@@ -135,7 +136,7 @@ export const downloadFile = (
       document.body.appendChild(link);
       link.click();
       link.remove();
-      window.URL.revokeObjectURL(downloadUrl); 
+      window.URL.revokeObjectURL(downloadUrl);
       setExportModal(false);
     })
     .catch((error) => {
@@ -143,33 +144,3 @@ export const downloadFile = (
       setExportModal(false);
     });
 };
-
-
-// utils/xlsxWorker.js
-export function processXlsFile(file:any) {
-  return new Promise((resolve, reject) => {
-    const worker = new Worker('/xlsx.worker.js');
-
-    worker.onmessage = (e) => {
-      const { data } = e;
-      if (data.error) {
-        reject(data.error);
-      } else {
-        resolve(data.json);
-      }
-      worker.terminate();
-    };
-
-    worker.onerror = (e) => {
-      reject(e.message);
-      worker.terminate();
-    };
-
-    const reader = new FileReader();
-    reader.onload = (event:any) => {
-      const binaryString = event?.target.result;
-      worker.postMessage(binaryString);
-    };
-    reader.readAsBinaryString(file);
-  });
-}

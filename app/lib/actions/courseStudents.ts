@@ -62,16 +62,6 @@ export const changeDocumentStatus = async (payload: any) => {
   return resp.data;
 };
 
-export const downloadStudentDocs = async (userId: any) => {
-  const resp = await fetch(`${rUserUrl}/Documents/DownloadDocuments/${userId}`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/zip'
-    }
-  });
-  return resp;
-};
-
 export const sendDocRejectionEmail = async (userId: string) => {
   try {
     const data = await post(
