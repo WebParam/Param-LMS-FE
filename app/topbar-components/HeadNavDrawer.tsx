@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import Cookies from "universal-cookie";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   setIsOpen,
@@ -11,6 +12,8 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
+  const pathName = usePathname();
+  const isAccount = pathName == "/protected/admin/account"
 
   const logout = () => {
     cookies.remove("param-lms-user", {
@@ -53,7 +56,9 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                   width: "450px",
                 }}
               >
-                Thooto - {courseTitle}
+                Thooto 
+                  {courseTitle && `- ${courseTitle}`}
+                
               </span>
             </a>
 
@@ -82,7 +87,11 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                   <div className="dropdown-header">
                     <strong>Account</strong>
                   </div>
-                  <a className="dropdown-item">Edit Account</a>
+                  <a className="dropdown-item">
+                    <Link href="/protected/admin/account">
+                    Edit Account
+                    </Link>
+                  </a>
                   <a className="dropdown-item" onClick={() => logout()}>
                     Logout
                   </a>

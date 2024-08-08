@@ -5,7 +5,7 @@ import Pagination from "@/app/components/Pagination";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import TableFilter from "./TableFilter";
 import { downloadFile } from "@/app/lib/utils";
-import { boundlessExcelUrl, rUserUrl } from "@/app/lib/actions/endpoints";
+import { rUserUrl } from "@/app/lib/actions/endpoints";
 interface TablePaginationProps {
   data: CourseApplicants[];
   courseId?: string;
@@ -29,7 +29,7 @@ function EnrolledTable({ data, courseId }: TablePaginationProps) {
     setLoading(true);
     const filename = "boundless-student-data";
     const fileExtension = "xlsx";
-    const url = `${boundlessExcelUrl}/Student/ExportStudentInformation/boundless/${courseId}`;
+    const url = `${rUserUrl}/Student/ExportStudentInformation/boundless/${courseId}`;
     downloadFile(url, filename, fileExtension, setLoading);
   };
 
