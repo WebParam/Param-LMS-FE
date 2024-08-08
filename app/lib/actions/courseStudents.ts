@@ -1,4 +1,3 @@
-"use server";
 import { IUpdateEnrollment } from "@/app/interfaces/Enrollment";
 import { Diagnostic } from "../logger/logger";
 import { get, post, put } from "../utils";
@@ -64,15 +63,12 @@ export const changeDocumentStatus = async (payload: any) => {
 };
 
 export const downloadStudentDocs = async (userId: any) => {
-  const resp = await fetch(
-    `${rUserUrl}/Documents/DownloadDocuments/${userId}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/zip",
-      },
+  const resp = await fetch(`${rUserUrl}/Documents/DownloadDocuments/${userId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/zip'
     }
-  );
+  });
   return resp;
 };
 

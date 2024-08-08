@@ -73,21 +73,19 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   const exportStudentDocuments = async () => {
     try {
+
       const filename = "student_information.zip";
       const response = await downloadStudentDocs(studentId);
   
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
       const blob = await response.blob();
       saveAs(blob, filename);
-      console.log("File downloaded successfully");
     } catch (error) {
       console.error("Error downloading the file:", error);
     }
   };
-
 
   useEffect(() => {
     studentInformation();
