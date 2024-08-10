@@ -45,7 +45,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       url: `${baseLayoutUrl}/profiles?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/profiles`,
     },
-    {
+    /*     {
       title: "Demographics",
       url: `${baseLayoutUrl}/demographics?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/demographics`,
@@ -65,7 +65,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       url: `${baseLayoutUrl}/employment?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/employment`,
     },
-    {
+ */ {
       title: "Documents",
       url: `${baseLayoutUrl}/document?title=${courseTitle}&studentName=${studentName}&isEnrolled=${isEnrolled}`,
       path: `${baseLayoutUrl}/document`,
