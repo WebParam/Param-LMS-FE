@@ -6,12 +6,15 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import KnowledgeModuleModal from "./KnowledgeModuleModal";
 import PracticalModuleModal from "./PracticalModuleModal";
+import WorkBookModal from "./WorkBookModal";
 
 export default function PageHeader({ title }: { title: string }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openPracticalModuleModal, setOpenPracticalModuleModal] =
     useState(false);
   const [openKnowledgeModuleModal, setOpenKnowledgeModuleModal] =
+    useState(false);
+    const [openWorkBookModal, setOpenWorkBookModal] =
     useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -34,6 +37,7 @@ export default function PageHeader({ title }: { title: string }) {
   let isCourse = false;
   let isEditDocument = false;
   let isEditKnowledgeTopic = false;
+  let isWorkBook = false;
   const { id } = useParams<{ id: string }>();
 
   const arrUrl = pathname.split("/");
@@ -122,6 +126,9 @@ export default function PageHeader({ title }: { title: string }) {
   } else if (pathname.indexOf("/modules/create") !== -1) {
     title = `Create Unit Standard`;
     isCreateModule = true;
+  }else if (pathname.indexOf(`/protected/admin/courses/${id}/workbook`) !== -1) {
+    title = `Create Workbook`;
+    isWorkBook = true;
   }
   // Backward Compatibility for Unit Standard
   else if (pathname.indexOf("/modules") !== -1) {
@@ -318,6 +325,12 @@ export default function PageHeader({ title }: { title: string }) {
         title={name}
       />
 
+       <WorkBookModal
+        show={openWorkBookModal}
+        onHide={() => setOpenWorkBookModal(false)}
+        courseId={id}
+        title={name}
+      />
       <div className="border-bottom-2 py-32pt position-relative z-1">
         <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
           <div className="flex d-flex justify-content-between flex-column flex-sm-row align-items-center mb-24pt mb-md-0">
@@ -408,6 +421,14 @@ export default function PageHeader({ title }: { title: string }) {
                   onClick={() => setOpenPracticalModuleModal(true)}
                 >
                   Create Practical Module
+                </button>
+              )}
+               {isWorkBook && (
+                <button
+                  className="btn btn-success"
+                  onClick={() => setOpenWorkBookModal(true)}
+                >
+                  Create Workbook
                 </button>
               )}
               {isAllCourse && (
