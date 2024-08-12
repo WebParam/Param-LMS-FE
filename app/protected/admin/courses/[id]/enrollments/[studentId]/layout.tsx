@@ -27,29 +27,9 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   const tabs = [
     {
-      title: "Profile",
+      title: "Student Info",
       url: `${baseLayoutUrl}/profiles?title=${courseTitle}&studentName=${studentName}`,
       path: `${baseLayoutUrl}/profiles`,
-    },
-    {
-      title: "Demographics",
-      url: `${baseLayoutUrl}/demographics?title=${courseTitle}&studentName=${studentName}`,
-      path: `${baseLayoutUrl}/demographics`,
-    },
-    {
-      title: "Contacts",
-      url: `${baseLayoutUrl}/contacts?title=${courseTitle}&studentName=${studentName}`,
-      path: `${baseLayoutUrl}/contacts`,
-    },
-    {
-      title: "Regional",
-      url: `${baseLayoutUrl}/regional?title=${courseTitle}&studentName=${studentName}`,
-      path: `${baseLayoutUrl}/regional`,
-    },
-    {
-      title: "Employment",
-      url: `${baseLayoutUrl}/employment?title=${courseTitle}&studentName=${studentName}`,
-      path: `${baseLayoutUrl}/employment`,
     },
     {
       title: "Documents",
@@ -83,7 +63,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
-      <div className="mx-1" style={{ width: "187px", height: "37.5px" }}>
+        <div className="mx-1" style={{ width: "187px", height: "37.5px" }}>
           <button
             onClick={() => downloadZip()}
             style={{ cursor: documents.length > 0 ? "pointer" : "" }}
