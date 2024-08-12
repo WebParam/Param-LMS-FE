@@ -13,6 +13,12 @@ import {
 } from "@/app/components/course-analytics/graphs/QuestionsAsked/data";
 
 import {
+  options as WorkbookOptions,
+  data as WorkbookData,
+  barDescriptions as WorkDescription,
+} from "@/app/components/course-analytics/graphs/workbook-signed/data";
+
+import {
   options as OverallQuizBarOptions,
   data as OverallQuizBarData,
   barDescriptions as OverallQuizBarDescription,
@@ -26,9 +32,12 @@ import {
 
 import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/course-analytics/graphs/StudentsProgressStatus/data";
 
+import { barDescriptions as CompetencyDescription } from "@/app/components/course-analytics/graphs/workbook-competency/data";
+
 import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/AvgTimeSpent";
 import { StudentsProgressStatus } from "@/app/components/course-analytics/graphs/StudentsProgressStatus/StudentsProgressStatus";
+import { CompetentVsIncompetent } from "@/app/components/course-analytics/graphs/workbook-competency/WorkCompetency";
 
 type DataTiles = {
   name: string;
@@ -45,10 +54,7 @@ export default async function Page() {
     { name: "Modules", icon: "book", data: 5 },
     { name: "Quizzes", icon: "help", data: 10 },
     { name: "Assessments", icon: "list", data: 4 },
-    { name: "Documents Downloaded", icon: "cloud_download", data: 79 },
   ];
-
-  
 
   return (
     <>
@@ -127,10 +133,29 @@ export default async function Page() {
             type="bar"
           />
         </div>
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartWrapper
+            title="Workbook Signed"
+            barDescriptions={WorkDescription}
+            options={WorkbookOptions}
+            data={WorkbookData}
+            type="bar"
+          />
+        </div>
+
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout
+            title="Workbook Competency"
+            barDescriptions={CompetencyDescription}
+            type="pie"
+          >
+            <CompetentVsIncompetent />
+          </ChartLayout>
+        </div>
       </div>
 
-      <div className="mb-24pt mb-sm-0 mr-sm-24pt">
-        <PageHeader title="Web Development Unit Standards" />
+      <div className="page-separator">
+        <div className="page-separator__text">Knowledge Modules</div>
       </div>
 
       <div className="card p-relative o-hidden mb-0">

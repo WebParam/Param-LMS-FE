@@ -68,10 +68,12 @@ function UnitStandardTable({ path }: UnitStandardTableProps) {
         })
       ) : (
         <div className="card my-24pt text-center py-3">
-          No Unit Standards Available...
+          No Knowledge Modules Available...
         </div>
       )}
-      <div className="card mb-24pt">
+
+      {
+        currentItems.length > 0 &&    <div className="card mb-24pt">
         <Pagination
           listLength={list?.length}
           indexOfLastItem={indexOfLastItem}
@@ -80,6 +82,8 @@ function UnitStandardTable({ path }: UnitStandardTableProps) {
           ITEMSPERPAGE={ITEMSPERPAGE}
         />
       </div>
+      }
+   
     </div>
   );
 }
