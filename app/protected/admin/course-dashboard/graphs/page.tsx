@@ -70,7 +70,7 @@ export default function Page() {
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
-            title="Average Time Spent"
+            title="Work Books"
             barDescriptions={AvgTimeSpentBarDataDescription}
           >
             <AvgTimeSpent />
