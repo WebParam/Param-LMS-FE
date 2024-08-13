@@ -65,7 +65,6 @@ export default function ChangePassword() {
       return;
     }
 
-    // Prepare payload
     const payload: IAdminPasswordChangeReset = {
       userId: user?.id,
       oldPassword: currentPassword,
@@ -76,7 +75,6 @@ export default function ChangePassword() {
     setLoading(true);
     setViewMsg(false);
 
-    // Call the API to reset password
     const response = await AdminResetPassword(payload);
     if (response?.id) {
       setViewMsg(true);

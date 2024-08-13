@@ -15,8 +15,16 @@ export default function CommentChartWrapper({
       <div className="card-header d-flex align-items-center">
         <strong>{title}</strong>
       </div>
+ 
+ {
+    !type &&  <div className="card-body">
+
+       {children}
+ 
+ </div>
+ }
       <div className="card-body text-muted flex d-flex flex-column align-items-center justify-content-center">
-        <div className={type == "pie" ? "chart" : "chart w-100"} style={{ height: "300px" }}>
+       { type &&  <div className={type == "pie" ? "chart" : "chart w-100"} style={{ height: "300px" }}>
           <div className="chartjs-size-monitor">
             <div className="chartjs-size-monitor-expand">
               <div className=""></div>
@@ -26,7 +34,7 @@ export default function CommentChartWrapper({
             </div>
           </div>
           {children}
-        </div>
+        </div>}
         <div
           id="repeatCustomerRateChartLegend"
           className="chart-legend chart-legend--horizontal mt-16pt"

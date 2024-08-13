@@ -55,7 +55,6 @@ function UnitStandardTable({ path }: UnitStandardTableProps) {
               ? arrUrl.join("/") + `/course/${data.id}?title=${data.title}` :    
               arrUrl.join("/") + `${studentId}/${data.id}?title=${data.title}`
 
-
           return (
             <Module
               key={data.id}
@@ -73,7 +72,8 @@ function UnitStandardTable({ path }: UnitStandardTableProps) {
       )}
 
       {
-        currentItems.length > 0 &&    <div className="card mb-24pt">
+        currentItems.length > 0 &&    
+        <div className="card mb-24pt">
         <Pagination
           listLength={list?.length}
           indexOfLastItem={indexOfLastItem}

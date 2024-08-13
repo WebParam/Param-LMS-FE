@@ -88,7 +88,7 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                     <strong>Account</strong>
                   </div>
                   <a className="dropdown-item">
-                    <Link href="/protected/admin/account">
+                    <Link href="/protected/admin/account/basic-info?account-title=Basic Information">
                     Edit Account
                     </Link>
                   </a>

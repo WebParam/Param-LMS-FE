@@ -36,6 +36,13 @@ export interface IAdminPasswordChangeReset {
     newPassword: string;
     confirmPassword: string;
   }
+
+  export interface IAdminUpdateUser {
+    userId: string;
+    email: string;
+    lastName: string;
+    firstName: string;
+  }
   
 
 export interface IUserRequestModel extends IUser{

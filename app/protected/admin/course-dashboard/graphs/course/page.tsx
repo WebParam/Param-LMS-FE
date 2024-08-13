@@ -46,7 +46,8 @@ type DataTiles = {
 };
 
 import UnitStandardTable from "../(components)/unit-standard-table";
-import PageHeader from "../../PageHeader";
+import ProgressBar from 'react-bootstrap/ProgressBar';
+
 
 export default async function Page() {
   const dataTiles: DataTiles[] = [
@@ -55,6 +56,7 @@ export default async function Page() {
     { name: "Quizzes", icon: "help", data: 10 },
     { name: "Assessments", icon: "list", data: 4 },
   ];
+  const now = 60;
 
   return (
     <>
@@ -142,7 +144,6 @@ export default async function Page() {
             type="bar"
           />
         </div>
-
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
             title="Workbook Competency"
@@ -150,6 +151,17 @@ export default async function Page() {
             type="pie"
           >
             <CompetentVsIncompetent />
+          </ChartLayout>
+        </div>
+
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout
+            title="Overall Workbooks Signed"
+            barDescriptions={WorkDescription}
+          >
+            
+            <ProgressBar variant = "info" now={60} label={`${60}%`} />        
+            
           </ChartLayout>
         </div>
       </div>
@@ -164,3 +176,4 @@ export default async function Page() {
     </>
   );
 }
+
