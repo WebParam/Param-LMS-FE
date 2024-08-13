@@ -167,3 +167,41 @@ export function processXlsFile(file:any) {
     reader.readAsBinaryString(file);
   });
 }
+
+export const downloadFile = (
+  url: string,
+  filename: string,
+  fileExtension: string,
+  setExportModal: (isBool: boolean) => void
+) => {
+  setExportModal(true);
+  fetch(url, {
+    method: "GET",
+    headers: {
+      Accept:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.blob();
+    })
+    .then((blob) => {
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.setAttribute("download", `${filename}.${fileExtension}`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(downloadUrl);
+      setExportModal(false);
+    })
+    .catch((error) => {
+      console.error("Error exporting file:", error);
+      setExportModal(false);
+    });
+};
