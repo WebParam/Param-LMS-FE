@@ -44,6 +44,8 @@ type DataTiles = {
 };
 
 import UnitStandardTable from "../(components)/unit-standard-table";
+import mockData from "./(components)/data";
+import ApplicantsTable from "./(components)/ApplicantsTable";
 
 
 export default async function Page() {
@@ -160,6 +162,9 @@ export default async function Page() {
       <div className="card p-relative o-hidden mb-0">
         <UnitStandardTable path="course" />
       </div>
+
+ 
+      <ApplicantsTable data={mockData} />
     </>
   );
 }
