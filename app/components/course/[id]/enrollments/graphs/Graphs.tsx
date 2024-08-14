@@ -1,59 +1,34 @@
 import ChartWrapper from "./ChartWrapper";
+import { barDescriptions as AvgTimeSpentBarDataDescription } from "./AvgTimeSpentBar/data";
 
 import {
   options as OverallAssessmentBarOptions,
+  data as OverallAssessmentBarData,
   barDescriptions as OverallAssessmentBarDescription,
-  transformData,
 } from "./OverallAssessment/data";
+import {
+  options as QuestionsAskedOptions,
+  data as QuestionsAskedData,
+  barDescriptions as QuestionsAskedDescription,
+} from "./QuestionsAsked/data";
 
 import {
-  options as SocioEcoStatusOptions,
-  data as SocioEcoStatusDataFn,
-  barDescriptions as SocioEcoStatusDescription,
-} from "./SocioEcoStatus/data";
+  options as OverallQuizBarOptions,
+  data as OverallQuizBarData,
+  barDescriptions as OverallQuizBarDescription,
+} from "./OverallQuiz/data";
 
 import {
-  options as StudentProvincesOptions,
-  data as StudentProvincesDataFn,
-  barDescriptions as StudentProvincesDescription,
-} from "./AvgStudentInProvince/data";
+  options as CommentsChartBarOptions,
+  data as CommentsChartBarData,
+  barDescriptions as CommentsChartBarDescription,
+} from "./CommentsChart/data";
 
-import {
-  options as StudentDisabilityOptions,
-  data as StudentDisabilityDataFn,
-  barDescriptions as StudentDisabilityDescription,
-} from "./AvgStudentDisabilities/data";
-
-import {
-  options as StudentLangOptions,
-  data as StudentLangDataFn,
-  barDescriptions as StudentLangDescription,
-} from "./AvgLangOfStudent/data";
-
-import {
-  options as CitizenshipChartOptions,
-  data as CitizenshipChartData,
-  barDescriptions as CitizenshipChartDescription,
-} from "./CitizenshipChart/data";
-
-import { barDescriptions as StudentsProgressStatusDescription } from "./StudentGenderRoles/data";
-import { barDescriptions as StudentRacesDescription } from "./StudentRaces/data";
+import { barDescriptions as StudentsProgressStatusDescription } from "./StudentsProgressStatus/data";
 
 import ChartLayout from "./ChartLayout";
-import { StudentGenderRoles } from "./StudentGenderRoles/StudentGenderPie";
-import { StudentRaces } from "./StudentRaces/StudentRaces";
-import { IStudentsData } from "@/app/interfaces/courseApplicants";
-
-import {
-  citizenshipData,
-  disabilitiesData,
-  genderData,
-  languagesData,
-  provinceData,
-  racesData,
-  socioEconomicData,
-  tilesData,
-} from "./data";
+import { AvgTimeSpent } from "./AvgTimeSpentBar/AvgTimeSpent";
+import { StudentsProgressStatus } from "./StudentsProgressStatus/StudentsProgressStatus";
 
 type DataTiles = {
   name: string;
@@ -61,44 +36,20 @@ type DataTiles = {
   data: number;
 };
 
-export default async function Graphs({
-  fetchedData,
-}: {
-  fetchedData: IStudentsData;
-}) {
-  const dataTiles: DataTiles[] = tilesData(fetchedData);
-  const studentsByProvinceData: any = provinceData(fetchedData);
-  const StudentRacesData = racesData(fetchedData);
-  const genderRolesData = genderData(fetchedData);
-  const SocioEcoStatusData: any = socioEconomicData(fetchedData);
-  const StudentDisabiltyData: any = disabilitiesData(fetchedData);
-  const StudentCitizenshipData: any = citizenshipData(fetchedData);
-  const StudentLanguagesData: any = languagesData(fetchedData);
-
-  const StudentProvincesBarData = await StudentProvincesDataFn(
-    studentsByProvinceData
-  );
-
-  const StudentDisabilityBarData = await StudentDisabilityDataFn(
-    StudentDisabiltyData
-  );
-
-  const StudentSocioEcoStatusBarData = await SocioEcoStatusDataFn(
-    SocioEcoStatusData
-  );
-
-  const StudentCitizenData = await CitizenshipChartData(StudentCitizenshipData);
-  const StudentLangData = await StudentLangDataFn(StudentLanguagesData);
-
-  const ageRangeGenderDistribution =
-    fetchedData?.ageRangeGenderDistribution || [];
-  const OverallAssessmentBarData = transformData(ageRangeGenderDistribution);
+export default async function Graphs() {
+  const dataTiles: DataTiles[] = [
+    { name: "Students", icon: "person_outline", data: 112 },
+    { name: "Modules", icon: "book", data: 5 },
+    { name: "Quizzes", icon: "help", data: 10 },
+    { name: "Assessments", icon: "list", data: 4 },
+    { name: "Documents Downloaded", icon: "cloud_download", data: 79 },
+  ];
 
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center mb-lg-8pt">
+      <div className="row mb-lg-8pt">
         {dataTiles.map((data: DataTiles) => (
-          <div key={data.name} style={{ width: "250px" }}>
+          <div key={data.name} className="col-lg-3">
             <div className="card">
               <div
                 data-toggle="tab"
@@ -118,17 +69,16 @@ export default async function Graphs({
       </div>
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Student Provinces"
-            barDescriptions={StudentProvincesDescription}
-            options={StudentProvincesOptions}
-            data={StudentProvincesBarData}
-            type="bar"
-          />
+          <ChartLayout
+            title="Average Time Spent"
+            barDescriptions={AvgTimeSpentBarDataDescription}
+          >
+            <AvgTimeSpent />
+          </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
-            title="Gender vs Age Group Category"
+            title="Assessment Completed"
             barDescriptions={OverallAssessmentBarDescription}
             options={OverallAssessmentBarOptions}
             data={OverallAssessmentBarData}
@@ -137,60 +87,38 @@ export default async function Graphs({
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
-            title="Gender"
+            title="Progress Status"
             barDescriptions={StudentsProgressStatusDescription}
             type="pie"
           >
-            <StudentGenderRoles StudentRoles={genderRolesData} />
-          </ChartLayout>
-        </div>
-
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Different Races"
-            barDescriptions={StudentRacesDescription}
-            type="pie"
-          >
-            <StudentRaces studentRacesData={StudentRacesData} />
+            <StudentsProgressStatus />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
-            title="Socio Economic Status"
-            barDescriptions={SocioEcoStatusDescription}
-            options={SocioEcoStatusOptions}
-            data={StudentSocioEcoStatusBarData}
+            title="Quiz Attempts"
+            barDescriptions={OverallQuizBarDescription}
+            options={OverallQuizBarOptions}
+            data={OverallQuizBarData}
+            type="line"
+          />
+        </div>
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartWrapper
+            title="Questions Asked"
+            barDescriptions={QuestionsAskedDescription}
+            options={QuestionsAskedOptions}
+            data={QuestionsAskedData}
             type="bar"
           />
         </div>
-
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
-            title="Disabilities"
-            barDescriptions={StudentDisabilityDescription}
-            options={StudentDisabilityOptions}
-            data={StudentDisabilityBarData}
-            type="bar"
-          />
-        </div>
-
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Citizenship"
-            barDescriptions={CitizenshipChartDescription}
-            options={CitizenshipChartOptions}
-            data={StudentCitizenData}
-            type="bar"
-          />
-        </div>
-
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Student Languages"
-            barDescriptions={StudentLangDescription}
-            options={StudentLangOptions}
-            data={StudentLangData}
+            title="Comments"
+            barDescriptions={CommentsChartBarDescription}
+            options={CommentsChartBarOptions}
+            data={CommentsChartBarData}
             type="bar"
           />
         </div>

@@ -10,16 +10,16 @@ export const options = {
 };
 
 export const barDescriptions = [
-  { description: "Comments over time", color: "rgb(82 121 249)" },
+  { description: "Disabilities of Students", color: "rgb(82 121 249)" },
 ];
 
-const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const labels = ["Blind", "Deaf", "Dumb", "Physical", "Emotional", "Intellectual", "Multiple Disabilites"];
 
 export const data = {
   labels,
   datasets: [
     {
-      label: "No of Comments",
+      label: "# of Students",
       data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
       backgroundColor: "rgb(82 121 249)",
       barPercentage: 0.3,

@@ -5,7 +5,7 @@ import {
   races,
   employmentStatuses,
   disabilities,
-} from "./graphs/data";
+} from "./graphs-live/data";
 
 export default function TableFilter({
   data,
