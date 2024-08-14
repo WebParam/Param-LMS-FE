@@ -40,7 +40,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-      <Graphs fetchedData={fetchedData} />
+      <Graphs />
       <ApplicantsTable
         courseId={courseId}
         data={

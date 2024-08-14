@@ -10,10 +10,10 @@ export const options = {
 };
 
 export const barDescriptions = [
-  { description: "Citizenship of Students", color: "rgb(82 121 249)" },
+  { description: "Disabilities of Students", color: "rgb(82 121 249)" },
 ];
 
-const labels = ["South Africa", "Other", "Dual(SA Plus Other)", "Permanent Residence", "Unknown"];
+const labels = ["Blind", "Deaf", "Dumb", "Physical", "Emotional", "Intellectual", "Multiple Disabilites"];
 
 export const data = {
   labels,

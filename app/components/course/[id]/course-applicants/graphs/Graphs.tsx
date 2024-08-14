@@ -1,34 +1,41 @@
+"use client";
+import Pagination from "@/app/components/Pagination";
+import Table from "./(components)/Table";
+import { useEffect, useState } from "react";
+import list from "./(components)/data";
+import { getCourseStudents } from "@/app/lib/actions/courseStudents";
+import { CourseApplicants } from "@/app/interfaces/courseApplicants";
+import Loading from "./loading";
+import { useRouter } from "next/navigation";
+import Cookies from "universal-cookie";
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
+
 import ChartWrapper from "./ChartWrapper";
+import { barDescriptions as AvgTimeSpentBarDataDescription } from "./AvgTimeSpentBar/data";
 
 import {
   options as OverallAssessmentBarOptions,
+  data as OverallAssessmentBarData,
   barDescriptions as OverallAssessmentBarDescription,
-  transformData,
 } from "./OverallAssessment/data";
+import {
+  options as QuestionsAskedOptions,
+  data as QuestionsAskedData,
+  barDescriptions as QuestionsAskedDescription,
+} from "./QuestionsAsked/data";
 
 import {
-  options as SocioEcoStatusOptions,
-  data as SocioEcoStatusDataFn,
-  barDescriptions as SocioEcoStatusDescription,
-} from "./SocioEcoStatus/data";
+  options as OverallQuizBarOptions,
+  data as OverallQuizBarData,
+  barDescriptions as OverallQuizBarDescription,
+} from "./OverallQuiz/data";
 
 import {
-  options as StudentProvincesOptions,
-  data as StudentProvincesDataFn,
-  barDescriptions as StudentProvincesDescription,
-} from "./AvgStudentInProvince/data";
-
-import {
-  options as StudentDisabilityOptions,
-  data as StudentDisabilityDataFn,
-  barDescriptions as StudentDisabilityDescription,
-} from "./AvgStudentDisabilities/data";
-
-import {
-  options as StudentLangOptions,
-  data as StudentLangDataFn,
-  barDescriptions as StudentLangDescription,
-} from "./AvgLangOfStudent/data";
+  options as CommentsChartBarOptions,
+  data as CommentsChartBarData,
+  barDescriptions as CommentsChartBarDescription,
+} from "./CommentsChart/data";
 
 import {
   options as CitizenshipChartOptions,
@@ -36,24 +43,17 @@ import {
   barDescriptions as CitizenshipChartDescription,
 } from "./CitizenshipChart/data";
 
-import { barDescriptions as StudentsProgressStatusDescription } from "./StudentGenderRoles/data";
+import { barDescriptions as StudentsProgressStatusDescription } from "./StudentsProgressStatus/data";
 import { barDescriptions as StudentRacesDescription } from "./StudentRaces/data";
 
 import ChartLayout from "./ChartLayout";
-import { StudentGenderRoles } from "./StudentGenderRoles/StudentGenderPie";
+import { AvgTimeSpent } from "./AvgTimeSpentBar/AvgTimeSpent";
+import { StudentsProgressStatus } from "./StudentsProgressStatus/StudentsProgressStatus";
 import { StudentRaces } from "./StudentRaces/StudentRaces";
-import { IStudentsData } from "@/app/interfaces/courseApplicants";
-
-import {
-  citizenshipData,
-  disabilitiesData,
-  genderData,
-  languagesData,
-  provinceData,
-  racesData,
-  socioEconomicData,
-  tilesData,
-} from "./data";
+import EnrolledTable from "./(components)/ApplicantsTable";
+import mockData from "./(components)/data";
+import ApplicantsTable from "./(components)/ApplicantsTable";
+import { getEnrollments } from "@/app/lib/actions/enrollments";
 
 type DataTiles = {
   name: string;
@@ -61,44 +61,59 @@ type DataTiles = {
   data: number;
 };
 
-export default async function Graphs({
-  fetchedData,
-}: {
-  fetchedData: IStudentsData;
-}) {
-  const dataTiles: DataTiles[] = tilesData(fetchedData);
-  const studentsByProvinceData: any = provinceData(fetchedData);
-  const StudentRacesData = racesData(fetchedData);
-  const genderRolesData = genderData(fetchedData);
-  const SocioEcoStatusData: any = socioEconomicData(fetchedData);
-  const StudentDisabiltyData: any = disabilitiesData(fetchedData);
-  const StudentCitizenshipData: any = citizenshipData(fetchedData);
-  const StudentLanguagesData: any = languagesData(fetchedData);
+export default async function Graphs() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMSPERPAGE = 6;
+  const indexOfLastItem = currentPage * ITEMSPERPAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const cookies = new Cookies();
+  const [courseApplications, setCourseApplications] = useState<
+    CourseApplicants[]
+  >([]);
 
-  const StudentProvincesBarData = await StudentProvincesDataFn(
-    studentsByProvinceData
-  );
+  useEffect(() => {
+    const asyncFetch = async () => {
+      try {
+        const fetchedData = await getCourseStudents("6669f0ff8759b480859c10a7");
 
-  const StudentDisabilityBarData = await StudentDisabilityDataFn(
-    StudentDisabiltyData
-  );
+        const applicantsData = await getEnrollments(
+          "6669f0ff8759b480859c10a7",
+          false
+        );
 
-  const StudentSocioEcoStatusBarData = await SocioEcoStatusDataFn(
-    SocioEcoStatusData
-  );
+        setCourseApplications(applicantsData.courseApplicants);
+        setData(fetchedData);
+        const courseTitle = fetchedData[0].title;
+        console.log("data is here", courseTitle);
+        cookies.set("courseTitle", courseTitle);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    asyncFetch();
+  }, []);
 
-  const StudentCitizenData = await CitizenshipChartData(StudentCitizenshipData);
-  const StudentLangData = await StudentLangDataFn(StudentLanguagesData);
+  if (loading) {
+    return <Loading />;
+  }
 
-  const ageRangeGenderDistribution =
-    fetchedData?.ageRangeGenderDistribution || [];
-  const OverallAssessmentBarData = transformData(ageRangeGenderDistribution);
-
+  const dataTiles: DataTiles[] = [
+    { name: "Students", icon: "person_outline", data: 112 },
+    { name: "Matriculated", icon: "book", data: 5 },
+    { name: "Graduated", icon: "school", data: 79 },
+    { name: "Employed", icon: "list", data: 4 },
+    { name: "Unemployed", icon: "help", data: 10 },
+  ];
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center mb-lg-8pt">
+      <div className="row mb-lg-8pt">
         {dataTiles.map((data: DataTiles) => (
-          <div key={data.name} style={{width: "250px"}}>
+          <div key={data.name} className="col-lg-3">
             <div className="card">
               <div
                 data-toggle="tab"
@@ -118,13 +133,12 @@ export default async function Graphs({
       </div>
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
+          <ChartLayout
             title="Student Provinces"
-            barDescriptions={StudentProvincesDescription}
-            options={StudentProvincesOptions}
-            data={StudentProvincesBarData}
-            type="bar"
-          />
+            barDescriptions={AvgTimeSpentBarDataDescription}
+          >
+            <AvgTimeSpent />
+          </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
@@ -141,56 +155,43 @@ export default async function Graphs({
             barDescriptions={StudentsProgressStatusDescription}
             type="pie"
           >
-            <StudentGenderRoles StudentRoles={genderRolesData} />
+            <StudentsProgressStatus />
           </ChartLayout>
         </div>
-
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
             title="Different Races"
             barDescriptions={StudentRacesDescription}
             type="pie"
           >
-            <StudentRaces studentRacesData={StudentRacesData} />
+            <StudentRaces />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
             title="Socio Economic Status"
-            barDescriptions={SocioEcoStatusDescription}
-            options={SocioEcoStatusOptions}
-            data={StudentSocioEcoStatusBarData}
+            barDescriptions={QuestionsAskedDescription}
+            options={QuestionsAskedOptions}
+            data={QuestionsAskedData}
             type="bar"
           />
         </div>
-
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
             title="Disabilities"
-            barDescriptions={StudentDisabilityDescription}
-            options={StudentDisabilityOptions}
-            data={StudentDisabilityBarData}
+            barDescriptions={CommentsChartBarDescription}
+            options={CommentsChartBarOptions}
+            data={CommentsChartBarData}
             type="bar"
           />
         </div>
-
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartWrapper
             title="Citizenship"
             barDescriptions={CitizenshipChartDescription}
             options={CitizenshipChartOptions}
-            data={StudentCitizenData}
-            type="bar"
-          />
-        </div>
-
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Student Languages"
-            barDescriptions={StudentLangDescription}
-            options={StudentLangOptions}
-            data={StudentLangData}
+            data={CitizenshipChartData}
             type="bar"
           />
         </div>
