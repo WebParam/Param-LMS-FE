@@ -25,6 +25,13 @@ import {
 } from "@/app/components/course-analytics/graphs/CommentsChart/data";
 
 import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/course-analytics/graphs/StudentsProgressStatus/data";
+import { barDescriptions as StudentsPlacedDesc } from "@/app/components/course-analytics/graphs/students-placed/data";
+import { StudentsPlaced } from "@/app/components/course-analytics/graphs/students-placed/StudentsPlaced";
+import { chartData } from '@/components/course-analytics/graphs/students-displayed/data';
+import DisplayedStudents from '@/components/course-analytics/graphs/students-displayed/DisplayedStudents';
+import { barDescriptions as StudentsDisplayedDesc } from "@/app/components/course-analytics/graphs/students-displayed/data";
+
+
 
 import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/AvgTimeSpent";
@@ -37,7 +44,7 @@ type DataTiles = {
 };
 
 import UnitStandardTable from "../(components)/unit-standard-table";
-import PageHeader from "../../PageHeader";
+
 
 export default async function Page() {
   const dataTiles: DataTiles[] = [
@@ -45,8 +52,8 @@ export default async function Page() {
     { name: "Modules", icon: "book", data: 5 },
     { name: "Quizzes", icon: "help", data: 10 },
     { name: "Assessments", icon: "list", data: 4 },
-    { name: "Documents Downloaded", icon: "cloud_download", data: 79 },
   ];
+  const now = 60;
 
   return (
     <>
@@ -125,10 +132,29 @@ export default async function Page() {
             type="bar"
           />
         </div>
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+           <ChartLayout
+             title="Students Placement"
+             barDescriptions={StudentsPlacedDesc}
+             type="pie"
+           >
+             <StudentsPlaced />
+           </ChartLayout>
+         </div>
+
+         <div className="col-lg-6 col-md-12 card-group-row__col">
+           <ChartLayout
+             title="Students Displayed"
+             barDescriptions={StudentsDisplayedDesc}
+             type="bar"
+           >
+           <DisplayedStudents data={chartData} />
+           </ChartLayout>
+         </div>
       </div>
 
-      <div className="mb-24pt mb-sm-0 mr-sm-24pt">
-        <PageHeader title="Web Development Unit Standards" />
+      <div className="page-separator">
+        <div className="page-separator__text">Knowledge Modules</div>
       </div>
 
       <div className="card p-relative o-hidden mb-0">
@@ -137,3 +163,4 @@ export default async function Page() {
     </>
   );
 }
+
