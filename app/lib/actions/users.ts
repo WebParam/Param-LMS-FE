@@ -11,7 +11,6 @@ export const getUsersByRole = async (role: string) => {
       console.log(resp);
       const data = resp.data;
   
-      // Assuming the structure is as provided
       const users = data[0]?.users || [];
       
       Diagnostic("SUCCESS ON GET, returning", users);

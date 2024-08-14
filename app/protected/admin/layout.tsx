@@ -28,6 +28,21 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           url: `/protected/admin/grouped-progress/1/assessments`,
           icon: "show_chart",
         },
+        {
+          name: "Workbook-Logbook Analytics",
+          url: `/protected/admin/grouped-progress/1/assessments`,
+          icon: "show_chart",
+        },
+        {
+          name: "Host Company Analytics",
+          url: `/protected/admin/grouped-progress/1/assessments`,
+          icon: "show_chart",
+        },
+        {
+          name: "Assessment-Assignments Analytics",
+          url: `/protected/admin/grouped-progress/1/assessments`,
+          icon: "show_chart",
+        },
       ],
     },
     {
