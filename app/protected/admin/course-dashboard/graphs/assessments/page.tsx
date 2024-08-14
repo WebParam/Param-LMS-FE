@@ -33,7 +33,7 @@ export default function page() {
 
        <div className="col-lg-6 col-md-12 card-group-row__col">
            <ChartWrapper
-             title="Workbook Signed"
+             title="Overall Class Average"
              barDescriptions={WorkDescription}
              options={WorkbookOptions}
              data={WorkbookData}
