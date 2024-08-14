@@ -61,7 +61,7 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
         <div className="page-separator__text">Placed Students</div>
       </div>
 
-      <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+      {/* <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
         <div className="mx-1">
           <button
             onClick={downloadAsXls}
@@ -78,7 +78,7 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
             )}
           </button>
         </div>
-      </div>
+      </div> */}
 
       <div className="card mb-0" >
         <TableFilter data={data} setFilteredData={setFilteredData} />

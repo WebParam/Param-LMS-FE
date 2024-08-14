@@ -33,24 +33,8 @@ import {
 
 import ChartLayout from "@/app/components/course-dashboard/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/course-dashboard/graphs/AvgTimeSpentBar/AvgTimeSpent";
-import { getModuleGraphs } from "@/app/lib/actions/module";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const data = await getModuleGraphs(params.id);
-
-  const OverallQuizBarData = await OverallQuizBarDataFn(
-    data.averageCompletedQuizzes
-  );
-  const QuestionsAskedData = await QuestionsAskedDataFn(
-    data.averageQuestionsAsked
-  );
-  const CommentsChartBarData = await CommentsChartBarDataFn(
-    data.averageNotesSubmitted
-  );
-  const PDFChartBarData = await OverallPDFBarDataFn(data.averagePdfDownloaded);
-  const CompletionRateChartBarData = await OverallCompletionRateBarDataFn(
-    data.averageCompletionRate
-  );
 
   return (
     <>
@@ -60,7 +44,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             title="Average Time Spent"
             barDescriptions={AvgTimeSpentBarDataDescription}
           >
-            <AvgTimeSpent averageTimeSpent={data.averageTimeSpent} />
+            <AvgTimeSpent />
           </ChartLayout>
         </div>
 
@@ -69,7 +53,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             title="Average Completed Quizzes"
             barDescriptions={OverallQuizBarDescription}
             options={OverallQuizBarOptions}
-            data={OverallQuizBarData}
+            data={OverallQuizBarDataFn}
             type="line"
           />
         </div>
@@ -78,7 +62,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             title="Average Questions Asked"
             barDescriptions={QuestionsAskedDescription}
             options={QuestionsAskedOptions}
-            data={QuestionsAskedData}
+            data={QuestionsAskedDataFn}
             type="bar"
           />
         </div>
@@ -87,7 +71,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             title="Average Notes Submitted"
             barDescriptions={CommentsChartBarDescription}
             options={CommentsChartBarOptions}
-            data={CommentsChartBarData}
+            data={CommentsChartBarDataFn}
             type="bar"
           />
         </div>
@@ -96,7 +80,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             title="Average PDFs downloaded"
             barDescriptions={OverallPDFBarDescription}
             options={OverallPDFBarOptions}
-            data={PDFChartBarData}
+            data={OverallPDFBarDataFn}
             type="line"
           />
         </div>
@@ -106,7 +90,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             title="Average Completed Rate (%)"
             barDescriptions={OverallCompletionRateBarDescription}
             options={OverallCompletionRateBarOptions}
-            data={CompletionRateChartBarData}
+            data={OverallCompletionRateBarDataFn}
             type="bar"
           />
         </div>

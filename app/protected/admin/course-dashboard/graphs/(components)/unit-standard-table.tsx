@@ -5,6 +5,7 @@ import Pagination from "@/components/Pagination";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { IUnitStandard } from "@/app/interfaces/unit-standard";
 import { getModules } from "@/app/lib/actions/module";
+import { mockData } from "./data";
 
 interface UnitStandardTableProps {
   path?: string;
@@ -15,7 +16,7 @@ function UnitStandardTable({ path }: UnitStandardTableProps) {
   const ITEMSPERPAGE = 3;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const [list, setList] = useState<IUnitStandard[]>([]);
+  const [list, setList] = useState<any[]>([]);
 
   const courseId = "66433416a454f78732f274ba";
 
@@ -36,14 +37,9 @@ function UnitStandardTable({ path }: UnitStandardTableProps) {
   const arrUrl = pathname.split("/");
   arrUrl.pop();
 
-  const fetchModules = async () => {
-    const modules = await getModules(courseId);
-    setList(modules);
-    console.log(modules);
-  };
 
   useEffect(() => {
-    fetchModules();
+    setList(mockData);
   }, [refreshId]);
 
   return (
@@ -52,8 +48,8 @@ function UnitStandardTable({ path }: UnitStandardTableProps) {
         currentItems.map((data) => {
           const url =
             path === "course"
-              ? arrUrl.join("/") + `/course/${data.id}?title=${data.title}` :    
-              arrUrl.join("/") + `${studentId}/${data.id}?title=${data.title}`
+              ? arrUrl.join("/") + `/course/${data.id}?title=${data.title}&btn-title=Course Analytics` :    
+              arrUrl.join("/") + `${studentId}/${data.id}?title=${data.title}&btn-title=Course Analytics`
 
 
           return (
@@ -61,7 +57,7 @@ function UnitStandardTable({ path }: UnitStandardTableProps) {
               key={data.id}
               name={data.title}
               description={data.description}
-              noOfDocuments={10}
+              noOfDocuments={data.noOfDocuments}
               url={url}
             />
           );

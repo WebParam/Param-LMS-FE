@@ -7,6 +7,7 @@ type Props = {
   url: string;
 };
 import { removeTags } from "@/app/lib/utils";
+import { usePathname } from "next/navigation";
 
 export default function Module({
   name,
@@ -14,6 +15,10 @@ export default function Module({
   noOfDocuments,
   url,
 }: Props) {
+
+  const pathname = usePathname();
+  const isCourseAnalytics = pathname.includes("/protected/admin/course-dashboard/graphs/course");
+
   return (
     <div className="card table-responsive my-24pt">
       <table className="table table-flush table--elevated">
@@ -24,12 +29,12 @@ export default function Module({
               <div className="text-right w-100">
                 <div className="row">
                   <div className="col-6">
-                    <div className="progress-bar ml-5 my-3">
+                    {!isCourseAnalytics &&  <div className="progress-bar ml-5 my-3">
                       <div
                         className="progress-bar-fill"
                         style={{ width: "62%" }}
                       ></div>
-                    </div>
+                    </div> }
                   </div>
                   <div className="col-6 pt-2">
                     <i className="material-icons">file_present</i>{noOfDocuments}
