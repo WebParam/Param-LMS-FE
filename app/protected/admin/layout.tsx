@@ -32,6 +32,18 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       roles: ["Admin", "SuperAdmin"],
     },
     {
+      name: "Assessments",
+      url: `/protected/admin/moderator/pages/assessment?title=${courseTitle}`,
+      icon: "group",
+      roles: ["Admin", "SuperAdmin"],
+    },
+    {
+      name: "Assignments",
+      url: `/protected/admin/moderator/pages/assignments?title=${courseTitle}`,
+      icon: "group",
+      roles: ["Admin", "SuperAdmin"],
+    },
+    {
       name: "Edit Course",
       url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
       icon: "edit",
