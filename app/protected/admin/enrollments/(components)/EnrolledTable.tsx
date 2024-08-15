@@ -28,7 +28,7 @@ function EnrolledTable({ data }: TablePaginationProps) {
 
   function downloadAsXls() {
     fetch(
-      `https://khumla-dev-user-read.azurewebsites.net/api/Student/ExportStudentInformation/${Id}`
+      `https://khumla-dev-user-read.azurewebsites.net/api/v1/Student/ExportStudentInformation/${Id}`
     )
       .then((response) => response.blob())
       .then((blob) => {
