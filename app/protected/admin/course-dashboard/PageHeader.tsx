@@ -1,6 +1,6 @@
 "use client"
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface PageHeaderProps {
   title : string
@@ -9,6 +9,9 @@ interface PageHeaderProps {
 export default function PageHeader({ title } : { title: string }) {
     const searchParams = useSearchParams();
   const studentName = searchParams.get("studentname");
+  const buttonTitle = searchParams.get("btn-title");
+const router = useRouter();
+    
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
@@ -25,8 +28,12 @@ export default function PageHeader({ title } : { title: string }) {
                 <li className="breadcrumb-item active">{title} </li>
               </ol>
             </div>
-            
           </div>
+            {
+          buttonTitle &&   <button onClick = {() => router.back()}className = "btn btn-success">
+        {buttonTitle}
+          </button>
+        }
         </div>
       </div>
     </>

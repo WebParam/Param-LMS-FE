@@ -1,10 +1,15 @@
+
 import { faker } from "@faker-js/faker";
 
-export const options = {
+
+export const options = {  
   responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
+  scales: {
+    x: {
+      stacked: true,
+    },
+    y: {
+      stacked: true,
     },
   },
 };
@@ -15,20 +20,19 @@ export const barDescriptions = [
   { description: "Quizzes completed overtime", color: "rgb(145 21 243)" },
 ];
 
-export const data = async ( quizAttempts: number[] ) => {
-  "use server";
-  return {
-    labels: labels,
-    datasets: [
-      {
-        label: "Average Quizzes Completed",
-        data: quizAttempts,
-        borderColor: "rgb(145 21 243)",
-        backgroundColor: "rgb(145 21 243)",
-        pointRadius: 2,
-        lineTension: 0.4,
-        borderWidth: 3,
-      },
-    ],
-  };
+
+
+
+export const data = {
+  labels,
+  datasets: [
+    {
+      label: "Average Quizzes Completed",
+      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+      backgroundColor: "rgb(33, 138, 253)",
+      barPercentage: 0.3,
+      borderRadius: 10,
+    },
+   
+  ],
 };

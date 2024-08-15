@@ -37,21 +37,6 @@ import { getStudentModuleGraphs } from "@/app/lib/actions/module";
 
 export default async function Page({ params }: { params: { studentId: string, moduleId:string } }) {
  
-  const data = await getStudentModuleGraphs(params.moduleId,params.studentId);
-
-  const OverallQuizBarData = await OverallQuizBarDataFn(
-    data.averageCompletedQuizzes
-  );
-  const QuestionsAskedData = await QuestionsAskedDataFn(
-    data.averageQuestionsAsked
-  );
-  const CommentsChartBarData = await CommentsChartBarDataFn(
-    data.averageNotesSubmitted
-  );
-  const PDFChartBarData = await OverallPDFBarDataFn(data.averagePdfDownloaded);
-  const CompletionRateChartBarData = await OverallCompletionRateBarDataFn(
-    data.averageCompletionRate
-  );
 
   return (
     <>
@@ -61,7 +46,7 @@ export default async function Page({ params }: { params: { studentId: string, mo
             title="Average Time Spent"
             barDescriptions={AvgTimeSpentBarDataDescription}
           >
-            <AvgTimeSpent averageTimeSpent={data.averageTimeSpent} />
+            <AvgTimeSpent />
           </ChartLayout>
         </div>
 
@@ -70,7 +55,7 @@ export default async function Page({ params }: { params: { studentId: string, mo
             title="Average Completed Quizzes"
             barDescriptions={OverallQuizBarDescription}
             options={OverallQuizBarOptions}
-            data={OverallQuizBarData}
+            data={OverallQuizBarDataFn}
             type="line"
           />
         </div>
@@ -79,7 +64,7 @@ export default async function Page({ params }: { params: { studentId: string, mo
             title="Average Questions Asked"
             barDescriptions={QuestionsAskedDescription}
             options={QuestionsAskedOptions}
-            data={QuestionsAskedData}
+            data={QuestionsAskedDataFn}
             type="bar"
           />
         </div>
@@ -88,7 +73,7 @@ export default async function Page({ params }: { params: { studentId: string, mo
             title="Average Notes Submitted"
             barDescriptions={CommentsChartBarDescription}
             options={CommentsChartBarOptions}
-            data={CommentsChartBarData}
+            data={CommentsChartBarDataFn}
             type="bar"
           />
         </div>
@@ -97,7 +82,7 @@ export default async function Page({ params }: { params: { studentId: string, mo
             title="Average PDFs downloaded"
             barDescriptions={OverallPDFBarDescription}
             options={OverallPDFBarOptions}
-            data={PDFChartBarData}
+            data={OverallPDFBarDataFn}
             type="line"
           />
         </div>
@@ -107,7 +92,7 @@ export default async function Page({ params }: { params: { studentId: string, mo
             title="Average Completed Rate (%)"
             barDescriptions={OverallCompletionRateBarDescription}
             options={OverallCompletionRateBarOptions}
-            data={CompletionRateChartBarData}
+            data={OverallCompletionRateBarDataFn}
             type="bar"
           />
         </div>

@@ -26,14 +26,14 @@ ChartJS.register(
 
 const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export function AvgTimeSpent({ averageTimeSpent }) {
+export function AvgTimeSpent() {
   const data = () => {
     return {
       labels: labels,
       datasets: [
         {
           label: "Average Hours Spent",
-          data: averageTimeSpent,
+          data: labels.map(() => faker.datatype.number({ min: 1, max: 10 })),
           fill: "start",
           pointRadius: 2,
           lineTension: 0.4,
@@ -72,5 +72,4 @@ export function AvgTimeSpent({ averageTimeSpent }) {
 
   return <Bar options={options} data={data()} />;
 }
-
 
