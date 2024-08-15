@@ -71,8 +71,9 @@ function Layout({ children }: { children: React.ReactNode }) {
     setLoading(true);
     const filename = "student_information";
     const fileExtension = "zip";
+    const isGet = true;
     const url = `${rUserUrl}/Documents/DownloadDocuments/${studentId}`;
-    downloadFile(url, filename, fileExtension, setLoading);
+    downloadFile(url, filename, fileExtension, setLoading, isGet);
   };
 
   return (

@@ -111,11 +111,12 @@ export const downloadFile = (
   url: string,
   filename: string,
   fileExtension: string,
-  setExportModal: (isBool: boolean) => void
+  setExportModal: (isBool: boolean) => void,
+  isGet = false
 ) => {
   setExportModal(true);
   fetch(url, {
-    method: fileExtension == "zip" ? "GET" : "POST",
+    method: isGet ? "GET" : "POST",
     headers: {
       Accept:
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
