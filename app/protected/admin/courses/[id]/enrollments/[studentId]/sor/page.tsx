@@ -20,14 +20,15 @@ const Body = () => {
     const fileExtension = "pdf";
     const userId = "66792cf48d68c25b74bba7aa";
     const url = `${rAssessmentUrl}/StudentAnswers/DownloadStudentSOR/${userId}`;
-    downloadFile(url, filename, fileExtension, setIsDownload);
+    const isGet = true;
+    downloadFile(url, filename, fileExtension, setIsDownload, isGet);
   };
 
   return (
     <>
       <div className="card m-3 d-flex flex-row p-2 justify-content-end">
         <div className="mx-1">
-          <button onClick={downloadPdf} className={`btn btn-dark`}>
+          <button onClick={downloadPdf} className={`btn btn-success`}>
             {isDownload ? (
               <div className="spinner-border text-white" role="status" />
             ) : (
