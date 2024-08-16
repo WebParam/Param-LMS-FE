@@ -50,10 +50,9 @@ import ChartLayout from "./ChartLayout";
 import { AvgTimeSpent } from "./AvgTimeSpentBar/AvgTimeSpent";
 import { StudentsProgressStatus } from "./StudentsProgressStatus/StudentsProgressStatus";
 import { StudentRaces } from "./StudentRaces/StudentRaces";
-import EnrolledTable from "./(components)/ApplicantsTable";
-import mockData from "./(components)/data";
-import ApplicantsTable from "./(components)/ApplicantsTable";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
+import { barDescriptions as StudentsPlacedDesc } from "./students-placed/data";
+import { StudentsPlaced } from "./students-placed/StudentsPlaced";
 
 type DataTiles = {
   name: string;
@@ -195,6 +194,16 @@ export default async function Graphs() {
             type="bar"
           />
         </div>
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+           <ChartLayout
+             title="Students Placement"
+             barDescriptions={StudentsPlacedDesc}
+             type="pie"
+           >
+             <StudentsPlaced />
+           </ChartLayout>
+         </div>
+
       </div>
     </>
   );
