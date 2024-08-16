@@ -13,12 +13,6 @@ import {
 } from "./QuestionsAsked/data";
 
 import {
-  options as LiveClassesOptions,
-  data as LiveClassesData,
-  barDescriptions as LiveClassesDescription,
-} from "@/app/components/course-dashboard/graphs/LiveClasses/data";
-
-import {
   options as OverallQuizBarOptions,
   data as OverallQuizBarData,
   barDescriptions as OverallQuizBarDescription,
@@ -130,15 +124,6 @@ export default async function Graphs() {
             barDescriptions={CommentsChartBarDescription}
             options={CommentsChartBarOptions}
             data={CommentsChartBarData}
-            type="bar"
-          />
-        </div>
-        <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Live Classes Attended"
-            barDescriptions={LiveClassesDescription}
-            options={LiveClassesOptions}
-            data={LiveClassesData}
             type="bar"
           />
         </div>
