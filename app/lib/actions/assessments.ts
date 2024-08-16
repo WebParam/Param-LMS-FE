@@ -196,6 +196,20 @@ export const submitForModeration = async (payload:FormData) => {
   }
 };
 
+export const downloadStudentAssessments = async (userId: string) => {
+  try {
+    const resp = await get(`${rAssessmentUrl}/StudentAnswers/DownloadStudentAsssessment/${userId}`);
+    Diagnostic("SUCCESS ON GET, returning", resp);
+    return resp;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+
+    console.error(err);
+  }
+};
+
+
+
 export const  submitModeratorFeedback = async (payload:FormData) => {
   const body ={
     id:"668bc5b9ab353d951018b589",

@@ -205,3 +205,26 @@ export const downloadFile = (
       setExportModal(false);
     });
 };
+
+
+export const downloadPdfFile = async (url: string, filename: string) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(downloadUrl);
+    Diagnostic("SUCCESS ON PDF DOWNLOAD, file downloaded", filename);
+  } catch (error) {
+    console.error("Error downloading PDF file:", error);
+    Diagnostic("ERROR ON PDF DOWNLOAD, returning", error);
+  }
+};

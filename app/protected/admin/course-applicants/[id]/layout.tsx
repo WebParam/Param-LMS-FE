@@ -95,3 +95,13 @@ function Layout({ children }: { children: React.ReactNode }) {
 };
 
 export default Layout;
+
+
+
+// const downloadZip = () => {
+//   setLoading(true);
+//   const filename = "student_information";
+//   const fileExtension = "zip";
+//   const url = `${rUserUrl}/Documents/DownloadDocuments/${studentId}`;
+//   downloadFile(url, filename, fileExtension, setLoading);
+// };
