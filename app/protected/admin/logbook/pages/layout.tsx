@@ -6,7 +6,6 @@ import { useState } from 'react';
 import Cookies from 'universal-cookie';
 
 function Layout({ children }: { children: React.ReactNode }) {
-  const [loading, setLoading] = useState(false);
   const cookies = new Cookies();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -15,8 +14,8 @@ function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const tabs = [
-    { name: "Signed Off", title: "Signed Off", url: `/protected/admin/course-applicants/${id}/profiles` },
-    { name: "Pending", title: "Pending", url: `/protected/admin/course-applicants/${id}/demographics` },
+    { name: "Complete", title: "Complete", url: `/protected/admin/logbook/pages/completed?title=Logbook` },
+    { name: "Outstanding", title: "Outstanding", url: `/protected/admin/logbook/pages/outstanding?title=Logbook` },
     
   ];
   
@@ -30,7 +29,7 @@ function Layout({ children }: { children: React.ReactNode }) {
           {tabs.map((tab) => (
             <a 
               key={tab.name}
-              onClick={()=> router.replace(`${tab.url}?id=${id}&name=${name}`)}
+              onClick={()=> router.replace(`${tab.url}`)}
               className={pathname.includes(tab.name) ? "active" : ""}
               data-toggle="tab"
               role="tab"

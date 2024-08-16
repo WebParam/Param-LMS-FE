@@ -75,7 +75,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     },
     {
       name: "Logbook",
-      url: `/protected/admin/logbook/pages?title=Logbook`,
+      url: `/protected/admin/logbook/pages/completed?title=Logbook`,
       icon: "dashboard",
     },
     {

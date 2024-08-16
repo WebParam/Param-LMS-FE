@@ -8,6 +8,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
+import Pagination from "@/components/Pagination";
 
 const Body = () => {
   const { studentId } = useParams<{ studentId: string }>();
@@ -15,17 +16,17 @@ const Body = () => {
   const refreshId = searchParams.get("refreshId");
 
   const [data, setData] = useState(list);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMSPERPAGE = 3;
+  const indexOfLastItem = currentPage * ITEMSPERPAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
+  const currentItems =
+  data && data.length > 0
+      ? data.slice(indexOfFirstItem, indexOfLastItem)
+      : [];
 
-  async function studentInformation() {
-    const response = await getStudentDocuments(studentId);
-    //setData(response);
 
-    console.log("response", response);
-  }
 
-  useEffect(() => {
-    studentInformation();
-  }, [refreshId]);
 
   return (
     <>
@@ -36,7 +37,20 @@ const Body = () => {
         data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
       >
         <Table list={data} />
+
+       
       </div>
+      {
+        
+        data.length > 0 &&
+        <Pagination
+        listLength={data?.length}
+        indexOfLastItem={indexOfLastItem}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        ITEMSPERPAGE={ITEMSPERPAGE}
+      />
+      }
     </>
   );
 };
