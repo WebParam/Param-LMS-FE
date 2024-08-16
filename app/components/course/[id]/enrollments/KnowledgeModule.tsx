@@ -61,7 +61,7 @@ const KnowledgeModules: React.FC = () => {
     <div className="card m-3 d-flex flex-column justify-content-center align-items-center gap-2 p-4">
       <div className="mb-3 d-flex justify-content-between align-items-center w-100">
         <p className="h5">Knowledge Modules</p>
-        <Button variant="primary btn-dark" onClick={handleShow}>
+        <Button variant="primary btn-success" onClick={handleShow}>
           Add Module
         </Button>
       </div>
@@ -153,7 +153,7 @@ const KnowledgeModules: React.FC = () => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary btn-dark" onClick={addModule}>
+          <Button variant="primary btn-success" onClick={addModule}>
             Submit
           </Button>
         </Modal.Footer>

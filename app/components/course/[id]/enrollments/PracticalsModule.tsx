@@ -62,7 +62,7 @@ const PracticalSkillsModules: React.FC = () => {
       <div className="mb-3 d-flex justify-content-between align-items-center w-100">
         <p className="h5">Practical Skills Modules</p>
         <Button
-          variant="primary btn-dark"
+          variant="primary btn-success"
           onClick={handleShow}
           className="mb-2"
         >
@@ -157,7 +157,7 @@ const PracticalSkillsModules: React.FC = () => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary btn-dark" onClick={addModule}>
+          <Button variant="primary btn-success" onClick={addModule}>
             Submit
           </Button>
         </Modal.Footer>

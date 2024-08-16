@@ -62,7 +62,7 @@ const WorkExperienceModules: React.FC = () => {
       <div className="mb-3 d-flex justify-content-between align-items-center w-100">
         <p className="h5">Work Experience Modules</p>
         <Button
-          variant="primary btn-dark"
+          variant="primary btn-success"
           onClick={handleShow}
           className="mb-2"
         >
@@ -158,7 +158,7 @@ const WorkExperienceModules: React.FC = () => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary btn-dark" onClick={addModule}>
+          <Button variant="primary btn-success" onClick={addModule}>
             Submit
           </Button>
         </Modal.Footer>
