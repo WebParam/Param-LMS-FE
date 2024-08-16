@@ -1,12 +1,14 @@
 "use client"
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 export default async function Assessments({ list }: any) {
 
 
 const baseUrl = "/protected/admin/"
   const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const courseTitle = searchParams.get("title") || "";
   const pageUrl = pathName === "/protected/admin/moderator/pages/assessment" ? `${baseUrl}/moderator/pages/assessment` :  pathName === "/protected/admin/moderator-feedback/pages/assessments" ? `${baseUrl}/moderator-feedback/pages/assessments` :  `${baseUrl}/assessments-assignments/pages/assessments`
   const homeTitle = pathName === "/protected/admin/moderator-feedback" ? "homeTitle=Assessment feedback" : "homeTitle=Mark Assessments"
   const buttonTitle = "button-title=Assessments";
@@ -21,7 +23,7 @@ const baseUrl = "/protected/admin/"
                   key={assessment.id}
                   imgUrl={assessment.avatar}
                   title={assessment.title}
-                  url={`${pageUrl}/${assessment.id}/grade-assessments?assessment-name=${assessment.title}&${homeTitle}&title=${assessment.title}&${buttonTitle}`}
+                  url={`${pageUrl}/${assessment.id}/grade-assessments?assessment-name=${assessment.title}&${homeTitle}&title=${courseTitle}&${buttonTitle}`}
                 />
               ))}
           </div>
@@ -66,7 +68,7 @@ const Assessment = ({
             style={{ height: "200px", border: "2px" }}
           >
             <p
-              className="bg-success d-flex align-items-center justify-content-center font-size-32pt font-weight-bold"
+              className="bg-success text-white d-flex align-items-center justify-content-center font-size-32pt font-weight-bold"
               style={{ borderRadius: "50%", width: "130px", height: "130px" }}
             >
               {title && titleShort(title)}

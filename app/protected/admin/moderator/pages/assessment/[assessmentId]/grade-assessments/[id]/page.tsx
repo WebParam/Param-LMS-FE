@@ -12,6 +12,7 @@ import { data } from "./data";
 import LongQuestionSkeleton from "@/components/skeleton/LongQuestionSkeleton";
 import { rAssessmentUrl } from "@/app/lib/actions/endpoints";
 import { downloadFile } from "@/app/lib/utils";
+import PageHeader from "./PageHeader";
 
 function Page({ params }: { params: { assessmentId: string; id: string } }) {
   const [studentAssessment, setStudentAssessment] =
@@ -63,70 +64,80 @@ function Page({ params }: { params: { assessmentId: string; id: string } }) {
 
   return (
     <>
-      <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
-        <div className="mx-1">
-          <button onClick={downloadPdf} className={`btn btn-success`}>
-            {isDownload ? (
-              <div className="spinner-border text-white" role="status" />
+      <div className="mdk-header-layout__content page-content ">
+        <div className="mdk-header-layout__content page-content ">
+          <PageHeader />
+
+          <div className="container page__container page__container page-section">
+            <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+              <div className="mx-1">
+                <button onClick={downloadPdf} className={`btn btn-success`}>
+                  {isDownload ? (
+                    <div className="spinner-border text-white" role="status" />
+                  ) : (
+                    "Download Assessment"
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div className="page-separator">
+              <div className="page-separator__text">Questions</div>
+            </div>
+
+            {loading ? (
+              <>
+                <LongQuestionSkeleton />
+                <LongQuestionSkeleton />
+              </>
             ) : (
-              "Download Assessment"
+              currentItems.map((data) =>
+                data.questionType === "Quiz" ? (
+                  <MultipleChoiceQuestion
+                    key={data.questionId}
+                    questionName={data.description}
+                    questionDescription={data.description}
+                    answers={data.options!}
+                    questionScore={data.score}
+                    studentMultipleChoiceAnswer={
+                      data.studentMultipleChoiceAnswer!
+                    }
+                  />
+                ) : (
+                  <LongQuestion
+                    key={data.questionId}
+                    questionName={data.description}
+                    questionDescription={data.description}
+                    questionAnswer={data.studentLongTextAnswer!}
+                    questionScore={data.score}
+                    rubric={data.rubrics}
+                  />
+                )
+              )
             )}
-          </button>
+            <div className="card mb-24pt mt-5">
+              <Pagination
+                listLength={studentAssessment?.answers.length || 0}
+                indexOfLastItem={indexOfLastItem}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                ITEMSPERPAGE={ITEMSPERPAGE}
+              />
+            </div>
+            <div className="card mb-0">
+              <Button variant="success" onClick={() => setModalShow(true)}>
+                Submit
+              </Button>
+
+              <MyVerticallyCenteredModal
+                show={modalShow}
+                onHide={() => {
+                  setModalShow(false);
+                }}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className="page-separator">
-        <div className="page-separator__text">Questions</div>
-      </div>
-      {loading ? (
-        <>
-          <LongQuestionSkeleton />
-          <LongQuestionSkeleton />
-        </>
-      ) : (
-        currentItems.map((data) =>
-          data.questionType === "Quiz" ? (
-            <MultipleChoiceQuestion
-              key={data.questionId}
-              questionName={data.description}
-              questionDescription={data.description}
-              answers={data.options!}
-              questionScore={data.score}
-              studentMultipleChoiceAnswer={data.studentMultipleChoiceAnswer!}
-            />
-          ) : (
-            <LongQuestion
-              key={data.questionId}
-              questionName={data.description}
-              questionDescription={data.description}
-              questionAnswer={data.studentLongTextAnswer!}
-              questionScore={data.score}
-              rubric={data.rubrics}
-            />
-          )
-        )
-      )}
-
-      <div className="card mb-24pt mt-5">
-        <Pagination
-          listLength={studentAssessment?.answers.length || 0}
-          indexOfLastItem={indexOfLastItem}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          ITEMSPERPAGE={ITEMSPERPAGE}
-        />
-      </div>
-      <div className="card mb-0">
-        <Button variant="success" onClick={() => setModalShow(true)}>
-          Submit
-        </Button>
-
-        <MyVerticallyCenteredModal
-          show={modalShow}
-          onHide={() => {
-            setModalShow(false);
-          }}
-        />
       </div>
     </>
   );
