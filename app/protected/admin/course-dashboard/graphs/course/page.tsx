@@ -30,6 +30,15 @@ import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/AvgTimeSpent";
 import { StudentsProgressStatus } from "@/app/components/course-analytics/graphs/StudentsProgressStatus/StudentsProgressStatus";
 
+import { barDescriptions as StudentsPlacedDesc } from "@/app/components/course-analytics/graphs/students-placed/data";
+import { StudentsPlaced } from "@/app/components/course-analytics/graphs/students-placed/StudentsPlaced";
+
+import {
+  options as LiveClassesOptions,
+  data as LiveClassesData,
+  barDescriptions as LiveClassesDescription,
+} from "@/app/components/course-dashboard/graphs/LiveClasses/data";
+
 type DataTiles = {
   name: string;
   icon: string;
@@ -49,8 +58,6 @@ export default async function Page() {
     { name: "Assessments", icon: "list", data: 4 },
     { name: "Documents Downloaded", icon: "cloud_download", data: 79 },
   ];
-
-  
 
   return (
     <>
@@ -129,6 +136,25 @@ export default async function Page() {
             type="bar"
           />
         </div>
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout
+            title="Students Placement"
+            barDescriptions={StudentsPlacedDesc}
+            type="pie"
+          >
+            <StudentsPlaced />
+          </ChartLayout>
+        </div>
+
+        <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
+          <ChartWrapper
+            title="Live Classes Attended"
+            barDescriptions={LiveClassesDescription}
+            options={LiveClassesOptions}
+            data={LiveClassesData}
+            type="bar"
+          />
+        </div>
       </div>
 
       <div className="mb-24pt mb-sm-0 mr-sm-24pt">
@@ -138,7 +164,7 @@ export default async function Page() {
       <div className="card p-relative o-hidden mb-0">
         <UnitStandardTable path="course" />
       </div>
-      
+
       <ApplicantsTable data={mockData} />
     </>
   );
