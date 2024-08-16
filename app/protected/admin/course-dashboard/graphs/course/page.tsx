@@ -38,6 +38,8 @@ type DataTiles = {
 
 import UnitStandardTable from "../(components)/unit-standard-table";
 import PageHeader from "../../PageHeader";
+import ApplicantsTable from "@/components/course-dashboard/graphs/Table/ApplicantsTable";
+import mockData from "@/components/course-dashboard/graphs/Table/data";
 
 export default async function Page() {
   const dataTiles: DataTiles[] = [
@@ -136,6 +138,7 @@ export default async function Page() {
       <div className="card p-relative o-hidden mb-0">
         <UnitStandardTable path="course" />
       </div>
+      {/* <ApplicantsTable {mockData} /> */}
     </>
   );
 }
