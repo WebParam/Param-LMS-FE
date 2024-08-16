@@ -32,6 +32,12 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       roles: ["Admin", "SuperAdmin"],
     },
     {
+      name: "Course Analytics",
+      url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+      icon: "bar_chart",
+      roles: ["Admin", "SuperAdmin"],
+    },
+    {
       name: "Assessments",
       url: `/protected/admin/moderator/pages/assessment?title=${courseTitle}`,
       icon: "school",

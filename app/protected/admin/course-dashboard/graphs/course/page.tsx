@@ -138,7 +138,8 @@ export default async function Page() {
       <div className="card p-relative o-hidden mb-0">
         <UnitStandardTable path="course" />
       </div>
-      {/* <ApplicantsTable {mockData} /> */}
+      
+      <ApplicantsTable data={mockData} />
     </>
   );
 }
