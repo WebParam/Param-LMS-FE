@@ -41,6 +41,21 @@ function Layout({ children }: { children: React.ReactNode }) {
       url: `${baseLayoutUrl}/internship-details?title=${courseTitle}&studentName=${studentName}`,
       path: `${baseLayoutUrl}/internship-details`,
     },
+    {
+      title: "Assessments",
+      url: `${baseLayoutUrl}/assessment?title=${courseTitle}&studentName=${studentName}`,
+      path: `${baseLayoutUrl}/assessments`,
+    },
+    {
+      title: "Assignments",
+      url: `${baseLayoutUrl}/assignment?title=${courseTitle}&studentName=${studentName}`,
+      path: `${baseLayoutUrl}/assignment`,
+    },
+    {
+      title: "SOR",
+      url: `${baseLayoutUrl}/sor?title=${courseTitle}&studentName=${studentName}`,
+      path: `${baseLayoutUrl}/sor`,
+    },
   ];
 
   async function studentInformation() {
