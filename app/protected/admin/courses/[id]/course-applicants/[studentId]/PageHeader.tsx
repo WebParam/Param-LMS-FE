@@ -1,7 +1,25 @@
 "use client";
 import Link from "next/link";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
+import Cookies from "universal-cookie";
+
+interface Tabs {
+  [id: string]: string;
+}
 
 export default function PageHeader() {
+  const { id } = useParams<{ id: string }>();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const courseTitle = searchParams.get("title");
+  const studentName = searchParams.get("studentName");
+  const tabs = {
+    profiles: "Student Profile",
+    document: "Student Documents",
+  } as Tabs;
+
+  const tabName = pathname.split("/").at(-1) || "";
+
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
@@ -11,22 +29,26 @@ export default function PageHeader() {
               style={{ width: "850px" }}
               className="mb-24pt mb-sm-0 mr-sm-24pt"
             >
-              <h2 className="mb-0">Course Applicants</h2>
+              <h2 className="mb-0">
+                {studentName} {" - " + tabs[tabName]}
+              </h2>
 
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">
                   <a href="#">Home</a>
                 </li>
 
-                <li className="breadcrumb-item active">Course Applicants</li>
+                <li className="breadcrumb-item active">
+                  {studentName} {" - " + tabs[tabName]}
+                </li>
               </ol>
             </div>
             <div>
               <Link
                 className="btn btn-success"
-                href={`/protected/home/courses`}
+                href={`/protected/admin/courses/${id}/course-applicants?title=${courseTitle}`}
               >
-                All Courses
+                Course Applicants
               </Link>
             </div>
           </div>
