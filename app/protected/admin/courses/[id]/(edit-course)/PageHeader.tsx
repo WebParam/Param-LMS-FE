@@ -1,6 +1,10 @@
 "use client";
+import KnowledgeModuleModal from "@/components/course/KnowledgeModuleModal";
+import PracticalModuleModal from "@/components/course/PracticalModuleModal";
+import WorkBookModal from "@/components/course/WorkBookModal";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 interface Tabs {
   [id: string]: string;
@@ -9,6 +13,9 @@ interface Tabs {
 export default function PageHeader() {
   const { id } = useParams<{ id: string }>();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const title = searchParams.get("title");
+
   const tabs = {
     "knowledge-modules": "Knowledge Modules",
     "practical-modules": "Practical Skills Modules",
@@ -17,9 +24,32 @@ export default function PageHeader() {
 
   const subPath = pathname.split("/").at(-1) || "/";
   const subPathName = subPath == id ? "Edit Course" : tabs[subPath];
+  const [openPracticalModuleModal, setOpenPracticalModuleModal] =
+    useState(false);
+  const [openKnowledgeModuleModal, setOpenKnowledgeModuleModal] =
+    useState(false);
+  const [openWorkBookModal, setOpenWorkBookModal] = useState(false);
 
   return (
     <>
+      <KnowledgeModuleModal
+        show={openKnowledgeModuleModal}
+        onHide={() => setOpenKnowledgeModuleModal(false)}
+        courseId={id}
+        title={title}
+      />
+      <PracticalModuleModal
+        show={openPracticalModuleModal}
+        onHide={() => setOpenPracticalModuleModal(false)}
+        courseId={id}
+        title={title}
+      />
+      <WorkBookModal
+        show={openWorkBookModal}
+        onHide={() => setOpenWorkBookModal(false)}
+        courseId={id}
+        title={title}
+      />
       <div className="border-bottom-2 py-32pt position-relative z-1">
         <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
           <div className="flex d-flex justify-content-between flex-column flex-sm-row align-items-center mb-24pt mb-md-0">
@@ -38,12 +68,38 @@ export default function PageHeader() {
               </ol>
             </div>
             <div>
-              <Link
-                className="btn btn-success"
-                href={`/protected/home/courses`}
-              >
-                All Courses
-              </Link>
+              {subPath == id && (
+                <Link
+                  className="btn btn-success"
+                  href={`/protected/home/courses`}
+                >
+                  All Courses
+                </Link>
+              )}
+              {subPath == "knowledge-modules" && (
+                <button
+                  className="btn btn-success"
+                  onClick={() => setOpenKnowledgeModuleModal(true)}
+                >
+                  Create Knowledge Module
+                </button>
+              )}
+              {subPath == "practical-modules" && (
+                <button
+                  className="btn btn-success"
+                  onClick={() => setOpenPracticalModuleModal(true)}
+                >
+                  Create Practical Module
+                </button>
+              )}
+              {subPath == "workbook" && (
+                <button
+                  className="btn btn-success"
+                  onClick={() => setOpenWorkBookModal(true)}
+                >
+                  Create Workbook
+                </button>
+              )}
             </div>
           </div>
         </div>
