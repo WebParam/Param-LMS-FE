@@ -43,7 +43,7 @@ export default function PageHeader() {
             <div>
               <Link
                 className="btn btn-success"
-                href={`/protected/admin/courses/${id}/practical-modules?title=${name}`}
+                href={`/protected/admin/courses/${id}/practical-modules?title=${courseTitle}`}
               >
                 Practical Modules
               </Link>
