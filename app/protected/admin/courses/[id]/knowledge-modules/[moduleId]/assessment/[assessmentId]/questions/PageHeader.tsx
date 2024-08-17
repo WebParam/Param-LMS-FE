@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 export default function PageHeader() {
   const { id, moduleId } = useParams<{ id: string; moduleId: string }>();
