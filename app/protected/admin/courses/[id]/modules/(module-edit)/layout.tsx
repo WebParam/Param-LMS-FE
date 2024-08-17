@@ -1,5 +1,6 @@
 "use client";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import PageHeader from "./PageHeader";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
@@ -17,41 +18,43 @@ function Layout({ children }: { children: React.ReactNode }) {
       name: "edit",
       title: "Edit Unit Standard",
       url: `${url}/edit?courseId=${courseId}&title=${title}`,
-      path: `${url}/edit`
+      path: `${url}/edit`,
     },
     {
       name: "documents",
       title: "Documents",
       url: `${url}/documents?courseId=${courseId}&title=${title}`,
-      path: `${url}/documents`
-
+      path: `${url}/documents`,
     },
   ];
 
   return (
     <>
-      <div className="card p-relative o-hidden mb-0">
-        <div
-          className="card-header card-header-tabs-basic nav px-0"
-          role="tablist"
-        >
-          {tabs.map((tab) => (
-            <a
-              key={tab.name}
-              className={tab.path === pathname ? "active" : ""}
-              onClick={() => router.replace(tab.url)}
-              data-toggle="tab"
-              role="tab"
-              aria-selected="true"
-            >
-              <span className="flex d-flex flex-column">
-                <strong className="card-title">{tab.title}</strong>
-              </span>
-            </a>
-          ))}
+      <PageHeader />
+      <div className="container page__container page__container page-section">
+        <div className="card p-relative o-hidden mb-0">
+          <div
+            className="card-header card-header-tabs-basic nav px-0"
+            role="tablist"
+          >
+            {tabs.map((tab) => (
+              <a
+                key={tab.name}
+                className={tab.path === pathname ? "active" : ""}
+                onClick={() => router.replace(tab.url)}
+                data-toggle="tab"
+                role="tab"
+                aria-selected="true"
+              >
+                <span className="flex d-flex flex-column">
+                  <strong className="card-title">{tab.title}</strong>
+                </span>
+              </a>
+            ))}
+          </div>
         </div>
+        {children}
       </div>
-      {children}
     </>
   );
 }
