@@ -1,4 +1,5 @@
 import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { useEffect, useRef, useState } from "react";
 import QuestionOptions from "./QuestionOptions";
 import QuestionRubric from "./QuestionRubric";
