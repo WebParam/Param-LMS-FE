@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
-import Cookies from "universal-cookie";
 
 interface Tabs {
   [id: string]: string;
