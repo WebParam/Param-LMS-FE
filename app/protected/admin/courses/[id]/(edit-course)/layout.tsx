@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
+import PageHeader from "./PageHeader";
 
 function Layout({
   children,
@@ -13,7 +14,6 @@ function Layout({
   const name = searchParams.get("title");
 
   const pathname = usePathname();
-  const router = useRouter();
 
   const baseUrl = `/protected/admin/courses/${params.id}`;
   const links = [
@@ -28,30 +28,37 @@ function Layout({
       path: `${baseUrl}/practical-modules`,
       url: `${baseUrl}/practical-modules?title=${name}`,
     },
-    { name: "Workbook", path: `${baseUrl}/workbook`, url: `${baseUrl}/workbook?title=${name}` }
+    {
+      name: "Workbook",
+      path: `${baseUrl}/workbook`,
+      url: `${baseUrl}/workbook?title=${name}`,
+    },
   ];
 
   return (
     <>
-      <div className="card p-relative o-hidden mb-0">
-        <div
-          className="card-header card-header-tabs-basic nav px-0"
-          role="tablist"
-        >
-          {links.map((l: any) => (
-            <Link
-              key={l.id}
-              className={pathname === l.path ? "active" : ""}
-              href={l.url}
-            >
-              <span className="flex d-flex flex-column">
-                <strong className="card-title">{l.name}</strong>
-              </span>
-            </Link>
-          ))}
+      <PageHeader />
+      <div className="container page__container page__container page-section">
+        <div className="card p-relative o-hidden mb-0">
+          <div
+            className="card-header card-header-tabs-basic nav px-0"
+            role="tablist"
+          >
+            {links.map((l: any) => (
+              <Link
+                key={l.id}
+                className={pathname === l.path ? "active" : ""}
+                href={l.url}
+              >
+                <span className="flex d-flex flex-column">
+                  <strong className="card-title">{l.name}</strong>
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
+        {children}
       </div>
-      {children}
     </>
   );
 }
