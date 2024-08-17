@@ -2,33 +2,12 @@
 import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 
-interface Tabs {
-  [id: string]: string;
-}
-
 export default function PageHeader() {
   const { id, moduleId } = useParams<{ id: string; moduleId: string }>();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title");
   const moduleTitle = searchParams.get("moduleTitle");
   const topicTitle = searchParams.get("topicTitle");
-
-  const tabs = {
-    "confirm-audio": "Confirm Audio",
-    "generate-quizzes": "Generate Quizzes",
-    "topic-elements": "Topic Elements",
-    "upload-link": "Upload Link",
-  } as Tabs;
-
-  const parentMap: any = {
-    "confirm-audio": "audios",
-    "upload-link": "videos",
-    "generate-quizzes": "quizzes",
-    "topic-elements": "knowledge-topics",
-  };
-
-  const tabName = pathname.split("/").at(-1) || "";
 
   return (
     <>
