@@ -33,11 +33,11 @@ export default function PageHeader({
               <h5 className="mt-2">Moderator : MS K Ngubani</h5>
             </div>
           </div>
-          {/* {!page && (
+          {!page && (
             <button onClick={() => router.back()} className="btn btn-success">
               {buttonTitle}
             </button>
-          )} */}
+          )}
         </div>
       </div>
     </>

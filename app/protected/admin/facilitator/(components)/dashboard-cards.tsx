@@ -37,7 +37,7 @@ const DashboardCards = () => {
       icon: "markAssessment",
       title: `Mark\n Assessments \n& \n Assignments`,
     },
-    { link: "#", icon: "logbook", title: "Logbook" },
+    { link:  `/protected/admin/logbook/pages/completed?title=Logbook&homeTitle=Facilitator Dashboard&button-title=Dashboard`, icon: "logbook", title: "Logbook" },
   ];
 
   return (
