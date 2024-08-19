@@ -38,6 +38,7 @@ export default function PageHeader({ title }: { title: string }) {
   let isEditDocument = false;
   let isEditKnowledgeTopic = false;
   let isWorkBook = false;
+  let isAllWorkBook = false;
   const { id } = useParams<{ id: string }>();
 
   const arrUrl = pathname.split("/");
@@ -129,6 +130,10 @@ export default function PageHeader({ title }: { title: string }) {
   }else if (pathname.indexOf(`/protected/admin/courses/${id}/workbook`) !== -1) {
     title = `Create Workbook`;
     isWorkBook = true;
+  }
+  else if (pathname.includes(`/protected/admin/courses/0/workbook/0`)) {
+    title = `Workbook`;
+    isAllWorkBook = true;
   }
   // Backward Compatibility for Unit Standard
   else if (pathname.indexOf("/modules") !== -1) {
@@ -463,6 +468,11 @@ export default function PageHeader({ title }: { title: string }) {
               {isEditKnowledgeTopic && (
                 <Link className="btn btn-success" href={backUrl}>
                   Knowledge Topic
+                </Link>
+              )}
+               {isAllWorkBook && (
+                <Link className="btn btn-success" href={backUrl}>
+                  Workbook
                 </Link>
               )}
             </div>
