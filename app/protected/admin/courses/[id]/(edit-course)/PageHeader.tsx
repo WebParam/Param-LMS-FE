@@ -20,6 +20,8 @@ export default function PageHeader() {
     "knowledge-modules": "Knowledge Modules",
     "practical-modules": "Practical Skills Modules",
     workbook: "Workbook",
+    logbook: "Logbook",
+
   } as Tabs;
 
   const subPath = pathname.split("/").at(-1) || "/";
