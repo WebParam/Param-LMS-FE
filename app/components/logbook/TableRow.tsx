@@ -1,48 +1,29 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import ViewLogbook from "./ViewLogbook";
 
 const TableRow = ({ document }: { document: any }) => {
-  const searchParams = useSearchParams();
-  const refreshId = searchParams.get("refreshId");
-  const [acceptDocumentModal, setAcceptDocumentModal] = useState(false);
-  const [rejectDocumentModal, setRejectDocumentModal] = useState(false);
-  const [documentShowModal, setDocumentShowModal] = useState(false);
-  const pathname = usePathname();
-  const router = useRouter();
-  const title = searchParams.get("title");
-  const studentName = searchParams.get("studentName");
-  const email = searchParams.get("email");
-  const isEnrolled = searchParams.get("isEnrolled");
-  const date = new Date();
+  const [viewLogbook, setViewLogbook] = useState(false);
+  const [url, setUrl] = useState("");
+  const [name, setName] = useState("");
 
   useEffect(() => {
-    setDocumentShowModal(false);
-  }, [refreshId]);
-
-  const acceptDoc = () => {
-    setAcceptDocumentModal(true);
-    router.replace(
-      `${pathname}?title=${title}&studentName=${studentName}&email=${email}&refreshId=${date}&isEnrolled=${isEnrolled}`,
-      {
-        scroll: false,
-      }
-    );
-  };
-
-  const rejectDoc = () => {
-    setRejectDocumentModal(true);
-    router.replace(
-      `${pathname}?title=${title}&studentName=${studentName}&email=${email}&refreshId=${date}&isEnrolled=${isEnrolled}`,
-      {
-        scroll: false,
-      }
-    );
-  };
+    if (document) {
+      setUrl(document.url);
+      setName(document.name);
+    }
+  }, [document]);
 
   return (
     <>
 
+<ViewLogbook
+  showDocumentModal = {viewLogbook}
+  setShowDocumentModal={setViewLogbook}
+  pdfWorkerUrl={url}
+  documentToView={name}
+/>
       <tr className="selected">
         <td style={{ width: "250px" }} className="py-0">
           <div className="d-flex align-items-center justify-content-center">
@@ -73,7 +54,7 @@ const TableRow = ({ document }: { document: any }) => {
 
         <td style={{ width: "700px" }} className="py-0">
           <div className="d-flex justify-content-center">
-            <div onClick={() => setDocumentShowModal(true)}>
+            <div onClick={() => setViewLogbook(true)}>
               <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
                 visibility
               </i>

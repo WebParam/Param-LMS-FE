@@ -1,4 +1,4 @@
-const data = [
+export const data = [
     {
       id: 1,
       description: "<p>What is the capital of France?</p>",
