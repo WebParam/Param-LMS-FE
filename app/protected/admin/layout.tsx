@@ -56,6 +56,12 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       roles: ["Admin", "SuperAdmin"],
     },
     {
+      name: "Logbook",
+      url: `/protected/admin/logbook/pages/completed?title=${courseTitle}`,
+      icon: "school",
+      roles: ["Admin", "SuperAdmin"],
+    },
+    {
       name: "Edit Course",
       url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
       icon: "edit",
