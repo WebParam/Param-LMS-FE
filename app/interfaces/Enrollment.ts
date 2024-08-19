@@ -7,3 +7,12 @@ export interface IEnrollment{
     modifyingUser:string;
     courses:string[];
 }
+
+export interface IUpdateEnrollment {
+    userId: string;
+    status: number;
+    fullName: string;
+    email: string;
+    courseTitle: string;
+    rejectionReason?: string;
+  }

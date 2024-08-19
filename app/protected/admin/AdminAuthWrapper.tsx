@@ -9,18 +9,20 @@ const withAuth = <P extends object>(
     const router = useRouter();
     const cookies = new Cookies();
     const loggedInUser = cookies.get("param-lms-user");
-    const isAuthorised = () => loggedInUser && loggedInUser.role == "Admin";
+    const isAuthorised = () =>
+      loggedInUser &&
+      (loggedInUser.role == "Admin" || loggedInUser.role == "SuperAdmin");
 
     useEffect(() => {
-      const checkAuth = async () => {
-        if (!loggedInUser) {
-          router.replace("/auth/login");
-        } else if (!isAuthorised()) {
-          router.replace("/protected/student/course/all-courses");
-        }
-      };
+      // const checkAuth = async () => {
+      //   if (!loggedInUser) {
+      //     router.replace("/auth/login");
+      //   } else if (!isAuthorised()) {
+      //     router.replace("/protected/student/course/all-courses");
+      //   }
+      // };
 
-      checkAuth();
+      // checkAuth();
     }, [loggedInUser]);
 
     return (

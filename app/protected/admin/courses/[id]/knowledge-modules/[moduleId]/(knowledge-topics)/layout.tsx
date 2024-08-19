@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useSearchParams, usePathname } from "next/navigation";
+import PageHeader from "./PageHeader";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
@@ -42,25 +43,34 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <div className="card p-relative o-hidden mb-0">
-        <div
-          className="card-header card-header-tabs-basic nav px-0"
-          role="tablist"
-        >
-          {tabs.map((tab) => (
-            <Link
-              key={tab.name}
-              className={tab.path === pathname ? "active" : ""}
-              href={tab.url}
-            >
-              <span className="flex d-flex flex-column">
-                <strong className="card-title">{tab.title}</strong>
-              </span>
-            </Link>
-          ))}
+      <PageHeader />
+      <div className="container page__container page__container page-section">
+        <div className="card p-relative o-hidden mb-0">
+          <div
+            className="card-header card-header-tabs-basic nav px-0"
+            role="tablist"
+          >
+            {tabs.map((tab) => (
+              <Link
+                key={tab.name}
+                className={pathname == tab.path ? "bg-success" : ""}
+                href={tab.url}
+              >
+                <span className="flex d-flex flex-column">
+                  <strong
+                    className={`card-title ${
+                      pathname == tab.path ? "text-white" : ""
+                    }`}
+                  >
+                    {tab.title}
+                  </strong>
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
+        {children}
       </div>
-      {children}
     </>
   );
 }

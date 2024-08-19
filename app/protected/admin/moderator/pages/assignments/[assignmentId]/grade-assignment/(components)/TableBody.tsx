@@ -16,6 +16,7 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   const [showDocumentModal, setShowDocumentModal] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const title = searchParams.get("title")!;
   const assessmentName = searchParams.get("assessment-name")!;
 
   const align = {
@@ -50,7 +51,7 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
         </Modal.Body>
       </Modal>
       <tbody className="list" id="staff">
-        {list.length > 0 ?
+        {list.length > 0 ? (
           list.map((data: ICourseAssessment) => (
             <tr key={data.assessmentId} className="selected">
               <td
@@ -95,36 +96,34 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
                 </i>
 
                 <Link
-                  href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&title=${data.name}&homeTitle=${assessmentName}`}
+                  href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&title=${title}&studentName=${data.name}&homeTitle=${assessmentName}`}
                 >
-                  <i
-                    className="material-icons icon-holder--outline-success rounded-lg mr-8pt"
-                  >
+                  <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
                     assignment_turned_in
                   </i>
                 </Link>
               </td>
             </tr>
-          )):    <>
-          <tr className="selected">
-         <td colSpan={10}>
-           <SkeletonLoader width="100%" height="2em" />
-         </td>
-         
-       </tr>
-       <tr className="selected">
-         <td colSpan={10}>
-           <SkeletonLoader width="100%" height="2em" />
-         </td>
-         
-       </tr> <tr className="selected">
-         <td colSpan={10}>
-           <SkeletonLoader width="100%" height="2em" />
-         </td>
-         
-       </tr>
-       </>
-       }
+          ))
+        ) : (
+          <>
+            <tr className="selected">
+              <td colSpan={10}>
+                <SkeletonLoader width="100%" height="2em" />
+              </td>
+            </tr>
+            <tr className="selected">
+              <td colSpan={10}>
+                <SkeletonLoader width="100%" height="2em" />
+              </td>
+            </tr>{" "}
+            <tr className="selected">
+              <td colSpan={10}>
+                <SkeletonLoader width="100%" height="2em" />
+              </td>
+            </tr>
+          </>
+        )}
       </tbody>
     </>
   );

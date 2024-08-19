@@ -1,88 +1,78 @@
 "use client";
 import Drawer from "@/app/topbar-components/Drawer";
-import HeadNav from "@/app/topbar-components/HeadNav";
+import HeadNav from "@/app/topbar-components/HeadNavDrawer";
 import { useState } from "react";
 import withAuth from "./AdminAuthWrapper";
+import { useParams, useSearchParams } from "next/navigation";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const params = useParams();
+  const courseId = params.id;
+  const courseTitle = searchParams.get("title") || "";
+
   const sideTabs = [
     {
-      name: "Analytics",
-      url: "#",
-      icon: "show_chart",
-
-      children: [
-        {
-          name: "Course Analytics",
-          url: "/protected/admin/course-dashboard/graphs/course",
-          icon: "list",
-        },
-        {
-          name: "Student Analytics",
-          url: "/protected/admin/student-analytics",
-          icon: "person",
-        },
-        {
-          name: "Analytic Averages",
-          url: `/protected/admin/grouped-progress/1/assessments`,
-          icon: "show_chart",
-        },
-      ],
+      name: "Back To Courses",
+      url: `/protected/home/courses`,
+      icon: "home",
+      roles: ["Admin", "SuperAdmin"],
     },
     {
       name: "Course",
-      url: "#",
-      icon: "list",
+      url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
+      icon: "person",
+      roles: ["Admin", "SuperAdmin"],
       children: [
         {
           name: "Course Applicants",
-          url: `/protected/admin/course-applicants`,
+          url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}`,
           icon: "person",
+          roles: ["Admin", "SuperAdmin"],
         },
+
         {
-          name: "Enrollments",
-          url: `/protected/admin/enrollments`,
-          icon: "assignment_turned_in",
-        },
-        {
-          name: "Manage Courses",
-          url: `/protected/admin/courses`,
-          icon: "folder_open",
-        },
-        {
-          name: "Create Course",
-          url: `/protected/admin/courses/create`,
-          icon: "add_box",
+          name: "Enrolled Students",
+          url: `/protected/admin/courses/${courseId}/enrollments?title=${courseTitle}`,
+          icon: "group",
+          roles: ["Admin", "SuperAdmin"],
         },
         {
           name: "Edit Course",
-          url: `#/protected/admin/courses`,
+          url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
           icon: "edit",
+          roles: ["SuperAdmin"],
         },
+        {
+          name: "Create Course",
+          url: `/protected/home/courses/create`,
+          icon: "add_box",
+          roles: ["SuperAdmin"],
+        },
+
       ],
     },
+
     {
+      name: "Course Analytics",
+      url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+      icon: "bar_chart",
+      roles: ["Admin", "SuperAdmin"],
+    },
+   
+    {
+      name: "Schedule Classes",
+      url: `/protected/admin/scheduleclass?title=${courseTitle}`,
+      icon: "meeting_room",
+      roles: ["Admin", "SuperAdmin"],
+    },
+
+     {
       name: "Facilitator",
-      url: `/protected/admin/facilitator?title=Facilitator Dashboard&homeTitle=HOME`,
-      icon: "dashboard",
-    },
-    {
-      name: "Moderator",
-      url: "#",
-      icon: "supervisor_account",
-      children: [
-        {
-          name: "Assessments",
-          url: `/protected/admin/moderator/pages/assessment?title=Mark Assessments&homeTitle=HOME&page=grouped`,
-          icon: "assignment_ind",
-        },
-        {
-          name: "Assignments",
-          url: `/protected/admin/moderator/pages/assignments?title=Mark Assignments&homeTitle=HOME&page=grouped`,
-          icon: "assignment_ind",
-        },
-      ],
+      url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
+      icon: "person",
+      roles: ["Admin", "SuperAdmin"],
     },
   ];
 

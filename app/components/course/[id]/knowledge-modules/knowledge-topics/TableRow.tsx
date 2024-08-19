@@ -3,9 +3,7 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import EditKnowledgeTopicModal from "./EditKnowledgeTopicModal";
 import DeleteKnowledgeTopicModal from "./DeleteKnowledgeTopicModal";
-import {
-  getKnowledgeTopic,
-} from "@/app/lib/actions/knowledge-topic";
+import { getKnowledgeTopic } from "@/app/lib/actions/knowledge-topic";
 import { getCourse } from "@/app/lib/actions/course";
 import { getKnowledgeModule } from "@/app/lib/actions/knowledge-module";
 import { getKnowledgeElements } from "@/app/lib/actions/topic-elements";
@@ -82,102 +80,6 @@ const TableRow = ({ document }: { document: any }) => {
       console.error(err);
     }
   };
-
-  /* const generateVideoScriptWithProgress = async (e: any) => {
-    e.preventDefault();
-    const [course, module, topic, topicElements] = await Promise.all([
-      getCourse(courseId),
-      getKnowledgeModule(moduleId),
-      getKnowledgeTopic(document.id),
-      getKnowledgeElements(document.id),
-    ]);
-
-    for (const element of topicElements) {
-      const body = {
-        moduleTitle: module.title,
-        moduleDescription: module.description,
-        topicTitle: topic.name,
-        topicId: topic.id,
-        topicDescription: topic.description,
-        lengthOfVideoScript: topic.lengthOfVideoScript,
-        tone: course.videoScriptTone,
-        elementTitle: element.title,
-        elementCode: element.elementCode,
-        elementId: element.id,
-      };
-
-      await post(
-        `${wGenerateVideoScriptUrl}/topicElement/generateUpdateSingle`,
-        body
-      ); 
-    }
-
-    const body = { ...topic, isGenerated: true };
-    await put(`${wCourseUrl}/KnowledgeTopics/UpdateKnowledgeTopic`, body);
-
-
-    const data = JSON.stringify({
-      documentId: document.id,
-      documentTitle: document.title,
-      courseId,
-      moduleId,
-      title,
-    });
-
-    setProgress(25);
-    fetch("/api/generate-video-script", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: data,
-    })
-      .then((response) => {
-        const reader = response.body?.getReader();
-        if (!reader) {
-          throw new Error("Response body is null");
-        }
-        // Get the size of the blob
-        let loaded = 0,
-          estimatedTotal = 0;
-
-        const push = async () => {
-          if (!reader) {
-            throw new Error("Reader is undefined");
-          }
-          const { done, value } = await reader.read();
-          if (done) {
-            console.log("Done");
-            return;
-          }
-
-          loaded += value.length;
-          estimatedTotal += value.length; // Estimate total size incrementally
-
-          const progress = Math.min(
-            Math.round((loaded / estimatedTotal) * 100),
-            100
-          );
-          setProgress(progress);
-          push();
-        };
-
-        push().catch((err) => {
-          console.error("Stream reading error:", err);
-          throw err;
-        });
-
-        setProgress(100);
-        setTimeout(() => {
-          setIsProgress(false);
-          setIsGenerated(true);
-        }, 5000);
-      })
-      .catch((error) => {
-        setIsTryAgain(true);
-        console.log("Error Generating Video Script");
-      });
-  }; */
 
   return (
     <>

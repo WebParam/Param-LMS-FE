@@ -4,19 +4,18 @@ import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export const data = {
-  labels: ["Male", "Female"],
-  datasets: [
-    {
-      label: "# of Students",
-      data: [12, 19],
-      backgroundColor: ["blue", "green"],
-      borderColor: ["blue", "green"],
-      borderWidth: 1,
-    },
-  ],
-};
-
-export function StudentsProgressStatus() {
+export function StudentsProgressStatus({studentCourseProgress}) {
+  const data = {
+    labels: ["Behind", "On Track"],
+    datasets: [
+      {
+        label: "# of Progress Status",
+        data: studentCourseProgress,
+        backgroundColor: ["red", "green"],
+        borderColor: ["red", "green"],
+        borderWidth: 1,
+      },
+    ],
+  };
   return <Pie data={data} />;
 }

@@ -45,7 +45,7 @@ const Pagination: NextPage<Props> = ({
             </a>
             <div className="dropdown-menu">
               {numbers.map((n) => (
-                <a
+                <a key={n}
                   onClick={() => setCurrentPage(n)}
                   className="dropdown-item active"
                 >

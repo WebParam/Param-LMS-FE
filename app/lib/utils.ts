@@ -88,7 +88,6 @@ export const removeTags = (str: string) => {
 export const formDataEntriesArray = (entries: any) => {
   const objMap: { [key: string]: { [key: string]: FormDataEntryValue } } = {};
 
-  // Iterate over formData entries
   for (const entry of entries) {
     const [key, value] = entry;
     const matches = key.match(/^options\[(.+)\]\[(\w+)\]$/);
@@ -104,66 +103,45 @@ export const formDataEntriesArray = (entries: any) => {
     }
   }
 
-  // Convert the object map to an array of objects
   const objArray: { [key: string]: FormDataEntryValue }[] =
     Object.values(objMap);
   return objArray;
 };
-
-export const exportToExcel = (
+export const downloadFile = (
   url: string,
   filename: string,
-  setExportModal: (isBool: boolean) => void
+  fileExtension: string,
+  setExportModal: (isBool: boolean) => void,
+  isGet = false
 ) => {
   setExportModal(true);
   fetch(url, {
-    method: "GET",
+    method: isGet ? "GET" : "POST",
     headers: {
-      Accept: "application/json",
+      Accept:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "Content-Type": "application/json",
     },
   })
-    .then((response) => response.blob())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.blob();
+    })
     .then((blob) => {
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = downloadUrl;
-      link.setAttribute("download", filename + ".xlsx");
+      link.setAttribute("download", `${filename}.${fileExtension}`);
       document.body.appendChild(link);
       link.click();
       link.remove();
+      window.URL.revokeObjectURL(downloadUrl);
       setExportModal(false);
     })
     .catch((error) => {
-      console.error("Error exporting knowledge topics:", error);
+      console.error("Error exporting file:", error);
+      setExportModal(false);
     });
 };
-
-// utils/xlsxWorker.js
-export function processXlsFile(file:any) {
-  return new Promise((resolve, reject) => {
-    const worker = new Worker('/xlsx.worker.js');
-
-    worker.onmessage = (e) => {
-      const { data } = e;
-      if (data.error) {
-        reject(data.error);
-      } else {
-        resolve(data.json);
-      }
-      worker.terminate();
-    };
-
-    worker.onerror = (e) => {
-      reject(e.message);
-      worker.terminate();
-    };
-
-    const reader = new FileReader();
-    reader.onload = (event:any) => {
-      const binaryString = event?.target.result;
-      worker.postMessage(binaryString);
-    };
-    reader.readAsBinaryString(file);
-  });
-}

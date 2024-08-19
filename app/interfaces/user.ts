@@ -29,6 +29,15 @@ export interface IUserRegisterModel{
  
 }
 
+
+export interface IAdminPasswordChangeReset {
+    userId: string;
+    oldPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }
+  
+
 export interface IUserRequestModel extends IUser{
 
 }

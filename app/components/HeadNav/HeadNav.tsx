@@ -15,7 +15,7 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
       path: "/",
     });
 
-    if (loggedInUser?.role == "Admin") router.replace("/auth/admin/login");
+    if (loggedInUser?.role == "Admin") router.replace("/");
     else router.replace("/");
   };
 
@@ -38,8 +38,8 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
 
         {/*     <!-- Navbar Brand --> */}
         <a className="navbar-brand mr-16pt d-lg-none">
-          Khumla
-          <span className="d-none d-lg-block">Khumla</span>
+          Thooto
+          <span className="d-none d-lg-block">Thooto</span>
         </a>
 
         <div className="flex"></div>
