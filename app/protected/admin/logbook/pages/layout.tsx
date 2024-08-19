@@ -14,8 +14,8 @@ function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const tabs = [
-    { name: "Complete", title: "Complete", url: `/protected/admin/logbook/pages/completed?title=Logbook` },
-    { name: "Outstanding", title: "Outstanding", url: `/protected/admin/logbook/pages/outstanding?title=Logbook` },
+    { name: "Complete", title: "Complete", url: `/protected/admin/logbook/pages/completed?title=Logbook&homeTitle=Facilitator Dashboard&button-title=Dashboard` },
+    { name: "Outstanding", title: "Outstanding", url: `/protected/admin/logbook/pages/outstanding?title=Logbook&homeTitle=Facilitator Dashboard&button-title=Dashboard` },
     
   ];
   

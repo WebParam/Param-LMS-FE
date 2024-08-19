@@ -73,11 +73,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       url: `/protected/admin/facilitator?title=Facilitator Dashboard&homeTitle=HOME`,
       icon: "dashboard",
     },
-    {
-      name: "Logbook",
-      url: `/protected/admin/logbook/pages/completed?title=Logbook`,
-      icon: "dashboard",
-    },
+
     {
       name: "Moderator",
       url: "#",
