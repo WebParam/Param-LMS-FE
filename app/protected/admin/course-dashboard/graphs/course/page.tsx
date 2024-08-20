@@ -18,6 +18,13 @@ import {
   barDescriptions as OverallQuizBarDescription,
 } from "@/app/components/course-analytics/graphs/OverallQuiz/data";
 
+
+import {
+  options as OverallWorkbookBarOptions,
+  data as OverallWorkbookBarData,
+  barDescriptions as OverallWorkbookBarDescription,
+} from "@/app/components/course-analytics/graphs/workbookTimeSpent/data";
+
 import {
   options as CommentsChartBarOptions,
   data as CommentsChartBarData,
@@ -32,6 +39,10 @@ import { StudentsProgressStatus } from "@/app/components/course-analytics/graphs
 
 import { barDescriptions as StudentsPlacedDesc } from "@/app/components/course-analytics/graphs/students-placed/data";
 import { StudentsPlaced } from "@/app/components/course-analytics/graphs/students-placed/StudentsPlaced";
+
+import { WorkbookCompletionRate } from "@/app/components/course-analytics/graphs/workbook-competionRate/workbookCompetionRate";
+import { barDescriptions as workbookCompetionRateDec } from "@/app/components/course-analytics/graphs/workbook-competionRate/data";
+
 
 import {
   options as LiveClassesOptions,
@@ -155,6 +166,27 @@ export default async function Page() {
             type="bar"
           />
         </div>
+
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout
+            title="Workbook Completion Rate"
+            barDescriptions={workbookCompetionRateDec}
+            type="pie"
+          >
+            <WorkbookCompletionRate />
+          </ChartLayout>
+        </div>
+
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartWrapper
+            title="Workbook Time Spent"
+            barDescriptions={OverallWorkbookBarDescription}
+            options={OverallWorkbookBarOptions}
+            data={OverallWorkbookBarData}
+            type="line"
+          />
+        </div>
+
       </div>
 
       <div className="mb-24pt mb-sm-0 mr-sm-24pt">

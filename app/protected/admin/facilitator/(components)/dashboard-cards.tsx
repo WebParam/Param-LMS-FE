@@ -15,7 +15,6 @@ type IconType =
 const DashboardCards = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const handleClick = () => {
     router.push(`${pathname}?title=${encodeURIComponent("KNOWLEDGE MODULES")}`);
