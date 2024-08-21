@@ -6,11 +6,8 @@ import {
 } from "@/app/interfaces/user";
 import { IResponseObject } from "../response";
 
-export const userWriteUrl =
-  "https://khumla-dev-user-write.azurewebsites.net/api";
-
-export const userReadUrl =
-  "https://khumla-dev-user-read.azurewebsites.net/api";
+export const userWriteUrl = process.env.NEXT_PUBLIC_USER_WRITE_URL;
+export const userReadUrl = process.env.NEXT_PUBLIC_USER_READ_URL;
 
 export const UserApi = {
   POST_Login: async (

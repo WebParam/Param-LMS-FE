@@ -11,35 +11,29 @@ import { IAssessment } from "@/app/interfaces/assessment";
 import { IDocument } from "@/app/interfaces/document";
 import { wUserUrl } from "../actions/endpoints";
 
-export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
-
-export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api";
-
 export const uploadImage = ""
 
-export const userWriteUrl = "https://khumla-development-user-write.azurewebsites.net/api/v1";
- 
-export const userReadUrl="https://khmla-development-user-read.azurewebsites.net/api/v1";
+export const courseWriteUrl = process.env.NEXT_PUBLIC_COURSE_WRITE_URL;
+export const courseReadUrl = process.env.NEXT_PUBLIC_COURSE_READ_URL;
 
-export const commentReadUrl="https://khumla-develop-comments-read.azurewebsites.net/api";
+export const userWriteUrl = process.env.NEXT_PUBLIC_USER_WRITE_URL;
+export const userReadUrl = process.env.NEXT_PUBLIC_USER_READ_URL;
 
-export const commentWriteUrl="https://khumla-develop-comments-write.azurewebsites.net/api";
+export const commentReadUrl = process.env.NEXT_PUBLIC_COMMENT_READ_URL;
+export const commentWriteUrl = process.env.NEXT_PUBLIC_COMMENT_WRITE_URL;
 
-export const quizReadUrl = "https://khumla-develop-quiz-read.azurewebsites.net/api";
+export const quizReadUrl = process.env.NEXT_PUBLIC_QUIZ_READ_URL;
+export const quizWriteUrl = process.env.NEXT_PUBLIC_QUIZ_WRITE_URL;
 
-export const assessmentWriteUrl = "https://khumla-develop-assessment-write.azurewebsites.net/api";
+export const assessmentWriteUrl = process.env.NEXT_PUBLIC_ASSESSMENT_WRITE_URL;
+export const assessmentReadUrl = process.env.NEXT_PUBLIC_ASSESSMENT_READ_URL;
 
-export const assessmentReadUrl = "https://khumla-develop-assessment-read.azurewebsites.net/api";
+export const documentWrite = process.env.NEXT_PUBLIC_DOCUMENT_WRITE_URL;
+export const documentRead = process.env.NEXT_PUBLIC_DOCUMENT_READ_URL;
 
-export const quizWriteUrl ="https://khumla-develop-assessment-write.azurewebsites.net/api";
+export const marksWrite = process.env.NEXT_PUBLIC_MARKS_WRITE_URL;
 
-export const documentWrite = "https://khumla-dev-document-write.azurewebsites.net/api"
 
-export const documentRead = "https://khumla-dev-document-read.azurewebsites.net/api"
-
-export const marksWrite = "https://khumla-dev-marks-write.azurewebsites.net/api"
-
-export const assessmentWrite = "https://khumla-develop-assessment-write.azurewebsites.net/api"
 
 
 
@@ -162,20 +156,20 @@ DELETE_CourseById: async (
   POST_Login: async (
     payload: IUserLoginModel
   ): Promise<IResponseObject<IUserRegisterModel>> => {
-    const response = await POST(`${wUserUrl}/Users/Login`, payload);
+    const response = await POST(`${userWriteUrl}/Users/Login`, payload);
     return response;
   },
 
   POST_Register: async (
     payload: IUserRegisterModel
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${wUserUrl}/Users/AddUser`, payload);
+    const response = await POST(`${userWriteUrl}/Users/AddUser`, payload);
     return response;
   },
   POST_RegisterAdmin: async (
     payload: IUserRegisterModel
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${wUserUrl}/Users/AddAdmin`, payload);
+    const response = await POST(`${userWriteUrl}/Users/AddAdmin`, payload);
     return response;
   },
 
@@ -197,14 +191,14 @@ DELETE_CourseById: async (
 
   POST_AddAssessments:async (payload:IAssessment)
   :Promise<IResponseObject<IAssessment>>=>{
-    const response = await POST(`${assessmentWrite}/Assessments/AddAssessment`,payload);
+    const response = await POST(`${assessmentWriteUrl}/Assessments/AddAssessment`,payload);
     return response;
   },
 
   PUT_UpdateAssessment: async (payload: IAssessment): Promise<any> => {
     try {
     
-      const response = await PUT(`${assessmentWrite}/Assessments/UpdateAssessment`, payload);
+      const response = await PUT(`${assessmentWriteUrl}/Assessments/UpdateAssessment`, payload);
       
       return response;
     } catch (error) {

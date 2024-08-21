@@ -28,6 +28,7 @@
     "cache": "^3.0.0",
     "chart.js": "^4.4.2",
     "clean": "^4.0.2",
+    "dotenv": "^16.4.5",
     "eslint": "^8.56.0",
     "eslint-config-next": "13.4.10",
     "faker": "^5.5.3",

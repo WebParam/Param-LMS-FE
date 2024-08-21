@@ -27,7 +27,7 @@ function ViewLogbook({ showDocumentModal, setShowDocumentModal, pdfWorkerUrl, do
         <Modal.Body>
         <Worker workerUrl={pdfWorkerUrl}>
             <Viewer
-              fileUrl={`https://khumla-development-user-read.azurewebsites.net/api/Documents/PreviewDocument/${documentToView}`}
+              fileUrl={`${process.env.NEXT_PUBLIC_USER_READ_URL}/Documents/PreviewDocument/${documentToView}`}
               plugins={[defaultLayoutPluginInstance]}
             />
           </Worker>

@@ -3,11 +3,8 @@ import { GET, POST, PUT, DELETE } from "../client";
 import { IResponseObject } from "../response";
 import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 
-export const assessmentWriteUrl =
-  "https://khumla-development-assessment-write.azurewebsites.net/api";
-
-export const assessmentReadUrl =
-  "https://khumla-development-assessment-read.azurewebsites.net/api";
+export const assessmentWriteUrl = process.env.NEXT_PUBLIC_ASSESSMENT_WRITE_URL;
+export const assessmentReadUrl = process.env.NEXT_PUBLIC_ASSESSMENT_READ_URL;
 
 export const AssessmentApi = {
   POST_AddAssessments: async (

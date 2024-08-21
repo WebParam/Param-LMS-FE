@@ -2,11 +2,8 @@ import { IDocument } from "@/app/interfaces/document";
 import { GET, POST, PUT, DELETE } from "../client";
 import { IResponseObject } from "../response";
 
-export const documentWrite =
-  "https://khumla-development-document-write.azurewebsites.net/api";
-
-export const documentRead =
-  "https://khumla-development-document-read.azurewebsites.net/api";
+export const documentWrite = process.env.NEXT_PUBLIC_DOCUMENT_WRITE_URL;
+export const documentRead = process.env.NEXT_PUBLIC_DOCUMENT_READ_URL;
 
 export const DocumentsApi = {
   POST_Document: async (

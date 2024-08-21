@@ -29,7 +29,7 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
 
   function downloadAsXls() {
     fetch(
-      `https://khumla-dev-user-read.azurewebsites.net/api/Student/ExportStudentInformation/${Id}`
+    `${process.env.NEXT_PUBLIC_USER_READ_URL}/Student/ExportStudentInformation/${Id}`
     )
       .then((response) => response.blob())
       .then((blob) => {

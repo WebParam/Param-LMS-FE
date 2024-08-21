@@ -2,11 +2,8 @@ import { IMarks, IQuiz } from "@/app/interfaces/quiz";
 import { GET, POST, PUT } from "../client";
 import { IResponseObject } from "../response";
 
-export const quizReadUrl =
-  "https://khumla-development-quiz-read.azurewebsites.net/api";
-
-export const quizWriteUrl =
-  "https://khumla-development-quiz-write.azurewebsites.net/api";
+export const quizReadUrl = process.env.NEXT_PUBLIC_QUIZ_READ_URL;
+export const quizWriteUrl = process.env.NEXT_PUBLIC_QUIZ_WRITE_URL;
 
 export const QuizApi = {
   POST_AddQuiz: async (payload: IQuiz): Promise<IResponseObject<IQuiz>> => {

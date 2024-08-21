@@ -44,7 +44,7 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
         <Modal.Body>
           <Worker workerUrl={pdfWorkerUrl}>
             <Viewer
-              fileUrl="https://khumla-development-user-read.azurewebsites.net/api/Documents/PreviewDocument/66754b17c66474c142f6b9f6"
+              fileUrl={`${process.env.NEXT_PUBLIC_USER_READ_URL}/Documents/PreviewDocument/66754b17c66474c142f6b9f6`}
               plugins={[defaultLayoutPluginInstance]}
             />
           </Worker>

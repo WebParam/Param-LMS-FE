@@ -2,11 +2,8 @@ import { ICourse, IDeleteSection,IDeleteVideo,IStudentCourses } from "@/app/inte
 import { GET, POST, PUT ,DELETE} from "../client";
 import { IResponseObject } from "../response";
 
-
-
-export const courseWriteUrl = "https://khumla-development-course-write.azurewebsites.net/api";
-
-export const courseReadUrl="https://khumla-development-course-read.azurewebsites.net/api";
+export const courseWriteUrl = process.env.NEXT_PUBLIC_COURSE_WRITE_URL;
+export const courseReadUrl = process.env.NEXT_PUBLIC_COURSE_READ_URL;
 
 export const CourseApi = {
     GET_Courses: async (): Promise<any> => {

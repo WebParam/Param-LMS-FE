@@ -3,11 +3,8 @@ import { IResponseObject } from "../response";
 import IComment, { ICommentReply } from "@/app/interfaces/comment";
 import { IRating } from "@/app/interfaces/Rating";
 
-export const commentReadUrl =
-  "https://khumla-development-comments-read.azurewebsites.net/api";
-
-export const commentWriteUrl =
-  "https://khumla-development-comments-write.azurewebsites.net/api";
+export const commentReadUrl = process.env.NEXT_PUBLIC_COMMENT_READ_URL;
+export const commentWriteUrl = process.env.NEXT_PUBLIC_COMMENT_WRITE_URL;
 
 export const CommentsApi = {
   GET_CommentsByReference: async (

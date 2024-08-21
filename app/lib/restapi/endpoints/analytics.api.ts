@@ -2,12 +2,9 @@ import { IActivity } from "@/app/interfaces/analytics";
 import { GET, POST, PUT, DELETE } from "../client";
 import { IResponseObject } from "../response";
 
-export const analyticsRead =
-  "https://khumla-development-api-aggregator.azurewebsites.net/api";
-export const activityWrite =
-  "https://khumla-development-activity-write.azurewebsites.net/api";
-export const courseWriteUrl =
-  "https://khumla-development-course-write.azurewebsites.net/api";
+export const analyticsRead = process.env.NEXT_PUBLIC_ANALYTICS_READ_URL;
+export const activityWrite = process.env.NEXT_PUBLIC_ACTIVITY_WRITE_URL;
+export const courseWriteUrl = process.env.NEXT_PUBLIC_COURSE_WRITE_URL;
 
 export const AnalyticsApi = {
   POST_Activity: async (
