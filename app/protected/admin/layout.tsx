@@ -60,6 +60,12 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       icon: "bar_chart",
       roles: ["Admin", "SuperAdmin"],
     },
+    {
+      name: "Assessment Analytics",
+      url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
+      icon: "bar_chart",
+      roles: ["Admin", "SuperAdmin"],
+    },
    
     {
       name: "Schedule Classes",
