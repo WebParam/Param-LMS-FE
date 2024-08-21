@@ -77,7 +77,7 @@ export default function Login() {
 
           console.log(user.data);
           console.log("Role", user?.data?.role);
-          router.push("/protected/student/course/all-courses");
+          router.push("/protected/home/courses");
         } else {
           toast.update(_id, {
             render: "Invalid login credentials",
