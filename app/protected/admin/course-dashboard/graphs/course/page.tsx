@@ -1,3 +1,4 @@
+"use client"
 import ChartWrapper from "@/app/components/course-analytics/graphs/ChartWrapper";
 import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/data";
 
@@ -60,7 +61,7 @@ import UnitStandardTable from "../(components)/unit-standard-table";
 import PageHeader from "../../PageHeader";
 import ApplicantsTable from "@/components/course-dashboard/graphs/Table/ApplicantsTable";
 import mockData from "@/components/course-dashboard/graphs/Table/data";
-
+import "aos/dist/aos.css";
 export default async function Page() {
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: 112 },
@@ -69,6 +70,7 @@ export default async function Page() {
     { name: "Assessments", icon: "list", data: 4 },
     { name: "Documents Downloaded", icon: "cloud_download", data: 79 },
   ];
+
 
   return (
     <>
@@ -197,7 +199,9 @@ export default async function Page() {
         <UnitStandardTable path="course" />
       </div>
 
-      <ApplicantsTable data={mockData} />
+      <div data-aos="slide-right">
+        <ApplicantsTable data={mockData} />
+      </div>
     </>
   );
 }

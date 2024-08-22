@@ -1,14 +1,6 @@
 "use client";
-import Link from "next/link";
 import { NextPage } from "next";
-import { CourseApplicants } from "@/app/interfaces/courseApplicants";
-import { usePathname, useSearchParams } from "next/navigation";
-
 const TableBody: NextPage<{ list: any }> = ({ list }) => {
-  const searchParams = useSearchParams();
-  const courseTitle = searchParams.get("title") || "";
-  const pathname = usePathname();
-
   return (
     <>
       <tbody className="list" id="staff">
@@ -34,9 +26,9 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
                 <td className="text-center js-lists-values-projects small">
                   {data.industry ?? "N/A"}
                 </td>
-                <td className="text-center js-lists-values-projects small">
+                {/* <td className="text-center js-lists-values-projects small">
                   {data.dateRange ?? "N/A"}
-                </td>
+                </td> */}
                 <td className="text-center js-lists-values-projects small">
                   {data.placementStatus ?? "N/A"}
                 </td>

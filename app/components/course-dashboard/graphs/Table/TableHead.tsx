@@ -6,7 +6,6 @@ const TableHead = () => {
     "Company Location",
     "Placed At Date",
     "Industry",
-    "Date Range",
     "Placement Status",
     "Job Role",
   ];

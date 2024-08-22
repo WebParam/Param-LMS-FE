@@ -35,15 +35,19 @@ const Body = ({ params }: { params: { assignmentId: string } }) => {
         }}
       />
 
-      <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+      <div       data-aos="slide-left"
+ className="card mb-3 d-flex flex-row p-2 justify-content-end">
         <div className="mx-1">
           <button className="btn btn-success btn-block" onClick={() => {setOpenModal(true)}}>
             Submit for moderation
           </button>
         </div>
       </div>
-      <div className="card mb-0">
+      <div
+      data-aos="slide-right"
+      className="card mb-0">
         <div
+
           className="table-responsive"
           data-toggle="lists"
           data-lists-sort-by="js-lists-values-employee-name"
