@@ -59,7 +59,9 @@ function Layout({
   return (
     <>
       {page && (
-        <div className="card p-relative  mb-2 position-relative">
+        <div 
+        data-aos="slide-left"
+        className="card p-relative mb-2 position-relative">
           <div
             className="card-header card-header-tabs-basic nav px-0"
             role="tablist"
