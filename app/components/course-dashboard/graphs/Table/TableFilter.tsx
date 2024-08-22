@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { provinces, industries, companyLocations } from "./data";
+import {
+  provinces,
+  industries,
+  companyLocations,
+  companies,
+  placementStatuses,
+  jobRoles,
+} from "./data";
 
 export default function TableFilter({
   data,
@@ -9,11 +16,13 @@ export default function TableFilter({
   setFilteredData: (data: any) => void;
 }) {
   const [searchTerm, setSearchTerm] = useState("");
-
   const [selectedFilters, setSelectedFilters] = useState({
     placedAt: "",
     industry: "",
     companyLocation: "",
+    company: "",
+    placementStatus: "",
+    jobRole: "",
   });
 
   useEffect(() => {
@@ -21,21 +30,21 @@ export default function TableFilter({
   }, [data, selectedFilters, searchTerm]);
 
   const applyFilters = () => {
-    let newFilteredData = data.filter((applicant: any) =>
+    let filteredData = data.filter((applicant) =>
       Object.values(applicant).some((value) =>
         String(value).toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
 
     Object.entries(selectedFilters).forEach(([key, value]) => {
-      if (value !== "") {
-        newFilteredData = newFilteredData.filter(
-          (applicant: any) => applicant[key] === value
+      if (value) {
+        filteredData = filteredData.filter(
+          (applicant) => applicant[key] === value
         );
       }
     });
 
-    setFilteredData(newFilteredData);
+    setFilteredData(filteredData);
   };
 
   const handleFilterChange = (
@@ -51,6 +60,18 @@ export default function TableFilter({
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+  };
+
+  const clearAllFilters = () => {
+    setSelectedFilters({
+      placedAt: "",
+      industry: "",
+      companyLocation: "",
+      company: "",
+      placementStatus: "",
+      jobRole: "",
+    });
+    setSearchTerm("");
   };
 
   const removeFilter = (filterKey: string) => {
@@ -70,7 +91,7 @@ export default function TableFilter({
             </label>
             <div className="d-flex" style={{ gap: "2px" }}>
               <input
-                style={{ width: "400px" }}
+    
                 type="text"
                 className="form-control search mb-2 mr-sm-2 mb-sm-0"
                 id="inlineFormFilterBy"
@@ -84,21 +105,9 @@ export default function TableFilter({
                 value={selectedFilters.placedAt}
               >
                 <option value="">Select Province</option>
-                {provinces.map((province: string) => (
+                {provinces.map((province) => (
                   <option key={province} value={province}>
                     {province}
-                  </option>
-                ))}
-              </select>
-              <select
-                className="custom-select mb-2 mr-sm-2 mb-sm-0"
-                onChange={(e) => handleFilterChange(e, "industry")}
-                value={selectedFilters.industry}
-              >
-                <option value="">Select Industry</option>
-                {industries.map((industry: string) => (
-                  <option key={industry} value={industry}>
-                    {industry}
                   </option>
                 ))}
               </select>
@@ -108,25 +117,55 @@ export default function TableFilter({
                 value={selectedFilters.companyLocation}
               >
                 <option value="">Select Company Location</option>
-                {companyLocations.map((location: string) => (
+                {companyLocations.map((location) => (
                   <option key={location} value={location}>
                     {location}
                   </option>
                 ))}
               </select>
+              <select
+                className="custom-select mb-2 mr-sm-2 mb-sm-0"
+                onChange={(e) => handleFilterChange(e, "company")}
+                value={selectedFilters.company}
+              >
+                <option value="">Select Company</option>
+                {companies.map((company) => (
+                  <option key={company} value={company}>
+                    {company}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="custom-select mb-2 mr-sm-2 mb-sm-0"
+                onChange={(e) => handleFilterChange(e, "placementStatus")}
+                value={selectedFilters.placementStatus}
+              >
+                <option value="">Select Status</option>
+                {placementStatuses.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="custom-select mb-2 mr-sm-2 mb-sm-0"
+                onChange={(e) => handleFilterChange(e, "jobRole")}
+                value={selectedFilters.jobRole}
+              >
+                <option value="">Select Job Role</option>
+                {jobRoles.map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </select>
               <button
-                className="btn btn-success"
-                onClick={() =>
-                  setSelectedFilters({
-                    placedAt: "",
-                    industry: "",
-                    companyLocation: "",
-                  })
-                }
+                className="btn btn-danger"
+                onClick={clearAllFilters}
               >
                 <i className="material-icons" style={{ fontSize: "15px" }}>
-                  delete
-                </i>
+                    delete
+                  </i>
               </button>
             </div>
           </div>
@@ -136,7 +175,7 @@ export default function TableFilter({
             ([key, value]) =>
               value && (
                 <span key={key} className="badge badge-primary mr-2">
-                  {key}: {value} <div onClick={() => removeFilter(key)}>&times;</div>
+                  {key}: {value} <span onClick={() => removeFilter(key)}>&times;</span>
                 </span>
               )
           )}
