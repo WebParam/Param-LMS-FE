@@ -189,8 +189,8 @@ export default async function Page() {
 
       </div>
 
-      <div className="mb-24pt mb-sm-0 mr-sm-24pt">
-        <PageHeader title="Web Development Unit Standards" />
+      <div className="page-separator mt-3">
+        <div className="page-separator__text">Knowledge Modules</div>
       </div>
 
       <div className="card p-relative o-hidden mb-0">
