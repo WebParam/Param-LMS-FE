@@ -1,6 +1,9 @@
-import React from "react";
-import Chart from "react-apexcharts";
+'use client'
+import dynamic from 'next/dynamic';
+import React from 'react';
 
-export default function PieChart({options,series}:any) {
-  return <Chart options={options} series={series} type="pie" width={380} />;
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+
+export default function PieChart({options, series}: any) {
+  return <ReactApexChart options={options} series={series} type="pie" width={380} />;
 }
