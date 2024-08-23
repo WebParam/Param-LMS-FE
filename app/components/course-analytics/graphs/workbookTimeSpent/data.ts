@@ -1,31 +1,46 @@
-import { faker } from "@faker-js/faker";
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
+export const workbookTimeSpentData = {
+  series: [{
+    name: "Workbook Time Spent",
+    data: [10, 41, 35, 51, 49, 62, 40, 91, 48]
+  }],
+  options: {
+    chart: {
+      height: 350,
+      type: 'line',
+      dropShadow: {
+          enabled: true,
+          color: '#000',
+          top: 18,
+          left: 7,
+          blur: 10,
+          opacity: 0.2
+      },
+      zoom: {
+        enabled: false
+      }
     },
-  },
-};
-
-const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-export const barDescriptions = [
-  { description: "Overall Time Spent on Workbook (hr)", color: "rgb(145 21 243)" },
-];
-
-export const data = {
-  labels: labels,
-  datasets: [
-    {
-      label: "Time Spent of Workbook (hr)",
-      data: labels.map(() => faker.number.int({ min: 0, max: 24 }) * 24), // Converted to hours
-      borderColor: "rgb(145 21 243)",
-      backgroundColor: "rgb(145 21 243)",
-      pointRadius: 2,
-      lineTension: 0.4,
-      borderWidth: 3,
+    colors:['#800080'],
+    dataLabels: {
+      enabled: false
     },
-  ],
+    stroke: {
+      curve: 'smooth'
+    },
+    title: {
+      text:  "Workbook Time Spent",
+      align: 'left'
+    },
+    grid: {
+      borderColor: '#e7e7e7',
+      row: {
+        colors: ['#f3f3f3', 'transparent'],
+      },
+    },
+    markers: {
+      size: 1
+    },
+    xaxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    }
+  }
 };

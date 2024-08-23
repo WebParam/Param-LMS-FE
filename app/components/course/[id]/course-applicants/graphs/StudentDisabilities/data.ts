@@ -1,8 +1,8 @@
-export const questionAskedData = {
+export const studentDisabilitiesData = {
   series: [
     {
-      name: 'Questions Asked',
-      data: [3, 4, 4.5, 5, 4.9, 6, 7, 9.1, 12.5],
+      name: 'Number of Students',
+      data: [10, 12, 15, 18, 20, 22, 25, 28, 30],
     },
   ],
   options: {
@@ -31,20 +31,18 @@ export const questionAskedData = {
     },
     xaxis: {
       categories: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
+        'Blind',
+        'Deaf',
+        'Dumb',
+        'Physical',
+        'Emotional',
+        'Intellectual',
+        'Multiple Disabilities',
       ],
     },
     yaxis: {
       title: {
-        text: 'Questions Asked (in hundreds)',
+        text: 'Number of Students (in hundreds)',
       },
     },
     fill: {

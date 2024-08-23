@@ -42,6 +42,8 @@ const Body = async ({ params }: { params: { id: string } }) => {
           </div>
         </div>
         <Graphs />
+
+        <div data-aos="slide-right">
         <ApplicantsTable
           courseId={courseId}
           data={
@@ -50,6 +52,8 @@ const Body = async ({ params }: { params: { id: string } }) => {
               : []
           }
         />{" "}
+        </div>
+       
       </div>
     </>
   );

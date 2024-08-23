@@ -1,7 +1,8 @@
 "use client";
 import PageHeader from "./PageHeader";
 import { useSearchParams, usePathname } from "next/navigation";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const name = searchParams.get("studentname");
@@ -15,6 +16,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   if (pathname == "/protected/admin/course-dashboard/graphs")
     title = "Sanlam Dashboard Analytics - Web Development";
 
+ 
   return (
     <>
       <div className="mdk-header-layout__content page-content ">
