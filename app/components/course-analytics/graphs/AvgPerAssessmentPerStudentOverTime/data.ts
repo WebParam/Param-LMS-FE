@@ -9,10 +9,10 @@ export const options = {
   },
 };
 
-const labels = ["Formative ", "Informative ", "Extended Formative", "Exntended Informative"];
+const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export const barDescriptions = [
-  { description: "Average Per Assessment Over Time", color: "rgb(145 21 243)" },
+  { description: "Assessment marks % (y) / Time (x)", color: "rgb(145 21 243)" },
 ];
 
 export const data = {

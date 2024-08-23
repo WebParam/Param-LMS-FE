@@ -3,7 +3,7 @@ import {
     options as WorkbookOptions,
     data as WorkbookData,
     barDescriptions as WorkDescription,
-  } from "@/app/components/course-analytics/graphs/workbook-signed/data";
+  } from "@/app/components/course-analytics/graphs/AvgPerAssessmentPerStudent/data";
   import { barDescriptions as CompetencyDescription } from "@/app/components/course-analytics/graphs/workbook-competency/data";
   import { CompetentVsIncompetent } from "@/app/components/course-analytics/graphs/workbook-competency/WorkCompetency";
   import ProgressBar from 'react-bootstrap/ProgressBar';
@@ -21,7 +21,7 @@ import {
     options as AvgAssessmentBarOptions,
     data as AvgAssessmentBarData,
     barDescriptions as AvgAssessmentBarDescription,
-  } from "@/app/components/course-analytics/graphs/AvgPerAssessment/data";
+  } from "@/app/components/course-analytics/graphs/AvgPerAssessmentPerStudentOverTime/data";
   import {AssessmentProgressStatus } from "@/app/components/course-analytics/graphs/AssessmentProgress/AssessmentProgressStatus";
   import {AssessmentPassRate} from "@/app/components/course-analytics/graphs/AssessmentPassRate/AssessmentPassRate";
 export default function page() {
@@ -31,7 +31,7 @@ export default function page() {
        
        <div className="col-lg-6 col-md-12 card-group-row__col">
            <ChartWrapper
-             title="Overall Class Average"
+             title="Assessment marks % (y) / Time (x)"
              barDescriptions={WorkDescription}
              options={WorkbookOptions}
              data={WorkbookData}
