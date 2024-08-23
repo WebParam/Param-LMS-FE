@@ -12,7 +12,6 @@ const TableHead = () => {
     <>
       <thead>
         <tr>          
-          <th className="text-center">Action</th>
           {headers.map((name) => (
             <th key={name} className="text-center">
               <a
@@ -23,7 +22,10 @@ const TableHead = () => {
                 {name}
               </a>
             </th>
+            
           ))}
+                    <th className="text-center">Action</th>
+
         </tr>
       </thead>
     </>

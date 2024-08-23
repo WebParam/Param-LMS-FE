@@ -5,8 +5,8 @@ export default function CommentChartWrapper({
   children,
   type
 }: {
-  title: string;
-  barDescriptions: barDescriptionType[];
+  title?: string;
+  barDescriptions?: barDescriptionType[];
     children: React.ReactNode;
   type?: string
 }) {
@@ -35,11 +35,13 @@ export default function CommentChartWrapper({
           </div>
           {children}
         </div>}
+
+        
         <div
           id="repeatCustomerRateChartLegend"
           className="chart-legend chart-legend--horizontal mt-16pt"
         >
-          {barDescriptions.map((data: barDescriptionType) => (
+          {barDescriptions?.map((data: barDescriptionType) => (
             <span key={data.color} className="chart-legend-item">
               <i
                 className="chart-legend-indicator"
