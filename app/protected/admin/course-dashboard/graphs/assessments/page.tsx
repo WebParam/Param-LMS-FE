@@ -24,8 +24,10 @@ import {
   } from "@/app/components/course-analytics/graphs/AvgPerAssessment/data";
   import {AssessmentProgressStatus } from "@/app/components/course-analytics/graphs/AssessmentProgress/AssessmentProgressStatus";
   import {AssessmentPassRate} from "@/app/components/course-analytics/graphs/AssessmentPassRate/AssessmentPassRate";
+
 import StudentsTable from './(components)/StudentsTable';
 import mockData from './(components)/data';
+
 export default function page() {
   return (
     <>
@@ -69,6 +71,7 @@ export default function page() {
         </div>
       </div>
       <StudentsTable data={mockData} />
+
     </>
   )
 }
