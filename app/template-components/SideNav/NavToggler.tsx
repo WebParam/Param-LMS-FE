@@ -28,7 +28,7 @@ console.log("User",loggedInUser)
 
                         <a href="index.html" className="sidebar-brand ">
                             <img className="sidebar-brand-icon" src="/assets/images/logo/dodger-blue-100@2x.png" alt="Huma"/>
-                            <span>Thooto</span>
+                            <span>thooto</span>
                         </a>
 
                         <div className="sidebar-account mx-16pt mb-16pt dropdown">

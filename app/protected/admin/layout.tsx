@@ -20,29 +20,65 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       roles: ["Admin", "SuperAdmin"],
     },
     {
-      name: "Course Applicants",
-      url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}`,
+      name: "Course",
+      url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
       icon: "person",
       roles: ["Admin", "SuperAdmin"],
-    },
-    {
-      name: "Enrolled Students",
-      url: `/protected/admin/courses/${courseId}/enrollments?title=${courseTitle}`,
-      icon: "group",
-      roles: ["Admin", "SuperAdmin"],
-    },
-    {
-      name: "Edit Course",
-      url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
-      icon: "edit",
-      roles: ["SuperAdmin"],
+      children: [
+        {
+          name: "Course Applicants",
+          url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}`,
+          icon: "person",
+          roles: ["Admin", "SuperAdmin"],
+        },
+
+        {
+          name: "Enrolled Students",
+          url: `/protected/admin/courses/${courseId}/enrollments?title=${courseTitle}`,
+          icon: "group",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
+          name: "Edit Course",
+          url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
+          icon: "edit",
+          roles: ["SuperAdmin"],
+        },
+        {
+          name: "Create Course",
+          url: `/protected/home/courses/create`,
+          icon: "add_box",
+          roles: ["SuperAdmin"],
+        },
+
+      ],
     },
 
     {
-      name: "Create Course",
-      url: `/protected/home/courses/create`,
-      icon: "add_box",
-      roles: ["SuperAdmin"],
+      name: "Course Analytics",
+      url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+      icon: "bar_chart",
+      roles: ["Admin", "SuperAdmin"],
+    },
+    {
+      name: "Assessment Analytics",
+      url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
+      icon: "bar_chart",
+      roles: ["Admin", "SuperAdmin"],
+    },
+   
+    {
+      name: "Schedule Classes",
+      url: `/protected/admin/scheduleclass?title=${courseTitle}`,
+      icon: "meeting_room",
+      roles: ["Admin", "SuperAdmin"],
+    },
+
+     {
+      name: "Facilitator",
+      url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
+      icon: "person",
+      roles: ["Admin", "SuperAdmin"],
     },
   ];
 

@@ -56,8 +56,8 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                   width: "450px",
                 }}
               >
-                Thooto 
-                  {courseTitle && `- ${courseTitle}`}
+                thooto 
+                  {courseTitle && ` - ${courseTitle}`}
                 
               </span>
             </a>

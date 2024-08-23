@@ -7,6 +7,7 @@ import SkeletonLoader from "@/components/skeleton/skeletonLoader";
 const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const title = searchParams.get("title")!;
   const assessmentName = searchParams.get("assessment-name")!;
 
   const align = {
@@ -50,7 +51,7 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
               <td className={`${align.action} js-lists-values-projects small`}>
               <Link
                   className={`chip chip-outline-success text ${align.student_name}`}
-                  href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&title=${data.name}&homeTitle=${assessmentName}`}
+                  href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&title=${title}&studentName=${data.name}&homeTitle=${assessmentName}`}
                 >
                   Grade Assessment
                   <i className="material-icons ">assignment_turned_in</i>

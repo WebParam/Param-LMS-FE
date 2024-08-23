@@ -25,12 +25,6 @@ import {
 } from "./CommentsChart/data";
 
 import { barDescriptions as StudentsProgressStatusDescription } from "./StudentsProgressStatus/data";
-import { barDescriptions as StudentsPlacedDesc } from "./students-placed/data";
-import { StudentsPlaced } from "./students-placed/StudentsPlaced";
-import { chartData } from "./students-displayed/data";
-import DisplayedStudents from "./students-displayed/DisplayedStudents";
-import { barDescriptions as StudentsDisplayedDesc } from "./students-displayed/data";
-
 import ChartLayout from "./ChartLayout";
 import { AvgTimeSpent } from "./AvgTimeSpentBar/AvgTimeSpent";
 import { StudentsProgressStatus } from "./StudentsProgressStatus/StudentsProgressStatus";
@@ -126,15 +120,6 @@ export default async function Graphs() {
             data={CommentsChartBarData}
             type="bar"
           />
-        </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Students Placement"
-            barDescriptions={StudentsPlacedDesc}
-            type="pie"
-          >
-            <StudentsPlaced />
-          </ChartLayout>
         </div>
       </div>
     </>
