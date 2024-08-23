@@ -1,33 +1,25 @@
-import ChartWrapper from "./ChartWrapper";
-import { barDescriptions as AvgTimeSpentBarDataDescription } from "./AvgTimeSpentBar/data";
+"use client"
+import { AvdTimeSpentData } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/data";
+
+import { OverallAssessmentData } from "@/app/components/course-analytics/graphs/OverallAssessment/data";
+import { questionAskedData } from "@/app/components/course-analytics/graphs/QuestionsAsked/data";
+
+import { quizAttemptData } from "@/app/components/course-analytics/graphs/OverallQuiz/data";
+
+import { workbookTimeSpentData } from "@/app/components/course-analytics/graphs/workbookTimeSpent/data";
+
+import { commentsSubmittedData } from "@/app/components/course-analytics/graphs/CommentsChart/data";
 
 import {
-  options as OverallAssessmentBarOptions,
-  data as OverallAssessmentBarData,
-  barDescriptions as OverallAssessmentBarDescription,
-} from "./OverallAssessment/data";
-import {
-  options as QuestionsAskedOptions,
-  data as QuestionsAskedData,
-  barDescriptions as QuestionsAskedDescription,
-} from "./QuestionsAsked/data";
+  options as studentProgressRateOptions,
+  series as studentProgressRateSeries,
+} from "@/app/components/course-analytics/graphs/StudentsProgressStatus/data";
 
-import {
-  options as OverallQuizBarOptions,
-  data as OverallQuizBarData,
-  barDescriptions as OverallQuizBarDescription,
-} from "./OverallQuiz/data";
+import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
 
-import {
-  options as CommentsChartBarOptions,
-  data as CommentsChartBarData,
-  barDescriptions as CommentsChartBarDescription,
-} from "./CommentsChart/data";
-
-import { barDescriptions as StudentsProgressStatusDescription } from "./StudentsProgressStatus/data";
-import ChartLayout from "./ChartLayout";
-import { AvgTimeSpent } from "./AvgTimeSpentBar/AvgTimeSpent";
-import { StudentsProgressStatus } from "./StudentsProgressStatus/StudentsProgressStatus";
+import LineChart from "@/components/course-dashboard/graphs/LineChart";
+import PieChart from "@/components/course-analytics/graphs/PieChart";
+import BarGraph from "@/components/course-dashboard/graphs/BarGraph";
 
 type DataTiles = {
   name: string;
@@ -68,59 +60,42 @@ export default async function Graphs() {
       </div>
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Average Time Spent"
-            barDescriptions={AvgTimeSpentBarDataDescription}
-          >
-            <AvgTimeSpent />
+          <ChartLayout title="Average Time Spent" type="bar">
+            <BarGraph chartData={AvdTimeSpentData} />
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Assessment Completed"
-            barDescriptions={OverallAssessmentBarDescription}
-            options={OverallAssessmentBarOptions}
-            data={OverallAssessmentBarData}
-            type="bar"
-          />
+          <ChartLayout title="Assessments Completed" type="bar">
+            <BarGraph chartData={OverallAssessmentData} />
+          </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Progress Status"
-            barDescriptions={StudentsProgressStatusDescription}
-            type="pie"
-          >
-            <StudentsProgressStatus />
+          <ChartLayout title="Progress Status" type="pie">
+            <PieChart
+              options={studentProgressRateOptions}
+              series={studentProgressRateSeries}
+            />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Quiz Attempts"
-            barDescriptions={OverallQuizBarDescription}
-            options={OverallQuizBarOptions}
-            data={OverallQuizBarData}
-            type="line"
-          />
+          <ChartLayout>
+            <LineChart chartData={quizAttemptData} />
+          </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Questions Asked"
-            barDescriptions={QuestionsAskedDescription}
-            options={QuestionsAskedOptions}
-            data={QuestionsAskedData}
-            type="bar"
-          />
+          <ChartLayout title="Questions Asked" type="bar">
+            <BarGraph chartData={questionAskedData} />
+          </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Comments"
-            barDescriptions={CommentsChartBarDescription}
-            options={CommentsChartBarOptions}
-            data={CommentsChartBarData}
-            type="bar"
-          />
+          <ChartLayout title="Comments Submited" type="bar">
+            <BarGraph chartData={commentsSubmittedData} />
+          </ChartLayout>
         </div>
+       
+        
+
       </div>
     </>
   );

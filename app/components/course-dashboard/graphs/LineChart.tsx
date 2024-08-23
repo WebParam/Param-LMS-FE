@@ -1,28 +1,16 @@
-"use client";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+'use client'
+import dynamic from 'next/dynamic';
+import React, { useState } from 'react';
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
+export default function LineChart({chartData}:any) {
 
-export default function BarChart({ options, data }: { options: any; data: any }) {
-  return <Line options={options} data={data} />;
+
+  return (
+    <div>
+
+<ReactApexChart options={chartData.options as any} series={chartData.series} type={chartData.options.chart.type as any} height={chartData.options.chart.height} />
+
+    </div>
+  );
 }

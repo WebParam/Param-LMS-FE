@@ -1,17 +1,18 @@
-export const questionAskedData = {
+export const AgeVsGenderData = {
   series: [
     {
-      name: 'Questions Asked',
-      data: [3, 4, 4.5, 5, 4.9, 6, 7, 9.1, 12.5],
+      name: 'Male',
+      data: [10, 15, 20, 25, 30, 35, 40, 45, 50],
+    },
+    {
+      name: 'Female',
+      data: [8, 12, 18, 22, 28, 32, 38, 42, 48],
     },
   ],
   options: {
     chart: {
-      type: 'bar',
+      type: 'bar' as 'bar', 
       height: 350,
-      toolbar: {
-        show: false,
-      },
     },
     plotOptions: {
       bar: {
@@ -27,34 +28,33 @@ export const questionAskedData = {
     stroke: {
       show: true,
       width: 2,
-      colors: ['#007bff'], // Changed color to a nice blue
+      colors: ['#007bff', '#ff0000'], // Changed color to blue and red
     },
     xaxis: {
       categories: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
+        '18-20',
+        '21-23',
+        '24-26',
+        '27-29',
+        '30-32',
+        '33-35',
+        '36-38',
+        '39-41',
+        '42-44',
       ],
     },
     yaxis: {
       title: {
-        text: 'Questions Asked (in hundreds)',
+        text: 'Number of Students',
       },
     },
     fill: {
       opacity: 1,
-      colors: ['#007bff'], // Changed color to a nice blue
     },
     tooltip: {
       y: {
         formatter: function (val:any) {
-          return `${val}00`;
+          return `${val}`;
         },
       },
     },
