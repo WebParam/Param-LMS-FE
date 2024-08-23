@@ -44,19 +44,19 @@ import "aos/dist/aos.css";
 import LineChart from "@/components/course-dashboard/graphs/LineChart";
 import PieChart from "@/components/course-analytics/graphs/PieChart";
 import BarGraph from "@/components/course-dashboard/graphs/BarGraph";
+import DataTab from "@/components/course-dashboard/graphs/DataTabs";
 export default async function Page() {
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: 112 },
     { name: "Modules", icon: "book", data: 5 },
     { name: "Quizzes", icon: "help", data: 10 },
     { name: "Assessments", icon: "list", data: 4 },
-    { name: "Documents Downloaded", icon: "cloud_download", data: 79 },
   ];
 
   return (
     <>
       <div className="row mb-lg-8pt">
-        {dataTiles.map((data: DataTiles) => (
+      {dataTiles.map((data: DataTiles) => (
           <div key={data.name} className="col-lg-3">
             <div className="card">
               <div
@@ -96,7 +96,11 @@ export default async function Page() {
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout>
+          <ChartLayout
+          title = "Quiz Attempt"
+          type= "line"
+          >
+
             <LineChart chartData={quizAttemptData} />
           </ChartLayout>
         </div>
@@ -135,7 +139,9 @@ export default async function Page() {
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
+        <ChartLayout
+          title = "Workbook Time Spent"
+          type="line"
           >
             <LineChart chartData={workbookTimeSpentData} />
           </ChartLayout>
@@ -150,9 +156,7 @@ export default async function Page() {
         <UnitStandardTable path="course" />
       </div>
 
-      <div data-aos="slide-right">
-        <ApplicantsTable data={mockData} />
-      </div>
+    
     </>
   );
 }

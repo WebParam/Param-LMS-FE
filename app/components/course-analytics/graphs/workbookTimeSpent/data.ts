@@ -1,6 +1,5 @@
 export const workbookTimeSpentData = {
   series: [{
-    name: "Workbook Time Spent",
     data: [10, 41, 35, 51, 49, 62, 40, 91, 48]
   }],
   options: {
@@ -27,7 +26,6 @@ export const workbookTimeSpentData = {
       curve: 'smooth'
     },
     title: {
-      text:  "Workbook Time Spent",
       align: 'left'
     },
     grid: {

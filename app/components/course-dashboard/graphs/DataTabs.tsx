@@ -8,7 +8,7 @@ type DataTabProps = {
   totalModdules: number;
   totalAssessments: number;
   totalQuizzes: number;
-  documentsDownloaded: number;
+  documentsDownloaded?: number;
 }
 export default function DataTab({
   totalEnrollments,
@@ -22,7 +22,7 @@ export default function DataTab({
     { name: "Modules", icon: "book", data: totalModdules },
     { name: "Quizzes", icon: "help", data: totalAssessments },
     { name: "Assessments", icon: "list", data: totalQuizzes },
-    { name: "Documents Downloaded", icon: "cloud_download", data: documentsDownloaded },
+   // { name: "Documents Downloaded", icon: "cloud_download", data: documentsDownloaded },
   ];
 
   return (

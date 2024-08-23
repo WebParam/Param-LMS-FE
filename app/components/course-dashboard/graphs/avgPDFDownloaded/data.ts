@@ -1,31 +1,62 @@
-import { faker } from "@faker-js/faker";
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
+export const downloadedPDFsData = {
+  series: [
+    {
+      name: 'PDFs Downloaded',
+      data: [10, 12, 15, 18, 20, 22, 25, 28, 30],
+    },
+  ],
+  options: {
+    chart: {
+      type: 'bar',
+      height: 350,
+      toolbar: {
+        show: false,
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        endingShape: 'rounded',
+        borderRadius: 10, // Added for a nice rounded edge
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['#007bff'], // Changed color to a nice blue
+    },
+    xaxis: {
+      categories: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+      ],
+    },
+    yaxis: {
+      title: {
+        text:  'PDFs Downloaded',
+      },
+    },
+    fill: {
+      opacity: 1,
+      colors: ['#007bff'], // Changed color to a nice blue
+    },
+    tooltip: {
+      y: {
+        formatter: function (val:any) {
+          return `${val}00`;
+        },
+      },
     },
   },
 };
-
-export const barDescriptions = [
-  { description: "PDFs downloaded over time", color: "rgb(82 121 249)" },
-];
-
-const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-export const data = async ( PDFsChartBarData: number[] ) => {
-return {
-  labels,
-  datasets: [
-    {
-      label: "No of PDFs downloaded",
-      data: PDFsChartBarData,
-      backgroundColor: "rgb(82 121 249)",
-      barPercentage: 0.3,
-      borderRadius: 10,
-    }
-  ],
-}
-}

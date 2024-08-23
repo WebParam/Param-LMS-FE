@@ -1,31 +1,44 @@
-import { faker } from "@faker-js/faker";
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
+export const correctAnswersData = {
+  series: [{
+    data: [10, 41, 35, 51, 49, 62, 40, 91, 48]
+  }],
+  options: {
+    chart: {
+      height: 350,
+      type: 'line',
+      dropShadow: {
+          enabled: true,
+          color: '#000',
+          top: 18,
+          left: 7,
+          blur: 10,
+          opacity: 0.2
+      },
+      zoom: {
+        enabled: false
+      }
     },
-  },
-};
-
-export const barDescriptions = [
-  { description: "Correct answers submitted over time", color: "rgb(82 121 249)" },
-];
-
-const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-export const data = async ( correctAnswersChartBarData: number[] ) => {
-return {
-  labels,
-  datasets: [
-    {
-      label: "No of Correct Answers Submitted",
-      data: correctAnswersChartBarData,
-      backgroundColor: "rgb(82 121 249)",
-      barPercentage: 0.3,
-      borderRadius: 10,
+    colors:['#800080'],
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      curve: 'smooth'
+    },
+    title: {
+      align: 'left'
+    },
+    grid: {
+      borderColor: '#e7e7e7',
+      row: {
+        colors: ['#f3f3f3', 'transparent'],
+      },
+    },
+    markers: {
+      size: 1
+    },
+    xaxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
     }
-  ],
-}
-}
+  }
+};

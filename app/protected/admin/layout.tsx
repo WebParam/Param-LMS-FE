@@ -7,7 +7,6 @@ import { useParams, useSearchParams } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const searchParams = useSearchParams();
@@ -25,13 +24,13 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     {
       name: "Course",
       url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
-      icon: "person",
+      icon: "school",
       roles: ["Admin", "SuperAdmin"],
       children: [
         {
           name: "Course Applicants",
           url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}`,
-          icon: "person",
+          icon: "group",
           roles: ["Admin", "SuperAdmin"],
         },
 
@@ -53,23 +52,48 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           icon: "add_box",
           roles: ["SuperAdmin"],
         },
-
       ],
     },
 
     {
-      name: "Course Analytics",
+      name: "Analytics",
       url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
-      icon: "bar_chart",
+      icon: "show_chart",
       roles: ["Admin", "SuperAdmin"],
+      children: [
+        {
+          name: "Course Analytics",
+          url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        // {
+        //   name: "Assessment Analytics",
+        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
+        //   icon: "bar_chart",
+        //   roles: ["Admin", "SuperAdmin"],
+        // },
+        // {
+        //   name: "Student Analytics",
+        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
+        //   icon: "bar_chart",
+        //   roles: ["Admin", "SuperAdmin"],
+        // },
+        // {
+        //   name: "Host Analytics",
+        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
+        //   icon: "bar_chart",
+        //   roles: ["Admin", "SuperAdmin"],
+        // },
+        {
+          name: "Grouped Analytics",
+          url: `/protected/admin/course-dashboard/student-table?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+      ],
     },
-    {
-      name: "Assessment Analytics",
-      url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-      icon: "bar_chart",
-      roles: ["Admin", "SuperAdmin"],
-    },
-   
+
     {
       name: "Schedule Classes",
       url: `/protected/admin/scheduleclass?title=${courseTitle}`,
@@ -77,26 +101,31 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       roles: ["Admin", "SuperAdmin"],
     },
 
-     {
+    {
       name: "Facilitator",
       url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
       icon: "person",
       roles: ["Admin", "SuperAdmin"],
     },
+   
+    {
+      name: "Host Companies",
+      url: `/protected/admin/host-companies/companies?title=${courseTitle}`,
+      icon: "business",
+      roles: ["Admin", "SuperAdmin"],
+    },
   ];
 
-  useEffect(()=>{
+  useEffect(() => {
     AOS.init({
       duration: 1200,
     });
-  },[])
+  }, []);
 
   return (
     <>
       <div className="mdk-header-layout js-mdk-header-layout">
         <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} />
-
-        {/* <!-- Header Layout Content --> */}
         <div className="mdk-header-layout__content page-content ">
           <nav className="navbar navbar-light bg-alt border-bottom">
             <div className="container page__container">
@@ -108,11 +137,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
           {children}
         </div>
-        {/* <!-- // END Header Layout Content --> */}
       </div>
-      {/* <!-- // END Header Layout --> */}
-
-      {/* <!-- drawer --> */}
       <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
     </>
   );

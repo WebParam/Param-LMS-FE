@@ -1,6 +1,5 @@
 export const quizAttemptData = {
   series: [{
-    name: "Quiz Attempt",
     data: [10, 41, 35, 51, 49, 62, 40, 91, 48]
   }],
   options: {
@@ -27,7 +26,6 @@ export const quizAttemptData = {
       curve: 'smooth'
     },
     title: {
-      text: 'Quiz Attempt',
       align: 'left'
     },
     grid: {

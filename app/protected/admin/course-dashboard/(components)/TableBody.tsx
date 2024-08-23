@@ -1,53 +1,42 @@
 import Link from "next/link";
 import { NextPage } from "next";
+import data from "../student-table/data";
 
 const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
-
   return (
     <>
       <tbody className="list" id="staff">
         {list &&
-          list.map((data: any, key) => (
-            <tr key={data.studentId} className="selected">
-              
+          list.map((item: any, key) => (
+            <tr key={item.student_id} className="selected">
               <td className="text-center js-lists-values-projects small">
-                <div className="d-flex justify-content-center align-items-center">
-                
-                  <Link
-                    href={`/protected/admin/course-dashboard/graphs/${data.studentId}/course?studentname=${data.studentName}`}
-                  >
-                    <i className="material-icons mr-8pt text-center">visibility</i>
-                  </Link>
-                </div>
+                {item.student_id}
               </td>
               <td className="text-center js-lists-values-projects small">
-                {data.studentId}
-              </td>
-              <td className="text-center js-lists-values-projects small">
-                {data.studentName}
+                {item.student_name}
               </td>
               <td className="text-center js-lists-values-projects small">
                 <div className="progress-container">
                   <div className="progress-bar">
                     <div
                       className="progress-bar-fill"
-                      style={{ width: `${data.completion}%` }}
+                      style={{ width: `${item.completion_rate}%` }}
                     ></div>
                   </div>
                   <div className="progress-bar-text">
-                    {data.completion}%
+                    {item.completion_rate}%
                   </div>
                 </div>
               </td>
               <td className="text-center js-lists-values-projects small">
-                {data.timespent}
+                {item.time_spent}
               </td>
               <td className="text-center js-lists-values-projects small">
-                {data.pointsCollected}
+                {item.points_collected}
               </td>
               <td className="text-center js-lists-values-projects small">
                 <div className="align-items-center">
-                  {data.isOnTrack ? (
+                  {item.isOnTrack ? (
                     <>
                       <a href="#" className="text-success">
                         <i className="material-icons mr-8pt">thumb_up</i>
@@ -70,6 +59,19 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                       </a>
                     </>
                   )}
+                </div>
+              </td>
+
+              <td className="text-center js-lists-values-projects small">
+                <div className="d-flex justify-content-center align-items-center">
+                  <Link
+                  
+                    href={`/protected/admin/course-dashboard/graphs/${item.student_id}/course?studentname=${item.student_name}`}
+                  >
+                    <i className="material-icons mr-8pt text-center">
+                      visibility
+                    </i>
+                  </Link>
                 </div>
               </td>
             </tr>

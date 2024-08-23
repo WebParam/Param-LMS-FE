@@ -9,7 +9,7 @@ export default function LineChart({chartData}:any) {
   return (
     <div>
 
-<ReactApexChart options={chartData.options as any} series={chartData.series} type={chartData.options.chart.type as any} height={chartData.options.chart.height} />
+<ReactApexChart options={chartData.options as any} series={chartData.series} type={chartData.options.chart.type as any} />
 
     </div>
   );

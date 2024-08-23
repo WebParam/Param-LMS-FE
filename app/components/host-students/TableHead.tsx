@@ -1,17 +1,17 @@
 const TableHead = () => {
   const headers = [
-    "StudentID",
     "Student Name",
-    "Completion",
-    "Time Spent",
-    "Points Collected",
-    "Progress Status"
+    "Job Role",
+    "Placement Status",
+    "Start Date",
+    "End Date",
+    "Location",
   ];
 
   return (
     <>
       <thead>
-        <tr>          
+        <tr>
           {headers.map((name) => (
             <th key={name} className="text-center">
               <a
@@ -22,10 +22,7 @@ const TableHead = () => {
                 {name}
               </a>
             </th>
-            
           ))}
-                    <th className="text-center">Action</th>
-
         </tr>
       </thead>
     </>
