@@ -10,11 +10,6 @@ import {
 import ChartWrapper from '@/components/course-analytics/graphs/ChartWrapper';
 import { IndustryOfHost } from "@/app/components/course-analytics/graphs/IndustryOfHost/IndustryOfHost";
 import { barDescriptions as IndustryOfHostBarDataDescription } from "@/app/components/course-analytics/graphs/IndustryOfHost/data";
-import {
-  options as QuestionsAskedOptions,
-  data as QuestionsAskedData,
-  barDescriptions as QuestionsAskedDescription,
-} from "@/app/components/course-analytics/graphs/QuestionsAsked/data";
 import { barDescriptions as AssessmentProgressStatusDescription } from "@/app/components/course-analytics/graphs/AssessmentProgress/data";
 import { barDescriptions as AssessmentPassRateDescription } from "@/app/components/course-analytics/graphs/AssessmentPassRate/data";
 import {

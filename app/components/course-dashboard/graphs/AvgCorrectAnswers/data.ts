@@ -16,7 +16,6 @@ export const barDescriptions = [
 const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export const data = async ( correctAnswersChartBarData: number[] ) => {
-"use server";
 return {
   labels,
   datasets: [

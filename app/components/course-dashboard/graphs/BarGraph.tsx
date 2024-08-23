@@ -1,17 +1,16 @@
+'use client'
+import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
-import Chart from 'react-apexcharts';
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const BarGraph = ({chartData}:any) => {
+export default function BarGraph({chartData}:any) {
+
 
   return (
     <div>
-      <Chart
-        options={chartData.options}
-        series={chartData.series}
-        type="bar"
-      />
+
+<ReactApexChart options={chartData.options as any} series={chartData.series} type={chartData.options.chart.type as any}  />
+
     </div>
   );
-};
-
-export default BarGraph;
+}
