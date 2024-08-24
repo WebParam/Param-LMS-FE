@@ -5,6 +5,7 @@ import "./css/fontawesome.css";
 import "./vendor/spinkit.css";
 import "./css/preloader.css";
 import "./css/app.css";
+import "aos/dist/aos.css";
 import "./css/dark-mode.css";
 import "./globals.css";
 import JsScripts from "@/app/template-components/JsScripts";

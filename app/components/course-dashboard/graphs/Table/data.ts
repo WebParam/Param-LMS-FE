@@ -25,6 +25,34 @@ export const companyLocations = [
   "Port Elizabeth",
   "Nelspruit",
 ];
+export const dateRanges = [
+  "Last Month",
+  "Last Quarter",
+  "Last Year",
+];
+
+export const placementStatuses = [
+  "Ongoing",
+  "Completed",
+  "Pending",
+];
+
+export const jobRoles = [
+  "Software Developer",
+  "Data Analyst",
+  "Project Manager",
+  "Sales Representative",
+  "HR Manager",
+];
+
+export const companies = [
+  "Tech Innovators",
+  "Green Energy Solutions",
+  "Coastal Logistics",
+  "AgriTech Farms",
+  "Mining & Co",
+];
+
 
 const mockData =[
   {
@@ -33,7 +61,11 @@ const mockData =[
     "companyName": "Tech Innovators",
     "companyLocation": "Johannesburg",
     "placedAtDate": "2024-08-01",
-    "industry": "Information Technology"
+    "industry": "Information Technology",
+    "dateRange": "Last Month",
+    "placementStatus": "Completed",
+    "jobRole": "Software Developer",
+    "company": "Tech Innovators"
   },
   {
     "fullName": "Alice Smith",
@@ -41,7 +73,11 @@ const mockData =[
     "companyName": "Green Energy Solutions",
     "companyLocation": "Cape Town",
     "placedAtDate": "2024-07-15",
-    "industry": "Renewable Energy"
+    "industry": "Renewable Energy",
+    "dateRange": "Last Quarter",
+    "placementStatus": "Ongoing",
+    "jobRole": "Data Analyst",
+    "company": "Green Energy Solutions"
   },
   {
     "fullName": "Michael Johnson",
@@ -49,7 +85,11 @@ const mockData =[
     "companyName": "Coastal Logistics",
     "companyLocation": "Durban",
     "placedAtDate": "2024-08-05",
-    "industry": "Logistics and Supply Chain"
+    "industry": "Logistics and Supply Chain",
+    "dateRange": "Last Year",
+    "placementStatus": "Pending",
+    "jobRole": "Project Manager",
+    "company": "Coastal Logistics"
   },
   {
     "fullName": "Sarah Lee",
@@ -57,7 +97,11 @@ const mockData =[
     "companyName": "AgriTech Farms",
     "companyLocation": "Port Elizabeth",
     "placedAtDate": "2024-07-20",
-    "industry": "Agriculture Technology"
+    "industry": "Agriculture Technology",
+    "dateRange": "Last Month",
+    "placementStatus": "Completed",
+    "jobRole": "Sales Representative",
+    "company": "AgriTech Farms"
   },
   {
     "fullName": "David Brown",
@@ -65,9 +109,12 @@ const mockData =[
     "companyName": "Mining & Co",
     "companyLocation": "Nelspruit",
     "placedAtDate": "2024-07-25",
-    "industry": "Mining"
+    "industry": "Mining",
+    "dateRange": "Last Quarter",
+    "placementStatus": "Ongoing",
+    "jobRole": "HR Manager",
+    "company": "Mining & Co"
   }
 ]
-
 
 export default mockData;

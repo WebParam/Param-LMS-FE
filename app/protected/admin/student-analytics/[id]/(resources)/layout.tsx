@@ -1,32 +1,6 @@
 "use client";
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import ChartWrapper from "@/app/components/course-analytics/graphs/ChartWrapper";
-import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/data";
-
-import {
-  options as OverallAssessmentBarOptions,
-  data as OverallAssessmentBarData,
-  barDescriptions as OverallAssessmentBarDescription,
-} from "@/app/components/course-analytics/graphs/OverallAssessment/data";
-import {
-  options as QuestionsAskedOptions,
-  data as QuestionsAskedData,
-  barDescriptions as QuestionsAskedDescription,
-} from "@/app/components/course-analytics/graphs/QuestionsAsked/data";
-
-import {
-  options as OverallQuizBarOptions,
-  data as OverallQuizBarData,
-  barDescriptions as OverallQuizBarDescription,
-} from "@/app/components/course-analytics/graphs/OverallQuiz/data";
-
-import {
-  options as CommentsChartBarOptions,
-  data as CommentsChartBarData,
-  barDescriptions as CommentsChartBarDescription,
-} from "@/app/components/course-analytics/graphs/CommentsChart/data";
-
-import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/course-analytics/graphs/StudentsProgressStatus/data";
 
 import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
 import { AvgTimeSpent } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/AvgTimeSpent";
@@ -52,7 +26,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   
   return (
     <>
-      <div className="row card-group-row">
+      {/* <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
             title="Average Time Spent"
@@ -124,7 +98,7 @@ function Layout({ children }: { children: React.ReactNode }) {
             </Link>
           ))}          
         </div>
-      </div>
+      </div> */}
 
       <div className="card mt-3">
         {children}

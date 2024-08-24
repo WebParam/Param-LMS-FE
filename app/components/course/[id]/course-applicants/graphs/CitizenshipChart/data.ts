@@ -1,29 +1,58 @@
-import { faker } from "@faker-js/faker";
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
+export const citizenshipData = {
+  series: [
+    {
+      name: 'Number of Students',
+      data: [10, 12, 15, 18, 20],
+    },
+  ],
+  options: {
+    chart: {
+      type: 'bar',
+      height: 350,
+      toolbar: {
+        show: false,
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        endingShape: 'rounded',
+        borderRadius: 10, 
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['#007bff'],
+    },
+    xaxis: {
+      categories: [
+        'South Africa',
+        'Other',
+        'Dual(SA Plus Other)',
+        'Permanent Residence',
+        'Unknown',
+      ],
+    },
+    yaxis: {
+      title: {
+        text: 'Number of Students (in hundreds)',
+      },
+    },
+    fill: {
+      opacity: 1,
+      colors: ['#007bff'], 
+    },
+    tooltip: {
+      y: {
+        formatter: function (val:any) {
+          return `${val}00`;
+        },
+      },
     },
   },
-};
-
-export const barDescriptions = [
-  { description: "Citizenship of Students", color: "rgb(82 121 249)" },
-];
-
-const labels = ["South Africa", "Other", "Dual(SA Plus Other)", "Permanent Residence", "Unknown"];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "# of Students",
-      data: labels.map(() => faker.number.int({ min: 0, max: 100 })),
-      backgroundColor: "rgb(82 121 249)",
-      barPercentage: 0.3,
-      borderRadius: 10,
-    }
-  ],
 };

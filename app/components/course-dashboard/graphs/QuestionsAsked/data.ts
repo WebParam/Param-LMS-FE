@@ -14,7 +14,6 @@ export const barDescriptions = [
 ];
 
 export const data = async (QuestionsAskedData: number[]) => {
-  "use server";
   return {
     labels,
     datasets: [

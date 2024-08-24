@@ -1,30 +1,62 @@
-import { faker } from "@faker-js/faker";
-
-export const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      }
+export const questionAskedData = {
+  series: [
+    {
+      name: 'Questions Asked',
+      data: [3, 4, 4.5, 5, 4.9, 6, 7, 9.1, 12.5],
     },
-  };
-  
-  const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  
-  export const barDescriptions = [
-    { description: "Questions Asked over time", color: "rgb(82 121 249)" },
-  ];
-
-  export const data = {
-    labels,
-    datasets: [
-      {
-        label: "No of Questions Asked",
-        data: labels.map(() => faker.number.int({ min: 0, max: 300 })),
-        backgroundColor: "rgb(82 121 249)",
-        barPercentage: 0.3,
-        borderRadius: 10,
-      }
-    ],
-  };
-  
+  ],
+  options: {
+    chart: {
+      type: 'bar',
+      height: 350,
+      toolbar: {
+        show: false,
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        endingShape: 'rounded',
+        borderRadius: 10, // Added for a nice rounded edge
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['#007bff'], // Changed color to a nice blue
+    },
+    xaxis: {
+      categories: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+      ],
+    },
+    yaxis: {
+      title: {
+        text: 'Questions Asked (in hundreds)',
+      },
+    },
+    fill: {
+      opacity: 1,
+      colors: ['#007bff'], // Changed color to a nice blue
+    },
+    tooltip: {
+      y: {
+        formatter: function (val:any) {
+          return `${val}00`;
+        },
+      },
+    },
+  },
+};

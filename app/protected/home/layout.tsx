@@ -1,11 +1,17 @@
 "use client";
 import HeadNav from "@/app/topbar-components/HeadNav";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import withAuth from "./AdminAuthWrapper";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
 
+    useEffect(()=>{
+      AOS.init({
+        duration: 1200,
+      });
+    },[])
   return (
     <>
       <div className="mdk-header-layout js-mdk-header-layout">

@@ -1,53 +1,34 @@
-import ChartWrapper from "@/app/components/course-analytics/graphs/ChartWrapper";
-import { barDescriptions as AvgTimeSpentBarDataDescription } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/data";
+"use client";
+import { AvdTimeSpentData } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/data";
+
+import { OverallAssessmentData } from "@/app/components/course-analytics/graphs/OverallAssessment/data";
+import { questionAskedData } from "@/app/components/course-analytics/graphs/QuestionsAsked/data";
+
+import { quizAttemptData } from "@/app/components/course-analytics/graphs/OverallQuiz/data";
+
+import { workbookTimeSpentData } from "@/app/components/course-analytics/graphs/workbookTimeSpent/data";
+
+import { commentsSubmittedData } from "@/app/components/course-analytics/graphs/CommentsChart/data";
 
 import {
-  options as OverallAssessmentBarOptions,
-  data as OverallAssessmentBarData,
-  barDescriptions as OverallAssessmentBarDescription,
-} from "@/app/components/course-analytics/graphs/OverallAssessment/data";
-import {
-  options as QuestionsAskedOptions,
-  data as QuestionsAskedData,
-  barDescriptions as QuestionsAskedDescription,
-} from "@/app/components/course-analytics/graphs/QuestionsAsked/data";
-
-import {
-  options as OverallQuizBarOptions,
-  data as OverallQuizBarData,
-  barDescriptions as OverallQuizBarDescription,
-} from "@/app/components/course-analytics/graphs/OverallQuiz/data";
-
-
-import {
-  options as OverallWorkbookBarOptions,
-  data as OverallWorkbookBarData,
-  barDescriptions as OverallWorkbookBarDescription,
-} from "@/app/components/course-analytics/graphs/workbookTimeSpent/data";
-
-import {
-  options as CommentsChartBarOptions,
-  data as CommentsChartBarData,
-  barDescriptions as CommentsChartBarDescription,
-} from "@/app/components/course-analytics/graphs/CommentsChart/data";
-
-import { barDescriptions as StudentsProgressStatusDescription } from "@/app/components/course-analytics/graphs/StudentsProgressStatus/data";
+  options as studentProgressRateOptions,
+  series as studentProgressRateSeries,
+} from "@/app/components/course-analytics/graphs/StudentsProgressStatus/data";
 
 import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
-import { AvgTimeSpent } from "@/app/components/course-analytics/graphs/AvgTimeSpentBar/AvgTimeSpent";
-import { StudentsProgressStatus } from "@/app/components/course-analytics/graphs/StudentsProgressStatus/StudentsProgressStatus";
-
-import { barDescriptions as StudentsPlacedDesc } from "@/app/components/course-analytics/graphs/students-placed/data";
-import { StudentsPlaced } from "@/app/components/course-analytics/graphs/students-placed/StudentsPlaced";
-
-import { WorkbookCompletionRate } from "@/app/components/course-analytics/graphs/workbook-competionRate/workbookCompetionRate";
-import { barDescriptions as workbookCompetionRateDec } from "@/app/components/course-analytics/graphs/workbook-competionRate/data";
-
 
 import {
-  options as LiveClassesOptions,
-  data as LiveClassesData,
-  barDescriptions as LiveClassesDescription,
+  options as StudentsPlacedOptions,
+  series as StudentsPlacedSeries,
+} from "@/app/components/course-analytics/graphs/students-placed/data";
+
+import {
+  options as workbookCompetionRateOptions,
+  series as workbookCompetionRateSeries,
+} from "@/app/components/course-analytics/graphs/workbook-competionRate/data";
+
+import {
+  liveClassesAttendedData,
 } from "@/app/components/course-dashboard/graphs/LiveClasses/data";
 
 type DataTiles = {
@@ -57,23 +38,25 @@ type DataTiles = {
 };
 
 import UnitStandardTable from "../(components)/unit-standard-table";
-import PageHeader from "../../PageHeader";
 import ApplicantsTable from "@/components/course-dashboard/graphs/Table/ApplicantsTable";
 import mockData from "@/components/course-dashboard/graphs/Table/data";
-
+import "aos/dist/aos.css";
+import LineChart from "@/components/course-dashboard/graphs/LineChart";
+import PieChart from "@/components/course-analytics/graphs/PieChart";
+import BarGraph from "@/components/course-dashboard/graphs/BarGraph";
+import DataTab from "@/components/course-dashboard/graphs/DataTabs";
 export default async function Page() {
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: 112 },
     { name: "Modules", icon: "book", data: 5 },
     { name: "Quizzes", icon: "help", data: 10 },
     { name: "Assessments", icon: "list", data: 4 },
-    { name: "Documents Downloaded", icon: "cloud_download", data: 79 },
   ];
 
   return (
     <>
       <div className="row mb-lg-8pt">
-        {dataTiles.map((data: DataTiles) => (
+      {dataTiles.map((data: DataTiles) => (
           <div key={data.name} className="col-lg-3">
             <div className="card">
               <div
@@ -94,110 +77,86 @@ export default async function Page() {
       </div>
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Average Time Spent"
-            barDescriptions={AvgTimeSpentBarDataDescription}
-          >
-            <AvgTimeSpent />
+          <ChartLayout title="Average Time Spent" type="bar">
+            <BarGraph chartData={AvdTimeSpentData} />
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Assessment Completed"
-            barDescriptions={OverallAssessmentBarDescription}
-            options={OverallAssessmentBarOptions}
-            data={OverallAssessmentBarData}
-            type="bar"
-          />
+          <ChartLayout title="Assessments Completed" type="bar">
+            <BarGraph chartData={OverallAssessmentData} />
+          </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Progress Status"
-            barDescriptions={StudentsProgressStatusDescription}
-            type="pie"
-          >
-            <StudentsProgressStatus />
+          <ChartLayout title="Progress Status" type="pie">
+            <PieChart
+              options={studentProgressRateOptions}
+              series={studentProgressRateSeries}
+            />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Quiz Attempts"
-            barDescriptions={OverallQuizBarDescription}
-            options={OverallQuizBarOptions}
-            data={OverallQuizBarData}
-            type="line"
-          />
-        </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Questions Asked"
-            barDescriptions={QuestionsAskedDescription}
-            options={QuestionsAskedOptions}
-            data={QuestionsAskedData}
-            type="bar"
-          />
-        </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Comments"
-            barDescriptions={CommentsChartBarDescription}
-            options={CommentsChartBarOptions}
-            data={CommentsChartBarData}
-            type="bar"
-          />
-        </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
-            title="Students Placement"
-            barDescriptions={StudentsPlacedDesc}
-            type="pie"
+          title = "Quiz Attempt"
+          type= "line"
           >
-            <StudentsPlaced />
+
+            <LineChart chartData={quizAttemptData} />
+          </ChartLayout>
+        </div>
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout title="Questions Asked" type="bar">
+            <BarGraph chartData={questionAskedData} />
+          </ChartLayout>
+        </div>
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout title="Comments Submited" type="bar">
+            <BarGraph chartData={commentsSubmittedData} />
+          </ChartLayout>
+        </div>
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout title="Students Placement" type="pie">
+            <PieChart
+              options={StudentsPlacedOptions}
+              series={StudentsPlacedSeries}
+            />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Live Classes Attended"
-            barDescriptions={LiveClassesDescription}
-            options={LiveClassesOptions}
-            data={LiveClassesData}
-            type="bar"
-          />
-        </div>
-
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Workbook Completion Rate"
-            barDescriptions={workbookCompetionRateDec}
-            type="pie"
-          >
-            <WorkbookCompletionRate />
+          <ChartLayout title="Live Classes Attended" type="bar">
+            <BarGraph chartData={liveClassesAttendedData} />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Workbook Time Spent"
-            barDescriptions={OverallWorkbookBarDescription}
-            options={OverallWorkbookBarOptions}
-            data={OverallWorkbookBarData}
-            type="line"
-          />
+          <ChartLayout title="Workbook Completion Rate" type="pie">
+            <PieChart
+              options={workbookCompetionRateOptions}
+              series={workbookCompetionRateSeries}
+            />
+          </ChartLayout>
         </div>
 
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <ChartLayout
+          title = "Workbook Time Spent"
+          type="line"
+          >
+            <LineChart chartData={workbookTimeSpentData} />
+          </ChartLayout>
+        </div>
       </div>
 
-      <div className="mb-24pt mb-sm-0 mr-sm-24pt">
-        <PageHeader title="Web Development Unit Standards" />
+      <div className="page-separator mt-3">
+        <div className="page-separator__text">Knowledge Modules</div>
       </div>
 
       <div className="card p-relative o-hidden mb-0">
         <UnitStandardTable path="course" />
       </div>
 
-      <ApplicantsTable data={mockData} />
+    
     </>
   );
 }
