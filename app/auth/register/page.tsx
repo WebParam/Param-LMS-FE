@@ -4,8 +4,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Api } from "../../lib/restapi/endpoints";
 import { IUserRegisterModel } from "../../interfaces/user";
+import thooto from "@/app/images/thooto.webp";
 import Cookies from "universal-cookie";
 import { useRouter } from 'next/navigation'
+import Image from "next/image";
 
 const cookies = new Cookies();
 const axios = require("axios").default;
@@ -184,12 +186,23 @@ export default function Register() {
   return (
     <>
       <ToastContainer />
-      <div className="d-flex justify-content-center align-items-center vh-100" style={{ marginTop: '20px' }}>
-        <div className="card p-4" style={{ width: '500px', height: '680px' }}>
-          <h2 className="text-center mb-4">Register your account</h2>
-          <p className="text-center mb-4">Welcome! Please enter your details</p>
+      <div
+        style={{
+          backgroundColor: "white",
+        }}
+        className="d-flex "
+      >
+
+<div className=" w-50 h-100">
+          <Image className="w-100 h-100" src={thooto} width={100} height={100} alt="banner" />
+        </div>
+
+
+        <div className=" p-4 w-50 h-100">
+          <h2 className="text-center mb-3">Register your account</h2>
+          <p className="text-center mb-3">Welcome! Please enter your details</p>
           <form>
-            <div className="form-group mb-3">
+            <div className="form-group mb-2">
               <label className="form-label" htmlFor="fname">
                {NameError ? <span style={{ color: "red", fontSize: "10px" }}>*required field</span> : null}
               </label>
@@ -204,7 +217,7 @@ export default function Register() {
               />
             </div>
 
-            <div className="form-group mb-3">
+            <div className="form-group mb-2">
               <label className="form-label" htmlFor="lname">
                  {LastNameError ? <span style={{ color: "red", fontSize: "10px" }}>*required field</span> : null}
               </label>
@@ -219,7 +232,7 @@ export default function Register() {
               />
             </div>
 
-            <div className="form-group mb-3">
+            <div className="form-group mb-2">
               <label className="form-label" htmlFor="email">
                  {EmailError ? <span style={{ color: "red", fontSize: "10px" }}>*required field</span> : null}
               </label>
@@ -234,7 +247,7 @@ export default function Register() {
               />
             </div>
 
-            <div className="form-group mb-3">
+            <div className="form-group mb-2">
               <label className="form-label" htmlFor="password">
                  {PasswordError ? <span style={{ color: "red", fontSize: "10px" }}>*required field</span> : null}
               </label>
@@ -249,7 +262,7 @@ export default function Register() {
               />
             </div>
 
-            <div className="form-group mb-3">
+            <div className="form-group mb-2">
               <label className="form-label" htmlFor="confirmPassword">
                  {ConfirmPassError ? <span style={{ color: "red", fontSize: "10px" }}>*required field</span> : null}
               </label>
@@ -270,7 +283,7 @@ export default function Register() {
               </button>
             </div>
 
-            <div className="text-center mt-3">
+            <div className="text-center mt-2">
               Already have an account? <span onClick={navigateToLogin} style={{ cursor: "pointer", color: "blue" }}>Sign-in</span>
             </div>
           </form>

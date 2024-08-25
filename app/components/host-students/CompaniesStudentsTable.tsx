@@ -66,7 +66,7 @@ function CompaniesStudentsTable({ data, courseId }: TablePaginationProps) {
             disabled
             className="btn btn-secondary"
           >
-                Export Companies 
+                Export Students 
           </button>
         </div>
       </div>

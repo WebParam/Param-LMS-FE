@@ -46,26 +46,19 @@ const Menu: NextPage<{ sideTabs: SideTab[] }> = ({ sideTabs }) => {
             } else {
               return (
                 <>
-                  {loggedInUser &&
-                  loggedInUser.role &&
-                  tab.roles &&
-                  tab.roles.includes(loggedInUser.role) ? (
-                    <li
-                      key={tab.url}
-                      className={`sidebar-menu-item ${
-                        pathname === tab.url ? "active" : ""
-                      }`}
-                    >
-                      <a className="sidebar-menu-button" href={tab.url}>
-                        <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                          {tab.icon}
-                        </span>
-                        <span className="sidebar-menu-text">{tab.name}</span>
-                      </a>
-                    </li>
-                  ) : (
-                    <></>
-                  )}
+                  <li
+                    key={tab.url}
+                    className={`sidebar-menu-item ${
+                      pathname === tab.url ? "active" : ""
+                    }`}
+                  >
+                    <a className="sidebar-menu-button" href={tab.url}>
+                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                        {tab.icon}
+                      </span>
+                      <span className="sidebar-menu-text">{tab.name}</span>
+                    </a>
+                  </li>
                 </>
               );
             }

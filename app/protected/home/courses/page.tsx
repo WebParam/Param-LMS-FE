@@ -4,7 +4,41 @@ import Courses from "@/components/course/Courses";
 import Link from "next/link";
 
 const Page = async () => {
-  const list = await getCourses();
+//  const list = await getCourses();
+
+  const list = [
+  {
+    id:"1",
+    title : "Software Engineer",
+    imgUrl:""
+  },
+  {
+    id:"1",
+    title : "Software Engineer",
+    imgUrl:""
+  },
+  {
+    id:"1",
+    title : "Software Engineer",
+    imgUrl:""
+  },
+  {
+    id:"1",
+    title : "Software Engineer",
+    imgUrl:""
+  },
+  {
+    id:"1",
+    title : "Software Engineer",
+    imgUrl:""
+  },
+  {
+    id:"1",
+    title : "Software Engineer",
+    imgUrl:""
+  }
+  ]
+
   return (
     <>
       <PageHeader />

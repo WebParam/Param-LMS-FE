@@ -1,4 +1,4 @@
-import DashboardCards from "./(components)/dashboard-cards";
+import DashboardCards from "@/app/components/facilitator/dashboard-cards";
 
 const Page = () => {
   return (

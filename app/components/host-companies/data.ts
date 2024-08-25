@@ -1,14 +1,3 @@
-export const provinces = [
-  "Gauteng",
-  "Western Cape",
-  "Eastern Cape",
-  "Northern Cape",
-  "Limpopo",
-  "Mpumalanga",
-  "KZN",
-  "Free State",
-  "North West",
-];
 
 export const industries = [
   "Information Technology",
@@ -25,36 +14,19 @@ export const companyLocations = [
   "Port Elizabeth",
   "Nelspruit",
 ];
-export const dateRanges = [
-  "Last Month",
-  "Last Quarter",
-  "Last Year",
+
+
+
+
+export const numberOfEmployeesRanges = [
+  "Less than 50",
+  "50-100",
+  "100-500",
+  "500-1000",
+  "More than 1000",
 ];
 
-export const placementStatuses = [
-  "Ongoing",
-  "Completed",
-  "Pending",
-];
 
-export const jobRoles = [
-  "Software Developer",
-  "Data Analyst",
-  "Project Manager",
-  "Sales Representative",
-  "HR Manager",
-];
-
-export const companies = [
-  "Tech Innovators",
-  "Green Energy Solutions",
-  "Coastal Logistics",
-  "AgriTech Farms",
-  "Mining & Co",
-  "NewTech Solutions", // Added new company
-  "EcoCycle", // Added new company
-  "GlobalConnect", // Added new company
-];
 const mockData =[
   {
     "companyId": 1,

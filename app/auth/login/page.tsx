@@ -6,6 +6,8 @@ import { Api } from "../../lib/restapi/endpoints";
 import { IUserLoginModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import thooto from "@/app/images/thooto.webp";
 
 const cookies = new Cookies();
 const axios = require("axios").default;
@@ -110,10 +112,16 @@ export default function Login() {
     <>
       <ToastContainer />
       <div
-        className="d-flex justify-content-center align-items-center vh-100"
-        style={{ marginTop: "20px" }}
+        style={{
+          backgroundColor: "white",
+        }}
+        className="d-flex "
       >
-        <div className="card p-4" style={{ width: "450px", height: "480px" }}>
+        <div className=" w-50 h-100">
+          <Image className="w-100 h-100" src={thooto} width={100} height={100} alt="banner" />
+        </div>
+
+        <div className=" p-4 w-50 h-100">
           <h2 className="text-center mb-4">Log in to your account</h2>
           <p className="text-center mb-4">
             Welcome back! Please enter your details
@@ -122,11 +130,12 @@ export default function Login() {
             <div className="form-group mb-3">
               <input
                 id="email"
-                type="text"
+                type="email"
                 value={email}
                 onChange={onChangeEmail}
                 className="form-control"
                 placeholder="Enter Email *"
+                required
                 style={{ height: "50px", fontSize: "16px" }}
               />
             </div>
@@ -135,6 +144,7 @@ export default function Login() {
                 id="password"
                 type="password"
                 value={password}
+                required
                 onChange={onChangePassword}
                 className="form-control"
                 placeholder="Enter Password *"

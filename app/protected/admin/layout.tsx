@@ -57,22 +57,22 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
     {
       name: "Analytics",
-      url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+      url: `/protected/admin/analytics/graphs/course?title=${courseTitle}`,
       icon: "show_chart",
       roles: ["Admin", "SuperAdmin"],
       children: [
         {
           name: "Course Analytics",
-          url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+          url: `/protected/admin/analytics/graphs/course?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
-        // {
-        //   name: "Assessment Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
+        {
+          name: "Assessment Analytics",
+          url: `/protected/admin/analytics/graphs/assessments?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
         // {
         //   name: "Student Analytics",
         //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
@@ -87,7 +87,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         // },
         {
           name: "Grouped Analytics",
-          url: `/protected/admin/course-dashboard/student-table?title=${courseTitle}`,
+          url: `/protected/admin/analytics/grouped-analytics?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
@@ -95,16 +95,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     },
 
     {
-      name: "Schedule Classes",
-      url: `/protected/admin/scheduleclass?title=${courseTitle}`,
-      icon: "meeting_room",
-      roles: ["Admin", "SuperAdmin"],
-    },
-
-    {
-      name: "Facilitator",
+      name: "Facilitator Dashboard",
       url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
-      icon: "person",
+      icon: "dashboard",
       roles: ["Admin", "SuperAdmin"],
     },
    
