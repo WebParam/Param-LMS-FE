@@ -53,7 +53,7 @@ export default async function Page() {
     <>
       <div className="row mb-lg-8pt">
       {dataTiles.map((data: DataTiles) => (
-          <div key={data.name} className="col-lg-3">
+          <div  data-aos="flip-down" key={data.name} className="col-lg-3">
             <div className="card">
               <div
                 data-toggle="tab"
@@ -71,19 +71,19 @@ export default async function Page() {
           </div>
         ))}
       </div>
-      <div className="row card-group-row">
+      <div  data-aos="flip-up" className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Average Time Spent" type="bar">
             <ChartProvider chartData={AvgTimeSpentData} />
           </ChartLayout>
         </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div  data-aos="flip-up" className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Assessments Completed" type="bar">
             <ChartProvider chartData={AssessmentCompletionData} />
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div  data-aos="flip-up" className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Progress Status" type="pie">
             <PieChart
               options={studentProgressRateOptions}
@@ -92,7 +92,7 @@ export default async function Page() {
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div  data-aos="flip-up" className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout
           title = "Quiz Attempt"
           type= "line"
@@ -102,17 +102,17 @@ export default async function Page() {
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div  data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Questions Asked" type="bar">
             <ChartProvider chartData={questionAskedData} />
           </ChartLayout>
         </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div data-aos="flip-down"className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Comments Submited" type="bar">
             <ChartProvider chartData={commentsSubmittedData} />
           </ChartLayout>
         </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div  data-aos="flip-down"className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Students Placement" type="pie">
             <PieChart
               options={StudentsPlacedOptions}
@@ -121,13 +121,13 @@ export default async function Page() {
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
+        <div  data-aos="flip-down" className="col-lg-6 w-100 col-md-12 card-group-row__col">
           <ChartLayout title="Live Classes Attended" type="bar">
             <ChartProvider chartData={liveClassesAttendedData} />
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div  data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Workbook Completion Rate" type="pie">
             <PieChart
               options={workbookCompetionRateOptions}
@@ -136,7 +136,7 @@ export default async function Page() {
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
         <ChartLayout
           title = "Workbook Time Spent"
           type="line"
@@ -146,13 +146,15 @@ export default async function Page() {
         </div>
       </div>
 
-      <div className="page-separator mt-3">
+     <div data-aos="slide-right">
+     <div className="page-separator mt-3">
         <div className="page-separator__text">Knowledge Modules</div>
       </div>
 
       <div className="card p-relative o-hidden mb-0">
         <KnowledgeModules path="course" />
       </div>
+     </div>
 
     
     </>

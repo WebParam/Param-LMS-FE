@@ -73,18 +73,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
-        // {
-        //   name: "Student Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Host Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
+       
         {
           name: "Grouped Analytics",
           url: `/protected/admin/analytics/grouped-analytics?title=${courseTitle}`,
@@ -99,6 +88,21 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
       icon: "dashboard",
       roles: ["Admin", "SuperAdmin"],
+    },
+    {
+      name: "Messaging",
+      url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
+      icon: "message",
+      roles: ["Admin", "SuperAdmin"],
+      children: [
+        {
+          name: "Notifications",
+          url: `/protected/admin/notifications?title=${courseTitle}`,
+          icon: "notifications",
+          roles: ["Admin", "SuperAdmin"],
+        },
+       
+      ],
     },
    
     {

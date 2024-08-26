@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { NextPage } from "next";
 import data from "../../../../protected/admin/analytics/grouped-analytics/data";
+import { useSearchParams } from "next/navigation";
 
 const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
+  const searchParams= useSearchParams();
+  const title = searchParams.get("title")!;
   return (
     <>
       <tbody className="list" id="staff">
@@ -66,7 +69,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                 <div className="d-flex justify-content-center align-items-center">
                   <Link
                   
-                    href={`/protected/admin/analytics/graphs/${item.student_id}/course?studentname=${item.student_name}`}
+                    href={`/protected/admin/analytics/graphs/${item.student_id}/course?title=${title}&studentName=${item.student_name}`}
                   >
                     <i className="material-icons mr-8pt text-center">
                       visibility

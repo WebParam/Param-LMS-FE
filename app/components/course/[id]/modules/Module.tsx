@@ -3,8 +3,9 @@ import Link from "next/link";
 type Props = {
   name: string;
   description: string;
-  noOfDocuments: number;
+  noOfDocuments?: number;
   url: string;
+  isAnalytics?: boolean
 };
 import { removeTags } from "@/app/lib/utils";
 
@@ -12,6 +13,7 @@ export default function Module({
   name,
   description,
   noOfDocuments,
+  isAnalytics,
   url,
 }: Props) {
   return (
@@ -24,13 +26,16 @@ export default function Module({
               <div className="text-right w-100">
                 <div className="row">
                   <div className="col-6">
+                  {isAnalytics &&
                     <div className="progress-bar ml-5 my-3">
-                      <div
+                        <div
                         className="progress-bar-fill"
                         style={{ width: "62%" }}
                       ></div>
                     </div>
+                  }
                   </div>
+                  
                   <div className="col-6 pt-2">
                     <i className="material-icons">file_present</i>{noOfDocuments}
                     files

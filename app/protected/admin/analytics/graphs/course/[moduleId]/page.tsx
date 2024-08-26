@@ -13,8 +13,8 @@ import {
 import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
 
 import ChartProvider from "@/components/course-analytics/graphs/ChartProvider";
-// import { downloadedPDFsData } from "@/components/course-dashboard/graphs/avgPDFDownloaded/data";
-// import { notesSubmittedData } from "@/components/course-analytics/graphs/course/AvgCommentsSubmitted";
+ import { AvgDownloadedPDFs } from "@/components/course-analytics/graphs/course/DownloadedPDFs";
+ import { AvgNotesSubmittedData } from "@/components/course-analytics/graphs/course/AvgNotesSubmitted";
 import PieChart from "@/components/course-analytics/graphs/PieChart";
 //import { getModuleGraphs } from "@/app/lib/actions/module";
 
@@ -37,14 +37,14 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <div className="row card-group-row">
+      <div data-aos="flip-down" className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Average Time Spent" type="bar">
             <ChartProvider chartData={AvgTimeSpentData} />
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Completion Rate" type="pie">
             <PieChart
               options={studentProgressRateOptions}
@@ -53,28 +53,28 @@ export default async function Page({ params }: { params: { id: string } }) {
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Average Completed Quizzes" type="line">
             <ChartProvider chartData={AvgQuizAttemptData} />
           </ChartLayout>
         </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Average Questions Asked" type="bar">
             <ChartProvider chartData={questionAskedData} />
           </ChartLayout>
         </div>
 
-        {/* <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
+        <div data-aos="flip-down" className="col-lg-6 w-100 col-md-12 card-group-row__col">
           <ChartLayout title="Average Notes Submitted" type="bar">
-            <ChartProvider chartData={notesSubmittedData} />
+            <ChartProvider chartData={AvgNotesSubmittedData} />
           </ChartLayout>
-        </div> */}
+        </div>
 
-        {/* <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Average PDFs downloaded" type="bar">
-            <ChartProvider chartData={downloadedPDFsData} />
+            <ChartProvider chartData={AvgDownloadedPDFs} />
           </ChartLayout>
-        </div> */}
+        </div>
       </div>
     </>
   );

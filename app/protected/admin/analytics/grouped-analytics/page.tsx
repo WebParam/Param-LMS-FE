@@ -24,8 +24,9 @@ const Body = ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-        <div className="card mb-0">
+        <div    data-aos="flip-down"  className="card mb-0">
           <div
+        
             className="table-responsive"
             data-toggle="lists"
             data-lists-sort-by="js-lists-values-employee-name"

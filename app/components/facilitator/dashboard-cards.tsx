@@ -48,7 +48,7 @@ const searchParams = useSearchParams();
       <PageHeader title="Facilitator Dashboard" />
       <Row className="mt-4 ml-5 justify-content-center">
         {cardData.map((card, index) => (
-          <Col key={index} md={6} lg={4} className="mb-4 mx-auto">
+          <Col data-aos="flip-up" key={index} md={6} lg={4} className="mb-4 mx-auto">
             <CardComponent
               link={card.link}
               icon={card.icon}

@@ -9,7 +9,7 @@ export default function ChartProvider({chartData}:any) {
   return (
     <div>
       <div style={{ height: "300px" }} id="chart" className='chart w-100 card p-2'>
-        <ReactApexChart options={chartData.options as any} series={chartData.series} type={chartData.options.chart.type as any} height={chartData.options.chart.height} />
+        <ReactApexChart options={chartData.options as any} series={chartData.series} type={chartData.options.chart.type as any}  />
       </div>
       <div id="html-dist"></div>
     </div>

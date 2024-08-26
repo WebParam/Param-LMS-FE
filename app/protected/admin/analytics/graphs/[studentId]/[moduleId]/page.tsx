@@ -41,13 +41,13 @@ export default async function Page({
   return (
     <>
       <div className="row card-group-row">
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div   data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Average Time Spent" type="bar">
             <ChartProvider chartData={AvgTimeSpentData} />
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div   data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Completion Rate" type="pie">
             <PieChart
               options={studentProgressRateOptions}
@@ -56,23 +56,23 @@ export default async function Page({
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div   data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Average Completed Quizzes" type="line">
             <ChartProvider chartData={AvgQuizAttemptData} />
           </ChartLayout>
         </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div   data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Average Questions Asked" type="bar">
             <ChartProvider chartData={questionAskedData} />
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
+        <div   data-aos="flip-down"  className="col-lg-6 w-100 col-md-12 card-group-row__col">
           <ChartLayout title="Average Notes Submitted" type="bar">
             <ChartProvider chartData={AvgNotesSubmittedData} />
           </ChartLayout>
         </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div   data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Average PDFs downloaded" type="bar">
             <ChartProvider chartData={AvgDownloadedPDFs} />
           </ChartLayout>

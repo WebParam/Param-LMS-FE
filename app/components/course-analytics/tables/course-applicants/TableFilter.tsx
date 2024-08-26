@@ -5,7 +5,7 @@ import {
   races,
   employmentStatuses,
   disabilities,
-} from "../../../course/[id]/course-applicants/graphs/data";
+} from "./data";
 
 const statuses = [
   { value: 0, label: "Enrolled" },

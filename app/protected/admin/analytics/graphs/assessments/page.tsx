@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import ChartLayout from "@/components/course-analytics/graphs/ChartLayout";
 import { WorkbookSignedData } from "@/components/course-analytics/graphs/assessments/WorkbookSigned";
 
@@ -17,18 +17,27 @@ export default function page() {
   return (
     <>
       <div className="row mb-lg-8pt">
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div
+          data-aos="flip-down"
+          className="col-lg-6 col-md-12 card-group-row__col"
+        >
           <ChartLayout title="Workbooks Signed" type="bar">
             <ChartProvider chartData={WorkbookSignedData} />
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div
+          data-aos="flip-down"
+          className="col-lg-6 col-md-12 card-group-row__col"
+        >
           <ChartLayout title="Average Per Assessment" type="line">
             <ChartProvider chartData={AvgAssessmentData} />
           </ChartLayout>
         </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div
+          data-aos="flip-down"
+          className="col-lg-6 col-md-12 card-group-row__col"
+        >
           <ChartLayout title="Assessment Progress Status" type="pie">
             <PieChart
               options={AssessmentPassRateOptions}
@@ -36,7 +45,10 @@ export default function page() {
             />
           </ChartLayout>
         </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <div
+          data-aos="flip-down"
+          className="col-lg-6 col-md-12 card-group-row__col"
+        >
           <ChartLayout title="Assessment Pass Rate" type="pie">
             <PieChart
               options={AssessmentPassRateOptions}
@@ -45,7 +57,9 @@ export default function page() {
           </ChartLayout>
         </div>
       </div>
-      <StudentsTable data={mockData} />
+      <div data-aos="slide-right">
+        <StudentsTable data={mockData} />
+      </div>
     </>
   );
 }

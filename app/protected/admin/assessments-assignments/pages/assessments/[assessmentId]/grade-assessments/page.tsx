@@ -50,7 +50,7 @@ const Body = ({ params }: { params: { assessmentId: string } }) => {
           </button>
         </div>
       </div>
-      <div data-aos="slide-right" className="card mb-0">
+      <div data-aos="flip-up" className="card mb-0">
         <div
           className="table-responsive"
           data-toggle="lists"
