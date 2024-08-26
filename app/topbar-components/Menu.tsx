@@ -1,14 +1,14 @@
 import { NextPage } from "next";
 import SideTab from "@/app/interfaces/sideTabs";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Dropdown from "../components/Dropdown";
 import Cookies from "universal-cookie";
-import { useState } from "react";
 
 const Menu: NextPage<{ sideTabs: SideTab[] }> = ({ sideTabs }) => {
   const pathname = usePathname();
   const cookies = new Cookies();
   const loggedInUser = cookies.get("param-lms-user");
+  const router = useRouter();
 
   return (
     <>
@@ -24,7 +24,9 @@ const Menu: NextPage<{ sideTabs: SideTab[] }> = ({ sideTabs }) => {
                       pathname === tab.url ? "active" : ""
                     }`}
                   >
-                    <a className="sidebar-menu-button" href={tab.url}>
+                    <a className="sidebar-menu-button"
+                    onClick={() => router.push(tab.url!)}
+                    >
                       <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                         {tab.icon}
                       </span>
@@ -46,26 +48,19 @@ const Menu: NextPage<{ sideTabs: SideTab[] }> = ({ sideTabs }) => {
             } else {
               return (
                 <>
-                  {loggedInUser &&
-                  loggedInUser.role &&
-                  tab.roles &&
-                  tab.roles.includes(loggedInUser.role) ? (
-                    <li
-                      key={tab.url}
-                      className={`sidebar-menu-item ${
-                        pathname === tab.url ? "active" : ""
-                      }`}
-                    >
-                      <a className="sidebar-menu-button" href={tab.url}>
-                        <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                          {tab.icon}
-                        </span>
-                        <span className="sidebar-menu-text">{tab.name}</span>
-                      </a>
-                    </li>
-                  ) : (
-                    <></>
-                  )}
+                  <li
+                    key={tab.url}
+                    className={`sidebar-menu-item ${
+                      pathname === tab.url ? "active" : ""
+                    }`}
+                  >
+                    <a className="sidebar-menu-button" href={tab.url}>
+                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                        {tab.icon}
+                      </span>
+                      <span className="sidebar-menu-text">{tab.name}</span>
+                    </a>
+                  </li>
                 </>
               );
             }

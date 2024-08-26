@@ -1,5 +1,5 @@
 "use client"
-import CreateNotificationModal from "@/components/Notifications/CreateNotificationModal";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface PageHeaderProps {
@@ -13,16 +13,12 @@ export default function PageHeader({
   buttonTitle,
   contentTitle,
 }: PageHeaderProps) {
-  const [showModal, setShowModal] = useState(false);
+
+  const router = useRouter();
 
   return (
     <>
-      <CreateNotificationModal
-        show={showModal}
-        onHide={() => {
-          setShowModal(false);
-        }}
-      />
+    
 
       <div className="border-bottom-2 py-32pt position-relative z-1">
         <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
@@ -39,7 +35,7 @@ export default function PageHeader({
               </ol>
             </div>
             {/* button with create notification */}
-            <button onClick={() => setShowModal(true)} className="position-absolute right-0 btn btn-success">{buttonTitle}</button>
+            <button onClick={() => router.back()} className="position-absolute right-0 btn btn-success">{buttonTitle}</button>
           </div>
         </div>
       </div>

@@ -14,7 +14,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     },[])
   return (
     <>
-      <div className="mdk-header-layout js-mdk-header-layout">
+      <div 
+      style={{backgroundColor:"white"}}
+      className="mdk-header-layout js-mdk-header-layout">
         <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} />
 
         {/* <!-- Header Layout Content --> */}

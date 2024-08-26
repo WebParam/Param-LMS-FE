@@ -111,8 +111,8 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div className="calendar-container">
-      <div className="calendar">
+    <div className="calendar p-2">
+      
         <div className="calendar-header">
           <Button variant="link" onClick={handlePrevMonth} className="calendar-nav">&lt;</Button>
           <h2>{currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}</h2>
@@ -124,7 +124,7 @@ const Calendar: React.FC = () => {
           ))}
           {renderCalendar()}
         </div>
-      </div>
+      
       <Modal show={showModal} onHide={handleCloseModal} dialogClassName="modal-lg">
         <Modal.Header className="d-flex justify-content-between">
           <Modal.Title>{isSpecialDate ? "Class Details" : "Schedule Class"}</Modal.Title>

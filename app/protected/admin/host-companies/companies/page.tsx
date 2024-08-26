@@ -34,7 +34,7 @@ const Body = () => {
 
   return (
     <>
-  <div data-aos="slide-right">
+  <div data-aos="flip-up">
         <CompaniesTable data={mockData} />
       </div>
      

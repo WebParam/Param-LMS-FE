@@ -1,172 +1,142 @@
 "use client";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Api } from "../../lib/restapi/endpoints";
 import { IUserLoginModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import thooto from "@/app/images/thooto.png";
 
 const cookies = new Cookies();
-const axios = require("axios").default;
 
 export default function Login() {
-  const [disable, setDisable] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
-  const onChangeEmail = (e: any) => {
-    setEmail(e.target.value);
-  };
-
-  const onChangePassword = (e: any) => {
-    setPassword(e.target.value);
-  };
+  const [disable, setDisable] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
 
-  const navigateToRegister = () => {
-    router.push("/auth/register");
-  };
+  const onChangeEmail = (e:any) => setEmail(e.target.value);
+  const onChangePassword = (e:any) => setPassword(e.target.value);
 
-  async function LoginUser(event: any) {
-    cookies.remove("param-lms-user");
+  async function LoginUser(event:any) {
+    event.preventDefault();
     setDisable(true);
+    setErrorMessage("");
+
+    cookies.remove("param-lms-user");
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    let _id = toast.loading("Logging in..", {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-
     if (!emailRegex.test(email)) {
-      toast.update(_id, {
-        render: "Invalid email address",
-        type: "error",
-        isLoading: false,
-      });
-      setTimeout(() => {
-        setDisable(false);
-        toast.dismiss(_id);
-      }, 2000);
-    } else {
-      const payload = {
-        Email: email,
-        Password: password,
-      } as IUserLoginModel;
+      setErrorMessage("Invalid email address");
+      setDisable(false);
+      return;
+    }
 
+    const payload = { Email: email, Password: password } as IUserLoginModel;
+
+    try {
       const user = await Api.POST_Login(payload);
-      console.log("data", user);
-      try {
-        if (user?.data?.id) {
-          toast.update(_id, {
-            render: "Successfully logged in",
-            type: "success",
-            isLoading: false,
-          });
 
-          cookies.set("param-lms-user", JSON.stringify(user.data), {
-            path: "/",
-          });
-
-          console.log(user.data);
-          console.log("Role", user?.data?.role);
-          router.push("/protected/student/course/all-courses");
-        } else {
-          toast.update(_id, {
-            render: "Invalid login credentials",
-            type: "error",
-            isLoading: false,
-          });
-          setTimeout(() => {
-            setDisable(false);
-            toast.dismiss(_id);
-          }, 3000);
-        }
-      } catch (error) {
-        toast.update(_id, {
-          render: "Invalid login credentials",
-          type: "error",
-          isLoading: false,
-        });
-        setTimeout(() => {
-          setDisable(false);
-          toast.dismiss(_id);
-        }, 3000);
-        console.log(error);
+      if (user?.data?.id) {
+        cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
+        router.push("/protected/home/courses");
+      } else {
+        setErrorMessage("Invalid login credentials");
+        setDisable(false);
       }
-
-      event?.preventDefault();
+    } catch (error) {
+      setErrorMessage("An error occurred. Please try again.");
+      setDisable(false);
     }
   }
 
   return (
-    <>
-      <ToastContainer />
-      <div
-        className="d-flex justify-content-center align-items-center vh-100"
-        style={{ marginTop: "20px" }}
-      >
-        <div className="card p-4" style={{ width: "450px", height: "480px" }}>
-          <h2 className="text-center mb-4">Log in to your account</h2>
-          <p className="text-center mb-4">
-            Welcome back! Please enter your details
-          </p>
-          <form>
-            <div className="form-group mb-3">
-              <input
-                id="email"
-                type="text"
-                value={email}
-                onChange={onChangeEmail}
-                className="form-control"
-                placeholder="Enter Email *"
-                style={{ height: "50px", fontSize: "16px" }}
-              />
-            </div>
-            <div className="form-group mb-3">
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={onChangePassword}
-                className="form-control"
-                placeholder="Enter Password *"
-                style={{ height: "50px", fontSize: "16px" }}
-              />
-            </div>
-            <div
-              className="d-flex justify-content-between align-items-center mb-3"
-              style={{ marginTop: "20px" }}
-            ></div>
-            <div
-              className="d-grid mb-3"
-              style={{ marginTop: "40px", textAlign: "center" }}
-            >
-              <button
-                disabled={disable}
-                onClick={LoginUser}
-                className="btn btn-primary"
-                style={{
-                  backgroundColor: "#24345c",
-                  borderColor: "#24345c",
-                  height: "50px",
-                  fontSize: "16px",
-                  width: "80%",
-                }}
-              >
-                Log In
-              </button>
-            </div>
-          </form>
-        </div>
+    <div className="d-flex" style={{ backgroundColor: "white" }}>
+      <div className="w-50 h-100">
+        <Image
+          className="w-100 h-100"
+          src={thooto}
+          width={500}
+          height={300}
+          alt="banner"
+          layout="responsive"
+        />
       </div>
-    </>
+
+      <div
+        className="p-4 w-50 h-100"
+        style={{
+          backgroundColor: "white",
+          boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.15)",
+          borderRadius: "8px",
+          padding: "40px",
+          maxWidth: "500px",
+          margin: "auto",
+          marginTop: "50px",
+        }}
+      >
+        <h2 className="text-center mb-4">Log in to your account</h2>
+        <p className="text-center mb-4">Welcome back! Please enter your details</p>
+
+        {errorMessage && (
+          <div className="alert alert-danger" role="alert">
+            {errorMessage}
+          </div>
+        )}
+
+        <form onSubmit={LoginUser}>
+          <div className="form-group mb-3">
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={onChangeEmail}
+              className="form-control"
+              placeholder="Enter Email *"
+              required
+              style={{ height: "50px", fontSize: "16px" }}
+            />
+          </div>
+          <div className="form-group mb-3">
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={onChangePassword}
+              className="form-control"
+              placeholder="Enter Password *"
+              required
+              style={{ height: "50px", fontSize: "16px" }}
+            />
+          </div>
+          <div
+            className="d-grid mb-3"
+            style={{ marginTop: "40px", textAlign: "center" }}
+          >
+            <button
+              type="submit"
+              disabled={disable}
+              className="btn btn-primary"
+              style={{
+                backgroundColor: "#24345c",
+                borderColor: "#24345c",
+                height: "50px",
+                fontSize: "16px",
+                width: "80%",
+              }}
+            >
+              {disable ? (
+                <div className="spinner-border text-white" role="status" />
+              ) : (
+                "Log In"
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }

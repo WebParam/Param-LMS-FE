@@ -1,7 +1,7 @@
 import { IStudentsData } from "@/app/interfaces/courseApplicants";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
-import Graphs from "@/components/course/[id]/enrollments/graphs/Graphs";
-import EnrolledTable from "@/components/course/[id]/enrollments/EnrolledTable";
+import Graphs from "@/components/course-analytics/graphs/enrolled-students/Graphs";
+import EnrolledTable from "@/components/course-analytics/tables/enrolled-students/EnrolledTable";
 import PageHeader from "./PageHeader";
 
 const Body = async ({ params }: { params: { id: string } }) => {
