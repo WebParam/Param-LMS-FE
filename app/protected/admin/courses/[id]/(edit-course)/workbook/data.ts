@@ -12,34 +12,7 @@ export const data = [
               questionType: "multiple-choice",
               score: "5"
             },
-            {
-              id: "60d5b2c88a3f9b000d8a6a92",
-              title: "Explain the process of photosynthesis.",
-              description: "Provide a detailed explanation.",
-              questionType: "essay",
-              score: "10"
-            },
-            {
-              id: "60d5b2c88a3f9b000d8a6a93",
-              title: "Solve the equation: 2x + 3 = 7.",
-              description: "Find the value of x.",
-              questionType: "short-answer",
-              score: "7"
-            },
-            {
-              id: "60d5b2c88a3f9b000d8a6a94",
-              title: "Which of the following are prime numbers?",
-              description: "Select all that apply.",
-              questionType: "multiple-select",
-              score: "6"
-            },
-            {
-              id: "60d5b2c88a3f9b000d8a6a95",
-              title: "Match the countries with their capitals.",
-              description: "Drag and drop to match each country with its capital.",
-              questionType: "matching",
-              score: "8"
-            }
+           
           ]
     },
     {
