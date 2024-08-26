@@ -1,7 +1,7 @@
 import { IStudentsData } from "@/app/interfaces/courseApplicants";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
-import ApplicantsTable from "@/components/course-analytics/tables/course-applicants/ApplicantsTable";
-import Graphs from "@/components/course-analytics/graphs/course-applicants/Graphs";
+import ApplicantsTable from "@/components/analytics/tables/course-applicants/ApplicantsTable";
+import Graphs from "@/components/analytics/graphs/course-applicants/Graphs";
 import Link from "next/link";
 import PageHeader from "./PageHeader";
 

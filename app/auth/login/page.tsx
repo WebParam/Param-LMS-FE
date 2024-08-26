@@ -75,7 +75,7 @@ export default function Login() {
           padding: "40px",
           maxWidth: "500px",
           margin: "auto",
-          marginTop: "50px",
+          marginTop: "100px",
         }}
       >
         <h2 className="text-center mb-4">Log in to your account</h2>

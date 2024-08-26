@@ -10,7 +10,7 @@ import { studentProvincesData } from "./StudentsProvinces";
 
 import "@/app/css/tiles.css"
 
-import { AgeVsGenderData } from "@/app/components/course-analytics/graphs/course-applicants/AgeVsGender";
+import { AgeVsGenderData } from "@/app/components/analytics/graphs/course-applicants/AgeVsGender";
 import { socioEconomicStatusData } from "./SocioEcoStatusData"; 
 
 import { studentDisabilitiesData } from "./StudentDisabilities";
@@ -22,7 +22,7 @@ import {
   series as raceSeries,
 } from "./StudentRaces";
 
-import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
+import ChartLayout from "@/app/components/analytics/graphs/ChartLayout";
 
 import {
   options as genderOptions,
@@ -33,8 +33,8 @@ import {
   options as placementOptions,
   series as placementSeries,
 } from "./StudentsPlacement";
-import ChartProvider from "@/components/course-analytics/graphs/ChartProvider";
-import PieChart from "@/components/course-analytics/graphs/PieChart";
+import ChartProvider from "@/components/analytics/graphs/ChartProvider";
+import PieChart from "@/components/analytics/graphs/PieChart";
 
 type DataTiles = {
   name: string;

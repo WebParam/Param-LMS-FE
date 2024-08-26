@@ -1,21 +1,21 @@
 "use client";
-import { AvgTimeSpentData } from "@/app/components/course-analytics/graphs/course/AvgTimeSpent";
+import { AvgTimeSpentData } from "@/app/components/analytics/graphs/course/AvgTimeSpent";
 
-import { questionAskedData } from "@/app/components/course-analytics/graphs/course/AvgQuestionsAsked";
+import { questionAskedData } from "@/app/components/analytics/graphs/course/AvgQuestionsAsked";
 
-import { AvgQuizAttemptData } from "@/app/components/course-analytics/graphs/course/AvgQuizAttempts";
+import { AvgQuizAttemptData } from "@/app/components/analytics/graphs/course/AvgQuizAttempts";
 
 import {
   options as studentProgressRateOptions,
   series as studentProgressRateSeries,
-} from "@/app/components/course-analytics/graphs/course/StudentCourseProgress";
+} from "@/app/components/analytics/graphs/course/StudentCourseProgress";
 
-import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
+import ChartLayout from "@/app/components/analytics/graphs/ChartLayout";
 
-import PieChart from "@/components/course-analytics/graphs/PieChart";
-import ChartProvider from "@/components/course-analytics/graphs/ChartProvider";
-import { AvgNotesSubmittedData } from "@/components/course-analytics/graphs/course/AvgNotesSubmitted";
-import { AvgDownloadedPDFs } from "@/components/course-analytics/graphs/course/DownloadedPDFs";
+import PieChart from "@/components/analytics/graphs/PieChart";
+import ChartProvider from "@/components/analytics/graphs/ChartProvider";
+import { AvgNotesSubmittedData } from "@/components/analytics/graphs/course/AvgNotesSubmitted";
+import { AvgDownloadedPDFs } from "@/components/analytics/graphs/course/DownloadedPDFs";
 
 export default async function Page({
   params,

@@ -1,35 +1,32 @@
 "use client";
-import { AvgTimeSpentData } from "@/app/components/course-analytics/graphs/course/AvgTimeSpent";
+import { AvgTimeSpentData } from "@/app/components/analytics/graphs/course/AvgTimeSpent";
 
-import { AssessmentCompletionData } from "@/components/course-analytics/graphs/course/AssessmentCompletion";
-import { questionAskedData } from "@/app/components/course-analytics/graphs/course/AvgQuestionsAsked";
+import { AssessmentCompletionData } from "@/components/analytics/graphs/course/AssessmentCompletion";
+import { questionAskedData } from "@/app/components/analytics/graphs/course/AvgQuestionsAsked";
 
-import { AvgQuizAttemptData } from "@/app/components/course-analytics/graphs/course/AvgQuizAttempts";
+import { AvgQuizAttemptData } from "@/app/components/analytics/graphs/course/AvgQuizAttempts";
 
-import { workbookTimeSpentData } from "@/app/components/course-analytics/graphs/course/WorkbookTimeSpent";
+import { workbookTimeSpentData } from "@/app/components/analytics/graphs/course/WorkbookTimeSpent";
 
-import { commentsSubmittedData } from "@/app/components/course-analytics/graphs/course/AvgCommentsSubmitted";
+import { commentsSubmittedData } from "@/app/components/analytics/graphs/course/AvgCommentsSubmitted";
 
 import {
   options as studentProgressRateOptions,
   series as studentProgressRateSeries,
-} from "@/app/components/course-analytics/graphs/course/StudentCourseProgress";
+} from "@/app/components/analytics/graphs/course/StudentCourseProgress";
 
-import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
+import ChartLayout from "@/app/components/analytics/graphs/ChartLayout";
 
-import {
-  options as StudentsPlacedOptions,
-  series as StudentsPlacedSeries,
-} from "@/app/components/course-analytics/graphs/course/NoOfStudentsPlaced";
+
 
 import {
   options as workbookCompetionRateOptions,
   series as workbookCompetionRateSeries,
-} from "@/app/components/course-analytics/graphs/course/WorkbookCompletionRate";
+} from "@/app/components/analytics/graphs/course/WorkbookCompletionRate";
 
 import {
   liveClassesAttendedData,
-} from "@/app/components/course-analytics/graphs/course/LiveClassesAteended";
+} from "@/app/components/analytics/graphs/course/LiveClassesAteended";
 
 type DataTiles = {
   name: string;
@@ -37,10 +34,11 @@ type DataTiles = {
   data: number;
 };
 
-import KnowledgeModules from "@/app/components/course-analytics/tables/KnowledgeModules";
+import KnowledgeModules from "@/app/components/analytics/tables/KnowledgeModules";
 import "aos/dist/aos.css";
-import ChartProvider from "@/components/course-analytics/graphs/ChartProvider";
-import PieChart from "@/components/course-analytics/graphs/PieChart";
+import ChartProvider from "@/components/analytics/graphs/ChartProvider";
+import PieChart from "@/components/analytics/graphs/PieChart";
+import { ModuleCompletionRates } from "@/components/analytics/graphs/course/ModuleCompletion";
 export default async function Page() {
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: 112 },
@@ -112,14 +110,6 @@ export default async function Page() {
             <ChartProvider chartData={commentsSubmittedData} />
           </ChartLayout>
         </div>
-        <div  data-aos="flip-down"className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Students Placement" type="pie">
-            <PieChart
-              options={StudentsPlacedOptions}
-              series={StudentsPlacedSeries}
-            />
-          </ChartLayout>
-        </div>
 
         <div  data-aos="flip-down" className="col-lg-6 w-100 col-md-12 card-group-row__col">
           <ChartLayout title="Live Classes Attended" type="bar">
@@ -142,6 +132,15 @@ export default async function Page() {
           type="line"
           >
             <ChartProvider chartData={workbookTimeSpentData} />
+          </ChartLayout>
+        </div>
+
+        <div data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
+        <ChartLayout
+          title = "Modules Completion Rate"
+          type="line"
+          >
+            <ChartProvider chartData={ModuleCompletionRates} />
           </ChartLayout>
         </div>
       </div>

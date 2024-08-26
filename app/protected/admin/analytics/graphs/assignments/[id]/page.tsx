@@ -1,5 +1,8 @@
 "use client"
 import ChartLayout from '@/components/analytics/graphs/ChartLayout'
+import {
+    WorkbookSignedData
+  } from "@/components/analytics/graphs/assessments/WorkbookSigned";
 
 import {
     options as AssessmentPassRateOptions,
@@ -14,7 +17,13 @@ export default function page() {
     <>
        <div className="row mb-lg-8pt">
        
-          <div   data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
+       <div   data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
+       <ChartLayout title="Workbooks Signed" type="bar">
+            <ChartProvider chartData={WorkbookSignedData} />
+          </ChartLayout>
+         </div>
+
+         <div   data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
          <ChartLayout title="Average Per Assessment" type="line">
             <ChartProvider chartData={AvgAssessmentData} />
           </ChartLayout>

@@ -1,33 +1,33 @@
 "use client";
-import { AvgTimeSpentData } from "@/app/components/course-analytics/graphs/course/AvgTimeSpent";
+import { AvgTimeSpentData } from "@/app/components/analytics/graphs/course/AvgTimeSpent";
 
-import { AssessmentCompletionData } from "@/components/course-analytics/graphs/course/AssessmentCompletion";
-import { questionAskedData } from "@/app/components/course-analytics/graphs/course/AvgQuestionsAsked";
+import { AssessmentCompletionData } from "@/components/analytics/graphs/course/AssessmentCompletion";
+import { questionAskedData } from "@/app/components/analytics/graphs/course/AvgQuestionsAsked";
 
-import { AvgQuizAttemptData } from "@/app/components/course-analytics/graphs/course/AvgQuizAttempts";
+import { AvgQuizAttemptData } from "@/app/components/analytics/graphs/course/AvgQuizAttempts";
 
 
-import { commentsSubmittedData } from "@/app/components/course-analytics/graphs/course/AvgCommentsSubmitted";
+import { commentsSubmittedData } from "@/app/components/analytics/graphs/course/AvgCommentsSubmitted";
 
 import {
   options as studentProgressRateOptions,
   series as studentProgressRateSeries,
-} from "@/app/components/course-analytics/graphs/course/StudentCourseProgress";
+} from "@/app/components/analytics/graphs/course/StudentCourseProgress";
 
-import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
+import ChartLayout from "@/app/components/analytics/graphs/ChartLayout";
 
 import {
   liveClassesAttendedData,
-} from "@/app/components/course-analytics/graphs/course/LiveClassesAteended";
+} from "@/app/components/analytics/graphs/course/LiveClassesAteended";
 
 
 import "aos/dist/aos.css";
-import ChartProvider from "@/components/course-analytics/graphs/ChartProvider";
-import PieChart from "@/components/course-analytics/graphs/PieChart";
-import KnowledgeModules from "../../../../../../components/course-analytics/tables/KnowledgeModules";
-import { AvgDownloadedPDFs } from "@/components/course-analytics/graphs/course/DownloadedPDFs";
-import { AvgCorrectAnswersSubmittedData } from "@/components/course-analytics/graphs/course/AvgCorrectAnswers";
-import { AvgNotesSubmittedData } from "@/components/course-analytics/graphs/course/AvgNotesSubmitted";
+import ChartProvider from "@/components/analytics/graphs/ChartProvider";
+import PieChart from "@/components/analytics/graphs/PieChart";
+import KnowledgeModules from "../../../../../../components/analytics/tables/KnowledgeModules";
+import { AvgDownloadedPDFs } from "@/components/analytics/graphs/course/DownloadedPDFs";
+import { AvgCorrectAnswersSubmittedData } from "@/components/analytics/graphs/course/AvgCorrectAnswers";
+import { AvgNotesSubmittedData } from "@/components/analytics/graphs/course/AvgNotesSubmitted";
 export default async function Page() {
     return (
     <>

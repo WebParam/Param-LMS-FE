@@ -15,8 +15,8 @@ export default function PageHeader({ title }: { title: string }) {
   const searchParams = useSearchParams();
   const studentName = searchParams.get("studentName")!;
   const isStudent =
-  pathName == `/protected/admin/analytics/graphs/assessments/${id}`;
-  const isHome = pathName == "/protected/admin/analytics/graphs/assessments"
+  pathName == `/protected/admin/analytics/graphs/assignments/${id}`;
+  const isHome = pathName == "/protected/admin/analytics/graphs/assignments"
 
 
   return (
@@ -27,7 +27,7 @@ export default function PageHeader({ title }: { title: string }) {
             <div className="mb-24pt mb-sm-0 mr-sm-24pt">
               <h2 className="mb-0">
                 {
-                    isStudent ? <span>{studentName}</span> : `Assessments Analytics - ${title}`
+                    isStudent ? <span>{studentName}</span> : `Assignments Analytics - ${title}`
                 }
                </h2>
 
@@ -37,12 +37,12 @@ export default function PageHeader({ title }: { title: string }) {
                 </li>
 
                 <li className="breadcrumb-item active">{title} </li>
-                <li className="breadcrumb-item active">Assessments Analytics</li>
+                <li className="breadcrumb-item active">Assignments Analytics</li>
               </ol>
             </div>
           </div>
           {isStudent && (
-            <button onClick={() => router.back()} className="btn btn-success">Assessments Analytics</button>
+            <button onClick={() => router.back()} className="btn btn-success">Assignments Analytics</button>
           )}
            {
             isHome &&  <button onClick={() => router.replace("/protected/home/courses")} className="btn btn-success">

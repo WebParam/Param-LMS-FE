@@ -2,16 +2,11 @@
 import Table from "@/components/logbook/Table";
 import { useEffect, useState } from "react";
 import list from "@/components/logbook/data";
-import {
-  useParams,
+import { useParams, useSearchParams } from "next/navigation";
 
-  useSearchParams,
-} from "next/navigation";
-
-import CompaniesTable from "@/components/host-companies/CompaniesTable";
-import mockData from "@/components/host-companies/data";
-import CompaniesStudentsTable from "@/components/host-students/CompaniesStudentsTable";
-import { studentPlacementData } from "@/components/host-students/data";
+import CompaniesTable from "@/components/analytics/tables/host-companies/CompaniesTable";
+import mockData from "@/components/analytics/tables/host-companies/data";
+import Graphs from "@/components/analytics/graphs/host-company/graphs";
 
 const Body = () => {
   const { studentId } = useParams<{ studentId: string }>();
@@ -24,20 +19,15 @@ const Body = () => {
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems =
-  data && data.length > 0
+    data && data.length > 0
       ? data.slice(indexOfFirstItem, indexOfLastItem)
       : [];
-
-   
-
-
-
   return (
     <>
-  <div data-aos="flip-up">
+    <Graphs/>
+      <div data-aos="flip-up">
         <CompaniesTable data={mockData} />
       </div>
-     
     </>
   );
 };

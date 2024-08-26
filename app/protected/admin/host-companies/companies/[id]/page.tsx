@@ -7,12 +7,8 @@ import {
 
   useSearchParams,
 } from "next/navigation";
-import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
-import Pagination from "@/components/Pagination";
-import CompaniesTable from "@/components/host-companies/CompaniesTable";
-import mockData from "@/components/host-companies/data";
-import CompaniesStudentsTable from "@/components/host-students/CompaniesStudentsTable";
-import { studentPlacementData } from "@/components/host-students/data";
+import CompaniesStudentsTable from "@/components//analytics/tables/host-students/CompaniesStudentsTable";
+import { studentPlacementData } from "@/components/analytics/tables/host-students/data";
 
 const Body = () => {
   const { studentId } = useParams<{ studentId: string }>();
@@ -28,10 +24,6 @@ const Body = () => {
   data && data.length > 0
       ? data.slice(indexOfFirstItem, indexOfLastItem)
       : [];
-
-   
-
-
 
   return (
     <>
