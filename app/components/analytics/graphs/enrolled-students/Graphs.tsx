@@ -1,26 +1,24 @@
 "use client"
-import { AvgTimeSpentData } from "@/app/components/course-analytics/graphs/course/AvgTimeSpent";
+import { AvgTimeSpentData } from "@/app/components/analytics/graphs/course/AvgTimeSpent";
 
-import { AssessmentCompletionData } from "@/components/course-analytics/graphs/course/AssessmentCompletion";
-import { questionAskedData } from "@/app/components/course-analytics/graphs/course/AvgQuestionsAsked";
+import { AssessmentCompletionData } from "@/components/analytics/graphs/course/AssessmentCompletion";
+import { questionAskedData } from "@/app/components/analytics/graphs/course/AvgQuestionsAsked";
 
-import { AvgQuizAttemptData } from "@/app/components/course-analytics/graphs/course/AvgQuizAttempts";
+import { AvgQuizAttemptData } from "@/app/components/analytics/graphs/course/AvgQuizAttempts";
 
-import { workbookTimeSpentData } from "@/app/components/course-analytics/graphs/course/WorkbookTimeSpent";
-
-import { commentsSubmittedData } from "@/app/components/course-analytics/graphs/course/AvgCommentsSubmitted";
+import { commentsSubmittedData } from "@/app/components/analytics/graphs/course/AvgCommentsSubmitted";
 
 import "@/app/css/tiles.css"
 
 import {
   options as studentProgressRateOptions,
   series as studentProgressRateSeries,
-} from "@/app/components/course-analytics/graphs/course/StudentCourseProgress";
+} from "@/app/components/analytics/graphs/course/StudentCourseProgress";
 
-import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
+import ChartLayout from "@/app/components/analytics/graphs/ChartLayout";
 
-import ChartProvider from "@/components/course-analytics/graphs/ChartProvider";
-import PieChart from "@/components/course-analytics/graphs/PieChart";
+import ChartProvider from "@/components/analytics/graphs/ChartProvider";
+import PieChart from "@/components/analytics/graphs/PieChart";
 
 type DataTiles = {
   name: string;

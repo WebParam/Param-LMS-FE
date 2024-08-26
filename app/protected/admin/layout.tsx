@@ -73,6 +73,12 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
+        {
+          name: "Assignments Analytics",
+          url: `/protected/admin/analytics/graphs/assignments?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
        
         {
           name: "Grouped Analytics",
@@ -80,6 +86,13 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
+        
+    {
+      name: "Host Analytics",
+      url: `/protected/admin/host-companies/companies?title=${courseTitle}`,
+      icon: "business",
+      roles: ["Admin", "SuperAdmin"],
+    },
       ],
     },
 
@@ -112,12 +125,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       roles: ["Admin", "SuperAdmin"],
     },
    
-    {
-      name: "Host Companies",
-      url: `/protected/admin/host-companies/companies?title=${courseTitle}`,
-      icon: "business",
-      roles: ["Admin", "SuperAdmin"],
-    },
   ];
 
   useEffect(() => {
