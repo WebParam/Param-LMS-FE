@@ -1,7 +1,7 @@
 const Body = () => {
   return (
     <>
-      <div className="page-section bg-alt border-bottom-2">
+      <div  className="page-section bg-alt border-bottom-2">
         <div className="container page__container">
           <div className="row">
             <div className="col-lg-9">

@@ -1,8 +1,8 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { Viewer } from '@react-pdf-viewer/core'; // Assuming this is the correct import for Viewer
-import { Worker } from '@react-pdf-viewer/core'; // Assuming this is the correct import for Worker
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'; // Assuming this is the correct import for defaultLayoutPluginInstance
+import { Viewer } from '@react-pdf-viewer/core';
+import { Worker } from '@react-pdf-viewer/core';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'; 
 
 interface ViewLogbookProps {
   showDocumentModal: boolean;

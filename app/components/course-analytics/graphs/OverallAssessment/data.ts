@@ -1,41 +1,62 @@
-import { faker } from "@faker-js/faker";
-
-
-export const options = {  
-  responsive: true,
-  scales: {
-    x: {
-      stacked: true,
+export const OverallAssessmentData = {
+  series: [
+    {
+      name: 'Completed',
+      data: [3, 4, 4.5, 5, 4.9, 6, 7, 9.1, 12.5],
     },
-    y: {
-      stacked: true,
+    {
+      name: 'Incomplete',
+      data: [2, 3, 3.5, 4, 3.9, 5, 6, 8.1, 10.5],
+    },
+  ],
+  options: {
+    chart: {
+      type: 'bar' as 'bar', 
+      height: 350,
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        endingShape: 'rounded',
+        borderRadius: 10, // Added for a nice rounded edge
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['#007bff', '#ff0000'], // Changed color to blue and red
+    },
+    xaxis: {
+      categories: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+      ],
+    },
+    yaxis: {
+      title: {
+        text: 'Assessments (in hundreds)',
+      },
+    },
+    fill: {
+      opacity: 1,
+    },
+    tooltip: {
+      y: {
+        formatter: function (val:any) {
+          return `${val}00`;
+        },
+      },
     },
   },
-};
-
-const labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-export const barDescriptions = [
-  { description: "Completed Assessment", color: "rgb(33, 138, 253)" },
-  { description: "Pending Assessment", color: "rgba(145, 21, 243, 0.3)" },
-];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Completed',
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      backgroundColor: "rgb(33, 138, 253)",
-      barPercentage: 0.3,
-      borderRadius: 10,
-    },
-    {
-      label: 'Pending',
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      backgroundColor: "rgba(145, 21, 243, 0.3)",
-      barPercentage: 0.3,
-      borderRadius: 10,
-    }
-  ],
 };

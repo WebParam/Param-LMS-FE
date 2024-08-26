@@ -12,7 +12,7 @@ export const options = {
 const labels = ["Formative ", "Informative ", "Extended Formative", "Exntended Informative"];
 
 export const barDescriptions = [
-  { description: "Avegare Per Assessments Over Time", color: "rgb(145 21 243)" },
+  { description: "Average Per Assessment Over Time", color: "rgb(145 21 243)" },
 ];
 
 export const data = {

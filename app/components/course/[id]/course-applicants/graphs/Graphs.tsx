@@ -12,47 +12,37 @@ import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 
 import ChartWrapper from "./ChartWrapper";
-import { barDescriptions as AvgTimeSpentBarDataDescription } from "./AvgTimeSpentBar/data";
+import { studentProvincesData } from "./StudentProvinces/data";
 
 import {
-  options as OverallAssessmentBarOptions,
-  data as OverallAssessmentBarData,
-  barDescriptions as OverallAssessmentBarDescription,
-} from "./OverallAssessment/data";
+  AgeVsGenderData
+} from "./AgeVsGender/data";
 import {
-  options as QuestionsAskedOptions,
-  data as QuestionsAskedData,
-  barDescriptions as QuestionsAskedDescription,
-} from "./QuestionsAsked/data";
+  socioEconomicStatusData
+} from "./StudentSocioEcoStatus/data";
+
 
 import {
-  options as OverallQuizBarOptions,
-  data as OverallQuizBarData,
-  barDescriptions as OverallQuizBarDescription,
-} from "./OverallQuiz/data";
+  studentDisabilitiesData
+} from "./StudentDisabilities/data";
 
 import {
-  options as CommentsChartBarOptions,
-  data as CommentsChartBarData,
-  barDescriptions as CommentsChartBarDescription,
-} from "./CommentsChart/data";
-
-import {
-  options as CitizenshipChartOptions,
-  data as CitizenshipChartData,
-  barDescriptions as CitizenshipChartDescription,
+citizenshipData
 } from "./CitizenshipChart/data";
 
-import { barDescriptions as StudentsProgressStatusDescription } from "./StudentsProgressStatus/data";
-import { barDescriptions as StudentRacesDescription } from "./StudentRaces/data";
 
-import ChartLayout from "./ChartLayout";
-import { AvgTimeSpent } from "./AvgTimeSpentBar/AvgTimeSpent";
-import { StudentsProgressStatus } from "./StudentsProgressStatus/StudentsProgressStatus";
-import { StudentRaces } from "./StudentRaces/StudentRaces";
+import { options as raceOptions,
+  series as raceSeries   } from "./StudentRaces/data";
+
+import ChartLayout from "@/app/components/course-analytics/graphs/ChartLayout";
+
+import {   options as genderOptions,
+  series as genderSeries } from "./Gender/data";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
-import { barDescriptions as StudentsPlacedDesc } from "./students-placed/data";
-import { StudentsPlaced } from "./students-placed/StudentsPlaced";
+import { options as placementOptions,
+  series as placementSeries } from "./students-placed/data";
+import BarGraph from "@/components/course-dashboard/graphs/BarGraph";
+import PieChart from "@/components/course-analytics/graphs/PieChart";
 
 type DataTiles = {
   name: string;
@@ -131,77 +121,57 @@ export default async function Graphs() {
         ))}
       </div>
       <div className="row card-group-row">
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Student Provinces"
-            barDescriptions={AvgTimeSpentBarDataDescription}
-          >
-            <AvgTimeSpent />
+      <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
+          <ChartLayout title="Student Provinces" type="bar">
+            <BarGraph chartData={studentProvincesData} />
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Gender vs Age Group Category"
-            barDescriptions={OverallAssessmentBarDescription}
-            options={OverallAssessmentBarOptions}
-            data={OverallAssessmentBarData}
-            type="bar"
-          />
-        </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Gender"
-            barDescriptions={StudentsProgressStatusDescription}
-            type="pie"
-          >
-            <StudentsProgressStatus />
+        <ChartLayout title="Gender vs Age Group Category" type="bar">
+            <BarGraph chartData={AgeVsGenderData} />
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            title="Different Races"
-            barDescriptions={StudentRacesDescription}
-            type="pie"
-          >
-            <StudentRaces />
+        <ChartLayout title="Genders" type="pie">
+            <PieChart
+              options={genderOptions}
+              series={genderSeries}
+            />
+          </ChartLayout>
+        </div>
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+        <ChartLayout title="Student Race" type="pie">
+            <PieChart
+              options={raceOptions}
+              series={raceSeries}
+            />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Socio Economic Status"
-            barDescriptions={QuestionsAskedDescription}
-            options={QuestionsAskedOptions}
-            data={QuestionsAskedData}
-            type="bar"
-          />
+        <ChartLayout             title="Socio Economic Status"
+ type="bar">
+            <BarGraph chartData={socioEconomicStatusData} />
+          </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Disabilities"
-            barDescriptions={CommentsChartBarDescription}
-            options={CommentsChartBarOptions}
-            data={CommentsChartBarData}
-            type="bar"
-          />
+        <ChartLayout             title="Student Disabilities"
+ type="bar">
+            <BarGraph chartData={studentDisabilitiesData} />
+          </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartWrapper
-            title="Citizenship"
-            barDescriptions={CitizenshipChartDescription}
-            options={CitizenshipChartOptions}
-            data={CitizenshipChartData}
-            type="bar"
-          />
+        <ChartLayout title="Students Citizenships" type="bar">
+            <BarGraph chartData={citizenshipData} />
+          </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-           <ChartLayout
-             title="Students Placement"
-             barDescriptions={StudentsPlacedDesc}
-             type="pie"
-           >
-             <StudentsPlaced />
-           </ChartLayout>
+        <ChartLayout title="Students Placement" type="pie">
+            <PieChart
+              options={placementOptions}
+              series={placementSeries}
+            />
+          </ChartLayout>
          </div>
 
       </div>

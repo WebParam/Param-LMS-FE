@@ -1,4 +1,3 @@
-
 const TableHead = () => {
   const headers = [
     "Name",
@@ -7,6 +6,8 @@ const TableHead = () => {
     "Company Location",
     "Placed At Date",
     "Industry",
+    "Placement Status",
+    "Job Role",
   ];
 
   return (
