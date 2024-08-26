@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Api } from "../../lib/restapi/endpoints";
-import { IUserRegisterModel } from "../../interfaces/user";
+import { Api } from "@/app/lib/restapi/endpoints";
+import { IUserRegisterModel } from "@/app/interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from 'next/navigation'
 
@@ -104,12 +104,13 @@ export default function Register() {
           changedBy: "",
           changedOn: date,
           Otp: "",
-          role: "Admin",
+          role: "Host",
           LoginType: 0,
         } as IUserRegisterModel;
 
         try {
-          const user = await Api.POST_RegisterAdmin(payload);
+         const user = await Api.POST_RegisterAdmin(payload);
+
 
           if (user?.data) {
             toast.update(_id, {
@@ -122,7 +123,7 @@ export default function Register() {
               path: "/",
             });
 
-            router.push('/protected/student/course/all-courses');
+            router.push('/protected/home/courses');
           } else if (user?.error) {
             toast.update(_id, {
               render: user.message,

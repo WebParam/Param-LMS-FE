@@ -23,6 +23,7 @@ export default function RootLayout({
   let bannerName = '';
   const pathname = usePathname();
   if (pathname == "/auth/admin/login") bannerName = "Thooto Admin Login"
+  else if (pathname == "/auth/host/login") bannerName = "Thooto Host Login"
   else if (pathname == "/auth/admin/register") bannerName = "Thooto Admin Register"
   else if (pathname == "/" || pathname == "/auth/login" ) bannerName = "Thooto Admin Portal"
   else bannerName = "Thooto Admin Register"

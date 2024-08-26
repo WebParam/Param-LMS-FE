@@ -87,12 +87,12 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                   <div className="dropdown-header">
                     <strong>Account</strong>
                   </div>
-                  <a className="dropdown-item">
-                    <Link href="/protected/admin/account">
+                  <a className="dropdown-item cursor-pointer">
+                    <Link href="/protected/admin/account/basic-info?account-title=Basic Information">
                     Edit Account
                     </Link>
                   </a>
-                  <a className="dropdown-item" onClick={() => logout()}>
+                  <a className="dropdown-item cursor-pointer" onClick={() => logout()}>
                     Logout
                   </a>
                 </div>

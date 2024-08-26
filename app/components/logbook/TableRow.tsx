@@ -3,65 +3,138 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ViewLogbook from "./ViewLogbook";
 
-const TableRow = ({ document }: { document: any }) => {
+const TableRow = ({ list }: { list: any }) => {
   const [viewLogbook, setViewLogbook] = useState(false);
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
-    if (document) {
-      setUrl(document.url);
-      setName(document.name);
+    if (list) {
+      setUrl(list.Document);
+      setName(list.Name);
     }
-  }, [document]);
+  }, [list]);
 
+ 
+
+
+
+  const fileUpload = () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.onchange = (e) => {
+      const target = e.target as HTMLInputElement;
+      const file = target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target?.result;
+          if (content) {
+            const blobUrl = URL.createObjectURL(new Blob([content], {type: "text/plain"}));
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    fileInput.click();
+  };
   return (
     <>
-
-<ViewLogbook
-  showDocumentModal = {viewLogbook}
-  setShowDocumentModal={setViewLogbook}
-  pdfWorkerUrl={url}
-  documentToView={name}
-/>
+      <ViewLogbook
+        showDocumentModal={viewLogbook}
+        setShowDocumentModal={setViewLogbook}
+        pdfWorkerUrl={url}
+        documentToView={name}
+      />
       <tr className="selected">
-        <td style={{ width: "250px" }} className="py-0">
+        <td className="py-0">
           <div className="d-flex align-items-center justify-content-center">
             <p
               className="text-center my-2"
               style={{
                 textOverflow: "ellipsis",
                 overflow: "hidden",
-                width: "250px",
               }}
             >
-              {document.name || "N/A"}
+              {list.Name || "N/A"}
             </p>
           </div>
         </td>
-        <td style={{ width: "300px" }} className="py-0">
+        <td className="py-0">
+          <div className="d-flex align-items-center justify-content-center">
+            <p
+              className="text-center my-2"
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+              }}
+            >
+              {list.StudentID || "N/A"}
+            </p>
+          </div>
+        </td>
+        <td className="py-0">
+          <div className="d-flex align-items-center justify-content-center">
+            <p
+              className="text-center my-2"
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+              }}
+            >
+              {list.CourseID || "N/A"}
+            </p>
+          </div>
+        </td>
+        <td className="py-0">
+          <div className="d-flex align-items-center justify-content-center">
+            <p
+              className="text-center my-2"
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+              }}
+            >
+              {list.ProgramName || "N/A"}
+            </p>
+          </div>
+        </td>
+        <td className="py-0">
+          <div className="d-flex align-items-center justify-content-center">
+            <p
+              className="text-center my-2"
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+              }}
+            >
+              {list.AssignedAt || "N/A"}
+            </p>
+          </div>
+        </td>
+        <td className="py-0">
           <p
             className="text-center my-2"
             style={{
               textOverflow: "ellipsis",
               overflow: "hidden",
-              width: "300px",
             }}
           >
-            {document.randomCode || "N/A"}
+            {list.Document || "N/A"}
           </p>
         </td>
 
-        <td style={{ width: "700px" }} className="py-0">
+        <td className="py-0">
           <div className="d-flex justify-content-center">
             <div onClick={() => setViewLogbook(true)}>
               <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
                 visibility
               </i>
             </div>
-            <div onClick={() => {}}>
+            <div onClick={fileUpload}>
               <i className="material-icons icon-holder--outline-success rounded-lg">
-                file_download
+                file_upload
               </i>
             </div>
           </div>
