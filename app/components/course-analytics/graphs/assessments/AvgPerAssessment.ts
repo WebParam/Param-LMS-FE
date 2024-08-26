@@ -40,5 +40,11 @@ export const AvgAssessmentData = {
       xaxis: {
         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
       }
+      ,
+      yaxis: {
+        title: {
+          text: 'Signed Assessment Marks % (y) / Time (x)',
+        },
+      },
     }
   };

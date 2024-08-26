@@ -1,7 +1,7 @@
 export const WorkbookSignedData = {
     series: [
       {
-        name: 'Workbooks Signed',
+        name: 'SignedAssessment marks % (y) / Time (x)',
         data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
       },
     ],
@@ -31,20 +31,20 @@ export const WorkbookSignedData = {
       },
       xaxis: {
         categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-        ],
+          'AS1',
+          'AS2',
+          'AS3',
+          'AS4',
+          'AS5',
+          'AS6',
+          'AS7',
+          'AS8',
+          'AS9',
+      ],
       },
       yaxis: {
         title: {
-          text: 'Workbooks (in hundreds)',
+          text: 'Assesment Mark (y) % / Assesment Code (x)',
         },
       },
       fill: {
