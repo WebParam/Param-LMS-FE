@@ -55,12 +55,16 @@ export default function Login() {
         toast.dismiss(_id);
       }, 2000);
     } else {
+    
+    
       const payload = {
         Email: email,
         Password: password,
       } as IUserLoginModel;
 
       const user = await Api.POST_Login(payload);
+      
+
       console.log("data", user);
       try {
         if (user?.data?.id && user?.data?.role == "Admin") {
@@ -74,7 +78,7 @@ export default function Login() {
             path: "/",
           });
 
-          router.push("/protected/admin/manage-courses");
+          router.push("/protected/home/courses");
         } else {
           const errorString = user?.data?.id
             ? "Not an Admin"

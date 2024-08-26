@@ -9,6 +9,7 @@ import { IStudentAnswer } from "@/app/interfaces/studentAnswer";
 import { IMarks, IQuiz } from "@/app/interfaces/quiz";
 import { IAssessment } from "@/app/interfaces/assessment";
 import { IDocument } from "@/app/interfaces/document";
+import { wUserUrl } from "../actions/endpoints";
 
 export const courseWriteUrl = "https://khumla-dev-course-write.azurewebsites.net/api";
 
@@ -16,9 +17,9 @@ export const courseReadUrl="https://khumla-dev-course-read.azurewebsites.net/api
 
 export const uploadImage = ""
 
-export const userWriteUrl = "https://khumla-dev-user-write.azurewebsites.net/api";
+export const userWriteUrl = "https://khumla-development-user-write.azurewebsites.net/api/v1";
  
-export const userReadUrl="https://khmla-dev-user-read.azurewebsites.net/api";
+export const userReadUrl="https://khmla-development-user-read.azurewebsites.net/api/v1";
 
 export const commentReadUrl="https://khumla-develop-comments-read.azurewebsites.net/api";
 
@@ -161,20 +162,20 @@ DELETE_CourseById: async (
   POST_Login: async (
     payload: IUserLoginModel
   ): Promise<IResponseObject<IUserRegisterModel>> => {
-    const response = await POST(`${userWriteUrl}/Users/Login`, payload);
+    const response = await POST(`${wUserUrl}/Users/Login`, payload);
     return response;
   },
 
   POST_Register: async (
     payload: IUserRegisterModel
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${userWriteUrl}/Users/AddUser`, payload);
+    const response = await POST(`${wUserUrl}/Users/AddUser`, payload);
     return response;
   },
   POST_RegisterAdmin: async (
     payload: IUserRegisterModel
   ): Promise<IResponseObject<any>> => {
-    const response = await POST(`${userWriteUrl}/Users/AddAdmin`, payload);
+    const response = await POST(`${wUserUrl}/Users/AddAdmin`, payload);
     return response;
   },
 

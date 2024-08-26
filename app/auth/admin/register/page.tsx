@@ -29,7 +29,7 @@ export default function Register() {
   const router = useRouter();
 
   const navigateToLogin = () => {
-    router.push("/auth/admin/login");
+    router.push("/");
   };
 
   const Register = async (event: any) => {

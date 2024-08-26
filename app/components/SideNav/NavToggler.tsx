@@ -24,7 +24,7 @@ const NavToggler: NextPage<{ setIsOpen?: any, isOpen?: boolean }> = ({ setIsOpen
       </a>}
 
       <a href="#" className="sidebar-brand ">
-          <span>Khumla</span>
+          <span>Thooto</span>
       </a>
 
     </>
