@@ -57,7 +57,7 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                 }}
               >
                 Thooto 
-                  {courseTitle && `- ${courseTitle}`}
+                  {courseTitle && ` - ${courseTitle}`}
                 
               </span>
             </a>

@@ -7,11 +7,7 @@ import Link from "next/link";
 const Body = async ({ params }: { params: { id: string } }) => {
   const courseId = params.id;
   const fetchedData: IStudentsData = await getEnrollments(courseId, false);
-  const baseUrl =
-    process.env.NEXT_PUBLIC_STUDENT_SITE
-      ? process.env.NEXT_PUBLIC_STUDENT_SITE
-      : "https://web-param-param-lms-student-qa.vercel.app";
-
+  const baseUrl ="https://boundless.thooto.com"
   const registrationUrl = `${baseUrl}/register?courseId=${courseId}`;
   const loginUrl = `${baseUrl}/login`;
 
@@ -20,7 +16,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
       <div className="d-flex card flex-column p-3 mb-3 text-success">
         <div className="d-flex align-items-center">
           <div className="font-weight-bolder text-underline mr-2">
-            Student Registration:{" "}
+          Student Registration:{" "}
           </div>{" "}
           <Link
             target="_blank"
