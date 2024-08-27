@@ -5,7 +5,7 @@ import Graphs from "@/components/course/[id]/course-applicants/graphs/Graphs";
 import Link from "next/link";
 
 const Body = async ({ params }: { params: { id: string } }) => {
-  const courseId ="66aa8cab45223bcb337a9643";
+  const courseId = params.id;
   const fetchedData: IStudentsData = await getEnrollments(courseId, false);
   const baseUrl ="https://boundless.thooto.com"
   const registrationUrl = `${baseUrl}/register?courseId=${courseId}`;
@@ -16,7 +16,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
       <div className="d-flex card flex-column p-3 mb-3 text-success">
         <div className="d-flex align-items-center">
           <div className="font-weight-bolder text-underline mr-2">
-          Yes Programme Student Registration:{" "}
+          Student Registration:{" "}
           </div>{" "}
           <Link
             target="_blank"
