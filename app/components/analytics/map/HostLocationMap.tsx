@@ -13,7 +13,8 @@ export default function SimpleMap(){
   };
 
   return (
-    <div style={{ height: '27vh', width: '100%' }}>
+    // Important! Always set the container height explicitly
+    <div style={{ height: '100%', width: '100%' }}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: "" }}
         defaultCenter={defaultProps.center}

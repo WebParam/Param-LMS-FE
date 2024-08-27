@@ -1,3 +1,4 @@
+"use client"
 import { NextPage } from "next";
 import Cookies from "universal-cookie";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -35,17 +36,19 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
             id="default-navbar"
             data-primary
           >
-            {/* <!-- Navbar toggler --> */}
-            <button
-                className="navbar-toggler d-block rounded-0"
-                onClick={() => {
-                  setIsOpen(!isOpen);
-                }}
-                type="button"
-                data-toggle="sidebar"
-              >
-                <span className="material-icons">menu</span>
-              </button>
+            {
+              !isHost &&  <button
+              className="navbar-toggler d-block rounded-0"
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
+              type="button"
+              data-toggle="sidebar"
+            >
+              <span className="material-icons">menu</span>
+            </button>
+            }
+           
 
             {/* <!-- Navbar Brand --> */}
             <a className="navbar-brand mr-16pt">

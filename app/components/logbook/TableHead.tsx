@@ -2,7 +2,7 @@
 import { useSearchParams } from "next/navigation";
 
 const TableHead = () => {
-  const headers = ["Student Name", "Code", "Action", "Icons"];
+  const headers = ["Student Name", "Course", "Placed At", "Actions"];
 
   const searchParams = useSearchParams();
   const isEnrolled = searchParams.get("isEnrolled");
