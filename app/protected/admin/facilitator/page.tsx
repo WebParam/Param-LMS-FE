@@ -1,6 +1,6 @@
 import DashboardCards from "@/app/components/facilitator/dashboard-cards";
 
-const Page = () => {
+const Page: React.FC = () => {
   return (
     <>
     <DashboardCards/>

@@ -29,18 +29,16 @@ const searchParams = useSearchParams();
     { link: "#", icon: "createAssessment", title: "Schedule Assessment" },
     { link: "#", icon: "leaderBoard", title: "Leader Board" },
     {
-      link: `/protected/admin/moderator-feedback/pages/assessments?title=Assessments Feedback&homeTitle=Facilitator Dashboard&page=grouped&button-title=Dashboard`,
+      link: `/protected/admin/moderator-feedback/pages/assessments?title=${courseTitle}`,
       icon: "feedback",
       title: "Moderator Feedback",
     },
     {
-      link: `/protected/admin/assessments-assignments/pages/assessments?title=${encodeURIComponent(
-        "Mark Assessments"
-      )}&homeTitle=Facilitator Dashboard&button-title=Dashboard&page=grouped`,
+      link: `/protected/admin/assessments-assignments/pages/assessments?title=${courseTitle}`,
       icon: "markAssessment",
       title: `Mark\n Assessments \n& \n Assignments`,
     },
-    { link:  `/protected/admin/logbook/pages/completed?title=Logbook&homeTitle=Facilitator Dashboard&button-title=Dashboard`, icon: "logbook", title: "Logbook" },
+    { link:  `/protected/admin/logbook/pages/completed?title=${courseTitle}`, icon: "logbook", title: "Logbook" },
   ];
 
   return (

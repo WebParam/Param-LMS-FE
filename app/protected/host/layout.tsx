@@ -2,7 +2,6 @@
 import Drawer from "@/app/topbar-components/Drawer";
 import HeadNav from "@/app/topbar-components/HeadNavDrawer";
 import { useEffect, useState } from "react";
-import withAuth from "./AdminAuthWrapper";
 import { useParams, useSearchParams } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -149,9 +148,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
-      <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
     </>
   );
 }
 
-export default withAuth(RootLayout);
+export default RootLayout;

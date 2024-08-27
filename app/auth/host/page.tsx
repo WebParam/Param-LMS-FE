@@ -6,7 +6,7 @@ import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import thooto from "@/app/images/thooto.png";
-import "./login.css"
+import "@/app/auth/login/login.css"
 const cookies = new Cookies();
 
 export default function Login() {
@@ -42,7 +42,7 @@ export default function Login() {
 
       if (user?.data?.id) {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
-        router.push("/protected/home/courses");
+        router.push("/protected/host/host/completed");
       } else {
         setErrorMessage("Invalid login credentials");
         setDisable(false);
