@@ -57,63 +57,74 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
     {
       name: "Analytics",
-      url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+      url: `/protected/admin/analytics/graphs/course?title=${courseTitle}`,
       icon: "show_chart",
       roles: ["Admin", "SuperAdmin"],
       children: [
         {
           name: "Course Analytics",
-          url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+          url: `/protected/admin/analytics/graphs/course?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
-        // {
-        //   name: "Assessment Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Student Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Host Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
+        {
+          name: "Assessment Analytics",
+          url: `/protected/admin/analytics/graphs/assessments?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
+          name: "Assignments Analytics",
+          url: `/protected/admin/analytics/graphs/assignments?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+       
         {
           name: "Grouped Analytics",
-          url: `/protected/admin/course-dashboard/student-table?title=${courseTitle}`,
+          url: `/protected/admin/analytics/grouped-analytics?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
-      ],
-    },
-
+        
     {
-      name: "Schedule Classes",
-      url: `/protected/admin/scheduleclass?title=${courseTitle}`,
-      icon: "meeting_room",
-      roles: ["Admin", "SuperAdmin"],
-    },
-
-    {
-      name: "Facilitator",
-      url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
-      icon: "person",
-      roles: ["Admin", "SuperAdmin"],
-    },
-   
-    {
-      name: "Host Companies",
+      name: "Host Analytics",
       url: `/protected/admin/host-companies/companies?title=${courseTitle}`,
       icon: "business",
       roles: ["Admin", "SuperAdmin"],
     },
+      ],
+    },
+
+    {
+      name: "Facilitator Dashboard",
+      url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
+      icon: "dashboard",
+      roles: ["Admin", "SuperAdmin"],
+    },
+    {
+      name: "Messaging",
+      url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
+      icon: "message",
+      roles: ["Admin", "SuperAdmin"],
+      children: [
+        {
+          name: "Notifications",
+          url: `/protected/admin/notifications?title=${courseTitle}`,
+          icon: "notifications",
+          roles: ["Admin", "SuperAdmin"],
+        },
+       
+      ],
+    },
+
+    {
+      name: "Host Company",
+      url: `/protected/admin/host/completed?title=${courseTitle}`,
+      icon: "business",
+      roles: ["Admin", "SuperAdmin"],
+    },
+   
   ];
 
   useEffect(() => {

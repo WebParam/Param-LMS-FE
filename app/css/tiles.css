@@ -1,0 +1,19 @@
+.tiles-container {
+    overflow-x: auto; /* Enables horizontal scrolling */
+    white-space: nowrap; /* Prevents line breaks, keeping all tiles on one line */
+  }
+  
+  .tiles-row {
+    display: flex;
+    flex-wrap: nowrap; /* Prevent wrapping, forcing items to stay in a single line */
+    gap: 16px; /* Adjusts space between tiles */
+  }
+  
+  .tile-item {
+    flex: 0 0 auto; /* Prevents shrinking, keeps tiles the same size */
+  }
+  
+  .tiles-container::-webkit-scrollbar {
+    display: none; /* Hides the scrollbar for a cleaner look */
+  }
+  

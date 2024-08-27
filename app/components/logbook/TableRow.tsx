@@ -2,12 +2,16 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ViewLogbook from "./ViewLogbook";
+import { downloadFile } from "@/app/lib/utils";
 
 const TableRow = ({ document }: { document: any }) => {
   const [viewLogbook, setViewLogbook] = useState(false);
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
-
+  const [loading, setLoading] = useState(false);
+  const documentToView = 'https://khumla-dev-assessment-read.azurewebsites.net/api/v1/StudentAnswers/DownloadStudentAsssessment/54670932456yu';
+  const pdfVersion = "3.10.111";
+  const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
   useEffect(() => {
     if (document) {
       setUrl(document.url);
@@ -15,14 +19,24 @@ const TableRow = ({ document }: { document: any }) => {
     }
   }, [document]);
 
+  const downloadDocument = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const filename = "document";
+    const fileExtension = "pdf";
+    const status = 3;
+    const url = `${documentToView}`;
+    downloadFile(url, filename, fileExtension, setLoading,true);
+  };
   return (
+
+    
     <>
 
 <ViewLogbook
   showDocumentModal = {viewLogbook}
   setShowDocumentModal={setViewLogbook}
-  pdfWorkerUrl={url}
-  documentToView={name}
+  pdfWorkerUrl={pdfWorkerUrl}
+  documentToView={documentToView}
 />
       <tr className="selected">
         <td style={{ width: "250px" }} className="py-0">
@@ -48,7 +62,19 @@ const TableRow = ({ document }: { document: any }) => {
               width: "300px",
             }}
           >
-            {document.randomCode || "N/A"}
+            {document.courseName || "N/A"}
+          </p>
+        </td>
+        <td style={{ width: "300px" }} className="py-0">
+          <p
+            className="text-center my-2"
+            style={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              width: "300px",
+            }}
+          >
+            {document.placedAt || "N/A"}
           </p>
         </td>
 
@@ -59,10 +85,14 @@ const TableRow = ({ document }: { document: any }) => {
                 visibility
               </i>
             </div>
-            <div onClick={() => {}}>
+            <div onClick={(e:any) => downloadDocument(e)}>
+              {loading ? (
+              <div className="spinner-border text-success" role="status" />
+            ) : (
               <i className="material-icons icon-holder--outline-success rounded-lg">
-                file_download
-              </i>
+              file_download
+            </i>
+            )}
             </div>
           </div>
         </td>
