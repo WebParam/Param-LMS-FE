@@ -346,14 +346,14 @@ export default function PageHeader({ title }: { title: string }) {
               </ol>
             </div>
             <div>
-              {isCourse && (
+              {/* {isCourse && (
                 <Link
                   className="btn btn-success"
                   href={`/protected/admin/courses/create`}
                 >
                   Create Course
                 </Link>
-              )}
+              )} */}
               {isEditCourse && (
                 <Link
                   className="btn btn-success"
