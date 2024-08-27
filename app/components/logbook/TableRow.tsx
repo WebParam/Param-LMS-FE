@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+"use client"
 import { useEffect, useState } from "react";
 import ViewLogbook from "./ViewLogbook";
 import { downloadFile } from "@/app/lib/utils";
@@ -59,7 +58,6 @@ const TableRow = ({ document }: { document: any }) => {
             style={{
               textOverflow: "ellipsis",
               overflow: "hidden",
-              width: "300px",
             }}
           >
             {document.courseName || "N/A"}
@@ -71,12 +69,37 @@ const TableRow = ({ document }: { document: any }) => {
             style={{
               textOverflow: "ellipsis",
               overflow: "hidden",
-              width: "300px",
             }}
           >
             {document.placedAt || "N/A"}
           </p>
         </td>
+        <td style={{ width: "300px" }} className="py-0">
+          <p
+            className="text-center my-2"
+            style={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+            }}
+          >
+            {document.jobRole || "N/A"}
+          </p>
+        </td>
+
+
+        <td style={{ width: "300px" }} className="py-0">
+          <p
+            className="text-center my-2"
+            style={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+            }}
+          >
+            {document.placedDate || "N/A"}
+          </p>
+        </td>
+
+
 
         <td style={{ width: "700px" }} className="py-0">
           <div className="d-flex justify-content-center">

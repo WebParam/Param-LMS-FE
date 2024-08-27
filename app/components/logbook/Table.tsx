@@ -1,6 +1,5 @@
 import TableBody from "./TableBody";
 import { NextPage } from "next";
-import { applicantDocuments } from "./data";
 import TableHead from "./TableHead";
 
 const Table: NextPage<{ list: any[] }> = ({ list }) => {

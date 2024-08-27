@@ -15,7 +15,7 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const courseTitle = searchParams.get("title") || "";
   const pathName = usePathname();
   const isAccount = pathName == "/protected/admin/account";
-  const isHost = pathName == "/protected/host/host/complete";
+  const isHost = pathName == "/protected/host/host/complete" && true;
 
   const logout = () => {
     cookies.remove("param-lms-user", {

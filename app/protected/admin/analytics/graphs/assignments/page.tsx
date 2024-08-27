@@ -12,7 +12,7 @@ import {
 import {
   options as assignmentsPassRateOptions,
   series as assignmentsPassRateSeries,
-} from "@/components/analytics/graphs/assignments/assignmentsPassRate";
+} from "@/components/analytics/graphs/assignments/AssignmentsPassRate";
 import {
 WorkbookSignedData
 } from "@/components/analytics/graphs/assessments/WorkbookSigned";
@@ -75,7 +75,7 @@ export default async function Page() {
           data-aos="flip-down"
           className="col-lg-6 col-md-12 card-group-row__col"
         >
-          <ChartLayout title="Assessment Completion Rate" type="pie">
+          <ChartLayout title="Assignment Completion Rate" type="pie">
             <PieChart
               options={assignmentsPassRateOptions}
               series={assignmentsPassRateSeries}
@@ -86,7 +86,7 @@ export default async function Page() {
           data-aos="flip-down"
           className="col-lg-6 col-md-12 card-group-row__col"
         >
-          <ChartLayout title="Assessment Pass Rate" type="pie">
+          <ChartLayout title="Assignment Pass Rate" type="pie">
             <PieChart
               options={assignmentsCompletionRateOptions}
               series={assignmentsCompletionRateSeries}

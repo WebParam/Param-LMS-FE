@@ -14,7 +14,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                 className="text-center mx-auto text-justify js-lists-values-projects small"
               ></td>
               <td
-                style={{ width: "600px" }}
+                style={{ width: "100%" }}
                 className="text-center js-lists-values-projects small"
               >
                 No Document Files...
