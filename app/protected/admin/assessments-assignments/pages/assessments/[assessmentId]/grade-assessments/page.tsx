@@ -36,7 +36,7 @@ const Body = ({ params }: { params: { assessmentId: string } }) => {
       />
 
       <div
-        data-aos="slide-left"
+        data-aos="flip-up"
         className="card mb-3 d-flex flex-row p-2 justify-content-end"
       >
         <div className="mx-1">

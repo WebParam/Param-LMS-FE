@@ -9,11 +9,10 @@ import {
   series as workbookCompetionRateSeries,
 } from "@/app/components/analytics/graphs/course/WorkbookCompletionRate";
 
-
 import {
   options as assignmentsPassRateOptions,
   series as assignmentsPassRateSeries,
-} from "@/app/components/analytics/graphs/assignments/AssignmentsPassRate";
+} from "@/components/analytics/graphs/assignments/AssignmentsPassRate";
 import {
 WorkbookSignedData
 } from "@/components/analytics/graphs/assessments/WorkbookSigned";
@@ -33,6 +32,7 @@ import "aos/dist/aos.css";
 import ChartProvider from "@/components/analytics/graphs/ChartProvider";
 import PieChart from "@/components/analytics/graphs/PieChart";
 export default async function Page() {
+
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: 112 },
     { name: "Modules", icon: "book", data: 5 },
@@ -45,7 +45,7 @@ export default async function Page() {
       <div className="row mb-lg-8pt">
 
  
-       <div   data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
+       <div data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
        <ChartLayout title="Workbooks Signed" type="bar">
             <ChartProvider chartData={WorkbookSignedData} />
           </ChartLayout>
@@ -75,7 +75,7 @@ export default async function Page() {
           data-aos="flip-down"
           className="col-lg-6 col-md-12 card-group-row__col"
         >
-          <ChartLayout title="Assessment Completion Rate" type="pie">
+          <ChartLayout title="Assignment Completion Rate" type="pie">
             <PieChart
               options={assignmentsPassRateOptions}
               series={assignmentsPassRateSeries}
@@ -86,7 +86,7 @@ export default async function Page() {
           data-aos="flip-down"
           className="col-lg-6 col-md-12 card-group-row__col"
         >
-          <ChartLayout title="Assessment Pass Rate" type="pie">
+          <ChartLayout title="Assignment Pass Rate" type="pie">
             <PieChart
               options={assignmentsCompletionRateOptions}
               series={assignmentsCompletionRateSeries}

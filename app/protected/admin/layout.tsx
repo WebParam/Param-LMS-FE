@@ -3,7 +3,7 @@ import Drawer from "@/app/topbar-components/Drawer";
 import HeadNav from "@/app/topbar-components/HeadNavDrawer";
 import { useEffect, useState } from "react";
 import withAuth from "./AdminAuthWrapper";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -13,6 +13,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const params = useParams();
   const courseId = params.id;
   const courseTitle = searchParams.get("title") || "";
+  const pathName = usePathname();
+  const isHost = pathName == "/protected/host/host/completed"
 
   const sideTabs = [
     {
@@ -98,13 +100,13 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
     {
       name: "Facilitator Dashboard",
-      url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
+      url: `/protected/admin/facilitator/?title=${courseTitle}`,
       icon: "dashboard",
       roles: ["Admin", "SuperAdmin"],
     },
     {
       name: "Messaging",
-      url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
+      url: `/protected/admin/facilitator/?title=${courseTitle}`,
       icon: "message",
       roles: ["Admin", "SuperAdmin"],
       children: [
@@ -149,6 +151,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
+  
       <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
     </>
   );

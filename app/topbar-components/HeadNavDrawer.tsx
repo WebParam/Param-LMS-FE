@@ -1,3 +1,4 @@
+"use client";
 import { NextPage } from "next";
 import Cookies from "universal-cookie";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -13,7 +14,11 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
   const pathName = usePathname();
-  const isAccount = pathName == "/protected/admin/account"
+  const isAccount = pathName == "/protected/admin/account";
+  const isHost =
+    pathName == "/protected/host/host-company/478acbasa65s7xasvx56";
+
+  const hostName = "Sanlam";
 
   const logout = () => {
     cookies.remove("param-lms-user", {
@@ -27,27 +32,26 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   return (
     <>
       {/* <!-- Header --> */}
-      <div  id="header" className="mdk-header js-mdk-header mb-0" data-fixed>
+      <div id="header" className="mdk-header js-mdk-header mb-0" data-fixed>
         <div className="mdk-header__content">
           <div
             className="navbar navbar-expand px-0 nav-bar-bg navbar-dark"
             id="default-navbar"
             data-primary
           >
-            {/* <!-- Navbar toggler --> */}
-            <button
-              className="navbar-toggler d-block rounded-0"
-              onClick={() => {
-                setIsOpen(!isOpen);
-              }}
-              type="button"
-              data-toggle="sidebar"
-            >
-              <span className="material-icons">menu</span>
-            </button>
-
-            {/* <!-- Navbar Brand --> */}
-            <a className="navbar-brand mr-16pt">
+            {!isHost && (
+              <button
+                className="navbar-toggler d-block rounded-0"
+                onClick={() => {
+                  setIsOpen(!isOpen);
+                }}
+                type="button"
+                data-toggle="sidebar"
+              >
+                <span className="material-icons">menu</span>
+              </button>
+            )}
+            <a className={`navbar-brand mr-16pt ${isHost && "ml-3"}`}>
               <span
                 className=" d-lg-block"
                 style={{
@@ -56,9 +60,9 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                   width: "450px",
                 }}
               >
-                thooto 
-                  {courseTitle && ` - ${courseTitle}`}
-                
+                thooto
+                {courseTitle && ` - ${courseTitle}`}
+                {isHost && ` - ${hostName}`}
               </span>
             </a>
 
@@ -88,12 +92,10 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                     <strong>Account</strong>
                   </div>
                   <a className="dropdown-item">
-                    <Link href="/protected/admin/account">
-                    Edit Account
-                    </Link>
+                    <Link href="/protected/admin/account/basic-info?account-title=Basic Information">Edit Account</Link>
                   </a>
                   <a className="dropdown-item" onClick={() => logout()}>
-                    Logout
+                    <Link href="">Logout</Link>
                   </a>
                 </div>
               </div>
