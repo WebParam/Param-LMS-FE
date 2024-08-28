@@ -13,7 +13,6 @@ export default function PageHeader({
   const home_title = searchParams.get("homeTitle");
   const buttonTitle = searchParams.get("button-title") ?? "Go Back";
   const page = searchParams.get("page");
-    const pathName = usePathname();
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
