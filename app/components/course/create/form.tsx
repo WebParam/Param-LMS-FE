@@ -1,23 +1,33 @@
+"use client"
+import { Modal } from "react-bootstrap";
+import EditButton from "./button";
+import { useEffect, useState } from "react";
+
+
 type CreateFormType = {
   title?: string;
   description?: string;
+  videoScriptTone?: string;
   instructorName?: string;
-  logoUrl?: string;
-  thumbUrl?: string;
+  courseLogoUrl?: string;
+  thumbnailUrl?: string;
   action: (formData: FormData) => void;
 };
 
-export default function CreateForm({
-  title,
-  description,
-  instructorName,
-  logoUrl,
-  thumbUrl,
-  action,
-}: CreateFormType) {
-  return (
-    <form className="mb-0" action={action}>
+export default function CreateForm({ title, description, videoScriptTone, instructorName, courseLogoUrl, thumbnailUrl, action}: CreateFormType) {
+  const [showModal, setShowModal] = useState(false);
 
+  return (
+    <>
+    <Modal show={showModal} onHide={() => {setShowModal(false)}} centered>
+      <Modal.Body>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center'}}>
+          <div className="spinner-border text-primary" role="status"/>
+          <div style={{ color: '#252525 !important'}} className="text-black">Submitting...</div>
+        </div>
+      </Modal.Body>
+    </Modal>
+    <form name="create-course" className="mb-0" action={action} data-netlify="true">
       <div className="list-group list-group-form">
         <div className="list-group-item">
           <div className="form-group row align-items-center mb-0">
@@ -43,10 +53,26 @@ export default function CreateForm({
             <div className="col-sm-9">
               <textarea
                 name="description"
-                className="w-100 p-2"
-                style={{ height: "100px" }}
+                className="w-100 p-2 text-black"
+                style={{ height: "100px", backgroundColor: 'white' }}
                 defaultValue={description}
                 placeholder="Description ..."
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div className="list-group-item">
+          <div className="form-group row align-items-center mb-0">
+            <label className="form-label col-form-label col-sm-3">
+              Video Script Prompt
+            </label>
+            <div className="col-sm-9">
+              <textarea
+                name="videoScriptTone"
+                className="w-100 p-2 text-black"
+                style={{ height: "100px", backgroundColor: 'white' }}
+                defaultValue={videoScriptTone}
+                placeholder="Video Script Query ..."
               ></textarea>
             </div>
           </div>
@@ -74,10 +100,10 @@ export default function CreateForm({
             </label>
             <div className="col-sm-9">
               <input
-                name="logoUrl"
+                name="courseLogoUrl"
                 type="text"
                 className="form-control"
-                defaultValue={logoUrl}
+                defaultValue={courseLogoUrl}
                 placeholder="https://..."
               />
             </div>
@@ -90,10 +116,10 @@ export default function CreateForm({
             </label>
             <div className="col-sm-9">
               <input
-                name="thumbUrl"
+                name="thumbnailUrl"
                 type="text"
                 className="form-control"
-                defaultValue={thumbUrl}
+                defaultValue={thumbnailUrl}
                 placeholder="https://..."
               />
             </div>
@@ -101,8 +127,8 @@ export default function CreateForm({
         </div>
       </div>
       <div className="m-3">
-        <button className="btn btn-success btn-block">Submit</button>
+        <EditButton setShowModal={setShowModal} />
       </div>
     </form>
-  );
-}
+    </>
+)};

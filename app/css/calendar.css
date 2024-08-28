@@ -1,0 +1,113 @@
+.calendar-container {
+    margin-top: -1rem; /* Increased negative margin-top to move the calendar up */
+    display: flex;
+    justify-content: flex-start; /* Move the calendar to the left */
+    margin-left: -1.5rem; /* Move the calendar further to the left */
+  }
+  
+  .calendar {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%; /* Ensure the calendar takes full width */
+    max-width: 1200px; /* Increased max width to maintain consistency */
+  }
+  
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .calendar-nav {
+    color: #28a745; /* Green color */
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .calendar-day-header {
+    font-weight: bold;
+    padding: 0.5rem;
+  }
+  
+  .calendar-day {
+    padding: 1.5rem; /* Decreased padding to reduce height */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column; /* Ensure children are stacked vertically */
+    justify-content: flex-start; /* Align items to the top */
+    align-items: center;
+    position: relative; /* Add this line */
+    height: 80px; /* Decreased height for consistency */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  }
+  
+  .calendar-day .event {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+  }
+  
+  .calendar-day .event-dot {
+    width: 8px; /* Adjusted size for a proper circle */
+    height: 8px; /* Adjusted size for a proper circle */
+    background-color: #1c6ea4; /* Peacock color */
+    border-radius: 50%;
+    border: none;
+    margin-right: 5px;
+  }
+  
+  .calendar-day .event-text {
+    font-size: 0.75rem; /* Decreased font size */
+    white-space: nowrap; /* Ensure text stays on one line */
+  }
+  
+  .calendar-day:hover .create-button {
+    display: block;
+  }
+  
+  .calendar-day:hover span {
+    display: none;
+  }
+  
+  .calendar-day span {
+    display: block;
+  }
+  
+  .calendar-day.empty {
+    background-color: transparent;
+    border: none;
+    cursor: default;
+  }
+  
+  .create-button {
+    font-size: 1.5rem;
+    color: #28a745; /* Green color */
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: none;
+    position: absolute; /* Add this line */
+    top: 50%; /* Add this line */
+    left: 50%; /* Add this line */
+    transform: translate(-50%, -50%); /* Add this line */
+  }
+
+.page-separator {
+    width: 65.5%; /* Increased width of the separator */
+    height: 0px; /* Further decreased height of the separator to make it thinner */
+    background-color: #bcc2c7;; /* Light gray color */
+    margin: 2rem auto; /* Space around the separator and center it */
+    transform: translateX(-4%); /* Adjusted to keep the separator centered */
+}

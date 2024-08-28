@@ -3,6 +3,8 @@
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["use-sync-external-store", "yargs"],
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -34,6 +36,6 @@
     "app/interfaces/**/*.ts",
     "middleware.ts",
     "node_modules/react-redux"
-  ],
+, "app/components/course-analytics/graphs/AvgCompletedQuizzes", "app/components/course-analytics/graphs/AvgCompletedQuizzes"  ],
   "exclude": ["node_modules"]
 }

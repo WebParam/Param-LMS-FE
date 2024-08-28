@@ -30,13 +30,7 @@ const Body = () => {
   return (
     <>
       <div className="card mt-3 mb-3">
-        <div className="card mb-0">
-          <MyVerticallyCenteredModal
-            show={openModal}
-            onHide={() => setOpenModal(false)}
-          />
-        </div>
-        <Table viewModal={setOpenModal} list={currentItems!} />
+        <Table list={currentItems!} />
       </div>
 
       <div className="card mb-24pt">

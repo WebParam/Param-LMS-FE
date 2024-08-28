@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   setIsOpen,
@@ -15,7 +16,7 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
       path: "/",
     });
 
-    if (loggedInUser?.role == "Admin") router.replace("/auth/admin/login");
+    if (loggedInUser?.role == "Admin") router.replace("/");
     else router.replace("/");
   };
 
@@ -25,30 +26,18 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
       <div id="header" className="mdk-header js-mdk-header mb-0" data-fixed>
         <div className="mdk-header__content">
           <div
-            className="navbar navbar-expand px-0 nav-bar-bg navbar-dark"
+            className="navbar navbar-expand nav-bar-bg navbar-dark"
             id="default-navbar"
             data-primary
           >
-            {/* <!-- Navbar toggler --> */}
-            <button
-              className="navbar-toggler d-block rounded-0"
-              onClick={() => {
-                setIsOpen(!isOpen);
-              }}
-              type="button"
-              data-toggle="sidebar"
-            >
-              <span className="material-icons">menu</span>
-            </button>
-
             {/* <!-- Navbar Brand --> */}
             <a className="navbar-brand mr-16pt">
-              <span className=" d-lg-block">Khumla</span>
+              <span className=" d-lg-block">thooto</span>
             </a>
 
             <div className="flex"></div>
 
-            <div className="nav navbar-nav flex-nowrap d-flex ml-0 mr-16pt">
+            <div className="nav navbar-nav flex-nowrap d-flex ml-0">
               <div className="nav-item dropdown d-none d-sm-flex">
                 <a
                   href="#"
@@ -71,10 +60,20 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                   <div className="dropdown-header">
                     <strong>Account</strong>
                   </div>
-                  <a className="dropdown-item">Edit Account</a>
-                  <a className="dropdown-item" onClick={() => logout()}>
+
+                  <Link
+                    className="dropdown-item"
+                    href="/protected/admin/account/basic-info?account-title=Basic Information"
+                  >
+                    Edit Account
+                  </Link>
+                  <Link
+                    className="dropdown-item"
+                    onClick={() => logout()}
+                    href=""
+                  >
                     Logout
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

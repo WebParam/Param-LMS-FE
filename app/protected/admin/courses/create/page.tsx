@@ -1,13 +1,15 @@
 import CreateForm from "@/app/components/course/create/form";
-import { createCourse } from "@/app/lib/action/course";
+import { createCourse } from "@/app/lib/actions/course";
 
 const Body = () => {
   const title = "Calculus";
   const description = "Mathematical Calculation and derivations of formulas";
-  const instructorName = "John Doe";
-  const logoUrl =
+  const videoScriptTone =
+    "Video Script of Mathematical Calculation and derivations of formulas";
+  const instructorName = "Khanyi Ngubani";
+  const courseLogoUrl =
     "https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg";
-  const thumbUrl =
+  const thumbnailUrl =
     "https://static-production.npmjs.com/255a118f56f5346b97e56325a1217a16.svg";
 
   return (
@@ -22,9 +24,10 @@ const Body = () => {
           <CreateForm
             title={title}
             description={description}
+            videoScriptTone={videoScriptTone}
             instructorName={instructorName}
-            logoUrl={logoUrl}
-            thumbUrl={thumbUrl}
+            courseLogoUrl={courseLogoUrl}
+            thumbnailUrl={thumbnailUrl}
             action={createCourse}
           />
         </div>
