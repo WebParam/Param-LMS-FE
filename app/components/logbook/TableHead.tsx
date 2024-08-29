@@ -1,29 +1,23 @@
 "use client";
-import { useSearchParams } from "next/navigation";
 
 const TableHead = () => {
-  const headers = ["Name", "Student ID", "Course ID", "Program Name", "Assigned At", "Document","Icons"];
+  const headers = ["Student Name", "Course", "Placed At", "Job Role", "Placed Date","Actions"];
 
-
-  const searchParams = useSearchParams();
 
   return (
     <>
       <thead>
         <tr>
           {headers.map((name) => (
-            <th key={name} className="text-center">
-              {name === "Embedded Link" && (
-                <i className="material-icons mr-8pt">link</i>
-              )}
-              <a
-                key={name}
-                className="sort"
-                data-sort={`js-lists-values-${name.toLowerCase().replace(/ /g, "-")}`}
-              >
-                {name}
-              </a>
-            </th>
+              <th key={name} className="text-center">
+                <a
+                  key={name}
+                  className="sort"
+                  data-sort="js-lists-values-employee-name"
+                >
+                  {name}
+                </a>
+              </th>
           ))}
         </tr>
       </thead>

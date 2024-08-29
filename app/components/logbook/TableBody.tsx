@@ -7,14 +7,14 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
     <>
       <tbody className="list" id="staff">
         {list.length > 0 ? 
-          list.map((data: any) => <TableRow key={data.id} list={data} />): (
+          list.map((data: any) => <TableRow key={data.id} document={data} />): (
             <tr className="selected">
               <td
                 style={{ width: "300px" }}
                 className="text-center mx-auto text-justify js-lists-values-projects small"
               ></td>
               <td
-                style={{ width: "600px" }}
+                style={{ width: "100%" }}
                 className="text-center js-lists-values-projects small"
               >
                 No Document Files...

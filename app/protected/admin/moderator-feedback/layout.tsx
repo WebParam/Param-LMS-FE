@@ -1,5 +1,5 @@
 "use client";
-import PageHeader from "./PageHeader";
+import PageHeader from "../../../components/PageHeaders/moderator/ModeratorFeeedbackPageHeader";
 import { useSearchParams, usePathname } from "next/navigation";
 
 function Layout({ children , params}: { children: React.ReactNode, params:{assessmentId : string} }) {
