@@ -120,43 +120,43 @@ export default async function Graphs() {
 
 
       <div className="row card-group-row">
-        <div  data-aos="flip-down" className="col-lg-6 w-100 col-md-12 card-group-row__col">
-          <ChartLayout title="Student Provinces" type="bar">
-            <ChartProvider chartData={studentProvincesData} />
+        <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
+          <ChartLayout  chartData={studentProvincesData}  title="Student Provinces" type="bar">
+            <ChartProvider/>
           </ChartLayout>
         </div>
-        <div  data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Gender vs Age Group Category" type="bar">
-            <ChartProvider chartData={AgeVsGenderData} />
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout  chartData={AgeVsGenderData} title="Gender vs Age Group Category" type="bar">
+            <ChartProvider />
           </ChartLayout>
         </div>
-        <div  data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
+        <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Genders" type="pie">
             <PieChart options={genderOptions} series={genderSeries} />
           </ChartLayout>
         </div> 
-        <div  data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
+        <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Student Race" type="pie">
             <PieChart options={raceOptions} series={raceSeries} />
           </ChartLayout>
         </div>
 
-        <div data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Socio Economic Status" type="bar">
-            <ChartProvider chartData={socioEconomicStatusData} />
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout chartData={socioEconomicStatusData}  title="Socio Economic Status" type="bar">
+            <ChartProvider />
           </ChartLayout>
         </div>
-        <div  data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Student Disabilities" type="bar">
-            <ChartProvider chartData={studentDisabilitiesData} />
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout chartData={studentDisabilitiesData} title="Student Disabilities" type="bar">
+            <ChartProvider  />
           </ChartLayout>
         </div>
-        <div  data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Students Citizenships" type="bar">
-            <ChartProvider chartData={citizenshipData} />
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout  chartData={citizenshipData} title="Students Citizenships" type="bar">
+            <ChartProvider />
           </ChartLayout>
         </div>
-        <div  data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
+        <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Students Placement" type="pie">
             <PieChart options={placementOptions} series={placementSeries} />
           </ChartLayout>

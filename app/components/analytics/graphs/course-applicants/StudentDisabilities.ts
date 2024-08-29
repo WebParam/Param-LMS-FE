@@ -2,7 +2,7 @@ export const studentDisabilitiesData = {
   series: [
     {
       name: 'Number of Students',
-      data: [10, 12, 15, 18, 20, 22, 25, 28, 30],
+      data: [10, 12, 15, 18, 20, 22, 25],
     },
   ],
   options: {

@@ -91,7 +91,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         
     {
       name: "Host Analytics",
-      url: `/protected/admin/host-companies/companies?title=${courseTitle}`,
+      url: `/protected/admin/analytics/graphs/host-companies/companies?title=${courseTitle}`,
       icon: "business",
       roles: ["Admin", "SuperAdmin"],
     },

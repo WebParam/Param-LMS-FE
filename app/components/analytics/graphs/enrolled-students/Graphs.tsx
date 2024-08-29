@@ -60,17 +60,17 @@ export default async function Graphs() {
   </div>
 </div>
       <div className="row card-group-row">
-        <div data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Average Time Spent" type="bar">
-            <ChartProvider chartData={AvgTimeSpentData} />
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout chartData={AvgTimeSpentData} title="Average Time Spent" type="bar">
+            <ChartProvider  />
           </ChartLayout>
         </div>
-        <div data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Assessments Completed" type="bar">
-            <ChartProvider chartData={AssessmentCompletionData} />
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout chartData={AssessmentCompletionData} title="Assessments Completed" type="bar">
+            <ChartProvider  />
           </ChartLayout>
         </div>
-        <div data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
+        <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Progress Status" type="pie">
             <PieChart
               options={studentProgressRateOptions}
@@ -79,19 +79,19 @@ export default async function Graphs() {
           </ChartLayout>
         </div>
 
-        <div data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout>
-            <ChartProvider chartData={AvgQuizAttemptData} />
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout type = "bar" title = "Average Quiz Attempt" chartData={AvgQuizAttemptData} >
+            <ChartProvider />
           </ChartLayout>
         </div>
-        <div data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Questions Asked" type="bar">
-            <ChartProvider chartData={questionAskedData} />
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout  chartData={questionAskedData} title="Questions Asked" type="bar">
+            <ChartProvider />
           </ChartLayout>
         </div>
-        <div data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Comments Submited" type="bar">
-            <ChartProvider chartData={commentsSubmittedData} />
+        <div className="col-lg-6 col-md-12 card-group-row__col">
+          <ChartLayout chartData={commentsSubmittedData} title="Comments Submited" type="bar">
+            <ChartProvider  />
           </ChartLayout>
         </div>
        

@@ -1,56 +1,64 @@
+"use client"
+import React from 'react';
+
 type barDescriptionType = { description: string; color: string };
-export default function CommentChartWrapper({
-  title,
-  barDescriptions,
-  children,
-  type
-}: {
+
+type ChartLayoutProps = {
   title?: string;
-  barDescriptions?: barDescriptionType[];
-    children: React.ReactNode;
-  type?: string
-}) {
+  children: React.ReactNode;
+  type?: string;
+  hasFilter?: boolean;
+  chartData?: any;
+};
+
+export default function ChartLayout({
+  title,
+  children,
+  type,
+  hasFilter = false,
+  chartData,
+}: ChartLayoutProps) {
   return (
     <div className="card card-group-row__card">
-      <div className="card-header d-flex align-items-center">
-        <strong>{title}</strong>
-      </div>
- 
- {
-    !type &&  <div className="card-body">
-
-       {children}
- 
- </div>
- }
-      <div className="card-body text-muted flex d-flex flex-column align-items-center justify-content-center">
-       { type &&  <div className={type == "pie" ? "chart" : "chart w-100"} style={{ height: "300px" }}>
-          <div className="chartjs-size-monitor">
-            <div className="chartjs-size-monitor-expand">
-              <div className=""></div>
-            </div>
-            <div className="chartjs-size-monitor-shrink">
-              <div className=""></div>
+      <div className="card-header d-flex align-items-center justify-content-between">
+        <label className="mr-sm-2 form-label" htmlFor="inlineFormFilterBy">
+          {title}
+        </label>
+        {hasFilter && (
+          <div className="d-flex align-items-center justify-content-between">
+            <div className="filter-dropdown">
+              <select className="form-control">
+                <option className="form-label" disabled selected value="">
+                  Filter by:
+                </option>
+                {[
+                  { description: "Option 1", color: "red" },
+                  { description: "Option 2", color: "blue" },
+                  { description: "Option 3", color: "green" },
+                ].map((data: barDescriptionType) => (
+                  <option key={data.color} value={data.color}>
+                    {data.description}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
-          {children}
-        </div>}
+        )}
+      </div>
 
-        
-        <div
-          id="repeatCustomerRateChartLegend"
-          className="chart-legend chart-legend--horizontal mt-16pt"
-        >
-          {barDescriptions?.map((data: barDescriptionType) => (
-            <span key={data.color} className="chart-legend-item">
-              <i
-                className="chart-legend-indicator"
-                style={{ backgroundColor: data.color }}
-              ></i>
-              {data.description}
-            </span>
-          ))}
-        </div>
+      {!type && <div className="card-body">{children}</div>}
+
+      <div className="card-body text-muted d-flex flex-column align-items-center justify-content-center">
+        {type && (
+          <div
+            className={type === 'pie' ? 'chart' : 'chart w-100'}
+            style={{ height: '300px' }}
+          >
+            {children && React.cloneElement(children as React.ReactElement<any>, { chartData })}
+          </div>
+        )}
+
+       
       </div>
     </div>
   );

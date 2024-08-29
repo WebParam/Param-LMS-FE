@@ -27,39 +27,14 @@ import { industryOfHostdata } from "./IndustryOfHost";
 import { CompanySizeData } from "./CompanySize";
 
 
-type DataTiles = {
-  name: string;
-  icon: string;
-  data: number;
-};
-
 export default async function Graphs() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 6;
-  const indexOfLastItem = currentPage * ITEMSPERPAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const [data, setData] = useState();
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const cookies = new Cookies();
-  const [courseApplications, setCourseApplications] = useState<
-    CourseApplicants[]
-  >([]);
 
-
-  const dataTiles: DataTiles[] = [
-    { name: "Students", icon: "person_outline", data: 112 },
-    { name: "Matriculated", icon: "book", data: 5 },
-    { name: "Graduated", icon: "school", data: 79 },
-    { name: "Employed", icon: "list", data: 4 },
-    { name: "Unemployed", icon: "help", data: 10 },
-  ];
 
   return (
     <>
       <div className="row card-group-row">
      
-        <div data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
+        <div className="col-lg-6 col-md-12 card-group-row__col">
         <ChartLayout
           title = "Location"
           type="line"
@@ -67,23 +42,25 @@ export default async function Graphs() {
             <SimpleMap/>
           </ChartLayout>
         </div>
-        <div data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
+        <div className="col-lg-6 col-md-12 card-group-row__col">
         <ChartLayout
+        chartData = {industryOfHostdata}
           title = "Host Industries"
           type="line"
           >
-            <ChartProvider chartData = {industryOfHostdata}/>
+            <ChartProvider />
           </ChartLayout>
         </div>
-        <div data-aos="flip-down" className="col-lg-6 col-md-12 card-group-row__col">
+        <div className="col-lg-6 col-md-12 card-group-row__col">
         <ChartLayout
+        chartData = {CompanySizeData}
           title = "Company Size"
           type="line"
           >
-            <ChartProvider chartData = {CompanySizeData}/>
+            <ChartProvider />
           </ChartLayout>
         </div>
-        <div  data-aos="flip-down"className="col-lg-6 col-md-12 card-group-row__col">
+        <div  className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Students Placement" type="pie">
             <PieChart
               options={StudentsPlacedOptions}
