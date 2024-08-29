@@ -14,7 +14,7 @@ import type { Metadata } from "next";
 import { ReduxProvider } from "./provider";
 
 export const metadata: Metadata = {
-  title: "Param LMS",
+  title: process.env.NEXT_PUBLIC_SITE_NAME || "Param LMS",
   description: "Param LMS |  A new way to learn",
 };
 
