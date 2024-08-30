@@ -1,7 +1,7 @@
 import { ICourse, IDeleteSection,IDeleteVideo,IStudentCourses } from "@/app/interfaces/courses";
 import { GET, POST, PUT ,DELETE} from "./client";
 import { IResponseObject } from "./response";
-import { IUser, IUserLoginModel, IUserRegisterModel } from "@/app/interfaces/user";
+import { IUser, IUserLoginModel, IUserRegisterFreeMiumModel, IUserRegisterModel } from "@/app/interfaces/user";
 import  IComment, { ICommentReply }  from "@/app/interfaces/comment";
 import { IRating } from "@/app/interfaces/Rating";
 import { get } from "http";
@@ -172,8 +172,16 @@ DELETE_CourseById: async (
     const response = await POST(`${wUserUrl}/Users/AddUser`, payload);
     return response;
   },
+
   POST_RegisterAdmin: async (
     payload: IUserRegisterModel
+  ): Promise<IResponseObject<any>> => {
+    const response = await POST(`${wUserUrl}/Users/AddAdmin`, payload);
+    return response;
+  },
+
+  POST_RegisterFreeMium: async (
+    payload: IUserRegisterFreeMiumModel
   ): Promise<IResponseObject<any>> => {
     const response = await POST(`${wUserUrl}/Users/AddAdmin`, payload);
     return response;
