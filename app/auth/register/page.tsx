@@ -97,13 +97,6 @@ export default function Register() {
           email: email,
           password: password,
           image: "",
-          headLine: "",
-          summary: "",
-          createdOn: date,
-          createdBy: "",
-          changedBy: "",
-          changedOn: date,
-          Otp: "",
           role: "Admin",
           LoginType: 0,
         } as IUserRegisterModel;

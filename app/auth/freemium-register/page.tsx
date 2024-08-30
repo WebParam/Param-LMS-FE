@@ -4,21 +4,21 @@ import { ChangeEvent, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Api } from "../../lib/restapi/endpoints";
-import { IUserLoginModel } from "../../interfaces/user";
+import { IUserLoginModel, IUserRegisterFreeMiumModel, IUserRegisterModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 
 const cookies = new Cookies();
 const axios = require("axios").default;
 
-export default function () {
+export default function RegisterFreemium() {
   const [disable, setDisable] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
-  const [image, setImage] = useState<string>("");
+  const [image, setImage] = useState<any>();
   const [loginType, setLoginType] = useState<number>(0);
 
   const onChangeEmail = (e: any) => {
@@ -32,12 +32,11 @@ export default function () {
   const router = useRouter();
 
 
-  async function LoginUser(event: any) {
-    cookies.remove("param-lms-user");
+  async function registerAdd(event: any) {
     setDisable(true);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    let _id = toast.loading("Logging in..", {
+    let _id = toast.loading("Registering...", {
       position: "top-center",
       autoClose: 1000,
       hideProgressBar: false,
@@ -60,16 +59,17 @@ export default function () {
       }, 2000);
     } else {
       const payload = {
-        Email: email,
-        Password: password,
-        FirstName: firstName,
-        LastName: lastName,
-        Username: username,
-        Image: image,
-        LoginType: loginType,
-      } as IUserLoginModel;
+        firstName: firstName,  
+        lastName: lastName,
+        username: username,
+        email: email,
+        password: password,
+        image: image,
+        role: "Admin",
+        loginType: 0
+      } as IUserRegisterFreeMiumModel;
 
-      const user = await Api.POST_Login(payload);
+      const user = await Api.POST_RegisterFreeMium(payload);
       console.log("data", user);
       try {
         if (user?.data?.id) {
@@ -85,7 +85,7 @@ export default function () {
 
           console.log(user.data);
           console.log("Role", user?.data?.role);
-          router.push("/protected/home/courses");
+          // router.push("/protected/home/courses");
         } else {
           toast.update(_id, {
             render: "Invalid login credentials",
@@ -119,7 +119,7 @@ export default function () {
   }
 
   function onChangeImage(event: ChangeEvent<HTMLInputElement>): void {
-    setImage(event.target.value);
+    // setImage(event.target.value);
   }
 
   function onChangeUsername(event: ChangeEvent<HTMLInputElement>): void {
@@ -227,7 +227,7 @@ export default function () {
               <div className="col-12 d-grid mb-3" style={{ marginTop: "20px" }}>
                 <button
                   disabled={disable}
-                  onClick={LoginUser}
+                  onClick={registerAdd}
                   className="btn btn-primary"
                   style={{
                     backgroundColor: "#24345c",
