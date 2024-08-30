@@ -6,8 +6,8 @@
     overflow: hidden;
   }
   
-  .login-left {
-    background-image: url("../../images/param.png");
+  /*.login-left {
+    background-image: url("../../../.env/NEXT_PUBLIC_LOGIN_IMAGE_URL");
     color: white;
     padding: 40px;
     width: 50%;
@@ -16,7 +16,7 @@
     justify-content: space-between;
     align-items: center;
     background-size: cover;
-  }
+  }*/
   
   .login-left .logo img {
     width: 80px;
