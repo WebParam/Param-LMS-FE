@@ -4,9 +4,8 @@ import { Api } from "../../lib/restapi/endpoints";
 import { IUserLoginModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import thooto from "@/app/images/thooto.png";
-import "./login.css"
+import "./login.css";
+
 const cookies = new Cookies();
 
 export default function Login() {
@@ -17,10 +16,10 @@ export default function Login() {
 
   const router = useRouter();
 
-  const onChangeEmail = (e:any) => setEmail(e.target.value);
-  const onChangePassword = (e:any) => setPassword(e.target.value);
+  const onChangeEmail = (e: any) => setEmail(e.target.value);
+  const onChangePassword = (e: any) => setPassword(e.target.value);
 
-  async function LoginUser(event:any) {
+  async function LoginUser(event: any) {
     event.preventDefault();
     setDisable(true);
     setErrorMessage("");
@@ -42,7 +41,12 @@ export default function Login() {
 
       if (user?.data?.id) {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
-        router.push("/protected/home/courses");
+
+        if (process.env.NEXT_PUBLIC_USER_ACCESS === "FREEMIUM") {
+          router.push("/freemium/home");// currently waiting for lihle side
+        } else {
+          router.push("/protected/home/courses");
+        }
       } else {
         setErrorMessage("Invalid login credentials");
         setDisable(false);
@@ -55,9 +59,22 @@ export default function Login() {
 
   return (
     <div className="login-container">
-      <div className="login-left"></div>
+      <div
+        className="login-left"
+        style={{
+          backgroundImage: `url(${process.env.NEXT_PUBLIC_LOGIN_IMAGE_URL})`,
+          color: "white",
+          padding: "40px",
+          width: "50%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundSize: "cover",
+        }}
+      ></div>
       <div className="login-right">
-        <h1>Sign in</h1>
+      <h1>Sign in</h1>
         <p>Welcome back! Please enter your details</p>
         {errorMessage && <div className={errorMessage.includes('Invalid') ? 'alert alert-danger' : 'alert alert-success'} style={{ marginTop: '10px' }}>{errorMessage}</div>}
 
