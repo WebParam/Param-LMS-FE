@@ -119,13 +119,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
        
       ],
     },
-
-    {
-      name: "Host Company",
-      url: `/protected/admin/host/completed?title=${courseTitle}`,
-      icon: "business",
-      roles: ["Admin", "SuperAdmin"],
-    },
    
   ];
 

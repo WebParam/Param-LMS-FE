@@ -6,16 +6,15 @@ import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import { useRouter } from "next/navigation";
 import Cookies from "universal-cookie";
 
-import { studentProvincesData } from "./StudentsProvinces";
+import { studentProvincesData  } from "./StudentsProvinces";
 
 import "@/app/css/tiles.css"
 
 import { AgeVsGenderData } from "@/app/components/analytics/graphs/course-applicants/AgeVsGender";
-import { socioEconomicStatusData } from "./SocioEcoStatusData"; 
+import {  studentsEcoStatusDataFilterOptions, studentsEcoStatusDatafiltersMapping, studentsSocioEcoData } from "./SocioEcoStatusData"; 
 
-import { studentDisabilitiesData } from "./StudentDisabilities";
+import { studentsDisabilitiesData, studentsDisabilitiesDataFilterOptions, studentsDisabilitiesDatafiltersMapping } from "./StudentDisabilities";
 
-import { citizenshipData } from "./StudentsCitizenship";
 
 import {
   options as raceOptions,
@@ -35,6 +34,7 @@ import {
 } from "./StudentsPlacement";
 import ChartProvider from "@/components/analytics/graphs/ChartProvider";
 import PieChart from "@/components/analytics/graphs/PieChart";
+import { studentsCitizenshipData, studentsCitizenshipDataFilterOptions, studentsCitizenshipDatafiltersMapping } from "./StudentsCitizenship";
 
 type DataTiles = {
   name: string;
@@ -121,20 +121,36 @@ export default async function Graphs() {
 
       <div className="row card-group-row">
         <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
-          <ChartLayout  chartData={studentProvincesData}  title="Student Provinces" type="bar">
+        <ChartLayout
+            hasFilter={false}
+            title="Students Provinces"
+            type="bar"
+            chartData={studentProvincesData}
+
+          >
             <ChartProvider/>
           </ChartLayout>
         </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout  chartData={AgeVsGenderData} title="Gender vs Age Group Category" type="bar">
-            <ChartProvider />
+        <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
+        <ChartLayout
+            hasFilter={false}
+            title="Age vs Gender "
+            type="bar"
+            chartData={AgeVsGenderData}
+
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
+
+        
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Genders" type="pie">
             <PieChart options={genderOptions} series={genderSeries} />
           </ChartLayout>
         </div> 
+
+
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Student Race" type="pie">
             <PieChart options={raceOptions} series={raceSeries} />
@@ -142,18 +158,42 @@ export default async function Graphs() {
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout chartData={socioEconomicStatusData}  title="Socio Economic Status" type="bar">
-            <ChartProvider />
+        <ChartLayout
+            hasFilter={true}
+            title="Students Socio Economic Status"
+            type="bar"
+            chartData={studentsSocioEcoData}
+            filterOptions={studentsEcoStatusDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={studentsEcoStatusDatafiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout chartData={studentDisabilitiesData} title="Student Disabilities" type="bar">
-            <ChartProvider  />
+        <ChartLayout
+            hasFilter={true}
+            title="Students Disabilities"
+            type="bar"
+            chartData={studentsDisabilitiesData}
+            filterOptions={studentsDisabilitiesDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={studentsDisabilitiesDatafiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout  chartData={citizenshipData} title="Students Citizenships" type="bar">
-            <ChartProvider />
+        <ChartLayout
+            hasFilter={true}
+            title="Students Citizenship"
+            type="bar"
+            chartData={studentsCitizenshipData}
+            filterOptions={studentsCitizenshipDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={studentsCitizenshipDatafiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">

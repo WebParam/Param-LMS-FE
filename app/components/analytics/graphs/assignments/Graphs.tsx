@@ -1,6 +1,10 @@
 "use client";
 
-import { workbookTimeSpentData } from "@/app/components/analytics/graphs/course/WorkbookTimeSpent";
+import {
+  filterOptions,
+  filtersMapping,
+  workbookData,
+} from "@/app/components/analytics/graphs/course/WorkbookTimeSpent";
 
 import ChartLayout from "@/app/components/analytics/graphs/ChartLayout";
 
@@ -13,7 +17,8 @@ import {
   options as assignmentsPassRateOptions,
   series as assignmentsPassRateSeries,
 } from "@/components/analytics/graphs/assignments/AssignmentsPassRate";
-import { WorkbookSignedData } from "@/components/analytics/graphs/assessments/WorkbookSigned";
+import {   wookbookSignedDataFilterOptions,
+  wookbookSignedDatafiltersMapping,wookbookSignedData } from "@/components/analytics/graphs/assessments/WorkbookSigned";
 
 import {
   options as assignmentsCompletionRateOptions,
@@ -26,11 +31,18 @@ export default async function Graphs() {
     <>
       <div className="row mb-lg-8pt">
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Workbooks Signed" type="bar" chartData={WorkbookSignedData}>
+        <ChartLayout
+            hasFilter={true}
+            title="Wookbooks Signed"
+            type="bar"
+            chartData={wookbookSignedData}
+            filterOptions={wookbookSignedDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={wookbookSignedDatafiltersMapping}
+          >
             <ChartProvider/>
           </ChartLayout>
         </div>
-
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Workbook Completion Rate" type="pie">
@@ -46,7 +58,10 @@ export default async function Graphs() {
             hasFilter={true}
             title="Workbook Time Spent"
             type="line"
-            chartData={workbookTimeSpentData}
+            chartData={workbookData}
+            filterOptions={filterOptions}
+            defaultFilter="yellow"
+            filtersMapping={filtersMapping}
           >
             <ChartProvider />
           </ChartLayout>

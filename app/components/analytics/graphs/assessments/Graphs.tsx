@@ -10,21 +10,14 @@ import StudentsTable from "@/app/components/analytics/tables/assessments/Student
 import mockData from "@/app/components/analytics/tables/assessments/data";
 import ChartProvider from "@/components/analytics/graphs/ChartProvider";
 import PieChart from "@/components/analytics/graphs/PieChart";
-import { AvgAssessmentData } from "@/components/analytics/graphs/assessments/AvgPerAssessment";
+import { AvgAssessmentData ,AvgAssessmentDatafiltersMapping,
+  AvgAssessmentDataFilterOptions} from "@/components/analytics/graphs/assessments/AvgPerAssessment";
 
 export default function Graphs() {
   return (
     <>
       <div className="row mb-lg-8pt">
       
-        <div
-          className="col-lg-6 col-md-12 card-group-row__col"
-        >
-          <ChartLayout chartData={AvgAssessmentData} title="Average Per Assessment" type="line">
-            <ChartProvider  />
-          </ChartLayout>
-        </div>
-
         <div
           className="col-lg-6 col-md-12 card-group-row__col"
         >

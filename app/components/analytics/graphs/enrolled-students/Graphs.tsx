@@ -1,10 +1,10 @@
 "use client"
-import { AvgTimeSpentData } from "@/app/components/analytics/graphs/course/AvgTimeSpent";
+import { AvgTimeSpentData, AvgTimeSpentDataFilterOptions, AvgTimeSpentDatafiltersMapping } from "@/app/components/analytics/graphs/course/AvgTimeSpent";
 
-import { AssessmentCompletionData } from "@/components/analytics/graphs/course/AssessmentCompletion";
-import { questionAskedData } from "@/app/components/analytics/graphs/course/AvgQuestionsAsked";
+import { AssessmentCompletionData, AssessmentCompletionDataFilterOptions, AssessmentCompletionDataFiltersMapping } from "@/components/analytics/graphs/course/AssessmentCompletion";
+import { questionAskedData, questionAskedDataFilterOptions, questionAskedDataFiltersMapping } from "@/app/components/analytics/graphs/course/AvgQuestionsAsked";
 
-import { AvgQuizAttemptData } from "@/app/components/analytics/graphs/course/AvgQuizAttempts";
+import { AvgQuizAttemptData, AvgQuizAttemptDataFilterOptions, AvgQuizAttemptDatafiltersMapping } from "@/app/components/analytics/graphs/course/AvgQuizAttempts";
 
 import { commentsSubmittedData } from "@/app/components/analytics/graphs/course/AvgCommentsSubmitted";
 
@@ -61,13 +61,30 @@ export default async function Graphs() {
 </div>
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout chartData={AvgTimeSpentData} title="Average Time Spent" type="bar">
-            <ChartProvider  />
+        <ChartLayout
+            hasFilter={true}
+            title="Average Time Spent"
+            type="bar"
+            chartData={AvgTimeSpentData}
+            filterOptions={AvgTimeSpentDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={AvgTimeSpentDatafiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout chartData={AssessmentCompletionData} title="Assessments Completed" type="bar">
-            <ChartProvider  />
+        <ChartLayout
+            hasFilter={true}
+            title="Assessments Completion Rate"
+            
+            type="bar"
+            chartData={AssessmentCompletionData}
+            filterOptions={AssessmentCompletionDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={AssessmentCompletionDataFiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
@@ -80,20 +97,45 @@ export default async function Graphs() {
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout type = "bar" title = "Average Quiz Attempt" chartData={AvgQuizAttemptData} >
-            <ChartProvider />
+        <ChartLayout
+            hasFilter={true}
+            title="Average Quiz Attempt"
+            type="bar"
+            chartData={AvgQuizAttemptData}
+            filterOptions={AvgQuizAttemptDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={AvgQuizAttemptDatafiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout  chartData={questionAskedData} title="Questions Asked" type="bar">
-            <ChartProvider />
+        <ChartLayout
+            hasFilter={true}
+            title="Average Questions Asked"
+            type="bar"
+            chartData={questionAskedData}
+            filterOptions={questionAskedDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={questionAskedDataFiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout chartData={commentsSubmittedData} title="Comments Submited" type="bar">
-            <ChartProvider  />
+        <ChartLayout
+            hasFilter={true}
+            title="Average Comments Submitted"
+            type="bar"
+            chartData={questionAskedData}
+            filterOptions={questionAskedDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={questionAskedDataFiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
+
        
         
 

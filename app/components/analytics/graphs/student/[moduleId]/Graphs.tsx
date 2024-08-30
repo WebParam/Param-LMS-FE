@@ -1,9 +1,9 @@
 "use client";
-import { AvgTimeSpentData } from "@/app/components/analytics/graphs/course/AvgTimeSpent";
+import { AvgTimeSpentData, AvgTimeSpentDataFilterOptions, AvgTimeSpentDatafiltersMapping } from "@/app/components/analytics/graphs/course/AvgTimeSpent";
 
-import { questionAskedData } from "@/app/components/analytics/graphs/course/AvgQuestionsAsked";
+import { questionAskedData, questionAskedDataFilterOptions, questionAskedDataFiltersMapping } from "@/app/components/analytics/graphs/course/AvgQuestionsAsked";
 
-import { AvgQuizAttemptData } from "@/app/components/analytics/graphs/course/AvgQuizAttempts";
+import { AvgQuizAttemptData, AvgQuizAttemptDataFilterOptions, AvgQuizAttemptDatafiltersMapping } from "@/app/components/analytics/graphs/course/AvgQuizAttempts";
 
 import {
   options as studentProgressRateOptions,
@@ -14,8 +14,8 @@ import ChartLayout from "@/app/components/analytics/graphs/ChartLayout";
 
 import PieChart from "@/components/analytics/graphs/PieChart";
 import ChartProvider from "@/components/analytics/graphs/ChartProvider";
-import { AvgNotesSubmittedData } from "@/components/analytics/graphs/course/AvgNotesSubmitted";
-import { AvgDownloadedPDFs } from "@/components/analytics/graphs/course/DownloadedPDFs";
+import { AvgNotesSubmittedData, AvgNotesSubmittedDataFilterOptions, AvgNotesSubmittedDataFiltersMapping } from "@/components/analytics/graphs/course/AvgNotesSubmitted";
+import {  AvgPDFsDownloadedData, AvgPDFsDownloadedFilterOptions,AvgPDFsDownloadedDataFiltersMapping } from "@/components/analytics/graphs/course/DownloadedPDFs";
 
 export default async function Graphs() {
   // const data = await getStudentModuleGraphs(params.moduleId,params.studentId);
@@ -38,8 +38,16 @@ export default async function Graphs() {
     <>
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout chartData={AvgTimeSpentData}  title="Average Time Spent" type="bar">
-            <ChartProvider />
+        <ChartLayout
+            hasFilter={true}
+            title="Average Time Spent"
+            type="bar"
+            chartData={AvgTimeSpentData}
+            filterOptions={AvgTimeSpentDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={AvgTimeSpentDatafiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
 
@@ -53,24 +61,56 @@ export default async function Graphs() {
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout  chartData={AvgQuizAttemptData}  title="Average Completed Quizzes" type="line">
+        <ChartLayout
+            hasFilter={true}
+            title="Average Quiz Attempt"
+            type="bar"
+            chartData={AvgQuizAttemptData}
+            filterOptions={AvgQuizAttemptDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={AvgQuizAttemptDatafiltersMapping}
+          >
             <ChartProvider/>
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout chartData={questionAskedData}  title="Average Questions Asked" type="bar">
-            <ChartProvider />
+        <ChartLayout
+            hasFilter={true}
+            title="Average Questions Asked"
+            type="bar"
+            chartData={questionAskedData}
+            filterOptions={questionAskedDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={questionAskedDataFiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
-          <ChartLayout chartData={AvgNotesSubmittedData} title="Average Notes Submitted" type="bar">
-            <ChartProvider  />
+        <ChartLayout
+            hasFilter={true}
+            title="Average Notes Submitted"
+            type="bar"
+            chartData={AvgNotesSubmittedData}
+            filterOptions={AvgNotesSubmittedDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={AvgNotesSubmittedDataFiltersMapping}
+          >
+            <ChartProvider />
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout chartData={AvgDownloadedPDFs} title="Average PDFs downloaded" type="bar">
-            <ChartProvider  />
+        <ChartLayout
+            hasFilter={true}
+            title="Average PDFs downloaded"
+            type="line"
+            chartData={AvgPDFsDownloadedData}
+            filterOptions={AvgPDFsDownloadedFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={AvgPDFsDownloadedDataFiltersMapping}
+          >
+            <ChartProvider />
           </ChartLayout>
         </div>
       </div>
