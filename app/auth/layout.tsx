@@ -25,6 +25,7 @@ export default function RootLayout({
   if (pathname == "/auth/admin/login") bannerName = "Thooto Admin Login"
   else if (pathname == "/auth/host/login") bannerName = "Thooto Host Login"
   else if (pathname == "/auth/admin/register") bannerName = "Thooto Admin Register"
+  else if (pathname == "/auth/verify-account") bannerName = "Verify Account"
   else if (pathname == "/" || pathname == "/auth/login" ) bannerName = "Thooto Admin Portal"
   else bannerName = "Thooto Admin Register"
 
