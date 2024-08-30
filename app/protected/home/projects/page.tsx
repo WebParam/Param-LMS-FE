@@ -1,12 +1,8 @@
-import { getCourses } from "@/app/lib/actions/course";
 import PageHeader from "./PageHeader";
 import Projects from "@/components/project/projects";
-import { getProjects } from "@/app/lib/actions/project";
 
 const Page = async () => {
-    const adminId = "A455A258A35F449203A71A25";
-  const list = await getProjects(adminId);
-    //const list = await getCourses();
+    
   return (
     <>
       <PageHeader />
@@ -19,7 +15,7 @@ const Page = async () => {
             data-lists-sort-by="js-lists-values-employee-name"
             data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
           >
-            <Projects list={list} />
+            <Projects/>
           </div>
         </div>{" "}
       </div>

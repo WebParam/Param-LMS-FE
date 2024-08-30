@@ -3,11 +3,10 @@ import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
 import { rUserUrl, wUserUrl } from "./endpoints";
-import Cookies from "universal-cookie";
 
 export const createProject = async (formData: FormData) => {
     const payload = {
-        adminId: "1",
+        adminId: formData.get("adminId") as string,
         programDescription: formData.get("description") as string,
         duration: formData.get("duration") as string,
         logo: formData.get("courseLogoUrl") as string,

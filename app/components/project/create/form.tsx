@@ -2,7 +2,7 @@
 import { Modal } from "react-bootstrap";
 import EditButton from "./button";
 import { useState } from "react";
-
+import Cookies from "universal-cookie";
 
 type CreateFormType = {
   title?: string;
@@ -14,6 +14,9 @@ type CreateFormType = {
 
 export default function CreateForm({ title, description, projectLogoUrl,duration, action}: CreateFormType) {
   const [showModal, setShowModal] = useState(false);
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("param-lms-user");
+  const adminId = loggedInUser?.id;
 
   return (
     <>
@@ -92,6 +95,7 @@ export default function CreateForm({ title, description, projectLogoUrl,duration
           </div>
         </div>
       </div>
+      <input type="hidden" name="adminId" value={adminId} />
       <div className="m-3">
         <EditButton setShowModal={setShowModal} />
       </div>
