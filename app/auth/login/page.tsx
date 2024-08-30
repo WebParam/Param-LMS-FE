@@ -43,7 +43,7 @@ export default function Login() {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
 
         if (process.env.NEXT_PUBLIC_USER_ACCESS === "FREEMIUM") {
-          router.push("/freemium/home");// currently waiting for lihle side
+          router.push("protected/home/projects");
         } else {
           router.push("/protected/home/courses");
         }
