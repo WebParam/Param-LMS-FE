@@ -3,7 +3,7 @@ import Drawer from "@/app/topbar-components/Drawer";
 import HeadNav from "@/app/topbar-components/HeadNavDrawer";
 import { useEffect, useState } from "react";
 import withAuth from "./AdminAuthWrapper";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -13,6 +13,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const params = useParams();
   const courseId = params.id;
   const courseTitle = searchParams.get("title") || "";
+  const pathName = usePathname();
+  const isHost = pathName == "/protected/host/host/completed"
 
   const sideTabs = [
     {
@@ -57,55 +59,65 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
     {
       name: "Analytics",
-      url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+      url: `/protected/admin/analytics/graphs/course?title=${courseTitle}`,
       icon: "show_chart",
       roles: ["Admin", "SuperAdmin"],
       children: [
         {
           name: "Course Analytics",
-          url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+          url: `/protected/admin/analytics/graphs/course?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
-        // {
-        //   name: "Assessment Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Student Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Host Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
+        {
+          name: "Assessment Analytics",
+          url: `/protected/admin/analytics/graphs/assessments?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
+          name: "Assignments Analytics",
+          url: `/protected/admin/analytics/graphs/assignments?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+       
         {
           name: "Grouped Analytics",
-          url: `/protected/admin/course-dashboard/student-table?title=${courseTitle}`,
+          url: `/protected/admin/analytics/grouped-analytics?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
+        
+    {
+      name: "Host Analytics",
+      url: `/protected/admin/analytics/graphs/host-companies/companies?title=${courseTitle}`,
+      icon: "business",
+      roles: ["Admin", "SuperAdmin"],
+    },
       ],
     },
 
     {
-      name: "Schedule Classes",
-      url: `/protected/admin/scheduleclass?title=${courseTitle}`,
-      icon: "meeting_room",
+      name: "Facilitator Dashboard",
+      url: `/protected/admin/facilitator/?title=${courseTitle}`,
+      icon: "dashboard",
       roles: ["Admin", "SuperAdmin"],
     },
-
     {
-      name: "Facilitator",
-      url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
-      icon: "person",
+      name: "Messaging",
+      url: `/protected/admin/facilitator/?title=${courseTitle}`,
+      icon: "message",
       roles: ["Admin", "SuperAdmin"],
+      children: [
+        {
+          name: "Notifications",
+          url: `/protected/admin/notifications?title=${courseTitle}`,
+          icon: "notifications",
+          roles: ["Admin", "SuperAdmin"],
+        },
+       
+      ],
     },
     {
       name: "Host",
@@ -116,12 +128,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
 
    
-    {
-      name: "Host Companies",
-      url: `/protected/admin/host-companies/companies?title=${courseTitle}`,
-      icon: "business",
-      roles: ["Admin", "SuperAdmin"],
-    }
   ];
 
   useEffect(() => {
@@ -146,6 +152,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
+  
       <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
     </>
   );

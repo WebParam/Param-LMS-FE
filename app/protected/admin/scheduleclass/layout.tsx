@@ -1,28 +1,28 @@
 "use client";
-import PageHeader from '@/components/ScheduleClass/PageHeader';
-import React, { ReactNode } from 'react';
-import { Container } from 'react-bootstrap';
+import { useSearchParams } from "next/navigation";
+import PageHeader from "@/components/ScheduleClass/PageHeader";
+import Cookies from "universal-cookie";
 
-interface MainLayoutProps {
-  children: ReactNode;
-}
+function Layout({ children }: { children: React.ReactNode }) {
+  const searchParams = useSearchParams();
 
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+  const title = searchParams.get("title")!;
+
   return (
     <>
       <div className="mdk-header-layout__content page-content ">
         <div className="mdk-header-layout__content page-content ">
-          <PageHeader headerTitle="Schedule Class" buttonTitle="Create Class" contentTitle=""/>
-          <div className="page-separator">
-            <div className="page-separator__text">Calendar</div>
-          </div>
-          <div className="container page__container page__container page-section">
+        <PageHeader
+            headerTitle="Schedule Class"
+            buttonTitle="Dashboard"
+            contentTitle=""
+          />          <div className="container page__container page__container page-section">
             {children}
           </div>
         </div>
       </div>
     </>
   );
-};
+}
 
-export default MainLayout;
+export default Layout;
