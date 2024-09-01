@@ -13,7 +13,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
       <PageHeader />
       <div className="container page__container page__container page-section">
         <Graphs />
-        <div data-aos="slide-right">
+        <div >
         <EnrolledTable
           courseId={courseId}
           data={

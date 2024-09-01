@@ -43,7 +43,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
         </div>
         <Graphs />
 
-        <div data-aos="slide-right">
+        <div>
         <ApplicantsTable
           courseId={courseId}
           data={

@@ -5,7 +5,6 @@ import Pagination from "@/components/Pagination";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { IUnitStandard } from "@/app/interfaces/unit-standard";
 import { getModules } from "@/app/lib/actions/module";
-import { descriptors } from "chart.js/dist/core/core.defaults";
 
 interface KnowledgeModulesProps {
   path?: string;
@@ -48,31 +47,32 @@ function KnowledgeModules({ path }: KnowledgeModulesProps) {
   }, [refreshId]);
 
   const modules = [
-    { id: 1,
-      title: "Course Overview",
+    {
+      id: 1,
+      title: "Introduction to the Course",
       description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quibusdam recusandae voluptatem veniam! Ab ducimus excepturi iusto odit, illo asperiores modi repudiandae fugit rerum praesentium dolor tenetur, aspernatur architecto recusandae.",
+        "This module provides an overview of the course structure, objectives, and key learning outcomes. You'll get familiar with the topics that will be covered and understand what to expect throughout the course.",
     },
     {
       id: 2,
-      title: "Course Overview",
+      title: "Fundamentals of the Subject",
       description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quibusdam recusandae voluptatem veniam! Ab ducimus excepturi iusto odit, illo asperiores modi repudiandae fugit rerum praesentium dolor tenetur, aspernatur architecto recusandae.",
+        "In this module, you'll learn the basic concepts and foundational knowledge necessary for mastering the subject. Key terms, theories, and introductory practices will be discussed to set the groundwork for future learning.",
     },
     {
       id: 3,
-      title: "Course Overview",
+      title: "Intermediate Concepts and Applications",
       description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quibusdam recusandae voluptatem veniam! Ab ducimus excepturi iusto odit, illo asperiores modi repudiandae fugit rerum praesentium dolor tenetur, aspernatur architecto recusandae.",
+        "This module dives deeper into more complex topics, building on the basics covered previously. You'll explore practical applications, case studies, and real-world examples to enhance your understanding.",
     },
     {
       id: 4,
-      title: "Course Overview",
+      title: "Advanced Techniques and Best Practices",
       description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quibusdam recusandae voluptatem veniam! Ab ducimus excepturi iusto odit, illo asperiores modi repudiandae fugit rerum praesentium dolor tenetur, aspernatur architecto recusandae.",
+        "The final module covers advanced strategies, tips, and best practices. This section is designed to help you achieve mastery and apply your knowledge effectively in practical scenarios.",
     },
   ];
-
+  
   return (
     <div className="px-2">
       {modules.length > 0 ? (
