@@ -8,15 +8,6 @@ interface Tabs {
 }
 
 export default function PageHeader() {
-  const { id } = useParams<{ id: string }>();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const title = searchParams.get("title");
-
-  const tabs = {
-    "knowledge-modules": "Knowledge Modules",
-  } as Tabs;
-
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
