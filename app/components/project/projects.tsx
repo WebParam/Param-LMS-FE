@@ -1,18 +1,6 @@
 'use client';
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import Cookies from "universal-cookie";
-export default async function Projects() {
-const [list, setList] = useState([]);
-const cookies = new Cookies();
-const loggedInUser = cookies.get("param-lms-user");
-cookies.set("number-of-projects", list.length);
-  useEffect(() => {
-    // Mock fetching data
-    setTimeout(() => {
-      setList(list); // This is just to simulate an async data fetch
-    }, 1000);
-  }, []);
+export default async function Projects({list}:any) {
 
   return (
     <>
@@ -25,7 +13,7 @@ cookies.set("number-of-projects", list.length);
                   key={project.id}
                   imgUrl={project.logo}
                   title={project.programTitle??"NA"}
-                  url={`/protected/admin/projects/${project.id}/?title=${project.programTitle}`}
+                  url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.programTitle}`}
                
                 />
               ))}
