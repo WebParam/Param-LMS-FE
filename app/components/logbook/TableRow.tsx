@@ -1,29 +1,37 @@
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+"use client"
 import { useEffect, useState } from "react";
 import ViewLogbook from "./ViewLogbook";
+import { downloadFile } from "@/app/lib/utils";
 
-const TableRow = ({ list }: { list: any }) => {
+const TableRow = ({ document }: { document: any }) => {
   const [viewLogbook, setViewLogbook] = useState(false);
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
-  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [logbookData, setLogbookData] = useState<any[]>([]);
+  const documentToView = 'https://khumla-dev-assessment-read.azurewebsites.net/api/v1/StudentAnswers/DownloadStudentAsssessment/54670932456yu';
+  const pdfVersion = "3.10.111";
+  const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
 
   useEffect(() => {
-    if (list) {
-      setUrl(list.Document);
-      setName(list.Name);
+    if (document) {
+      setUrl(document.url);
+      setName(document.name);
     }
-  }, [list]);
+  }, [document]);
 
- 
+  const downloadDocument = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const filename = "document";
+    const fileExtension = "pdf";
+    downloadFile(documentToView, filename, fileExtension, setLoading, true);
+  };
 
-
-
-  const fileUpload = () => {
-    const fileInput = document.createElement('input');
+  const handleAddLogbook = () => {
+    const fileInput = window.document.createElement('input');
     fileInput.type = 'file';
-    fileInput.onchange = (e) => {
+    fileInput.accept = ".pdf,.doc,.docx,.txt"; // Specify accepted file types
+    fileInput.onchange = (e: any) => {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0];
       if (file) {
@@ -31,89 +39,40 @@ const TableRow = ({ list }: { list: any }) => {
         reader.onload = (e) => {
           const content = e.target?.result;
           if (content) {
-            const blobUrl = URL.createObjectURL(new Blob([content], {type: "text/plain"}));
+            const blobUrl = URL.createObjectURL(new Blob([content], { type: file.type }));
+            setLogbookData([...logbookData, { id: logbookData.length + 1, title: file.name, url: blobUrl }]);
           }
         };
-        reader.readAsText(file);
+        reader.readAsArrayBuffer(file); 
       }
     };
     fileInput.click();
   };
+
   return (
     <>
       <ViewLogbook
         showDocumentModal={viewLogbook}
         setShowDocumentModal={setViewLogbook}
-        pdfWorkerUrl={url}
-        documentToView={name}
+        pdfWorkerUrl={pdfWorkerUrl}
+        documentToView={documentToView}
       />
       <tr className="selected">
-        <td className="py-0">
+        <td style={{ width: "250px" }} className="py-0">
           <div className="d-flex align-items-center justify-content-center">
             <p
               className="text-center my-2"
               style={{
                 textOverflow: "ellipsis",
                 overflow: "hidden",
+                width: "250px",
               }}
             >
-              {list.Name || "N/A"}
+              {document.name || "N/A"}
             </p>
           </div>
         </td>
-        <td className="py-0">
-          <div className="d-flex align-items-center justify-content-center">
-            <p
-              className="text-center my-2"
-              style={{
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-              }}
-            >
-              {list.StudentID || "N/A"}
-            </p>
-          </div>
-        </td>
-        <td className="py-0">
-          <div className="d-flex align-items-center justify-content-center">
-            <p
-              className="text-center my-2"
-              style={{
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-              }}
-            >
-              {list.CourseID || "N/A"}
-            </p>
-          </div>
-        </td>
-        <td className="py-0">
-          <div className="d-flex align-items-center justify-content-center">
-            <p
-              className="text-center my-2"
-              style={{
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-              }}
-            >
-              {list.ProgramName || "N/A"}
-            </p>
-          </div>
-        </td>
-        <td className="py-0">
-          <div className="d-flex align-items-center justify-content-center">
-            <p
-              className="text-center my-2"
-              style={{
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-              }}
-            >
-              {list.AssignedAt || "N/A"}
-            </p>
-          </div>
-        </td>
-        <td className="py-0">
+        <td style={{ width: "300px" }} className="py-0">
           <p
             className="text-center my-2"
             style={{
@@ -121,18 +80,59 @@ const TableRow = ({ list }: { list: any }) => {
               overflow: "hidden",
             }}
           >
-            {list.Document || "N/A"}
+            {document.courseName || "N/A"}
           </p>
         </td>
-
-        <td className="py-0">
+        <td style={{ width: "300px" }} className="py-0">
+          <p
+            className="text-center my-2"
+            style={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+            }}
+          >
+            {document.placedAt || "N/A"}
+          </p>
+        </td>
+        <td style={{ width: "300px" }} className="py-0">
+          <p
+            className="text-center my-2"
+            style={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+            }}
+          >
+            {document.jobRole || "N/A"}
+          </p>
+        </td>
+        <td style={{ width: "300px" }} className="py-0">
+          <p
+            className="text-center my-2"
+            style={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+            }}
+          >
+            {document.placedDate || "N/A"}
+          </p>
+        </td>
+        <td style={{ width: "700px" }} className="py-0">
           <div className="d-flex justify-content-center">
             <div onClick={() => setViewLogbook(true)}>
               <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
                 visibility
               </i>
             </div>
-            <div onClick={fileUpload}>
+            <div onClick={(e: any) => downloadDocument(e)}>
+              {loading ? (
+                <div className="spinner-border text-success" role="status" />
+              ) : (
+                <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
+                  file_download
+                </i>
+              )}
+            </div>
+            <div onClick={handleAddLogbook}>
               <i className="material-icons icon-holder--outline-success rounded-lg">
                 file_upload
               </i>

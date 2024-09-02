@@ -5,6 +5,8 @@ import Link from "next/link";
 
 const Page = async () => {
   const list = await getCourses();
+
+
   return (
     <>
       <PageHeader />
