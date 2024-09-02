@@ -5,6 +5,7 @@ import Cookies from "universal-cookie";
 export default function PageHeader() {
   const cookies = new Cookies();
   const loggedInUser = cookies.get("param-lms-user");
+  const numberOfProjects = cookies.get("number-of-projects");
 
   return (
     <>
@@ -26,14 +27,24 @@ export default function PageHeader() {
               </ol>
             </div>
             <div>
-              {loggedInUser && loggedInUser.role == "SuperAdmin" && (
-                <Link
-                  className="btn btn-success"
-                  href={`/protected/home/projects/create`}
-                >
-                  Create Project
-                </Link>
-              )}
+            {loggedInUser &&
+  (loggedInUser.role === "SuperAdmin" || loggedInUser.role === "Admin") && (
+    <Link
+      className={`btn ${
+        numberOfProjects >= 2 ? "btn-secondary disabled" : "btn-success"
+      }`}
+      href={numberOfProjects >= 2 ? "#" : `/protected/home/projects/create`}
+      style={{ pointerEvents: numberOfProjects >= 2 ? "none" : "auto" }}
+      onClick={(e) => {
+        if (numberOfProjects > 2) {
+          e.preventDefault();
+        }
+      }}
+    >
+      Create Project
+    </Link>
+  )}
+
             </div>
           </div>
         </div>

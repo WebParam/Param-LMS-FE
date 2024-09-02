@@ -1,14 +1,12 @@
 'use client';
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-export default function Projects() {
-  const [list, setList] = useState([
-    { id: 1, logo: 'logo1.png', programTitle: 'Project Alpha' },
-    { id: 2, logo: 'logo2.png', programTitle: 'Project Beta' },
-    { id: 3, logo: 'logo3.png', programTitle: 'Project Gamma' }
-  ]);
-
+import Cookies from "universal-cookie";
+export default async function Projects() {
+const [list, setList] = useState([]);
+const cookies = new Cookies();
+const loggedInUser = cookies.get("param-lms-user");
+cookies.set("number-of-projects", list.length);
   useEffect(() => {
     // Mock fetching data
     setTimeout(() => {
@@ -26,8 +24,10 @@ export default function Projects() {
                 <Project
                   key={project.id}
                   imgUrl={project.logo}
-                  title={project.programTitle ?? "NA"}
-                  url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.programTitle}`}                />
+                  title={project.programTitle??"NA"}
+                  url={`/protected/admin/projects/${project.id}/?title=${project.programTitle}`}
+               
+                />
               ))}
             </div>
           ) : (
