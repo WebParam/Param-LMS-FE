@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/navigation';
 import Cookies from 'universal-cookie';
 import './verify.scss';
+import { Api } from "@/app/lib/restapi/endpoints";
 
 
 
@@ -62,22 +63,21 @@ export default function VerifyAccount() {
       async function handleVerify(e:any) {
         e.preventDefault();
         setIsSubmitted(true);
-        const email = cookies.get('userEmail');
+        const email = cookies.get('user-verify-email');
         const payload = {
             email,
             otp: String(otp)
         }
 
-        // const res = await verifyUserAccount(payload);
-        const res = {data:{message:`Otp don't match`}} as any;
+        const res = await Api.POST_VerifyEmail(payload);
         debugger;
         if (res?.data.message != `Otp don't match`) {
             console.log(res);
             setIsSubmitted(false);
-            // const user = await 
-            cookies.set("loggedInUser", res?.data);
-            localStorage.setItem("loggedInUser", res?.data)
-            router.push('/student/student-profile')
+            cookies.set("param-lms-user", JSON.stringify(res.data), {
+              path: "/",
+            });
+            router.push('/protected/student/course/all-courses');
         } else {
             setIsSubmitted(false);
             setErrorMessage(true)
