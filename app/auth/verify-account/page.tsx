@@ -54,7 +54,6 @@ export default function VerifyAccount() {
             inputRefs[index - 1].current?.focus();
           }
       
-          // Add the "incorrect" class to trigger the animation
           e.target.classList.add('incorrect');
         }
       };
@@ -77,7 +76,7 @@ export default function VerifyAccount() {
             cookies.set("param-lms-user", JSON.stringify(res.data), {
               path: "/",
             });
-            router.push('/protected/student/course/all-courses');
+            router.push('/protected/home/courses');
         } else {
             setIsSubmitted(false);
             setErrorMessage(true)
