@@ -1,11 +1,5 @@
 "use client";
 import Link from "next/link";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
-
-
-interface Tabs {
-  [id: string]: string;
-}
 
 export default function PageHeader() {
   return (

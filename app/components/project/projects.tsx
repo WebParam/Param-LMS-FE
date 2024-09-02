@@ -7,8 +7,7 @@ export default async function Projects() {
 const [list, setList] = useState([]);
 const cookies = new Cookies();
 const loggedInUser = cookies.get("param-lms-user");
-    
-  
+cookies.set("number-of-projects", list.length);
   useEffect(() => {
     var fetchData = async () => {
       const data = await getProjects(loggedInUser?.id);
