@@ -6,6 +6,7 @@ import { Api } from "../../lib/restapi/endpoints";
 import { IUserLoginModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const cookies = new Cookies();
 const axios = require("axios").default;
@@ -165,6 +166,9 @@ export default function Login() {
               </button>
             </div>
           </form>
+          <p className="text-center text-dark">
+            Don't have an account? <Link href={process.env.NEXT_PUBLIC_isFreeMium ? "/auth/freemium-register" : "/auth/register"} className="text-primary"><u>Register</u></Link>
+          </p>
         </div>
       </div>
     </>

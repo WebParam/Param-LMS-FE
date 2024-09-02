@@ -187,6 +187,13 @@ DELETE_CourseById: async (
     return response;
   },
 
+  POST_VerifyEmail: async (
+    payload: any
+  ): Promise<IResponseObject<any>> => {
+    const response = await POST(`${wUserUrl}/Users/VerifyOTP`, payload);
+    return response;
+  },
+
   GET_UserById:async(id: string)
           :Promise<IResponseObject<IUser>>=>{
             

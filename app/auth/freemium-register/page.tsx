@@ -18,8 +18,7 @@ export default function RegisterFreemium() {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
-  const [image, setImage] = useState<any>();
-  const [loginType, setLoginType] = useState<number>(0);
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const onChangeEmail = (e: any) => {
     setEmail(e.target.value);
@@ -47,6 +46,19 @@ export default function RegisterFreemium() {
       theme: "light",
     });
 
+    if (password !== confirmPassword) {
+      toast.update(_id, {
+        render: "Passwords do not match",
+        type: "error",
+        isLoading: false,
+      });
+      setTimeout(() => {
+        setDisable(false);
+        toast.dismiss(_id);
+      }, 2000);
+      return
+    }
+
     if (!emailRegex.test(email)) {
       toast.update(_id, {
         render: "Invalid email address",
@@ -64,7 +76,6 @@ export default function RegisterFreemium() {
         username: username,
         email: email,
         password: password,
-        image: image,
         role: "Admin",
         loginType: 0
       } as IUserRegisterFreeMiumModel;
@@ -74,32 +85,20 @@ export default function RegisterFreemium() {
       try {
         if (user?.data?.id) {
           toast.update(_id, {
-            render: "Successfully logged in",
+            render: "Successfully registered",
             type: "success",
             isLoading: false,
           });
 
-          cookies.set("param-lms-user", JSON.stringify(user.data), {
+          cookies.set("user-verify-email", JSON.stringify(user.data.email), {
             path: "/",
           });
 
-          console.log(user.data);
-          console.log("Role", user?.data?.role);
-          // router.push("/protected/home/courses");
-        } else {
-          toast.update(_id, {
-            render: "Invalid login credentials",
-            type: "error",
-            isLoading: false,
-          });
-          setTimeout(() => {
-            setDisable(false);
-            toast.dismiss(_id);
-          }, 3000);
-        }
+          router.push("/auth/verify-account");
+        } 
       } catch (error) {
         toast.update(_id, {
-          render: "Invalid login credentials",
+          render: "There was an error registering your account",
           type: "error",
           isLoading: false,
         });
@@ -118,9 +117,6 @@ export default function RegisterFreemium() {
     setFirstName(event.target.value);
   }
 
-  function onChangeImage(event: ChangeEvent<HTMLInputElement>): void {
-    // setImage(event.target.value);
-  }
 
   function onChangeUsername(event: ChangeEvent<HTMLInputElement>): void {
     setUsername(event.target.value);
@@ -129,6 +125,11 @@ export default function RegisterFreemium() {
   function onChangeLastName(event: ChangeEvent<HTMLInputElement>): void {
     setLastName(event.target.value);
   }
+
+  function onChangeConfirmPassword(event: ChangeEvent<HTMLInputElement>): void {
+    setConfirmPassword(event.target.value);
+  }
+
   
 
   return (
@@ -139,9 +140,9 @@ export default function RegisterFreemium() {
         style={{ marginTop: "20px" }}
       >
         <div className="card p-4" style={{ width: "600px", height: "auto" }}>
-          <h2 className="text-center">Register Your Organization</h2>
+          <h2 className="text-center">Register Your FreeMium Account</h2>
           <p className="text-center text-dark">
-            Please enter your details to register your organization
+            Please enter your details below
           </p>
           <form>
           <div className="row">
@@ -210,18 +211,19 @@ export default function RegisterFreemium() {
                   style={{ height: "50px", fontSize: "16px" }}
                 />
               </div>
-             
               <div className="col-md-6 mb-3">
-                <label htmlFor="image">Upload Logo (Optional)</label>
+                <label htmlFor="password">Confirm Password *</label>
                 <input
-                  id="image"
-                  type="file"
-                  onChange={onChangeImage}
+                  id="password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={onChangeConfirmPassword}
                   className="form-control"
-                  accept="image/*"
+                  placeholder="********"
                   style={{ height: "50px", fontSize: "16px" }}
                 />
               </div>
+             
             </div>
             <div className="row">
               <div className="col-12 d-grid mb-3" style={{ marginTop: "20px" }}>
