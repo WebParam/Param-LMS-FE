@@ -27,8 +27,8 @@ const loggedInUser = cookies.get("param-lms-user");
                   key={project.id}
                   imgUrl={project.logo}
                   title={project.programTitle??"NA"}
-                //   url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.title}`}
-                url='#'
+                  url={`/protected/admin/projects/${project.id}/?title=${project.programTitle}`}
+               
                 />
               ))}
             </div>
