@@ -1,21 +1,21 @@
 'use client';
-import { getProjects } from "@/app/lib/actions/project";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Cookies from "universal-cookie";
-export default async function Projects() {
-const [list, setList] = useState([]);
-const cookies = new Cookies();
-const loggedInUser = cookies.get("param-lms-user");
-    
-  
+
+export default function Projects() {
+  const [list, setList] = useState([
+    { id: 1, logo: 'logo1.png', programTitle: 'Project Alpha' },
+    { id: 2, logo: 'logo2.png', programTitle: 'Project Beta' },
+    { id: 3, logo: 'logo3.png', programTitle: 'Project Gamma' }
+  ]);
+
   useEffect(() => {
-    var fetchData = async () => {
-      const data = await getProjects(loggedInUser?.id);
-      setList(data);
-    }
-    fetchData();
+    // Mock fetching data
+    setTimeout(() => {
+      setList(list); // This is just to simulate an async data fetch
+    }, 1000);
   }, []);
+
   return (
     <>
       <div className="page-section bg-alt border-top-2">
@@ -26,10 +26,8 @@ const loggedInUser = cookies.get("param-lms-user");
                 <Project
                   key={project.id}
                   imgUrl={project.logo}
-                  title={project.programTitle??"NA"}
-                //   url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.title}`}
-                url='#'
-                />
+                  title={project.programTitle ?? "NA"}
+                  url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.programTitle}`}                />
               ))}
             </div>
           ) : (

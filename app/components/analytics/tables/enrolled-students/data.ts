@@ -1,19 +1,15 @@
-
-
 export const mockData = [
   {
-    name: "John Doe",
+    name: "John",
     gender: "Male",
-    homeLanguage: "English",
     race: "Caucasian",
     disability: "None",
     employmentStatus: "Employed",
     province: "Gauteng",
     status: 1,
-    age: 34
   },
   {
-    name: "Jane Smith",
+    name: "Jane",
     gender: "Female",
     homeLanguage: "Afrikaans",
     race: "Coloured",
@@ -23,8 +19,9 @@ export const mockData = [
     status: 2,
     age: 29
   },
+
   {
-    name: "Lerato Mokoena",
+    name: "Lerato",
     gender: "Female",
     homeLanguage: "Sesotho",
     race: "Black",
@@ -34,8 +31,9 @@ export const mockData = [
     status: 1,
     age: 22
   },
+
   {
-    name: "Mandla Ndlovu",
+    name: "Mandla",
     gender: "Male",
     homeLanguage: "Zulu",
     race: "Black",
@@ -45,8 +43,9 @@ export const mockData = [
     status: 3,
     age: 40
   },
+
   {
-    name: "Sarah Johnson",
+    name: "Sarah",
     gender: "Female",
     homeLanguage: "English",
     race: "Asian",
@@ -56,8 +55,9 @@ export const mockData = [
     status: 1,
     age: 28
   },
+
   {
-    name: "Thabo Dlamini",
+    name: "Thabo",
     gender: "Male",
     homeLanguage: "Zulu",
     race: "Black",
@@ -68,7 +68,7 @@ export const mockData = [
     age: 45
   },
   {
-    name: "Maryam Patel",
+    name: "Maryam",
     gender: "Female",
     homeLanguage: "Hindi",
     race: "Indian",
@@ -78,8 +78,9 @@ export const mockData = [
     status: 0,
     age: 33
   },
+  
   {
-    name: "James Brown",
+    name: "James",
     gender: "Male",
     homeLanguage: "English",
     race: "Coloured",
@@ -90,7 +91,7 @@ export const mockData = [
     age: 67
   },
   {
-    name: "Zama Mkhize",
+    name: "Zama",
     gender: "Female",
     homeLanguage: "Xhosa",
     race: "Black",
@@ -101,7 +102,7 @@ export const mockData = [
     age: 26
   },
   {
-    name: "David Green",
+    name: "David",
     gender: "Male",
     homeLanguage: "English",
     race: "Caucasian",
@@ -112,7 +113,7 @@ export const mockData = [
     age: 21
   },
   {
-    name: "Nkosi Molefe",
+    name: "Nkosi",
     gender: "Male",
     homeLanguage: "Tswana",
     race: "Black",
@@ -123,7 +124,7 @@ export const mockData = [
     age: 39
   },
   {
-    name: "Sibongile Sithole",
+    name: "Sibongile",
     gender: "Female",
     homeLanguage: "Xhosa",
     race: "Black",
@@ -134,7 +135,7 @@ export const mockData = [
     age: 31
   },
   {
-    name: "Andile Mbatha",
+    name: "Andile",
     gender: "Male",
     homeLanguage: "Zulu",
     race: "Black",
@@ -145,7 +146,7 @@ export const mockData = [
     age: 36
   },
   {
-    name: "Ayesha Khan",
+    name: "Ayesha",
     gender: "Female",
     homeLanguage: "Urdu",
     race: "Indian",

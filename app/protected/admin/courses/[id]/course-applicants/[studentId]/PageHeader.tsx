@@ -18,6 +18,7 @@ export default function PageHeader() {
   } as Tabs;
 
   const tabName = pathname.split("/").at(-1) || "";
+  const entityType = process.env.NEXT_PUBLIC_USER === "freemium" ? "Project" : "Course";
 
   return (
     <>
@@ -47,7 +48,7 @@ export default function PageHeader() {
                 className="btn btn-success"
                 href={`/protected/admin/courses/${id}/course-applicants?title=${courseTitle}`}
               >
-                Course Applicants
+                {entityType} Applicants
               </Link>
             </div>
           </div>

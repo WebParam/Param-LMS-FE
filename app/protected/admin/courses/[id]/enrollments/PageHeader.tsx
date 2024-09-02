@@ -1,7 +1,16 @@
 "use client";
 import Link from "next/link";
+import { useEffect, useState } from 'react';
 
 export default function PageHeader() {
+  const [label, setLabel] = useState('Courses');
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_USER) {
+      setLabel('Projects');
+    }
+  }, []);
+
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
@@ -24,9 +33,9 @@ export default function PageHeader() {
             <div>
               <Link
                 className="btn btn-success"
-                href={`/protected/home/courses`}
+                href={`/protected/home/${label.toLowerCase()}`}
               >
-                All Courses
+                All {label}
               </Link>
             </div>
           </div>

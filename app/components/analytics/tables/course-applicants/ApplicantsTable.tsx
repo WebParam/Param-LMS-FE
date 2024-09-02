@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "./Table";
 import Pagination from "@/app/components/Pagination";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
@@ -7,7 +7,7 @@ import TableFilter from "./TableFilter";
 import { downloadFile } from "@/app/lib/utils";
 import { rUserUrl } from "@/app/lib/actions/endpoints";
 interface TablePaginationProps {
-  data: CourseApplicants[];
+  data: any[];
   courseId?: string;
 }
 
@@ -16,6 +16,13 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
   const ITEMSPERPAGE = 6;
   const [filteredData, setFilteredData] = useState(data);
   const [loading, setLoading] = useState(false);
+  const [entity, setEntity] = useState("Course");
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_USER === "freemium") {
+      setEntity("Project");
+    }
+  }, []);
 
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
@@ -37,7 +44,7 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
   return (
     <>
       <div className="page-separator">
-        <div className="page-separator__text">Course Applicants</div>
+        <div className="page-separator__text">{entity} Applicants</div>
       </div>
 
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">

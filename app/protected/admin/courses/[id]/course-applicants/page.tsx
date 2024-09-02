@@ -4,6 +4,7 @@ import ApplicantsTable from "@/components/analytics/tables/course-applicants/App
 import Graphs from "@/components/analytics/graphs/course-applicants/Graphs";
 import Link from "next/link";
 import PageHeader from "./PageHeader";
+import { mockData } from "@/components/analytics/tables/enrolled-students/data";
 
 const Body = async ({ params }: { params: { id: string } }) => {
   const courseId = params.id;
@@ -14,6 +15,9 @@ const Body = async ({ params }: { params: { id: string } }) => {
 
   const registrationUrl = `${baseUrl}/register?courseId=${courseId}`;
   const loginUrl = `${baseUrl}/login`;
+
+  const useMockData = process.env.NEXT_PUBLIC_USER ? true : false;
+  const tableData = useMockData ? mockData : (fetchedData && fetchedData.courseApplicants ? fetchedData.courseApplicants : []);
 
   return (
     <>
@@ -46,11 +50,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
         <div>
         <ApplicantsTable
           courseId={courseId}
-          data={
-            fetchedData && fetchedData.courseApplicants
-              ? fetchedData.courseApplicants
-              : []
-          }
+          data={tableData}
         />{" "}
         </div>
        
