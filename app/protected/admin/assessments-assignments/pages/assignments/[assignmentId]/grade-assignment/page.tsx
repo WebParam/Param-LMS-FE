@@ -44,7 +44,7 @@ const Body = ({ params }: { params: { assignmentId: string } }) => {
         </div>
       </div>
       <div
-      data-aos="slide-right"
+      data-aos="flip-up"
       className="card mb-0">
         <div
 

@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import PageHeader from "./PageHeader";
+import PageHeader from "../../../components/PageHeaders/host-companies/PageHeader";
 import Cookies from "universal-cookie";
 
 function Layout({ children }: { children: React.ReactNode }) {
