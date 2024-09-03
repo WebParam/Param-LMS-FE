@@ -1,7 +1,7 @@
 import { IStudentsData } from "@/app/interfaces/courseApplicants";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
-import ApplicantsTable from "@/components/course/[id]/course-applicants/ApplicantsTable";
-import Graphs from "@/components/course/[id]/course-applicants/graphs/Graphs";
+import ApplicantsTable from "@/components/analytics/tables/course-applicants/ApplicantsTable";
+import Graphs from "@/components/analytics/graphs/course-applicants/Graphs";
 import Link from "next/link";
 import PageHeader from "./PageHeader";
 
@@ -43,7 +43,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
         </div>
         <Graphs />
 
-        <div data-aos="slide-right">
+        <div>
         <ApplicantsTable
           courseId={courseId}
           data={

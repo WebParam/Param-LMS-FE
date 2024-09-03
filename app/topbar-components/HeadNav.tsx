@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   setIsOpen,
@@ -59,18 +60,20 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                   <div className="dropdown-header">
                     <strong>Account</strong>
                   </div>
-                  <a
+
+                  <Link
                     className="dropdown-item"
-                    style={{ cursor: "pointer" }}
-                    onClick={() =>
-                      router.push("/protected/admin/account/basic-info?account-title=Basic Information")
-                    }
+                    href="/protected/admin/account/basic-info?account-title=Basic Information"
                   >
                     Edit Account
-                  </a>
-                  <a className="dropdown-item" onClick={() => logout()}>
+                  </Link>
+                  <Link
+                    className="dropdown-item"
+                    onClick={() => logout()}
+                    href=""
+                  >
                     Logout
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -2,6 +2,8 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Viewer } from '@react-pdf-viewer/core';
 import { Worker } from '@react-pdf-viewer/core';
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'; 
 
 interface ViewLogbookProps {
@@ -27,7 +29,8 @@ function ViewLogbook({ showDocumentModal, setShowDocumentModal, pdfWorkerUrl, do
         <Modal.Body>
         <Worker workerUrl={pdfWorkerUrl}>
             <Viewer
-              fileUrl={`https://khumla-development-user-read.azurewebsites.net/api/Documents/PreviewDocument/${documentToView}`}
+               //fileUrl={`https://khumla-development-user-read.azurewebsites.net/api/Documents/PreviewDocument/66754b17c66474c142f6b9f6`}
+              fileUrl={documentToView}
               plugins={[defaultLayoutPluginInstance]}
             />
           </Worker>

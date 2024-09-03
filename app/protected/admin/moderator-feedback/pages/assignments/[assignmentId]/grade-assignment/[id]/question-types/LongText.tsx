@@ -76,8 +76,10 @@ export default function ({
                 <h6>RUBRIC:</h6>
               </div>
               <div className="d-flex flex-row justify-content-between mr-5">
-                <h6 className="mr-5 text-success">Facilitator</h6>
-                <h6 className="mr-3 text-danger">Moderator</h6>
+                <h6 className="mr-5 text-danger">Facilitator</h6>
+                <h6
+                 style={{ color: "green" }}
+                className="mr-3 ">Moderator</h6>
               </div>
             </td>
           </tr>
@@ -85,14 +87,16 @@ export default function ({
             {rubric.map((choice, index) => (
               <td key={index} className="py-2 d-flex justify-content-between align-items-center">
                 <div className="d-flex flex-column align-items-start">
-                <div className="text-danger d-flex mt-2">
+                <div 
+ style={{ color: "green" }}             
+    className=" d-flex mt-2">
                     {Array.from({ length: moderatorGrades[index] || 0 }).map((_, i) => (
                       <i key={i} className="material-icons">check</i>
                     ))}
                   </div>
                 
                   <span className="ml-2">{choice.description}</span>
-                  <div className="text-success d-flex">
+                  <div className="text-danger d-flex">
                     {Array(facilitatorGrades[index]).fill(<i className="material-icons">check</i>).map((icon, i) => (
                       <span key={i} className="mr-1">{icon}</span>
                     ))}
@@ -149,7 +153,10 @@ function Grade({
   return (
     <div className="d-flex w-100">
       <div className="d-flex w-75">
-        <div className={`text-center w-100 py-2 ${grade < questionScore * 0.5 ? "text-danger" : "text-success"}`}>
+      <div 
+                    style={{ color: grade >= (questionScore * 0.5) ? "green" : "" }}
+
+        className={`text-center w-100 py-2 ${grade < questionScore * 0.5 && "text-danger" }`}>
           Score: {grade} / {questionScore}
         </div>
       </div>

@@ -84,7 +84,7 @@ export default function ({
           {rubric.map((choice, index) => (
               <td key={index} className="py-2 d-flex justify-content-between align-items-center">
                 <div className="d-flex flex-column align-items-start">
-                  <div className="text-success d-flex">
+                  <div className="text-danger d-flex">
                     {Array(grades[index]).fill(<i className="material-icons">check</i>).map((icon, i) => (
                       <span key={i} className="mr-1">{icon}</span>
                     ))}
@@ -132,7 +132,11 @@ function Grade({
     return (
       <div className="d-flex w-100">
         <div className="d-flex w-75">
-          <div className={`text-center w-100 py-2 ${grade < (questionScore * 0.5) ? "text-danger" : "text-success"}`}>Score: {grade} / {questionScore}</div>
+          <div 
+style={{ color: grade >= (questionScore * 0.5) ? "green" : "" }}
+
+        
+          className={`text-center w-100 py-2 ${grade < (questionScore * 0.5) && "text-danger" }`}>Score: {grade} / {questionScore}</div>
         </div>
         {! questionType &&
           <div>

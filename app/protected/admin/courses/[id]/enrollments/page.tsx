@@ -1,7 +1,7 @@
 import { IStudentsData } from "@/app/interfaces/courseApplicants";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
-import Graphs from "@/components/course/[id]/enrollments/graphs/Graphs";
-import EnrolledTable from "@/components/course/[id]/enrollments/EnrolledTable";
+import Graphs from "@/components/analytics/graphs/enrolled-students/Graphs";
+import EnrolledTable from "@/components/analytics/tables/enrolled-students/EnrolledTable";
 import PageHeader from "./PageHeader";
 
 const Body = async ({ params }: { params: { id: string } }) => {
@@ -13,7 +13,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
       <PageHeader />
       <div className="container page__container page__container page-section">
         <Graphs />
-        <div data-aos="slide-right">
+        <div >
         <EnrolledTable
           courseId={courseId}
           data={
