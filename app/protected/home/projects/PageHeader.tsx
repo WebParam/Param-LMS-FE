@@ -36,7 +36,7 @@ export default function PageHeader() {
       href={numberOfProjects >= 2 ? "#" : `/protected/home/projects/create`}
       style={{ pointerEvents: numberOfProjects >= 2 ? "none" : "auto" }}
       onClick={(e) => {
-        if (numberOfProjects > 2) {
+        if (numberOfProjects >= 2) {
           e.preventDefault();
         }
       }}

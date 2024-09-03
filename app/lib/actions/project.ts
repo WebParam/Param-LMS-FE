@@ -78,3 +78,57 @@ export const getProject = async (id:string) => {
         throw err;
     }
 }
+
+export const getProjectApplicants = async (id:string) => {
+    try {
+        const resp = await get(`${rUserUrl}/UserOrganisationProgramEnrollment/GetProjectApplicants/${id}`);
+        const data = resp.data.length > 0 ? resp.data: [];
+        Diagnostic("SUCCESS ON GET PROJECT APPLICANTS, returning", data);
+        return data;
+    } catch (err) {
+        Diagnostic("ERROR ON GET PROJECT APPLICANTS, returning", err);
+        throw err;
+    }
+}
+
+export const getProjectEnrollments = async (id:string) => {
+    try {
+        Diagnostic("GET PROJECT ENROLLMENTS", id);
+        const resp = await get(`${rUserUrl}/OrganizationProgram/GetOrganizationProgramEnrollments/${id}`);
+        const data =resp.data!==null|| resp.data.length > 0 ? resp.data: [];
+        Diagnostic("SUCCESS ON GET PROJECT ENROLLMENTS, returning", data);
+        return data;
+    } catch (err) {
+        Diagnostic("ERROR ON GET PROJECT ENROLLMENTS, returning", err);
+        throw err;
+    }
+}
+
+export const getEnrolledStudentCount = async (id:string) => {
+    try {
+        const resp = await get(`${rUserUrl}/OrganizationProgram/GetEnrolledStudentCount/${id}`);
+        const data = resp;
+        Diagnostic("SUCCESS ON GET STUDENT COUNT, returning", data);
+        return data;
+    } catch (err) {
+        Diagnostic("ERROR ON GET STUDENT COUNT, returning", err);
+        throw err;
+    }
+}
+export const updateProjectEnrollmentStatus = async (payload: any) => {
+    try {
+        Diagnostic("PUT PAYLOAD", payload);
+        const resp = await put(`${wUserUrl}/OrganizationProgramEnrollment/UpdateOrganizationProgramEnrollmentStatus`, payload);
+        Diagnostic(" returning", resp);
+        const data = resp.data;
+        Diagnostic("SUCCESS ON PUT PROJECT ENROLLMENT STATUS, returning", data);
+        return data;
+    } catch (err) {
+        if (err instanceof Error) {
+            Diagnostic("ERROR ON PUT PROJECT ENROLLMENT STATUS, returning", err.cause);
+            throw err;
+        }
+        Diagnostic("ERROR ON PUT PROJECT ENROLLMENT STATUS, returning", err);
+        throw err;
+    }
+};

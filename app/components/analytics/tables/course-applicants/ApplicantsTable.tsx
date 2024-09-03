@@ -6,6 +6,7 @@ import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import TableFilter from "./TableFilter";
 import { downloadFile } from "@/app/lib/utils";
 import { rUserUrl } from "@/app/lib/actions/endpoints";
+import Cookies from "universal-cookie";
 interface TablePaginationProps {
   data: any[];
   courseId?: string;
@@ -17,7 +18,8 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
   const [filteredData, setFilteredData] = useState(data);
   const [loading, setLoading] = useState(false);
   const [entity, setEntity] = useState("Course");
-
+  let cookies = new Cookies();
+  const numberOfEnrolledStudents = cookies.get("number-of-enrolled-students");
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_USER === "freemium") {
       setEntity("Project");
@@ -65,6 +67,16 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
           </button>
         </div>
       </div>
+      {process.env.NEXT_PUBLIC_USER === "freemium"&&numberOfEnrolledStudents >= 25 && (
+        <div className="card mb-3 d-flex flex-row p-2">
+        <div className="mx-1 flex-grow-1 text-start">
+          <p className="mb-0" style={{ color: "#000000", fontSize: "1.25em" }}>
+            You have reached the maximum number of enrollments allowed. A maximum of 50 enrollments is allowed on the freemium plan, with up to 25 enrollments per project.
+          </p>
+        </div>
+      </div>
+      )}
+
 
       <div className="card mb-0">
         <TableFilter data={data} setFilteredData={setFilteredData} />
