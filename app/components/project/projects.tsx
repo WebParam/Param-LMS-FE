@@ -3,19 +3,20 @@ import { getProjects } from "@/app/lib/actions/project";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
-export default async function Projects() {
+export default function Projects() {
 const [list, setList] = useState([]);
 const cookies = new Cookies();
 const loggedInUser = cookies.get("param-lms-user");
-    
   
   useEffect(() => {
     var fetchData = async () => {
       const data = await getProjects(loggedInUser?.id);
+      cookies.set("number-of-projects", data.length, { path: '/' });
       setList(data);
     }
     fetchData();
   }, []);
+
   return (
     <>
       <div className="page-section bg-alt border-top-2">
@@ -27,8 +28,7 @@ const loggedInUser = cookies.get("param-lms-user");
                   key={project.id}
                   imgUrl={project.logo}
                   title={project.programTitle??"NA"}
-                //   url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.title}`}
-                url='#'
+                  url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.title}`}
                 />
               ))}
             </div>
