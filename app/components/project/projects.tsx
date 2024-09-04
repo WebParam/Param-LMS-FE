@@ -1,6 +1,6 @@
 'use client';
 import Link from "next/link";
-export default async function Projects({list}:any) {
+export default function Projects({list}:any) {
 
   return (
     <>
