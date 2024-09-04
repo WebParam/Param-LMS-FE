@@ -1,8 +1,12 @@
-import PageHeader from "./PageHeader";
+import PageHeader from "../PageHeader";
 import Projects from "@/components/project/projects";
 import { getProjects } from "@/app/lib/actions/project";
-const Page = async () => {
-  const list = await getProjects("66aa2c9346704137687384a2");
+const Page = async ({ params }: { params: { freemiumId: string } }) => {
+
+
+
+  const list = await getProjects(params.freemiumId);
+
   return (
     <>
       <PageHeader />
