@@ -1,16 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 export default function PageHeader() {
-  const [title, setTitle] = useState("Course");
-
-  useEffect(() => {
-    if (process.env.NEXT_PUBLIC_USER === "freemium") {
-      setTitle("Project");
-    }
-  }, []);
-
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
@@ -20,22 +11,22 @@ export default function PageHeader() {
               style={{ width: "850px" }}
               className="mb-24pt mb-sm-0 mr-sm-24pt"
             >
-              <h2 className="mb-0">{title} Applicants</h2>
+              <h2 className="mb-0">Course Applicants</h2>
 
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">
                   <a href="#">Home</a>
                 </li>
 
-                <li className="breadcrumb-item active">{title} Applicants</li>
+                <li className="breadcrumb-item active">Course Applicants</li>
               </ol>
             </div>
             <div>
               <Link
                 className="btn btn-success"
-                href={`/protected/home/${title.toLowerCase()}s`}
+                href={`/protected/home/courses`}
               >
-                All {title}s
+                All Courses
               </Link>
             </div>
           </div>
