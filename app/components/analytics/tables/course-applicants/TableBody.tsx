@@ -3,12 +3,16 @@ import Link from "next/link";
 import { NextPage } from "next";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import { usePathname, useSearchParams } from "next/navigation";
+import Cookies from "universal-cookie";
 
-const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
+const TableBody: NextPage<{ list: CourseApplicants[] }> = async ({ list }) => {
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
   const pathname = usePathname();
-
+  const enrolledCount = list.filter((data) => data.status === 0).length;
+  const useProject = process.env.NEXT_PUBLIC_USER === "freemium";
+  let cookies = new Cookies();
+  cookies.set("number-of-enrolled-students", enrolledCount);
   return (
     <>
       <tbody className="list" id="staff">
@@ -113,18 +117,19 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                     )}
                   </div>
                 </td>
-
-                <td className="text-center js-lists-values-projects small">
-                  <div className="d-flex align-items-center justify-content-center ">
-                    <Link
-                      href={`${pathname}/${data.userId}/profiles?title=${courseTitle}&studentName=${studentName}&isEnrolled=${data.status}`}
-                    >
-                      <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
-                        visibility
-                      </i>
-                    </Link>
-                  </div>
-                </td>
+                {useProject&&enrolledCount <= 25 && (
+                  <td className="text-center js-lists-values-projects small">
+                    <div className="d-flex align-items-center justify-content-center ">
+                      <Link
+                        href={`${pathname}/${data.userId}/profiles?title=${courseTitle}&studentName=${studentName}&isEnrolled=${data.status}`}
+                      >
+                        <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
+                          visibility
+                        </i>
+                      </Link>
+                    </div>
+                  </td>
+                )}
               </tr>
             );
           })}

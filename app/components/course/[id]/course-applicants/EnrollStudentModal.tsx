@@ -8,8 +8,8 @@ import {
   useSearchParams,
 } from "next/navigation";
 import { useEffect, useState } from "react";
-import { deleteKnowledgeTopic } from "@/app/lib/actions/knowledge-topic";
 import { updateEnrollmentStatus } from "@/app/lib/actions/courseStudents";
+import { updateProjectEnrollmentStatus } from "@/app/lib/actions/project";
 
 function EnrollStudentModal(props: any) {
   const [successMessage, setSuccessMessage] = useState<string>("");
@@ -36,11 +36,15 @@ const [disabled, setDisabled] = useState(false)
     const payload = {
       userId: studentId,
       status: 0,
+      organizationProgramId: courseId,
+      organizationProrgamTitle: title,
       fullName: studentName,
       email: email,
       courseTitle: title,
     }
-    const resp = await updateEnrollmentStatus(payload);
+    const useProject = process.env.NEXT_PUBLIC_USER === "freemium";
+    const resp = useProject? await updateProjectEnrollmentStatus(payload): await updateEnrollmentStatus(payload);
+    console.log("Enroll Student Response", resp);
     if (resp.enrollmentStatus == 0) {
       setIsSpinner(false);
       setSuccessMessage("Student Enrolled Successfully");
