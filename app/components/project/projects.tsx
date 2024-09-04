@@ -1,20 +1,23 @@
 'use client';
+import { getProjects } from "@/app/lib/actions/project";
 import Link from "next/link";
+import Cookies from "universal-cookie";
 export default function Projects({list}:any) {
+const cookies = new Cookies();
+cookies.set("number-of-projects", list && list.length, { path: '/' });
 
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
-          {list.length > 0 ? (
+          {list && list.length > 0 ? (
             <div className="row card-group-row ">
               {list.map((project: any) => (
                 <Project
                   key={project.id}
                   imgUrl={project.logo}
                   title={project.programTitle??"NA"}
-                  url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.programTitle}`}
-               
+                  url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.title}`}
                 />
               ))}
             </div>
