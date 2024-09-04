@@ -7,7 +7,7 @@ import TableFilter from "./TableFilter";
 import { downloadFile } from "@/app/lib/utils";
 import { rUserUrl } from "@/app/lib/actions/endpoints";
 interface TablePaginationProps {
-  data: any[];
+  data: CourseApplicants[];
   courseId?: string;
 }
 

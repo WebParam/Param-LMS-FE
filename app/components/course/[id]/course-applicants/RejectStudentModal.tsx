@@ -9,7 +9,6 @@ import {
 } from "next/navigation";
 import { useEffect, useState } from "react";
 import { updateEnrollmentStatus } from "@/app/lib/actions/courseStudents";
-import { updateProjectEnrollmentStatus } from "@/app/lib/actions/project";
 
 function RejectStudentModal(props: any) {
   const { id : courseId, studentId } = useParams<{
@@ -49,14 +48,12 @@ function RejectStudentModal(props: any) {
       const payload = {
         userId: studentId,
         status: 1,
-        organizationProgramId: courseId,
-        organizationProrgamTitle: title,
         fullName: studentName,
         email: email,
         courseTitle: title,
+        rejectionReason:selectedReason
       }
-      const useProject = process.env.NEXT_PUBLIC_USER === "freemium";
-    const resp = useProject? await updateProjectEnrollmentStatus(payload): await updateEnrollmentStatus(payload);
+      const resp = await updateEnrollmentStatus(payload);
       if (resp.enrollmentStatus == 1) {
         setIsSpinner(false);
         setSuccessMessage("Student Rejected Successfully");
