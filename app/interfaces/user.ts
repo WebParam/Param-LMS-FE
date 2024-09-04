@@ -59,6 +59,22 @@ export interface IUserLoginModel{
     Password:string
 }
 
+export interface IUserRegisterModel{
+  Email:string, 
+  Password:string
+}
+
+export interface IUserRegisterFreeMiumModel{
+  firstName: string,  
+  lastName: string,
+  username: string,
+  email: string,
+  password: string,
+  image: string,
+  role: string,
+  loginType: number
+}
+
 
 export interface IUserResetPasswordModel extends IUser{
     Email:string, 

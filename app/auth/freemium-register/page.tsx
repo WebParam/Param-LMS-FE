@@ -1,5 +1,5 @@
 "use client";
-import "./register.scss";
+import "./freemium.scss";
 import { ChangeEvent, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -140,7 +140,7 @@ export default function RegisterFreemium() {
         style={{ marginTop: "20px" }}
       >
         <div className="card p-4" style={{ width: "600px", height: "auto" }}>
-          <h2 className="text-center">Register Your Account</h2>
+          <h2 className="text-center">Register Your FreeMium Account</h2>
           <p className="text-center text-dark">
             Please enter your details below
           </p>

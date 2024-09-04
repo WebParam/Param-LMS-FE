@@ -1,7 +1,21 @@
 'use client';
+import { getProjects } from "@/app/lib/actions/project";
 import Link from "next/link";
-export default function Projects({list}:any) {
-
+import { useEffect, useState } from "react";
+import Cookies from "universal-cookie";
+export default async function Projects() {
+const [list, setList] = useState([]);
+const cookies = new Cookies();
+const loggedInUser = cookies.get("param-lms-user");
+    
+  
+  useEffect(() => {
+    var fetchData = async () => {
+      const data = await getProjects(loggedInUser?.id);
+      setList(data);
+    }
+    fetchData();
+  }, []);
   return (
     <>
       <div className="page-section bg-alt border-top-2">
@@ -13,8 +27,7 @@ export default function Projects({list}:any) {
                   key={project.id}
                   imgUrl={project.logo}
                   title={project.programTitle??"NA"}
-                  url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.programTitle}`}
-               
+                  url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.title}`}
                 />
               ))}
             </div>
