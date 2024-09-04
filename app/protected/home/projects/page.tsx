@@ -15,6 +15,7 @@ const Page = () => {
       if (loggedInUser?.id) {
         const data = await getProjects(loggedInUser.id);
         setList(data);
+        console.log(data.list)
         cookies.set("number-of-projects", data.length, { path: '/' });
       }
     };
