@@ -33,7 +33,7 @@ export const createProject = async (formData: FormData) => {
 export const getProjects = async (adminId:string) => {
     try {
         const resp = await get(`${rUserUrl}/OrganizationProgram/GetOrganizationProgramsByAdmin/${adminId}`);
-        const data = resp.data.length > 0 ? resp.data: [];
+        const data = resp.data;
         Diagnostic("SUCCESS ON GET, returning", data);
         return data;
     } catch (err) {

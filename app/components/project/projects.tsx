@@ -1,27 +1,16 @@
 'use client';
 import { getProjects } from "@/app/lib/actions/project";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
-export default function Projects() {
-const [list, setList] = useState([]);
+export default function Projects({list}:any) {
 const cookies = new Cookies();
-const loggedInUser = cookies.get("param-lms-user");
-  
-  useEffect(() => {
-    var fetchData = async () => {
-      const data = await getProjects(loggedInUser?.id);
-      cookies.set("number-of-projects", data.length, { path: '/' });
-      setList(data);
-    }
-    fetchData();
-  }, []);
+cookies.set("number-of-projects", list && list.length, { path: '/' });
 
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
-          {list.length > 0 ? (
+          {list && list.length > 0 ? (
             <div className="row card-group-row ">
               {list.map((project: any) => (
                 <Project
