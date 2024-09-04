@@ -4,10 +4,10 @@ import PageHeader from "./PageHeader";
 import Projects from "@/components/project/projects";
 import Cookies from "universal-cookie"
 import { getProjects } from "@/app/lib/actions/project";
-const Page = async () => {
+const Page = () => {
   const [list, setList] = useState([]);
 const cookies = new Cookies();
-const loggedInUser = cookies.get("param-lms-user");
+const loggedInUser = cookies.get("param-lms-user")
 
   useEffect(() => {
     var fetchData = async () => {
