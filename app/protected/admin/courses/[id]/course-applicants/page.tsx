@@ -4,16 +4,22 @@ import ApplicantsTable from "@/components/analytics/tables/course-applicants/App
 import Graphs from "@/components/analytics/graphs/course-applicants/Graphs";
 import Link from "next/link";
 import PageHeader from "./PageHeader";
+import { mockData } from "@/components/analytics/tables/enrolled-students/data";
+import { getProjectApplicants, getProjectEnrollments } from "@/app/lib/actions/project";
 
 const Body = async ({ params }: { params: { id: string } }) => {
   const courseId = params.id;
-  const fetchedData: IStudentsData = await getEnrollments(courseId, false);
+  
   const baseUrl = process.env.NEXT_PUBLIC_STUDENT_SITE
     ? process.env.NEXT_PUBLIC_STUDENT_SITE
     : "https://web-param-param-lms-student-qa.vercel.app";
 
   const registrationUrl = `${baseUrl}/register?courseId=${courseId}`;
   const loginUrl = `${baseUrl}/login`;
+  const useProject = process.env.NEXT_PUBLIC_USER === "freemium";
+  const fetchedData: IStudentsData = await getEnrollments(courseId, false);
+  const projectApplicants= await getProjectApplicants(courseId);
+  const tableData = useProject ? projectApplicants : (fetchedData && fetchedData.courseApplicants ? fetchedData.courseApplicants : []);
 
   return (
     <>
@@ -46,11 +52,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
         <div>
         <ApplicantsTable
           courseId={courseId}
-          data={
-            fetchedData && fetchedData.courseApplicants
-              ? fetchedData.courseApplicants
-              : []
-          }
+          data={tableData}
         />{" "}
         </div>
        

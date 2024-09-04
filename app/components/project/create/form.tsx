@@ -85,7 +85,7 @@ export default function CreateForm({ title, description, projectLogoUrl,duration
             </label>
             <div className="col-sm-9">
               <input
-                name="courseLogoUrl"
+                name="projectLogoUrl"
                 type="text"
                 className="form-control"
                 defaultValue={projectLogoUrl}

@@ -14,45 +14,45 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const courseId = params.id;
   const courseTitle = searchParams.get("title") || "";
   const pathName = usePathname();
-  const isHost = pathName == "/protected/host/host/completed"
+  const isFreemium = process.env.NEXT_PUBLIC_USER ? true : false;
 
   const sideTabs = [
     {
-      name: "Back To Courses",
+      name: isFreemium ? "Back To Projects" : "Back To Courses",
       url: `/protected/home/courses`,
       icon: "home",
-      roles: ["Admin", "SuperAdmin"],
+      roles: isFreemium ? ["Admin", "SuperAdmin", "Freemium"] : ["Admin", "SuperAdmin"],
     },
     {
-      name: "Course",
+      name: isFreemium ? "Project" : "Course",
       url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
       icon: "school",
       roles: ["Admin", "SuperAdmin"],
       children: [
         {
-          name: "Course Applicants",
+          name: isFreemium ? "Project Applicants" : "Course Applicants",
           url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}`,
           icon: "group",
-          roles: ["Admin", "SuperAdmin"],
+          roles: isFreemium ? ["Admin", "SuperAdmin", "Freemium"] : ["Admin", "SuperAdmin"],
         },
 
         {
-          name: "Enrolled Students",
+          name: isFreemium ? "Enrolled Students" : "Enrolled Students",
           url: `/protected/admin/courses/${courseId}/enrollments?title=${courseTitle}`,
           icon: "group",
-          roles: ["Admin", "SuperAdmin"],
+          roles: isFreemium ? ["Admin", "SuperAdmin", "Freemium"] : ["Admin", "SuperAdmin"],
         },
         {
-          name: "Edit Course",
-          url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
+          name: isFreemium ? "Edit Project" : "Edit Course",
+          url: isFreemium ? `/protected/admin/projects/${courseId}?title=${courseTitle}` : `/protected/admin/courses/${courseId}?title=${courseTitle}`,
           icon: "edit",
-          roles: ["SuperAdmin"],
+          roles: isFreemium ? ["Admin", "SuperAdmin", "Freemium"] : ["Admin", "SuperAdmin"],
         },
         {
-          name: "Create Course",
-          url: `/protected/home/courses/create`,
+          name: isFreemium ? "Create Project" : "Create Course",
+          url: isFreemium ? `/protected/home/projects/create` : `/protected/home/courses/create`,
           icon: "add_box",
-          roles: ["SuperAdmin"],
+          roles: isFreemium ? ["Admin", "SuperAdmin", "Freemium"] : ["Admin", "SuperAdmin"],
         },
       ],
     },
@@ -64,7 +64,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       roles: ["Admin", "SuperAdmin"],
       children: [
         {
-          name: "Course Analytics",
+          name: isFreemium ? "Project Analytics" : "Course Analytics",
           url: `/protected/admin/analytics/graphs/course?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
