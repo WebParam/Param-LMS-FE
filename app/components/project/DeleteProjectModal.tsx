@@ -22,8 +22,8 @@ function DeleteProjectModal(props: any) {
     setIsSpinner(true);
     setDisabled(true);
 
-    const resp = await deleteProject(props.id);
-    if (resp.id) {
+    try {
+      const resp = await deleteProject(props.id);
       setIsSpinner(false);
       setSuccessMessage("Project Deleted Successfully");
       setTimeout(() => {
@@ -32,15 +32,14 @@ function DeleteProjectModal(props: any) {
         });
         setSuccessMessage("");
       }, 2000);
-      return;
+    } catch (error) {
+      setErrorMessage("Failed Deleting Project");
+      setIsSpinner(false);
+      setTimeout(() => {
+        setErrorMessage("");
+        setDisabled(false);
+      }, 2000);
     }
-
-    setErrorMessage("Failed Deleting Project");
-    setIsSpinner(false);
-    setTimeout(() => {
-      setErrorMessage("");
-      setDisabled(false);
-    }, 2000);
   };
 
   useEffect(() => {

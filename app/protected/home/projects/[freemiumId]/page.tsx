@@ -3,8 +3,6 @@ import Projects from "@/components/project/projects";
 import { getProjects } from "@/app/lib/actions/project";
 const Page = async ({ params }: { params: { freemiumId: string } }) => {
 
-
-
   const list = await getProjects(params.freemiumId);
 
   return (

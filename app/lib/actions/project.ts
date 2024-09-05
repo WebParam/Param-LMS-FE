@@ -1,6 +1,6 @@
 'use server'
 import { redirect } from "next/navigation";
-import { get, post, put } from "../utils";
+import { del, get, post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
 import { rUserUrl, wUserUrl } from "./endpoints";
 
@@ -11,7 +11,7 @@ export const createProject = async (formData: FormData) => {
         duration: formData.get("duration") as string,
         logo: formData.get("courseLogoUrl") as string,
         programTitle: formData.get("title") as string,
-        state:1
+        state:0
     };
     Diagnostic("Payload", payload);
     let url = "";
@@ -38,6 +38,17 @@ export const getProjects = async (adminId:string) => {
         return data;
     } catch (err) {
         Diagnostic("ERROR ON GET, returning", err);
+        throw err;
+    }
+}
+export const deleteProject = async (id:string) => {
+    try {
+        const resp = await del(`${wUserUrl}/OrganizationProgram/DeleteOrganizationProgram?id=${id}`);
+        const data = resp.data;
+        Diagnostic("SUCCESS ON DELETE PROJECT BY ID, returning", data);
+        return data;
+    } catch (err) {
+        Diagnostic("SUCCESS ON DELETE PROJECT BY ID, returning", err);
         throw err;
     }
 }
