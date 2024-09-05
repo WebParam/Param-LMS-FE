@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <>
       <ReduxProvider>
-        <div>{children}</div>
+        <div className="h-100 w-100">{children}</div>
       </ReduxProvider>
     </>
   );

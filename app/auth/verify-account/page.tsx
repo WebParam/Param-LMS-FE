@@ -54,7 +54,6 @@ export default function VerifyAccount() {
             inputRefs[index - 1].current?.focus();
           }
       
-          // Add the "incorrect" class to trigger the animation
           e.target.classList.add('incorrect');
         }
       };
@@ -77,7 +76,8 @@ export default function VerifyAccount() {
             cookies.set("param-lms-user", JSON.stringify(res.data), {
               path: "/",
             });
-            router.push('/protected/student/course/all-courses');
+            
+            router.push('/protected/home/courses');
         } else {
             setIsSubmitted(false);
             setErrorMessage(true)
@@ -86,6 +86,7 @@ export default function VerifyAccount() {
   
     return (
         <div className="verify">
+          <div className="card p-4">
             <h1>Confirm  your email address</h1>
             <p>We’ve sent an email to the address you provided.
             Check your inbox and enter the 5 digit code.</p>
@@ -105,7 +106,11 @@ export default function VerifyAccount() {
                   ))}
                 </div>
                 {errorMessage && <span className={`errorMessage`} style={{marginBottom:'3px'}}>Incorrect OTP, please check and try again</span>}
-                <button type="submit" disabled={isSubmitted}>
+                <button 
+                type="submit" 
+                disabled={isSubmitted}
+                className="w-50"
+                >
                     {
                         isSubmitted ? 
                         <div className="spinner-border" role="status"/>
@@ -114,10 +119,11 @@ export default function VerifyAccount() {
                     }
                 </button>
                 <div className="account">
-                    <p>Already have an account?
-                    <Link href='/login'> Log in</Link></p>
+                    <p>
+                    <Link href='/auth/freemium-register'>Back to register</Link></p>
                 </div>
             </form>
+        </div>
         </div>
     )
 }
