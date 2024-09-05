@@ -1,12 +1,24 @@
 'use client';
 import { getProjects } from "@/app/lib/actions/project";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import DeleteProjectModal from "./DeleteProjectModal";
-export default function Projects({list}:any) {
+export default function Projects() {
 const cookies = new Cookies();
-cookies.set("number-of-projects", list && list.length, { path: '/' });
+
+const [list, setlist] = useState<any[]>([]);
+const user = cookies.get("param-lms-user");
+
+const projects = async () => {
+  const projects = await getProjects(user.id);
+  cookies.set("number-of-projects", list && list.length, { path: '/' });
+  setlist(projects);
+};
+
+useEffect(() => {
+  projects();
+}, []);
 
   return (
     <>
