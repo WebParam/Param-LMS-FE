@@ -30,11 +30,16 @@ export const createProject = async (formData: FormData) => {
 }
 
 export const getProjects = async () => {
+    let userId;
+    try {
+        userId = localStorage.getItem("id");
+        if (!userId) throw new Error("User ID not found in local storage.");
+    } catch (err) {
+        Diagnostic("ERROR ON LOCAL STORAGE ACCESS, returning", err);
+        throw new Error("Local storage access failed. Make sure your browser supports local storage.");
+    }
 
     try {
-        const userId = localStorage.getItem("id");
-        if (!userId) throw new Error("User ID not found in local storage.");
-        
         const resp = await get(`${rUserUrl}/OrganizationProgram/GetOrganizationProgramsByAdmin/${userId}`);
         const data = resp.data;
         localStorage.setItem("number-of-projects", String(data.length));
@@ -42,7 +47,7 @@ export const getProjects = async () => {
         return data;
     } catch (err) {
         Diagnostic("ERROR ON GET, returning", err);
-        throw err;
+        throw new Error("Failed to fetch projects. Please try again later.");
     }
 }
 export const deleteProject = async (id:string) => {
