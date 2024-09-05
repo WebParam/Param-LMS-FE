@@ -1,9 +1,23 @@
-import PageHeader from "../PageHeader";
+"use client";
+import PageHeader from "./PageHeader";
 import Projects from "@/components/project/projects";
 import { getProjects } from "@/app/lib/actions/project";
-const Page = async ({ params }: { params: { freemiumId: string } }) => {
+import Cookies from "universal-cookie";
+import { useEffect, useState } from "react";
+const Page = () => {
+  
+  const cookies = new Cookies();
+  const [list, setlist] = useState<any[]>([]);
+  const user = cookies.get("param-lms-user");
 
-  const list = await getProjects(params.freemiumId);
+  const projects = async () => {
+    const projects = await getProjects(user.id);
+    setlist(projects);
+  };
+
+  useEffect(() => {
+    projects();
+  }, []);
 
   return (
     <>
