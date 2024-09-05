@@ -7,7 +7,7 @@ export const studentsEcoStatusDatafiltersMapping = {
 };
 
 export const studentsEcoStatusDataFilterOptions = [
-  { description: 'All Students', color: 'yellow' },
+  { description: 'All Statuses', color: 'yellow' },
   { description: 'Females', color: 'red' },
   { description: 'Males', color: 'blue' },
 
@@ -17,7 +17,7 @@ export const studentsEcoStatusDataFilterOptions = [
 const commonOptions = {
   chart: {
     height: 350,
-    type: 'bar', // Ensure the type is set to 'bar' to display as a bar graph
+    type: 'bar', 
     dropShadow: {
       enabled: true,
       color: '#000',
@@ -28,18 +28,17 @@ const commonOptions = {
     },
     zoom: { enabled: false },
   },
-       yaxis: {
-        title: {
-          text: 'Students Socio Economic Status (in hundreds)',
-        },
-      },
+  yaxis: {
+    title: {
+      text: 'Number of Students by Employment Status',
+    },
+  },
   colors: ['#007bff'],
   dataLabels: { enabled: false },
   stroke: {
     show: false,
     width: 2,
     colors: ['#007bff', '#ff0000'],
-    
   },
   title: { align: 'left' },
   grid: {
@@ -52,55 +51,64 @@ const commonOptions = {
       horizontal: false,
       columnWidth: '55%',
       endingShape: 'rounded',
-      borderRadius: 10, // Added for a nice rounded edge
+      borderRadius: 10, 
     },
   },
 };
 
-// Data for each month using the same common options
 export const studentsSocioEcoData = {
   studentsSocioStatus: {
-    series: [{ name: 'All of Students', data: Array.from({ length: 5 }, () => Math.floor(Math.random() * 60)) }],
+    series: [{ name: 'Number of Students', data: Array.from({ length: 8 }, () => Math.floor(Math.random() * 60)) }],
     options: {
       ...commonOptions,
       xaxis: {
         categories: [
-          'South Africa',
-          'Other',
-          'Dual(SA Plus Other)',
-          'Permanent Residence',
-          'Unknown',
+          "Employed",
+          "Unemployed",
+          "Home Maker",
+          "Scholar",
+          "Unemployed(Disabled)",
+          "Employed(Disabled)",
+          "Other",
+          "Unspecified",
         ],
       },
     },
   },
-  malesStudentsData: {
-    series: [{ name: 'Males', data: Array.from({ length: 5 }, () => Math.floor(Math.random() * 60)) }],
+  malesStudentData: {
+    series: [{  name: 'Number of Students', data: Array.from({ length: 8 }, () => Math.floor(Math.random() * 60)) }],
     options: {
       ...commonOptions,
       xaxis: {
         categories: [
-          'South Africa',
-          'Other',
-          'Dual(SA Plus Other)',
-          'Permanent Residence',
-          'Unknown',
+          "Employed",
+          "Unemployed",
+          "Home Maker",
+          "Scholar",
+          "Unemployed(Disabled)",
+          "Employed(Disabled)",
+          "Other",
+          "Unspecified",
         ],
       },
-    },  },
+    },
+  },
   femalesStudentData: {
-    series: [{ name: 'Female', data: Array.from({ length: 5 }, () => Math.floor(Math.random() * 50)) }],
+    series: [{  name: 'Number of Students', data: Array.from({ length: 8 }, () => Math.floor(Math.random() * 50)) }],
     options: {
       ...commonOptions,
       xaxis: {
         categories: [
-          'South Africa',
-          'Other',
-          'Dual(SA Plus Other)',
-          'Permanent Residence',
-          'Unknown',
+          "Employed",
+          "Unemployed",
+          "Home Maker",
+          "Scholar",
+          "Unemployed(Disabled)",
+          "Employed(Disabled)",
+          "Other",
+          "Unspecified",
         ],
       },
-    },  },
-
+    },
+  },
 };
