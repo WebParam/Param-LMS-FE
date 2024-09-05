@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import Cookies from "universal-cookie";
 
@@ -26,14 +26,12 @@ export default function PageHeader() {
               </ol>
             </div>
             <div>
-              {loggedInUser && loggedInUser?.role == "SuperAdmin" || loggedInUser?.role == "Admin" && (
-                <Link
-                  className="btn btn-success"
-                  href={`/protected/home/projects/create`}
-                >
-                  Create Project
-                </Link>
-              )}
+              <Link
+                className="btn btn-success"
+                href={`/protected/home/projects/create`}
+              >
+                Create Project
+              </Link>
             </div>
           </div>
         </div>
