@@ -84,11 +84,6 @@ export default function RegisterFreemium() {
       console.log("data", user);
       try {
         if (user?.data?.id) {
-          toast.update(_id, {
-            render: "Successfully registered",
-            type: "success",
-            isLoading: false,
-          });
 
           cookies.set("user-verify-email", JSON.stringify(user.data.email), {
             path: "/",
