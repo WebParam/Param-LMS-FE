@@ -1,3 +1,4 @@
+"use client"
 import CreateForm from "@/app/components/project/create/form";
 import { createProject } from "@/app/lib/actions/project";
 import PageHeader from "./PageHeader";

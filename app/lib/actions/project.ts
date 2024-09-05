@@ -1,4 +1,3 @@
-'use server'
 import { redirect } from "next/navigation";
 import { del, get, post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
@@ -30,10 +29,15 @@ export const createProject = async (formData: FormData) => {
     redirect(url);
 }
 
-export const getProjects = async (adminId:string) => {
+export const getProjects = async () => {
+
     try {
-        const resp = await get(`${rUserUrl}/OrganizationProgram/GetOrganizationProgramsByAdmin/${adminId}`);
+        const userId = localStorage.getItem("id");
+        if (!userId) throw new Error("User ID not found in local storage.");
+        
+        const resp = await get(`${rUserUrl}/OrganizationProgram/GetOrganizationProgramsByAdmin/${userId}`);
         const data = resp.data;
+        localStorage.setItem("number-of-projects", String(data.length));
         Diagnostic("SUCCESS ON GET, returning", data);
         return data;
     } catch (err) {

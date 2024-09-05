@@ -9,11 +9,7 @@ export default function Projects() {
 
   const fetchProjects = async () => {
     try {
-      const userId = localStorage.getItem("id");
-      if (!userId) throw new Error("User ID not found in local storage.");
-
-      const projects = await getProjects(userId);
-      localStorage.setItem("number-of-projects", String(projects.length));
+      const projects = await getProjects();
       setList(projects);
     } catch (err) {
       console.error("Failed to fetch projects:", err);
@@ -23,7 +19,6 @@ export default function Projects() {
   useEffect(() => {
     fetchProjects();
   }, []);
-
 
   return (
     <>

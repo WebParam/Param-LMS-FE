@@ -1,3 +1,4 @@
+"use client"
 import { Suspense, useEffect } from "react";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
