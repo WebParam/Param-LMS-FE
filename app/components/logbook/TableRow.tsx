@@ -12,7 +12,6 @@ const TableRow = ({ document }: { document: any }) => {
   const documentToView = 'https://khumla-dev-assessment-read.azurewebsites.net/api/v1/StudentAnswers/DownloadStudentAsssessment/54670932456yu';
   const pdfVersion = "3.10.111";
   const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
-
   useEffect(() => {
     if (document) {
       setUrl(document.url);
