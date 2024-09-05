@@ -1,3 +1,4 @@
+"use client"
 import PageHeader from "./PageHeader";
 import Projects from "@/components/project/projects";
 const Page = () => {

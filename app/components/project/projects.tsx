@@ -1,24 +1,29 @@
-'use client';
+"use client";
 import { getProjects } from "@/app/lib/actions/project";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import Cookies from "universal-cookie";
 import DeleteProjectModal from "./DeleteProjectModal";
+import Link from "next/link";
+
 export default function Projects() {
-const cookies = new Cookies();
+  const [list, setList] = useState<any[]>([]);
 
-const [list, setlist] = useState<any[]>([]);
-const user = cookies.get("param-lms-user");
+  const fetchProjects = async () => {
+    try {
+      const userId = localStorage.getItem("id");
+      if (!userId) throw new Error("User ID not found in local storage.");
 
-const projects = async () => {
-  const projects = await getProjects(user.id);
-  cookies.set("number-of-projects", list && list.length, { path: '/' });
-  setlist(projects);
-};
+      const projects = await getProjects(userId);
+      localStorage.setItem("number-of-projects", String(projects.length));
+      setList(projects);
+    } catch (err) {
+      console.error("Failed to fetch projects:", err);
+    }
+  };
 
-useEffect(() => {
-  projects();
-}, []);
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
 
   return (
     <>
@@ -104,10 +109,12 @@ const Project = ({
             onClick={() => setOpenModal(true)}
             className="material-icons text-success "
             style={{
-              position:"absolute",
-              bottom:0,
-              right:0,
-              fontSize: "19px", cursor:"pointer" }}
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              fontSize: "19px",
+              cursor: "pointer",
+            }}
           >
             delete
           </i>

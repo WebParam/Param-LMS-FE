@@ -41,6 +41,7 @@ export default function Login() {
 
       if (user?.data?.id) {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
+        localStorage.setItem("id",user?.data?.id)
 
         if (process.env.NEXT_PUBLIC_USER_ACCESS === "FREEMIUM") {
           router.push("protected/home/projects");
