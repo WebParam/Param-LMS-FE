@@ -26,7 +26,7 @@ export default function PageHeader() {
               </ol>
             </div>
             <div>
-              {loggedInUser && loggedInUser.role == "SuperAdmin" || loggedInUser.role == "Admin" && (
+              {loggedInUser && loggedInUser?.role == "SuperAdmin" || loggedInUser?.role == "Admin" && (
                 <Link
                   className="btn btn-success"
                   href={`/protected/home/projects/create`}
