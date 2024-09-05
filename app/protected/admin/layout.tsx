@@ -53,7 +53,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           url: `/protected/home/courses/create`,
           icon: "add_box",
           roles: ["SuperAdmin"],
-        }
+        },
       ],
     },
 
@@ -119,14 +119,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
        
       ],
     },
-    {
-      name: "Host",
-      url: `/protected/admin/host/pages/completed?title=${courseTitle}`,
-      icon: "add_box",
-      roles: ["Admin","SuperAdmin"],
-    },
-
-
    
   ];
 
