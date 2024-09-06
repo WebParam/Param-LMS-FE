@@ -34,10 +34,14 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
     downloadFile(url, filename, fileExtension, setLoading);
   };
 
+  // Check the environment variable
+  const isFreemium = process.env.NEXT_PUBLIC_USER === "freemium";
+  const sectionTitle = isFreemium ? "Project Applicants" : "Course Applicants";
+
   return (
     <>
       <div className="page-separator">
-        <div className="page-separator__text">Course Applicants</div>
+        <div className="page-separator__text">{sectionTitle}</div>
       </div>
 
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">

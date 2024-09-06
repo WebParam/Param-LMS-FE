@@ -4,7 +4,7 @@ import { Api } from "../../lib/restapi/endpoints";
 import { IUserLoginModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
-import "./login.css";
+import Link from "next/link";
 
 const cookies = new Cookies();
 
@@ -41,6 +41,7 @@ export default function Login() {
 
       if (user?.data?.id) {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
+        localStorage.setItem("id",user?.data?.id)
 
         if (process.env.NEXT_PUBLIC_USER_ACCESS === "FREEMIUM"){
           router.push("protected/home/projects");
@@ -60,65 +61,65 @@ export default function Login() {
   return (
     <div className="login-container">
       <div
-        className="login-left"
-        style={{
-          backgroundImage: `url(${process.env.NEXT_PUBLIC_LOGIN_IMAGE_URL})`,
-          color: "white",
-          padding: "40px",
-          width: "50%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          alignItems: "center",
-          backgroundSize: "cover",
-        }}
-      ></div>
-      <div className="login-right">
-      <h1>Sign in</h1>
-        <p>Welcome back! Please enter your details</p>
-        {errorMessage && <div className={errorMessage.includes('Invalid') ? 'alert alert-danger' : 'alert alert-success'} style={{ marginTop: '10px' }}>{errorMessage}</div>}
-
-        <form onSubmit={LoginUser}>
-          <div className="form-group">
-            <label htmlFor="email">E-mail Address</label>
-            <input required={true} type="email" id="email" placeholder="Enter your email" value={email} onChange={onChangeEmail} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={onChangePassword}
-              required={true}
-            />
-          </div>
-          
-          <div
-            className="d-grid mb-3"
-            style={{ marginTop: "40px", textAlign: "center" }}
-          >
-            <button
-              type="submit"
-              disabled={disable}
-              className="btn btn-primary"
-              style={{
-                backgroundColor: "#24345c",
-                borderColor: "#24345c",
-                height: "50px",
-                fontSize: "16px",
-                width: "80%",
-              }}
+        className="d-flex justify-content-center align-items-center vh-100"
+        style={{ marginTop: "20px" }}
+      >
+        <div className="card p-4" style={{ width: "450px", height: "480px" }}>
+          <h2 className="text-center mb-4">Log in to your account</h2>
+          <p className="text-center mb-4">
+            Welcome back! Please enter your details
+          </p>
+          <form>
+            <div className="form-group mb-3">
+              <input
+                id="email"
+                type="text"
+                value={email}
+                onChange={onChangeEmail}
+                className="form-control"
+                placeholder="Enter Email *"
+                style={{ height: "50px", fontSize: "16px" }}
+              />
+            </div>
+            <div className="form-group mb-3">
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={onChangePassword}
+                className="form-control"
+                placeholder="Enter Password *"
+                style={{ height: "50px", fontSize: "16px" }}
+              />
+            </div>
+            <div
+              className="d-flex justify-content-between align-items-center mb-3"
+              style={{ marginTop: "20px" }}
+            ></div>
+            <div
+              className="d-grid mb-3"
+              style={{ marginTop: "40px", textAlign: "center" }}
             >
-              {disable ? (
-                <div className="spinner-border text-white" role="status" />
-              ) : (
-                "Log In"
-              )}
-            </button>
-          </div>
-        </form>
+              <button
+                disabled={disable}
+                onClick={LoginUser}
+                className="btn btn-primary"
+                style={{
+                  backgroundColor: "#24345c",
+                  borderColor: "#24345c",
+                  height: "50px",
+                  fontSize: "16px",
+                  width: "80%",
+                }}
+              >
+                Log In
+              </button>
+            </div>
+          </form>
+          <p className="text-center text-dark">
+            Don't have an account? <Link href={process.env.NEXT_PUBLIC_isFreeMium ? "/auth/freemium-register" : "/auth/404"} className="text-primary"><u>Register</u></Link>
+          </p>
+        </div>
       </div>
     </div>
   );

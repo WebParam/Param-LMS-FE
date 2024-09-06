@@ -13,10 +13,10 @@ export default function Page() {
           setShowModal(false);
         }}
       />
-      <div data-aos="flip-up" className="page-separator">
+      <div className="page-separator">
         <div className="page-separator__text">Recent Notifications</div>
       </div>
-      <div data-aos="flip-up" className="card mt-3">
+      <div className="card mt-3">
         <div
           className="table-responsive"
           data-toggle="lists"
