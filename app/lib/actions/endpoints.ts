@@ -1,6 +1,8 @@
 const test = "testing";
 const env = process.env.NEXT_PUBLIC_API_ENV == "production" ? "prod" : "dev";
 
+debugger;
+
 export const wCourseUrl = `https://khumla-${env}-newcourse-write.azurewebsites.net/api/v1`;
 
 export const rCourseUrl = `https://khumla-${env}-newcourse-read.azurewebsites.net/api/v1`;
