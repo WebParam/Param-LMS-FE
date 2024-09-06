@@ -42,7 +42,7 @@ export default function Login() {
       if (user?.data?.id) {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
 
-        if (process.env.NEXT_PUBLIC_USER_ACCESS === "FREEMIUM") {
+        if (process.env.NEXT_PUBLIC_USER_ACCESS === "FREEMIUM"){
           router.push("protected/home/projects");
         } else {
           router.push("/protected/home/courses");
