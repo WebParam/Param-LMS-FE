@@ -76,7 +76,12 @@ export default function VerifyAccount() {
             cookies.set("param-lms-user", JSON.stringify(res.data), {
               path: "/",
             });
-            router.push('/protected/home/courses');
+            if(res.data.role == "Freemium"){
+              router.push('/protected/home/projects');
+            }else{
+              router.push('/protected/home/courses');
+   
+            }
         } else {
             setIsSubmitted(false);
             setErrorMessage(true)
