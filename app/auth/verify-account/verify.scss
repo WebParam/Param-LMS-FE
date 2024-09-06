@@ -7,6 +7,16 @@
     height: 100dvh;
     color: #252525;
 
+    & .card {
+        padding: 20px;
+        border-radius: 10px;
+        
+        & button {
+            width: 60%;
+            
+        }
+    }
+
     & h1 {
         font-size: 34px;
         width: 100%;
