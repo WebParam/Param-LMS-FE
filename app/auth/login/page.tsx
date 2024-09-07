@@ -92,10 +92,7 @@ export default function Login() {
                 style={{ height: "50px", fontSize: "16px" }}
               />
             </div>
-            <div
-              className="d-flex justify-content-between align-items-center mb-3"
-              style={{ marginTop: "20px" }}
-            ></div>
+            <div className="text-center mb-3 text-danger">{errorMessage}</div>
             <div
               className="d-grid mb-3"
               style={{ marginTop: "40px", textAlign: "center" }}
@@ -117,7 +114,17 @@ export default function Login() {
             </div>
           </form>
           <p className="text-center text-dark">
-            Don't have an account? <Link href={process.env.NEXT_PUBLIC_isFreeMium ? "/auth/freemium-register" : "/auth/404"} className="text-primary"><u>Register</u></Link>
+            Don't have an account?{" "}
+            <Link
+              href={
+                process.env.NEXT_PUBLIC_isFreeMium
+                  ? "/auth/freemium-register"
+                  : "/auth/404"
+              }
+              className="text-primary"
+            >
+              <u>Register</u>
+            </Link>
           </p>
         </div>
       </div>

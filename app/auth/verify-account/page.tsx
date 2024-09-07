@@ -90,8 +90,9 @@ export default function VerifyAccount() {
   
     return (
         <div className="verify">
+          <div className="card">
             <h1>Confirm  your email address</h1>
-            <p>We’ve sent an email to the address you provided.
+            <p>We’ve sent an email to the address you provided.<br/>
             Check your inbox and enter the 5 digit code.</p>
             <form onSubmit={handleVerify}>
                 <div className="otpContainer">
@@ -122,6 +123,7 @@ export default function VerifyAccount() {
                     <Link href='/login'> Log in</Link></p>
                 </div>
             </form>
+          </div>
         </div>
     )
 }
