@@ -1,11 +1,14 @@
 "use client";
-import { getProjects } from "@/app/lib/actions/project";
+import { getProjects } from "@/app/lib/actions/getProject";
 import { useEffect, useState } from "react";
 import DeleteProjectModal from "./DeleteProjectModal";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function Projects() {
   const [list, setList] = useState<any[]>([]);
+  const searchParams = useSearchParams();
+  const refreshId = searchParams.get("refreshId")!;
 
   const fetchProjects = async () => {
     try {
@@ -18,7 +21,7 @@ export default function Projects() {
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [refreshId]);
 
   return (
     <>
@@ -65,7 +68,7 @@ const Project = ({
       <DeleteProjectModal
         id={id}
         show={openModal}
-        onHide={() => setOpenModal(false)}
+        onHide={() => setOpenModal(true)}
         title={title}
       />
       <div className="card card-group-row__card">

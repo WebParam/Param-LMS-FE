@@ -3,23 +3,16 @@ import { del, get, post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
 import { rUserUrl, wUserUrl } from "./endpoints";
 
-export const createProject = async (formData: FormData) => {
-    const payload = {
-        adminId: formData.get("adminId") as string,
-        programDescription: formData.get("description") as string,
-        duration: formData.get("duration") as string,
-        logo: formData.get("courseLogoUrl") as string,
-        programTitle: formData.get("title") as string,
-        state:0
-    };
-    Diagnostic("Payload", payload);
+export const createProject = async (formData:any) => {
+    Diagnostic("Payload", formData);
     let url = "";
     try {
-        const resp = await post(`${wUserUrl}/OrganizationProgram/AddOrganizationProgram`, payload);
+        const resp = await post(`${wUserUrl}/OrganizationProgram/AddOrganizationProgram`, formData);
         Diagnostic("RESP", resp.data);
          const data = await resp.data;
-        // const { id, title } = data;
-       // url = `/protected/admin/courses/${id}?title=${title}`;
+         console.log("data",resp)
+        //  const { id, programTitle } = data;
+        // url = `/protected/home/projects/${id}?title=${programTitle}`;
         Diagnostic("SUCCESS ON POST, returning", data);
     } catch (err) {
         Diagnostic("ERROR ON POST, returning", err);
@@ -29,27 +22,7 @@ export const createProject = async (formData: FormData) => {
     redirect(url);
 }
 
-export const getProjects = async () => {
-    let userId;
-    try {
-        userId = localStorage.getItem("id");
-        if (!userId) throw new Error("User ID not found in local storage.");
-    } catch (err) {
-        Diagnostic("ERROR ON LOCAL STORAGE ACCESS, returning", err);
-        throw new Error("Local storage access failed. Make sure your browser supports local storage.");
-    }
 
-    try {
-        const resp = await get(`${rUserUrl}/OrganizationProgram/GetOrganizationProgramsByAdmin/${userId}`);
-        const data = resp.data;
-        localStorage.setItem("number-of-projects", String(data.length));
-        Diagnostic("SUCCESS ON GET, returning", data);
-        return data;
-    } catch (err) {
-        Diagnostic("ERROR ON GET, returning", err);
-        throw new Error("Failed to fetch projects. Please try again later.");
-    }
-}
 export const deleteProject = async (id:string) => {
     try {
         const resp = await del(`${wUserUrl}/OrganizationProgram/DeleteOrganizationProgram?id=${id}`);
@@ -61,3 +34,34 @@ export const deleteProject = async (id:string) => {
         throw err;
     }
 }
+
+export const getProject = async (id: string) => {
+    try {
+      const resp = await get(`${rUserUrl}/OrganizationProgram/GetOrganizationProgram/${id}`);
+  
+      const data = resp.data;
+      Diagnostic("SUCCESS ON GET, returning", data);
+      return data;
+    } catch (err) {
+      Diagnostic("ERROR ON GET, returning", err);
+      throw err;
+    }
+  };
+
+  export const updateProject = async (formData: FormData) => {
+    const id = formData.get("id") as string
+    let url = "";
+    try {
+      const resp = await put(`${wUserUrl}/OrganizationProgram/UpdateOrganizationProgram`, formData);
+  
+      const data = await resp.data;
+      const { title } = data;
+      url = `/protected/home/projects/${id}?title=${title}`;
+      Diagnostic("SUCCESS ON PUT, returning", data);
+    } catch (err) {
+      Diagnostic("ERROR ON PUT, returning", err);
+      throw err;
+    }
+  
+    redirect(url);
+  };

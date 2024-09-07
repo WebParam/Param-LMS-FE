@@ -12,6 +12,7 @@ function DeleteProjectModal(props: any) {
   const router = useRouter();
   const pathname = usePathname();
   const [disabled, setDisabled] = useState(false);
+  const [hideModal, setHideModal] = useState<boolean>(false)
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId") || "";
   const date = new Date().toString();
