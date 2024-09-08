@@ -15,9 +15,9 @@ function Layout({
 
   const pathname = usePathname();
 
-  const baseUrl = `/protected/admin/courses/${params.id}`;
+  const baseUrl = `/protected/home/projects/${params.id}`;
   const links = [
-    { name: "Edit Course", path: baseUrl, url: `${baseUrl}?title=${name}` },
+    { name: "Edit Project", path: baseUrl, url: `${baseUrl}?title=${name}` },
   ];
 
   return (

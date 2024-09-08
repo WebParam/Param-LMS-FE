@@ -5,31 +5,16 @@ import DeleteProjectModal from "./DeleteProjectModal";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-export default function Projects() {
-  const [list, setList] = useState<any[]>([]);
-  const searchParams = useSearchParams();
-  const refreshId = searchParams.get("refreshId")!;
+export default function Projects({data}:any) {
 
-  const fetchProjects = async () => {
-    try {
-      const projects = await getProjects();
-      setList(projects);
-    } catch (err) {
-      console.error("Failed to fetch projects:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchProjects();
-  }, [refreshId]);
 
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
-          {list.length > 0 ? (
+          {data.length > 0 ? (
             <div className="row card-group-row ">
-              {list.map((project: any) => (
+              {data.map((project: any) => (
                 <Project
                   id={project.id}
                   key={project.id}
@@ -68,7 +53,7 @@ const Project = ({
       <DeleteProjectModal
         id={id}
         show={openModal}
-        onHide={() => setOpenModal(true)}
+        onHide={() => setOpenModal(false)}
         title={title}
       />
       <div className="card card-group-row__card">

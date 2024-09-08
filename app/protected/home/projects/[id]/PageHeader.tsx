@@ -23,7 +23,7 @@ export default function PageHeader() {
             <div>
               <Link
                 className="btn btn-success"
-                href={`/protected/home/courses`}
+                href={`/protected/home/projects`}
               >
                 All Projects
               </Link>

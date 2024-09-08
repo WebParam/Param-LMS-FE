@@ -15,6 +15,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const courseTitle = searchParams.get("title") || "";
   const pathName = usePathname();
   const isHost = pathName == "/protected/host/host/completed"
+  const projectLength = localStorage.getItem("len")!;
 
   const userRole = process.env.NEXT_PUBLIC_USER;
 
@@ -29,33 +30,33 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       name: userRole === "freemium" ? "Project" : "Course",
       url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
       icon: "school",
-      roles: [""],
+      roles: ["Admin", "SuperAdmin", "Freemium"],
       children: [
         {
           name: userRole === "freemium" ? "Project Applicants" : "Course Applicants",
           url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}`,
           icon: "group",
-          roles: ["Admin", "SuperAdmin"],
+          roles: ["Admin", "SuperAdmin", "Freemium"],
         },
 
         {
           name: userRole === "freemium" ? "Enrolled Students " : "Enrolled Students",
           url: `/protected/admin/courses/${courseId}/enrollments?title=${courseTitle}`,
           icon: "group",
-          roles: ["Admin", "SuperAdmin"],
+          roles: ["Admin", "SuperAdmin", "Freemium"],
         },
         {
           name: userRole === "freemium" ? "Edit Project" : "Edit Course",
-          url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
+          url: userRole !== "freemium" ? `/protected/admin/courses/${courseId}?title=${courseTitle}` : `/protected/home/projects/${courseId}?title=${courseTitle}`,
           icon: "edit",
-          roles: ["SuperAdmin"],
+          roles: ["Admin", "SuperAdmin", "Freemium"],
         },
-        {
-          name: userRole === "freemium" ? "Create Project" : "Create Course",
+        ...(userRole !== "freemium" || Number(projectLength) < 2 ? [{
+          name: userRole === "freemium"  ? "Create Project" : "Create Course",
           url: `/protected/home/courses/create`,
           icon: "add_box",
-          roles: ["SuperAdmin"],
-        },
+          roles: ["Admin", "SuperAdmin", "Freemium"],
+        }] : []),
       ],
     },
 

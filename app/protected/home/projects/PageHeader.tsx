@@ -1,10 +1,9 @@
 "use client";
-import Link from "next/link";
-import Cookies from "universal-cookie";
+import { useRouter } from "next/navigation";
 
-export default function PageHeader() {
-  const cookies = new Cookies();
-  const loggedInUser = cookies.get("param-lms-user");
+
+export default function PageHeader({length}:any) {
+  const router = useRouter();
 
   return (
     <>
@@ -26,12 +25,14 @@ export default function PageHeader() {
               </ol>
             </div>
             <div>
-              <Link
-                className="btn btn-success"
-                href={`/protected/home/projects/create`}
-              >
-                Create Project
-              </Link>
+              <button 
+              onClick={() => {
+                router.replace(`/protected/home/projects/create`)
+              }}
+              disabled = {length >= 2 ? true : false}
+              className= {length >= 2 ? "btn btn-secondary" : "btn btn-success"}>
+               Create Project
+              </button>
             </div>
           </div>
         </div>

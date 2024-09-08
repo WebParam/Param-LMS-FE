@@ -117,7 +117,7 @@ export default function Login() {
             </div>
           </form>
           <p className="text-center text-dark">
-            Don't have an account? <Link href={process.env.NEXT_PUBLIC_isFreeMium ? "/auth/freemium-register" : "/auth/register"} className="text-primary"><u>Register</u></Link>
+            Don't have an account? <Link href={process.env.NEXT_PUBLIC_isFreeMium ? "/auth/freemium-register" : "/auth/404"} className="text-primary"><u>Register</u></Link>
           </p>
         </div>
       </div>

@@ -16,7 +16,7 @@ export const getProjects = async () => {
     try {
         const resp = await get(`${rUserUrl}/OrganizationProgram/GetOrganizationProgramsByAdmin/${userId}`);
         const data = resp.data;
-        localStorage.setItem("number-of-projects", String(data.length));
+        localStorage.setItem("len", String(data.length));
         Diagnostic("SUCCESS ON GET, returning", data);
         return data;
     } catch (err) {
