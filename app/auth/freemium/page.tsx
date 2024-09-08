@@ -4,12 +4,11 @@ import { ChangeEvent, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Api } from "../../lib/restapi/endpoints";
-import { IUserLoginModel, IUserRegisterFreeMiumModel, IUserRegisterModel } from "../../interfaces/user";
+import {  IUserRegisterFreeMiumModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 
 const cookies = new Cookies();
-const axios = require("axios").default;
 
 export default function RegisterFreemium() {
   const [disable, setDisable] = useState<boolean>(false);

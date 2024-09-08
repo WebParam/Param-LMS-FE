@@ -1,32 +1,20 @@
 "use client";
-import { getProjects } from "@/app/lib/actions/project";
+import { getProjects } from "@/app/lib/actions/getProject";
 import { useEffect, useState } from "react";
 import DeleteProjectModal from "./DeleteProjectModal";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-export default function Projects() {
-  const [list, setList] = useState<any[]>([]);
+export default function Projects({data}:any) {
 
-  const fetchProjects = async () => {
-    try {
-      const projects = await getProjects();
-      setList(projects);
-    } catch (err) {
-      console.error("Failed to fetch projects:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchProjects();
-  }, []);
 
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
-          {list.length > 0 ? (
+          {data.length > 0 ? (
             <div className="row card-group-row ">
-              {list.map((project: any) => (
+              {data.map((project: any) => (
                 <Project
                   id={project.id}
                   key={project.id}

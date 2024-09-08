@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useFormStatus } from "react-dom";
 
-export default function EditButton({ setShowModal }: any) {
+export default function EditButton({handleSubmit, setShowModal }: any) {
   const { pending } = useFormStatus();
 
   useEffect(() => {
@@ -15,6 +15,7 @@ export default function EditButton({ setShowModal }: any) {
 
   return (
     <button
+    onClick={handleSubmit}
       className="btn btn-success btn-block d-flex flex-column justify-content-center align-items-center"
       disabled={pending}
     >
