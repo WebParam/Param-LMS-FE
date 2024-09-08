@@ -27,10 +27,7 @@ function DeleteProjectModal(props: any) {
       setIsSpinner(false);
       setSuccessMessage("Project Deleted Successfully");
       setTimeout(() => {
-        router.replace(`${pathname}?refreshId=${date}`, {
-          scroll: false,
-        });
-        setSuccessMessage("");
+        props.onDelete()
       }, 2000);
     } catch (error) {
       setErrorMessage("Failed Deleting Project");
@@ -88,4 +85,5 @@ function DeleteProjectModal(props: any) {
     </Modal>
   );
 }
+
 export default DeleteProjectModal;
