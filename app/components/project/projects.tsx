@@ -1,21 +1,25 @@
-'use client';
+"use client";
 import { getProjects } from "@/app/lib/actions/project";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import Cookies from "universal-cookie";
-export default async function Projects() {
-const [list, setList] = useState([]);
-const cookies = new Cookies();
-const loggedInUser = cookies.get("param-lms-user");
-    
-  
-  useEffect(() => {
-    var fetchData = async () => {
-      const data = await getProjects(loggedInUser?.id);
-      setList(data);
+import DeleteProjectModal from "./DeleteProjectModal";
+import Link from "next/link";
+
+export default function Projects() {
+  const [list, setList] = useState<any[]>([]);
+
+  const fetchProjects = async () => {
+    try {
+      const projects = await getProjects();
+      setList(projects);
+    } catch (err) {
+      console.error("Failed to fetch projects:", err);
     }
-    fetchData();
+  };
+
+  useEffect(() => {
+    fetchProjects();
   }, []);
+
   return (
     <>
       <div className="page-section bg-alt border-top-2">
@@ -24,11 +28,11 @@ const loggedInUser = cookies.get("param-lms-user");
             <div className="row card-group-row ">
               {list.map((project: any) => (
                 <Project
+                  id={project.id}
                   key={project.id}
                   imgUrl={project.logo}
-                  title={project.programTitle??"NA"}
-                //   url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.title}`}
-                url='#'
+                  title={project.programTitle ?? "NA"}
+                  url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.programTitle}`}
                 />
               ))}
             </div>
@@ -47,13 +51,28 @@ const Project = ({
   imgUrl,
   url,
   title,
+  id,
 }: {
   imgUrl: string;
   url: string;
   title: string;
+  id: string;
 }) => {
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleDelete = () => {
+    setOpenModal(false);
+  };
+
   return (
     <div className="col-lg-3 card-group-row__col">
+      <DeleteProjectModal
+        id={id}
+        show={openModal}
+        onHide={() => setOpenModal(false)}
+        title={title}
+        onDelete={handleDelete}
+      />
       <div className="card card-group-row__card">
         <Link href={url} className="d-block mb-16pt">
           <div
@@ -83,9 +102,22 @@ const Project = ({
               </h4>
             </div>
           </div>
-          <Link href={url}>
-            <i className="material-icons text-50">more_horiz</i>
-          </Link>
+        </div>
+
+        <div className="d-flex justify-content-end position-relative ">
+          <i
+            onClick={() => setOpenModal(true)}
+            className="material-icons text-success "
+            style={{
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              fontSize: "19px",
+              cursor: "pointer",
+            }}
+          >
+            delete
+          </i>
         </div>
       </div>
     </div>

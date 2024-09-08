@@ -1,8 +1,8 @@
+"use client"
 import PageHeader from "./PageHeader";
 import Projects from "@/components/project/projects";
+const Page = () => {
 
-const Page = async () => {
-    
   return (
     <>
       <PageHeader />
@@ -17,7 +17,7 @@ const Page = async () => {
           >
             <Projects/>
           </div>
-        </div>{" "}
+        </div>
       </div>
     </>
   );

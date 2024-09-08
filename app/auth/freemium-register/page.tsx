@@ -76,7 +76,7 @@ export default function RegisterFreemium() {
         username: username,
         email: email,
         password: password,
-        role: "Admin",
+        role: "Freemium",
         loginType: 0
       } as IUserRegisterFreeMiumModel;
 
