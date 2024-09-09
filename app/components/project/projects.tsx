@@ -1,38 +1,25 @@
 "use client";
-import { getProjects } from "@/app/lib/actions/project";
+import { getProjects } from "@/app/lib/actions/getProject";
 import { useEffect, useState } from "react";
 import DeleteProjectModal from "./DeleteProjectModal";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-export default function Projects() {
-  const [list, setList] = useState<any[]>([]);
-
-  const fetchProjects = async () => {
-    try {
-      const projects = await getProjects();
-      setList(projects);
-    } catch (err) {
-      console.error("Failed to fetch projects:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
+export default function Projects({ data }: any) {
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
-          {list.length > 0 ? (
+          {data.length > 0 ? (
             <div className="row card-group-row ">
-              {list.map((project: any) => (
+              {data.map((project: any) => (
                 <Project
                   id={project.id}
                   key={project.id}
                   imgUrl={project.logo}
                   title={project.programTitle ?? "NA"}
                   url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.programTitle}`}
+                  editUrl={`/protected/home/projects/${project.id}?title=${project.programTitle}`}
                 />
               ))}
             </div>
@@ -50,11 +37,13 @@ export default function Projects() {
 const Project = ({
   imgUrl,
   url,
+  editUrl,
   title,
   id,
 }: {
   imgUrl: string;
   url: string;
+  editUrl: string;
   title: string;
   id: string;
 }) => {
@@ -93,31 +82,19 @@ const Project = ({
           </div>
         </Link>
 
-        <div className="d-flex p-16pt">
-          <div className="d-flex flex-column flex">
-            <div className="posts-card-popular__title card-body">
-              <small className="text-muted text-uppercase">blog</small>
-              <h4 className="card-title m-0">
-                <a href={url}>{title}</a>
-              </h4>
-            </div>
+        <div className="d-flex justify-content-between p-16pt">
+          <h4 className="card-title m-0">
+            <a href={url}>{title}</a>
+          </h4>
+          <div>
+            {" "}
+            <Link href={editUrl}>
+              <i className="material-icons">edit</i>
+            </Link>
+            <i onClick={() => setOpenModal(true)} className="material-icons">
+              delete
+            </i>
           </div>
-        </div>
-
-        <div className="d-flex justify-content-end position-relative ">
-          <i
-            onClick={() => setOpenModal(true)}
-            className="material-icons text-success "
-            style={{
-              position: "absolute",
-              bottom: 0,
-              right: 0,
-              fontSize: "19px",
-              cursor: "pointer",
-            }}
-          >
-            delete
-          </i>
         </div>
       </div>
     </div>

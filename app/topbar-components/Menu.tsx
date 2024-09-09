@@ -15,60 +15,40 @@ const Menu: NextPage<{ sideTabs: SideTab[] }> = ({ sideTabs }) => {
       <ul style={{ height: "100vh" }} className="sidebar-menu">
         {sideTabs &&
           sideTabs.map((tab, index) => {
-            if (tab.name === "Host Companies") {
-              return (
-                <>
+            return (
+              <>
+                {loggedInUser &&
+                loggedInUser.role &&
+                tab.roles &&
+                tab.roles.includes(loggedInUser.role) ? (
                   <li
                     key={tab.url}
                     className={`sidebar-menu-item ${
                       pathname === tab.url ? "active" : ""
                     }`}
                   >
-                    <a className="sidebar-menu-button" href={tab.url}>
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        {tab.icon}
-                      </span>
-                      <span className="sidebar-menu-text">{tab.name}</span>
-                    </a>
-                  </li>
-                </>
-              );
-            } else if (tab.children) {
-              return (
-                <Dropdown
-                  key={tab.name}
-                  icon={tab.icon}
-                  parent={tab.name}
-                  children={tab.children}
-                  pathname={pathname}
-                />
-              );
-            } else {
-              return (
-                <>
-                  {loggedInUser &&
-                  loggedInUser.role &&
-                  tab.roles &&
-                  tab.roles.includes(loggedInUser.role) ? (
-                    <li
-                      key={tab.url}
-                      className={`sidebar-menu-item ${
-                        pathname === tab.url ? "active" : ""
-                      }`}
-                    >
+                    {tab.children ? (
+                      <Dropdown
+                        key={tab.name}
+                        icon={tab.icon}
+                        parent={tab.name}
+                        children={tab.children}
+                        pathname={pathname}
+                      />
+                    ) : (
                       <a className="sidebar-menu-button" href={tab.url}>
                         <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
                           {tab.icon}
                         </span>
                         <span className="sidebar-menu-text">{tab.name}</span>
                       </a>
-                    </li>
-                  ) : (
-                    <></>
-                  )}
-                </>
-              );
-            }
+                    )}
+                  </li>
+                ) : (
+                  <></>
+                )}
+              </>
+            );
           })}
       </ul>
     </>

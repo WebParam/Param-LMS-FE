@@ -12,6 +12,7 @@ function DeleteProjectModal(props: any) {
   const router = useRouter();
   const pathname = usePathname();
   const [disabled, setDisabled] = useState(false);
+  const [hideModal, setHideModal] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId") || "";
   const date = new Date().toString();
@@ -24,11 +25,19 @@ function DeleteProjectModal(props: any) {
 
     try {
       const resp = await deleteProject(props.id);
-      setIsSpinner(false);
-      setSuccessMessage("Project Deleted Successfully");
-      setTimeout(() => {
-        props.onDelete()
-      }, 2000);
+
+      if (resp === "Successfully deleted the Organization Program") {
+        setIsSpinner(false);
+        setSuccessMessage("Project Deleted Successfully");
+        setTimeout(() => {
+          router.replace(`${pathname}?refreshId=${date}`, {
+            scroll: false,
+          });
+          setSuccessMessage("");
+          props.onHide();
+        }, 2000);
+      } else {
+      }
     } catch (error) {
       setErrorMessage("Failed Deleting Project");
       setIsSpinner(false);
@@ -72,7 +81,7 @@ function DeleteProjectModal(props: any) {
         </Button>
         <button
           disabled={disabled}
-          className="btn btn-success"
+          className={disabled ? "btn btn-secondary" : "btn btn-success"}
           onClick={() => delProject()}
         >
           {isSpinner ? (
@@ -85,5 +94,4 @@ function DeleteProjectModal(props: any) {
     </Modal>
   );
 }
-
 export default DeleteProjectModal;
