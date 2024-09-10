@@ -70,7 +70,7 @@ function Page({ params }: { params: { id: string } }) {
     fetchProjectData();
   }, []);
 
-  const graphsData = isFreemium ? projectData : courseData;
+  const graphsData = projectData;
 
   return (
     <ErrorBoundary>
