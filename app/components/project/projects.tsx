@@ -3,11 +3,9 @@ import { getProjects } from "@/app/lib/actions/getProject";
 import { useEffect, useState } from "react";
 import DeleteProjectModal from "./DeleteProjectModal";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function Projects({data}:any) {
-
-
+export default function Projects({ data }: any) {
   return (
     <>
       <div className="page-section bg-alt border-top-2">
@@ -52,6 +50,10 @@ const Project = ({
     setOpenModal(false);
   };
 
+  const router = useRouter();
+
+  
+
   return (
     <div className="col-lg-3 card-group-row__col">
       <DeleteProjectModal
@@ -83,29 +85,35 @@ const Project = ({
 
         <div className="d-flex p-16pt">
           <div className="d-flex flex-column flex">
-            <div className="posts-card-popular__title card-body">
-              <small className="text-muted text-uppercase">blog</small>
+            <div className="d-flex justify-content-between align-items-center posts-card-popular__title card-body">
+              {" "}
               <h4 className="card-title m-0">
                 <a href={url}>{title}</a>
               </h4>
+              <div className="">
+              <i
+                onClick={() => setOpenModal(true)}
+                className="material-icons icon-holder--outline-success rounded-lg mr-8pt "
+                style={{
+                  fontSize: "19px",
+                  cursor: "pointer",
+                }}
+              >
+                delete
+              </i>
+              <i
+                onClick={() => router.push(`/protected/home/projects/${id}`)}
+                className="material-icons icon-holder--outline-success rounded-lg mr-8pt "
+                style={{
+                  fontSize: "19px",
+                  cursor: "pointer",
+                }}
+              >
+                edit
+              </i>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="d-flex justify-content-end position-relative ">
-          <i
-            onClick={() => setOpenModal(true)}
-            className="material-icons text-success "
-            style={{
-              position: "absolute",
-              bottom: 0,
-              right: 0,
-              fontSize: "19px",
-              cursor: "pointer",
-            }}
-          >
-            delete
-          </i>
         </div>
       </div>
     </div>
