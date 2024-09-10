@@ -14,7 +14,6 @@ export default function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [otp, setOTP] = useState<string>("");
   const [otpLength, setOtpLength] = useState<number>(0);
-  const [otpSent, setOtpSent] = useState<boolean>(false);
   const [showMessage, setShowMessage] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [alertType, setAlertType] = useState<string>("");
@@ -87,7 +86,6 @@ export default function ResetPassword() {
         setAlertMessage(`OTP sent to ${email}.`);
         setAlertType("alert-success");
         setShowPassInputs(false);
-        setOtpSent(true);
       }
       setShowMessage(true);
     } catch (error: any) {
