@@ -42,7 +42,7 @@ type DataTiles = {
   data: number;
 };
 
-export default async function Graphs() {
+export default async function Graphs({Graphdata}:any) {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -51,46 +51,22 @@ export default async function Graphs() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const cookies = new Cookies();
-  const [courseApplications, setCourseApplications] = useState<
-    CourseApplicants[]
-  >([]);
 
-  // useEffect(() => {
-  //   const asyncFetch = async () => {
-  //     try {
-  //       const fetchedData = await getCourseStudents("6669f0ff8759b480859c10a7");
 
-  //       const applicantsData = await getEnrollments(
-  //         "6669f0ff8759b480859c10a7",
-  //         false
-  //       );
 
-  //       setCourseApplications(applicantsData.courseApplicants);
-  //       setData(fetchedData);
-  //       const courseTitle = fetchedData[0].title;
-  //       console.log("data is here", courseTitle);
-  //       cookies.set("courseTitle", courseTitle);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } 
-      
-  //     // finally {
-  //     //  // setLoading(false);
-  //     // }
-  //   };
-  //   asyncFetch();
-  // }, []);
-
-  // if (loading) {
-  //   return <Loading />;//we need to use skeleton loader for the graphs
-  // }
+  // console.log("numberOfStudentsByProvince:", Graphdata.numberOfStudentsByProvince);
+  // console.log("numberOfStudentsByGender:", Graphdata.numberOfStudentsByGender);
+  // console.log("numberOfStudentsByEquityGroup:", Graphdata.numberOfStudentsByEquityGroup);
+  // console.log("numberOfStudentsByNationality:", Graphdata.numberOfStudentsByNationality);
+  // console.log("numberOfStudentsByLanguage:", Graphdata.numberOfStudentsByLanguage);
+  // console.log("courseApplicants:", Graphdata.courseApplicants);
+  // console.log("ageRangeGenderDistribution:", Graphdata.ageRangeGenderDistribution);
 
   const dataTiles: DataTiles[] = [
-    { name: "Students", icon: "person_outline", data: 112 },
-    { name: "Matriculated", icon: "book", data: 5 },
-    { name: "Graduated", icon: "school", data: 79 },
-    { name: "Employed", icon: "list", data: 4 },
-    { name: "Unemployed", icon: "help", data: 10 },
+    { name: "Students", icon: "person_outline", data: Graphdata.numberOfStudents },
+    { name: "Disabilities", icon: "school", data:  Graphdata.numberOfStudentsWithDisabilities},
+    { name: "Employed", icon: "list", data:  Graphdata.numbetOfStudentsEmployed },
+    { name: "Unemployed", icon: "help", data: Graphdata.numberOfStudentsUnemployed},
   ];
 
   return (
@@ -125,7 +101,9 @@ export default async function Graphs() {
             hasFilter={false}
             title="Students Provinces"
             type="bar"
-            chartData={studentProvincesData}
+            chartData={studentProvincesData({
+              data:Graphdata.numberOfStudentsByProvince.overall
+            })}
 
           >
             <ChartProvider/>
@@ -136,7 +114,10 @@ export default async function Graphs() {
             hasFilter={false}
             title="Age vs Gender "
             type="bar"
-            chartData={AgeVsGenderData}
+            chartData={AgeVsGenderData({
+              malesData: Graphdata.ageRangeGenderDistribution.males,
+              femalesData:Graphdata.ageRangeGenderDistribution.females
+            })}
 
           >
             <ChartProvider/>
@@ -146,14 +127,18 @@ export default async function Graphs() {
         
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Genders" type="pie">
-            <PieChart options={genderOptions} series={genderSeries} />
+            <PieChart options={genderOptions} series={genderSeries({
+              data:Graphdata.numberOfStudentsByGender.overall
+            })} />
           </ChartLayout>
         </div> 
 
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Student Race" type="pie">
-            <PieChart options={raceOptions} series={raceSeries} />
+            <PieChart options={raceOptions} series={raceSeries({
+              data:Graphdata.numberOfStudentsByEquityGroup.overall
+            })} />
           </ChartLayout>
         </div>
 
@@ -162,7 +147,11 @@ export default async function Graphs() {
             hasFilter={true}
             title="Students Socio Economic Status"
             type="bar"
-            chartData={studentsSocioEcoData}
+            chartData={studentsSocioEcoData({
+              studentsSocioStatusData: Graphdata.numberOfStudentsBySocialEconomicStatus.overall,
+              malesStudentData: Graphdata.numberOfStudentsBySocialEconomicStatus.overall.males,
+              femalesStudentData: Graphdata.numberOfStudentsBySocialEconomicStatus.overall.females
+            })}
             filterOptions={studentsEcoStatusDataFilterOptions}
             defaultFilter="yellow"
             filtersMapping={studentsEcoStatusDatafiltersMapping}
@@ -175,7 +164,11 @@ export default async function Graphs() {
             hasFilter={true}
             title="Students Disabilities"
             type="bar"
-            chartData={studentsDisabilitiesData}
+            chartData={studentsDisabilitiesData({
+              allDisabilitiesData:Graphdata.numberOfStudentsByDisability.overall,
+              malesStudentData:Graphdata.numberOfStudentsByDisability.males,
+              femalesStudentData:Graphdata.numberOfStudentsByDisability.females,
+            })}
             filterOptions={studentsDisabilitiesDataFilterOptions}
             defaultFilter="yellow"
             filtersMapping={studentsDisabilitiesDatafiltersMapping}
@@ -188,7 +181,11 @@ export default async function Graphs() {
             hasFilter={true}
             title="Students Citizenship"
             type="bar"
-            chartData={studentsCitizenshipData}
+            chartData={studentsCitizenshipData({
+              allCitizenshipsData:Graphdata.numberOfStudentsByNationality.overall,
+              malesStudentData:Graphdata.numberOfStudentsByNationality.males,
+              femalesStudentData:Graphdata.numberOfStudentsByNationality.females
+            })}
             filterOptions={studentsCitizenshipDataFilterOptions}
             defaultFilter="yellow"
             filtersMapping={studentsCitizenshipDatafiltersMapping}

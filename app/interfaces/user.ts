@@ -45,15 +45,6 @@ export interface IAdminPasswordChangeReset {
   }
   
 
-export interface IUserRequestModel extends IUser{
-
-}
-
-export interface IUserResponseModel extends IUser{
-
-}
-
-
 export interface IUserLoginModel{
     Email:string, 
     Password:string
@@ -76,6 +67,12 @@ export interface IUserRegisterFreeMiumModel{
 }
 
 
-export interface IUserResetPasswordModel extends IUser{
-    Email:string, 
+export interface IUserResetPasswordModel {
+    email:string, 
+}
+
+export interface IUserResetPasswordRequest {
+  otp: string;
+  email: string;
+  password: string;
 }
