@@ -1,3 +1,4 @@
+"use server"
 import { IStudentsData } from "@/app/interfaces/courseApplicants";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
 import ApplicantsTable from "@/components/analytics/tables/course-applicants/ApplicantsTable";

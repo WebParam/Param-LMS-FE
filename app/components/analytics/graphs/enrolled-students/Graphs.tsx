@@ -39,24 +39,24 @@ export default async function Graphs() {
     <>
      <div className="tiles-container">
   <div className="row mb-lg-8pt tiles-row">
-    {dataTiles.map((data: DataTiles) => (
-      <div key={data.name} className="col-lg-3 tile-item">
-        <div className="card">
-          <div
-            data-toggle="tab"
-            role="tab"
-            aria-selected="true"
-            className="dashboard-area-tabs__tab card-body text-center active"
-          >
-            <span className="font-weight-bold">{data.name}</span>
-            <i className="material-icons text-success icon-48pt">
-              {data.icon}
-            </i>
-            <span className="h2 mb-0 mt-n1">{data.data}</span>
+  {dataTiles.map((data: DataTiles) => (
+          <div key={data.name} className="col-lg-3">
+            <div className="card">
+              <div
+                data-toggle="tab"
+                role="tab"
+                aria-selected="true"
+                className="dashboard-area-tabs__tab card-body text-center active"
+              >
+                <span className="font-weight-bold">{data.name}</span>
+                <i className="material-icons text-success icon-48pt">
+                  {data.icon}
+                </i>
+                <span className="h2 mb-0 mt-n1">{data.data}</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    ))}
+        ))}
   </div>
 </div>
       <div className="row card-group-row">
