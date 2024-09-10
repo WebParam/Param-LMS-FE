@@ -48,6 +48,10 @@ const Project = ({
 }) => {
   const [openModal, setOpenModal] = useState(false);
 
+  const handleDelete = () => {
+    setOpenModal(false);
+  };
+
   return (
     <div className="col-lg-3 card-group-row__col">
       <DeleteProjectModal
@@ -55,6 +59,7 @@ const Project = ({
         show={openModal}
         onHide={() => setOpenModal(false)}
         title={title}
+        onDelete={handleDelete}
       />
       <div className="card card-group-row__card">
         <Link href={url} className="d-block mb-16pt">
