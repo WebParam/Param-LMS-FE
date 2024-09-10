@@ -25,15 +25,15 @@ export const twAssessmentUrl = `https://khumla-${test}-assessment-write.azureweb
 
 export const rAssessmentUrl = `https://khumla-${env}-assessment-read.azurewebsites.net/api/v1`;
 
-export const wQuestionUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/Questions`;
+export const wQuestionUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/v1/Questions`;
 
 export const rAggregatorUrl = `https://khumla-${env}-api-aggregator.azurewebsites.net/api/v1`;
 
-export const wRubricUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/Rubrics`;
+export const wRubricUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/v1/Rubrics`;
 
 export const rRubricUrl = `https://khumla-${env}-assessment-read.azurewebsites.net/api/v1/Rubrics`;
 
-export const wOptionUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/Options`;
+export const wOptionUrl = `https://khumla-${env}-assessment-write.azurewebsites.net/api/v1/Options`;
 
 export const rOptionUrl = `https://khumla-${env}-assessment-read.azurewebsites.net/api/v1/Options`;
 
