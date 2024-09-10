@@ -1,11 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
-import { getCourseStudents } from "@/app/lib/actions/courseStudents";
-import { CourseApplicants } from "@/app/interfaces/courseApplicants";
-//import Loading from "../../../course/[id]/course-applicants/graphs/loading";
-import { useRouter } from "next/navigation";
-import Cookies from "universal-cookie";
-
 import { studentProvincesData  } from "./StudentsProvinces";
 
 import "@/app/css/tiles.css"
@@ -27,7 +20,6 @@ import {
   options as genderOptions,
   series as genderSeries,
 } from "./Genders";
-import { getEnrollments } from "@/app/lib/actions/enrollments";
 import {
   options as placementOptions,
   series as placementSeries,
@@ -35,6 +27,7 @@ import {
 import ChartProvider from "@/components/analytics/graphs/ChartProvider";
 import PieChart from "@/components/analytics/graphs/PieChart";
 import { studentsCitizenshipData, studentsCitizenshipDataFilterOptions, studentsCitizenshipDatafiltersMapping } from "./StudentsCitizenship";
+import { studentsLanguageDatafiltersMapping, studentsLanguages, studentsLanguagesDataFilterOptions } from "./StudentsLangData";
 
 type DataTiles = {
   name: string;
@@ -43,24 +36,7 @@ type DataTiles = {
 };
 
 export default async function Graphs({Graphdata}:any) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 6;
-  const indexOfLastItem = currentPage * ITEMSPERPAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const [data, setData] = useState();
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const cookies = new Cookies();
 
-
-
-  // console.log("numberOfStudentsByProvince:", Graphdata.numberOfStudentsByProvince);
-  // console.log("numberOfStudentsByGender:", Graphdata.numberOfStudentsByGender);
-  // console.log("numberOfStudentsByEquityGroup:", Graphdata.numberOfStudentsByEquityGroup);
-  // console.log("numberOfStudentsByNationality:", Graphdata.numberOfStudentsByNationality);
-  // console.log("numberOfStudentsByLanguage:", Graphdata.numberOfStudentsByLanguage);
-  // console.log("courseApplicants:", Graphdata.courseApplicants);
-  // console.log("ageRangeGenderDistribution:", Graphdata.ageRangeGenderDistribution);
 
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: Graphdata.numberOfStudents },
@@ -128,7 +104,7 @@ export default async function Graphs({Graphdata}:any) {
         <div className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Genders" type="pie">
             <PieChart options={genderOptions} series={genderSeries({
-              data:Graphdata.numberOfStudentsByGender.overall
+              data:Graphdata.numberOfStudentsByGender
             })} />
           </ChartLayout>
         </div> 
@@ -194,8 +170,20 @@ export default async function Graphs({Graphdata}:any) {
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Students Placement" type="pie">
-            <PieChart options={placementOptions} series={placementSeries} />
+        <ChartLayout
+            hasFilter={true}
+            title="Students Languages"
+            type="bar"
+            chartData={studentsLanguages({
+              studentsSocioStatusData: Graphdata.numberOfStudentsByLanguage.overall,
+              malesStudentData: Graphdata.numberOfStudentsByLanguage.overall.males,
+              femalesStudentData: Graphdata.numberOfStudentsByLanguage.overall.females
+            })}
+            filterOptions={studentsLanguagesDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={studentsLanguageDatafiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
       </div>

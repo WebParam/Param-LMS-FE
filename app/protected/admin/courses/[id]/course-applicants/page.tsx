@@ -19,7 +19,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
 
   const fetchedData: IProjectAnalytics = await getEnrollments(courseId, true);
   const projectAnalytics: IProjectAnalytics = await getProjectAnalytics(
-    "66d5967e6b0c61ffe2afaf76",
+    courseId,
     false
   );
   const isFreemium = process.env.NEXT_PUBLIC_USER;

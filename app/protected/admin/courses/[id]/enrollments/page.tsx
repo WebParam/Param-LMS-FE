@@ -1,4 +1,3 @@
-import { IStudentsData } from "@/app/interfaces/courseApplicants";
 import { getEnrollments } from "@/app/lib/actions/enrollments";
 import Graphs from "@/components/analytics/graphs/course-applicants/Graphs";
 import EnrolledTable from "@/components/analytics/tables/enrolled-students/EnrolledTable";
@@ -12,12 +11,13 @@ const Body = async ({ params }: { params: { id: string } }) => {
   const fetchedData: IProjectAnalytics = await getEnrollments(courseId, true);
   const projectAnalytics: IProjectAnalytics = await getProjectAnalytics(
     courseId,
-    true
+        true
   );
   const isFreemium = process.env.NEXT_PUBLIC_USER;
   const graphsData = isFreemium ? projectAnalytics : fetchedData;
   
-    
+
+  console.log("projectAnalytics",projectAnalytics)
 
   return (
     <>
@@ -25,12 +25,12 @@ const Body = async ({ params }: { params: { id: string } }) => {
       <div className="container page__container page__container page-section">
       <Graphs Graphdata={graphsData} />
 
-        <div>
+        {/* <div>
           <EnrolledTable
             courseId={courseId}
             data={graphsData.courseApplicants}
           />
-        </div>
+        </div> */}
       </div>
     </>
   );
