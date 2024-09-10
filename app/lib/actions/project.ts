@@ -1,6 +1,7 @@
 import { del, get, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
 import { rUserUrl, wUserUrl } from "./endpoints";
+import { IProjectAnalytics } from "@/app/interfaces/project";
 
 export const createProject = async (formData: any) => {
   try {
@@ -70,6 +71,18 @@ export const getProject = async (id: string) => {
     );
 
     const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    throw err;
+  }
+};
+
+export const getProjectAnalytics = async (id: string, value: boolean): Promise<IProjectAnalytics> => {
+  try {
+    const resp = await get(`${rUserUrl}/UserOrganisationProgramEnrollment/GetStudentInfoSummary/${id}?enrolled=${value}`);
+    const data: IProjectAnalytics = resp.data;
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
   } catch (err) {

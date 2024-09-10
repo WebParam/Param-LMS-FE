@@ -1,12 +1,12 @@
-export const AgeVsGenderData = {
+export const AgeVsGenderData = ({malesData, femalesData}:any) => ({
   series: [
     {
       name: 'Male',
-      data: [10, 15, 20, 25, 30, 35, 40, 45, 50],
+      data: malesData,
     },
     {
       name: 'Female',
-      data: [8, 12, 18, 22, 28, 32, 38, 42, 48],
+      data: femalesData,
     },
   ],
   options: {
@@ -60,4 +60,4 @@ export const AgeVsGenderData = {
       },
     },
   },
-};
+});

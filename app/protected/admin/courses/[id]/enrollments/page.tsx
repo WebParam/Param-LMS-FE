@@ -4,24 +4,32 @@ import Graphs from "@/components/analytics/graphs/course-applicants/Graphs";
 import EnrolledTable from "@/components/analytics/tables/enrolled-students/EnrolledTable";
 import PageHeader from "./PageHeader";
 import { mockData } from "@/components/analytics/tables/enrolled-students/data";
+import { getProjectAnalytics } from "@/app/lib/actions/project";
+import { IProjectAnalytics } from "@/app/interfaces/project";
 
 const Body = async ({ params }: { params: { id: string } }) => {
   const courseId = params.id;
-  const fetchedData: IStudentsData = await getEnrollments(courseId, true);
+  const fetchedData: IProjectAnalytics = await getEnrollments(courseId, true);
+  const projectAnalytics: IProjectAnalytics = await getProjectAnalytics(
+    courseId,
+    true
+  );
+  const isFreemium = process.env.NEXT_PUBLIC_USER;
+  const graphsData = isFreemium ? projectAnalytics : fetchedData;
+  
+    
 
-  const useMockData = process.env.NEXT_PUBLIC_USER ? true : false;
-  const tableData = useMockData
-    ? mockData
-    : fetchedData && fetchedData.courseApplicants
-    ? fetchedData.courseApplicants
-    : [];
   return (
     <>
       <PageHeader />
       <div className="container page__container page__container page-section">
-      <Graphs />
-      <div>
-          <EnrolledTable courseId={courseId} data={tableData} />
+      <Graphs Graphdata={graphsData} />
+
+        <div>
+          <EnrolledTable
+            courseId={courseId}
+            data={graphsData.courseApplicants}
+          />
         </div>
       </div>
     </>

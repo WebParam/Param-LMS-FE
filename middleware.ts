@@ -10,7 +10,6 @@ export function middleware(request: NextRequest) {
     //return NextResponse.redirect(new URL('/auth/login', request.url));
   }
   
-
   return NextResponse.next();
 }
 

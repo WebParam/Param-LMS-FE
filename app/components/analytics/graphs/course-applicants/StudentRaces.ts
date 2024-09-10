@@ -30,5 +30,5 @@ export const options = {
   }]
 };
 
-export const series = [50, 19, 23, 12, 6, 45, 15];
+export const series = ({data}:any) => data; 
 

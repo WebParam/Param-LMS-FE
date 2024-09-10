@@ -22,7 +22,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const sideTabs = [
     {
       name:userRole === "freemium" ? "Back To Projects" : "Back To Courses",
-      url: `/protected/home/courses`,
+      url: userRole ? `/protected/home/projects` : `/protected/home/courses` ,
       icon: "home",
       roles: ["Admin", "SuperAdmin", "Freemium"],
     },

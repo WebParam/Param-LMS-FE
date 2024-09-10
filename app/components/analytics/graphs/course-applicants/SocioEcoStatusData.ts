@@ -56,9 +56,9 @@ const commonOptions = {
   },
 };
 
-export const studentsSocioEcoData = {
+export const studentsSocioEcoData = ({studentsSocioStatusData, malesStudentData, femalesStudentData}:any) => ({
   studentsSocioStatus: {
-    series: [{ name: 'Number of Students', data: Array.from({ length: 8 }, () => Math.floor(Math.random() * 60)) }],
+    series: [{ name: 'Number of Students', data: studentsSocioStatusData }],
     options: {
       ...commonOptions,
       xaxis: {
@@ -76,7 +76,7 @@ export const studentsSocioEcoData = {
     },
   },
   malesStudentData: {
-    series: [{  name: 'Number of Students', data: Array.from({ length: 8 }, () => Math.floor(Math.random() * 60)) }],
+    series: [{ name: 'Number of Students', data: malesStudentData }],
     options: {
       ...commonOptions,
       xaxis: {
@@ -94,7 +94,7 @@ export const studentsSocioEcoData = {
     },
   },
   femalesStudentData: {
-    series: [{  name: 'Number of Students', data: Array.from({ length: 8 }, () => Math.floor(Math.random() * 50)) }],
+    series: [{ name: 'Number of Students', data: femalesStudentData }],
     options: {
       ...commonOptions,
       xaxis: {
@@ -111,4 +111,4 @@ export const studentsSocioEcoData = {
       },
     },
   },
-};
+});

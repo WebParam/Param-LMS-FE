@@ -77,8 +77,10 @@ export default function VerifyAccount() {
               path: "/",
             });
             if(res.data.role == "Freemium"){
+              localStorage.setItem("id",res.data.id);
               router.push('/protected/home/projects');
             }else{
+              localStorage.setItem("id",res.data.id);
               router.push('/protected/home/courses');
    
             }
