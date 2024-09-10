@@ -58,7 +58,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
           <ApplicantsTable
             courseId={courseId}
             data={graphsData.courseApplicants}
-          />{" "}
+          />
         </div>
       </div>
     </>
