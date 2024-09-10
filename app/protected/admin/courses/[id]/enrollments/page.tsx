@@ -63,8 +63,7 @@ function Page({ params }: { params: { id: string } }) {
     fetchCourseData();
     fetchProjectData();
   }, []);
-
-  const graphsData = isFreemium ? projectData : courseData;
+  const graphsData = projectData;
 
   return (
     <ErrorBoundary>
