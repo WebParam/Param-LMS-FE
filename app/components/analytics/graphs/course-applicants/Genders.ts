@@ -16,4 +16,4 @@ export const options = {
     }]
   };
   
-  export const series = ({data}:any) => data; // Function to accept gender data as props
+  export const series = ({data}:any) => data; 
