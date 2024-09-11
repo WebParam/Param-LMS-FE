@@ -19,7 +19,7 @@ const BasicInformation = () => {
     setFormError("");
     setFormSuccess("");
     setViewMsg(false);
- 
+
     if (!firstName || !lastName || !email) {
       setFormError("All fields are required.");
       setViewMsg(true);
@@ -30,25 +30,27 @@ const BasicInformation = () => {
       userId: user?.id,
       firstName,
       lastName,
-      email
+      email,
     };
-    setLoading(true)
+    setLoading(true);
     const response = await adminUpdateUserDetails(payload);
     if (response?.id) {
-             setFormSuccess("Your information has been successfully updated.");
-    setViewMsg(true);
+      setFormSuccess("Your information has been successfully updated.");
+      setViewMsg(true);
       setFormError("");
       setTimeout(() => {
         setViewMsg(false);
-      },3000)
+      }, 3000);
     } else {
-      setFormError("An error occurred while updating your information. Please try again.");
+      setFormError(
+        "An error occurred while updating your information. Please try again."
+      );
       setViewMsg(true);
       setFormSuccess("");
-      setIsUpdated(true)
+      setIsUpdated(true);
       setTimeout(() => {
         setViewMsg(false);
-      },3000)
+      }, 3000);
     }
     setLoading(false);
   };
@@ -56,12 +58,13 @@ const BasicInformation = () => {
   useEffect(() => {
     const getUser = async () => {
       const getAdminDetails = await getAdminUser(user?.id);
-        setFirstName(getAdminDetails?.firstName);
-        setLastName(getAdminDetails?.lastName);
-        setEmail(getAdminDetails?.email)
-    }
+      console.log("user", user.id);
+      setFirstName(getAdminDetails?.firstName);
+      setLastName(getAdminDetails?.lastName);
+      setEmail(getAdminDetails?.email);
+    };
     getUser();
-  },[isUpdated])
+  }, [isUpdated]);
 
   return (
     <div className="col-lg-9 pr-lg-0">

@@ -1,34 +1,25 @@
-'use client';
-import { getProjects } from "@/app/lib/actions/project";
-import Link from "next/link";
+"use client";
+import { getProjects } from "@/app/lib/actions/getProject";
 import { useEffect, useState } from "react";
-import Cookies from "universal-cookie";
-export default async function Projects() {
-const [list, setList] = useState([]);
-const cookies = new Cookies();
-const loggedInUser = cookies.get("param-lms-user");
-    
-  
-  useEffect(() => {
-    var fetchData = async () => {
-      const data = await getProjects(loggedInUser?.id);
-      setList(data);
-    }
-    fetchData();
-  }, []);
+import DeleteProjectModal from "./DeleteProjectModal";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+
+export default function Projects({ data }: any) {
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
-          {list.length > 0 ? (
+          {data.length > 0 ? (
             <div className="row card-group-row ">
-              {list.map((project: any) => (
+              {data.map((project: any) => (
                 <Project
+                  id={project.id}
                   key={project.id}
                   imgUrl={project.logo}
-                  title={project.programTitle??"NA"}
-                //   url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.title}`}
-                url='#'
+                  title={project.programTitle ?? "NA"}
+                  url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.programTitle}`}
+                  editUrl={`/protected/home/projects/${project.id}?title=${project.programTitle}`}
                 />
               ))}
             </div>
@@ -46,14 +37,31 @@ const loggedInUser = cookies.get("param-lms-user");
 const Project = ({
   imgUrl,
   url,
+  editUrl,
   title,
+  id,
 }: {
   imgUrl: string;
   url: string;
+  editUrl: string;
   title: string;
+  id: string;
 }) => {
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleDelete = () => {
+    setOpenModal(false);
+  };
+
   return (
     <div className="col-lg-3 card-group-row__col">
+      <DeleteProjectModal
+        id={id}
+        show={openModal}
+        onHide={() => setOpenModal(false)}
+        title={title}
+        onDelete={handleDelete}
+      />
       <div className="card card-group-row__card">
         <Link href={url} className="d-block mb-16pt">
           <div
@@ -74,18 +82,19 @@ const Project = ({
           </div>
         </Link>
 
-        <div className="d-flex p-16pt">
-          <div className="d-flex flex-column flex">
-            <div className="posts-card-popular__title card-body">
-              <small className="text-muted text-uppercase">blog</small>
-              <h4 className="card-title m-0">
-                <a href={url}>{title}</a>
-              </h4>
-            </div>
+        <div className="d-flex justify-content-between p-16pt">
+          <h4 className="card-title m-0">
+            <a href={url}>{title}</a>
+          </h4>
+          <div>
+            {" "}
+            <Link href={editUrl}>
+              <i className="material-icons">edit</i>
+            </Link>
+            <i onClick={() => setOpenModal(true)} className="material-icons">
+              delete
+            </i>
           </div>
-          <Link href={url}>
-            <i className="material-icons text-50">more_horiz</i>
-          </Link>
         </div>
       </div>
     </div>

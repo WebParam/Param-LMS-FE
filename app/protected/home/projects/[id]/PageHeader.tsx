@@ -1,10 +1,6 @@
 "use client";
-import { useRouter } from "next/navigation";
-
-
-export default function PageHeader({length}:any) {
-  const router = useRouter();
-
+import Link from "next/link";
+export default function PageHeader() {
   return (
     <>
       <div className="border-bottom-2 py-32pt position-relative z-1">
@@ -14,25 +10,23 @@ export default function PageHeader({length}:any) {
               style={{ width: "850px" }}
               className="mb-24pt mb-sm-0 mr-sm-24pt"
             >
-              <h2 className="mb-0">Projects</h2>
+              <h2 className="mb-0">Edit Project</h2>
 
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">
                   <a href="#">Home</a>
                 </li>
 
-                <li className="breadcrumb-item active">Projects</li>
+                <li className="breadcrumb-item active">Edit Project</li>
               </ol>
             </div>
             <div>
-              <button 
-              onClick={() => {
-                router.replace(`/protected/home/projects/create`)
-              }}
-              disabled = {length >= 2 ? true : false}
-              className= {length >= 2 ? "btn btn-secondary" : "btn btn-success"}>
-               Create Project
-              </button>
+              <Link
+                className="btn btn-success"
+                href={`/protected/home/projects`}
+              >
+                All Projects
+              </Link>
             </div>
           </div>
         </div>
