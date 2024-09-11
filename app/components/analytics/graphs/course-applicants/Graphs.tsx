@@ -20,10 +20,6 @@ import {
   options as genderOptions,
   series as genderSeries,
 } from "./Genders";
-import {
-  options as placementOptions,
-  series as placementSeries,
-} from "./StudentsPlacement";
 import ChartProvider from "@/components/analytics/graphs/ChartProvider";
 import PieChart from "@/components/analytics/graphs/PieChart";
 import { studentsCitizenshipData, studentsCitizenshipDataFilterOptions, studentsCitizenshipDatafiltersMapping } from "./StudentsCitizenship";
@@ -35,7 +31,7 @@ type DataTiles = {
   data: number;
 };
 
-export default async function Graphs({Graphdata}:any) {
+export default function Graphs({Graphdata}:any) {
 
 
   const dataTiles: DataTiles[] = [
@@ -47,9 +43,8 @@ export default async function Graphs({Graphdata}:any) {
 
   return (
     <>
-<div className="tiles-container">
-  <div className="row mb-lg-8pt tiles-row">
-  {dataTiles.map((data: DataTiles) => (
+ <div className="row mb-lg-8pt">
+        {dataTiles.map((data: DataTiles) => (
           <div key={data.name} className="col-lg-3">
             <div className="card">
               <div
@@ -67,8 +62,7 @@ export default async function Graphs({Graphdata}:any) {
             </div>
           </div>
         ))}
-  </div>
-</div>
+      </div>
 
 
       <div className="row card-group-row">

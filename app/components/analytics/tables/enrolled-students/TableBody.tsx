@@ -12,7 +12,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
   return (
     <>
       <tbody className="list" id="staff">
-        {list &&
+        {list.length > 0 ?
           list.map((data: CourseApplicants) => {
             let studentName = "";
             if (data.name && data.surname)
@@ -128,7 +128,17 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                 </td>
               </tr>
             );
-          })}
+          }): <>
+          <tr className="selected">
+         <td className="text-center js-lists-values-projects small" colSpan={10}>
+          No Enrolled Students
+         </td>
+         
+       </tr>
+  
+         
+       
+         </>}
       </tbody>
     </>
   );
