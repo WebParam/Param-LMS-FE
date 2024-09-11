@@ -7,6 +7,7 @@ import { getProjectAnalytics } from "@/app/lib/actions/project";
 import { IProjectAnalytics } from "@/app/interfaces/project";
 import { useEffect, useState } from "react";
 import EnrolledTable from "@/components/analytics/tables/enrolled-students/EnrolledTable";
+import SkeletonGraphs from "@/components/skeleton/graphs-skeleton/SkeletonGraphs";
 
 function ErrorBoundary({ children }: { children: React.ReactNode }) {
   const [hasError, setHasError] = useState(false);
@@ -69,18 +70,20 @@ function Page({ params }: { params: { id: string } }) {
     <ErrorBoundary>
       <PageHeader />
       <div className="container page__container page__container page-section">
-        {graphsData ? (
+      {graphsData ? (
           <>
             <Graphs Graphdata={graphsData} />
             <div>
               <EnrolledTable
                 courseId={courseId}
-                data={graphsData?.courseApplicants!}
+                data={graphsData?.courseApplicants || []}
               />
             </div>
           </>
         ) : (
-          <div>Loading data...</div>
+          <div>
+          <SkeletonGraphs  />
+          </div>
         )}
       </div>
     </ErrorBoundary>

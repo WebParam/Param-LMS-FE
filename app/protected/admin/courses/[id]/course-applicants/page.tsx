@@ -7,6 +7,7 @@ import PageHeader from "./PageHeader";
 import { getProjectAnalytics } from "@/app/lib/actions/project";
 import { IProjectAnalytics } from "@/app/interfaces/project";
 import { useEffect, useState } from "react";
+import SkeletonGraphs from "@/components/skeleton/graphs-skeleton/SkeletonGraphs";
 
 function ErrorBoundary({ children }: { children: React.ReactNode }) {
   const [hasError, setHasError] = useState(false);
@@ -25,11 +26,12 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
 
 function Page({ params }: { params: { id: string } }) {
   const courseId = params.id;
-  const baseUrl = process.env.NEXT_PUBLIC_STUDENT_SITE
-    ? process.env.NEXT_PUBLIC_STUDENT_SITE
-    : "https://web-param-param-lms-student-qa.vercel.app";
+  const isFreemium = process.env.NEXT_PUBLIC_USER;
+  const baseUrl = isFreemium
+    ? "https://freemium-student-qa.netlify.app"
+    : "https://thooto-student-dev.netlify.app";
 
-  const registrationUrl = `${baseUrl}/register?courseId=${courseId}`;
+  const registrationUrl = `${baseUrl}/register?${isFreemium ? 'projectId' : 'courseId'}=${courseId}`;
   const loginUrl = `${baseUrl}/login`;
   const [courseData, setCourseData] = useState<IProjectAnalytics | undefined>(
     undefined
@@ -37,7 +39,6 @@ function Page({ params }: { params: { id: string } }) {
   const [projectData, setProjectData] = useState<IProjectAnalytics | undefined>(
     undefined
   );
-  const isFreemium = process.env.NEXT_PUBLIC_USER;
 
   const fetchCourseData = async () => {
     try {
@@ -70,7 +71,7 @@ function Page({ params }: { params: { id: string } }) {
     fetchProjectData();
   }, []);
 
-  const graphsData = projectData;
+  const graphsData: IProjectAnalytics = projectData!;
 
   return (
     <ErrorBoundary>
@@ -104,12 +105,14 @@ function Page({ params }: { params: { id: string } }) {
             <div>
               <ApplicantsTable
                 courseId={courseId}
-                data={graphsData?.courseApplicants || []} 
+                data={graphsData?.courseApplicants || []}
               />
             </div>
           </>
         ) : (
-          <div>Loading data...</div>
+          <div>
+          <SkeletonGraphs  />
+          </div>
         )}
       </div>
     </ErrorBoundary>

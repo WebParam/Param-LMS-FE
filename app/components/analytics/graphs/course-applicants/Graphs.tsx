@@ -20,15 +20,10 @@ import {
   options as genderOptions,
   series as genderSeries,
 } from "./Genders";
-import {
-  options as placementOptions,
-  series as placementSeries,
-} from "./StudentsPlacement";
 import ChartProvider from "@/components/analytics/graphs/ChartProvider";
 import PieChart from "@/components/analytics/graphs/PieChart";
 import { studentsCitizenshipData, studentsCitizenshipDataFilterOptions, studentsCitizenshipDatafiltersMapping } from "./StudentsCitizenship";
 import { studentsLanguageDatafiltersMapping, studentsLanguages, studentsLanguagesDataFilterOptions } from "./StudentsLangData";
-import SkeletonLoader from "@/components/skeleton/skeletonLoader";
 
 type DataTiles = {
   name: string;
@@ -36,7 +31,7 @@ type DataTiles = {
   data: number;
 };
 
-export default async function Graphs({Graphdata}:any) {
+export default function Graphs({Graphdata}:any) {
 
 
   const dataTiles: DataTiles[] = [
@@ -49,30 +44,24 @@ export default async function Graphs({Graphdata}:any) {
   return (
     <>
  <div className="row mb-lg-8pt">
-        {dataTiles.length > 0 ? (
-          dataTiles.map((data: DataTiles) => (
-            <div key={data.name} className="col-lg-3">
-              <div className="card">
-                <div
-                  data-toggle="tab"
-                  role="tab"
-                  aria-selected="true"
-                  className="dashboard-area-tabs__tab card-body text-center active"
-                >
-                  <span className="font-weight-bold">{data.name}</span>
-                  <i className="material-icons text-success icon-48pt">
-                    {data.icon}
-                  </i>
-                  <span className="h2 mb-0 mt-n1">{data.data}</span>
-                </div>
+        {dataTiles.map((data: DataTiles) => (
+          <div key={data.name} className="col-lg-3">
+            <div className="card">
+              <div
+                data-toggle="tab"
+                role="tab"
+                aria-selected="true"
+                className="dashboard-area-tabs__tab card-body text-center active"
+              >
+                <span className="font-weight-bold">{data.name}</span>
+                <i className="material-icons text-success icon-48pt">
+                  {data.icon}
+                </i>
+                <span className="h2 mb-0 mt-n1">{data.data}</span>
               </div>
             </div>
-          ))
-        ) : (
-          <div className="col-lg-3">
-            <SkeletonLoader width="100%" height="200px" />
           </div>
-        )}
+        ))}
       </div>
 
 
