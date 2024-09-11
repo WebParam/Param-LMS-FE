@@ -1,9 +1,8 @@
 "use client";
-import { getProjects } from "@/app/lib/actions/getProject";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DeleteProjectModal from "./DeleteProjectModal";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Projects({ data }: any) {
   return (
@@ -19,6 +18,7 @@ export default function Projects({ data }: any) {
                   imgUrl={project.logo}
                   title={project.programTitle ?? "NA"}
                   url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.programTitle}`}
+                  editUrl={`/protected/home/projects/${project.id}?title=${project.programTitle}`}
                 />
               ))}
             </div>
@@ -36,11 +36,13 @@ export default function Projects({ data }: any) {
 const Project = ({
   imgUrl,
   url,
+  editUrl,
   title,
   id,
 }: {
   imgUrl: string;
   url: string;
+  editUrl: string;
   title: string;
   id: string;
 }) => {
