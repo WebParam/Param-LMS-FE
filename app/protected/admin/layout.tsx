@@ -15,14 +15,18 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const courseTitle = searchParams.get("title") || "";
   const pathName = usePathname();
   const isHost = pathName == "/protected/host/host/completed"
-  const projectLength = localStorage.getItem("len")!;
+  const [projectLength, setProjectLength] = useState<string | null>(null);
+
+  useEffect(() => {
+    setProjectLength(localStorage.getItem("len"));
+  }, []);
 
   const userRole = process.env.NEXT_PUBLIC_USER;
 
   const sideTabs = [
     {
       name:userRole === "freemium" ? "Back To Projects" : "Back To Courses",
-      url: `/protected/home/courses`,
+      url: userRole ? `/protected/home/projects` : `/protected/home/courses` ,
       icon: "home",
       roles: ["Admin", "SuperAdmin", "Freemium"],
     },

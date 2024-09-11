@@ -6,7 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
   const searchParams = useSearchParams();
-  const courseTitle = searchParams.get("title") || "";
+  const courseTitle = searchParams.get("title") || "N/A";
   const pathname = usePathname();
 
   return (
@@ -14,10 +14,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
       <tbody className="list" id="staff">
         {list &&
           list.map((data: CourseApplicants) => {
-            let studentName = "";
-            if (data.name && data.surname)
-              studentName = data.name + " " + data.surname;
-            else studentName = "N/A";
+            let studentName = data.name && data.surname ? `${data.name} ${data.surname}` : "N/A";
 
             return (
               <tr key={data.id} className="selected">
@@ -31,21 +28,21 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                   {studentName}
                 </td>
                 <td className="text-center js-lists-values-projects small">
-                  {data.gender ?? "N/A"}
+                  {data.gender || "N/A"}
                 </td>
 
                 <td className="text-center js-lists-values-projects small">
-                  {data.race ?? "N/A"}
+                  {data.race || "N/A"}
                 </td>
 
                 <td className="text-center js-lists-values-projects small">
-                  {data.disability ?? "N/A"}
+                  {data.disability || "N/A"}
                 </td>
                 <td className="text-center js-lists-values-projects small">
-                  {data.employmentStatus ?? "N/A"}
+                  {data.employmentStatus || "N/A"}
                 </td>
                 <td className="text-center js-lists-values-projects small">
-                  {data.province ?? "N/A"}
+                  {data.province || "N/A"}
                 </td>
                 <td className="text-center js-lists-values-projects small">
                   <div

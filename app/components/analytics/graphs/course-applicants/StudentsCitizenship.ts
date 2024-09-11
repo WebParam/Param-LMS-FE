@@ -48,15 +48,14 @@ const commonOptions = {
       horizontal: false,
       columnWidth: '55%',
       endingShape: 'rounded',
-      borderRadius: 10, // Added for a nice rounded edge
+      borderRadius: 10, 
     },
   },
 };
 
-// Data for each citizenship category using the same common options
-export const studentsCitizenshipData = {
+export const studentsCitizenshipData = ({allCitizenshipsData, malesStudentData, femalesStudentData}:any) => ({
   allCitizenships: {
-    series: [{ name: 'All Citizenships', data: Array.from({ length: 5 }, () => Math.floor(Math.random() * 60)) }],
+    series: [{ name: 'All Citizenships', data: allCitizenshipsData}],
     options: {
       ...commonOptions,
       xaxis: {
@@ -71,7 +70,7 @@ export const studentsCitizenshipData = {
     },
   },
   malesCitizenships: {
-    series: [{ name: 'Males', data: Array.from({ length: 5 }, () => Math.floor(Math.random() * 60)) }],
+    series: [{ name: 'Males', data: malesStudentData }],
     options: {
       ...commonOptions,
       xaxis: {
@@ -86,7 +85,7 @@ export const studentsCitizenshipData = {
     },
   },
   femalesCitizenships: {
-    series: [{ name: 'Females', data: Array.from({ length: 5 }, () => Math.floor(Math.random() * 50)) }],
+    series: [{ name: 'Females', data: femalesStudentData }],
     options: {
       ...commonOptions,
       xaxis: {
@@ -100,4 +99,4 @@ export const studentsCitizenshipData = {
       },
     },
   },
-};
+});

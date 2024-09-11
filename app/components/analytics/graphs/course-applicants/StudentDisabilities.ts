@@ -54,9 +54,10 @@ const commonOptions = {
 };
 
 // Data for each disability category using the same common options
-export const studentsDisabilitiesData = {
+
+export const studentsDisabilitiesData = ({allDisabilitiesData, malesStudentData, femalesStudentData}:any) => ({
   allDisabilities: {
-    series: [{ name: 'All Disabilities', data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 60)) }],
+    series: [{ name: 'All Disabilities', data: allDisabilitiesData}],
     options: {
       ...commonOptions,
       xaxis: {
@@ -73,7 +74,7 @@ export const studentsDisabilitiesData = {
     },
   },
   malesDisabilities: {
-    series: [{ name: 'Males', data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 60)) }],
+    series: [{ name: 'Males', data: malesStudentData}],
     options: {
       ...commonOptions,
       xaxis: {
@@ -90,7 +91,7 @@ export const studentsDisabilitiesData = {
     },
   },
   femalesDisabilities: {
-    series: [{ name: 'Females', data: Array.from({ length:7 }, () => Math.floor(Math.random() * 50)) }],
+    series: [{ name: 'Females', data: femalesStudentData}],
     options: {
       ...commonOptions,
       xaxis: {
@@ -106,4 +107,4 @@ export const studentsDisabilitiesData = {
       },
     },
   },
-};
+});
