@@ -44,3 +44,5 @@ export const rUserUrl = `https://khumla-dev-user-read.azurewebsites.net/api/v1`;
 export const wUserUrl = `https://khumla-${env}-user-write.azurewebsites.net/api/v1`;
 
 export const rAnalyticUrl = `https:khumla-${env}-activity-read.azurewebsites.net/api/v1`;
+
+export const rUserUrlRc = `https://thooto-rc-be-user-read.azurewebsites.net/api/v1`

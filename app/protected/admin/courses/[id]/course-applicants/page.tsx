@@ -71,7 +71,7 @@ function Page({ params }: { params: { id: string } }) {
     fetchProjectData();
   }, []);
 
-  const graphsData: IProjectAnalytics = projectData!;
+  const graphsData: IProjectAnalytics = isFreemium ?  projectData! : courseData! ;
 
   return (
     <ErrorBoundary>

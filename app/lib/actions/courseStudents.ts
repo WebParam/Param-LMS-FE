@@ -1,7 +1,7 @@
 import { IUpdateEnrollment } from "@/app/interfaces/Enrollment";
 import { Diagnostic } from "../logger/logger";
 import { get, post, put } from "../utils";
-import { rAggregatorUrl, rUserUrl, wCourseUrl, wUserUrl } from "./endpoints";
+import { rAggregatorUrl, rUserUrl, rUserUrlRc, wCourseUrl, wUserUrl } from "./endpoints";
 import { z } from "zod";
 
 export const getCourseStudents = async (courseId: string) => {
@@ -44,7 +44,7 @@ export const getStudentProfile = async (studentId: string) => {
 
 export const getStudentData = async (studentId: string) => {
   const resp = await get(
-    `${rUserUrl}/Student/GetStudentInformation/${studentId} `
+    `${rUserUrlRc}/Student/GetStudentInformation/${studentId} `
   );
   return resp.data;
 };
