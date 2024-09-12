@@ -64,10 +64,10 @@ function Page({ params }: { params: { id: string } }) {
     fetchCourseData();
     fetchProjectData();
   }, []);
-  const graphsData = projectData;
+  const graphsData: IProjectAnalytics = isFreemium ?  projectData! : courseData! ;
 
   return (
-    <ErrorBoundary>
+    <ErrorBoundary>ay
       <PageHeader />
       <div className="container page__container page__container page-section">
       {graphsData ? (
