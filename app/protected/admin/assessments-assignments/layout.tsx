@@ -1,6 +1,6 @@
 "use client";
-import { useSearchParams, usePathname } from "next/navigation";
-import PageHeader from "./PageHeader";
+import { useSearchParams } from "next/navigation";
+import PageHeader from "@/app/components/PageHeaders/assessments/PageHeader";
 
 function Layout({ children , params}: { children: React.ReactNode, params:{assessmentId : string} }) {
   const searchParams = useSearchParams();

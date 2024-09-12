@@ -1,0 +1,111 @@
+.login-container {
+    display: flex;
+    height: 100vh;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  /*.login-left {
+    background-image: url("../../../.env/NEXT_PUBLIC_LOGIN_IMAGE_URL");
+    color: white;
+    padding: 40px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-size: cover;
+  }*/
+  
+  .login-left .logo img {
+    width: 80px;
+  }
+  
+  .login-left h1 {
+    margin: 20px 0;
+    font-size: 24px;
+  }
+  
+  .login-left p {
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.5;
+  }
+  
+  .credits {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .credits span {
+    font-size: 12px;
+  }
+  
+  .login-right {
+    background: white;
+    padding: 60px 40px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .login-right h2 {
+    margin-bottom: 30px;
+    color: #003876;
+    font-size: 28px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .checkbox-group {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+  }
+  
+  .checkbox-group input {
+    margin-right: 10px;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .signup-btn {
+    background-color: #003876;
+    color: white;
+  }
+  
+  .signin-btn {
+    background-color: transparent;
+    color: #003876;
+    border: 1px solid #003876;
+  }
+  

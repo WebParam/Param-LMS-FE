@@ -222,11 +222,14 @@ function ViewButton({
 
 }) {
 
+  const searchParams = useSearchParams();
+  const title = searchParams.get("title")!;
+
   const handleOpenModal = () => {setOpenModal(true);setViewQuestionModal(true)};
   return (
     <div className="d-flex justify-content-end">
       <div>
-        <Link href='/protected/admin/courses/0/workbook/0' type="button">
+        <Link href='/protected/admin/courses/0/workbook/0?title=${title}' type="button">
           <i className="material-icons icon-holder--outline-dark rounded-lg">
             edit
           </i>

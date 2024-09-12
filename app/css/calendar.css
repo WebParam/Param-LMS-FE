@@ -12,7 +12,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 100%; /* Ensure the calendar takes full width */
-    max-width: 1010px; /* Increased max width to maintain consistency */
+    max-width: 1200px; /* Increased max width to maintain consistency */
   }
   
   .calendar-header {

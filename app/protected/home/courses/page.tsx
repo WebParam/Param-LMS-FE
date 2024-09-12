@@ -5,6 +5,8 @@ import Link from "next/link";
 
 const Page = async () => {
   const list = await getCourses();
+
+
   return (
     <>
       <PageHeader />
@@ -19,7 +21,7 @@ const Page = async () => {
           >
             <Courses list={list} />
           </div>
-        </div>{" "}
+        </div>
       </div>
     </>
   );

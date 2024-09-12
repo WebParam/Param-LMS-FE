@@ -3,7 +3,7 @@ import Drawer from "@/app/topbar-components/Drawer";
 import HeadNav from "@/app/topbar-components/HeadNavDrawer";
 import { useEffect, useState } from "react";
 import withAuth from "./AdminAuthWrapper";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -13,115 +13,120 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const params = useParams();
   const courseId = params.id;
   const courseTitle = searchParams.get("title") || "";
+  const pathName = usePathname();
+  const isHost = pathName == "/protected/host/host/completed"
+  const [projectLength, setProjectLength] = useState<string | null>(null);
+
+  useEffect(() => {
+    setProjectLength(localStorage.getItem("len"));
+  }, []);
+
+  const userRole = process.env.NEXT_PUBLIC_USER;
 
   const sideTabs = [
     {
-      name: "Back To Courses",
-      url: `/protected/home/courses`,
+      name:userRole === "freemium" ? "Back To Projects" : "Back To Courses",
+      url: userRole ? `/protected/home/projects` : `/protected/home/courses` ,
       icon: "home",
-      roles: ["Admin", "SuperAdmin"],
+      roles: ["Admin", "SuperAdmin", "Freemium"],
     },
     {
-      name: "Course",
+      name: userRole === "freemium" ? "Project" : "Course",
       url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
       icon: "school",
-      roles: ["Admin", "SuperAdmin"],
+      roles: ["Admin", "SuperAdmin", "Freemium"],
       children: [
         {
-          name: "Course Applicants",
+          name: userRole === "freemium" ? "Project Applicants" : "Course Applicants",
           url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}`,
           icon: "group",
-          roles: ["Admin", "SuperAdmin"],
+          roles: ["Admin", "SuperAdmin", "Freemium"],
         },
 
         {
-          name: "Enrolled Students",
+          name: userRole === "freemium" ? "Enrolled Students " : "Enrolled Students",
           url: `/protected/admin/courses/${courseId}/enrollments?title=${courseTitle}`,
           icon: "group",
-          roles: ["Admin", "SuperAdmin"],
+          roles: ["Admin", "SuperAdmin", "Freemium"],
         },
         {
-          name: "Edit Course",
-          url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
+          name: userRole === "freemium" ? "Edit Project" : "Edit Course",
+          url: userRole !== "freemium" ? `/protected/admin/courses/${courseId}?title=${courseTitle}` : `/protected/home/projects/${courseId}?title=${courseTitle}`,
           icon: "edit",
-          roles: ["SuperAdmin"],
+          roles: ["Admin", "SuperAdmin", "Freemium"],
         },
-        {
-          name: "Create Course",
+        ...(userRole !== "freemium" || Number(projectLength) < 2 ? [{
+          name: userRole === "freemium"  ? "Create Project" : "Create Course",
           url: `/protected/home/courses/create`,
           icon: "add_box",
-          roles: ["SuperAdmin"],
-        }
+          roles: ["Admin", "SuperAdmin", "Freemium"],
+        }] : []),
       ],
     },
 
     {
       name: "Analytics",
-      url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+      url: `/protected/admin/analytics/graphs/course?title=${courseTitle}`,
       icon: "show_chart",
       roles: ["Admin", "SuperAdmin"],
       children: [
         {
-          name: "Course Analytics",
-          url: `/protected/admin/course-dashboard/graphs/course?title=${courseTitle}`,
+          name: userRole === "freemium" ? "Project Analytics" : "Course Analytics",
+          url: `/protected/admin/analytics/graphs/course?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
-        // {
-        //   name: "Assessment Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Student Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Host Analytics",
-        //   url: `/protected/admin/course-dashboard/graphs/assessments?title=${courseTitle}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
+        {
+          name: "Assessment Analytics",
+          url: `/protected/admin/analytics/graphs/assessments?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
+          name: "Assignments Analytics",
+          url: `/protected/admin/analytics/graphs/assignments?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+       
         {
           name: "Grouped Analytics",
-          url: `/protected/admin/course-dashboard/student-table?title=${courseTitle}`,
+          url: `/protected/admin/analytics/grouped-analytics?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
+        
+    {
+      name: "Host Analytics",
+      url: `/protected/admin/analytics/graphs/host-companies/companies?title=${courseTitle}`,
+      icon: "business",
+      roles: ["Admin", "SuperAdmin"],
+    },
       ],
     },
 
     {
-      name: "Schedule Classes",
-      url: `/protected/admin/scheduleclass?title=${courseTitle}`,
-      icon: "meeting_room",
-      roles: ["Admin", "SuperAdmin"],
-    },
-
-    {
-      name: "Facilitator",
-      url: `/protected/admin/facilitator/?title=Facilitator Dashboard&homeTitle=Home`,
-      icon: "person",
+      name: "Facilitator Dashboard",
+      url: `/protected/admin/facilitator/?title=${courseTitle}`,
+      icon: "dashboard",
       roles: ["Admin", "SuperAdmin"],
     },
     {
-      name: "Host",
-      url: `/protected/admin/host/pages/completed?title=${courseTitle}`,
-      icon: "add_box",
-      roles: ["Admin","SuperAdmin"],
+      name: "Messaging",
+      url: `/protected/admin/facilitator/?title=${courseTitle}`,
+      icon: "message",
+      roles: ["Admin", "SuperAdmin"],
+      children: [
+        {
+          name: "Notifications",
+          url: `/protected/admin/notifications?title=${courseTitle}`,
+          icon: "notifications",
+          roles: ["Admin", "SuperAdmin"],
+        },
+       
+      ],
     },
-
-
    
-    {
-      name: "Host Companies",
-      url: `/protected/admin/host-companies/companies?title=${courseTitle}`,
-      icon: "business",
-      roles: ["Admin", "SuperAdmin"],
-    }
   ];
 
   useEffect(() => {
@@ -146,6 +151,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
+  
       <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
     </>
   );
