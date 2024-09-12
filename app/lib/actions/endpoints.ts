@@ -3,9 +3,9 @@ const env = process.env.NEXT_PUBLIC_API_ENV == "production" ? "prod" : process.e
 
 
 
-export const writeUserData = `https://thooto-${env}-be-user-write.azurewebsites.net`;
+export const wUserUrl = `https://thooto-${env}-be-user-write.azurewebsites.net`;
 
-export const readUserData = `https://thooto-${env}-be-user-read.azurewebsites.net`;
+export const rUserUrl = `https://thooto-${env}-be-user-read.azurewebsites.net`;
 
 export const wCourseUrl = `https://thooto-${env}-be-newcourse-write.azurewebsites.net`;
 
