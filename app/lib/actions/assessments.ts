@@ -14,6 +14,7 @@ export const createAssessment = async (
 ) => {
   const body = {
     title: formData.get("title"),
+    assessmentType:Number(formData.get("assessmentsType")),
     courseId,
   };
 

@@ -20,10 +20,27 @@ export const getCourseStudents = async (courseId: string) => {
   }
 };
 
-export const updateEnrollmentStatus = async (payload: IUpdateEnrollment) => {
+export const updateEnrollmentStatus = async (payload: any) => {
   try {
     const resp = await put(
       `${wCourseUrl}/Enrollments/UpdateEnrollmentStatus`,
+      payload
+    );
+    console.log(resp);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+
+    console.error(err);
+  }
+};
+
+export const updateProgramEnrollmentStatus = async (payload: any) => {
+  try {
+    const resp = await put(
+      `${wUserUrl}/OrganizationProgramEnrollment/UpdateOrganizationProgramEnrollmentStatus`,
       payload
     );
     console.log(resp);

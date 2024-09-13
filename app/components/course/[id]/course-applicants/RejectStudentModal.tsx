@@ -1,35 +1,30 @@
 "use client";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { updateEnrollmentStatus } from "@/app/lib/actions/courseStudents";
+import { updateEnrollmentStatus, updateProgramEnrollmentStatus } from "@/app/lib/actions/courseStudents";
 
 function RejectStudentModal(props: any) {
-  const { id : courseId, studentId } = useParams<{
-    id:string;
+  const { id: courseId, studentId } = useParams<{
+    id: string;
     studentId: string;
   }>();
-  const [isSpinner, setIsSpinner] = useState<boolean>(false);
+  const [isSpinner, setIsSpinner] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
   const studentName = searchParams.get("studentName") || "";
-  const refreshId = searchParams.get("refreshId") || "";
+  const date = new Date().toISOString();
+  const homePath = `/protected/admin/courses/${courseId}/course-applicants?title=${title}&refreshId=${date}`;
+  const isFreemium = process.env.NEXT_PUBLIC_USER;
+
   const [selectedReason, setSelectedReason] = useState("");
   const [reasonError, setReasonError] = useState("");
-  const [successMessage, setSuccessMessage] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const date = new Date().toString();
-  const homePath = `/protected/admin/courses/${courseId}/course-applicants?title=${title}&refreshId=${date}`
-  const [disabled, setDisabled] = useState(false)
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const arrReasons = [
     "Illegible Application",
@@ -38,55 +33,64 @@ function RejectStudentModal(props: any) {
     "Missing information",
     "Expired documents",
   ];
-
   const declineStudentFn = async () => {
-    setDisabled(true)
-    if (selectedReason !== "") {
-     
-      setIsSpinner(true);
-      const email = localStorage.getItem("email")!;
-      const payload = {
-        userId: studentId,
-        status: 1,
-        fullName: studentName,
-        email: email,
-        courseTitle: title,
-        rejectionReason:selectedReason
+    setIsSpinner(true);
+    setDisabled(true);
+    setErrorMessage("")
+    setSuccessMessage("")
+    try {
+      if (selectedReason !== "") {
+        const email = localStorage.getItem("email")!;
+        const programPayload = {
+          userId: studentId,
+          organizationProgramId: courseId,
+          status: 1,
+          fullName: studentName,
+          email,
+          organizationProgramTitle: title,
+          rejectionReason: ""
+        };
+
+        const payload = {
+          userId: studentId,
+          status: 1,
+          fullName: studentName,
+          email,
+          courseTitle: title,
+          rejectionReason: selectedReason
+        };
+
+        const updateStatus = isFreemium ? updateProgramEnrollmentStatus : updateEnrollmentStatus;
+      const resp = await updateStatus(isFreemium ? programPayload : payload);
+
+        if (resp.enrollmentStatus === 1) {
+          setSuccessMessage("Student Rejected Successfully");
+          router.replace(homePath);
+        } else {
+          setErrorMessage("Failed Rejecting Student");
+        }
+      } else {
+        setErrorMessage("Please select a reason for rejection.");
       }
-      const resp = await updateEnrollmentStatus(payload);
-      if (resp.enrollmentStatus == 1) {
-        setIsSpinner(false);
-        setSuccessMessage("Student Rejected Successfully");
-        router.replace(
-          `${pathname}?title=${title}&studentName=${studentName}&refreshId=${date}`,
-          {
-            scroll: false,
-          }
-        );
-        router.push(homePath);
-        return;
-      }
-  
-      setErrorMessage("Failed Enrolling Student");
-      return;
-          }
-          setDisabled(false)
+    } catch (error) {
+      setErrorMessage("Error processing your request");
+      console.error(error);
+    } finally {
+      setIsSpinner(false);
+      setDisabled(false);
+
+    }
   };
 
   useEffect(() => {
     setIsSpinner(false);
-    setReasonError("")
+    setReasonError("");
     setSelectedReason("");
-  }, [refreshId]);
+  }, [searchParams.get("refreshId")]);
 
   return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header style={{ background: "#24345c" }} closeButton>
+    <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal.Header closeButton style={{ background: "#24345c" }}>
         <Modal.Title style={{ color: "white" }}>Reject Application</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -112,24 +116,15 @@ function RejectStudentModal(props: any) {
         {reasonError && <p className="text-danger">{reasonError}</p>}
       </Modal.Body>
       <Modal.Footer>
-      {successMessage && (
-          <div className="alert alert-success postion-abolute left-0">{successMessage}</div>
-        )}
-        {errorMessage && (
-          <div className="alert  alert-danger">{errorMessage}</div>
-        )}
-        <Button variant="secondary" onClick={props.onHide}>
-          Cancel
-        </Button>
-        <button disabled={disabled} className="btn btn-danger" onClick={() => declineStudentFn()}>
-          {isSpinner ? (
-            <span className="spinner-border text-white" role="status" />
-          ) : (
-            <>Reject Application</>
-          )}
+        {successMessage && <div className="alert alert-success">{successMessage}</div>}
+        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+        <Button variant="secondary" onClick={props.onHide}>Cancel</Button>
+        <button disabled={disabled} className="btn btn-danger" onClick={declineStudentFn}>
+          {isSpinner ? <span className="spinner-border text-white" role="status" /> : "Reject Application"}
         </button>
       </Modal.Footer>
     </Modal>
   );
 }
+
 export default RejectStudentModal;

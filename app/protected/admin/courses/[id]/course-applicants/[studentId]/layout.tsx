@@ -34,6 +34,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
   const isEnrolled = searchParams.get("isEnrolled");
+  const isFreemium = process.env.NEXT_PUBLIC_USER;
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -144,22 +145,24 @@ function Layout({ children }: { children: React.ReactNode }) {
             </>
           )}
 
-          <div className="mx-1" style={{ width: "187px", height: "37.5px" }}>
-            <button
-              onClick={() => downloadZip()}
-              style={{ cursor: documents.length > 0 ? "pointer" : "" }}
-              className={`btn w-100 h-100 ${
-                documents.length > 0 ? "btn-success" : "btn-secondary"
-              }`}
-              disabled={!(documents.length > 0)}
-            >
-              {loading ? (
-                <div className="spinner-border text-white" role="status" />
-              ) : (
-                "Download Documents"
-              )}
-            </button>
-          </div>
+          {!isFreemium && (
+            <div className="mx-1" style={{ width: "187px", height: "37.5px" }}>
+              <button
+                onClick={() => downloadZip()}
+                style={{ cursor: documents.length > 0 ? "pointer" : "" }}
+                className={`btn w-100 h-100 ${
+                  documents.length > 0 ? "btn-success" : "btn-secondary"
+                }`}
+                disabled={!(documents.length > 0)}
+              >
+                {loading ? (
+                  <div className="spinner-border text-white" role="status" />
+                ) : (
+                  "Download Documents"
+                )}
+              </button>
+            </div>
+          )}
 
           {Number(isEnrolled) === 0 || Number(isEnrolled) === 1 ? null : (
             <div className="mx-1 d-flex align-items-center">
