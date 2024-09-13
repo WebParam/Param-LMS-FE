@@ -67,7 +67,7 @@ function Page({ params }: { params: { id: string } }) {
   const graphsData: IProjectAnalytics = isFreemium ?  projectData! : courseData! ;
 
   return (
-    <ErrorBoundary>ay
+    <ErrorBoundary>
       <PageHeader />
       <div className="container page__container page__container page-section">
       {graphsData ? (
