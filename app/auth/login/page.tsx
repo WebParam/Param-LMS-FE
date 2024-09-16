@@ -5,6 +5,11 @@ import { IUserLoginModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useFlags } from "flagsmith/react";
+
+interface FeatureFlags {
+  next_public_user?: { enabled: boolean };
+}
 
 const cookies = new Cookies();
 

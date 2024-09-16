@@ -8,6 +8,8 @@ import { getProjectAnalytics } from "@/app/lib/actions/project";
 import { IProjectAnalytics } from "@/app/interfaces/project";
 import { useEffect, useState } from "react";
 import SkeletonGraphs from "@/components/skeleton/graphs-skeleton/SkeletonGraphs";
+import { useFlags } from "flagsmith/react";
+import { useSearchParams } from "next/navigation";
 
 function ErrorBoundary({ children }: { children: React.ReactNode }) {
   const [hasError, setHasError] = useState(false);
@@ -26,7 +28,16 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
 
 function Page({ params }: { params: { id: string } }) {
   const courseId = params.id;
-  const isFreemium = process.env.NEXT_PUBLIC_USER;
+  const flags = useFlags(["freemium"]); 
+  const searchParams = useSearchParams();
+  const refreshId = searchParams.get("refreshId")!;
+  //const isFreemium = flags.freemium.enabled && flags.freemium.value == true;
+  const [isFreemium, setIsFreemium] = useState();
+
+
+
+
+
   const baseUrl = isFreemium
     ? "https://freemium-student-qa.netlify.app"
     : "https://thooto-student-dev.netlify.app";
@@ -69,9 +80,14 @@ function Page({ params }: { params: { id: string } }) {
   useEffect(() => {
     fetchCourseData();
     fetchProjectData();
-  }, []);
+  }, [refreshId]);
 
   const graphsData: IProjectAnalytics = isFreemium ?  projectData! : courseData! ;
+  useEffect(() => {
+    const localValue = localStorage.getItem("isFreemium")!;
+    const value = JSON.parse(localValue) ?? false;
+    setIsFreemium(value);
+  }, [refreshId]);
 
   return (
     <ErrorBoundary>

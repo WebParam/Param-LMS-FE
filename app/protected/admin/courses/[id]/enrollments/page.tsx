@@ -8,9 +8,12 @@ import { IProjectAnalytics } from "@/app/interfaces/project";
 import { useEffect, useState } from "react";
 import EnrolledTable from "@/components/analytics/tables/enrolled-students/EnrolledTable";
 import SkeletonGraphs from "@/components/skeleton/graphs-skeleton/SkeletonGraphs";
+import { useSearchParams } from "next/navigation";
 
 function ErrorBoundary({ children }: { children: React.ReactNode }) {
   const [hasError, setHasError] = useState(false);
+  
+
 
   const handleError = (error: any, errorInfo: any) => {
     console.error("Error caught by Error Boundary:", error, errorInfo);
@@ -25,6 +28,10 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
 }
 
 function Page({ params }: { params: { id: string } }) {
+  const searchParams = useSearchParams();
+  const refreshId = searchParams.get("refreshId")!;
+  //const isFreemium = flags.freemium.enabled && flags.freemium.value == true;
+  const [isFreemium, setIsFreemium] = useState();
   const courseId = params.id;
   const [courseData, setCourseData] = useState<IProjectAnalytics | undefined>(
     undefined
@@ -32,7 +39,6 @@ function Page({ params }: { params: { id: string } }) {
   const [projectData, setProjectData] = useState<IProjectAnalytics | undefined>(
     undefined
   );
-  const isFreemium = process.env.NEXT_PUBLIC_USER;
 
   const fetchCourseData = async () => {
     try {
@@ -65,6 +71,12 @@ function Page({ params }: { params: { id: string } }) {
     fetchProjectData();
   }, []);
   const graphsData: IProjectAnalytics = isFreemium ?  projectData! : courseData! ;
+
+  useEffect(() => {
+    const localValue = localStorage.getItem("isFreemium")!;
+    const value = JSON.parse(localValue) ?? false;
+    setIsFreemium(value);
+  }, [refreshId]);
 
   return (
     <ErrorBoundary>

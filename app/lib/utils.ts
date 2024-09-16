@@ -1,6 +1,5 @@
 import { Diagnostic } from "./logger/logger";
 
-
 export const post = async (url: string, body: any) => {
   try {
     const res = await fetch(url, {

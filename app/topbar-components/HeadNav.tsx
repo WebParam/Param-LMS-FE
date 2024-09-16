@@ -74,6 +74,7 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                   >
                     Logout
                   </Link>
+                  
                 </div>
               </div>
             </div>

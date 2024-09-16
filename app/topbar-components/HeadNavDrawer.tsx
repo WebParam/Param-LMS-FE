@@ -3,6 +3,9 @@ import { NextPage } from "next";
 import Cookies from "universal-cookie";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Switch from "@mui/material/Switch";
+import { useFlags } from "flagsmith/react";
+import { useEffect, useState } from "react";
 
 const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   setIsOpen,
@@ -14,7 +17,10 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
   const pathName = usePathname();
-  const isAccount = pathName == "/protected/admin/account";
+  const flags = useFlags(["freemium"]);
+  const isFreemium : boolean = JSON.parse(localStorage.getItem("isFreemium")!) ?? false;
+
+
   const isHost =
     pathName == "/protected/host/host-company/478acbasa65s7xasvx56";
 
@@ -28,10 +34,32 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
     if (loggedInUser?.role == "Admin") router.replace("/");
     else router.replace("/");
   };
+  const label = { inputProps: { "aria-label": "Switch demo" } };
+
+  const handleFreemiumChange = (event: any) => {
+    localStorage.setItem("isFreemium", event.target.checked);
+    const date = new Date().toString();
+    if(isFreemium){
+      router.replace(`/protected/home/courses?title=${courseTitle}`)
+    }else{
+      router.replace(`/protected/home/projects?title=${courseTitle}`)
+
+    }
+  };
+
+  useEffect(() => {
+    // localStorage.setItem(
+    //   "isFreemium",
+    //   JSON.stringify(flags.freemium.enabled && flags.freemium.value)
+    // );
+    localStorage.setItem(
+      "isFreemium",
+      JSON.stringify(isFreemium)
+    );
+  }, []);
 
   return (
     <>
-      {/* <!-- Header --> */}
       <div id="header" className="mdk-header js-mdk-header mb-0" data-fixed>
         <div className="mdk-header__content">
           <div
@@ -67,7 +95,6 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
             </a>
 
             <div className="flex"></div>
-
             <div className="nav navbar-nav flex-nowrap d-flex ml-0 mr-16pt">
               <div className="nav-item dropdown d-none d-sm-flex">
                 <a
@@ -91,12 +118,26 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                   <div className="dropdown-header">
                     <strong>Account</strong>
                   </div>
-                  <a className="dropdown-item">
-                    <Link href="/protected/admin/account/basic-info?account-title=Basic Information">Edit Account</Link>
-                  </a>
+                  <Link
+                    className="dropdown-item"
+                    href="/protected/admin/account/basic-info?account-title=Basic Information"
+                  >
+                    Edit Account
+                  </Link>
                   <a className="dropdown-item" onClick={() => logout()}>
                     <Link href="">Logout</Link>
                   </a>
+                  <div className="dropdown-divider"></div>
+                  <div className="dropdown-item">
+                    <label htmlFor="toggleSwitch" className="switch">
+                      Freemium
+                      <Switch
+                        {...label}
+                        defaultChecked={isFreemium!}
+                        onChange={handleFreemiumChange}
+                      />
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>

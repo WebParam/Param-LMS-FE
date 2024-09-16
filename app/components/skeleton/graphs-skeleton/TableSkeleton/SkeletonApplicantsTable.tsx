@@ -1,21 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "./Table";
 import Pagination from "@/app/components/Pagination";
-import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import TableFilter from "./TableFilter";
-import { downloadFile } from "@/app/lib/utils";
-import { rUserUrl } from "@/app/lib/actions/endpoints";
 import { mockData } from "./data";
+import { useSearchParams } from "next/navigation";
 
 
 function SkeletonApplicantsTable() {
-  const data = mockData
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 6;
   const [filteredData, setFilteredData] = useState(mockData);
-  const [loading, setLoading] = useState(false);
-
+  const searchParams = useSearchParams();
+  const refreshId = searchParams.get("refreshId")!;
+  const [isFreemium, setIsFreemium] = useState();
+  
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = filteredData.slice(
@@ -23,19 +22,14 @@ function SkeletonApplicantsTable() {
     indexOfFirstItem + ITEMSPERPAGE
   );
 
-  const downloadAsXls = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    const filename = "boundless-student-data";
-    const fileExtension = "xlsx";
-    const status = 3;
-    const url = `${rUserUrl}/Student/ExportStudentInformation/boundless/}/${status}`;
-    downloadFile(url, filename, fileExtension, setLoading);
-  };
-
   // Check the environment variable
-  const isFreemium = process.env.NEXT_PUBLIC_USER === "freemium";
   const sectionTitle = isFreemium ? "Project Applicants" : "Course Applicants";
+
+    useEffect(() => {
+      const localValue = localStorage.getItem("isFreemium")!;
+      const value = JSON.parse(localValue) ?? false;
+      setIsFreemium(value);
+    }, [refreshId]);
 
   return (
     <>
