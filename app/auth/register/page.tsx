@@ -104,18 +104,13 @@ export default function Register() {
           changedBy: "",
           changedOn: date,
           Otp: "",
-          role: "Student",
+          role: "Admin",
           LoginType: 0,
         } as IUserRegisterModel;
 
         try {
-          let user;
-          if (payload.role === "Student") {
-            user = await Api.POST_RegisterAdmin(payload);
-          } else {
-            user = await Api.POST_Register(payload);
-          }
-
+          
+          const user = await Api.POST_RegisterAdmin(payload);
           if (user?.data) {
             toast.update(_id, {
               render: "Successfully registered",
@@ -127,7 +122,7 @@ export default function Register() {
               path: "/",
             });
 
-            router.push('/protected/student/course/all-courses');
+            router.push('/protected/home/courses');
           } else if (user?.error) {
             toast.update(_id, {
               render: user.message,

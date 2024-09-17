@@ -1,7 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
-import { rAggregatorUrl, rAssessmentUrl, twAssessmentUrl, wAssessmentUrl } from "./endpoints";
+import { rAggregatorUrl, rAssessmentUrl, wAssessmentUrl } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
 import { IMarkStudentAssessment, ISubmitFacilitatorAssessment } from "@/app/interfaces/assessments";
 import { unstable_noStore as noStore } from "next/cache";
@@ -128,6 +128,7 @@ export const markStudentAssessment = async (
     console.error(err);
   }
 };
+
 export const submitFacilitatorAssessment = async (payload:FormData) => {
  const body ={
     facilitatorId : payload.get("facilitatorId") ?? "",
@@ -135,7 +136,7 @@ export const submitFacilitatorAssessment = async (payload:FormData) => {
     studentId : payload.get("studentId"),
   }
   try {
-    const data = await post(`${twAssessmentUrl}/StudentAnswers/FacilitatorSubmit`, body);
+    const data = await post(`${wAssessmentUrl}/StudentAnswers/FacilitatorSubmit`, body);
     Diagnostic("SUCCESS ON POST, returning", data);
     return data.data;
   } catch (err) {
@@ -153,7 +154,7 @@ export const submitModeratorAssessment = async (payload:FormData) => {
      studentId : payload.get("studentId"),
    }
    try {
-     const data = await post(`${twAssessmentUrl}/StudentAnswers/FacilitatorSubmit`, body);
+     const data = await post(`${wAssessmentUrl}/StudentAnswers/FacilitatorSubmit`, body);
      Diagnostic("SUCCESS ON POST, returning", data);
      return data.data;
    } catch (err) {
@@ -171,7 +172,7 @@ export const submitForModeration = async (payload:FormData) => {
      studentId : payload.get("studentId"),
    }
    try {
-     const data = await post(`${twAssessmentUrl}/StudentAnswers/FacilitatorSubmit`, body);
+     const data = await post(`${wAssessmentUrl}/StudentAnswers/FacilitatorSubmit`, body);
      Diagnostic("SUCCESS ON POST, returning", data);
      return data.data;
    } catch (err) {
@@ -204,7 +205,7 @@ export const  submitModeratorFeedback = async (payload:FormData) => {
    }
    console.log("body",body)
    try {
-     const data = await post(`${twAssessmentUrl}/StudentAnswers/AddModeratorFeedBack`, body);
+     const data = await post(`${wAssessmentUrl}/StudentAnswers/AddModeratorFeedBack`, body);
      Diagnostic("SUCCESS ON POST, returning", data);
      return data.data;
    } catch (err) {
