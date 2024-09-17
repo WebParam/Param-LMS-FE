@@ -1,15 +1,30 @@
 "use client";
+import { useFlags } from "flagsmith/react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function PageHeader() {
   const [title, setTitle] = useState("Course");
+  const flags = useFlags(["freemium"]);
+  const searchParams = useSearchParams();
+  const refreshId = searchParams.get("refreshId")!;
+  //const isFreemium = flags.freemium.enabled && flags.freemium.value == true;
+  const [isFreemium, setIsFreemium] = useState();
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_USER === "freemium") {
+    if (isFreemium) {
       setTitle("Project");
+    } else {
+      setTitle("Course");
     }
-  }, []);
+  }, [isFreemium]);
+
+  useEffect(() => {
+    const localValue = localStorage.getItem("isFreemium")!;
+    const value = JSON.parse(localValue) ?? false;
+    setIsFreemium(value);
+  }, [refreshId]);
 
   return (
     <>
@@ -40,7 +55,7 @@ export default function PageHeader() {
             </div>
           </div>
         </div>
-      </div>{" "}
+      </div>
     </>
   );
 }

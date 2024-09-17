@@ -1,8 +1,8 @@
 "use client";
-import Image from "next/image";
 import Cookies from "universal-cookie";
 import { ReduxProvider } from "../provider";
-import { usePathname } from "next/navigation";
+import flagsmith from "flagsmith";
+import { FlagsmithProvider } from "flagsmith/react";
 
 const cookies = new Cookies();
 
@@ -20,19 +20,17 @@ export default function RootLayout({
 }: {
   children?: React.ReactNode;
 }) {
-  let bannerName = '';
-  const pathname = usePathname();
-  if (pathname == "/auth/admin/login") bannerName = "Thooto Admin Login"
-  else if (pathname == "/auth/host/login") bannerName = "Thooto Host Login"
-  else if (pathname == "/auth/admin/register") bannerName = "Thooto Admin Register"
-  else if (pathname == "/auth/verify-account") bannerName = "Verify Account"
-  else if (pathname == "/" || pathname == "/auth/login" ) bannerName = "Thooto Admin Portal"
-  else bannerName = "Thooto Admin Register"
-
   return (
     <>
       <ReduxProvider>
+        <FlagsmithProvider
+          options={{
+            environmentID: "GTGFWiyEFuVDfna2gjdqQC",
+          }}
+          flagsmith={flagsmith}
+        >
         <div className="h-100 w-100">{children}</div>
+        </FlagsmithProvider>
       </ReduxProvider>
     </>
   );

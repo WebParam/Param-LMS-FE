@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "./Table";
 import Pagination from "@/app/components/Pagination";
 import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import TableFilter from "./TableFilter";
 import { downloadFile } from "@/app/lib/utils";
 import { rUserUrl } from "@/app/lib/actions/endpoints";
+import { useSearchParams } from "next/navigation";
 interface TablePaginationProps {
   data: CourseApplicants[];
   courseId?: string;
@@ -16,6 +17,10 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
   const ITEMSPERPAGE = 6;
   const [filteredData, setFilteredData] = useState(data);
   const [loading, setLoading] = useState(false);
+  
+  const [isFreemium, setIsFreemium] = useState();
+  const searchParams = useSearchParams();
+  const refreshId = searchParams.get("refreshId")!;
 
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
@@ -35,8 +40,14 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
   };
 
   // Check the environment variable
-  const isFreemium = process.env.NEXT_PUBLIC_USER === "freemium";
   const sectionTitle = isFreemium ? "Project Applicants" : "Course Applicants";
+
+    useEffect(() => {
+      const localValue = localStorage.getItem("isFreemium")!;
+      const value = JSON.parse(localValue) ?? false;
+      setIsFreemium(value);
+    }, [refreshId]);
+
 
   return (
     <>

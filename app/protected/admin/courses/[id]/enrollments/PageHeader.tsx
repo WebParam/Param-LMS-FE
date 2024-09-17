@@ -1,15 +1,31 @@
 "use client";
+import { useFlags } from "flagsmith/react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from 'react';
 
 export default function PageHeader() {
-  const [label, setLabel] = useState('Courses');
+  const [title, setTitle] = useState("Courses");
+  const flags = useFlags(["freemium"]);
+  const searchParams = useSearchParams();
+  const refreshId = searchParams.get("refreshId")!;
+  //const isFreemium = flags.freemium.enabled && flags.freemium.value == true;
+  const [isFreemium, setIsFreemium] = useState();
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_USER) {
-      setLabel('Projects');
+    if (isFreemium) {
+      setTitle("Projects");
+    } else {
+      setTitle("Courses");
     }
-  }, []);
+  }, [isFreemium]);
+
+  useEffect(() => {
+    const localValue = localStorage.getItem("isFreemium")!;
+    const value = JSON.parse(localValue) ?? false;
+    setIsFreemium(value);
+  }, [refreshId]);
+
 
   return (
     <>
@@ -33,9 +49,9 @@ export default function PageHeader() {
             <div>
               <Link
                 className="btn btn-success"
-                href={`/protected/home/${label.toLowerCase()}`}
+                href={`/protected/home/${title.toLowerCase()}`}
               >
-                All {label}
+                All {title}
               </Link>
             </div>
           </div>

@@ -15,6 +15,7 @@ import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
 import { rUserUrl } from "@/app/lib/actions/endpoints";
 import { downloadFile } from "@/app/lib/utils";
 import PageHeader from "./PageHeader";
+import { useFlags } from "flagsmith/react";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -34,7 +35,10 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
   const isEnrolled = searchParams.get("isEnrolled");
-  const isFreemium = process.env.NEXT_PUBLIC_USER;
+  const refreshId = searchParams.get("refreshId")!;
+  const flags = useFlags(["next_public_user"]); 
+  //const isFreemium = flags.next_public_user.enabled && flags.next_public_user.value == true;
+  const [isFreemium, setIsFreemium] = useState(false)
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();
@@ -76,6 +80,13 @@ function Layout({ children }: { children: React.ReactNode }) {
     const url = `${rUserUrl}/Documents/DownloadDocuments/${studentId}`;
     downloadFile(url, filename, fileExtension, setLoading, isGet);
   };
+
+ 
+  useEffect(() => {
+    const localValue = localStorage.getItem("isFreemium")!;
+    const value = JSON.parse(localValue) ?? false;
+    setIsFreemium(value);
+  }, [refreshId]);
 
   return (
     <>

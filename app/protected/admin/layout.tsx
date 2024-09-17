@@ -6,6 +6,9 @@ import withAuth from "./AdminAuthWrapper";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { FlagsmithProvider } from "flagsmith/react";
+
+import flagsmith from "flagsmith";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,53 +17,71 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const courseId = params.id;
   const courseTitle = searchParams.get("title") || "";
   const pathName = usePathname();
-  const isHost = pathName == "/protected/host/host/completed"
+  const isHost = pathName == "/protected/host/host/completed";
   const [projectLength, setProjectLength] = useState<string | null>(null);
+  const [flagsLoaded, setFlagsLoaded] = useState(false);
+  const [isFreemium, setIsFreemium] = useState();
+  const refreshId = searchParams.get("refreshId")!;
 
+  
   useEffect(() => {
     setProjectLength(localStorage.getItem("len"));
   }, []);
 
-  const userRole = process.env.NEXT_PUBLIC_USER;
+  //const isFreemium = flags.freemium.enabled && flags.freemium.value == true;
 
   const sideTabs = [
     {
-      name:userRole === "freemium" ? "Back To Projects" : "Back To Courses",
-      url: userRole ? `/protected/home/projects` : `/protected/home/courses` ,
+      name: isFreemium ? "Back To Projects" : "Back To Courses",
+      url: isFreemium ? `/protected/home/projects` : `/protected/home/courses`,
       icon: "home",
       roles: ["Admin", "SuperAdmin", "Freemium"],
     },
     {
-      name: userRole === "freemium" ? "Project" : "Course",
+      name:isFreemium ? "Project" : "Course",
       url: `/protected/admin/courses/${courseId}?title=${courseTitle}`,
       icon: "school",
       roles: ["Admin", "SuperAdmin", "Freemium"],
       children: [
         {
-          name: userRole === "freemium" ? "Project Applicants" : "Course Applicants",
+          name:
+           isFreemium
+              ? "Project Applicants"
+              : "Course Applicants",
           url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}`,
           icon: "group",
           roles: ["Admin", "SuperAdmin", "Freemium"],
         },
 
         {
-          name: userRole === "freemium" ? "Enrolled Students " : "Enrolled Students",
+          name:
+           isFreemium
+              ? "Enrolled Students "
+              : "Enrolled Students",
           url: `/protected/admin/courses/${courseId}/enrollments?title=${courseTitle}`,
           icon: "group",
           roles: ["Admin", "SuperAdmin", "Freemium"],
         },
         {
-          name: userRole === "freemium" ? "Edit Project" : "Edit Course",
-          url: userRole !== "freemium" ? `/protected/admin/courses/${courseId}?title=${courseTitle}` : `/protected/home/projects/${courseId}?title=${courseTitle}`,
+          name: isFreemium ? "Edit Project" : "Edit Course",
+          url:
+            isFreemium
+              ? `/protected/admin/courses/${courseId}?title=${courseTitle}`
+              : `/protected/home/projects/${courseId}?title=${courseTitle}`,
           icon: "edit",
           roles: ["Admin", "SuperAdmin", "Freemium"],
         },
-        ...(userRole !== "freemium" || Number(projectLength) < 2 ? [{
-          name: userRole === "freemium"  ? "Create Project" : "Create Course",
-          url: `/protected/home/courses/create`,
-          icon: "add_box",
-          roles: ["Admin", "SuperAdmin", "Freemium"],
-        }] : []),
+        ...(isFreemium || Number(projectLength) < 2
+          ? [
+              {
+                name:
+                  isFreemium ? "Create Project" : "Create Course",
+                url: `/protected/home/courses/create`,
+                icon: "add_box",
+                roles: ["Admin", "SuperAdmin", "Freemium"],
+              },
+            ]
+          : []),
       ],
     },
 
@@ -71,7 +92,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       roles: ["Admin", "SuperAdmin"],
       children: [
         {
-          name: userRole === "freemium" ? "Project Analytics" : "Course Analytics",
+          name:
+            isFreemium ? "Project Analytics" : "Course Analytics",
           url: `/protected/admin/analytics/graphs/course?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
@@ -88,7 +110,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
-       
+
         {
           name: "Grouped Analytics",
           url: `/protected/admin/analytics/grouped-analytics?title=${courseTitle}`,
@@ -96,15 +118,15 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           roles: ["Admin", "SuperAdmin"],
         },
         
-    {
-      name: "Host Analytics",
-      url: `/protected/admin/analytics/graphs/host-companies/companies?title=${courseTitle}`,
-      icon: "business",
-      roles: ["Admin", "SuperAdmin"],
-    },
+        {
+          name: "Host Analytics",
+          url: `/protected/admin/analytics/graphs/host-companies/companies?title=${courseTitle}`,
+          icon: "business",
+          roles: ["Admin", "SuperAdmin"],
+        },
       ],
     },
-
+    
     {
       name: "Facilitator Dashboard",
       url: `/protected/admin/facilitator/?title=${courseTitle}`,
@@ -123,10 +145,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           icon: "notifications",
           roles: ["Admin", "SuperAdmin"],
         },
-       
       ],
     },
-   
   ];
 
   useEffect(() => {
@@ -135,24 +155,52 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  useEffect(() => {
+    flagsmith.init({
+      environmentID: "GTGFWiyEFuVDfna2gjdqQC",
+      onChange: () => {
+        console.log("Flags updated", flagsmith.getAllFlags());
+        setFlagsLoaded(true);
+        
+      },
+      onError: (error) => {
+        console.error("Error loading flags", error);
+        setFlagsLoaded(true);
+      },
+    });
+  }, []);
+  
+    useEffect(() => {
+      const localValue = localStorage.getItem("isFreemium")!;
+      const value = JSON.parse(localValue) ?? false;
+      setIsFreemium(value);
+    }, [refreshId]);
+  
   return (
     <>
-      <div className="mdk-header-layout js-mdk-header-layout">
-        <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} />
-        <div className="mdk-header-layout__content page-content ">
-          <nav className="navbar navbar-light bg-alt border-bottom">
-            <div className="container page__container">
-              <ul className="nav navbar-nav">
-                <li className="nav-item"></li>
-              </ul>
-            </div>
-          </nav>
+      <FlagsmithProvider
+        options={{
+          environmentID: "GTGFWiyEFuVDfna2gjdqQC",
+        }}
+        flagsmith={flagsmith}
+      >
+        <div className="mdk-header-layout js-mdk-header-layout">
+          <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} />
+          <div className="mdk-header-layout__content page-content ">
+            <nav className="navbar navbar-light bg-alt border-bottom">
+              <div className="container page__container">
+                <ul className="nav navbar-nav">
+                  <li className="nav-item"></li>
+                </ul>
+              </div>
+            </nav>
 
-          {children}
+            {flagsLoaded && <div>{children}</div>}
+          </div>
         </div>
-      </div>
-  
-      <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
+
+        <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
+      </FlagsmithProvider>
     </>
   );
 }

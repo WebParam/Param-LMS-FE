@@ -1,6 +1,8 @@
 "use client";
+import { useFlags } from "flagsmith/react";
 import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface Tabs {
   [id: string]: string;
@@ -11,6 +13,9 @@ export default function PageHeader() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title");
+  const [isFreemium, setIsFreemium] = useState(false)
+  const refreshId = searchParams.get("refreshId")!;
+ // const isFreemium = flags.next_public_user.enabled && flags.next_public_user.value == true;
   const studentName = searchParams.get("studentName");
   const tabs = {
     profiles: "Student Profile",
@@ -20,8 +25,17 @@ export default function PageHeader() {
   const tabName = pathname.split("/").at(-1) || "";
 
   // Check the environment variable
-  const isFreemium = process.env.NEXT_PUBLIC_USER === "freemium";
+  const flags = useFlags(["next_public_user"]); // only causes re-render if specified flag values / traits change
+  console.log("Flags: ", flags);
+
   const buttonText = isFreemium ? "Project Applicants" : "Course Applicants";
+
+  
+  useEffect(() => {
+    const localValue = localStorage.getItem("isFreemium")!;
+    const value = JSON.parse(localValue) ?? false;
+    setIsFreemium(value);
+  }, [refreshId]);
 
   return (
     <>
