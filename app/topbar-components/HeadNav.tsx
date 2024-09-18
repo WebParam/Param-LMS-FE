@@ -60,20 +60,14 @@ const HeadNav: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                   <div className="dropdown-header">
                     <strong>Account</strong>
                   </div>
-
-                  <Link
-                    className="dropdown-item"
-                    href="/protected/admin/account/basic-info?account-title=Basic Information"
-                  >
-                    Edit Account
-                  </Link>
-                  <Link
-                    className="dropdown-item"
-                    onClick={() => logout()}
-                    href=""
-                  >
-                    Logout
-                  </Link>
+                  <a className="dropdown-item">
+                    <Link href="/protected/admin/account/basic-info?account-title=Basic Information">
+                      Edit Account
+                    </Link>
+                  </a>
+                  <a className="dropdown-item" onClick={() => logout()}>
+                    <Link href="">Logout</Link>
+                  </a>
                 </div>
               </div>
             </div>
