@@ -6,7 +6,7 @@ export default function PageHeader() {
   const [title, setTitle] = useState("Course");
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_USER === "freemium") {
+    if ( process.env.NEXT_PUBLIC_FREEMIUM ==="true") {
       setTitle("Project");
     }
   }, []);

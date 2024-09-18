@@ -21,7 +21,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     setProjectLength(localStorage.getItem("len"));
   }, []);
 
-  const userRole = process.env.NEXT_PUBLIC_USER;
+  const userRole = process.env.NEXT_PUBLIC_FREEMIUM ==="true"? "freemium" : localStorage.getItem("role");
 
   const sideTabs = [
     {

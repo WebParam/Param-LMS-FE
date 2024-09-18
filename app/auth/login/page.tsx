@@ -116,7 +116,7 @@ debugger;
             Don't have an account?{" "}
             <Link
               href={
-                process.env.NEXT_PUBLIC_isFreeMium
+                process.env.NEXT_PUBLIC_FREEMIUM==="true"
                   ? "/auth/freemium-register"
                   : "/auth/404"
               }
