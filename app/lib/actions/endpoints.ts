@@ -1,9 +1,10 @@
 const test = "testing";
 const env = process.env.NEXT_PUBLIC_API_ENV == "production" ? "prod" : "dev";
+const envDev = "dev-be";
 
-export const wCourseUrl = `https://khumla-${env}-newcourse-write.azurewebsites.net/api/v1`;
+export const wCourseUrl = `https://thooto-${envDev}-newcourse-write.azurewebsites.net/api/v1`;
 
-export const rCourseUrl = `https://khumla-${env}-newcourse-read.azurewebsites.net/api/v1`;
+export const rCourseUrl = `https://thooto-${envDev}-newcourse-read.azurewebsites.net/api/v1`;
 
 export const wDocumentUrl = `https://khumla-${env}-document-write.azurewebsites.net/api/Documents`;
 
@@ -39,9 +40,9 @@ export const rOptionUrl = `https://khumla-${env}-assessment-read.azurewebsites.n
 
 export const rKnowledgeModuleUrl = `https://khumla-${env}-newcourse-read.azurewebsites.net/api/v1`;
 
-export const rUserUrl = `https://khumla-dev-user-read.azurewebsites.net/api/v1`;
+export const rUserUrl = `https://thooto-${envDev}-user-read.azurewebsites.net/api/v1`;
 
-export const wUserUrl = `https://khumla-${env}-user-write.azurewebsites.net/api/v1`;
+export const wUserUrl = `https://thooto-${envDev}-user-write.azurewebsites.net/api/v1`;
 
 export const rAnalyticUrl = `https:khumla-${env}-activity-read.azurewebsites.net/api/v1`;
 
