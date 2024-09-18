@@ -1,4 +1,3 @@
-"use server";
 import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
