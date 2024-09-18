@@ -37,7 +37,7 @@ export default function Login() {
 
     try {
       const user = await login(email, password);
-
+debugger;
       if (user?.data?.id) {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
         localStorage.setItem("id", user?.data?.id);
