@@ -1,5 +1,5 @@
 const test = "testing";
-const env = process.env.NEXT_PUBLIC_API_ENV == "production" ? "prod" : "dev";
+const env = process.env.NEXT_PUBLIC_API_ENV == "production" ? "prod" : process.env.NEXT_PUBLIC_API_ENV;
 const envDev = "dev-be";
 
 export const wCourseUrl = `https://thooto-${envDev}-newcourse-write.azurewebsites.net/api/v1`;
@@ -40,10 +40,10 @@ export const rOptionUrl = `https://thooto-${env}-be-assessment-read.azurewebsite
 
 export const rKnowledgeModuleUrl = `https://thooto-${env}-be-newcourse-read.azurewebsites.net/api/v1`;
 
-export const rUserUrl = `https://thooto-${env}-user-read.azurewebsites.net/api/v1`;
+export const rUserUrl = `https://thooto-${env}-be-user-read.azurewebsites.net/api/v1`;
 
-export const wUserUrl = `https://thooto-${env}-user-write.azurewebsites.net/api/v1`;
+export const wUserUrl = `https://thooto-${env}-be-user-write.azurewebsites.net/api/v1`;
 
-export const rAnalyticUrl = `https:thooto-${env}-be-be-activity-read.azurewebsites.net/api/v1`;
+export const rAnalyticUrl = `https:thooto-${env}-be-activity-read.azurewebsites.net/api/v1`;
 
 export const rUserUrlRc = `https://thooto-rc-be-user-read.azurewebsites.net/api/v1`
