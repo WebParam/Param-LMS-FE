@@ -42,7 +42,7 @@ export const rKnowledgeModuleUrl = `https://thooto-${env}-be-newcourse-read.azur
 
 export const rUserUrl = `https://thooto-${env}-be-user-read.azurewebsites.net/api/v1`;
 
-export const wUserUrl = `https://thooto-${env}-be-user-write.azurewebsites.net/api/v1`;
+export const wUserUrl = `https://thooto-qa-be-user-write.azurewebsites.net/api/v1`;
 
 export const rAnalyticUrl = `https:thooto-${env}-be-activity-read.azurewebsites.net/api/v1`;
 
