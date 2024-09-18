@@ -34,9 +34,11 @@ export const getCourses = async () => {
   noStore();
   try {
     const resp = await get(`${rCourseUrl}/Courses/GetCoursesNew`);
-    const data = resp.length > 0 ? resp.map((res: any) => res.data) : [];
-    Diagnostic("SUCCESS ON GET, returning", data);
-    return data;
+    if (Array.isArray(resp) && resp.length > 0) {
+      const data = resp.map((res: any) => res.data);
+      Diagnostic("SUCCESS ON GET, returning", data);
+      return data;
+    } else return [];
   } catch (err) {
     Diagnostic("ERROR ON GET, returning", err);
     throw err;

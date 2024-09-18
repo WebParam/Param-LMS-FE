@@ -5,6 +5,7 @@ import { IUserLoginModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { login } from "@/app/lib/actions/users";
 
 const cookies = new Cookies();
 
@@ -34,14 +35,12 @@ export default function Login() {
       return;
     }
 
-    const payload = { Email: email, Password: password } as IUserLoginModel;
-
     try {
-      const user = await Api.POST_Login(payload);
-
+      const user = await login(email, password);
+debugger;
       if (user?.data?.id) {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
-        localStorage.setItem("id",user?.data?.id)
+        localStorage.setItem("id", user?.data?.id);
 
         if (user?.data.role == "Freemium") {
           router.push("protected/home/projects");
