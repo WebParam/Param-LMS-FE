@@ -1,6 +1,6 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post, put } from "../utils";
+import { del, get, post, put } from "../utils";
 import {
   rAggregatorUrl,
   rAssessmentUrl,
@@ -8,9 +8,7 @@ import {
   wAssessmentUrl,
 } from "./endpoints";
 import { Diagnostic } from "../logger/logger";
-import {
-  IMarkStudentAssessment,
-} from "@/app/interfaces/assessments";
+import { IMarkStudentAssessment } from "@/app/interfaces/assessments";
 import { unstable_noStore as noStore } from "next/cache";
 
 export const createAssessment = async (
@@ -73,7 +71,10 @@ export const updateAssessment = async (
   };
 
   try {
-    const data = await put(`${wAssessmentUrl}/Assessments/UpdateNewAssessment`, body);
+    const data = await put(
+      `${wAssessmentUrl}/Assessments/UpdateNewAssessment`,
+      body
+    );
     Diagnostic("SUCCESS ON PUT, returning", data);
   } catch (err) {
     Diagnostic("ERROR ON PUT, returning", err);
@@ -84,6 +85,21 @@ export const updateAssessment = async (
   const date = new Date().toString();
   const url = `/protected/admin/courses/${courseId}/assessments?title=${courseTitle}&refreshId=${date}`;
   redirect(url);
+};
+
+export const deleteAssessment = async (assessmentId: string) => {
+  try {
+    const resp = await del(
+      `${wAssessmentUrl}/Assessments/NewAssessment/${assessmentId}`
+    );
+    const data = resp.data;
+    Diagnostic("SUCCESS ON DELETE, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON DELETE, returning", err);
+
+    console.error(err);
+  }
 };
 
 export const getStudentAssessmentAnswers = async (

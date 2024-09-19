@@ -9,6 +9,7 @@ import QuestionsModal from "./QuestionsModal";
 import { getQuestions } from "@/app/lib/actions/questions";
 import { getOptions } from "@/app/lib/actions/options";
 import { getRubrics } from "@/app/lib/actions/rubrics";
+import DeleteAssessmentModal from "./DeleteAssessmentModal";
 
 function Assessment({ data }: { data: any }) {
   const searchParams = useSearchParams();
@@ -18,6 +19,7 @@ function Assessment({ data }: { data: any }) {
   const [questions, setQuestions] = useState<any>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const pathname = usePathname();
 
   const previewQuestions = async (assessmentId: string) => {
@@ -44,6 +46,7 @@ function Assessment({ data }: { data: any }) {
 
   useEffect(() => {
     setOpenEditModal(false);
+    setDeleteModal(false);
   }, [refreshId]);
 
   return (
@@ -88,6 +91,12 @@ function Assessment({ data }: { data: any }) {
         questions={questions}
       />
 
+      <DeleteAssessmentModal
+        id={data.id}
+        show={deleteModal}
+        onHide={() => setDeleteModal(false)}
+      />
+
       <div className="card p-3 mt-3 mb-3 overflow-auto">
         <div className="d-flex justify-content-between">
           <div style={{ fontSize: "15px" }}>
@@ -114,6 +123,12 @@ function Assessment({ data }: { data: any }) {
               className="material-icons icon-holder--outline-dark rounded-lg"
             >
               open_in_new
+            </i>
+            <i
+              onClick={() => setDeleteModal(true)}
+              className="material-icons icon-holder--outline-dark rounded-lg"
+            >
+              delete
             </i>
           </div>
         </div>
