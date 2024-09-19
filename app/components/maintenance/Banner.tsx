@@ -1,6 +1,4 @@
-
 import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Button } from "@nextui-org/react";
 import { useDeploymentTime } from './useDeploymentTime';
 
 const Banner: React.FC = () => {
@@ -9,34 +7,46 @@ const Banner: React.FC = () => {
   const message = process.env.NEXT_PUBLIC_DEPLOYMENTMESSAGE || '';
   
   const truncatedMessage = useMemo(() => {
-    if (message.length <= 100) return message;
-    return message.slice(0, 97) + '...';
+    if (message.length <= 300) return message;
+    return message.slice(0, 200) + '...';
   }, [message]);
 
   if (!showBanner) return null;
 
   return (
-    <Card className="w-full bg-yellow-100">
-      <CardBody>
-        <div className="flex flex-col">
-          <div className={`transition-all duration-300 ease-in-out ${expanded ? '' : 'line-clamp-1'}`}>
-            <p className="text-sm">
-              {expanded ? message : truncatedMessage}
-            </p>
-          </div>
-          {message.length > 100 && (
-            <Button 
-              size="sm"
-              variant="light"
-              onPress={() => setExpanded(!expanded)}
-              className="self-end mt-2"
-            >
-              {expanded ? 'Collapse' : 'Expand'}
-            </Button>
-          )}
-        </div>
-      </CardBody>
-    </Card>
+    <div style={{
+      width: '100%',
+      backgroundColor: '#FFF9C4',
+      padding: '10px',
+      boxSizing: 'border-box',
+      borderRadius: '4px',
+      marginBottom: '20px'
+    }}>
+      <div style={{
+        transition: 'all 0.3s ease-in-out',
+        maxHeight: expanded ? '1000px' : '60px',
+        overflow: 'hidden'
+      }}>
+        <p style={{ fontSize: '14px', margin: 0 }}>
+          {expanded ? message : truncatedMessage}
+        </p>
+      </div>
+      {message.length > 100 && (
+        <button 
+          onClick={() => setExpanded(!expanded)}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#1976D2',
+            cursor: 'pointer',
+            fontSize: '12px',
+            marginTop: '5px'
+          }}
+        >
+          {expanded ? 'Collapse' : 'Expand'}
+        </button>
+      )}
+    </div>
   );
 };
 
