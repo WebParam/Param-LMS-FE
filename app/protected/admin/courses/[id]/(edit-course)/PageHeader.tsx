@@ -5,7 +5,7 @@ import PracticalModuleModal from "@/components/course/PracticalModuleModal";
 import WorkBookModal from "@/components/course/WorkBookModal";
 import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Tabs {
   [id: string]: string;
@@ -16,6 +16,7 @@ export default function PageHeader() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
+  const refreshId = searchParams.get("refreshId");
 
   const tabs = {
     "knowledge-modules": "Knowledge Modules",
@@ -33,6 +34,10 @@ export default function PageHeader() {
     useState(false);
   const [openWorkBookModal, setOpenWorkBookModal] = useState(false);
   const [openAssessmentModal, setOpenAssessmentModal] = useState(false);
+
+  useEffect(() => {
+    setOpenAssessmentModal(false);
+  }, [refreshId]);
 
   return (
     <>
