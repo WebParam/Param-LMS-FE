@@ -1,15 +1,13 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from 'react';
+import { useParams, useSearchParams } from "next/navigation";
 
 export default function PageHeader() {
-  const [label, setLabel] = useState('Courses');
-
-  useEffect(() => {
-    if (process.env.NEXT_PUBLIC_FREEMIUM) {
-      setLabel('Projects');
-    }
-  }, []);
+  const { id, moduleId } = useParams<{ id: string; moduleId: string }>();
+  const searchParams = useSearchParams();
+  const courseTitle = searchParams.get("title");
+  const moduleTitle = searchParams.get("moduleTitle");
+  const topicTitle = searchParams.get("topicTitle");
 
   return (
     <>
@@ -20,22 +18,22 @@ export default function PageHeader() {
               style={{ width: "850px" }}
               className="mb-24pt mb-sm-0 mr-sm-24pt"
             >
-              <h2 className="mb-0">Enrolled Students</h2>
+              <h2 className="mb-0">{topicTitle}</h2>
 
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">
                   <a href="#">Home</a>
                 </li>
 
-                <li className="breadcrumb-item active">Enrolled Students</li>
+                <li className="breadcrumb-item active">{topicTitle}</li>
               </ol>
             </div>
             <div>
               <Link
                 className="btn btn-success"
-                href={`/protected/home/${label.toLowerCase()}`}
+                href={`/protected/admin/courses/${id}/assessments?title=${courseTitle}`}
               >
-                All {label}
+                Assessments
               </Link>
             </div>
           </div>

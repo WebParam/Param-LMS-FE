@@ -127,7 +127,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
           }): <>
           <tr className="selected">
          <td className="text-center js-lists-values-projects small" colSpan={10}>
-          No Student Applicants
+          No Students Applicants
          </td>
          
        </tr>

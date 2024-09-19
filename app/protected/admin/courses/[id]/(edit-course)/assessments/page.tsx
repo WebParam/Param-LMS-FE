@@ -1,11 +1,10 @@
 "use client";
 import Pagination from "@/app/components/Pagination";
-import Table from "@/components/course/[id]/knowledge-modules/assessments/Table";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import CreateAssessmentModal from "@/components/course/[id]/knowledge-modules/assessments/CreateAssessmentModal";
 import { IAssessment } from "@/app/interfaces/assessments";
 import { getAssessments } from "@/app/lib/actions/assessments";
+import Assessment from "@/components/course/[id]/knowledge-modules/assessments/Assessment";
 
 const Body = ({ params }: { params: { id: string } }) => {
   const { id: courseId } = params;
@@ -15,7 +14,7 @@ const Body = ({ params }: { params: { id: string } }) => {
 
   const [assessments, setAssessments] = useState<IAssessment[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 4;
+  const ITEMSPERPAGE = 7;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems =
@@ -33,43 +32,15 @@ const Body = ({ params }: { params: { id: string } }) => {
     setOpenModal(false);
   }, [refreshId]);
 
-
   return (
     <>
-      <CreateAssessmentModal
-        show={openModal}
-        onHide={() => {
-          setOpenModal(false);
-        }}
-      />
-
-      <div className="page-separator my-4">
-        <div className="page-separator__text">Assessments</div>
-      </div>
-
-      <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
-        <div className="mx-1">
-          <button
-            className="btn btn-success btn-block"
-            onClick={() => setOpenModal(true)}
-          >
-            Generate Assessment
-          </button>
+      {currentItems.length > 0 ? (
+        currentItems.map((data) => <Assessment data={data} />)
+      ) : (
+        <div className="card my-24pt text-center py-3">
+          No Assessments Available...
         </div>
-        <div className="mx-1">
-          <button
-            className="btn btn-success btn-block"
-            onClick={() => setOpenModal(true)}
-          >
-            Create Assessment
-          </button>
-        </div>
-      </div>
-
-      <div className="card mt-3 mb-3 overflow-auto">
-        <Table list={currentItems} />
-      </div>
-
+      )}
       <div className="card mb-0">
         <Pagination
           listLength={assessments?.length}
