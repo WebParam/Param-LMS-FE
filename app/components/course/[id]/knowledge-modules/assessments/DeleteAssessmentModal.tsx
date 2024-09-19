@@ -43,7 +43,7 @@ function DeleteAssessmentModal(props: any) {
         </Button>
         <button className="btn btn-success" onClick={() => delAssessment()}>
           {isSpinner ? (
-            <span className="spinner-border text-success" role="status" />
+            <span className="spinner-border text-white" role="status" />
           ) : (
             <>Yes</>
           )}
