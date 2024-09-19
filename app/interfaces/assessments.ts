@@ -1,4 +1,4 @@
-export interface Assessment {
+export interface IAssessment {
     id? : string;
     title: string;
     courseId: string;

@@ -23,6 +23,7 @@ export default function Question({ question }: { question: IQuestion }) {
   const [rubrics, setRubrics] = useState<Rubric[]>([]);
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const topicTitle = searchParams.get("topicTitle") || "";
   const refreshId = searchParams.get("refreshId");
   const ref = useRef<HTMLFormElement>(null);
 
@@ -72,7 +73,8 @@ export default function Question({ question }: { question: IQuestion }) {
     courseId,
     moduleId,
     assessmentId,
-    title
+    title,
+    topicTitle
   );
 
   return (
