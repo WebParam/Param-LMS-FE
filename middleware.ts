@@ -7,7 +7,10 @@ export function middleware(request: NextRequest) {
   const loggedInUser = cookies.get('param-lms-user');
 
   if (!loggedInUser) {
-    //return NextResponse.redirect(new URL('/auth/login', request.url));
+    const loginUrl = new URL('/auth/login', request.url);
+    if (request.nextUrl.pathname !== loginUrl.pathname ) {
+      return NextResponse.redirect(loginUrl);
+    }
   }
   
   return NextResponse.next();
@@ -16,4 +19,3 @@ export function middleware(request: NextRequest) {
 export const config = {
     matcher: ['/((?!api|_next/static|_next/image|favicon.ico|/).*)'],
   };
-  
