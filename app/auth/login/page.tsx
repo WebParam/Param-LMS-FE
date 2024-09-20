@@ -117,7 +117,7 @@ debugger;
             <Link
               href={
                 process.env.NEXT_PUBLIC_FREEMIUM==="true"
-                  ? "/auth/freemium-register"
+                  ? "/auth/freemium"
                   : "/auth/404"
               }
               className="text-primary"
