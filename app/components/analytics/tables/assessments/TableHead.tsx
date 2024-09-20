@@ -1,10 +1,11 @@
 
 const TableHead = () => {
   const headers = [
-    "Student Name",
+    "Student ID",
+    "Full Name",
+    "Assessment Type",
     "Assessment Date",
-    "Subject",
-    "Grade",
+    "Average Score",
     "Instructor"
 ];
 
