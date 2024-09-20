@@ -2,7 +2,10 @@
 import { IUserResetPasswordModel } from "@/app/interfaces/user";
 import { useState } from "react";
 import { BasicOTPComponent } from "./basic-otp";
-import { adminForgotResetPassword, AdminSendResetOTP } from "@/app/lib/actions/users";
+import {
+  adminForgotResetPassword,
+  AdminSendResetOTP,
+} from "@/app/lib/actions/users";
 import { useRouter } from "next/navigation";
 
 export default function ResetPassword() {
@@ -47,13 +50,19 @@ export default function ResetPassword() {
       setAlertMessage("Password changed successfully. You may now login.");
       setAlertType("alert-success");
       setShowPassInputs(false);
-      router.push("/auth/login")
+      router.push("/auth/login");
     } catch (error: any) {
       console.error(error);
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         setAlertMessage(error.response.data.message);
       } else {
-        setAlertMessage("An error occurred while changing the password. Please try again.");
+        setAlertMessage(
+          "An error occurred while changing the password. Please try again."
+        );
       }
       setAlertType("alert-danger");
     } finally {
@@ -74,10 +83,8 @@ export default function ResetPassword() {
     setEmailError(false);
     setDisable(true);
 
-    const payload: IUserResetPasswordModel = { email };
-
     try {
-      const sendOtp = await AdminSendResetOTP(payload);
+      const sendOtp = await AdminSendResetOTP(email);
       if (sendOtp === "User does not exist") {
         setAlertMessage(`User does not exist with email: ${email}.`);
         setAlertType("alert-danger");
@@ -129,9 +136,7 @@ export default function ResetPassword() {
                           <i className="material-icons">check_circle</i>
                         </div>
                         <div className="flex" style={{ minWidth: 180 }}>
-                          <small className="text-100">
-                            {alertMessage}
-                          </small>
+                          <small className="text-100">{alertMessage}</small>
                         </div>
                       </div>
                     </div>
@@ -161,7 +166,8 @@ export default function ResetPassword() {
                         }}
                       />
                       <small className="form-text text-muted">
-                        We will email you with info on how to reset your password.
+                        We will email you with info on how to reset your
+                        password.
                       </small>
                     </div>
 
@@ -171,7 +177,10 @@ export default function ResetPassword() {
                       className="btn btn-success"
                     >
                       {disable ? (
-                        <div className="spinner-border text-white" role="status" />
+                        <div
+                          className="spinner-border text-white"
+                          role="status"
+                        />
                       ) : (
                         "Reset"
                       )}
