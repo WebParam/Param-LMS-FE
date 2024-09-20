@@ -2,7 +2,6 @@
 import Drawer from "@/app/topbar-components/Drawer";
 import HeadNav from "@/app/topbar-components/HeadNavDrawer";
 import { useEffect, useState } from "react";
-import withAuth from "./AdminAuthWrapper";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -157,4 +156,4 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default withAuth(RootLayout);
+export default RootLayout;
