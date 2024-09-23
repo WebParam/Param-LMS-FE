@@ -68,6 +68,7 @@ export function DELETE(endPoint: string): Promise<any> {
   let HEADER = {
     "Authorization": "Basic YWRtaW46cmpOdjJhU1omPXxuRDYpJQ==",
     "Access-Control-Allow-Origin": "*",
+    "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY
   };
 
   // Return the axios promise directly
@@ -86,6 +87,7 @@ export function PUT(endPoint: string, payload: Object): Promise<any> {
   let HEADER = {
     "Authorization": "Basic YWRtaW46cmpOdjJhU1omPXxuRDYpJQ==",
     "Access-Control-Allow-Origin": "*",
+    "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY
   };
 
   // Return the axios promise directly
