@@ -2,10 +2,11 @@ import { del, get, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
 import { rUserUrl, wUserUrl } from "./endpoints";
 import { IProjectAnalytics } from "@/app/interfaces/project";
+import { DELETE, GET, POST, PUT } from "../restapi/client";
 
 export const createProject = async (formData: any) => {
   try {
-    const res = await fetch(
+    const res = await POST(
       `${wUserUrl}/OrganizationProgram/AddOrganizationProgram`,
       {
         method: "POST",
@@ -29,7 +30,7 @@ export const createProject = async (formData: any) => {
 export const updateProjectLogo = async (formData: FormData) => {
   const id = formData.get("programId");
   try {
-    const res = await fetch(
+    const res = await PUT(
       `${wUserUrl}/OrganizationProgram/UpdsteOrganizationProgramLogo/${id}`,
       {
         method: "PUT",
@@ -52,7 +53,7 @@ export const updateProjectLogo = async (formData: FormData) => {
 
 export const deleteProject = async (id: string) => {
   try {
-    const resp = await del(
+    const resp = await DELETE(
       `${wUserUrl}/OrganizationProgram/DeleteOrganizationProgram?id=${id}`
     );
     const data = resp.message;
@@ -66,10 +67,10 @@ export const deleteProject = async (id: string) => {
 
 export const getProject = async (id: string) => {
   try {
-    const resp = await get(
+    const resp = await GET(
       `${rUserUrl}/OrganizationProgram/GetOrganizationProgram/${id}`
     );
-
+debugger;
     const data = resp.data;
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
@@ -81,7 +82,7 @@ export const getProject = async (id: string) => {
 
 export const getProjectAnalytics = async (id: string, value: boolean): Promise<IProjectAnalytics> => {
   try {
-    const resp = await get(`${rUserUrl}/UserOrganisationProgramEnrollment/GetStudentInfoSummary/${id}?enrolled=${value}`);
+    const resp = await GET(`${rUserUrl}/UserOrganisationProgramEnrollment/GetStudentInfoSummary/${id}?enrolled=${value}`);
     const data: IProjectAnalytics = resp.data;
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
@@ -93,7 +94,7 @@ export const getProjectAnalytics = async (id: string, value: boolean): Promise<I
 
 export const updateProject = async (payload: any) => {
   try {
-    const resp = await put(
+    const resp = await PUT(
       `${wUserUrl}/OrganizationProgram/UpdateOrganizationProgram`,
       payload
     );
