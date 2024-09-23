@@ -35,7 +35,7 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
   };
 
   // Check the environment variable
-  const isFreemium = process.env.NEXT_PUBLIC_USER === "freemium";
+  const isFreemium =  process.env.NEXT_PUBLIC_FREEMIUM ==="true";
   const sectionTitle = isFreemium ? "Project Applicants" : "Course Applicants";
 
   return (

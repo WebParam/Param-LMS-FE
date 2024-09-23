@@ -122,7 +122,7 @@ export default function VerifyAccount() {
                 </button>
                 <div className="account">
                     <p>Already have an account?
-                    <Link href='/login'> Log in</Link></p>
+                    <Link href='/'> Log in</Link></p>
                 </div>
             </form>
           </div>
