@@ -1,10 +1,10 @@
 export const barDescriptions = [
-    { description: "Complete", color: "#008000" }, // Changed to hex code for green
-    { description: "Incomplete", color: "#FF0000" }, // Changed to hex code for red
+    { description: "Complete", color: "#008000" }, 
+    { description: "Incomplete", color: "#FF0000" }, 
   ];
   
   export const options = {
-    labels: ["Complete", "Incomplete"], // Changed labels to match bar descriptions
+    labels: ["Complete", "Incomplete"], 
     legend: {
       position: "bottom" as "top" | "left" | "right" | "bottom",
     },
@@ -21,4 +21,4 @@ export const barDescriptions = [
     }]
   };
   
-  export const series = [64, 36]; // Data for each category
+  export const series = [64, 36]; 

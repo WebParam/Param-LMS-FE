@@ -82,6 +82,12 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           roles: ["Admin", "SuperAdmin"],
         },
         {
+          name: "Videos Analytics",
+          url: `/protected/admin/analytics/grouped-analytics/videos?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
           name: "Assignments Analytics",
           url: `/protected/admin/analytics/graphs/assignments?title=${courseTitle}`,
           icon: "bar_chart",
@@ -89,8 +95,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         },
        
         {
-          name: "Grouped Analytics",
-          url: `/protected/admin/analytics/grouped-analytics?title=${courseTitle}`,
+          name: "Students Analytics",
+          url: `/protected/admin/analytics/grouped-analytics/students?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },

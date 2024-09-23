@@ -26,7 +26,7 @@ import {
 } from "@/app/components/analytics/graphs/assignments/AssignmentsCompletionRate";
 import ChartProvider from "@/components/analytics/graphs/ChartProvider";
 import PieChart from "@/components/analytics/graphs/PieChart";
-export default async function Graphs() {
+export default function Graphs() {
   return (
     <>
       <div className="row mb-lg-8pt">

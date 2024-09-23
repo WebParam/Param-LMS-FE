@@ -14,8 +14,9 @@ const Body = ({ params }: { params: { id: string } }) => {
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
 
   const fetchAnalytics = async () => {
-    const data = await getCourseTableAnalytics("66433416a454f78732f274ba");
+    const data = await getCourseTableAnalytics("6669f0ff8759b480859c10a7");
     //   setList(data);
+    console.log(data)
   };
 
   useEffect(() => {

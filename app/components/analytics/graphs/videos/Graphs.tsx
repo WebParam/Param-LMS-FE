@@ -26,10 +26,45 @@ import {
 } from "@/app/components/analytics/graphs/assignments/AssignmentsCompletionRate";
 import ChartProvider from "@/components/analytics/graphs/ChartProvider";
 import PieChart from "@/components/analytics/graphs/PieChart";
+
+type DataTiles = {
+    name: string;
+    icon: string;
+    data: number;
+  };
+  
+
 export default function Graphs() {
+    const dataTiles: DataTiles[] = [
+        { name: "Total Students", icon: "person_outline", data: 1 },
+        { name: "Videos Watched by All Students", icon: "videocam", data: 1 },
+        { name: "Total Videos in Course", icon: "video_library", data: 1 },
+        { name: "Completion Percentage", icon: "check_circle", data: 100 },
+      ];
+
   return (
     <>
-      <div className="row mb-lg-8pt">
+        <div className="row mb-lg-8pt">
+        {dataTiles.map((data: DataTiles) => (
+          <div key={data.name} className="col-lg-3">
+            <div className="card">
+              <div
+                data-toggle="tab"
+                role="tab"
+                aria-selected="true"
+                className="dashboard-area-tabs__tab card-body text-center active"
+              >
+                <span className="font-weight-bold">{data.name}</span>
+                <i className="material-icons text-success icon-48pt">
+                  {data.icon}
+                </i>
+                <span className="h2 mb-0 mt-n1">{data.data}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* <div className="row mb-lg-8pt">
         <div className="col-lg-6 col-md-12 card-group-row__col">
         <ChartLayout
             hasFilter={true}
@@ -44,46 +79,7 @@ export default function Graphs() {
           </ChartLayout>
         </div>
 
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Workbook Completion Rate" type="pie">
-            <PieChart
-              options={workbookCompetionRateOptions}
-              series={workbookCompetionRateSeries}
-            />
-          </ChartLayout>
-        </div>
-
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout
-            hasFilter={true}
-            title="Workbook Time Spent"
-            type="line"
-            chartData={workbookData}
-            filterOptions={filterOptions}
-            defaultFilter="yellow"
-            filtersMapping={filtersMapping}
-          >
-            <ChartProvider />
-          </ChartLayout>
-        </div>
-
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Assignment Completion Rate" type="pie">
-            <PieChart
-              options={assignmentsPassRateOptions}
-              series={assignmentsPassRateSeries}
-            />
-          </ChartLayout>
-        </div>
-        <div className="col-lg-6 col-md-12 card-group-row__col">
-          <ChartLayout title="Assignment Pass Rate" type="pie">
-            <PieChart
-              options={assignmentsCompletionRateOptions}
-              series={assignmentsCompletionRateSeries}
-            />
-          </ChartLayout>
-        </div>
-      </div>
+      </div> */}
     </>
   );
 }
