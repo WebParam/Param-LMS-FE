@@ -28,12 +28,14 @@ export const createQuestion = async (
 
   const entries: any = formData.entries();
   let question = {} as IQuestion;
+  const correctValue: any = formData.get("correctValue") || "";
+  console.log("Correct Value: ", correctValue);
+  
   try {
     const data = await post(`${wQuestionUrl}/AddQuestion`, body);
     question = data.data;
     Diagnostic("SUCCESS ON POST, returning", data);
 
-    const correctValue: any = formData.get("correctValue") || "";
 
     createUpdateOptionRubric(
       entries,

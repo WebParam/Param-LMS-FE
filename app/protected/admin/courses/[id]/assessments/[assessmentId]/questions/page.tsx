@@ -5,7 +5,7 @@ import { Modal } from "react-bootstrap";
 import { getQuestions } from "@/app/lib/actions/questions";
 import Question from "@/components/course/[id]/modules/questions/Question";
 import { IQuestion } from "@/app/interfaces/questions";
-import QuestionAdd from "@/components/course/[id]/modules/questions/QuestionAdd";
+import QuestionAdd from "@/components/course/[id]/assessment/questions/QuestionAdd";
 
 const Body = ({ params }: { params: { assessmentId: string } }) => {
   const assessmentId = params.assessmentId;
