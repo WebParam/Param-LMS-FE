@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["use-sync-external-store", "yargs"],
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -25,9 +23,8 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/components/*": ["./app/components/*"],
+      "@/*": ["./*"],
     }
   },
   "include": [
@@ -38,10 +35,7 @@
     "dist/types/**/*.ts",
     "app/interfaces/**/*.ts",
     "middleware.ts",
-    "node_modules/react-redux", "app/protected/student/course/quiz/quiz-questions/page.tsx",
-    
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "node_modules/react-redux"
+, "app/components/course-analytics/graphs/AvgCompletedQuizzes", "app/components/course-analytics/graphs/AvgCompletedQuizzes"  ],
+  "exclude": ["node_modules"]
 }
