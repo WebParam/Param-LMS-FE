@@ -7,6 +7,7 @@ interface DeploymentSlot {
 
 export const useDeploymentTime = () => {
   const [showBanner, setShowBanner] = useState(false);
+  const [endTime, setEndTime] = useState<string | null>(null);
 
   const checkDeploymentTime = () => {
     const currentTime = new Date();
@@ -16,7 +17,7 @@ export const useDeploymentTime = () => {
       slots = JSON.parse(process.env.NEXT_PUBLIC_DEPLOYMENTSLOTS || '[]');
     } catch (error) {
       console.error('Error parsing NEXT_PUBLIC_DEPLOYMENTSLOTS:', error);
-      return false;
+      return { isDeploymentTime: false, endTime: null };
     }
     
     for (const slot of slots) {
@@ -30,21 +31,30 @@ export const useDeploymentTime = () => {
       endDate.setHours(endHour, endMinute, 0, 0);
       
       if (currentTime >= startDate && currentTime <= endDate) {
-        return true;
+        return { isDeploymentTime: true, endTime: slot.endTime };
       }
     }
     
-    return false;
+    return { isDeploymentTime: false, endTime: null };
   };
 
   useEffect(() => {
-    const updateBanner = () => {
-      setShowBanner(checkDeploymentTime());
-    };
-    updateBanner();
-    const interval = setInterval(updateBanner, 60000); // Check every minute
-    return () => clearInterval(interval);
+    const { isDeploymentTime, endTime } = checkDeploymentTime();
+    setShowBanner(isDeploymentTime);
+    setEndTime(endTime);
+
+    if (!isDeploymentTime) {
+      const interval = setInterval(() => {
+        const { isDeploymentTime: newIsDeploymentTime, endTime: newEndTime } = checkDeploymentTime();
+        setShowBanner(newIsDeploymentTime);
+        setEndTime(newEndTime);
+        if (newIsDeploymentTime) {
+          clearInterval(interval);
+        }
+      }, 60000); // Check every minute
+      return () => clearInterval(interval);
+    }
   }, []);
 
-  return { showBanner };
+  return { showBanner, endTime };
 };
