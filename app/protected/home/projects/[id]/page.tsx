@@ -1,10 +1,12 @@
 import { updateCourse, getCourse } from "@/app/lib/actions/course";
-import { getProject, updateProject } from "@/app/lib/actions/project";
+import { wUserUrl } from "@/app/lib/actions/endpoints";
+// import { getProject, updateProject } from "@/app/lib/actions/project";
+import { GET } from "@/app/lib/restapi/client";
 import ProjectForm from "@/components/project/form";
 
 export default async function Course({ params }: { params: { id: string } }) {
-  const project = await getProject(params.id);
-
+  // const project = await getProject(params.id);
+  const project = await GET(`${wUserUrl}/OrganizationProgram/GetOrganizationProgramById/${params.id}`);
   return (
     <>
       <div className="card mt-3">
