@@ -65,20 +65,20 @@ export const updateProjectLogo = async (formData: FormData) => {
 //   }
 // };
 
-// export const getProject = async (id: string) => {
-//   try {
-//     const resp = await GET(
-//       `${rUserUrl}/OrganizationProgram/GetOrganizationProgram/${id}`
-//     );
-// debugger;
-//     const data = resp.data;
-//     Diagnostic("SUCCESS ON GET, returning", data);
-//     return data;
-//   } catch (err) {
-//     Diagnostic("ERROR ON GET, returning", err);
-//     throw err;
-//   }
-// };
+export const getProject = async (id: string) => {
+  try {
+    const resp = await GET(
+      `${rUserUrl}/OrganizationProgram/GetOrganizationProgram/${id}`
+    );
+debugger;
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    throw err;
+  }
+};
 
 export const getProjectAnalytics = async (id: string, value: boolean): Promise<IProjectAnalytics> => {
   try {
