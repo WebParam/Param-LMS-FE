@@ -83,7 +83,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         },
         {
           name: "Videos Analytics",
-          url: `/protected/admin/analytics/grouped-analytics/videos?title=${courseTitle}`,
+          url: `/protected/admin/analytics/grouped-analytics/videos/${courseId}?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },

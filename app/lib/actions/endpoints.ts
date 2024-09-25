@@ -44,6 +44,6 @@ export const rUserUrl = `https://thooto-${envDev}-user-read.azurewebsites.net/ap
 
 export const wUserUrl = `https://thooto-${envDev}-user-write.azurewebsites.net/api/v1`;
 
-export const rAnalyticUrl = `https:khumla-${env}-activity-read.azurewebsites.net/api/v1`;
+export const rAnalyticUrl = `https:thooto-${env}-activity-read.azurewebsites.net/api/v1`;
 
-export const rUserUrlRc = `https://thooto-rc-be-user-read.azurewebsites.net/api/v1`
+export const rUserUrlRc = `https://thooto-rc-be-user-read.azurewebsites.net/api/v1`;
