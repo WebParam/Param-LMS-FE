@@ -1,3 +1,4 @@
+"use server"
 import { del, get, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
 import { rUserUrl, wUserUrl } from "./endpoints";
