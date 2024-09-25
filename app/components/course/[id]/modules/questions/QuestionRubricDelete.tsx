@@ -9,13 +9,14 @@ export default function QuestionRubric({ rubric }: { rubric: Rubric }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
+  const topicTitle = searchParams.get("topicTitle");
   const refreshId = searchParams.get("refreshId");
 
   const delRubric = async () => {
     setIsSpinner(true);
     await deleteRubric(rubric.id!);
     const date = new Date().toString();
-    router.replace(`${pathname}?title=${title}&refreshId=${date}`, {
+    router.replace(`${pathname}?title=${title}&topicTitle=${topicTitle}&refreshId=${date}`, {
       scroll: false,
     });
   };

@@ -18,10 +18,13 @@ export const post = async (url: string, body: any) => {
       },
       body: JSON.stringify(body),
     });
+
     const data = await res.json();
     Diagnostic("SUCCESS ON POST, returning", data);
+    debugger;
     return data;
   } catch (err) {
+    debugger;
     console.log(`[API ERROR : Method: POST; Endpoint: ${url}]`, err);
     Diagnostic("ERROR ON POST, returning", err);
     return err;

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { del, get, post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
 import { rUserUrl, wUserUrl } from "./endpoints";
+import { GET } from "../restapi/client";
 
 export const getProjects = async () => {
     let userId;
@@ -14,8 +15,9 @@ export const getProjects = async () => {
     }
 
     try {
-        const resp = await get(`${rUserUrl}/OrganizationProgram/GetOrganizationProgramsByAdmin/${userId}`);
+        const resp = await GET(`${rUserUrl}/OrganizationProgram/GetOrganizationProgramsByAdmin/${userId}`);
         const data = resp.data;
+        debugger
         localStorage.setItem("len", String(data.length));
         Diagnostic("SUCCESS ON GET, returning", data);
         return data;

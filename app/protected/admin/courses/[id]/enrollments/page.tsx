@@ -32,7 +32,7 @@ function Page({ params }: { params: { id: string } }) {
   const [projectData, setProjectData] = useState<IProjectAnalytics | undefined>(
     undefined
   );
-  const isFreemium = process.env.NEXT_PUBLIC_USER;
+  const isFreemium =  process.env.NEXT_PUBLIC_FREEMIUM ==="true";
 
   const fetchCourseData = async () => {
     try {

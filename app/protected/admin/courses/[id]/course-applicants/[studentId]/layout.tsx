@@ -34,7 +34,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
   const isEnrolled = searchParams.get("isEnrolled");
-  const isFreemium = process.env.NEXT_PUBLIC_USER;
+  const isFreemium =  process.env.NEXT_PUBLIC_FREEMIUM ==="true";
 
   const arrUrl = pathname.split("/");
   arrUrl.pop();

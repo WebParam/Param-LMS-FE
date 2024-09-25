@@ -13,7 +13,7 @@ const apiDocUrl = `${rUserUrl}/Documents/PreviewDocument`;
 
 function DocumentModal(props: any) {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
-
+debugger;
   return (
     <Modal
       {...props}
@@ -29,6 +29,9 @@ function DocumentModal(props: any) {
       <Modal.Body>
         <Worker workerUrl={pdfWorkerUrl}>
           <Viewer
+           httpHeaders={{
+            "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY??"",
+            }}
             fileUrl={`${apiDocUrl}/${props.documentId}`}
             plugins={[defaultLayoutPluginInstance]}
           />

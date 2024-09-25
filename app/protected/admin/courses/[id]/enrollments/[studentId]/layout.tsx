@@ -15,7 +15,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   const studentName = searchParams.get("studentName");
   const refreshId = searchParams.get("refreshId");
   const [loading, setLoading] = useState(false);
-  const isFreemium = process.env.NEXT_PUBLIC_USER;
+  const isFreemium = process.env.NEXT_PUBLIC_FREEMIUM ==="true";
 
   const { id: courseId, studentId } = useParams<{
     id: string;
