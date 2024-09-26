@@ -2,7 +2,21 @@ import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
 import { rUserUrl, wUserUrl } from "./endpoints";
-import { IAdminPasswordChangeReset, IAdminUpdateUser, IUserResetPasswordModel, IUserResetPasswordRequest } from "@/app/interfaces/user";
+import {
+  IAdminPasswordChangeReset,
+  IAdminUpdateUser,
+} from "@/app/interfaces/user";
+
+export const login = async (email: string, password: string) => {
+  try {
+    const resp = await post(`${wUserUrl}/Users/Login`, { email, password });
+    Diagnostic("SUCCESS ON POST, returning", resp);
+    return resp;
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    throw err;
+  }
+};
 
 export const getUsersByRole = async (role: string) => {
   try {
@@ -18,7 +32,9 @@ export const getUsersByRole = async (role: string) => {
   }
 };
 
-export const AdminResetPassword = async (payload: IAdminPasswordChangeReset) => {
+export const AdminResetPassword = async (
+  payload: IAdminPasswordChangeReset
+) => {
   try {
     const resp = await put(`${wUserUrl}/Users/AdminResetPassword`, payload);
     console.log(resp);
@@ -32,10 +48,10 @@ export const AdminResetPassword = async (payload: IAdminPasswordChangeReset) => 
   }
 };
 
-export const AdminSendResetOTP = async (email:IUserResetPasswordModel) => {
+export const AdminSendResetOTP = async (email: string) => {
   try {
     const resp = await post(`${wUserUrl}/Users/SendResetPasswordOtp`, email);
-    console.log(resp)
+    console.log(resp);
     const data = resp.data;
 
     Diagnostic("SUCCESS ON GET, returning", data);
@@ -46,10 +62,14 @@ export const AdminSendResetOTP = async (email:IUserResetPasswordModel) => {
   }
 };
 
-export const adminForgotResetPassword = async (payload:IUserResetPasswordRequest) => {
+export const adminForgotResetPassword = async (payload: {
+  email: string;
+  password: string;
+  otp: string;
+}) => {
   try {
     const resp = await post(`${wUserUrl}/Users/ResetPassword`, payload);
-    console.log(resp)
+    console.log(resp);
     const data = resp.data;
 
     Diagnostic("SUCCESS ON GET, returning", data);
@@ -59,8 +79,6 @@ export const adminForgotResetPassword = async (payload:IUserResetPasswordRequest
     console.error(err);
   }
 };
-
-
 
 export const adminUpdateUserDetails = async (payload: IAdminUpdateUser) => {
   try {
@@ -78,7 +96,9 @@ export const adminUpdateUserDetails = async (payload: IAdminUpdateUser) => {
 
 export const getAdminUser = async (userId: string) => {
   try {
-    const resp = await get(`https://khumla-dev-user-read.azurewebsites.net/api/v1/Users/${userId}`);
+    const resp = await get(
+      `https://khumla-dev-user-read.azurewebsites.net/api/v1/Users/${userId}`
+    );
     console.log(resp);
     const data = resp.data;
 

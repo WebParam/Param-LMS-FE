@@ -1,7 +1,6 @@
 "use client";
 import HeadNav from "@/app/topbar-components/HeadNav";
 import { useEffect, useState } from "react";
-import withAuth from "./AdminAuthWrapper";
 import AOS from "aos";
 import "aos/dist/aos.css";
 function RootLayout({ children }: { children: React.ReactNode }) {
@@ -38,4 +37,4 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default withAuth(RootLayout);
+export default RootLayout;

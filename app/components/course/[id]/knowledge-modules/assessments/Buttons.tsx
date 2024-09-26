@@ -7,7 +7,7 @@ export function CreateAssesssmentBtn() {
   return (
     <Button variant="success" type="submit">
       {formstatus.pending ? (
-        <span className="spinner-border text-success" role="status" />
+        <span className="spinner-border text-white" role="status" />
       ) : (
         <>Submit</>
       )}
@@ -21,7 +21,7 @@ export function EditAssesssmentBtn() {
   return (
     <Button variant="success" type="submit">
       {formstatus.pending ? (
-        <span className="spinner-border text-success" role="status" />
+        <span className="spinner-border text-white" role="status" />
       ) : (
         <>Submit</>
       )}

@@ -10,6 +10,7 @@ import {
   updateProject,
   updateProjectLogo,
 } from "@/app/lib/actions/project";
+import { POST, PUT } from "@/app/lib/restapi/client";
 
 type CreateFormType = {
   data?: any;
@@ -94,8 +95,11 @@ export default function ProjectForm({ data }: CreateFormType) {
 
     try {
       if (pathName === "/protected/home/projects/create") {
-        const response = await createProject(formData);
+        // const response = await createProject(formData);
+        const response = await POST( `${wUserUrl}/OrganizationProgram/AddOrganizationProgram`, formData);
+
         setShowModal(false);
+        debugger;
         if(response.id){
 
           router.push("/protected/home/projects");
@@ -112,7 +116,8 @@ export default function ProjectForm({ data }: CreateFormType) {
           logo: logo,
         };
 
-        const response = await updateProject(objectData);
+        // const response = await updateProject(objectData);
+        const response = await PUT( `${wUserUrl}/OrganizationProgram/UpdateOrganizationProgram`, objectData);
         setShowModal(false);
         if(response.id){
 

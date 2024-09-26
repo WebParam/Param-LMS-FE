@@ -2,7 +2,6 @@
 import Drawer from "@/app/topbar-components/Drawer";
 import HeadNav from "@/app/topbar-components/HeadNavDrawer";
 import { useEffect, useState } from "react";
-import withAuth from "./AdminAuthWrapper";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -21,7 +20,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     setProjectLength(localStorage.getItem("len"));
   }, []);
 
-  const userRole = process.env.NEXT_PUBLIC_USER;
+  const userRole = process.env.NEXT_PUBLIC_FREEMIUM ==="true"? "freemium" : localStorage.getItem("role");
 
   const sideTabs = [
     {
@@ -83,6 +82,12 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           roles: ["Admin", "SuperAdmin"],
         },
         {
+          name: "Videos Analytics",
+          url: `/protected/admin/analytics/grouped-analytics/videos/${courseId}?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
           name: "Assignments Analytics",
           url: `/protected/admin/analytics/graphs/assignments?title=${courseTitle}`,
           icon: "bar_chart",
@@ -90,8 +95,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         },
        
         {
-          name: "Grouped Analytics",
-          url: `/protected/admin/analytics/grouped-analytics?title=${courseTitle}`,
+          name: "Students Analytics",
+          url: `/protected/admin/analytics/grouped-analytics/students?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },
@@ -157,4 +162,4 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default withAuth(RootLayout);
+export default RootLayout;
