@@ -5,9 +5,14 @@ import { useEffect, useState } from "react";
 import withAuth from "./AdminAuthWrapper";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import AOS from "aos";
+import { FlagsmithProvider } from "flagsmith/react";
+import flagsmith from "flagsmith";
 import "aos/dist/aos.css";
+import KillSwitchPage from "@/components/maintenance/KillSwitchPage";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
+  const [killSwitch, setKillSwitch] = useState<any>();
+  const [killSwitchMessage, setKillSwitchMessage] = useState<any>(101);
   const [isOpen, setIsOpen] = useState(false);
   const searchParams = useSearchParams();
   const params = useParams();
@@ -135,8 +140,28 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  useEffect(() => {
+    flagsmith.init({
+      environmentID: "GTGFWiyEFuVDfna2gjdqQC",
+      onChange: () => {
+        console.log("Flags updated", flagsmith.getAllFlags());
+        const flags = flagsmith.getAllFlags();
+        setKillSwitch(flags.next_public_killswitch.value);
+        setKillSwitchMessage(flags.next_public_deploymentmessage.value);
+      },
+      onError: (error: any) => {
+        console.error("Error loading flags", error);
+      },
+    });
+  }, []);
   return (
     <>
+          <FlagsmithProvider
+        options={{
+          environmentID: "GTGFWiyEFuVDfna2gjdqQC",
+        }}
+        flagsmith={flagsmith}
+      >
       <div className="mdk-header-layout js-mdk-header-layout">
         <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} />
         <div className="mdk-header-layout__content page-content ">
@@ -148,11 +173,16 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             </div>
           </nav>
 
-          {children}
+          {killSwitch == 101 ? (
+              <KillSwitchPage message={killSwitchMessage} />
+            ) : (
+              children
+            )}
         </div>
       </div>
   
       <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
+      </FlagsmithProvider>
     </>
   );
 }
