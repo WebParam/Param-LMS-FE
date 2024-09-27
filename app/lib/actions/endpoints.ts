@@ -2,7 +2,7 @@ const test = "testing";
 const env =
   process.env.NEXT_PUBLIC_API_ENV == "production"
     ? "prod"
-    : process.env.NEXT_PUBLIC_API_ENV;
+    : "dev";
 
 export const wCourseUrl = `https://thooto-${env}-be-newcourse-write.azurewebsites.net/api/v1`;
 
