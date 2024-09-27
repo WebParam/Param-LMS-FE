@@ -26,6 +26,7 @@ export default function PageHeader({ title }: { title: string }) {
   const isModule =
     pathName == `/protected/admin/analytics/graphs/${studentId}/${moduleId}`;
   const isHome = pathName == "/protected/admin/analytics/grouped-analytics"
+  const isGroupedStAnalytics = pathName.includes("/protected/admin/analytics/grouped-analytics/videos")
 
   const router = useRouter();
   return (
@@ -35,8 +36,8 @@ export default function PageHeader({ title }: { title: string }) {
           <div className="flex d-flex flex-column flex-sm-row align-items-center mb-24pt mb-md-0">
             <div className="mb-24pt mb-sm-0 mr-sm-24pt">
               <h2 className="mb-0">
-                {!isStudent && !isModule && `Grouped Analytics - ${title}`}
-                {isStudent && <span>{studentName} - Grouped Analytics</span>}
+                {!isStudent && !isModule && (isGroupedStAnalytics ? `Video Analytics - ${title}` : `Grouped Analytics - ${title}`)}
+                {isStudent && <span>{studentName} - {isGroupedStAnalytics ? "Video Analytics" : "Grouped Analytics"}</span>}
                 {isModule && (
                   <span>
                     {studentName} - {moduleTitle}
@@ -69,6 +70,13 @@ export default function PageHeader({ title }: { title: string }) {
               {studentName} Analytics
             </button>
           )}
+                    <button className="btn btn-primary">
+                      
+                      {
+                        isGroupedStAnalytics ? "  All Courses" : "Grouped Analytics"
+                      }
+                    </button>
+
         </div>
       </div>
     </>
