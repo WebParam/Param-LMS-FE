@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { NextPage } from "next";
-import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import { usePathname, useSearchParams } from "next/navigation";
 
 const TableBody: NextPage<{ list: any }> = ({ list }) => {
@@ -18,30 +17,19 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
     return (
       <tr key={data.studentId} className="selected">
         <td className="text-center js-lists-values-projects small">
-          {data.fullName}
+          {data.topicTitle}
         </td>
         <td className="text-center js-lists-values-projects small">
-          {data.assessmentDate ?? "N/A"}
+          {data.videoTitle}
         </td>
         <td className="text-center js-lists-values-projects small">
-          {data.subject ?? "N/A"}
+          {data.timeSpent}
         </td>
         <td className="text-center js-lists-values-projects small">
-          {data.grade ?? "N/A"}
+          {data.totalVideoTime}
         </td>
         <td className="text-center js-lists-values-projects small">
-          {data.instructor ?? "N/A"}
-        </td>
-        <td className="text-center js-lists-values-projects small">
-          <div className="d-flex align-items-center justify-content-center ">
-            <Link
-              href={`${pathname}/${data.studentId}/?title=${courseTitle}&studentName=${data.fullName}`}
-            >
-              <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
-                visibility
-              </i>
-            </Link>
-          </div>
+          {data.isCompleted ? "Completed" : "Incomplete"}
         </td>
       </tr>
     );

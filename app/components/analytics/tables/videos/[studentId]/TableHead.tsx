@@ -1,13 +1,11 @@
-
 const TableHead = () => {
   const headers = [
-    "Student Name",
-    "Assessment Date",
-    "Subject",
-    "Grade",
-    "Instructor"
-];
-
+    "topicTitle",
+    "videoTitle",
+    "timeSpent",
+    "totalVideoTime",
+    "isCompleted",
+  ];
 
   return (
     <>
@@ -24,7 +22,6 @@ const TableHead = () => {
               </a>
             </th>
           ))}
-            <th className="text-center">Actions</th>
         </tr>
       </thead>
     </>

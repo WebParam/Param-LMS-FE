@@ -90,8 +90,14 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         },
        
         {
-          name: "Grouped Analytics",
-          url: `/protected/admin/analytics/grouped-analytics?title=${courseTitle}`,
+          name: "Students Analytics",
+          url: `/protected/admin/analytics/grouped-analytics/students?title=${courseTitle}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
+          name: "Video Analytics",
+          url: `/protected/admin/analytics/grouped-analytics/videos?title=${courseTitle}`,
           icon: "bar_chart",
           roles: ["Admin", "SuperAdmin"],
         },

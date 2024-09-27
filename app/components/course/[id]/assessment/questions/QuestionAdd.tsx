@@ -23,7 +23,7 @@ export default function QuestionAdd() {
   }>();
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
-  const topicTitle = searchParams.get("topicTitle") || "";
+  const topicTitle : any = searchParams.get("topicTitle") || "";
   const refreshId = searchParams.get("refreshId");
 
   const createQuestionWithParams = createQuestion.bind(
