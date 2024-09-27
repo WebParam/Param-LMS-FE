@@ -4,7 +4,7 @@ import Table from "@/components/course/[id]/modules/assessments/Table";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import CreateAssessmentModal from "@/components/course/[id]/modules/assessments/CreateAssessmentModal";
-import { Assessment } from "@/app/interfaces/assessments";
+import { IAssessment } from "@/app/interfaces/assessments";
 import { getAssessments } from "@/app/lib/actions/assessments";
 
 const Body = ({ params }: { params: { id: string } }) => {
@@ -13,7 +13,7 @@ const Body = ({ params }: { params: { id: string } }) => {
   const refreshId = searchParams.get("refreshId");
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const [assessments, setAssessments] = useState<Assessment[]>([]);
+  const [assessments, setAssessments] = useState<IAssessment[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 4;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;

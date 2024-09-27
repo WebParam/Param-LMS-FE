@@ -31,32 +31,36 @@ const mockData = [
     "studentId": "1",
     "fullName": "John Doe",
     "assessmentDate": "2024-08-01",
-    "subject": "Mathematics",
-    "grade": "A",
+    "assessmentType": "Formative",
+    "date": "2024-08-01",
+    "score": 90, // Assuming 'A' corresponds to 90%
     "instructor": "Mr. Johnson"
   },
   {
     "studentId": "2",
     "fullName": "Alice Smith",
     "assessmentDate": "2024-07-15",
-    "subject": "Science",
-    "grade": "B+",
+    "assessmentType": "Informative",
+    "date": "2024-07-15",
+    "score": 88, // Assuming 'B+' corresponds to 88%
     "instructor": "Ms. Davis"
   },
   {
     "studentId": "3",
     "fullName": "Michael Brown",
     "assessmentDate": "2024-08-10",
-    "subject": "English",
-    "grade": "A-",
+    "assessmentType": "Extended Formative",
+    "date": "2024-08-10",
+    "score": 92, // Assuming 'A-' corresponds to 92%
     "instructor": "Mrs. Clark"
   },
   {
     "studentId": "4",
     "fullName": "Sarah Lee",
     "assessmentDate": "2024-07-22",
-    "subject": "History",
-    "grade": "B",
+    "assessmentType": "Extended Informative",
+    "date": "2024-07-22",
+    "score": 85, // Assuming 'B' corresponds to 85%
     "instructor": "Mr. Thompson"
   }
 ]

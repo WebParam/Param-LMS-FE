@@ -1,7 +1,6 @@
 "use client";
 import HeadNav from "@/app/topbar-components/HeadNav";
 import { useEffect, useState } from "react";
-import withAuth from "./AdminAuthWrapper";
 import { FlagsmithProvider } from "flagsmith/react";
 import flagsmith from "flagsmith";
 import AOS from "aos";
@@ -66,4 +65,4 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default withAuth(RootLayout);
+export default RootLayout;

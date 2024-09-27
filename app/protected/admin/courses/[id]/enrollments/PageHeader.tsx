@@ -6,7 +6,7 @@ export default function PageHeader() {
   const [label, setLabel] = useState('Courses');
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_USER) {
+    if (process.env.NEXT_PUBLIC_FREEMIUM) {
       setLabel('Projects');
     }
   }, []);

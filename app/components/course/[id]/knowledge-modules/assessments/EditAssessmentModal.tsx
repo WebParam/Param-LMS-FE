@@ -3,9 +3,7 @@ import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useParams, useSearchParams } from "next/navigation";
-import { updateDocument } from "@/app/lib/actions/document";
-import { useState, useEffect } from "react";
-import { CreateAssesssmentBtn, EditAssesssmentBtn } from "./Buttons";
+import { EditAssesssmentBtn } from "./Buttons";
 import { updateAssessment } from "@/app/lib/actions/assessments";
 
 function EditAssessmentModal(props: any) {
@@ -15,7 +13,6 @@ function EditAssessmentModal(props: any) {
   }>();
 
   const searchParams = useSearchParams();
-  const [closeEditModal, setCloseEditModal] = useState(false);
   const title = searchParams.get("title") || "";
   const updateAssessmentWithParams = updateAssessment.bind(
     null,

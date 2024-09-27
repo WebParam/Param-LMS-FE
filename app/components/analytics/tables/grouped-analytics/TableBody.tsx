@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { NextPage } from "next";
-import data from "../../../../protected/admin/analytics/grouped-analytics/data";
+import data from "../../../../protected/admin/analytics/grouped-analytics/students/data";
 import { useSearchParams } from "next/navigation";
 
 const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
