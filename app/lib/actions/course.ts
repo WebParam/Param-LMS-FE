@@ -130,6 +130,44 @@ export const getStudentCourseGraphsAnalytics = async (
   }
 };
 
+
+export const getCourseVideoAnalytics = async (
+  courseId: string,
+) => {
+  try {
+    const resp = await get(
+      `${rAnalyticUrl}/VideoWatched/Course/${courseId}/Videos`
+    );
+    const data = resp.data;
+    console.log("Data data", data);
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (error) {
+    Diagnostic("ERROR ON GET, returning", error);
+    throw error;
+  }
+};
+
+
+export const getStudentCourseVideoAnalytics = async (
+  courseId: string,
+  studentId: string
+) => {
+  try {
+    const resp = await get(
+      `${rAnalyticUrl}/VideoWatched/Student/${studentId}/Course/${courseId}/Videos`
+    );
+    const data = resp;
+    console.log("Data data", data);
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (error) {
+    Diagnostic("ERROR ON GET, returning", error);
+    throw error;
+  }
+};
+
+
 export const getCodes = async () => {
   try {
     const resp = await get(`${rUserUrl}/Student/GetCodes`);

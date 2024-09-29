@@ -2,11 +2,15 @@
 import Pagination from "@/app/components/Pagination";
 import Table from "@/app/components/analytics/tables/videos/[studentId]/Table";
 import { useEffect, useState } from "react";
-import { getCourseTableAnalytics } from "@/app/lib/actions/course";
+import { getCourseTableAnalytics, getStudentCourseVideoAnalytics } from "@/app/lib/actions/course";
 import mockData from "@/app/components/analytics/tables/videos/[studentId]/data";
+import { useSearchParams } from "next/navigation";
 
-const Body = ({ params }: { params: { id: string } }) => {
-  const [list, setList] = useState(mockData);
+const Body = ({ params }: { params: { studentId: string } }) => {
+  const studentId = params.studentId;
+  const searchParams = useSearchParams();
+  const courseId = searchParams.get("courseId")!;
+  const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -14,8 +18,11 @@ const Body = ({ params }: { params: { id: string } }) => {
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
 
   const fetchAnalytics = async () => {
-    const data = await getCourseTableAnalytics("66433416a454f78732f274ba");
-    //   setList(data);
+    const data = await getStudentCourseVideoAnalytics(
+      courseId,
+      studentId
+    );
+       setList(data);
   };
 
   useEffect(() => {
