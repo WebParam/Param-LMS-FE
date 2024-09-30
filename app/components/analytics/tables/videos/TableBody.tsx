@@ -24,7 +24,7 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
           {data.numberOfVideosWatched}
         </td>
         <td className="text-center js-lists-values-projects small">
-          {`${data.topicCompletedRate}%`}
+          {`${data.topicCompletedRate.toFixed(2)}%`}
         </td>
         <td className="text-center js-lists-values-projects small">
           <div className="d-flex align-items-center justify-content-center ">
