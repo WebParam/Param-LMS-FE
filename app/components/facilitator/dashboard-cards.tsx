@@ -21,24 +21,25 @@ const DashboardCards = () => {
   };
 const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
+  const courseId = searchParams.get("id") || "";
 
 
   const cardData: { link: string; icon: IconType; title: string }[] = [
-    { link: `/protected/admin/scheduleclass?title=${courseTitle}`,
+    { link: `/protected/admin/scheduleclass?title=${courseTitle}&id=${courseId}`,
     icon: "schedule", title: "Schedule Class" },
     { link: "#", icon: "createAssessment", title: "Schedule Assessment" },
     { link: "#", icon: "leaderBoard", title: "Leader Board" },
     {
-      link: `/protected/admin/moderator-feedback/pages/assessments?title=${courseTitle}`,
+      link: `/protected/admin/moderator-feedback/pages/assessments?title=${courseTitle}&id=${courseId}`,
       icon: "feedback",
       title: "Moderator Feedback",
     },
     {
-      link: `/protected/admin/assessments-assignments/pages/assessments?title=${courseTitle}`,
+      link: `/protected/admin/assessments-assignments/pages/assessments?title=${courseTitle}&id=${courseId}`,
       icon: "markAssessment",
       title: `Mark\n Assessments \n& \n Assignments`,
     },
-    { link:  `/protected/admin/logbook/pages/completed?title=${courseTitle}`, icon: "logbook", title: "Logbook" },
+    { link:  `/protected/admin/logbook/pages/completed?title=${courseTitle}&id=${courseId}`, icon: "logbook", title: "Logbook" },
   ];
 
   return (

@@ -1,9 +1,10 @@
 "use client";
 import React, { useState, useEffect, FormEvent } from "react";
 import "@/app/css/scheduleclassform.css"; 
-import { createClass } from "@/app/lib/actions/class-session";
+import { createClass, updateClass } from "@/app/lib/actions/class-session";
 import { IClassSession } from "@/app/interfaces/class-session";
 import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from "universal-cookie";
 
 interface ScheduleClassModalProps {
   onClose: () => void;
@@ -13,19 +14,23 @@ interface ScheduleClassModalProps {
   defaultEndTime?: string;
   defaultLink?: string;
   isSpecialDate: boolean;
+  event? :IClassSession 
 }
 
-const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, selectedDate, defaultTitle, defaultStartTime, defaultEndTime, defaultLink, isSpecialDate }) => {
-  const [title, setTitle] = useState(defaultTitle || "");
-  const [startDate, setStartDate] = useState(selectedDate ? selectedDate.toISOString().split('T')[0] : "");
-  const [startTime, setStartTime] = useState(defaultStartTime || "");
-  const [endDate, setEndDate] = useState(selectedDate ? selectedDate.toISOString().split('T')[0] : "");
-  const [endTime, setEndTime] = useState(defaultEndTime || "");
-  const [location, setLocation] = useState("");
-  const [link, setLink] = useState(defaultLink || "");
+const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, selectedDate, defaultTitle, defaultStartTime, defaultEndTime, defaultLink, event, isSpecialDate }) => {
+  const cookies = new Cookies();
+  const user = cookies.get("param-lms-user");
+  const [title, setTitle] = useState(event?.title || defaultTitle || "");
+  const [startDate, setStartDate] = useState(event?.date ? event.date.split('T')[0] : selectedDate ? selectedDate.toISOString().split('T')[0] : "");
+  const [startTime, setStartTime] = useState(event?.startingTime || defaultStartTime || "");
+  const [endDate, setEndDate] = useState(startDate); // Use startDate for endDate to ensure consistency
+  const [endTime, setEndTime] = useState(defaultEndTime || ""); // Corrected from 'endingTime' to 'endTime'
+  const [location, setLocation] = useState(event?.location || "");
+  const [link, setLink] = useState(event?.classLink || defaultLink || "");
   const router = useRouter();
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
+  const courseId = searchParams.get("id") || "";
 
   useEffect(() => {
     if (selectedDate) {
@@ -72,22 +77,32 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, select
   
   const createClassSession = async () => {
     const payload: IClassSession = {
+      id: event?.id ?? "",
       sessionType: 0,
       classLink: link,
-      date: selectedDate?.toISOString() || "",
+      date: startDate,
       title: title,
-      courseId: "6669f0ff8759b480859c10a7",
-      moduleId: "6669f0ff8759b480859c10a7",
+      courseId: courseId,
+      moduleId: "",
       classDuration: "40",
       startingTime: startTime,
-      adminId: "2266e99d85cd38e3ea88319d40",
-      location: "",
+      adminId: user.id,
+      location: location,
     };
+
     try {
-      const response = await createClass(payload);
+      let response;
+      if(event){
+        const resp = await updateClass(payload);
+        response = resp;
+      }else{
+        const resp = await createClass(payload);
+        response = resp
+      }
+
       console.log("response",response);
       const date = new Date();
-      const path = `/protected/admin/scheduleclass?title=${courseTitle}&refreshId=${date}`;
+      const path = `/protected/admin/scheduleclass?title=${courseTitle}&id=${courseId}&refreshId=${date}`;
       router.replace(path);
     } catch (error) {
       console.log("error",error);
@@ -138,17 +153,6 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, select
           </select>
         </div>
         <div>
-          <label htmlFor="endDate">End Date</label>
-          <input
-            type="date"
-            id="endDate"
-            className="form-control"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            required
-          />
-        </div>
-        <div>
           <label htmlFor="endTime">End Time</label>
           <input
             type="time"
@@ -182,6 +186,8 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, select
       </div>
       <button onClick={createClassSession} type="submit" className={`btn ${isSpecialDate ? "btn-danger" : "btn-success"} save-button`}>
         {isSpecialDate ? "Cancel Class" : "Save Class"}
+
+        {/* <span className="spinner-border text-white" role="status" /> */}
       </button>
     </form>
   );

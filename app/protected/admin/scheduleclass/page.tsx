@@ -4,6 +4,7 @@ import Calendar from "../../../components/ScheduleClass/Calendar";
 import CreateNotificationModal from "@/components/Notifications/CreateNotificationModal";
 import { Button, Modal } from "react-bootstrap";
 import dynamic from "next/dynamic";
+import Cookies from "universal-cookie";
 import { IClassSession } from "@/app/interfaces/class-session";
 import { getCourseClassSessions } from "@/app/lib/actions/class-session";
 import { useSearchParams } from "next/navigation";
@@ -25,7 +26,13 @@ function ScheduleClassPage() {
   const [link, setLink] = useState("");
   const [isSpecialDate, setIsSpecialDate] = useState(false);
   const [courseClassSessions, setCourseClassSessions] = useState<IClassSession[]>([]);
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()
+  const courseId = searchParams.get("id") ?? "";
+  
+  
+
+  const cookies = new Cookies();
+
   const refreshId = searchParams.get("refreshId");
 
   const handleCloseModal = () => {
@@ -61,8 +68,9 @@ function ScheduleClassPage() {
 
   const fetchCourseClassSessions = async () => {
     try {
-      const classSessions = await getCourseClassSessions("6669f0ff8759b480859c10a7");
+      const classSessions = await getCourseClassSessions(courseId);
       setCourseClassSessions(classSessions);
+      console.log("CourseId",courseId)
     } catch (error) {
       console.log("Error on getCourseClassSessions", error);
     }
@@ -118,7 +126,7 @@ function ScheduleClassPage() {
         </div>
       </div>
 
-      <Calendar sessions={courseClassSessions} />
+      <Calendar sessions={courseClassSessions || []} />
     </div>
   );
 }

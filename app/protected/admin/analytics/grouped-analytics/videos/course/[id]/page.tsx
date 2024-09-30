@@ -11,7 +11,7 @@ import StudentsTable from "@/components/analytics/tables/videos/StudentsTable";
 import mockData from "@/components/analytics/tables/videos/data";
 import { getCourseVideoAnalytics } from "@/app/lib/actions/course";
 import { IVideoAnalytics } from "@/app/interfaces/analytics";
-import Cookies from "universal-cookie";
+import { useSearchParams } from "next/navigation";
 function ErrorBoundary({ children }: { children: React.ReactNode }) {
   const [hasError, setHasError] = useState(false);
 
@@ -28,9 +28,9 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
 }
 
 function Page() {
-  const cookies = new Cookies();
   const [videoData, setVideoData] = useState<IVideoAnalytics>();
-  const courseId = cookies.get("co-id");
+  const searchParams = useSearchParams();
+  const courseId = searchParams.get("id") ?? "";
 
   const fetchVideoAnalyticsData = async () => {
     try {

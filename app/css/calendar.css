@@ -49,8 +49,17 @@
     justify-content: flex-start; 
     align-items: center;
     position: relative; 
-    height: 18vh;
+    height: auto;
     box-sizing: border-box;
+  }
+
+  .event{
+    /* display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center; */
+
+    position: relative;
   }
 
   .create-button-container {
