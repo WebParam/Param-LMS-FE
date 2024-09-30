@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 const Body = ({ params }: { params: { studentId: string } }) => {
   const studentId = params.studentId;
   const searchParams = useSearchParams();
-  const courseId = searchParams.get("courseId")!;
+  const courseId = searchParams.get("id")!;
   const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 6;

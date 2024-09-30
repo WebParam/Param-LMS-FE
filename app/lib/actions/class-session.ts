@@ -1,6 +1,6 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post, put } from "../utils";
+import { del, get, post, put } from "../utils";
 import { rAnalyticUrl, rCourseUrl, rLogbookUrl, rUserUrl, wCourseUrl, wLogbookUrl } from "./endpoints";
 import { unstable_noStore as noStore } from "next/cache";
 import { Diagnostic } from "../logger/logger";
@@ -18,6 +18,21 @@ export const createClass = async (payload: IClassSession) => {
 
 };
 
+export const updateClass = async (payload: IClassSession) => {
+    console.log("Payload",payload)
+    try {
+
+      const resp = await post(`${wLogbookUrl}/ClassSessions/UpdateClassSession`, payload);
+      const data = await resp.data;
+      
+      Diagnostic("SUCCESS ON POST, returning", data);
+    } catch (err) {
+      Diagnostic("ERROR ON POST, returning", err);
+      throw err;
+    }
+  
+  };
+
 export const getCourseClassSessions = async (
     courseId: string,
   ) => {
@@ -26,6 +41,7 @@ export const getCourseClassSessions = async (
         `${rLogbookUrl}/ClassSessions/GetClassSessions/${courseId}/Course`
       );
       const data = resp.data;
+      
       console.log("Data data", data);
       Diagnostic("SUCCESS ON GET, returning", data);
       return data;
@@ -34,4 +50,24 @@ export const getCourseClassSessions = async (
       throw error;
     }
   };
+
+  export const deleteCourseClassSessions = async (
+    classId: string,
+  ) => {
+    try {
+      const resp = await del(
+        `${wLogbookUrl}/ClassSessions/DeleteClassSession/${classId}`
+      );
+      const data = resp.message;
+      
+      console.log("Data data", data);
+      Diagnostic("SUCCESS ON DELETE returning", data);
+      return data;
+    } catch (error) {
+      Diagnostic("ERROR ON DELETE, returning", error);
+      throw error;
+    }
+  };
   
+
+
