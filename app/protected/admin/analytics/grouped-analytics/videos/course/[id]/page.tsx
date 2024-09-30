@@ -11,7 +11,7 @@ import StudentsTable from "@/components/analytics/tables/videos/StudentsTable";
 import mockData from "@/components/analytics/tables/videos/data";
 import { getCourseVideoAnalytics } from "@/app/lib/actions/course";
 import { IVideoAnalytics } from "@/app/interfaces/analytics";
-
+import Cookies from "universal-cookie";
 function ErrorBoundary({ children }: { children: React.ReactNode }) {
   const [hasError, setHasError] = useState(false);
 
@@ -27,21 +27,19 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-function Page({ params }: { params: { id: string } }) {
-  const courseId = params.id;
+function Page() {
+  const cookies = new Cookies();
   const [videoData, setVideoData] = useState<IVideoAnalytics>();
+  const courseId = cookies.get("co-id");
 
   const fetchVideoAnalyticsData = async () => {
     try {
-      const videoAnalytics = await getCourseVideoAnalytics(
-        "6669f0ff8759b480859c10a7"
-      );
+      const videoAnalytics = await getCourseVideoAnalytics(courseId);
       setVideoData(videoAnalytics as IVideoAnalytics);
     } catch (error) {
       console.error("Error fetching project data:", error);
     }
   };
-
   useEffect(() => {
     fetchVideoAnalyticsData();
   }, []);
@@ -49,9 +47,11 @@ function Page({ params }: { params: { id: string } }) {
   return (
     <ErrorBoundary>
       <div className="container page__container page__container page-section">
-        <Graphs Graphdata = {videoData?.videoWatchGroupedCharts!} />
+        <Graphs Graphdata={videoData?.videoWatchGroupedCharts!} />
         <div>
-          <StudentsTable courseId={courseId} data={videoData?.videoWatchGroupedStudentsTable! || []} />
+          <StudentsTable
+            data={videoData?.videoWatchGroupedStudentsTable! || []}
+          />
         </div>
       </div>
     </ErrorBoundary>

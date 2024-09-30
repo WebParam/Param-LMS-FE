@@ -1,6 +1,9 @@
 "use client";
 import React, { useState, useEffect, FormEvent } from "react";
 import "@/app/css/scheduleclassform.css"; 
+import { createClass } from "@/app/lib/actions/class-session";
+import { IClassSession } from "@/app/interfaces/class-session";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface ScheduleClassModalProps {
   onClose: () => void;
@@ -20,6 +23,9 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, select
   const [endTime, setEndTime] = useState(defaultEndTime || "");
   const [location, setLocation] = useState("");
   const [link, setLink] = useState(defaultLink || "");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const courseTitle = searchParams.get("title") || "";
 
   useEffect(() => {
     if (selectedDate) {
@@ -61,6 +67,32 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, select
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     onClose();
+  };
+
+  
+  const createClassSession = async () => {
+    const payload: IClassSession = {
+      sessionType: 0,
+      classLink: link,
+      date: selectedDate?.toISOString() || "",
+      title: title,
+      courseId: "6669f0ff8759b480859c10a7",
+      moduleId: "6669f0ff8759b480859c10a7",
+      classDuration: "40",
+      startingTime: startTime,
+      adminId: "2266e99d85cd38e3ea88319d40",
+      location: "",
+    };
+    try {
+      const response = await createClass(payload);
+      console.log("response",response);
+      const date = new Date();
+      const path = `/protected/admin/scheduleclass?title=${courseTitle}&refreshId=${date}`;
+      router.replace(path);
+    } catch (error) {
+      console.log("error",error);
+      alert(error);
+    }
   };
 
   return (
@@ -148,7 +180,7 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({ onClose, select
           onChange={(e) => setLink(e.target.value)}
         />
       </div>
-      <button type="submit" className={`btn ${isSpecialDate ? "btn-danger" : "btn-success"} save-button`}>
+      <button onClick={createClassSession} type="submit" className={`btn ${isSpecialDate ? "btn-danger" : "btn-success"} save-button`}>
         {isSpecialDate ? "Cancel Class" : "Save Class"}
       </button>
     </form>
