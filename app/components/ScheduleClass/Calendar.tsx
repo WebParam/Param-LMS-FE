@@ -72,7 +72,7 @@ const Calendar: React.FC<{ sessions: IClassSession[] }> = ({ sessions }) => {
       days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
     }
     for (let i = 1; i <= daysInCurrentMonth; i++) {
-      const currentDayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+      const currentDayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i + 1);
       const formattedDate = currentDayDate.toISOString().split("T")[0];
       const eventsData = sessions.filter((event) => event.date.startsWith(formattedDate));
       days.push(

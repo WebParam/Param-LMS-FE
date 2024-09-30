@@ -22,12 +22,12 @@ export const updateClass = async (payload: IClassSession) => {
     console.log("Payload",payload)
     try {
 
-      const resp = await post(`${wLogbookUrl}/ClassSessions/UpdateClassSession`, payload);
+      const resp = await put(`${wLogbookUrl}/ClassSessions/UpdateClassSession`, payload);
       const data = await resp.data;
       
-      Diagnostic("SUCCESS ON POST, returning", data);
+      Diagnostic("SUCCESS ON PUT, returning", data);
     } catch (err) {
-      Diagnostic("ERROR ON POST, returning", err);
+      Diagnostic("ERROR ON PUT, returning", err);
       throw err;
     }
   

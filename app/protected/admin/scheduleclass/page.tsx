@@ -28,12 +28,6 @@ function ScheduleClassPage() {
   const [courseClassSessions, setCourseClassSessions] = useState<IClassSession[]>([]);
   const searchParams = useSearchParams()
   const courseId = searchParams.get("id") ?? "";
-  
-  
-
-  const cookies = new Cookies();
-
-  const refreshId = searchParams.get("refreshId");
 
   const handleCloseModal = () => {
     setShowModal(false);
