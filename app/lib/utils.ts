@@ -2,11 +2,19 @@ import { Diagnostic } from "./logger/logger";
 
 export const post = async (url: string, body: any) => {
   try {
+    if (
+      !process.env.NEXT_PUBLIC_CLIENTKEY ||
+      process.env.NEXT_PUBLIC_CLIENTKEY.length < 0
+    ) {
+      throw "ClientKey not available";
+    }
+
     const res = await fetch(url, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY,
       },
       body: JSON.stringify(body),
     });
@@ -22,11 +30,19 @@ export const post = async (url: string, body: any) => {
 
 export const put = async (url: string, body: any) => {
   try {
+    if (
+      !process.env.NEXT_PUBLIC_CLIENTKEY ||
+      process.env.NEXT_PUBLIC_CLIENTKEY.length < 0
+    ) {
+      throw "ClientKey not available";
+    }
+
     const res = await fetch(url, {
       method: "PUT",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY,
       },
       body: JSON.stringify(body),
     });
@@ -42,8 +58,18 @@ export const put = async (url: string, body: any) => {
 
 export const del = async (url: string) => {
   try {
+    if (
+      !process.env.NEXT_PUBLIC_CLIENTKEY ||
+      process.env.NEXT_PUBLIC_CLIENTKEY.length < 0
+    ) {
+      throw "ClientKey not available";
+    }
+
     const res = await fetch(url, {
       method: "DELETE",
+      headers: {
+        "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY,
+      },
     });
     const data = await res.json();
     Diagnostic("SUCCESS ON DELETE, returning", data);
@@ -57,7 +83,27 @@ export const del = async (url: string) => {
 
 export const get = async (url: string) => {
   try {
-    const res = await fetch(url, { cache: "no-store" });
+    if (
+      !process.env.NEXT_PUBLIC_CLIENTKEY ||
+      process.env.NEXT_PUBLIC_CLIENTKEY.length < 0
+    ) {
+      throw "ClientKey not available";
+    }
+
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY,
+      },
+      cache: "no-store",
+    });
+
+    // Check if the response is JSON
+    const contentType = res.headers.get("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw "Expected JSON response, got something else";
+    }
+
     const data = await res.json();
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
@@ -115,33 +161,48 @@ export const downloadFile = (
   isGet = false
 ) => {
   setExportModal(true);
-  fetch(url, {
-    method: isGet ? "GET" : "POST",
-    headers: {
-      Accept:
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.blob();
+
+  try {
+    if (
+      !process.env.NEXT_PUBLIC_CLIENTKEY ||
+      process.env.NEXT_PUBLIC_CLIENTKEY.length < 0
+    ) {
+      throw "ClientKey not available";
+    }
+
+    fetch(url, {
+      method: isGet ? "GET" : "POST",
+      headers: {
+        Accept:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "Content-Type": "application/json",
+        "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY,
+      },
     })
-    .then((blob) => {
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.setAttribute("download", `${filename}.${fileExtension}`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(downloadUrl);
-      setExportModal(false);
-    })
-    .catch((error) => {
-      console.error("Error exporting file:", error);
-      setExportModal(false);
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.setAttribute("download", `${filename}.${fileExtension}`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(downloadUrl);
+        setExportModal(false);
+      })
+      .catch((error) => {
+        console.error("Error exporting file:", error);
+        setExportModal(false);
+      });
+  } catch (err) {
+    console.log(`[API ERROR : Method: GET; Endpoint: ${url}]`, err);
+    Diagnostic("ERROR ON GET, returning", err);
+    return err;
+  }
 };

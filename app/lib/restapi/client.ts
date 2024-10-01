@@ -1,100 +1,208 @@
 import { Diagnostic } from "../logger/logger";
 
-
-const axios = require("axios").default;
-
-const token = "";
-console.log(token);
-let header: any;
-// if (!token) {
-//   header = {
-
-//     Authorization: `Anonymous`,
-//     "Access-Control-Allow-Origin": "*",
-//     "Access-Control-Allow-Headers": "X-Requested-With",
-//   };
-// } else {
-  header = {
-    // Authorization: `Bearer ${token}`,
-    Authorization:"Basic YWRtaW46cmpPdjJhU1omPXxuRDYpJQ==",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "X-Requested-With",
-    "ngrok-skip-browser-warning":"any"
-  // };
-}
-
-export async function GET(endPoint: string) {
+export const POST = async (url: string, body: any) => {
   try {
-    // const result = await axios.get(`${endPoint}`, {auth: {
-    //   username: "admin",
-    //   password: "rjOv2aSZ&=|nD6)%"
-    // }} );
-    const result =  fetch(endPoint, {
-      method: 'get',
-      headers: header,
-      // body: JSON.stringify(opts)
-    }).then(function(response) {
-      return response.json();
-    })
+    if (
+      !process.env.NEXT_PUBLIC_CLIENTKEY ||
+      process.env.NEXT_PUBLIC_CLIENTKEY.length < 0
+    ) {
+      throw "ClientKey not available";
+    }
 
-    return result;
-  } catch (error:any) {
-    console.log(
-      `[API ERROR  : Method: GET; Endpoint: ${endPoint}]`,
-      error.toJSON()
-    );
-    return error.response;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY,
+      },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    Diagnostic("SUCCESS ON POST, returning", data);
+    return data;
+  } catch (err) {
+    console.log(`[API ERROR : Method: POST; Endpoint: ${url}]`, err);
+    Diagnostic("ERROR ON POST, returning", err);
+    return err;
   }
-}
+};
 
-export async function POST(endPoint: string, payload: Object) {
+export const PUT = async (url: string, body: any) => {
   try {
-  
-    const result = await axios.post(`${endPoint}`, payload, {
-      headers: header,
+    if (
+      !process.env.NEXT_PUBLIC_CLIENTKEY ||
+      process.env.NEXT_PUBLIC_CLIENTKEY.length < 0
+    ) {
+      throw "ClientKey not available";
+    }
+
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY,
+      },
+      body: JSON.stringify(body),
     });
-    Diagnostic("SUCCESS ON POST, returning", result);
-    return result.data;
-  } catch (error:any) {
-    
-    console.log(`[API ERROR : Method: POST; Endpoint: ${endPoint}]`, error);
-    Diagnostic("ERROR ON POST, returning", error);
-    return error.response;
+    const data = await res.json();
+    Diagnostic("SUCCESS ON PUT, returning", data);
+    return data;
+  } catch (err) {
+    console.log(`[API ERROR : Method: PUT; Endpoint: ${url}]`, err);
+    Diagnostic("ERROR ON PUT, returning", err);
+    return err;
   }
-}
-export function DELETE(endPoint: string): Promise<any> {
-  let HEADER = {
-    "Authorization": "Basic YWRtaW46cmpOdjJhU1omPXxuRDYpJQ==",
-    "Access-Control-Allow-Origin": "*",
-  };
+};
 
-  // Return the axios promise directly
-  return axios
-    .delete(`${endPoint}`, { headers: HEADER })
-    .then((result: any) => {
-      // Assuming result.data is the actual data returned from the API
-      return result.data;
-    })
-    .catch((error: any) => {
-      // Returning an error object or throwing an error, based on your preference
-      return error;
-    });
-}
-export function PUT(endPoint: string, payload: Object): Promise<any> {
-  let HEADER = {
-    "Authorization": "Basic YWRtaW46cmpOdjJhU1omPXxuRDYpJQ==",
-    "Access-Control-Allow-Origin": "*",
-  };
+export const DELETE = async (url: string) => {
+  try {
+    if (
+      !process.env.NEXT_PUBLIC_CLIENTKEY ||
+      process.env.NEXT_PUBLIC_CLIENTKEY.length < 0
+    ) {
+      throw "ClientKey not available";
+    }
 
-  // Return the axios promise directly
-  return axios
-    .put(`${endPoint}`, payload, { headers: HEADER })
-    .then((result: any) => {
-      // Assuming result.data is the actual data returned from the API
-      return result.data;
-    })
-    .catch((error: any) => {
-      // Returning an error object or throwing an error, based on your preference
-      return error;
+    const res = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY,
+      },
     });
+    const data = await res.json();
+    Diagnostic("SUCCESS ON DELETE, returning", data);
+    return data;
+  } catch (err) {
+    console.log(`[API ERROR : Method: DELETE; Endpoint: ${url}]`, err);
+    Diagnostic("ERROR ON DELETE, returning", err);
+    return err;
+  }
+};
+
+export const GET = async (url: string) => {
+  try {
+    if (
+      !process.env.NEXT_PUBLIC_CLIENTKEY ||
+      process.env.NEXT_PUBLIC_CLIENTKEY.length < 0
+    ) {
+      throw "ClientKey not available";
+    }
+
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY,
+      },
+      cache: "no-store",
+    });
+
+    // Check if the response is JSON
+    const contentType = res.headers.get("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw "Expected JSON response, got something else";
+    }
+
+    const data = await res.json();
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    console.log(`[API ERROR : Method: GET; Endpoint: ${url}]`, err);
+    Diagnostic("ERROR ON GET, returning", err);
+    return err;
+  }
+};
+
+export function generateRandomUserId(length?: number) {
+  length = length || 8;
+  var characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var result = "";
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
 }
+
+export const removeTags = (str: string) => {
+  const textArea = document.createElement("textarea");
+  textArea.innerHTML = str;
+  return textArea.value.replace(/<\/?[^>]+(>|$)/g, "");
+};
+
+export const formDataEntriesArray = (entries: any) => {
+  const objMap: { [key: string]: { [key: string]: FormDataEntryValue } } = {};
+
+  for (const entry of entries) {
+    const [key, value] = entry;
+    const matches = key.match(/^options\[(.+)\]\[(\w+)\]$/);
+    if (matches) {
+      const index = matches[1];
+      const propName = matches[2];
+
+      if (!objMap[index]) {
+        objMap[index] = {};
+      }
+
+      objMap[index][propName] = value;
+    }
+  }
+
+  const objArray: { [key: string]: FormDataEntryValue }[] =
+    Object.values(objMap);
+  return objArray;
+};
+export const downloadFile = (
+  url: string,
+  filename: string,
+  fileExtension: string,
+  setExportModal: (isBool: boolean) => void,
+  isGet = false
+) => {
+  setExportModal(true);
+
+  try {
+    if (
+      !process.env.NEXT_PUBLIC_CLIENTKEY ||
+      process.env.NEXT_PUBLIC_CLIENTKEY.length < 0
+    ) {
+      throw "ClientKey not available";
+    }
+
+    fetch(url, {
+      method: isGet ? "GET" : "POST",
+      headers: {
+        Accept:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "Content-Type": "application/json",
+        "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.setAttribute("download", `${filename}.${fileExtension}`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(downloadUrl);
+        setExportModal(false);
+      })
+      .catch((error) => {
+        console.error("Error exporting file:", error);
+        setExportModal(false);
+      });
+  } catch (err) {
+    console.log(`[API ERROR : Method: GET; Endpoint: ${url}]`, err);
+    Diagnostic("ERROR ON GET, returning", err);
+    return err;
+  }
+};
