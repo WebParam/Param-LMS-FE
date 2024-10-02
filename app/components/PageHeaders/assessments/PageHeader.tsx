@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-export default function PageHeader({ courseId }: { courseId: string }) {
+export default function PageHeader({ courseId }: { courseId?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title");
