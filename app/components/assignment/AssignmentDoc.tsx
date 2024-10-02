@@ -1,40 +1,37 @@
 import Link from "next/link";
-import EditLogbookDoc from "./EditAssignmentDoc"
+import EditAssignmentDoc from "./EditAssignmentDoc"
 
 type Props = {
   name: string;
-  url: string;
+  desc: string;
 };
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import ViewLogbook from "./ViewAssignment";
+import ViewAssignment from "./ViewAssignment";
 
 export default function Module({
   name,
-
-  url,
+  desc,
 }: Props) {
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId");
   const [isEditModal, setIsEditModal] = useState(false);
-  const [viewLogbook, setViewLogbook] = useState(false);
-
-
+  const [viewAssignment, setViewAssignment] = useState(false);
 
   return (
     <div className="card table-responsive my-2">
 
-<EditLogbookDoc
+<EditAssignmentDoc
 name = {name}
-url = {url}
+url = {desc}
 show={isEditModal}
 onHide={() => setIsEditModal(false)}
 />
 
-<ViewLogbook
-  showDocumentModal = {viewLogbook}
-  setShowDocumentModal={setViewLogbook}
-  pdfWorkerUrl={url}
+<ViewAssignment
+  showDocumentModal = {viewAssignment}
+  setShowDocumentModal={setViewAssignment}
+  pdfWorkerUrl={desc}
   documentToView={name}
 />
 
@@ -62,11 +59,11 @@ onHide={() => setIsEditModal(false)}
           <tr>
             <td style={{}} className="py-2">
               <div>
-              {url}
+              {desc}
               </div>
             </td>
             <td style={{ width: "300px" }} className="py-2">
-              <ViewButton url={url} setViewLogbook = {() => setViewLogbook(true)} setIsEditModal={() => setIsEditModal(true)} setDeleteModal={() => {}} />
+              <ViewButton desc={desc} setViewAssignment = {() => setViewAssignment(true)} setIsEditModal={() => setIsEditModal(true)} setDeleteModal={() => {}} />
             </td>
           </tr>
         </tbody>
@@ -76,15 +73,15 @@ onHide={() => setIsEditModal(false)}
 }
 
 function ViewButton({
-  url,
+  desc,
   setIsEditModal,
   setDeleteModal,
-  setViewLogbook
+  setViewAssignment
 }: {
-  url: string;
+  desc: string;
   setIsEditModal: (isOpen: boolean) => void;
   setDeleteModal: (isOpen: boolean) => void;
-  setViewLogbook: (isOpen: boolean) => void;
+  setViewAssignment: (isOpen: boolean) => void;
 }) {
   return (
     <div className="d-flex justify-content-end">
@@ -97,7 +94,7 @@ function ViewButton({
       </div>
       <div>
 
-      <i onClick={() => setViewLogbook(true)} className="material-icons icon-holder--outline-dark rounded-lg ml-2">
+      <i onClick={() => setViewAssignment(true)} className="material-icons icon-holder--outline-dark rounded-lg ml-2">
             visibility
           </i>
     

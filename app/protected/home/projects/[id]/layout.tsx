@@ -15,34 +15,9 @@ function Layout({
 
   const pathname = usePathname();
 
-  const baseUrl = `/protected/admin/courses/${params.id}`;
+  const baseUrl = `/protected/home/projects/${params.id}`;
   const links = [
-    { name: "Edit Course", path: baseUrl, url: `${baseUrl}?title=${name}` },
-    {
-      name: "Knowledge Modules",
-      path: `${baseUrl}/knowledge-modules`,
-      url: `${baseUrl}/knowledge-modules?title=${name}`,
-    },
-    {
-      name: "Practical Skills Modules",
-      path: `${baseUrl}/practical-modules`,
-      url: `${baseUrl}/practical-modules?title=${name}`,
-    },
-    {
-      name: "Assesments",
-      path: `${baseUrl}/assessments`,
-      url: `${baseUrl}/assessments?title=${name}`,
-    },
-    {
-      name: "Workbook",
-      path: `${baseUrl}/workbook`,
-      url: `${baseUrl}/workbook?title=${name}`,
-    },
-    {
-      name: "Logbook",
-      path: `${baseUrl}/logbook`,
-      url: `${baseUrl}/logbook?title=${name}`,
-    },
+    { name: "Edit Project", path: baseUrl, url: `${baseUrl}?title=${name}` },
   ];
 
   return (

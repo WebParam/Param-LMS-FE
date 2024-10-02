@@ -6,14 +6,14 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'; 
 
-interface ViewLogbookProps {
+interface ViewAssignmentProps {
   showDocumentModal: boolean;
   setShowDocumentModal: (value: boolean) => void;
   pdfWorkerUrl: string;
   documentToView: string;
 }
 
-function ViewLogbook({ showDocumentModal, setShowDocumentModal, pdfWorkerUrl, documentToView }: ViewLogbookProps) {
+function ViewAssignment({ showDocumentModal, setShowDocumentModal, pdfWorkerUrl, documentToView }: ViewAssignmentProps) {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   return (
@@ -29,7 +29,6 @@ function ViewLogbook({ showDocumentModal, setShowDocumentModal, pdfWorkerUrl, do
         <Modal.Body>
         <Worker workerUrl={pdfWorkerUrl}>
             <Viewer
-               //fileUrl={`https://khumla-development-user-read.azurewebsites.net/api/Documents/PreviewDocument/66754b17c66474c142f6b9f6`}
               fileUrl={documentToView}
               plugins={[defaultLayoutPluginInstance]}
             />
@@ -41,4 +40,4 @@ function ViewLogbook({ showDocumentModal, setShowDocumentModal, pdfWorkerUrl, do
     )
 }
 
-export default ViewLogbook
+export default ViewAssignment

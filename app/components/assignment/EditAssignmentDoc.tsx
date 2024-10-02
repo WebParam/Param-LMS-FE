@@ -9,16 +9,19 @@ import {
 } from "next/navigation";
 import { useEffect, useState } from "react";
 import { changeDocumentStatus } from "@/app/lib/actions/courseStudents";
+import { uploadAssignment } from "@/app/lib/actions/assignments";
+import Cookies from "universal-cookie";
 
-  
+function EditAssignmentDoc(props: any) {
 
-function EditLogbookDoc(props: any) {
-  const { id: courseId } = useParams<{
-    id: string;
-  }>();
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
+
+  const {id : courseId, moduleId} = useParams<{
+    id : string ,
+    moduleId : string
+  }>();
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
@@ -29,7 +32,10 @@ function EditLogbookDoc(props: any) {
   const isEnrolled = searchParams.get("isEnrolled");
   const [disabled, setDisabled] = useState(false);
   const [fileName, setFileName] = useState<string>("");
-  const [fileUrl, setFileUrl] = useState<string>("");
+  const [desc, setDesc] = useState<string>("");
+
+  const cookies = new Cookies();
+  const user = cookies.get("param-lms-user");
 
   const acceptDocumentFn = async () => {
     setErrorMessage("");
@@ -40,7 +46,7 @@ function EditLogbookDoc(props: any) {
       status: "Accepted",
       reason: "",
       fileName: fileName,
-      fileUrl: fileUrl,
+      fileUrl: "",
     };
 
     try {
@@ -71,6 +77,26 @@ function EditLogbookDoc(props: any) {
     setIsSpinner(false);
   }, [refreshId]);
 
+  async function handleFileUpload(file: File) {
+    const formData = new FormData();
+    formData.append("courseId", courseId);
+    formData.append("title", props.name);
+    formData.append("knowledgeId", moduleId);
+    formData.append("description", "");
+    formData.append("creatingUserId", user.id);
+    formData.append("scheduledDate", new Date().toISOString());
+    formData.append("isPublished", "true");
+    formData.append("file", file);
+    try {
+      const uploadCourseAssignments = await uploadAssignment(formData);
+     // getKnowledgeModuleAssignments();
+     const date = new Date()
+     router.replace(`/protected/admin/courses/66c6f9fe0c2eeac80af3b590/knowledge-modules/66c6faa90c2eeac80af3b592/assignments?title=Contact%20Centre%20Manager&moduleTitle=Introductory%20studies%20for%20Contact%20Centre%20Managers?refreshId=${date}`)
+    } catch (error) {
+      console.error("Error uploading assignment:", error);
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -80,13 +106,13 @@ function EditLogbookDoc(props: any) {
     >
       <Modal.Header style={{ background: "#24345c" }} closeButton>
         <Modal.Title style={{ color: "white" }}>
-          Edit Document - {props.documentName || "File - " + props.documentId}
+          Edit Assignment - {props.documentName || "File - " + props.documentId}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="mb-3">
           <label htmlFor="fileName" className="form-label">
-            File Name:
+            Assignment:
           </label>
           <input
             defaultValue={props.name}
@@ -99,14 +125,14 @@ function EditLogbookDoc(props: any) {
         </div>
         <div className="mb-3">
           <label htmlFor="fileUrl" className="form-label">
-            File URL:
+            Description:
           </label>
           <input
             defaultValue={props.url}
             type="text"
             id="fileUrl"
-            value={fileUrl}
-            onChange={(e) => setFileUrl(e.target.value)}
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
             className="form-control"
           />
         </div>
@@ -119,7 +145,9 @@ function EditLogbookDoc(props: any) {
           <div className="alert  alert-danger">{errorMessage}</div>
         )}
 
-        <Button className = "btn btn-success" onClick={props.onHide}>
+        <Button className = "btn btn-success" onClick={() => {
+          handleFileUpload()
+        }}>
           submit
         </Button>
         <Button variant="secondary" onClick={props.onHide}>
@@ -129,4 +157,4 @@ function EditLogbookDoc(props: any) {
     </Modal>
   );
 }
-export default EditLogbookDoc;
+export default EditAssignmentDoc;
