@@ -98,3 +98,18 @@ interface IVideoStudentTableAnalytics {
     numberOfVideosWatched: number;
     topicCompletedRate: number;
 }
+
+export interface IStudentWatchedVideos {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    isCompleted: boolean;
+    userId: string;
+    courseId: string;
+    videoTitle: string;
+    elementId: string;
+    topicId: string;
+    topicTitle: string;
+    totalVideoTime: number;
+    timeSpent: number;
+}

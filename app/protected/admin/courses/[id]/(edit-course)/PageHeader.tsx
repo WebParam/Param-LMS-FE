@@ -24,6 +24,7 @@ export default function PageHeader() {
     workbook: "Workbook",
     logbook: "Logbook",
     assessments: "Assessments",
+    assignments: "Assignments",
   } as Tabs;
 
   const subPath = pathname.split("/").at(-1) || "/";

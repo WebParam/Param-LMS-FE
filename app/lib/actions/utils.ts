@@ -25,6 +25,7 @@ export const put = async (url: string, body: any) => {
     const res = await fetch(url, {
       method: "PUT",
       headers: {
+        
         Accept: "application/json",
         "Content-Type": "application/json",
       },

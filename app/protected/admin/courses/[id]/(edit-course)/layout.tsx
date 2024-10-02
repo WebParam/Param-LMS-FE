@@ -29,9 +29,14 @@ function Layout({
       url: `${baseUrl}/practical-modules?title=${name}`,
     },
     {
-      name: "Assesments",
+      name: "Assessments",
       path: `${baseUrl}/assessments`,
       url: `${baseUrl}/assessments?title=${name}`,
+    },
+    {
+      name: "Assignments",
+      path: `${baseUrl}/assignments`,
+      url: `${baseUrl}/assignments?title=${name}`,
     },
     {
       name: "Workbook",
@@ -53,12 +58,14 @@ function Layout({
           <div
             className="card-header card-header-tabs-basic nav px-0"
             role="tablist"
+            style={{ display: 'flex', overflowX: 'scroll', whiteSpace: 'nowrap', width: '1400px', alignItems: 'center', scrollbarWidth: 'auto' }}
           >
             {links.map((l: any) => (
               <Link
-                key={l.id}
+                key={l.name}
                 className={pathname === l.path ? "active" : ""}
                 href={l.url}
+                style={{ display: 'inline-flex', marginRight: '10px', flexShrink: 0 }}
               >
                 <span className="flex d-flex flex-column">
                   <strong className="card-title">{l.name}</strong>
