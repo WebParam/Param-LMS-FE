@@ -14,14 +14,17 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const courseId = params.id;
   const courseTitle = searchParams.get("title") || "";
   const pathName = usePathname();
-  const isHost = pathName == "/protected/host/host/completed"
+  const isHost = pathName == "/protected/host/host/completed";
   const [projectLength, setProjectLength] = useState<string | null>(null);
 
   useEffect(() => {
     setProjectLength(localStorage.getItem("len"));
   }, []);
 
-  const userRole = process.env.NEXT_PUBLIC_FREEMIUM ==="true"? "freemium" : localStorage.getItem("role");
+  const userRole =
+    process.env.NEXT_PUBLIC_FREEMIUM === "true"
+      ? "freemium"
+      : localStorage.getItem("role");
 
   const sideTabs = [
     {
@@ -37,7 +40,10 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       roles: ["Admin", "SuperAdmin", "Freemium"],
       children: [
         {
-          name: userRole === "freemium" ? "Project Applicants" : "Course Applicants",
+          name:
+            userRole === "freemium"
+              ? "Project Applicants"
+              : "Course Applicants",
           url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}&id=${courseId}`,
           icon: "group",
           roles: ["Admin", "SuperAdmin", "Freemium"],
@@ -108,7 +114,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     },
     {
       name: "Facilitator Dashboard",
-      url: `/protected/admin/facilitator/?title=${courseTitle}&id=${courseId}`,
+      url: `/protected/admin/facilitator/${courseId}?title=${courseTitle}&id=${courseId}`,
       icon: "dashboard",
       roles: ["Admin", "SuperAdmin"],
     },
@@ -150,7 +156,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
-  
+
       <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
     </>
   );

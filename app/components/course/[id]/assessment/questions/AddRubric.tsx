@@ -32,7 +32,7 @@ export default function AddRubric({
       <input
         type="text"
         className="form-control w-75"
-        placeholder="Label: E.g. A"
+        placeholder="Rubric ..."
         value={label}
         name={`options[${topicElements.length}][description]`}
         onChange={(e: any) => setLabel(e.target.value)}
@@ -41,7 +41,7 @@ export default function AddRubric({
       <input
         type="text"
         className="form-control w-25"
-        placeholder="Option ..."
+        placeholder="Points: E.g. 4"
         name={`options[${topicElements.length}][label]`}
         value={description}
         onChange={(e: any) => setDescription(e.target.value)}
