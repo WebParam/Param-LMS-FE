@@ -3,6 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import CardComponent from "./Card/Card";
 import PageHeader from "./PageHeader";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useParams } from "react-router-dom";
 
 type IconType =
   | "schedule"
@@ -12,21 +13,23 @@ type IconType =
   | "markAssessment"
   | "logbook";
 
-const DashboardCards = () => {
+const DashboardCards = ({ courseId }: { courseId: string }) => {
   const pathname = usePathname();
+  // const { courseId } = useParams();
   const router = useRouter();
 
   const handleClick = () => {
     router.push(`${pathname}?title=${encodeURIComponent("KNOWLEDGE MODULES")}`);
   };
-const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
-  const courseId = searchParams.get("id") || "";
-
 
   const cardData: { link: string; icon: IconType; title: string }[] = [
-    { link: `/protected/admin/scheduleclass?title=${courseTitle}&id=${courseId}`,
-    icon: "schedule", title: "Schedule Class" },
+    {
+      link: `/protected/admin/scheduleclass?title=${courseTitle}&id=${courseId}`,
+      icon: "schedule",
+      title: "Schedule Class",
+    },
     { link: "#", icon: "createAssessment", title: "Schedule Assessment" },
     { link: "#", icon: "leaderBoard", title: "Leader Board" },
     {
@@ -35,11 +38,15 @@ const searchParams = useSearchParams();
       title: "Moderator Feedback",
     },
     {
-      link: `/protected/admin/assessments-assignments/pages/assessments?title=${courseTitle}&id=${courseId}`,
+      link: `/protected//admin/courses/${courseId}/grade/assessments?title=${courseTitle}`,
       icon: "markAssessment",
-      title: `Mark\n Assessments \n& \n Assignments`,
+      title: `Mark Assessments`,
     },
-    { link:  `/protected/admin/logbook/pages/completed?title=${courseTitle}&id=${courseId}`, icon: "logbook", title: "Logbook" },
+    {
+      link: `/protected/admin/logbook/pages/completed?title=${courseTitle}&id=${courseId}`,
+      icon: "logbook",
+      title: "Logbook",
+    },
   ];
 
   return (
