@@ -19,7 +19,7 @@ const TableBody: NextPage<{loading:boolean, list: ICourseAssessment[] }> = ({ li
   return (
     <>
       <tbody className="list" id="staff">
-        {!loading ?
+        {loading ?
         <>
         {
           list.length > 0 ?  list.map((data: ICourseAssessment) => (

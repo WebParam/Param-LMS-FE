@@ -15,13 +15,16 @@ const Body = ({ params }: { params: { assessmentId: string } }) => {
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
+  const [loading, setLoading] = useState(true);
 
   const assessmentId = params.assessmentId;
 
   const getAssessments = async () => {
+   
     const assessments = await getStudentsAssessment(assessmentId);
     setList(assessments || []);
-    console.log("Assessments", assessments);
+    setLoading(false)
+
   };
 
   useEffect(() => {
@@ -62,7 +65,7 @@ const Body = ({ params }: { params: { assessmentId: string } }) => {
             data-lists-sort-by="js-lists-values-employee-name"
             data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
           >
-            <Table list={currentItems} />
+            <Table loading = {loading} list={currentItems} />
           </div>
 
           <Pagination
