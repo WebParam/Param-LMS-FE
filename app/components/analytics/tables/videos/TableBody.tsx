@@ -29,7 +29,7 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
         <td className="text-center js-lists-values-projects small">
           <div className="d-flex align-items-center justify-content-center ">
             <Link
-              href={`/protected/admin/analytics/grouped-analytics/videos/student/${data.id}/?title=${courseTitle}&studentName=${data.firstName} ${data.surname}&id=${courseId}`}
+              href={`/protected/admin/analytics/grouped-analytics/videos/student/${data.studentId}/?title=${courseTitle}&studentName=${data.firstName} ${data.surname}&id=${courseId}`}
             >
               <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
                 visibility
