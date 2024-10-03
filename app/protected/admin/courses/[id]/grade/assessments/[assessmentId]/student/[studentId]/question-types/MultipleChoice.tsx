@@ -35,7 +35,7 @@ export default function ({
         <tbody>
           {answers.map((choice, index) => {
             const isStudentAnswer =
-              studentMultipleChoiceAnswer[0].label == choice.label;
+              studentMultipleChoiceAnswer[0]?.label == choice.label;
             if (!answer && choice.isCorrect) {
               setAnswer(choice.label);
               if (isStudentAnswer) {

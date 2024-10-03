@@ -4,7 +4,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
 import SkeletonLoader from "@/components/skeleton/skeletonLoader";
 
-const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
+const TableBody: NextPage<{ loading:boolean , list: ICourseAssessment[] }> = ({ list,loading }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const title = searchParams.get("title")!;
@@ -20,7 +20,10 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   return (
     <>
       <tbody className="list" id="staff">
-        {list.length > 0 ? (
+        {!loading ? (
+      <>
+        {
+          list.length > 0 ?
           list.map((data: ICourseAssessment) => {
             const name = data.name != " " ? data.name : "N/A";
             const factilitatorMark =
@@ -80,6 +83,16 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
               </tr>
             );
           })
+          
+          : <tr className="selected">
+          <td className="text-center js-lists-values-projects small" colSpan={10}>
+           No Students Assessments
+          </td>
+          
+         </tr>
+        }
+      
+      </>
         ) : (
           <>
             <tr className="selected">
