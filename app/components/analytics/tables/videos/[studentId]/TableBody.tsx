@@ -17,10 +17,10 @@ const TableBody: NextPage<{ list: any }> = ({ list }) => {
     return (
       <tr key={data.studentId} className="selected">
         <td className="text-center js-lists-values-projects small">
-          {data.topicTitle}
+          {data.topicTitle.length > 30 ? `${data.topicTitle.substring(0, 27)}...` : data.topicTitle}
         </td>
         <td className="text-center js-lists-values-projects small">
-          {data.videoTitle}
+          {data.videoTitle.length > 30 ? `${data.videoTitle.substring(0, 27)}...` : data.videoTitle}
         </td>
         <td className="text-center js-lists-values-projects small">
           {data.timeSpent}
