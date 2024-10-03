@@ -29,11 +29,9 @@ function Page({ params }: { params: { id: string; moduleId: string } }) {
   const [editModal, setEditModal] = useState(false);
   const [fileTitle, setFileTitle] = useState<string>("");
   const searchParams = useSearchParams();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
  const refreshId = searchParams.get("refreshId");
-  const currentItems =
-    assignmentData && assignmentData.length > 0
-      ? assignmentData.slice(indexOfFirstItem, indexOfLastItem)
-      : [];
+ const [docId, setDocId] = useState("");
   const arrUrl = pathname.split("/");
   arrUrl.pop();
 
@@ -44,16 +42,15 @@ function Page({ params }: { params: { id: string; moduleId: string } }) {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0];
       if (file) {
-        setFileTitle(file.name)
         const reader = new FileReader();
         reader.onload = (e) => {
           const content = e.target?.result;
           if (content) {
-            const blobUrl = URL.createObjectURL(
-              new Blob([content], { type: "text/plain" })
-            );
+                 setFileTitle(file.name)
+            setSelectedFile(file);
+            
             setEditModal(true);
-           // handleFileUpload(file);
+            
           }
         };
         reader.readAsText(file);
@@ -78,6 +75,7 @@ function Page({ params }: { params: { id: string; moduleId: string } }) {
     <>
       <EditAssignmentDoc
         name={fileTitle}
+        file={selectedFile}
         show={editModal}
         onHide={() => setEditModal(false)}
       />
@@ -90,8 +88,10 @@ function Page({ params }: { params: { id: string; moduleId: string } }) {
           return (
             <AssignmentDoc
               key={data.id}
+              id ={data.id}
               name={data.title}
               desc={data.description}
+              url={data?.blobUrl!}
             />
           );
         })

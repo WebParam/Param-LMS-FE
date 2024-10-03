@@ -5,6 +5,7 @@ export interface IAssignment {
     description: string;
     rubrics: IRubric[];
     scheduledDate: string;
+    blobUrl?:string;
     isPublished: boolean;
 }
 
@@ -15,4 +16,13 @@ export interface IRubric {
     id: string;
     facilitatorScore: number;
     moderatorScore: number;
+}
+
+
+export interface IUpdateAssignment {
+    id: string;
+    title?: string;
+    description?: string;
+    scheduledDate?: string;
+    isPublished?: boolean;
 }
