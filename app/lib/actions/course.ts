@@ -157,7 +157,7 @@ export const getStudentCourseVideoAnalytics = async (
     const resp = await get(
       `${rAnalyticUrl}/VideoWatched/Student/${studentId}/Course/${courseId}/Videos`
     );
-    const data = resp;
+    const data = resp.data;
     console.log("Data data", data);
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
