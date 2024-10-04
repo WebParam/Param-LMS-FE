@@ -44,8 +44,8 @@ export default function ({
       rubric[index].label
     );
   };
-  const { id: userId, assessmentId } = useParams<{
-    id: string;
+  const { studentId: userId, assessmentId } = useParams<{
+    studentId: string;
     assessmentId: string;
   }>();
 
