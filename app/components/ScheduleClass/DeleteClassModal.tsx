@@ -32,11 +32,12 @@ const pathName = usePathname();
       setLoading(false);
       setFormError("");
       setFormSuccess(response);
+      const date = new Date();
     
       setTimeout(() => {
         setFormSuccess(""); 
         props.onHide();
-        router.replace(`${pathName}?title=Learning+Telecommunication&id=${id}`);
+        router.replace(`${pathName}?title=Learning+Telecommunication&id=${id}&refreshId=${date}`);
 
       }, 3000);
 
@@ -66,16 +67,18 @@ const pathName = usePathname();
         </div>
         <Modal.Body>
           <p className="font-size-16pt">Are you sure you want to delete this class?</p>
-          {formError && <div className="text-danger">{formError}</div>}
-          {formSuccess && <div className="text-success">{formSuccess}</div>}
+      
         </Modal.Body>
         <Modal.Footer>
+        {formError && <div className="alert alert-danger">Failed to delete class</div>}
+        {formSuccess && <div className="alert alert-success">Class deleted successfully</div>}
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
           <Button variant="danger" type="submit">
           {!loading ? "Delete" : <div className="spinner-border text-white" role="status" /> }
           </Button>
+          
         </Modal.Footer>
       </form>
     </Modal>
