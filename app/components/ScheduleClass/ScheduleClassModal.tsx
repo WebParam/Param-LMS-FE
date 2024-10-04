@@ -5,6 +5,7 @@ import { createClass, updateClass } from "@/app/lib/actions/class-session";
 import { IClassSession } from "@/app/interfaces/class-session";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "universal-cookie";
+import { IResponseObject } from "@/app/lib/restapi/response";
 
 interface ScheduleClassModalProps {
   onClose: () => void;
@@ -55,9 +56,9 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({
   const courseTitle = searchParams.get("title") || "";
   const courseId = searchParams.get("id") || "";
   const [loading, setLoading] = useState(false);
-  const [classDuration, setClassDuration] = useState<string>("")
+  const [classDuration, setClassDuration] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(false);
 
   useEffect(() => {
     if (selectedDate) {
@@ -83,23 +84,21 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTime = e.target.value;
     setStartTime(selectedTime);
-   
   };
 
   const handleEndTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTime = e.target.value;
     setEndTime(selectedTime);
-  
   };
 
   const calculateTimeDifference = () => {
     if (startTime && endTime) {
-      const start = startTime.split(':');
-      const end = endTime.split(':');
+      const start = startTime.split(":");
+      const end = endTime.split(":");
       const startMinutes = parseInt(start[0]) * 60 + parseInt(start[1]);
       const endMinutes = parseInt(end[0]) * 60 + parseInt(end[1]);
       const diff = endMinutes - startMinutes;
-      return diff.toString()
+      return diff.toString();
     }
   };
 
@@ -116,7 +115,7 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({
     e.preventDefault();
     setSuccessMessage(false);
     setErrorMessage(false);
-    calculateTimeDifference()
+    calculateTimeDifference();
 
     const validationError = validateInputs();
     if (validationError) {
@@ -140,28 +139,46 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({
     };
 
     try {
-      let response;
       if (event) {
-        response = await updateClass(payload);
-      } else {
-        response = await createClass(payload);
-      }
-      setLoading(false);
-      setSuccessMessage(true);
-      setErrorMessage(false);
+        const response:any = await updateClass(payload);
+        if(response.id){
+          setLoading(false);
+          setSuccessMessage(true);
+          setErrorMessage(false);
+    
+          const date = new Date();
+          const path = `/protected/admin/scheduleclass?title=${courseTitle}&id=${courseId}&refreshId=${date}`;
+          router.replace(path);
+          setTimeout(() => {
+            onClose();
+            setSuccessMessage(false);
+            setErrorMessage(false);
+          }, 4000);
+        }
 
-      const date = new Date();
-      const path = `/protected/admin/scheduleclass?title=${courseTitle}&id=${courseId}&refreshId=${date}`;
-      router.replace(path);
-      setTimeout(() => {
-        onClose();
-        setSuccessMessage(false);
-        setErrorMessage(false);
-      },4000)
+      } else {
+        const response :any= await createClass(payload);
+        console.log("Class",response)
+        if(response.id){
+          setLoading(false);
+          setSuccessMessage(true);
+          setErrorMessage(false);
+    
+          const date = new Date();
+          const path = `/protected/admin/scheduleclass?title=${courseTitle}&id=${courseId}&refreshId=${date}`;
+          router.replace(path);
+          setTimeout(() => {
+            onClose();
+            setSuccessMessage(false);
+            setErrorMessage(false);
+          }, 4000);
+        }
+
+      }
+ 
     } catch (error) {
       setSuccessMessage(false);
       setErrorMessage(true);
-
       console.error("Error during class session creation:", error);
       setLoading(false);
     }
@@ -171,18 +188,16 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({
     <form className="schedule-class-form" onSubmit={createClassSession}>
       <div className="form-group">
         <div className="w-100">
-        <label htmlFor="title">Class Title</label>
+          <label htmlFor="title">Class Title</label>
 
-        {
-          successMessage && <p className ="alert alert-success">
-            Class Session Created Successfully
-          </p>
-        }
-              {
-          errorMessage && <p className ="alert alert-danger">
-            Failed Creating Class Session  
-          </p>
-        }
+          {successMessage && (
+            <p className="alert alert-success">
+              Class Session Created Successfully
+            </p>
+          )}
+          {errorMessage && (
+            <p className="alert alert-danger">Failed Creating Class Session</p>
+          )}
         </div>
 
         <input
@@ -261,9 +276,7 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({
           onChange={(e) => setLink(e.target.value)}
         />
       </div>
-      <button
-        className={`btn ${!loading ? "btn-success" : "btn-secondary"}`}
-      >
+      <button className={`btn ${!loading ? "btn-success" : "btn-secondary"}`}>
         {loading ? (
           <span className="spinner-border text-white" role="status" />
         ) : (

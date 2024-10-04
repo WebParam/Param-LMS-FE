@@ -11,6 +11,7 @@ export const createClass = async (payload: IClassSession) => {
     const resp = await post(`${wLogbookUrl}/ClassSessions/CreateClassSession`, payload);
     const data = await resp.data;
     Diagnostic("SUCCESS ON POST, returning", data);
+    return data
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
     throw err;
@@ -19,13 +20,13 @@ export const createClass = async (payload: IClassSession) => {
 };
 
 export const updateClass = async (payload: IClassSession) => {
-    console.log("Payload",payload)
     try {
 
       const resp = await put(`${wLogbookUrl}/ClassSessions/UpdateClassSession`, payload);
       const data = await resp.data;
       
       Diagnostic("SUCCESS ON PUT, returning", data);
+      return data
     } catch (err) {
       Diagnostic("ERROR ON PUT, returning", err);
       throw err;
