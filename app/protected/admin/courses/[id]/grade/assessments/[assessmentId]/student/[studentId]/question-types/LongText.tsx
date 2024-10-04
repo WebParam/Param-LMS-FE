@@ -104,6 +104,15 @@ export default function ({
                 className="py-2 d-flex justify-content-between align-items-center"
               >
                 <div className="d-flex flex-column align-items-start">
+                  <div className="text-danger d-flex">
+                    {Array(grades[index])
+                      .fill(<i className="material-icons">check</i>)
+                      .map((icon, i) => (
+                        <span key={i} className="mr-1">
+                          {icon}
+                        </span>
+                      ))}
+                  </div>
                   <span className="ml-2">{choice.description}</span>
                 </div>
                 <GradeInput
