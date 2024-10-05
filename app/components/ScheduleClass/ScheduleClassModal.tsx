@@ -5,7 +5,6 @@ import { createClass, updateClass } from "@/app/lib/actions/class-session";
 import { IClassSession } from "@/app/interfaces/class-session";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "universal-cookie";
-import { IResponseObject } from "@/app/lib/restapi/response";
 
 interface ScheduleClassModalProps {
   onClose: () => void;
@@ -157,8 +156,7 @@ const ScheduleClassModal: React.FC<ScheduleClassModalProps> = ({
         }
 
       } else {
-        const response :any= await createClass(payload);
-        console.log("Class",response)
+        const response :any = await createClass(payload);
         if(response.id){
           setLoading(false);
           setSuccessMessage(true);
