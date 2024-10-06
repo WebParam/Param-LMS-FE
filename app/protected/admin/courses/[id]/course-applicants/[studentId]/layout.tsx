@@ -33,6 +33,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const isEnrolled = searchParams.get("isEnrolled");
   const isFreemium =  process.env.NEXT_PUBLIC_FREEMIUM ==="true";
 
@@ -54,8 +55,13 @@ function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   async function studentInformation() {
-    const response = await getStudentDocuments(studentId);
-    setDocuments(response);
+    try {
+      const response = await getStudentDocuments(studentId);
+      setDocuments(response);
+    } catch (err) {
+      console.error("Failed to fetch student documents:", err);
+      setError("Failed to load documents.");
+    }
   }
 
   useEffect(() => {
@@ -68,14 +74,21 @@ function Layout({ children }: { children: React.ReactNode }) {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const downloadZip = () => {
+  const downloadZip = async () => {
     setLoading(true);
     const filename = "student_information";
     const fileExtension = "zip";
     const isGet = true;
     const url = `${rUserUrl}/Documents/DownloadDocuments/${studentId}`;
-    downloadFile(url, filename, fileExtension, setLoading, isGet);
+    try {
+      await downloadFile(url, filename, fileExtension, setLoading, isGet);
+    } catch (err) {
+      console.error("Failed to download documents:", err);
+      setError("Failed to download documents.");
+      setLoading(false);
+    }
   };
+
 
   return (
     <>
@@ -134,10 +147,10 @@ function Layout({ children }: { children: React.ReactNode }) {
               <div className="mx-1">
                 <button
                   className={`btn btn-block mx-1 ${
-                    documents.length > 0 ? "btn-success" : "btn-secondary"
+                    documents && documents.length > 0 ? "btn-success" : "btn-secondary"
                   }`}
                   onClick={() => setRequestModal(true)}
-                  disabled={!(documents.length > 0)}
+                  disabled={!(documents && documents.length > 0)}
                 >
                   Request Modification
                 </button>
@@ -149,11 +162,11 @@ function Layout({ children }: { children: React.ReactNode }) {
             <div className="mx-1" style={{ width: "187px", height: "37.5px" }}>
               <button
                 onClick={() => downloadZip()}
-                style={{ cursor: documents.length > 0 ? "pointer" : "" }}
+                style={{ cursor: documents && documents.length > 0 ? "pointer" : "" }}
                 className={`btn w-100 h-100 ${
-                  documents.length > 0 ? "btn-success" : "btn-secondary"
+                  documents && documents.length > 0 ? "btn-success" : "btn-secondary"
                 }`}
-                disabled={!(documents.length > 0)}
+                disabled={!(documents && documents.length > 0)}
               >
                 {loading ? (
                   <div className="spinner-border text-white" role="status" />
@@ -179,7 +192,7 @@ function Layout({ children }: { children: React.ReactNode }) {
                   style={{ cursor: "pointer" }}
                   className="dropdown-menu dropdown-menu-right"
                 >
-                  {documents.length > 0 ? (
+                  {documents && documents.length > 0 ? (
                     <>
                       <div
                         onClick={() => setRequestModal(true)}

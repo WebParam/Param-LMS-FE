@@ -37,7 +37,6 @@ function RequestModificationModal(props: any) {
     setDisableBtn(true)
     if (selectedDocuments.length > 0) {
       setIsSpinner(true);
-      console.log("selectedDocuments", selectedDocuments)
        await sendDocRejectionEmail(studentId);
        setSuccessMessage("Request Successfully sent")
        setIsSpinner(false);
@@ -91,7 +90,7 @@ function RequestModificationModal(props: any) {
           <h5>Please select the Documents to be Modified below:</h5>
         </div>
         <div>
-          {props.documents.filter((doc:any) => doc.status == "Rejected").map((document: any) => (
+          {props.documents && props.documents.filter((doc:any) => doc.status == "Rejected").map((document: any) => (
             <div key={document.id} className="d-flex">
               <div className="d-flex mr-2">
                 <input

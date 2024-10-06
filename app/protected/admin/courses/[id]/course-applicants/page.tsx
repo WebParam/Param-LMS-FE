@@ -48,7 +48,6 @@ function Page({ params }: { params: { id: string } }) {
         courseId,
         false
       );
-      console.log("Fetched Course Data:", fetchedData);
       setCourseData(fetchedData);
     } catch (error) {
       console.error("Error fetching course data:", error);
@@ -61,7 +60,6 @@ function Page({ params }: { params: { id: string } }) {
         courseId,
         false
       );
-      console.log("Fetched Project Data:", projectAnalytics);
       setProjectData(projectAnalytics);
     } catch (error) {
       console.error("Error fetching project data:", error);
