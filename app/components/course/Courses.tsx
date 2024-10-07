@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Cookies from "universal-cookie";
 
-export default async function Courses({ list }: any) {
+export default function Courses({ list }: any) {
   const cookies = new Cookies();
 
   return (
@@ -12,6 +12,7 @@ export default async function Courses({ list }: any) {
           {list.length > 0 ? (
             <div className="row card-group-row">
               {list.map((course: any) => {
+                localStorage.setItem('encryptid', course.id);
                 cookies.set("co-id", course.id, { path: '/' });
                 return (
                   <Course
