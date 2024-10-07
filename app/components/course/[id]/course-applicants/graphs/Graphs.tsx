@@ -60,7 +60,7 @@ type DataTiles = {
   data: number;
 };
 
-export default async function Graphs() {
+export default function Graphs() {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
