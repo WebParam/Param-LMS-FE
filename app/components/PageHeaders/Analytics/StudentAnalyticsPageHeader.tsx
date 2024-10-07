@@ -89,7 +89,7 @@ export default function PageHeader({ title }: { title: string }) {
 
           {isGroupedStAnalytics ? (
             <button 
-            onClick={() => router.push("/proteced/home/courses")}
+            onClick={() => router.push("/protected/home/courses")}
             className="btn btn-success">All Courses</button>
           ) : (
             <button onClick={() => router.back() } className="btn btn-success">Grouped Analytics</button>
