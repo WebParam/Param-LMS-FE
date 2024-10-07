@@ -1,5 +1,5 @@
 export const options = {
-    labels: ["Completed", "Incompleted"], // Changed labels to match gender data
+    labels: ["Completed", "Incomplete"], // Changed labels to match gender data
     legend: {
       position: "bottom",
     },
