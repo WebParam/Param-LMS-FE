@@ -39,8 +39,7 @@ export const rUserUrl = `https://thooto-${env}-be-user-read.azurewebsites.net/ap
 
 export const wUserUrl = `https://thooto-${env}-be-user-write.azurewebsites.net/api/v1`;
 
-export const rAnalyticUrl = `https:thooto-${env}-be-activity-read.azurewebsites.net/api/v1`;
-
+export const rAnalyticUrl = `https://thooto-${env}-be-activity-read.azurewebsites.net/api/v1`;
 export const rUserUrlRc = `https://thooto-${env}-be-user-read.azurewebsites.net/api/v1`;
 export const wLogbookUrl = `https://thooto-${env}-be-logbook-write.azurewebsites.net/api/v1`;
 export const rLogbookUrl = `https://thooto-${env}-be-logbook-read.azurewebsites.net/api/v1`;
