@@ -44,7 +44,7 @@ function Options() {
             <input
               type="text"
               className="form-control w-75"
-              placeholder="Topic Element ..."
+              placeholder="Rubric ..."
               name={`options[${topic.id}][description]`}
               defaultValue={topic.element}
               onChange={(e) => {
@@ -56,7 +56,7 @@ function Options() {
             <input
               type="text"
               className="form-control w-25"
-              placeholder="Element Code ..."
+              placeholder="Points: E.g. 4"
               name={`options[${topic.id}][label]`}
               defaultValue={topic.code}
             />

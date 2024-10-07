@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-export default async function Assignments({ list }: any) {
+export default function Assignments({ list }: any) {
   const baseUrl = "/protected/admin/";
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";

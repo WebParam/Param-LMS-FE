@@ -11,7 +11,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import SkeletonLoader from "@/components/skeleton/skeletonLoader";
 
-const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
+const TableBody: NextPage<{ loading: boolean , list: ICourseAssessment[] }> = ({ loading , list }) => {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const [showDocumentModal, setShowDocumentModal] = useState(false);
   const pathname = usePathname();
@@ -51,60 +51,73 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
         </Modal.Body>
       </Modal>
       <tbody className="list" id="staff">
-        {list.length > 0 ? (
-          list.map((data: ICourseAssessment) => (
-            <tr key={data.assessmentId} className="selected">
-              <td
-                className={`${align.student_name} js-lists-values-projects small`}
+        {!loading ? (
+       <>
+       {
+        list.length > 0 ?    list.map((data: ICourseAssessment) => (
+          <tr key={data.assessmentId} className="selected">
+            <td
+              className={`${align.student_name} js-lists-values-projects small`}
+            >
+              {data.name}
+            </td>
+            <td className={`${align.action} js-lists-values-projects small`}>
+              {data.userId.slice(0, 6) + "..."}
+            </td>
+            <td
+              className={`${align.assessment_name} js-lists-values-projects small`}
+            >
+              {data.datesubmitted}
+            </td>
+            <td className={`${align.action} js-lists-values-projects small`}>
+              <p
+                className={
+                  data.factilitatorMark > 50 ? "text-success" : "text-danger"
+                }
               >
-                {data.name}
-              </td>
-              <td className={`${align.action} js-lists-values-projects small`}>
-                {data.userId.slice(0, 6) + "..."}
-              </td>
-              <td
-                className={`${align.assessment_name} js-lists-values-projects small`}
+                {data.factilitatorMark}/{data.totalMark}
+              </p>
+            </td>
+            <td className={`${align.action} js-lists-values-projects small`}>
+              <p
+                className={
+                  data.moderatorMark > 50 ? "text-success" : "text-danger"
+                }
               >
-                {data.datesubmitted}
-              </td>
-              <td className={`${align.action} js-lists-values-projects small`}>
-                <p
-                  className={
-                    data.factilitatorMark > 50 ? "text-success" : "text-danger"
-                  }
-                >
-                  {data.factilitatorMark}/{data.totalMark}
-                </p>
-              </td>
-              <td className={`${align.action} js-lists-values-projects small`}>
-                <p
-                  className={
-                    data.moderatorMark > 50 ? "text-success" : "text-danger"
-                  }
-                >
-                  {data.moderatorMark}/{data.totalMark}
-                </p>
-              </td>
-              <td
-                className={`${align.action} js-lists-values-projects small d-flex justify-content-center align-items-center`}
+                {data.moderatorMark}/{data.totalMark}
+              </p>
+            </td>
+            <td
+              className={`${align.action} js-lists-values-projects small d-flex justify-content-center align-items-center`}
+            >
+              <i
+                onClick={() => setShowDocumentModal(true)}
+                className="material-icons icon-holder--outline-success rounded-lg mr-8pt"
               >
-                <i
-                  onClick={() => setShowDocumentModal(true)}
-                  className="material-icons icon-holder--outline-success rounded-lg mr-8pt"
-                >
-                  visibility
-                </i>
+                visibility
+              </i>
 
-                <Link
-                  href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&title=${title}&studentName=${data.name}&homeTitle=${assessmentName}`}
-                >
-                  <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
-                    assignment_turned_in
-                  </i>
-                </Link>
-              </td>
-            </tr>
-          ))
+              <Link
+                href={`${pathname}/${data.userId}?assessment_name=${assessmentName}&title=${title}&studentName=${data.name}&homeTitle=${assessmentName}`}
+              >
+                <i className="material-icons icon-holder--outline-success rounded-lg mr-8pt">
+                  assignment_turned_in
+                </i>
+              </Link>
+            </td>
+          </tr>
+        )) :  <tr className="selected">
+        <td className="text-center js-lists-values-projects small" colSpan={10}>
+         No Students Assigments
+        </td>
+        
+       </tr>
+       }
+       
+       </>
+
+
+
         ) : (
           <>
             <tr className="selected">

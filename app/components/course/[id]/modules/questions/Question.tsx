@@ -15,6 +15,7 @@ import { getOptions } from "@/app/lib/actions/options";
 import { getRubrics } from "@/app/lib/actions/rubrics";
 import { EditBtn } from "./Buttons";
 import { Rubric } from "@/app/interfaces/rubric";
+import { removeTags } from "@/app/lib/utils";
 
 export default function Question({ question }: { question: IQuestion }) {
   const [description, setDescription] = useState(question.description);
@@ -73,7 +74,7 @@ export default function Question({ question }: { question: IQuestion }) {
   const updateQuestionWithParams = updateQuestion.bind(
     null,
     question.id!,
-    description,
+    removeTags(description),
     courseId,
     moduleId,
     assessmentId,

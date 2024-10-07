@@ -5,6 +5,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import Options from "./Options";
 import { AddBtn } from "./Buttons";
 import Rubrics from "./Rubrics";
+import { removeTags } from "@/app/lib/utils";
 
 export default function QuestionAdd() {
   const [description, setDescription] = useState("");
@@ -28,7 +29,7 @@ export default function QuestionAdd() {
 
   const createQuestionWithParams = createQuestion.bind(
     null,
-    description,
+    removeTags(description),
     courseId,
     moduleId,
     assessmentId,

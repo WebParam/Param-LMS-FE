@@ -14,7 +14,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const courseId = params.id;
   const courseTitle = searchParams.get("title") || "";
   const pathName = usePathname();
-  const isHost = pathName == "/protected/host/host/completed"
+  const isHost = pathName == "/protected/host/host/completed";
   const [projectLength, setProjectLength] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,7 +37,10 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       roles: ["Admin", "SuperAdmin", "Freemium"],
       children: [
         {
-          name: userRole === "freemium" ? "Project Applicants" : "Course Applicants",
+          name:
+            userRole === "freemium"
+              ? "Project Applicants"
+              : "Course Applicants",
           url: `/protected/admin/courses/${courseId}/course-applicants?title=${courseTitle}&id=${courseId}`,
           icon: "group",
           roles: ["Admin", "SuperAdmin", "Freemium"],
@@ -156,7 +159,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
-  
+
       <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
     </>
   );
