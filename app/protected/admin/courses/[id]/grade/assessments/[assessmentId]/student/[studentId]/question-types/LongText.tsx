@@ -3,6 +3,7 @@ import "react-quill/dist/quill.snow.css";
 import { IMarkStudentAssessment, IRubric } from "@/app/interfaces/assessments";
 import { useParams } from "next/navigation";
 import { markStudentAssessment } from "@/app/lib/actions/assessments";
+import Cookies from "universal-cookie";
 
 type Props = {
   isMarked: boolean;
@@ -28,6 +29,9 @@ export default function ({
   );
   const [isGraded, setIsGraded] = useState(false);
   const totalGrade = grades.reduce((acc, grade) => acc + grade, 0);
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("param-lms-user");
+  const markType = loggedInUser.role == "Facilitator" ? 0 : 1;
 
   useEffect(() => {
     setIsGraded(totalGrade > 0);
@@ -56,13 +60,13 @@ export default function ({
     label: number
   ) => {
     const payload: IMarkStudentAssessment = {
-      assessmentId: assessmentId,
-      questionId: questionId,
-      rubricId: rubricId,
-      userId: userId,
+      assessmentId,
+      questionId,
+      rubricId,
+      userId,
       creatingUserId: "6580051b2b3b4e16f159792d",
-      mark: mark,
-      markType: 1,
+      mark,
+      markType,
       label: Number(label),
     };
     const markResponse = await markStudentAssessment(payload);
@@ -104,7 +108,11 @@ export default function ({
                 className="py-2 d-flex justify-content-between align-items-center"
               >
                 <div className="d-flex flex-column align-items-start">
-                  <div className="text-danger d-flex">
+                  <div
+                    className={`${
+                      markType ? "text-success" : "text-danger"
+                    } d-flex`}
+                  >
                     {Array(grades[index])
                       .fill(<i className="material-icons">check</i>)
                       .map((icon, i) => (
