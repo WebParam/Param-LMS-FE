@@ -6,12 +6,14 @@ import withAuth from "./AdminAuthWrapper";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Cookies from "universal-cookie";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const searchParams = useSearchParams();
   const params = useParams();
-  const courseId = params.id;
+  const [undefinedCourseId, setUndefinedCourseId] = useState("")
+  const courseId = params.id ? params.id : undefinedCourseId;
   const courseTitle = searchParams.get("title") || "";
   const pathName = usePathname();
   const isHost = pathName == "/protected/host/host/completed";
@@ -141,6 +143,28 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     AOS.init({
       duration: 1200,
     });
+  }, []);
+
+
+  const getUndefinedCourseId = () => {
+    const getLocalStorageData = (key: string) => {
+      if (typeof window !== "undefined") {
+        const data = localStorage.getItem(key);
+        setUndefinedCourseId(data!);
+        return;
+      }
+      const cookies = new Cookies();
+      const id = cookies.get("co-id");
+      return id;
+    };
+
+    const courseIdData = getLocalStorageData("encryptid");
+    if (!courseId) return;
+    setUndefinedCourseId(courseIdData);
+  };
+
+  useEffect(() => {
+    getUndefinedCourseId();
   }, []);
 
   return (
