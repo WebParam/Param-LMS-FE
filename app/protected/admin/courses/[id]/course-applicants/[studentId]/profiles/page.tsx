@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getStudentProfile } from "@/app/lib/actions/courseStudents";
+import { getStudentData, getStudentProfile } from "@/app/lib/actions/courseStudents";
 import { useParams } from "next/navigation";
 import { getCodes } from "@/app/lib/actions/course";
 interface Code {
@@ -27,7 +27,7 @@ const Body = () => {
 
   const studentInformation = async () => {
     try {
-      const response = await getStudentProfile(studentId);
+      const response = await getStudentData(studentId);
       setData(response);
       localStorage.setItem("email", response.email);
     } catch (error) {
