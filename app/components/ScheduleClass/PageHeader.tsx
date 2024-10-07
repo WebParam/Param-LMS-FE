@@ -35,7 +35,7 @@ export default function PageHeader({
               </ol>
             </div>
             {/* button with create notification */}
-            <button onClick={() => router.back()} className="position-absolute right-0 btn btn-success">{buttonTitle}</button>
+            {/* <button onClick={() => router.back()} className="position-absolute right-0 btn btn-success">{buttonTitle}</button> */}
           </div>
         </div>
       </div>

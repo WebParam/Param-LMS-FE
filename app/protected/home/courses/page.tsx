@@ -21,7 +21,7 @@ const Page = async () => {
           >
             <Courses list={list} />
           </div>
-        </div>{" "}
+        </div>
       </div>
     </>
   );

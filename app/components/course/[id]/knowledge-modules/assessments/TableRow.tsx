@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Assessment } from "@/app/interfaces/assessments";
+import { IAssessment } from "@/app/interfaces/assessments";
 import QuestionsModal from "./QuestionsModal";
 import { getQuestions } from "@/app/lib/actions/questions";
 import { Modal } from "react-bootstrap";
 import { getOptions } from "@/app/lib/actions/options";
 import { getRubrics } from "@/app/lib/actions/rubrics";
 
-const TableRow = ({ assessment }: { assessment: Assessment }) => {
+const TableRow = ({ assessment }: { assessment: IAssessment }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
