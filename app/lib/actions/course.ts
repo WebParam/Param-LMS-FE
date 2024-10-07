@@ -136,7 +136,7 @@ export const getCourseVideoAnalytics = async (
 ) => {
   try {
     const resp = await get(
-      `https://71ce-165-16-191-39.ngrok-free.app/api/v1/VideoWatched/Course/${courseId}/Videos`
+      `${rAnalyticUrl}/VideoWatched/Course/${courseId}/Videos`
     );
     const data = resp.data;
     console.log("Data data", data);
