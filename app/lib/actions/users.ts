@@ -1,11 +1,10 @@
-import { redirect } from "next/navigation";
 import { get, post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
-import { rUserUrl, wUserUrl } from "./endpoints";
 import {
   IAdminPasswordChangeReset,
   IAdminUpdateUser,
 } from "@/app/interfaces/user";
+import { rUserUrl, wUserUrl } from "./endpoints";
 
 export const login = async (email: string, password: string) => {
   try {
@@ -37,9 +36,7 @@ export const AdminResetPassword = async (
 ) => {
   try {
     const resp = await put(`${wUserUrl}/Users/AdminResetPassword`, payload);
-    console.log(resp);
-    const data = resp.data;
-
+    const data = resp;
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
   } catch (err) {
@@ -48,11 +45,10 @@ export const AdminResetPassword = async (
   }
 };
 
-export const AdminSendResetOTP = async (email: string) => {
+export const AdminSendResetOTP = async (payload:any) => {
   try {
-    const resp = await post(`${wUserUrl}/Users/SendResetPasswordOtp`, email);
-    console.log(resp);
-    const data = resp.data;
+    const resp = await post(`${wUserUrl}/Users/SendResetPasswordOtp`, payload);
+    const data = resp;
 
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;

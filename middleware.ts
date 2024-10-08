@@ -18,6 +18,9 @@ export function middleware(request: NextRequest) {
   if (path === "/auth/login") {
     return NextResponse.next();
   }
+  if (path === "/auth/login/reset-password") {
+    return NextResponse.next();
+  }
 
   if (!loggedInUser) {
     const loginUrl = new URL("/auth/login", request.url);
