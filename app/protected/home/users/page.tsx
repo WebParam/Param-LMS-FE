@@ -12,7 +12,7 @@ const Body = ({ params }: { params: { id: string } }) => {
   const searchParams = useSearchParams();
   const refreshId = searchParams.get("refreshId");
   const [openModal, setOpenModal] = useState<boolean>(false);
-  console.log("userData:", userData);
+
   const [users, setUsers] = useState<any[]>(userData);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 6;
