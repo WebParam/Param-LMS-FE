@@ -41,7 +41,7 @@ export default function Login() {
       if (user?.data?.id) {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
         localStorage.setItem("id", user?.data?.id);
-        debugger;
+       
         if (process.env.NEXT_PUBLIC_FREEMIUM ==="true") {
           router.push("protected/home/projects");
         } else {
@@ -113,16 +113,12 @@ export default function Login() {
             </div>
           </form>
           <p className="text-center text-dark">
-            Don't have an account?{" "}
+            Lost your password?{" "}
             <Link
-              href={
-                process.env.NEXT_PUBLIC_FREEMIUM==="true"
-                  ? "/auth/freemium"
-                  : "/auth/404"
-              }
+              href="/auth/login/reset-password"
               className="text-primary"
             >
-              <u>Register</u>
+              <u>Reset</u>
             </Link>
           </p>
         </div>

@@ -6,9 +6,8 @@
     width: 40px; /* You can adjust the width as per your preference */
     height: 40px; /* You can adjust the height as per your preference */
     border: 1px solid #ccc;
+    border-radius: 5px; /* Adds rounded corners */
     text-align: center;
     font-size: 18px;
     margin: 5px;
-
   }
-  
