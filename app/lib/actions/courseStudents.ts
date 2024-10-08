@@ -1,8 +1,10 @@
 import { IUpdateEnrollment } from "@/app/interfaces/Enrollment";
 import { Diagnostic } from "../logger/logger";
 import { get, post, put } from "../utils";
-import { rAggregatorUrl, rUserUrl, wCourseUrl, wUserUrl } from "./endpoints";
+import { rAggregatorUrl, rUserUrl, rUserUrlRc, wCourseUrl, wUserUrl } from "./endpoints";
 import { z } from "zod";
+import { IResponseObject } from "../restapi/response";
+import { IDocument } from "@/app/interfaces/document";
 
 export const getCourseStudents = async (courseId: string) => {
   try {
@@ -20,10 +22,27 @@ export const getCourseStudents = async (courseId: string) => {
   }
 };
 
-export const updateEnrollmentStatus = async (payload: IUpdateEnrollment) => {
+export const updateEnrollmentStatus = async (payload: any) => {
   try {
     const resp = await put(
       `${wCourseUrl}/Enrollments/UpdateEnrollmentStatus`,
+      payload
+    );
+    console.log(resp);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+
+    console.error(err);
+  }
+};
+
+export const updateProgramEnrollmentStatus = async (payload: any) => {
+  try {
+    const resp = await put(
+      `${wUserUrl}/OrganizationProgramEnrollment/UpdateOrganizationProgramEnrollmentStatus`,
       payload
     );
     console.log(resp);
@@ -44,14 +63,22 @@ export const getStudentProfile = async (studentId: string) => {
 
 export const getStudentData = async (studentId: string) => {
   const resp = await get(
-    `${rUserUrl}/Student/GetStudentInformation/${studentId} `
+    `${rUserUrlRc}/Student/GetStudentInformation/${studentId} `
   );
   return resp.data;
 };
 
 export const getStudentDocuments = async (studentId: string) => {
-  const resp = await get(`${rUserUrl}/Documents/GetDocuments/${studentId} `);
-  return resp.data;
+  try {
+    const resp = await get(`${rUserUrl}/Documents/GetDocuments/${studentId}`);
+    console.log(resp);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    console.error(err);
+  }
 };
 
 export const changeDocumentStatus = async (payload: any) => {

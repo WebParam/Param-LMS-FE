@@ -1,114 +1,64 @@
 "use client";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Api } from "../../lib/restapi/endpoints";
 import { IUserLoginModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { login } from "@/app/lib/actions/users";
 
 const cookies = new Cookies();
-const axios = require("axios").default;
 
 export default function Login() {
-  const [disable, setDisable] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
-  const onChangeEmail = (e: any) => {
-    setEmail(e.target.value);
-  };
-
-  const onChangePassword = (e: any) => {
-    setPassword(e.target.value);
-  };
+  const [disable, setDisable] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
 
-  const navigateToRegister = () => {
-    router.push("/auth/register");
-  };
+  const onChangeEmail = (e: any) => setEmail(e.target.value);
+  const onChangePassword = (e: any) => setPassword(e.target.value);
 
   async function LoginUser(event: any) {
-    cookies.remove("param-lms-user");
+    event.preventDefault();
     setDisable(true);
+    setErrorMessage("");
+
+    cookies.remove("param-lms-user");
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    let _id = toast.loading("Logging in..", {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-
     if (!emailRegex.test(email)) {
-      toast.update(_id, {
-        render: "Invalid email address",
-        type: "error",
-        isLoading: false,
-      });
-      setTimeout(() => {
-        setDisable(false);
-        toast.dismiss(_id);
-      }, 2000);
-    } else {
-      const payload = {
-        Email: email,
-        Password: password,
-      } as IUserLoginModel;
+      setErrorMessage("Invalid email address");
+      setDisable(false);
+      return;
+    }
 
-      const user = await Api.POST_Login(payload);
-      console.log("data", user);
-      try {
-        if (user?.data?.id) {
-          toast.update(_id, {
-            render: "Successfully logged in",
-            type: "success",
-            isLoading: false,
-          });
+    try {
+      const user = await login(email, password);
 
-          cookies.set("param-lms-user", JSON.stringify(user.data), {
-            path: "/",
-          });
-
-          console.log(user.data);
-          console.log("Role", user?.data?.role);
-          router.push("/protected/student/course/all-courses");
+      if (user?.data?.id) {
+        cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
+        localStorage.setItem("id", user?.data?.id);
+        debugger;
+        if (process.env.NEXT_PUBLIC_FREEMIUM ==="true") {
+          router.push("protected/home/projects");
         } else {
-          toast.update(_id, {
-            render: "Invalid login credentials",
-            type: "error",
-            isLoading: false,
-          });
-          setTimeout(() => {
-            setDisable(false);
-            toast.dismiss(_id);
-          }, 3000);
+          router.push("/protected/home/courses");
         }
-      } catch (error) {
-        toast.update(_id, {
-          render: "Invalid login credentials",
-          type: "error",
-          isLoading: false,
-        });
-        setTimeout(() => {
-          setDisable(false);
-          toast.dismiss(_id);
-        }, 3000);
-        console.log(error);
+      } else {
+        setErrorMessage("Invalid login credentials");
+        setDisable(false);
       }
-
-      event?.preventDefault();
+    } catch (error) {
+      setErrorMessage("An error occurred. Please try again.");
+      setDisable(false);
     }
   }
 
   return (
-    <>
-      <ToastContainer />
+    <div className="login-container">
       <div
         className="d-flex justify-content-center align-items-center vh-100"
         style={{ marginTop: "20px" }}
@@ -141,10 +91,7 @@ export default function Login() {
                 style={{ height: "50px", fontSize: "16px" }}
               />
             </div>
-            <div
-              className="d-flex justify-content-between align-items-center mb-3"
-              style={{ marginTop: "20px" }}
-            ></div>
+            <div className="text-center mb-3 text-danger">{errorMessage}</div>
             <div
               className="d-grid mb-3"
               style={{ marginTop: "40px", textAlign: "center" }}
@@ -165,8 +112,21 @@ export default function Login() {
               </button>
             </div>
           </form>
+          <p className="text-center text-dark">
+            Don't have an account?{" "}
+            <Link
+              href={
+                process.env.NEXT_PUBLIC_FREEMIUM==="true"
+                  ? "/auth/freemium"
+                  : "/auth/404"
+              }
+              className="text-primary"
+            >
+              <u>Register</u>
+            </Link>
+          </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }

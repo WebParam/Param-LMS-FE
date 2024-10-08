@@ -15,6 +15,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   const studentName = searchParams.get("studentName");
   const refreshId = searchParams.get("refreshId");
   const [loading, setLoading] = useState(false);
+  const isFreemium = process.env.NEXT_PUBLIC_FREEMIUM ==="true";
 
   const { id: courseId, studentId } = useParams<{
     id: string;
@@ -81,24 +82,26 @@ function Layout({ children }: { children: React.ReactNode }) {
     <>
       <PageHeader />
       <div className="container page__container page__container page-section">
-        <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
-          <div className="mx-1" style={{ width: "187px", height: "37.5px" }}>
-            <button
-              onClick={() => downloadZip()}
-              style={{ cursor: documents.length > 0 ? "pointer" : "" }}
-              className={`btn w-100 h-100 ${
-                documents.length > 0 ? "btn-success" : "btn-secondary"
-              }`}
-              disabled={!(documents.length > 0)}
-            >
-              {loading ? (
-                <div className="spinner-border text-white" role="status" />
-              ) : (
-                "Download Documents"
-              )}
-            </button>
+        {!isFreemium && (
+          <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+            <div className="mx-1" style={{ width: "187px", height: "37.5px" }}>
+              <button
+                onClick={() => downloadZip()}
+                style={{ cursor: documents.length > 0 ? "pointer" : "" }}
+                className={`btn w-100 h-100 ${
+                  documents.length > 0 ? "btn-success" : "btn-secondary"
+                }`}
+                disabled={!(documents.length > 0)}
+              >
+                {loading ? (
+                  <div className="spinner-border text-white" role="status" />
+                ) : (
+                  "Download Documents"
+                )}
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="card p-relative o-hidden mb-0">
           <div

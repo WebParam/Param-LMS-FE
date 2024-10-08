@@ -5,12 +5,15 @@ import Link from "next/link";
 
 const Page = async () => {
   const list = await getCourses();
+
+
   return (
     <>
-      <PageHeader />  
+      <PageHeader />
       <div className="container page__container page__container page-section">
         <div className="card mb-0">
           <div
+            data-aos="fade-up"
             className="table-responsive"
             data-toggle="lists"
             data-lists-sort-by="js-lists-values-employee-name"
@@ -18,7 +21,7 @@ const Page = async () => {
           >
             <Courses list={list} />
           </div>
-        </div>{" "}
+        </div>
       </div>
     </>
   );

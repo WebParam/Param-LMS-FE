@@ -17,6 +17,8 @@ export default function PageHeader() {
     videos: "Video Links",
     quizzes: "Quizzes",
     assessments: "Assessments",
+    assignments: "Assignments",
+
   } as Tabs;
 
   const tabName = pathname.split("/").at(-1) || "";

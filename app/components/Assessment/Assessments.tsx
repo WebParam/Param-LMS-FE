@@ -1,16 +1,13 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-export default async function Assessments({ list }: any) {
 
-
-const baseUrl = "/protected/admin/"
+export default function Assessments({ list }: any) {
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
-  const pageUrl = pathName === "/protected/admin/moderator/pages/assessment" ? `${baseUrl}/moderator/pages/assessment` :  pathName === "/protected/admin/moderator-feedback/pages/assessments" ? `${baseUrl}/moderator-feedback/pages/assessments` :  `${baseUrl}/assessments-assignments/pages/assessments`
-  const homeTitle = pathName === "/protected/admin/moderator-feedback" ? "homeTitle=Assessment feedback" : "homeTitle=Mark Assessments"
+  const homeTitle = "homeTitle=Mark Assessments";
   const buttonTitle = "button-title=Assessments";
   return (
     <>
@@ -23,7 +20,7 @@ const baseUrl = "/protected/admin/"
                   key={assessment.id}
                   imgUrl={assessment.avatar}
                   title={assessment.title}
-                  url={`${pageUrl}/${assessment.id}/grade-assessments?assessment-name=${assessment.title}&${homeTitle}&title=${courseTitle}&${buttonTitle}`}
+                  url={`${pathName}/${assessment.id}?assessment-name=${assessment.title}&${homeTitle}&title=${courseTitle}&${buttonTitle}`}
                 />
               ))}
           </div>
@@ -32,8 +29,6 @@ const baseUrl = "/protected/admin/"
     </>
   );
 }
-
-
 
 const Assessment = ({
   imgUrl,
@@ -44,20 +39,21 @@ const Assessment = ({
   url: string;
   title: string;
 }) => {
-  const [isFacilitator, setIsFacilitator] = useState(false)
+  const [isFacilitator, setIsFacilitator] = useState(false);
 
-  const baseUrl = "/protected/admin/"
+  const baseUrl = "/protected/admin/";
   const pathName = usePathname();
   useEffect(() => {
-    if( pathName === `/protected/admin/assessments-assignments/pages/assessments` || pathName === `/protected/admin/assessments-assignments/pages/assignments`  ){
-      setIsFacilitator(true)
-      return
+    if (
+      pathName ===
+        `/protected/admin/assessments-assignments/pages/assessments` ||
+      pathName === `/protected/admin/assessments-assignments/pages/assignments`
+    ) {
+      setIsFacilitator(true);
+      return;
     }
-    setIsFacilitator(false)
-
-
-   }, [pathName])
-   
+    setIsFacilitator(false);
+  }, [pathName]);
 
   return (
     <div className="col-lg-3 card-group-row__col">
@@ -80,29 +76,22 @@ const Assessment = ({
           <div className="d-flex flex-column flex">
             <div className="posts-card-popular__title card-body">
               <small className="text-muted text-uppercase">blog</small>
-              <h6 
-              className="card-title m-0 mb-2">
+              <h6 className="card-title m-0 mb-2">
                 <a href={url}>{title}</a>
               </h6>
-            {
-              !isFacilitator && <>
-                <h6
-                   style={{fontSize:"10px"}}
-              className=" m-0">
-                <a href={url}>Assigned by : MS Khululeka</a>
-              </h6>
-              <h6
-                   style={{fontSize:"10px"}}
-              className=" m-0">
-                <a href={url}>At : 12 July 2023</a>
-              </h6>
-              <h6
-                   style={{fontSize:"10px"}}
-              className=" m-0">
-                <a href={url}>Due : 5 August 2023</a>
-              </h6>
-              </>
-            }
+              {!isFacilitator && (
+                <>
+                  <h6 style={{ fontSize: "10px" }} className=" m-0">
+                    <a href={url}>Assigned by : MS Khululeka</a>
+                  </h6>
+                  <h6 style={{ fontSize: "10px" }} className=" m-0">
+                    <a href={url}>At : 12 July 2023</a>
+                  </h6>
+                  <h6 style={{ fontSize: "10px" }} className=" m-0">
+                    <a href={url}>Due : 5 August 2023</a>
+                  </h6>
+                </>
+              )}
             </div>
           </div>
           <Link href={url}>

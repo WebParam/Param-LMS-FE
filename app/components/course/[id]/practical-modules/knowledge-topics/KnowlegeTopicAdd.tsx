@@ -18,6 +18,7 @@ export default function KnowlegeTopicAdd() {
   }>();
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const topicTitle = searchParams.get("topicTitle") || "";
   const refreshId = searchParams.get("refreshId");
 
   const createQuestionWithParams = createQuestion.bind(
@@ -26,7 +27,8 @@ export default function KnowlegeTopicAdd() {
     courseId,
     moduleId,
     assessmentId,
-    title
+    title,
+    topicTitle
   );
 
   useEffect(() => {

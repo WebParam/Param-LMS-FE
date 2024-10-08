@@ -5,6 +5,7 @@ import "./css/fontawesome.css";
 import "./vendor/spinkit.css";
 import "./css/preloader.css";
 import "./css/app.css";
+import "aos/dist/aos.css";
 import "./css/dark-mode.css";
 import "./globals.css";
 import JsScripts from "@/app/template-components/JsScripts";
@@ -13,7 +14,7 @@ import type { Metadata } from "next";
 import { ReduxProvider } from "./provider";
 
 export const metadata: Metadata = {
-  title: "Param LMS",
+  title: process.env.NEXT_PUBLIC_SITE_NAME || "Param LMS",
   description: "Param LMS |  A new way to learn",
 };
 
@@ -27,10 +28,14 @@ export default function RootLayout({
       <head>
       <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
 
-        <link
-          href="https://fonts.googleapis.com/css?family=Lato:400,700%7COswald:300,400,500,700%7CRoboto:400,500%7CExo+2:600&amp;display=swap"
-          rel="stylesheet"
-        />
+      <link
+        href="https://fonts.googleapis.com/css?family=Lato:400,700%7COswald:300,400,500,700%7CRoboto:400,500%7CExo+2:600&amp;display=swap"
+        rel="stylesheet"
+      />
+      <link
+        rel="icon"
+        href={process.env.NEXT_PUBLIC_FAVICON_URL || "/favicon.ico"}
+      />
       </head>
       <body className="layout-app layout-sticky-subnav">
         <GoogleAnalytics />

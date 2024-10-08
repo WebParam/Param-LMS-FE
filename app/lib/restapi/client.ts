@@ -6,21 +6,23 @@ const axios = require("axios").default;
 const token = "";
 console.log(token);
 let header: any;
-// if (!token) {
-//   header = {
 
-//     Authorization: `Anonymous`,
-//     "Access-Control-Allow-Origin": "*",
-//     "Access-Control-Allow-Headers": "X-Requested-With",
-//   };
-// } else {
+if (
+  !process.env.NEXT_PUBLIC_CLIENTKEY ||
+  process.env.NEXT_PUBLIC_CLIENTKEY.length < 0
+) {
+  throw "ClientKey not available";
+}
+
   header = {
-    // Authorization: `Bearer ${token}`,
+
+    // Authorization: `Bearer ${token}`
     Authorization:"Basic YWRtaW46cmpPdjJhU1omPXxuRDYpJQ==",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "X-Requested-With",
-    "ngrok-skip-browser-warning":"any"
-  // };
+    "ngrok-skip-browser-warning":"any",
+    "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY,
+
 }
 
 export async function GET(endPoint: string) {
@@ -66,6 +68,7 @@ export function DELETE(endPoint: string): Promise<any> {
   let HEADER = {
     "Authorization": "Basic YWRtaW46cmpOdjJhU1omPXxuRDYpJQ==",
     "Access-Control-Allow-Origin": "*",
+    "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY
   };
 
   // Return the axios promise directly
@@ -84,6 +87,7 @@ export function PUT(endPoint: string, payload: Object): Promise<any> {
   let HEADER = {
     "Authorization": "Basic YWRtaW46cmpOdjJhU1omPXxuRDYpJQ==",
     "Access-Control-Allow-Origin": "*",
+    "Client-Key": process.env.NEXT_PUBLIC_CLIENTKEY
   };
 
   // Return the axios promise directly

@@ -13,6 +13,7 @@ const Page = async () => {
     <>
       <div className="card mb-0">
         <div
+        data-aos="fade-up"
           className="table-responsive"
           data-toggle="lists"
           data-lists-sort-by="js-lists-values-employee-name"
