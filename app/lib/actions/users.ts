@@ -109,3 +109,70 @@ export const getAdminUser = async (userId: string) => {
     console.error(err);
   }
 };
+
+export const getUsers = async (userId: string) => {
+  try {
+    const resp = await get(
+      `https://khumla-dev-user-read.azurewebsites.net/api/v1/Users/${userId}`
+    );
+    console.log(resp);
+    const data = resp.data;
+
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    console.error(err);
+  }
+};
+
+export const createUser = async (formData: FormData) => {
+  const body = {
+    title: formData.get("name"),
+    role: formData.get("role"),
+    email: formData.get("email"),
+    phoneNumber: formData.get("phoneNumber"),
+    courseLogoUrl: formData.get("courseLogoUrl"),
+    thumbnailUrl: formData.get("thumbnailUrl"),
+  };
+
+  let url = "";
+  try {
+    const resp = await post(`${wUserUrl}/Courses/AddCourseNew`, body);
+    const data = await resp.data;
+
+    url = `/protected/home/users`;
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    throw err;
+  }
+
+  redirect(url);
+};
+
+export const updateUser = async (id: string, formData: FormData) => {
+  const body = {
+    id,
+    title: formData.get("name"),
+    role: formData.get("role"),
+    email: formData.get("email"),
+    phoneNumber: formData.get("phoneNumber"),
+    courseLogoUrl: formData.get("courseLogoUrl"),
+    thumbnailUrl: formData.get("thumbnailUrl"),
+  };
+
+  let url = "";
+  try {
+    const resp = await post(`${wUserUrl}/Courses/AddCourseNew`, body);
+    const data = await resp.data;
+
+    url = `/protected/home/users/${id}?pageTitle=Edit User Info`;
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    throw err;
+  }
+
+  redirect(url);
+};
