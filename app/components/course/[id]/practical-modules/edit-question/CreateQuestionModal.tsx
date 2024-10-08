@@ -25,6 +25,7 @@ function CreateQuestionModal(props: any) {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const topicTitle = searchParams.get("topicTitle") || "";
   const [description, setDescription] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [errorSubmit, setErrorSubmit] = useState(false);
@@ -46,7 +47,8 @@ function CreateQuestionModal(props: any) {
     courseId,
     moduleId,
     assessmentId,
-    title
+    title,
+    topicTitle
   );
 
   const submit = () => {

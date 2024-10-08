@@ -19,8 +19,7 @@ export default function PageHeader() {
 
   const tabName = pathname.split("/").at(-1) || "";
 
-  // Check the environment variable
-  const isFreemium = process.env.NEXT_PUBLIC_USER === "freemium";
+  const isFreemium = process.env.NEXT_PUBLIC_FREEMIUM === "true";
   const buttonText = isFreemium ? "Project Applicants" : "Course Applicants";
 
   return (

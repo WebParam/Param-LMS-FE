@@ -19,8 +19,9 @@ export const uploadDocuments = async (
       }
     );
 
-    const data = await res.json();
-    Diagnostic("SUCCESS ON POST, returning", data);
+   // const data = await res.json();
+    console.log("Response", res)
+    Diagnostic("SUCCESS ON POST, returning",res);
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
   }

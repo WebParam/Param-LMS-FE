@@ -26,12 +26,14 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
 
 function Page({ params }: { params: { id: string } }) {
   const courseId = params.id;
-  const isFreemium = process.env.NEXT_PUBLIC_USER;
-  const baseUrl = isFreemium
-    ? "https://freemium-student-qa.netlify.app"
-    : "https://thooto-student-dev.netlify.app";
+  const isFreemium = process.env.NEXT_PUBLIC_FREEMIUM === "true";
+  const baseUrl = `https://${process.env.NEXT_PUBLIC_API_ENV}${
+    isFreemium ? "-freemium" : ""
+  }.thooto.com`;
 
-  const registrationUrl = `${baseUrl}/register?${isFreemium ? 'projectId' : 'courseId'}=${courseId}`;
+  const registrationUrl = `${baseUrl}/register?${
+    isFreemium ? "projectId" : "courseId"
+  }=${courseId}`;
   const loginUrl = `${baseUrl}/login`;
   const [courseData, setCourseData] = useState<IProjectAnalytics | undefined>(
     undefined
@@ -46,7 +48,6 @@ function Page({ params }: { params: { id: string } }) {
         courseId,
         false
       );
-      console.log("Fetched Course Data:", fetchedData);
       setCourseData(fetchedData);
     } catch (error) {
       console.error("Error fetching course data:", error);
@@ -59,7 +60,6 @@ function Page({ params }: { params: { id: string } }) {
         courseId,
         false
       );
-      console.log("Fetched Project Data:", projectAnalytics);
       setProjectData(projectAnalytics);
     } catch (error) {
       console.error("Error fetching project data:", error);
@@ -71,7 +71,7 @@ function Page({ params }: { params: { id: string } }) {
     fetchProjectData();
   }, []);
 
-  const graphsData: IProjectAnalytics = isFreemium ?  projectData! : courseData! ;
+  const graphsData: IProjectAnalytics = isFreemium ? projectData! : courseData!;
 
   return (
     <ErrorBoundary>
@@ -111,7 +111,7 @@ function Page({ params }: { params: { id: string } }) {
           </>
         ) : (
           <div>
-          <SkeletonGraphs  />
+            <SkeletonGraphs />
           </div>
         )}
       </div>

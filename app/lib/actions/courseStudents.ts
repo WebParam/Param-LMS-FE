@@ -3,6 +3,8 @@ import { Diagnostic } from "../logger/logger";
 import { get, post, put } from "../utils";
 import { rAggregatorUrl, rUserUrl, rUserUrlRc, wCourseUrl, wUserUrl } from "./endpoints";
 import { z } from "zod";
+import { IResponseObject } from "../restapi/response";
+import { IDocument } from "@/app/interfaces/document";
 
 export const getCourseStudents = async (courseId: string) => {
   try {
@@ -67,8 +69,16 @@ export const getStudentData = async (studentId: string) => {
 };
 
 export const getStudentDocuments = async (studentId: string) => {
-  const resp = await get(`${rUserUrl}/Documents/GetDocuments/${studentId} `);
-  return resp.data;
+  try {
+    const resp = await get(`${rUserUrl}/Documents/GetDocuments/${studentId}`);
+    console.log(resp);
+    const data = resp.data;
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    console.error(err);
+  }
 };
 
 export const changeDocumentStatus = async (payload: any) => {

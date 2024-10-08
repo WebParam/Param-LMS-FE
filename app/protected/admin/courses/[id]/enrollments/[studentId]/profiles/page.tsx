@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getStudentProfile } from "@/app/lib/actions/courseStudents";
+import { getStudentData, getStudentProfile } from "@/app/lib/actions/courseStudents";
 import { useParams, useSearchParams } from "next/navigation";
 import { getCodes } from "@/app/lib/actions/course";
 
@@ -25,7 +25,7 @@ const Body = () => {
   const { studentId } = useParams<{ studentId: string }>();
 
   const studentInformation = async () => {
-    const response = await getStudentProfile(studentId);
+    const response = await getStudentData(studentId);
     setData(response);
     localStorage.setItem("email", response.email);
   };

@@ -39,6 +39,12 @@ function Layout({ children }: { children: React.ReactNode }) {
       url: `${url}/assessments?title=${title}&moduleTitle=${moduleTitle}`,
       path: `${url}/assessments`,
     },
+    {
+      name: "Assignments",
+      title: "Assignments",
+      url: `${url}/assignments?title=${title}&moduleTitle=${moduleTitle}`,
+      path: `${url}/assignments`,
+    },
   ];
 
   return (
