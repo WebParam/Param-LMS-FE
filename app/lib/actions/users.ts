@@ -64,8 +64,7 @@ export const adminForgotResetPassword = async (payload: {
   otp: string;
 }) => {
   try {
-    const resp = await post(`${wUserUrl}/Users/ResetPassword`, payload);
-    console.log(resp);
+    const resp = await put(`${wUserUrl}/Users/ResetPassword`, payload);
     const data = resp.data;
 
     Diagnostic("SUCCESS ON GET, returning", data);
