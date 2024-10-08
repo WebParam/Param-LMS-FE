@@ -53,18 +53,18 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           icon: "group",
           roles: ["Admin", "SuperAdmin", "Freemium"],
         },
-        // {
-        //   name: userRole === "freemium" ? "Edit Project" : "Edit Course",
-        //   url: userRole !== "freemium" ? `/protected/admin/courses/${courseId}?title=${courseTitle}&id=${courseId}` : `/protected/home/projects/${courseId}?title=${courseTitle}&id=${courseId}`,
-        //   icon: "edit",
-        //   roles: ["Admin", "SuperAdmin", "Freemium"],
-        // },
-        // ...(userRole !== "freemium" || Number(projectLength) < 2 ? [{
-        //   name: userRole === "freemium" ? "Create Project" : "Create Course",
-        //   url: `/protected/home/courses/create?title=${courseTitle}&id=${courseId}`,
-        //   icon: "add_box",
-        //   roles: ["Admin", "SuperAdmin", "Freemium"],
-        // }] : []),
+        {
+          name: userRole === "freemium" ? "Edit Project" : "Edit Course",
+          url: userRole !== "freemium" ? `/protected/admin/courses/${courseId}?title=${courseTitle}&id=${courseId}` : `/protected/home/projects/${courseId}?title=${courseTitle}&id=${courseId}`,
+          icon: "edit",
+          roles: ["Admin", "SuperAdmin", "Freemium"],
+        },
+        ...(userRole !== "freemium" || Number(projectLength) < 2 ? [{
+          name: userRole === "freemium" ? "Create Project" : "Create Course",
+          url: `/protected/home/courses/create?title=${courseTitle}&id=${courseId}`,
+          icon: "add_box",
+          roles: ["Admin", "SuperAdmin", "Freemium"],
+        }] : []),
       ],
     },
     {
