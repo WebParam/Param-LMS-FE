@@ -18,6 +18,10 @@ export default function ResetPassword() {
   const [sendEmailError, setSendEmailError] = useState(false);
   const [sendOtpError, setSendOtpError] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [passwordChangedSuccess ,setPasswordChangedSuccess] = useState(false);
+  const [disableChangePassBtn ,setDisableChangePassBtn] = useState(false);
+
+  const [wrongEmailError, setWrongEmailError] = useState(false);
   const router = useRouter();
 
   const handleOTPChange = (otpValue: string) => {
@@ -26,9 +30,14 @@ export default function ResetPassword() {
   };
 
   const changePassword = async (event: React.FormEvent<HTMLFormElement>) => {
-    setPasswordMatchError(false);
-
     event.preventDefault();
+    setDisableChangePassBtn(true)
+    setSendEmailSuccess(false);
+    setSendEmailError(false);
+    setSendOtpError(false);
+    setPasswordMatchError(false);
+    setPasswordChangedSuccess(false);
+    setWrongEmailError(false);
     if (password !== confirmPassword) {
       setPasswordMatchError(true);
       return;
@@ -37,22 +46,35 @@ export default function ResetPassword() {
     setDisable(true);
     try {
       const payload = { email, password, otp };
-      await adminForgotResetPassword(payload);
-
+     const response = await adminForgotResetPassword(payload);
+     if(response.id){
       setSendOtpError(false);
       setShowPassInputs(false);
-      router.push("/");
+      setPasswordChangedSuccess(true);
+
+          setDisableChangePassBtn(false)
+      setTimeout(() =>{
+        router.push("/");
+      },5000)
+     }else{
+      setSendOtpError(true)
+     }
+  
     } catch (error: any) {
       console.error(error);
-
+      setSendOtpError(true)
       setDisable(false);
     }
   };
 
   const sendOtp = async (event: React.FormEvent<HTMLFormElement>) => {
-    setSendEmailError(false);
-    setSendEmailSuccess(false);
     event.preventDefault();
+    setSendEmailSuccess(false);
+    setSendEmailError(false);
+    setSendOtpError(false);
+    setPasswordMatchError(false);
+    setPasswordChangedSuccess(false);
+    setWrongEmailError(false);
     if (!email.trim()) {
      
       return;
@@ -63,16 +85,18 @@ export default function ResetPassword() {
       const payload = { email };
       const response = await AdminSendResetOTP(payload);
       if (response == "User does not exist") {
-        setSendEmailError(true);
+        setWrongEmailError(true)
         setSendEmailSuccess(false);
+
       } else if (response.data.id) {
         setSendEmailError(false);
         setSendEmailSuccess(true);
-        debugger;
+      
         setTimeout(() => {
           setSendEmailError(false);
           setSendEmailSuccess(false);
           setShowPassInputs(false);
+          setDisable(false);
         }, 4000);
       }
     } catch (error: any) {
@@ -81,6 +105,15 @@ export default function ResetPassword() {
       setDisable(false);
     }
   };
+
+  const resetValues = () => {
+    setSendEmailSuccess(false);
+    setSendEmailError(false);
+    setSendOtpError(false);
+    setPasswordMatchError(false);
+    setPasswordChangedSuccess(false);
+    setWrongEmailError(false);
+  }
 
   return (
     <>
@@ -96,7 +129,13 @@ export default function ResetPassword() {
             </a>
           ) : (
             <div
-              onClick={() => setShowPassInputs(true)}
+              onClick={() => 
+
+                {
+                  setShowPassInputs(true)
+                  resetValues()
+                }
+              }
               className="btn btn-success flex-column"
             >
               <span className="btn__secondary-text">Resend OTP</span>
@@ -129,7 +168,7 @@ export default function ResetPassword() {
                       We will email you with info on how to reset your password.
                     </small>
                   </div>
-                  <button disabled={disable} className="btn btn-success">
+                  <button disabled={disable} className={disable ? "btn btn-secondary" : "btn btn-success" }>
                     {disable ? (
                       <div
                         className="spinner-border text-white"
@@ -149,6 +188,11 @@ export default function ResetPassword() {
                       Failed to send OTP sent to {email}
                     </span>
                   )}
+                  {wrongEmailError && (
+                  <span className=" ml-5 alert alert-danger">
+                  Kindly utilize an email address previously registered with us.
+                  </span>
+                )}
                 </form>
               </div>
             </div>
@@ -197,15 +241,22 @@ export default function ResetPassword() {
                 <button
                   disabled={disable}
                   type="submit"
-                  className="btn btn-success"
+                  className={disable ? "btn btn-secondary" : "btn btn-success" }
                 >
-                  Save password
+                  {disableChangePassBtn ? (
+                      <div
+                        className="spinner-border text-white"
+                        role="status"
+                      />
+                    ) : (
+                      "Save Password"
+                    )}
                 </button>
-                {!sendOtpError && (
+                {sendOtpError && (
                   <span className=" ml-5 alert alert-danger">Invalid OTP</span>
                 )}
 
-                {sendOtpError && (
+                {passwordChangedSuccess && (
                   <span className=" ml-5 alert alert-success">
                     Password changed successfully
                   </span>
@@ -215,6 +266,7 @@ export default function ResetPassword() {
                     Passwords do not match
                   </span>
                 )}
+                
               </form>
             </div>
           </>
