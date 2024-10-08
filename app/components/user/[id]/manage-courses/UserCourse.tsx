@@ -2,6 +2,7 @@
 import Modal from "react-bootstrap/Modal";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 function UserCourse({ data }: { data: any }) {
   const searchParams = useSearchParams();
@@ -18,42 +19,39 @@ function UserCourse({ data }: { data: any }) {
   }, [refreshId]);
 
   return (
-    <div key={data.id}>
-      <Modal
-        size="sm"
-        centered
-        show={viewQuizModal}
-        onHide={() => setViewQuestionModal(false)}
-        backdrop={false}
-        keyboard={false}
-      >
-        <Modal.Body>
-          <div
+    <div className="col-lg-3 card-group-row__col">
+      <div className="card card-group-row__card">
+        <div
+          className="d-flex align-items-center justify-content-center"
+          style={{ height: "200px", border: "2px", position: "relative" }}
+        >
+          <input
+            style={{ position: "absolute", right: "15px", top: "15px" }}
+            type="checkbox"
+            name=""
+            id=""
+          />
+          <p
+            className="bg-success d-flex align-items-center justify-content-center font-size-32pt font-weight-bold"
             style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "#252525",
-              gap: "15px",
+              borderRadius: "50%",
+              width: "130px",
+              height: "130px",
+              color: "white",
             }}
           >
-            <div className="spinner-grow text-primary" role="status" />
-            <p>loading preview...</p>
-          </div>
-        </Modal.Body>
-      </Modal>
+            {data.title && titleShort(data.title)}
+          </p>
+        </div>
 
-      <div className="card p-3 mt-3 mb-3 overflow-auto">
-        <div className="d-flex justify-content-between">
-          <div style={{ fontSize: "15px" }}>
-            <div className="mb-0">
-              <b>{data.title}</b>
+        <div className="d-flex p-16pt">
+          <div className="d-flex flex-column flex">
+            <div className="posts-card-popular__title card-body">
+              <small className="text-muted text-uppercase">blog</small>
+              <h4 className="card-title m-0">
+                <div>{data.title}</div>
+              </h4>
             </div>
-          </div>
-
-          <div className="d-flex align-content-center">
-            <input type="checkbox" name="" id="" />
           </div>
         </div>
       </div>
@@ -61,3 +59,11 @@ function UserCourse({ data }: { data: any }) {
   );
 }
 export default UserCourse;
+
+const titleShort = (title: string) => {
+  const strArr = title.split(" ");
+
+  if (strArr.length > 1 && strArr[1][0])
+    return strArr[0][0].toUpperCase() + strArr[1][0].toUpperCase();
+  return strArr[0][0].toUpperCase();
+};
