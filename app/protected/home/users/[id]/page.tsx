@@ -1,46 +1,37 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { getAssessments } from "@/app/lib/actions/assessments";
 import { userData } from "@/components/user/data";
+import { updateUser } from "@/app/lib/actions/users";
 
 const Body = ({ params }: { params: { id: string } }) => {
   const { id } = params;
-  const searchParams = useSearchParams();
-  const refreshId = searchParams.get("refreshId");
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [users, setUsers] = useState<any[]>(userData);
 
-  const user = userData.find((u) => (u.id = id)) || {};
-
-  const fetchUsers = async () => {
-    const data = await getAssessments(id);
-    setUsers(data);
-  };
-
-  useEffect(() => {
-    // fetchUsers();
-    setOpenModal(false);
-  }, [refreshId]);
+  const user: any = userData.find((u) => (u.id = id)) || {};
+  const updateUserWithParams = updateUser.bind(null, id);
 
   return (
     <>
       <div className="card p-4">
-        <form>
+        <form action={updateUserWithParams}>
           <div>
             <h5>Name & Surname</h5>
             <input
               minLength={10}
               className="form-control mb-3"
               placeholder="Enter your title here..."
-              name="title"
+              defaultValue={user.name}
+              name="name"
             />
           </div>
           <div>
             <h5>User Role</h5>
-            <select className="form-control mb-3" name="assessmentType">
-              <option value="1">Facilitor</option>
-              <option value="0">Moderator</option>
+            <select
+              defaultValue={user.role}
+              className="form-control mb-3"
+              name="role"
+            >
+              <option value="">Select Role</option>
+              <option value="Facilitator">Facilitator</option>
+              <option value="Moderator">Moderator</option>
             </select>
           </div>
           <div>
@@ -49,8 +40,9 @@ const Body = ({ params }: { params: { id: string } }) => {
               type="email"
               minLength={10}
               className="form-control mb-3"
-              placeholder="Enter your title here..."
-              name="title"
+              placeholder="Enter your email here..."
+              name="email"
+              defaultValue={user.email}
             />
           </div>
           <div>
@@ -61,6 +53,7 @@ const Body = ({ params }: { params: { id: string } }) => {
               className="form-control mb-3"
               placeholder="Enter your title here..."
               name="title"
+              defaultValue={user.phoneNumber}
             />
           </div>
           <div className="d-flex justify-content-center">
