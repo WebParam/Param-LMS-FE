@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getStudentProfile } from "@/app/lib/actions/courseStudents";
+import { getStudentData, getStudentProfile } from "@/app/lib/actions/courseStudents";
 import { useParams, useSearchParams } from "next/navigation";
 import { getCodes } from "@/app/lib/actions/course";
 
@@ -25,7 +25,7 @@ const Body = () => {
   const { studentId } = useParams<{ studentId: string }>();
 
   const studentInformation = async () => {
-    const response = await getStudentProfile(studentId);
+    const response = await getStudentData(studentId);
     setData(response);
     localStorage.setItem("email", response.email);
   };
@@ -41,19 +41,22 @@ const Body = () => {
   };
 
   const getDescription = (codeType: number, code: string) => {
-    console.log(`Getting description for type: ${codeType}, code: ${code}`);
-    const codeCategory = codes.find((c: any) => c.type === codeType);
-    if (!codeCategory) {
-      console.log(`No category found for type: ${codeType}`);
+    try {
+      const codeCategory = codes.find((c) => c.type === codeType);
+      if (!codeCategory) {
+        console.log(`No category found for type: ${codeType}`);
+        return "N/A";
+      }
+      const codeObj = codeCategory.codes.find((c) => c.code === code);
+      if (!codeObj) {
+        console.log(`No code object found for code: ${code} in type: ${codeType}`);
+        return "N/A";
+      }
+      return codeObj.description;
+    } catch (error) {
+      console.error(`Error retrieving description for codeType: ${codeType}, code: ${code}`, error);
       return "N/A";
     }
-    const codeObj = codeCategory.codes.find((c) => c.code === code);
-    if (!codeObj) {
-      console.log(
-        `No code object found for code: ${code} in type: ${codeType}`
-      );
-    }
-    return codeObj ? codeObj.description : "N/A";
   };
 
   useEffect(() => {
