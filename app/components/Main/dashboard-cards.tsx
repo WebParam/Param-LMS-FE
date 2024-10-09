@@ -1,7 +1,7 @@
 "use client";
 import { Container, Row, Col } from "react-bootstrap";
-import CardComponent from "./Card/Card";
-import PageHeader from "./PageHeader";
+import CardComponent from "../facilitator/Card/Card";
+import PageHeader from "../facilitator/PageHeader";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useParams } from "react-router-dom";
 
