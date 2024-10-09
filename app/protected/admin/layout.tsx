@@ -119,7 +119,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     },
     {
       name: "Facilitator Dashboard",
-      url: `/protected/admin/facilitator/?title=${courseTitle}&id=${courseId}`,
+      url: `/protected/admin/facilitator?title=${courseTitle}&id=${courseId}`,
       icon: "dashboard",
       roles: ["Admin", "SuperAdmin"],
     },
