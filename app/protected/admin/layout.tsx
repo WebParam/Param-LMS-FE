@@ -57,7 +57,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           icon: "group",
           roles: ["Admin", "SuperAdmin", "Freemium"],
         },
-        ...(userRole == "SuperAdmin" ? [
+        ...(userRole == "SuperAdmin" || userRole == "Admin" ? [
           {
             name: "Edit Course",
             url: `/protected/admin/courses/${courseId}?title=${courseTitle}&id=${courseId}`,
@@ -79,30 +79,30 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       icon: "show_chart",
       roles: ["Admin", "SuperAdmin"],
       children: [
-        // {
-        //   name: userRole === "freemium" ? "Project Analytics" : "Course Analytics",
-        //   url: `/protected/admin/analytics/graphs/course?title=${courseTitle}&id=${courseId}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Assessment Analytics",
-        //   url: `/protected/admin/analytics/graphs/assessments?title=${courseTitle}&id=${courseId}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Assignments Analytics",
-        //   url: `/protected/admin/analytics/graphs/assignments?title=${courseTitle}&id=${courseId}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Students Analytics",
-        //   url: `/protected/admin/analytics/grouped-analytics/students?title=${courseTitle}&id=${courseId}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
+        {
+          name: userRole === "freemium" ? "Project Analytics" : "Course Analytics",
+          url: `/protected/admin/analytics/graphs/course?title=${courseTitle}&id=${courseId}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
+          name: "Assessment Analytics",
+          url: `/protected/admin/analytics/graphs/assessments?title=${courseTitle}&id=${courseId}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
+          name: "Assignments Analytics",
+          url: `/protected/admin/analytics/graphs/assignments?title=${courseTitle}&id=${courseId}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
+          name: "Students Analytics",
+          url: `/protected/admin/analytics/grouped-analytics/students?title=${courseTitle}&id=${courseId}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
         {
           name: "Video Analytics",
           url: `/protected/admin/analytics/grouped-analytics/videos/course/${courseId}?title=${courseTitle}&id=${courseId}`,
