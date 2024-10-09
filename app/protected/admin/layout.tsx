@@ -123,12 +123,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       icon: "dashboard",
       roles: ["Admin", "SuperAdmin"],
     },
-    {
-      name: "Schedule Classes",
-      url: `/protected/admin/scheduleclass?title=${courseTitle}&id=${courseId}`,
-      icon: "class",
-      roles: ["Admin", "SuperAdmin"],
-    },
+
     {
       name: "Messaging",
       url: `/protected/admin/facilitator/?title=${courseTitle}&id=${courseId}`,
