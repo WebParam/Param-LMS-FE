@@ -111,38 +111,33 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         },
       ],
     },
-    // {
-    //   name: "Host Analytics",
-    //   url: `/protected/admin/analytics/graphs/host-companies/companies?title=${courseTitle}&id=${courseId}`,
-    //   icon: "business",
-    //   roles: ["Admin", "SuperAdmin"],
-    // // },
-    // {
-    //   name: "Facilitator Dashboard",
-    //   url: `/protected/admin/facilitator/?title=${courseTitle}&id=${courseId}`,
-    //   icon: "dashboard",
-    //   roles: ["Admin", "SuperAdmin"],
-    // },
     {
-      name: "Schedule Classes",
-      url: `/protected/admin/scheduleclass?title=${courseTitle}&id=${courseId}`,
-      icon: "class",
+      name: "Host Analytics",
+      url: `/protected/admin/analytics/graphs/host-companies/companies?title=${courseTitle}&id=${courseId}`,
+      icon: "business",
       roles: ["Admin", "SuperAdmin"],
     },
-    // {
-    //   name: "Messaging",
-    //   url: `/protected/admin/facilitator/?title=${courseTitle}&id=${courseId}`,
-    //   icon: "message",
-    //   roles: ["Admin", "SuperAdmin"],
-    //   children: [
-    //     {
-    //       name: "Notifications",
-    //       url: `/protected/admin/notifications?title=${courseTitle}&id=${courseId}`,
-    //       icon: "notifications",
-    //       roles: ["Admin", "SuperAdmin"],
-    //     },
-    //   ],
-    // },
+    {
+      name: "Facilitator Dashboard",
+      url: `/protected/admin/facilitator/?title=${courseTitle}&id=${courseId}`,
+      icon: "dashboard",
+      roles: ["Admin", "SuperAdmin"],
+    },
+
+    {
+      name: "Messaging",
+      url: `/protected/admin/facilitator/?title=${courseTitle}&id=${courseId}`,
+      icon: "message",
+      roles: ["Admin", "SuperAdmin"],
+      children: [
+        {
+          name: "Notifications",
+          url: `/protected/admin/notifications?title=${courseTitle}&id=${courseId}`,
+          icon: "notifications",
+          roles: ["Admin", "SuperAdmin"],
+        },
+      ],
+    },
   ];
 
   useEffect(() => {
