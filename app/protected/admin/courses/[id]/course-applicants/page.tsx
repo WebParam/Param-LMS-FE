@@ -14,6 +14,13 @@ const Body = async ({ params }: { params: { id: string } }) => {
 
   const registrationUrl = `${baseUrl}/register?courseId=${courseId}`;
   const loginUrl = `${baseUrl}/login`;
+  
+  const data = {
+    numberOfStudents: fetchedData.numberOfStudents,
+    numbetOfStudentsEmployed: fetchedData.numbetOfStudentsEmployed,
+    numberOfStudentsUnemployed: fetchedData.numberOfStudentsUnemployed,
+    numberOfStudentsWithDisabilities: fetchedData.numberOfStudentsWithDisabilities,
+  }
 
   return (
     <>
@@ -41,7 +48,7 @@ const Body = async ({ params }: { params: { id: string } }) => {
             </Link>
           </div>
         </div>
-        <Graphs />
+        <Graphs graphData={data} />
 
         <div data-aos="slide-right">
         <ApplicantsTable
