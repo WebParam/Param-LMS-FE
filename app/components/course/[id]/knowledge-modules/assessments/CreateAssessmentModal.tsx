@@ -40,7 +40,6 @@ function CreateAssessmentModal(props: any) {
         <Modal.Header closeButton>
           <Modal.Title>Create Assessment</Modal.Title>
         </Modal.Header>
-
         <Modal.Body>
           <div>
             <h5>Name</h5>
@@ -50,6 +49,13 @@ function CreateAssessmentModal(props: any) {
               placeholder="Enter your title here..."
               name="title"
             />
+            <div>
+              <h5>Type</h5>
+              <select className="form-control mb-3" name="assessmentType">
+                <option value="1">Formative</option>
+                <option value="0">Summative</option>
+              </select>
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer>

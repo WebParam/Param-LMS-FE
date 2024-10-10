@@ -34,9 +34,11 @@ export const getCourses = async () => {
   noStore();
   try {
     const resp = await get(`${rCourseUrl}/Courses/GetCoursesNew`);
-    const data = resp.length > 0 ? resp.map((res: any) => res.data) : [];
-    Diagnostic("SUCCESS ON GET, returning", data);
-    return data;
+    if (Array.isArray(resp) && resp.length > 0) {
+      const data = resp.map((res: any) => res.data);
+      Diagnostic("SUCCESS ON GET, returning", data);
+      return data;
+    } else return [];
   } catch (err) {
     Diagnostic("ERROR ON GET, returning", err);
     throw err;
@@ -127,6 +129,44 @@ export const getStudentCourseGraphsAnalytics = async (
     throw error;
   }
 };
+
+
+export const getCourseVideoAnalytics = async (
+  courseId: string,
+) => {
+  try {
+    const resp = await get(
+      `${rAnalyticUrl}/VideoWatched/Course/${courseId}/Videos`
+    );
+    const data = resp.data;
+    console.log("Data data", data);
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (error) {
+    Diagnostic("ERROR ON GET, returning", error);
+    throw error;
+  }
+};
+
+
+export const getStudentCourseVideoAnalytics = async (
+  courseId: string,
+  studentId: string
+) => {
+  try {
+    const resp = await get(
+      `${rAnalyticUrl}/VideoWatched/Student/${studentId}/Course/${courseId}/Videos`
+    );
+    const data = resp.data;
+    console.log("Data data", data);
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (error) {
+    Diagnostic("ERROR ON GET, returning", error);
+    throw error;
+  }
+};
+
 
 export const getCodes = async () => {
   try {

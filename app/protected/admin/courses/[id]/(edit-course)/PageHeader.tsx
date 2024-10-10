@@ -1,10 +1,11 @@
 "use client";
+import CreateAssessmentModal from "@/components/course/[id]/knowledge-modules/assessments/CreateAssessmentModal";
 import KnowledgeModuleModal from "@/components/course/KnowledgeModuleModal";
 import PracticalModuleModal from "@/components/course/PracticalModuleModal";
 import WorkBookModal from "@/components/course/WorkBookModal";
 import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Tabs {
   [id: string]: string;
@@ -15,11 +16,14 @@ export default function PageHeader() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
+  const refreshId = searchParams.get("refreshId");
 
   const tabs = {
     "knowledge-modules": "Knowledge Modules",
     "practical-modules": "Practical Skills Modules",
     workbook: "Workbook",
+    logbook: "Logbook",
+    assessments: "Assessments",
   } as Tabs;
 
   const subPath = pathname.split("/").at(-1) || "/";
@@ -29,6 +33,11 @@ export default function PageHeader() {
   const [openKnowledgeModuleModal, setOpenKnowledgeModuleModal] =
     useState(false);
   const [openWorkBookModal, setOpenWorkBookModal] = useState(false);
+  const [openAssessmentModal, setOpenAssessmentModal] = useState(false);
+
+  useEffect(() => {
+    setOpenAssessmentModal(false);
+  }, [refreshId]);
 
   return (
     <>
@@ -49,6 +58,12 @@ export default function PageHeader() {
         onHide={() => setOpenWorkBookModal(false)}
         courseId={id}
         title={title}
+      />
+      <CreateAssessmentModal
+        show={openAssessmentModal}
+        onHide={() => {
+          setOpenAssessmentModal(false);
+        }}
       />
       <div className="border-bottom-2 py-32pt position-relative z-1">
         <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
@@ -98,6 +113,14 @@ export default function PageHeader() {
                   onClick={() => setOpenWorkBookModal(true)}
                 >
                   Create Workbook
+                </button>
+              )}
+              {subPath == "assessments" && (
+                <button
+                  className="btn btn-success"
+                  onClick={() => setOpenAssessmentModal(true)}
+                >
+                  Create Assessment
                 </button>
               )}
             </div>

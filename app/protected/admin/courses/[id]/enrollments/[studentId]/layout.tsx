@@ -87,11 +87,11 @@ function Layout({ children }: { children: React.ReactNode }) {
             <div className="mx-1" style={{ width: "187px", height: "37.5px" }}>
               <button
                 onClick={() => downloadZip()}
-                style={{ cursor: documents && documents.length > 0 ? "pointer" : "" }}
+                style={{ cursor: documents.length > 0 ? "pointer" : "" }}
                 className={`btn w-100 h-100 ${
-                  documents && documents.length > 0 ? "btn-success" : "btn-secondary"
+                  documents.length > 0 ? "btn-success" : "btn-secondary"
                 }`}
-                disabled={!(documents && documents.length > 0)}
+                disabled={!(documents.length > 0)}
               >
                 {loading ? (
                   <div className="spinner-border text-white" role="status" />

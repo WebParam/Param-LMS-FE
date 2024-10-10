@@ -17,6 +17,7 @@ function EditQuestionModal(props: any) {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const topicTitle = searchParams.get("topicTitle") || "";
   const [description, setDescription] = useState(props.data.description);
   const submmitRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -28,7 +29,8 @@ function EditQuestionModal(props: any) {
     courseId,
     moduleId,
     assessmentId,
-    title
+    title,
+    topicTitle
   )
 
   const submit = () => {

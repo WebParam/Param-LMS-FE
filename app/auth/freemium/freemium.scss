@@ -1,0 +1,23 @@
+.custom-file-input label {
+    height: 50px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .custom-file-input label:hover {
+    background-color: #e9ecef;
+  }
+
+  label {
+    font-size: 16px;
+    color: #252525;
+  }
+
+  ::placeholder {
+    opacity: .4 !important;
+  }

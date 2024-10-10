@@ -84,3 +84,32 @@ export interface IStudentAssessmentAverage{
     averageResults: number
     averageTimeSpent: number
 }
+
+
+export interface IVideoAnalytics {
+    videoWatchGroupedCharts: number[];
+    videoWatchGroupedStudentsTable: IVideoStudentTableAnalytics[]
+}
+
+interface IVideoStudentTableAnalytics {
+    studentId: string;
+    firstName: string;
+    surname: string;
+    numberOfVideosWatched: number;
+    topicCompletedRate: number;
+}
+
+export interface IStudentWatchedVideos {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    isCompleted: boolean;
+    userId: string;
+    courseId: string;
+    videoTitle: string;
+    elementId: string;
+    topicId: string;
+    topicTitle: string;
+    totalVideoTime: number;
+    timeSpent: number;
+}

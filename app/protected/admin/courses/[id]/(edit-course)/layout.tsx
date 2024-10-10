@@ -29,9 +29,19 @@ function Layout({
       url: `${baseUrl}/practical-modules?title=${name}`,
     },
     {
+      name: "Assessments",
+      path: `${baseUrl}/assessments`,
+      url: `${baseUrl}/assessments?title=${name}`,
+    },
+    {
       name: "Workbook",
       path: `${baseUrl}/workbook`,
       url: `${baseUrl}/workbook?title=${name}`,
+    },
+    {
+      name: "Logbook",
+      path: `${baseUrl}/logbook`,
+      url: `${baseUrl}/logbook?title=${name}`,
     },
   ];
 

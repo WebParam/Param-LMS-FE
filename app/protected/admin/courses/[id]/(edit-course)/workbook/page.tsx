@@ -54,7 +54,7 @@ function Page({ params }: { params: { id: string } }) {
               name={data.Title}
               moduleCode={data.WorkExperienceModuleCode}
               description={data.Description}
-              url="#"
+              url={url}
             />
           );
         })

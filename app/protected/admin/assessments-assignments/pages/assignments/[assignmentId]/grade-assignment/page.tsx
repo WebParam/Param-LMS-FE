@@ -15,11 +15,16 @@ const Body = ({ params }: { params: { assignmentId: string } }) => {
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
   const assignmentId = params.assignmentId;
+  const [loading, setLoading] = useState(true);
+
 
   const getAssessments = async () => {
+    setLoading(true)
+
     const assessments = await getStudentsAssessment(assignmentId);
     setList(assessments);
-    console.log("Assessments", assessments);
+
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -35,21 +40,25 @@ const Body = ({ params }: { params: { assignmentId: string } }) => {
         }}
       />
 
-      <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+      <div       data-aos="slide-left"
+ className="card mb-3 d-flex flex-row p-2 justify-content-end">
         <div className="mx-1">
           <button className="btn btn-success btn-block" onClick={() => {setOpenModal(true)}}>
             Submit for moderation
           </button>
         </div>
       </div>
-      <div className="card mb-0">
+      <div
+      data-aos="flip-up"
+      className="card mb-0">
         <div
+
           className="table-responsive"
           data-toggle="lists"
           data-lists-sort-by="js-lists-values-employee-name"
           data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
         >
-          <Table list={currentItems} />
+          <Table loading ={loading} list={currentItems} />
         </div>
 
         <Pagination

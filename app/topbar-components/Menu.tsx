@@ -3,6 +3,7 @@ import SideTab from "@/app/interfaces/sideTabs";
 import { usePathname } from "next/navigation";
 import Dropdown from "../components/Dropdown";
 import Cookies from "universal-cookie";
+import { useState } from "react";
 
 const Menu: NextPage<{ sideTabs: SideTab[] }> = ({ sideTabs }) => {
   const pathname = usePathname();
@@ -11,21 +12,9 @@ const Menu: NextPage<{ sideTabs: SideTab[] }> = ({ sideTabs }) => {
 
   return (
     <>
-      <ul className="sidebar-menu">
+      <ul style={{ height: "100vh" }} className="sidebar-menu">
         {sideTabs &&
-          sideTabs.map((tab) => {
-            if (tab.children) {
-              return (
-                <Dropdown
-                  key={tab.name}
-                  icon={tab.icon}
-                  parent={tab.name}
-                  children={tab.children}
-                  pathname={pathname}
-                />
-              );
-            }
-
+          sideTabs.map((tab, index) => {
             return (
               <>
                 {loggedInUser &&
@@ -38,12 +27,22 @@ const Menu: NextPage<{ sideTabs: SideTab[] }> = ({ sideTabs }) => {
                       pathname === tab.url ? "active" : ""
                     }`}
                   >
-                    <a className="sidebar-menu-button" href={tab.url}>
-                      <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
-                        {tab.icon}
-                      </span>
-                      <span className="sidebar-menu-text">{tab.name}</span>
-                    </a>
+                    {tab.children ? (
+                      <Dropdown
+                        key={tab.name}
+                        icon={tab.icon}
+                        parent={tab.name}
+                        children={tab.children}
+                        pathname={pathname}
+                      />
+                    ) : (
+                      <a className="sidebar-menu-button" href={tab.url}>
+                        <span className="material-icons sidebar-menu-icon sidebar-menu-icon--left">
+                          {tab.icon}
+                        </span>
+                        <span className="sidebar-menu-text">{tab.name}</span>
+                      </a>
+                    )}
                   </li>
                 ) : (
                   <></>
