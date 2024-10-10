@@ -42,7 +42,7 @@ type DataTiles = {
   data: number;
 };
 
-export default async function Graphs() {
+export default async function Graphs({graphData}:any) {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -55,68 +55,40 @@ export default async function Graphs() {
     CourseApplicants[]
   >([]);
 
-  // useEffect(() => {
-  //   const asyncFetch = async () => {
-  //     try {
-  //       const fetchedData = await getCourseStudents("6669f0ff8759b480859c10a7");
+  
 
-  //       const applicantsData = await getEnrollments(
-  //         "6669f0ff8759b480859c10a7",
-  //         false
-  //       );
 
-  //       setCourseApplications(applicantsData.courseApplicants);
-  //       setData(fetchedData);
-  //       const courseTitle = fetchedData[0].title;
-  //       console.log("data is here", courseTitle);
-  //       cookies.set("courseTitle", courseTitle);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } 
-      
-  //     // finally {
-  //     //  // setLoading(false);
-  //     // }
-  //   };
-  //   asyncFetch();
-  // }, []);
 
-  // if (loading) {
-  //   return <Loading />;//we need to use skeleton loader for the graphs
-  // }
 
   const dataTiles: DataTiles[] = [
-    { name: "Students", icon: "person_outline", data: 112 },
-    { name: "Matriculated", icon: "book", data: 5 },
-    { name: "Graduated", icon: "school", data: 79 },
-    { name: "Employed", icon: "list", data: 4 },
-    { name: "Unemployed", icon: "help", data: 10 },
+    { name: "Students", icon: "school", data: graphData.numberOfStudents },
+    { name: "Employed", icon: "work_outline", data: graphData.numbetOfStudentsEmployed },
+    { name: "Unemployed", icon: "mood_bad", data: graphData.numberOfStudentsUnemployed },
+    { name: "Disabilities", icon: "accessible", data: graphData.numberOfStudentsWithDisabilities },
   ];
 
   return (
     <>
-<div className="tiles-container">
-  <div className="row mb-lg-8pt tiles-row">
-    {dataTiles.map((data: DataTiles) => (
-      <div key={data.name} className="col-lg-3 tile-item">
-        <div className="card">
-          <div
-            data-toggle="tab"
-            role="tab"
-            aria-selected="true"
-            className="dashboard-area-tabs__tab card-body text-center active"
-          >
-            <span className="font-weight-bold">{data.name}</span>
-            <i className="material-icons text-success icon-48pt">
-              {data.icon}
-            </i>
-            <span className="h2 mb-0 mt-n1">{data.data}</span>
+ <div className="row mb-lg-8pt">
+        {dataTiles.map((data: DataTiles) => (
+          <div key={data.name} className="col-lg-3">
+            <div className="card">
+              <div
+                data-toggle="tab"
+                role="tab"
+                aria-selected="true"
+                className="dashboard-area-tabs__tab card-body text-center active"
+              >
+                <span className="font-weight-bold">{data.name}</span>
+                <i className="material-icons text-success icon-48pt">
+                  {data.icon}
+                </i>
+                <span className="h2 mb-0 mt-n1">{data.data}</span>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
-    ))}
-  </div>
-</div>
 
 
       <div className="row card-group-row">

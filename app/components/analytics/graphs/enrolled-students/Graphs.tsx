@@ -26,39 +26,37 @@ type DataTiles = {
   data: number;
 };
 
-export default async function Graphs() {
+export default async function Graphs({graphData}:any) {
   const dataTiles: DataTiles[] = [
-    { name: "Students", icon: "person_outline", data: 112 },
-    { name: "Modules", icon: "book", data: 5 },
-    { name: "Quizzes", icon: "help", data: 10 },
-    { name: "Assessments", icon: "list", data: 4 },
-    { name: "Documents Downloaded", icon: "cloud_download", data: 79 },
+    { name: "Students", icon: "school", data: graphData.numberOfStudents },
+    { name: "Employed", icon: "work_outline", data: graphData.numbetOfStudentsEmployed },
+    { name: "Unemployed", icon: "mood_bad", data: graphData.numberOfStudentsUnemployed },
+    { name: "Disabilities", icon: "accessible", data: graphData.numberOfStudentsWithDisabilities },
   ];
-
   return (
     <>
-     <div className="tiles-container">
-  <div className="row mb-lg-8pt tiles-row">
-    {dataTiles.map((data: DataTiles) => (
-      <div key={data.name} className="col-lg-3 tile-item">
-        <div className="card">
-          <div
-            data-toggle="tab"
-            role="tab"
-            aria-selected="true"
-            className="dashboard-area-tabs__tab card-body text-center active"
-          >
-            <span className="font-weight-bold">{data.name}</span>
-            <i className="material-icons text-success icon-48pt">
-              {data.icon}
-            </i>
-            <span className="h2 mb-0 mt-n1">{data.data}</span>
+ <div className="row mb-lg-8pt">
+        {dataTiles.map((data: DataTiles) => (
+          <div key={data.name} className="col-lg-3">
+            <div className="card">
+              <div
+                data-toggle="tab"
+                role="tab"
+                aria-selected="true"
+                className="dashboard-area-tabs__tab card-body text-center active"
+              >
+                <span className="font-weight-bold">{data.name}</span>
+                <i className="material-icons text-success icon-48pt">
+                  {data.icon}
+                </i>
+                <span className="h2 mb-0 mt-n1">{data.data}</span>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
-    ))}
-  </div>
-</div>
+
+
       <div className="row card-group-row">
         <div data-aos="flip-down"  className="col-lg-6 col-md-12 card-group-row__col">
           <ChartLayout title="Average Time Spent" type="bar">
