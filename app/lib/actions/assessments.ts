@@ -19,7 +19,9 @@ export const createAssessment = async (
 ) => {
   const body = {
     title: formData.get("title"),
-    assessmentType:Number(formData.get("assessmentsType")),
+    type: Number(formData.get("type")),
+    dueDate: formData.get("dueDate"),
+    totalMarks: formData.get("totalMarks"),
     courseId,
   };
 
@@ -68,6 +70,10 @@ export const updateAssessment = async (
   const body = {
     id,
     title: formData.get("title"),
+    type: Number(formData.get("type")),
+    dueDate: formData.get("dueDate"),
+    totalMarks: formData.get("totalMarks"),
+    courseId,
   };
 
   try {
