@@ -3,6 +3,7 @@ import "react-quill/dist/quill.snow.css";
 import { IMarkStudentAssessment, IRubric } from "@/app/interfaces/assessments";
 import { useParams } from "next/navigation";
 import { markStudentAssessment } from "@/app/lib/actions/assessments";
+import Cookies from "universal-cookie";
 
 type Props = {
   isMarked: boolean;
@@ -14,6 +15,10 @@ type Props = {
   questionScore: number;
   rubric: IRubric[];
 };
+
+const cookies = new Cookies();
+const loggedInUser = cookies.get("param-lms-user");
+
 export default function ({
   isMarked,
   questionNumber,
@@ -23,11 +28,15 @@ export default function ({
   questionScore,
   rubric,
 }: Props) {
-  const [grades, setGrades] = useState<number[]>(
-    rubric.map((r) => r.facilitatorScore || 0)
-  );
+  const gradedRubric =
+    loggedInUser.role == "Facilitator"
+      ? rubric.map((r) => r.facilitatorScore || 0)
+      : rubric.map((r) => r.moderatorScore || 0);
+
+  const [grades, setGrades] = useState<number[]>(gradedRubric);
   const [isGraded, setIsGraded] = useState(false);
   const totalGrade = grades.reduce((acc, grade) => acc + grade, 0);
+  const markType = loggedInUser.role == "Facilitator" ? 0 : 1;
 
   useEffect(() => {
     setIsGraded(totalGrade > 0);
@@ -56,13 +65,13 @@ export default function ({
     label: number
   ) => {
     const payload: IMarkStudentAssessment = {
-      assessmentId: assessmentId,
-      questionId: questionId,
-      rubricId: rubricId,
-      userId: userId,
+      assessmentId,
+      questionId,
+      rubricId,
+      userId,
       creatingUserId: "6580051b2b3b4e16f159792d",
-      mark: mark,
-      markType: 1,
+      mark,
+      markType,
       label: Number(label),
     };
     const markResponse = await markStudentAssessment(payload);
@@ -104,7 +113,18 @@ export default function ({
                 className="py-2 d-flex justify-content-between align-items-center"
               >
                 <div className="d-flex flex-column align-items-start">
-                  <div className="text-danger d-flex">
+                  {loggedInUser.role == "Moderator" && (
+                    <div className="text-danger d-flex">
+                      {Array(grades[index])
+                        .fill(<i className="material-icons">check</i>)
+                        .map((icon, i) => (
+                          <span key={i} className="mr-1">
+                            {icon}
+                          </span>
+                        ))}
+                    </div>
+                  )}
+                  <div className="text-success d-flex">
                     {Array(grades[index])
                       .fill(<i className="material-icons">check</i>)
                       .map((icon, i) => (
@@ -115,13 +135,45 @@ export default function ({
                   </div>
                   <span className="ml-2">{choice.description}</span>
                 </div>
-                <GradeInput
-                  isMarked={isMarked}
-                  setIsGraded={setIsGraded}
-                  setGrade={(grade) => handleGradeChange(index, grade)}
-                  grade={choice.facilitatorScore || grades[index]}
-                  questionScore={Number(choice.label)}
-                />
+                <div
+                  className="d-flex"
+                  style={{
+                    width: loggedInUser.role == "Moderator" ? "300px" : "200px",
+                  }}
+                >
+                  <div className="d-flex w-75" style={{ gap: "20px" }}>
+                    {loggedInUser.role == "Moderator" ? (
+                      <>
+                        <GradeInput
+                          isMarked={isMarked}
+                          setIsGraded={setIsGraded}
+                          setGrade={(grade) => handleGradeChange(index, grade)}
+                          grade={choice.moderatorScore || grades[index]}
+                          questionScore={Number(choice.label)}
+                        />
+                        <input
+                          type="number"
+                          className="form-control"
+                          defaultValue={choice.facilitatorScore}
+                          disabled={true}
+                        />
+                      </>
+                    ) : (
+                      <GradeInput
+                        isMarked={isMarked}
+                        setIsGraded={setIsGraded}
+                        setGrade={(grade) => handleGradeChange(index, grade)}
+                        grade={choice.facilitatorScore || grades[index]}
+                        questionScore={Number(choice.label)}
+                      />
+                    )}
+
+                    <div className="text-center w-100 py-2">
+                      {" "}
+                      / {Number(choice.label)}
+                    </div>
+                  </div>
+                </div>
               </td>
             ))}
             <td
@@ -194,19 +246,16 @@ function GradeInput({
   questionScore: number;
 }) {
   return (
-    <div className="d-flex" style={{ width: "200px" }}>
-      <div className="d-flex w-75">
-        <input
-          type="number"
-          className="form-control"
-          defaultValue={grade}
-          min="0"
-          max={questionScore}
-          onChange={(e) => setGrade(Number(e.target.value))}
-          disabled={isMarked}
-        />
-        <div className="text-center w-100 py-2"> / {questionScore}</div>
-      </div>
-    </div>
+    <>
+      <input
+        type="number"
+        className="form-control"
+        defaultValue={grade}
+        min="0"
+        max={questionScore}
+        onChange={(e) => setGrade(Number(e.target.value))}
+        disabled={isMarked}
+      />
+    </>
   );
 }
