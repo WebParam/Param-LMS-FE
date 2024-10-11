@@ -1,5 +1,5 @@
 "use client";
-import { adminUpdateUserDetails, getAdminUser } from "@/app/lib/actions/users";
+import { adminUpdateUserDetails, getAdminUser } from "@/app/lib/data/users";
 import React, { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 

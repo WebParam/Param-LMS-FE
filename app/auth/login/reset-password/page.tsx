@@ -5,7 +5,7 @@ import { BasicOTPComponent } from "./basic-otp";
 import {
   adminForgotResetPassword,
   AdminSendResetOTP,
-} from "@/app/lib/actions/users";
+} from "@/app/lib/data/users";
 import { useRouter } from "next/navigation";
 
 export default function ResetPassword() {
