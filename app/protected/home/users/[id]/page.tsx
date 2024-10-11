@@ -1,37 +1,55 @@
-"use client";
-import { userData } from "@/components/user/data";
 import { updateUser } from "@/app/lib/actions/users";
+import { getUser } from "@/app/lib/data/users";
+import { EditUserBtn } from "@/components/user/[id]/Buttons";
 
-const Body = ({ params }: { params: { id: string } }) => {
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { [key: string]: string };
+}) {
   const { id } = params;
+  const { role } = searchParams;
 
-  const user: any = userData.find((u) => (u.id = id)) || {};
+  const user = await getUser(id, parseInt(role));
+
   const updateUserWithParams = updateUser.bind(null, id);
 
   return (
     <>
       <div className="card p-4">
         <form action={updateUserWithParams}>
-          <div>
-            <h5>Name & Surname</h5>
-            <input
-              minLength={10}
-              className="form-control mb-3"
-              placeholder="Enter your title here..."
-              defaultValue={user.name}
-              name="name"
-            />
+          <div className="row">
+            <div className="col-6">
+              <h5>Name</h5>
+              <input
+                className="form-control mb-3"
+                placeholder="Enter your title here..."
+                defaultValue={user ? user.firstName : ""}
+                name="firstName"
+              />
+            </div>{" "}
+            <div className="col-6">
+              <h5>Surname</h5>
+              <input
+                className="form-control mb-3"
+                placeholder="Enter your title here..."
+                defaultValue={user ? user.lastName : ""}
+                name="lastName"
+              />
+            </div>
           </div>
           <div>
             <h5>User Role</h5>
             <select
-              defaultValue={user.role}
+              defaultValue={user && user.role}
               className="form-control mb-3"
               name="role"
             >
               <option value="">Select Role</option>
-              <option value="Facilitator">Facilitator</option>
-              <option value="Moderator">Moderator</option>
+              <option value="1">Facilitator</option>
+              <option value="0">Moderator</option>
             </select>
           </div>
           <div>
@@ -42,27 +60,24 @@ const Body = ({ params }: { params: { id: string } }) => {
               className="form-control mb-3"
               placeholder="Enter your email here..."
               name="email"
-              defaultValue={user.email}
+              defaultValue={user && user.email}
             />
           </div>
           <div>
             <h5>Phone Number</h5>
             <input
-              type="email"
               minLength={10}
               className="form-control mb-3"
               placeholder="Enter your title here..."
-              name="title"
-              defaultValue={user.phoneNumber}
+              name="phoneNumber"
+              defaultValue={user && user.phoneNumber}
             />
           </div>
           <div className="d-flex justify-content-center">
-            <button className="btn btn-success">Submit</button>
+            <EditUserBtn />
           </div>
         </form>
       </div>
     </>
   );
-};
-
-export default Body;
+}
