@@ -1,16 +1,14 @@
 "use client";
 import Cookies from "universal-cookie";
 import { useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import CreateUserModal from "@/components/user/CreateUserModal";
 
 export default function PageHeader() {
   const cookies = new Cookies();
   const loggedInUser = cookies.get("param-lms-user");
   const [openUserModal, setOpenUserModal] = useState(false);
-  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const title = searchParams.get("title");
   const refreshId = searchParams.get("refreshId");
 
   useEffect(() => {

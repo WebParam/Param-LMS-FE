@@ -2,10 +2,10 @@
 import Pagination from "@/app/components/Pagination";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { getAssessments } from "@/app/lib/actions/assessments";
 import PageHeader from "@/components/user/PageHeader";
 import { userData } from "@/components/user/data";
 import User from "@/components/user/User";
+import { getUsers } from "@/app/lib/data/users";
 
 const Body = ({ params }: { params: { id: string } }) => {
   const { id: courseId } = params;
@@ -13,7 +13,7 @@ const Body = ({ params }: { params: { id: string } }) => {
   const refreshId = searchParams.get("refreshId");
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const [users, setUsers] = useState<any[]>(userData);
+  const [users, setUsers] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -24,12 +24,13 @@ const Body = ({ params }: { params: { id: string } }) => {
       : [];
 
   const fetchUsers = async () => {
-    const data = await getAssessments(courseId);
+    const data = await getUsers();
+    console.log("Data:", data);
     setUsers(data);
   };
 
   useEffect(() => {
-    // fetchUsers();
+    fetchUsers();
     setOpenModal(false);
   }, [refreshId]);
 

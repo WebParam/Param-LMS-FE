@@ -10,12 +10,12 @@ function User({ data }: { data: any }) {
   const title = searchParams.get("title") || "";
   const refreshId = searchParams.get("refreshId") || "";
   const [viewQuizModal, setViewQuestionModal] = useState(false);
-  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const pathname = usePathname();
+  let name = data.firstName + " " + data.lastName;
+  if (name == "") name = "N/A";
 
   useEffect(() => {
-    setOpenEditModal(false);
     setDeleteModal(false);
   }, [refreshId]);
 
@@ -57,12 +57,12 @@ function User({ data }: { data: any }) {
           <div style={{ fontSize: "15px" }}>
             <div className="d-flex" style={{ gap: "15px" }}>
               <div className="mb-0">
-                <b>{data.name}</b>
+                <b>{name}</b>
               </div>
             </div>
             <div className="d-flex" style={{ gap: "15px" }}>
               <h6 className="mb-0">Email: {data.email}</h6>
-              <h6 className="mb-0">Phone: {data.phoneNumber}</h6>
+              <h6 className="mb-0">Phone: {data.phoneNumber || "N/A"}</h6>
             </div>
           </div>
           <div>
@@ -73,12 +73,13 @@ function User({ data }: { data: any }) {
                   className="btn btn-outline-success btn-sm rounded-pill py-1 px-3 w-100"
                   style={{ height: "15px" }}
                 >
-                  {data.role}
+                  {data.role == 0 && "Moderator"}
+                  {data.role == 1 && "Facilitator"}
                 </button>
               </div>
 
               <div className="d-flex" style={{ gap: "10px" }}>
-                <Link href={`${pathname}/${data.id}?pageTitle=Edit User Info`}>
+                <Link href={`${pathname}/${data.userId}?pageTitle=Edit User Info&role=${data.role}`}>
                   <i className="material-icons icon-holder--outline-dark rounded-lg">
                     visibility
                   </i>
