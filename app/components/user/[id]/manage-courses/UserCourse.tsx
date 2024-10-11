@@ -1,22 +1,25 @@
-"use client";
-import Modal from "react-bootstrap/Modal";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { updateUserCourses } from "@/app/lib/actions/users";
+import { useState } from "react";
 
-function UserCourse({ data }: { data: any }) {
-  const searchParams = useSearchParams();
-  const title = searchParams.get("title") || "";
-  const refreshId = searchParams.get("refreshId") || "";
-  const [viewQuizModal, setViewQuestionModal] = useState(false);
-  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const pathname = usePathname();
+function UserCourse({
+  data,
+  isChecked,
+  userId,
+  role,
+}: {
+  data: any;
+  isChecked: boolean;
+  userId: string;
+  role: number;
+}) {
+  const [checked, setChecked] = useState(isChecked);
 
-  useEffect(() => {
-    setOpenEditModal(false);
-    setDeleteModal(false);
-  }, [refreshId]);
+  const updateCourses = async () => {
+    let state = !checked;
+    if (checked) setChecked(false);
+    else setChecked(true);
+    await updateUserCourses(userId, role, data.id, state);
+  };
 
   return (
     <div className="col-lg-3 card-group-row__col">
@@ -28,6 +31,8 @@ function UserCourse({ data }: { data: any }) {
           <input
             style={{ position: "absolute", right: "15px", top: "15px" }}
             type="checkbox"
+            checked={checked}
+            onChange={updateCourses}
             name=""
             id=""
           />
