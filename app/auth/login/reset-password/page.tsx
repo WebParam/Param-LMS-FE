@@ -5,7 +5,7 @@ import { BasicOTPComponent } from "./basic-otp";
 import {
   adminForgotResetPassword,
   AdminSendResetOTP,
-} from "@/app/lib/actions/users";
+} from "@/app/lib/data/users";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");

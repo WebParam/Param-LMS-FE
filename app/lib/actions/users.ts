@@ -1,106 +1,91 @@
-import { get, post, put } from "../utils";
+"use server";
+import { redirect } from "next/navigation";
+import { post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
-import {
-  IAdminPasswordChangeReset,
-  IAdminUpdateUser,
-} from "@/app/interfaces/user";
-import { rUserUrl, wUserUrl } from "./endpoints";
+import { wUserUrl } from "./endpoints";
 
-export const login = async (email: string, password: string) => {
+export const createUser = async (adminId: string, formData: FormData) => {
+  const body = {
+    name: formData.get("name"),
+    surname: formData.get("surname"),
+    role: parseInt(formData.get("role") as string),
+    email: formData.get("email"),
+    phoneNumber: formData.get("phoneNumber"),
+    adminId,
+  };
+
+  let url = "";
   try {
-    const resp = await post(`${wUserUrl}/Users/Login`, { email, password });
-    Diagnostic("SUCCESS ON POST, returning", resp);
-    return resp;
+    const resp = await post(
+      `${wUserUrl}/RoleManagement/AddRoleManagement`,
+      body
+    );
+    const data = await resp.data;
+
+    const date = new Date().toString();
+    url = `/protected/home/users?refreshId=${date}`;
+
+    Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
     throw err;
   }
+
+  redirect(url);
 };
 
-export const getUsersByRole = async (role: string) => {
+export const updateUser = async (userId: string, formData: FormData) => {
+  const body = {
+    userId,
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
+    role: parseInt(formData.get("role") as string),
+    email: formData.get("email"),
+    phoneNumber: formData.get("phoneNumber"),
+  };
+
+  let url = "";
   try {
-    const resp = await get(`${rUserUrl}/Users/ByRole/${role}`);
-    console.log(resp);
-    const data = resp.data;
-    const users = data[0]?.users || [];
-    Diagnostic("SUCCESS ON GET, returning", users);
-    return users;
-  } catch (err) {
-    Diagnostic("ERROR ON GET, returning", err);
-    console.error(err);
-  }
-};
-
-export const AdminResetPassword = async (
-  payload: IAdminPasswordChangeReset
-) => {
-  try {
-    const resp = await put(`${wUserUrl}/Users/AdminResetPassword`, payload);
-    const data = resp;
-    Diagnostic("SUCCESS ON GET, returning", data);
-    return data;
-  } catch (err) {
-    Diagnostic("ERROR ON GET, returning", err);
-    console.error(err);
-  }
-};
-
-export const AdminSendResetOTP = async (payload:any) => {
-  try {
-    const resp = await post(`${wUserUrl}/Users/SendResetPasswordOtp`, payload);
-    const data = resp;
-
-    Diagnostic("SUCCESS ON GET, returning", data);
-    return data;
-  } catch (err) {
-    Diagnostic("ERROR ON GET, returning", err);
-    console.error(err);
-  }
-};
-
-export const adminForgotResetPassword = async (payload: {
-  email: string;
-  password: string;
-  otp: string;
-}) => {
-  try {
-    const resp = await put(`${wUserUrl}/Users/ResetPassword`, payload);
-    const data = resp.data;
-
-    Diagnostic("SUCCESS ON GET, returning", data);
-    return data;
-  } catch (err) {
-    Diagnostic("ERROR ON GET, returning", err);
-    console.error(err);
-  }
-};
-
-export const adminUpdateUserDetails = async (payload: IAdminUpdateUser) => {
-  try {
-    const resp = await put(`${wUserUrl}/Users/AdminUpdateUser`, payload);
-    console.log(resp);
-    const data = resp.data;
-
-    Diagnostic("SUCCESS ON GET, returning", data);
-    return data;
-  } catch (err) {
-    Diagnostic("ERROR ON GET, returning", err);
-    console.error(err);
-  }
-};
-
-export const getAdminUser = async (userId: string) => {
-  try {
-    const resp = await get(
-      `https://khumla-dev-user-read.azurewebsites.net/api/v1/Users/${userId}`
+    const resp = await put(
+      `${wUserUrl}/RoleManagement/UpdateUserDetails`,
+      body
     );
-    console.log(resp);
-    const data = resp.data;
+    const data = await resp;
 
-    Diagnostic("SUCCESS ON GET, returning", data);
-    return data;
+    url = `/protected/home/users/${userId}?pageTitle=Edit User Info&role=${body.role}`;
+    Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
-    Diagnostic("ERROR ON GET, returning", err);
-    console.error(err);
+    Diagnostic("ERROR ON POST, returning", err);
+    throw err;
   }
+
+  redirect(url);
+};
+
+export const updateUserCourses = async (
+  userId: string,
+  role: number,
+  courseId: string,
+  isAssign: boolean
+) => {
+  const body = {
+    userId,
+    role,
+    courseId,
+    isAssign,
+  };
+
+  let url = "";
+  try {
+    const resp = await put(`${wUserUrl}/RoleManagement/UpdateCourses`, body);
+    const data = await resp.data;
+
+    url = `/protected/home/users/${userId}/manage-courses?pageTitle=Manage Courses&role=${role}`;
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    throw err;
+  }
+
+  redirect(url);
 };

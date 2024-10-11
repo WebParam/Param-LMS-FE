@@ -19,6 +19,7 @@ export const post = async (url: string, body: any) => {
       body: JSON.stringify(body),
     });
 
+    console.log("payload:", body);
     const data = await res.json();
     console.log("payload: ", body);
     Diagnostic(`SUCCESS ON POST ${url}, returning`, data);
