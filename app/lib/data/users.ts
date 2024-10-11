@@ -1,6 +1,7 @@
+
+
 import { get, post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
-
 import {
   IAdminPasswordChangeReset,
   IAdminUpdateUser,
@@ -37,9 +38,7 @@ export const AdminResetPassword = async (
 ) => {
   try {
     const resp = await put(`${wUserUrl}/Users/AdminResetPassword`, payload);
-    console.log(resp);
-    const data = resp.data;
-
+    const data = resp;
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
   } catch (err) {
@@ -48,11 +47,10 @@ export const AdminResetPassword = async (
   }
 };
 
-export const AdminSendResetOTP = async (email: string) => {
+export const AdminSendResetOTP = async (payload:any) => {
   try {
-    const resp = await post(`${wUserUrl}/Users/SendResetPasswordOtp`, email);
-    console.log(resp);
-    const data = resp.data;
+    const resp = await post(`${wUserUrl}/Users/SendResetPasswordOtp`, payload);
+    const data = resp;
 
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;
@@ -68,8 +66,7 @@ export const adminForgotResetPassword = async (payload: {
   otp: string;
 }) => {
   try {
-    const resp = await post(`${wUserUrl}/Users/ResetPassword`, payload);
-    console.log(resp);
+    const resp = await put(`${wUserUrl}/Users/ResetPassword`, payload);
     const data = resp.data;
 
     Diagnostic("SUCCESS ON GET, returning", data);
