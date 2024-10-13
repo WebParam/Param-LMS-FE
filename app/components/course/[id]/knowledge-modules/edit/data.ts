@@ -1,74 +1,74 @@
 const list = [
   {
       "assessment_id": 1,
-      "student_name": "John",
-      "student_surname": "Doe",
-      "assessment_name": "Introduction to Programming"
+      "student_name": "Mondli",
+      "student_surname": "Khumalo",
+      "assessment_name": "Management Accounting"
   },
   {
       "assessment_id": 2,
-      "student_name": "Jane",
-      "student_surname": "Smith",
+      "student_name": "Lindokuhle",
+      "student_surname": "Xaba",
       "assessment_name": "Data Structures and Algorithms"
   },
   {
       "assessment_id": 3,
-      "student_name": "Alice",
-      "student_surname": "Johnson",
+      "student_name": "Siboniso",
+      "student_surname": "Sibiya",
       "assessment_name": "Web Development Fundamentals"
   },
   {
       "assessment_id": 4,
-      "student_name": "Bob",
-      "student_surname": "Williams",
+      "student_name": "Tinny",
+      "student_surname": "Mandisa Phala",
       "assessment_name": "Machine Learning Basics"
   },
   {
       "assessment_id": 5,
-      "student_name": "Emily",
-      "student_surname": "Brown",
+      "student_name": "Kgothatso Utonga",
+      "student_surname": "Khumalo",
       "assessment_name": "Database Management Systems"
   },
   {
       "assessment_id": 6,
-      "student_name": "Michael",
-      "student_surname": "Jones",
+      "student_name": "Shanique",
+      "student_surname": "Shanique",
       "assessment_name": "Cybersecurity Essentials"
   },
   {
       "assessment_id": 7,
-      "student_name": "Sarah",
-      "student_surname": "Davis",
+      "student_name": "Elnah Nkosingiphile ",
+      "student_surname": "Mthethwa",
       "assessment_name": "Networking Fundamentals"
   },
   {
       "assessment_id": 8,
-      "student_name": "David",
-      "student_surname": "Martinez",
+      "student_name": "Kaylee Alexandra",
+      "student_surname": "Govender",
       "assessment_name": "Mobile App Development"
   },
   {
       "assessment_id": 9,
-      "student_name": "Sophia",
-      "student_surname": "Garcia",
+      "student_name": "Kirlynne",
+      "student_surname": "Felix",
       "assessment_name": "Software Engineering Principles"
   },
   {
       "assessment_id": 10,
-      "student_name": "Ethan",
-      "student_surname": "Rodriguez",
+      "student_name": "Lerato Blessing",
+      "student_surname": "Phema",
       "assessment_name": "Artificial Intelligence Concepts"
   },
   {
       "assessment_id": 11,
-      "student_name": "Olivia",
-      "student_surname": "Lopez",
+      "student_name": "Bongeka",
+      "student_surname": "Msibi",
       "assessment_name": "Computer Graphics Fundamentals"
   },
   {
       "assessment_id": 12,
-      "student_name": "James",
-      "student_surname": "Lee",
+      "student_name": "Mokgadi",
+      "student_surname": "Madutung",
       "assessment_name": "Digital Marketing Strategies"
   },
   {

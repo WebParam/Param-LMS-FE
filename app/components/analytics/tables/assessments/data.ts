@@ -29,11 +29,11 @@ export const companyLocations = [
 const mockData = [
   {
     "studentId": "1",
-    "fullName": "John Doe",
+    "fullName": "Mondli Khumalo",
     "assessmentDate": "2024-08-01",
-    "subject": "Mathematics",
+    "subject": "Management Accounting",
     "grade": "A",
-    "instructor": "Mr. Johnson"
+    "instructor": "Mr. Winston"
   },
   {
     "studentId": "2",

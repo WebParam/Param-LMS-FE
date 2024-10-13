@@ -76,7 +76,7 @@ export default function PageHeader({ title }: { title: string }) {
               All Courses
             </button>
           )}
-          {isStudent && (
+          {isStudent && !isGroupedStAnalytics && (
             <button onClick={() => router.back()} className="btn btn-success">
               Grouped Analytics
             </button>
@@ -87,13 +87,13 @@ export default function PageHeader({ title }: { title: string }) {
             </button>
           )}
 
-          {isGroupedStAnalytics ? (
+          {/* {isGroupedStAnalytics && !isStudent ? (
             <button 
             onClick={() => router.push("/protected/home/courses")}
             className="btn btn-success">All Courses</button>
           ) : (
             <button onClick={() => router.back() } className="btn btn-success">Grouped Analytics</button>
-          )}
+          )} */}
         </div>
       </div>
     </>

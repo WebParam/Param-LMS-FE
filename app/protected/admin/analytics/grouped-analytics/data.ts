@@ -1,7 +1,7 @@
 const list = [
   {
       "student_id": "1001",
-      "student_name": "Alice",
+      "student_name": "Mondli Khumalo",
       "completion_rate": 62,
       "time_spent": "4hrs 20min",
       "points_collected": 85
