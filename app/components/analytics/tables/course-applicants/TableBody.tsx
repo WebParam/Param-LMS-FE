@@ -36,7 +36,7 @@ const TableBody: NextPage<{ list: CourseApplicants[] }> = ({ list }) => {
                 </td>
 
                 <td className="text-center js-lists-values-projects small">
-                  {data.disability && data.disability.length > 10 ? `${data.disability.substring(0, 15)}...` : data.disability || "N/A"}
+                  {data.disability && data.disability.length > 15 ? `${data.disability.substring(0, 15)}...` : data.disability || "N/A"}
                 </td>
                 <td className="text-center js-lists-values-projects small">
                   {data.employmentStatus || "N/A"}
