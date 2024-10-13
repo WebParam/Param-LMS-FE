@@ -9,7 +9,7 @@ import {
 } from "@/app/lib/actions/knowledge-module";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-function Page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { id: string } }) {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 4;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
@@ -50,7 +50,7 @@ function Page({ params }: { params: { id: string } }) {
       const payload = {
         knowledgeModuleId: reorderedItem.id,
         courseId: params.id,
-        order: result.destination.index,
+        order: result.destination.index + 1,
       };
       handleReOrder(payload)
     },
@@ -58,21 +58,14 @@ function Page({ params }: { params: { id: string } }) {
   );
 
   const handleReOrder = async (payload: any) => {
-    setIsGragged(false);
-    console.log("payload:",payload)
+    setIsGragged(true);
     try {
       const reOrderModule = await reOrderKnowledgeModule(payload);
-      console.log("Response",reOrderModule)
-      if(reOrderModule.id){
-
-        setIsGragged(true);
-        return;
-      }
-      setIsGragged(false);
-
+      setList(reOrderModule);
+      setIsGragged(false)
     } catch (error) {
       console.error(error);
-      setIsGragged(false);
+      setIsGragged(false)
     }
   };
 
@@ -84,8 +77,8 @@ function Page({ params }: { params: { id: string } }) {
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {currentItems.length > 0 ? (
-                currentItems.sort((a, b) => (a.order - b.order)).map((data, index) => (
-                  <Draggable key={data.id} draggableId={data.id} index={index}>
+                currentItems.map((data, index) => (
+                  <Draggable isDragDisabled={isGragged} key={data.id} draggableId={data.id} index={index}>
                     {(dragProvided) => (
                       <div
                         ref={dragProvided.innerRef}
@@ -128,5 +121,3 @@ function Page({ params }: { params: { id: string } }) {
     </>
   );
 }
-
-export default Page;

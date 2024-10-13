@@ -1,5 +1,5 @@
 const test = "testing";
-const env = process.env.NEXT_PUBLIC_API_ENV == "production" ? "prod" : "dev";
+const env = process.env.NEXT_PUBLIC_API_ENV;
 const envDev = "dev-be";
 
 export const wCourseUrl = `https://thooto-${envDev}-newcourse-write.azurewebsites.net/api/v1`;
