@@ -16,4 +16,4 @@ export const options = {
   }]
 };
 
-export const series = ({data}:any) => data; 
+export const series = [44, 55]; 

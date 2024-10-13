@@ -37,11 +37,11 @@ function EnrolledTable({ data, courseId }: TablePaginationProps) {
   return (
     <>
       <div className="page-separator">
-        <div className="page-separator__text">Enrolled Students</div>
+        <div className="page-separator__text">Enrolled Students - Exports and Downloads</div>
       </div>
 
       <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
-        <div className="mx-1">
+        {/* <div className="mx-1">
           <button
             onClick={downloadAsXls}
             style={{ cursor: data.length > 0 ? "pointer" : "" }}
@@ -56,6 +56,19 @@ function EnrolledTable({ data, courseId }: TablePaginationProps) {
               "Export Students"
             )}
           </button>
+        </div> */}
+        
+        <div className="mx-1">
+          <a target="_blank" href={"http://res.cloudinary.com/dfqdgktky/raw/upload/v1728818913/r7oc666xrqiqfix4bnug.xlsx"}>
+            <span className="btn btn-secondary">Export Student Data </span>
+          </a>
+          </div>
+          <div className="mx-1">
+          <a target="_blank" href={"http://res.cloudinary.com/dfqdgktky/raw/upload/v1728808277/ug5ibyk2nkh5w56qs6gr.xls"}>
+            <span className="btn btn-secondary">Export ATR</span>
+          </a>
+
+
         </div>
       </div>
 
