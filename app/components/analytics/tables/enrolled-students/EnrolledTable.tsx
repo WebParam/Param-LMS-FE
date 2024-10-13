@@ -59,12 +59,12 @@ function EnrolledTable({ data, courseId }: TablePaginationProps) {
         </div> */}
         
         <div className="mx-1">
-          <a target="_blank" href={"http://res.cloudinary.com/dfqdgktky/raw/upload/v1728818913/r7oc666xrqiqfix4bnug.xlsx"}>
+          <a target="_blank" href={"https://res.cloudinary.com/dfqdgktky/raw/upload/v1728818913/r7oc666xrqiqfix4bnug.xlsx"}>
             <span className="btn btn-secondary">Export Student Data </span>
           </a>
           </div>
           <div className="mx-1">
-          <a target="_blank" href={"http://res.cloudinary.com/dfqdgktky/raw/upload/v1728808277/ug5ibyk2nkh5w56qs6gr.xls"}>
+          <a target="_blank" href={"https://res.cloudinary.com/dfqdgktky/raw/upload/v1728818913/r7oc666xrqiqfix4bnug.xlsx"}>
             <span className="btn btn-secondary">Export ATR</span>
           </a>
 
