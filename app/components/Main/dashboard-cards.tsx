@@ -1,7 +1,7 @@
 "use client";
 import { Container, Row, Col } from "react-bootstrap";
-import CardComponent from "./Card/Card";
-import PageHeader from "./PageHeader";
+import CardComponent from "../facilitator/Card/Card";
+import PageHeader from "../facilitator/PageHeader";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useParams } from "react-router-dom";
 
@@ -13,9 +13,8 @@ type IconType =
   | "markAssessment"
   | "logbook";
 
-const DashboardCards = ({ courseId }: { courseId: string }) => {
+const DashboardCards = () => {
   const pathname = usePathname();
-  // const { courseId } = useParams();
   const router = useRouter();
 
   const handleClick = () => {
@@ -23,7 +22,7 @@ const DashboardCards = ({ courseId }: { courseId: string }) => {
   };
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
-
+  const courseId = searchParams.get("id")!;
   const cardData: { link: string; icon: IconType; title: string }[] = [
     {
       link: `/protected/admin/scheduleclass?title=${courseTitle}&id=${courseId}`,

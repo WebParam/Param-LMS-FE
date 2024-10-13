@@ -1,11 +1,9 @@
 "use client";
 import { useState } from "react";
-import { Api } from "../../lib/restapi/endpoints";
-import { IUserLoginModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { login } from "@/app/lib/actions/users";
+import { login } from "@/app/lib/data/users";
 
 const cookies = new Cookies();
 

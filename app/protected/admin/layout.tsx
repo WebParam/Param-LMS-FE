@@ -7,6 +7,7 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Cookies from "universal-cookie";
+import { cookies } from "next/headers";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,12 +19,15 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const pathName = usePathname();
   const isHost = pathName == "/protected/host/host/completed";
   const [projectLength, setProjectLength] = useState<string | null>(null);
+  const cookies = new Cookies();
+  const user = cookies.get("param-lms-user");
+  const userRole = user.role;
 
   useEffect(() => {
     setProjectLength(localStorage.getItem("len"));
   }, []);
 
-  const userRole = process.env.NEXT_PUBLIC_FREEMIUM === "true"? "freemium" : localStorage.getItem("role");
+
 
   const sideTabs = [
     {
@@ -53,18 +57,20 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           icon: "group",
           roles: ["Admin", "SuperAdmin", "Freemium"],
         },
-        {
-          name: userRole === "freemium" ? "Edit Project" : "Edit Course",
-          url: userRole !== "freemium" ? `/protected/admin/courses/${courseId}?title=${courseTitle}&id=${courseId}` : `/protected/home/projects/${courseId}?title=${courseTitle}&id=${courseId}`,
-          icon: "edit",
-          roles: ["Admin", "SuperAdmin", "Freemium"],
-        },
-        ...(userRole !== "freemium" || Number(projectLength) < 2 ? [{
-          name: userRole === "freemium" ? "Create Project" : "Create Course",
-          url: `/protected/home/courses/create?title=${courseTitle}&id=${courseId}`,
-          icon: "add_box",
-          roles: ["Admin", "SuperAdmin", "Freemium"],
-        }] : []),
+        ...(userRole == "SuperAdmin" || userRole == "Admin" ? [
+          {
+            name: "Edit Course",
+            url: `/protected/admin/courses/${courseId}?title=${courseTitle}&id=${courseId}`,
+            icon: "edit",
+            roles: ["SuperAdmin"],
+          },
+          ...(Number(projectLength) < 2 ? [{
+            name: "Create Course",
+            url: `/protected/home/courses/create?title=${courseTitle}&id=${courseId}`,
+            icon: "add_box",
+            roles: ["SuperAdmin"],
+          }] : [])
+        ] : []),
       ],
     },
     {
@@ -73,30 +79,30 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       icon: "show_chart",
       roles: ["Admin", "SuperAdmin"],
       children: [
-        // {
-        //   name: userRole === "freemium" ? "Project Analytics" : "Course Analytics",
-        //   url: `/protected/admin/analytics/graphs/course?title=${courseTitle}&id=${courseId}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Assessment Analytics",
-        //   url: `/protected/admin/analytics/graphs/assessments?title=${courseTitle}&id=${courseId}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Assignments Analytics",
-        //   url: `/protected/admin/analytics/graphs/assignments?title=${courseTitle}&id=${courseId}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
-        // {
-        //   name: "Students Analytics",
-        //   url: `/protected/admin/analytics/grouped-analytics/students?title=${courseTitle}&id=${courseId}`,
-        //   icon: "bar_chart",
-        //   roles: ["Admin", "SuperAdmin"],
-        // },
+        {
+          name: userRole === "freemium" ? "Project Analytics" : "Course Analytics",
+          url: `/protected/admin/analytics/graphs/course?title=${courseTitle}&id=${courseId}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
+          name: "Assessment Analytics",
+          url: `/protected/admin/analytics/graphs/assessments?title=${courseTitle}&id=${courseId}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
+          name: "Assignments Analytics",
+          url: `/protected/admin/analytics/graphs/assignments?title=${courseTitle}&id=${courseId}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
+        {
+          name: "Students Analytics",
+          url: `/protected/admin/analytics/grouped-analytics/students?title=${courseTitle}&id=${courseId}`,
+          icon: "bar_chart",
+          roles: ["Admin", "SuperAdmin"],
+        },
         {
           name: "Video Analytics",
           url: `/protected/admin/analytics/grouped-analytics/videos/course/${courseId}?title=${courseTitle}&id=${courseId}`,
@@ -105,38 +111,33 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         },
       ],
     },
-    // {
-    //   name: "Host Analytics",
-    //   url: `/protected/admin/analytics/graphs/host-companies/companies?title=${courseTitle}&id=${courseId}`,
-    //   icon: "business",
-    //   roles: ["Admin", "SuperAdmin"],
-    // // },
-    // {
-    //   name: "Facilitator Dashboard",
-    //   url: `/protected/admin/facilitator/?title=${courseTitle}&id=${courseId}`,
-    //   icon: "dashboard",
-    //   roles: ["Admin", "SuperAdmin"],
-    // },
     {
-      name: "Schedule Classes",
-      url: `/protected/admin/scheduleclass?title=${courseTitle}&id=${courseId}`,
-      icon: "class",
+      name: "Host Analytics",
+      url: `/protected/admin/analytics/graphs/host-companies/companies?title=${courseTitle}&id=${courseId}`,
+      icon: "business",
       roles: ["Admin", "SuperAdmin"],
     },
-    // {
-    //   name: "Messaging",
-    //   url: `/protected/admin/facilitator/?title=${courseTitle}&id=${courseId}`,
-    //   icon: "message",
-    //   roles: ["Admin", "SuperAdmin"],
-    //   children: [
-    //     {
-    //       name: "Notifications",
-    //       url: `/protected/admin/notifications?title=${courseTitle}&id=${courseId}`,
-    //       icon: "notifications",
-    //       roles: ["Admin", "SuperAdmin"],
-    //     },
-    //   ],
-    // },
+    {
+      name: "Facilitator Dashboard",
+      url: `/protected/admin/facilitator?title=${courseTitle}&id=${courseId}`,
+      icon: "dashboard",
+      roles: ["Admin", "SuperAdmin"],
+    },
+
+    {
+      name: "Messaging",
+      url: `/protected/admin/facilitator/?title=${courseTitle}&id=${courseId}`,
+      icon: "message",
+      roles: ["Admin", "SuperAdmin"],
+      children: [
+        {
+          name: "Notifications",
+          url: `/protected/admin/notifications?title=${courseTitle}&id=${courseId}`,
+          icon: "notifications",
+          roles: ["Admin", "SuperAdmin"],
+        },
+      ],
+    },
   ];
 
   useEffect(() => {

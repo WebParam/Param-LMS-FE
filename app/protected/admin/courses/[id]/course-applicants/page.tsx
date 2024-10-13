@@ -77,7 +77,7 @@ function Page({ params }: { params: { id: string } }) {
     <ErrorBoundary>
       <PageHeader />
       <div className="container page__container page__container page-section">
-        <div className="d-flex card flex-column p-3 mb-3 text-success">
+        {/* <div className="d-flex card flex-column p-3 mb-3 text-success">
           <div className="d-flex align-items-center">
             <div className="font-weight-bolder text-underline mr-2">
               Student Registration:{" "}
@@ -98,7 +98,7 @@ function Page({ params }: { params: { id: string } }) {
               {loginUrl}
             </Link>
           </div>
-        </div>
+        </div> */}
         {graphsData ? (
           <>
             <Graphs Graphdata={graphsData} />

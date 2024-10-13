@@ -80,7 +80,6 @@ function Assessment({ data }: { data: any }) {
         show={openEditModal}
         onHide={() => setOpenEditModal(false)}
         data={data}
-        title={data.title}
         assessmentId={data.id}
       />
 
@@ -112,7 +111,6 @@ function Assessment({ data }: { data: any }) {
             <Link
               href={`${pathname}/${data.id}/questions?title=${title}&topicTitle=${data.title}`}
               type="button"
-              onClick={() => console.log()}
             >
               <i className="material-icons icon-holder--outline-dark rounded-lg">
                 visibility
@@ -136,6 +134,4 @@ function Assessment({ data }: { data: any }) {
     </div>
   );
 }
-export default dynamic(() => Promise.resolve(Assessment), {
-  ssr: false,
-});
+export default Assessment;

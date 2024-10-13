@@ -19,12 +19,13 @@ export const post = async (url: string, body: any) => {
       body: JSON.stringify(body),
     });
 
+    console.log("payload:", body);
     const data = await res.json();
+    console.log("payload: ", body);
     Diagnostic(`SUCCESS ON POST ${url}, returning`, data);
     debugger;
     return data;
   } catch (err) {
-    debugger;
     console.log(`[API ERROR : Method: POST; Endpoint: ${url}]`, err);
     Diagnostic("ERROR ON POST, returning", err);
     return err;
@@ -49,7 +50,10 @@ export const put = async (url: string, body: any) => {
       },
       body: JSON.stringify(body),
     });
+
     const data = await res.json();
+
+    console.log("payload: ", body);
     Diagnostic(`SUCCESS ON PUT ${url}, returning`, data);
     return data;
   } catch (err) {
