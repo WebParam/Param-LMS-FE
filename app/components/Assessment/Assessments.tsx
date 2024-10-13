@@ -9,13 +9,28 @@ export default function Assessments({ list }: any) {
   const courseTitle = searchParams.get("title") || "";
   const homeTitle = "homeTitle=Mark Assessments";
   const buttonTitle = "button-title=Assessments";
+
+
+  const assessmentList = [
+    {
+      id:"1",
+      imgUrl : "",
+      title: "Formative Assessment"
+    },
+    {
+      id:"2",
+      imgUrl : "",
+      title: "Extended Formative Assessment"
+    }
+  ]
+
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
           <div className="row card-group-row">
-            {list &&
-              list.map((assessment: any) => (
+            {assessmentList &&
+              assessmentList.map((assessment: any) => (
                 <Assessment
                   key={assessment.id}
                   imgUrl={assessment.avatar}
