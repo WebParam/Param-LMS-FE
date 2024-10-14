@@ -95,7 +95,7 @@ const Body = () => {
         </div>
         <div style={{ borderBottom: "1px solid black" }} className="col-4 p-3">
           <h6>Province:</h6>
-          <div>{getDescription(5, data?.province) ?? "N/A"}</div>
+          <div>Gauteng</div>
         </div>
         <div style={{ borderBottom: "1px solid black" }} className="col-4 p-3">
           <h6>Date of Birth:</h6>
