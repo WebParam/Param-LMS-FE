@@ -164,3 +164,103 @@ export const AvgTimeSpentData = {
     },
   },
 };
+
+
+export const AvgTimeSpentAssesmentData = {
+  AvgTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 60)) }],
+    options: {
+      ...commonOptions,
+      xaxis: {
+        categories: [
+          'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+        ],
+      },
+    },
+  },
+  JanTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  FebTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 28 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 28 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  MarTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  AprTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 30 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  MayTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  JunTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 30 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  JulTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  AugTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  SepTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 30 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  OctTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  NovTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 30 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  DecTimeSpentData: {
+    series: [{ name: 'Average Time Spent', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+};
+

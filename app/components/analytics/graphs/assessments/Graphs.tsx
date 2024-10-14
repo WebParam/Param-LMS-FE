@@ -12,6 +12,7 @@ import ChartProvider from "@/components/analytics/graphs/ChartProvider";
 import PieChart from "@/components/analytics/graphs/PieChart";
 import { AvgAssessmentData ,AvgAssessmentDatafiltersMapping,
   AvgAssessmentDataFilterOptions} from "@/components/analytics/graphs/assessments/AvgPerAssessment";
+import { AvgTimeSpentAssesmentData, AvgTimeSpentData, AvgTimeSpentDataFilterOptions, AvgTimeSpentDatafiltersMapping } from "../course/AvgTimeSpent";
 
 export default function Graphs() {
   return (
@@ -21,7 +22,7 @@ export default function Graphs() {
         <div
           className="col-lg-6 col-md-12 card-group-row__col"
         >
-          <ChartLayout title="Assessment Completion Rate" type="pie">
+          <ChartLayout title="Assessment Pass Rate" type="pie">
             <PieChart
               options={AssessmentPassRateOptions}
               series={AssessmentPassRateSeries}
@@ -31,11 +32,16 @@ export default function Graphs() {
         <div
           className="col-lg-6 col-md-12 card-group-row__col"
         >
-          <ChartLayout title="Assessment Pass Rate" type="pie">
-            <PieChart
-              options={AssessmentPassRateOptions}
-              series={AssessmentPassRateSeries}
-            />
+          <ChartLayout
+            hasFilter={true}
+            title="Time spent on assessments (mins)"
+            type="bar"
+            chartData={AvgTimeSpentAssesmentData}
+            filterOptions={AvgTimeSpentDataFilterOptions}
+            defaultFilter="yellow"
+            filtersMapping={AvgTimeSpentDatafiltersMapping}
+          >
+            <ChartProvider/>
           </ChartLayout>
         </div>
 

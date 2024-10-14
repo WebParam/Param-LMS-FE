@@ -21,4 +21,4 @@ export const barDescriptions = [
     }]
   };
 
-  export const series = [44, 55]; // Data for each category
+  export const series = [12, 88]; // Data for each category

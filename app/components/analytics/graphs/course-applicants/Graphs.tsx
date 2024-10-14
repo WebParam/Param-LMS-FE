@@ -33,7 +33,7 @@ type DataTiles = {
 
 export default function Graphs({Graphdata}:any) {
 
-
+console.log("GRAPH DATA", Graphdata)
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: Graphdata.numberOfStudents },
     { name: "Disabilities", icon: "school", data:  Graphdata.numberOfStudentsWithDisabilities},
