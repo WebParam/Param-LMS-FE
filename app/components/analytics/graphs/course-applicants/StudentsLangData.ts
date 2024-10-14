@@ -55,10 +55,15 @@ export const studentsLanguageDatafiltersMapping = {
       },
     },
   };
-  
-  export const studentsLanguages = ({studentLanguagesData, malesStudentData, femalesStudentData}:any) => ({
+
+  // Mock data for demonstration
+  const mockStudentLanguagesData = [10, 20, 15, 25, 30, 5, 12, 8, 22, 18, 9];
+  const mockMalesStudentData = [5, 10, 7, 12, 15, 2, 6, 4, 11, 9, 4];
+  const mockFemalesStudentData = [5, 10, 8, 13, 15, 3, 6, 4, 11, 9, 5];
+
+  export const studentsLanguages = () => ({
     studentsSocioStatus: {
-      series: [{ name: 'Number of Students Lang', data: studentLanguagesData}],
+      series: [{ name: 'Number of Students Lang', data: mockStudentLanguagesData}],
       options: {
         ...commonOptions,
         xaxis: {
@@ -79,7 +84,7 @@ export const studentsLanguageDatafiltersMapping = {
       },
     },
     malesStudentData: {
-      series: [{ name: 'Number of Students', data: malesStudentData }],
+      series: [{ name: 'Number of Students', data: mockMalesStudentData }],
       options: {
         ...commonOptions,
         xaxis: {
@@ -100,7 +105,7 @@ export const studentsLanguageDatafiltersMapping = {
       },
     },
     femalesStudentData: {
-      series: [{ name: 'Number of Students', data: femalesStudentData }],
+      series: [{ name: 'Number of Students', data: mockFemalesStudentData }],
       options: {
         ...commonOptions,
         xaxis: {
@@ -122,4 +127,3 @@ export const studentsLanguageDatafiltersMapping = {
       },
     },
   });
-  
