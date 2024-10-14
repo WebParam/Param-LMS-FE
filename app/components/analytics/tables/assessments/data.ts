@@ -37,25 +37,65 @@ const mockData = [
   },
   {
     "studentId": "2",
-    "fullName": "Alice Smith",
+    "fullName": "Lindokuhle Xaba",
     "assessmentDate": "2024-07-15",
-    "subject": "Science",
+    "subject": "Management Accounting",
     "grade": "B+",
     "instructor": "Ms. Davis"
   },
   {
     "studentId": "3",
-    "fullName": "Michael Brown",
+    "fullName": "Siboniso Sibiya",
     "assessmentDate": "2024-08-10",
-    "subject": "English",
+    "subject": "Management Accounting",
     "grade": "A-",
     "instructor": "Mrs. Clark"
   },
   {
     "studentId": "4",
-    "fullName": "Sarah Lee",
+    "fullName": "Tinny Mandisa Phala",
     "assessmentDate": "2024-07-22",
-    "subject": "History",
+    "subject": "Management Accounting",
+    "grade": "B",
+    "instructor": "Mr. Thompson"
+  },
+  {
+    "studentId": "4",
+    "fullName": "Shanique Plaatjies",
+    "assessmentDate": "2024-07-22",
+    "subject": "Management Accounting",
+    "grade": "B",
+    "instructor": "Mr. Thompson"
+  },
+  {
+    "studentId": "4",
+    "fullName": "Elnah Nkosingiphile Mthethwa	",
+    "assessmentDate": "2024-07-22",
+    "subject": "Management Accounting",
+    "grade": "B",
+    "instructor": "Mr. Thompson"
+  },
+  {
+    "studentId": "4",
+    "fullName": "Kagiso Ramakulukusha",
+    "assessmentDate": "2024-07-22",
+    "subject": "Management Accounting",
+    "grade": "B",
+    "instructor": "Mr. Thompson"
+  }  ,
+  {
+    "studentId": "4",
+    "fullName": "Lerato Blessing Phema",
+    "assessmentDate": "2024-07-22",
+    "subject": "Management Accounting",
+    "grade": "B",
+    "instructor": "Mr. Thompson"
+  },
+  {
+    "studentId": "4",
+    "fullName": "Bongeka Msibi",
+    "assessmentDate": "2024-07-22",
+    "subject": "Management Accounting",
     "grade": "B",
     "instructor": "Mr. Thompson"
   }

@@ -48,6 +48,7 @@ const Body = () => {
   };
 
   const getDescription = (codeType: number, code: string) => {
+    debugger;
     const codeCategory = codes && codes.find((c: any) => c.type === codeType);
     if (!codeCategory) {
       return "N/A";
