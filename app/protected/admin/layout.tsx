@@ -21,7 +21,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const [projectLength, setProjectLength] = useState<string | null>(null);
   const cookies = new Cookies();
   const user = cookies.get("param-lms-user");
-  const userRole = user.role;
+  const userRole = user?.role;
 
   useEffect(() => {
     setProjectLength(localStorage.getItem("len"));

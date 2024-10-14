@@ -30,7 +30,7 @@ export const studentsLanguageDatafiltersMapping = {
     },
     yaxis: {
       title: {
-        text: 'Number of Students by Employment Status',
+        text: 'Number of Students by First Language',
       },
     },
     colors: ['#007bff'],

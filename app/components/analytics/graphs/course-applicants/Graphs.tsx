@@ -33,7 +33,8 @@ type DataTiles = {
 
 export default function Graphs({Graphdata}:any) {
 
-console.log("GRAPH DATA", Graphdata)
+console.log("GRAPH DATA", Graphdata);
+
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: Graphdata.numberOfStudents },
     { name: "Disabilities", icon: "school", data:  Graphdata.numberOfStudentsWithDisabilities},
@@ -85,8 +86,8 @@ console.log("GRAPH DATA", Graphdata)
             title="Age vs Gender "
             type="bar"
             chartData={AgeVsGenderData({
-              malesData: Graphdata.ageRangeGenderDistribution.males,
-              femalesData:Graphdata.ageRangeGenderDistribution.females
+              malesData:Graphdata.ageRangeGenderDistribution.femaleCounts,
+              femalesData:Graphdata.ageRangeGenderDistribution.femaleCounts
             })}
 
           >
