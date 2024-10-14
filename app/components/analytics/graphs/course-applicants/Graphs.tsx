@@ -168,11 +168,7 @@ export default function Graphs({Graphdata}:any) {
             hasFilter={true}
             title="Students Languages"
             type="bar"
-            chartData={studentsLanguages({
-              studentsSocioStatusData: Graphdata.numberOfStudentsByLanguage.overall,
-              malesStudentData: Graphdata.numberOfStudentsByLanguage.overall.males,
-              femalesStudentData: Graphdata.numberOfStudentsByLanguage.overall.females
-            })}
+            chartData={studentsLanguages()}
             filterOptions={studentsLanguagesDataFilterOptions}
             defaultFilter="yellow"
             filtersMapping={studentsLanguageDatafiltersMapping}
