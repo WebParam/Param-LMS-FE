@@ -41,7 +41,7 @@ export default function Login() {
         localStorage.setItem("id", user?.data?.id);
 
         if (process.env.NEXT_PUBLIC_FREEMIUM === "true") {
-          router.push("protected/home/projects");
+          router.push("/protected/home/projects");
         } else if (
           user?.data?.role === "Facilitator" ||
           user?.data?.role === "Moderator"
