@@ -64,11 +64,17 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             icon: "edit",
             roles: ["SuperAdmin"],
           },
-          ...(Number(projectLength) < 2 ? [{
+          ...(userRole === "Freemium" && Number(projectLength) < 2 ? [{
+            name: "Create Project",
+            url: `/protected/home/projects/create?title=${courseTitle}&id=${courseId}`,
+            icon: "add_box",
+            roles: ["Freemium"],
+          }] : []),
+          ...(userRole !== "Freemium" && Number(projectLength) < 2 ? [{
             name: "Create Course",
             url: `/protected/home/courses/create?title=${courseTitle}&id=${courseId}`,
             icon: "add_box",
-            roles: ["SuperAdmin"],
+            roles: ["Admin", "SuperAdmin"],
           }] : [])
         ] : []),
       ],

@@ -84,6 +84,7 @@ export const getKnowledgeModule = async (id: string) => {
 
 
 export const reOrderKnowledgeModule = async (payload:any) => {
+  console.log("Payload",payload)
   try {
     const resp = await put(
       `${wCourseUrl}/KnowledgeModules/ReOrder`,payload

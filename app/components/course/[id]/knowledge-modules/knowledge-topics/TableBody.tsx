@@ -14,13 +14,15 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import EditKnowledgeTopicModal from "./EditKnowledgeTopicModal";
 import DeleteKnowledgeTopicModal from "./DeleteKnowledgeTopicModal";
-import { getKnowledgeTopic, reOrderKnowledgeTopic } from "@/app/lib/actions/knowledge-topic";
+import {
+  getKnowledgeTopic,
+  reOrderKnowledgeTopic,
+} from "@/app/lib/actions/knowledge-topic";
 import { getCourse } from "@/app/lib/actions/course";
 import { getKnowledgeModule } from "@/app/lib/actions/knowledge-module";
 import { getKnowledgeElements } from "@/app/lib/actions/topic-elements";
 import { post } from "@/app/lib/utils";
 import { wGenerateVideoScriptUrl } from "@/app/lib/actions/endpoints";
-
 
 type IKnowledgeTopic = {
   id: string;
@@ -34,7 +36,6 @@ type IKnowledgeTopic = {
   isGenerated: boolean;
   lengthOfVideoScript: number;
 };
-
 
 const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   const [currentItems, setCurrentItems] = useState(list);
@@ -117,13 +118,12 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
       const items = Array.from(currentItems);
       const [reorderedItem] = items.splice(result.source.index, 1);
       items.splice(result.destination.index, 0, reorderedItem);
-      setCurrentItems(items);
-
       const payload = {
         topicId: reorderedItem.id,
         knowledgeModuleId: reorderedItem.moduleId,
         order: result.destination.index + 1,
       };
+      setCurrentItems(items);
       handleReOrder(payload);
     },
     [currentItems]
@@ -136,11 +136,14 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   const handleReOrder = async (payload: any) => {
     setIsGragged(true);
     try {
-      await reOrderKnowledgeTopic(payload);
-      setIsGragged(false);
+      const orderTopicElements = await reOrderKnowledgeTopic(payload);
+      if (orderTopicElements.length > 0) {
+        setIsGragged(false);
+        setCurrentItems(orderTopicElements);
+      }
     } catch (error) {
       setIsGragged(false);
-      
+
       console.error("Reordering failed:", error);
     }
   };
@@ -173,7 +176,12 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
             >
               {currentItems.length > 0 ? (
                 currentItems.map((data, index) => (
-                  <Draggable isDragDisabled={isGragged} key={data.id} draggableId={data.id} index={index}>
+                  <Draggable
+                    isDragDisabled={isGragged}
+                    key={data.id}
+                    draggableId={data.id}
+                    index={index}
+                  >
                     {(dragProvided) => (
                       <tr
                         ref={dragProvided.innerRef}
@@ -234,7 +242,7 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                                   try {
                                     e.preventDefault();
                                     setDocument(data);
-                                
+
                                     setIsProgress(true);
                                     generateVideoScriptWithProgress(data);
                                   } catch (e: any) {
@@ -247,7 +255,8 @@ const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
                               >
                                 {isTryAgain
                                   ? "Network Error: Try Again"
-                                  : data.isGenerated || document?.id! === data.id && isGenerated 
+                                  : data.isGenerated ||
+                                    (document?.id! === data.id && isGenerated)
                                   ? "Regenerate"
                                   : "Generate Video Script"}
                               </button>

@@ -52,7 +52,7 @@ export default function Page({ params }: { params: { id: string } }) {
         courseId: params.id,
         order: result.destination.index + 1,
       };
-      handleReOrder(payload)
+      handleReOrder(payload);
     },
     [list]
   );
@@ -61,11 +61,15 @@ export default function Page({ params }: { params: { id: string } }) {
     setIsGragged(true);
     try {
       const reOrderModule = await reOrderKnowledgeModule(payload);
-      setList(reOrderModule);
-      setIsGragged(false)
+
+      if (reOrderModule.length > 0) {
+        setList(reOrderModule);
+        setIsGragged(false);
+        return;
+      }
     } catch (error) {
       console.error(error);
-      setIsGragged(false)
+      setIsGragged(false);
     }
   };
 
@@ -78,7 +82,12 @@ export default function Page({ params }: { params: { id: string } }) {
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {currentItems.length > 0 ? (
                 currentItems.map((data, index) => (
-                  <Draggable isDragDisabled={isGragged} key={data.id} draggableId={data.id} index={index}>
+                  <Draggable
+                    isDragDisabled={isGragged}
+                    key={data.id}
+                    draggableId={data.id}
+                    index={index}
+                  >
                     {(dragProvided) => (
                       <div
                         ref={dragProvided.innerRef}
