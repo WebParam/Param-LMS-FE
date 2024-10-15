@@ -28,13 +28,14 @@ export default function CreateQuestionBtn({
   const router = useRouter();
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
+  const topicTitle = searchParams.get("topicTitle");
   const refreshId = searchParams.get("refreshId");
 
   const delOption = async () => {
     setIsSpinner(true);
     await deleteOption(option.id!);
     const date = new Date().toString();
-    router.replace(`${pathname}?title=${title}&refreshId=${date}`, {
+    router.replace(`${pathname}?title=${title}&topicTitle=${topicTitle}&refreshId=${date}`, {
       scroll: false,
     });
   };
@@ -42,6 +43,10 @@ export default function CreateQuestionBtn({
   useEffect(() => {
     setIsSpinner(false);
   }, [refreshId]);
+
+  useEffect(() => {
+    if (option.isCorrect) setSelectedOption(label);
+  }, []);
 
   return (
     <div

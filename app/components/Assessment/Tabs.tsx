@@ -1,19 +1,13 @@
 "use client";
 import Link from "next/link";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Dropdown from "react-bootstrap/Dropdown";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
-function Layout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { id: string };
-}) {
+export default function Tabs() {
   const searchParams = useSearchParams();
   const page = searchParams.get("page");
   const title = searchParams.get("title");
+
   const [tabName, setTabName] = useState<string>("Pending");
   const pathname = usePathname();
   const viewTabes =
@@ -38,15 +32,6 @@ function Layout({
       }?title=${title}&page=${page}`,
     },
   ];
-
-  const chooseTask = () => {
-    if (page == "2") {
-      router.push(`${baseUrl}/assignments?title=${title}&page=1`);
-      return;
-    }
-    router.push(`${baseUrl}/assessments?title=${title}&page=2`);
-  };
-
   return (
     <>
       {viewTabes && (
@@ -73,30 +58,8 @@ function Layout({
               </Link>
             ))}
           </div>
-          <div
-            className="card-header card-header-tabs-basic nav px-0 position-absolute right-0 mt-2 mr-2 top-10"
-            role="tablist"
-          >
-            <Dropdown>
-              <Dropdown.Toggle variant="success" id="dropdown-basic">
-                Choose Task
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={chooseTask} href="#/action-1">
-                  Assessments
-                </Dropdown.Item>
-                <Dropdown.Item onClick={chooseTask} href="#/action-2">
-                  Assignments
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
         </div>
       )}
-      {children}
     </>
   );
 }
-
-export default Layout;

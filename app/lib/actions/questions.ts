@@ -16,6 +16,7 @@ export const createQuestion = async (
   moduleId: string,
   assessmentId: string,
   courseTitle: string,
+  topicTitle: string,
   formData: FormData
 ) => {
   const body = {
@@ -27,12 +28,14 @@ export const createQuestion = async (
 
   const entries: any = formData.entries();
   let question = {} as IQuestion;
+  const correctValue: any = formData.get("correctValue") || "";
+  console.log("Correct Value: ", correctValue);
+  
   try {
     const data = await post(`${wQuestionUrl}/AddQuestion`, body);
     question = data.data;
     Diagnostic("SUCCESS ON POST, returning", data);
 
-    const correctValue: any = formData.get("correctValue") || "";
 
     createUpdateOptionRubric(
       entries,
@@ -46,7 +49,7 @@ export const createQuestion = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/assessment/${assessmentId}/questions?title=${courseTitle}&refreshId=${date}`;
+  const url = `/protected/admin/courses/${courseId}/assessments/${assessmentId}/questions?title=${courseTitle}&topicTitle=${topicTitle}&refreshId=${date}`;
   redirect(url);
 };
 
@@ -57,6 +60,7 @@ export const updateQuestion = async (
   moduleId: string,
   assessmentId: string,
   courseTitle: string,
+  topicTitle: string,
   formData: FormData
 ) => {
   const body = {
@@ -90,7 +94,7 @@ export const updateQuestion = async (
   }
 
   const date = new Date().toString();
-  const url = `/protected/admin/courses/${courseId}/modules/${moduleId}/assessment/${assessmentId}/questions?title=${courseTitle}&refreshId=${date}`;
+  const url = `/protected/admin/courses/${courseId}/assessments/${assessmentId}/questions?title=${courseTitle}&topicTitle=${topicTitle}&refreshId=${date}`;
   redirect(url);
 };
 

@@ -17,10 +17,19 @@ const Body = ({ params }: { params: { assignmentId: string } }) => {
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
   const assignmentId = params.assignmentId;
 
+  const [loading, setLoading] = useState(true);
+
+
   const getAssessments = async () => {
+
+    setLoading(true)
+
     const assessments = await getStudentsAssessment(assignmentId);
     setList(assessments);
-    console.log("Assessments", assessments);
+    setLoading(false)
+
+
+
   };
 
   useEffect(() => {
@@ -55,7 +64,7 @@ const Body = ({ params }: { params: { assignmentId: string } }) => {
               <div className="">
                 <div className="card mb-0">
                   <div className="table-responsive">
-                    <Table list={currentItems} />
+                    <Table  loading = {loading}list={currentItems} />
                   </div>
 
                   <Pagination

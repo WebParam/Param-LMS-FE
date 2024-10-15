@@ -4,7 +4,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
 import SkeletonLoader from "@/components/skeleton/skeletonLoader";
 
-const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
+const TableBody: NextPage<{loading:boolean, list: ICourseAssessment[] }> = ({ list ,loading}) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const assessmentName = searchParams.get("assessment-name")!;
@@ -19,8 +19,10 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   return (
     <>
       <tbody className="list" id="staff">
-        {list.length > 0 ?
-          list.map((data: ICourseAssessment) => (
+        {loading ?
+        <>
+        {
+          list.length > 0 ?  list.map((data: ICourseAssessment) => (
             <tr key={data.assessmentId} className="selected">
               <td
                 className={`${align.student_name} js-lists-values-projects small`}
@@ -57,7 +59,16 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
                 </Link>
               </td>
             </tr>
-          ))
+          )) :   <tr className="selected">
+          <td className="text-center js-lists-values-projects small" colSpan={10}>
+           No Students Assessments
+          </td>
+          
+         </tr>
+         
+        }
+        
+        </>
           :   <>
           <tr className="selected">
          <td colSpan={10}>

@@ -1,13 +1,13 @@
 import { NextPage } from "next";
 import TableRow from "./TableRow";
-import { Assessment } from "@/app/interfaces/assessments";
+import { IAssessment } from "@/app/interfaces/assessments";
 
 const TableBody: NextPage<{ list: any[] }> = ({ list }) => {
   return (
     <>
       <tbody className="list" id="staff">
         {list.length > 0 ? (
-          list.map((assessment: Assessment, key) => (
+          list.map((assessment: IAssessment, key) => (
             <TableRow key={assessment.id} assessment={assessment} />
           ))
         ) : (

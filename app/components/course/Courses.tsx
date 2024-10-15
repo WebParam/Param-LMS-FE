@@ -1,19 +1,29 @@
+"use client";
 import Link from "next/link";
-export default async function Courses({ list }: any) {
+import Cookies from "universal-cookie";
+
+export default function Courses({ list }: any) {
+  const cookies = new Cookies();
+
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
           {list.length > 0 ? (
             <div className="row card-group-row">
-              {list.map((course: any) => (
-                <Course
-                  key={course.id}
-                  imgUrl={course.avatar}
-                  title={course.title}
-                  url={`/protected/admin/courses/${course.id}/course-applicants?title=${course.title}`}
-                />
-              ))}
+              {list.map((course: any) => {
+                localStorage.setItem('encryptid', course.id);
+                cookies.set("co-id", course.id, { path: '/' });
+                return (
+                  <Course
+                    key={course.id}
+                    id={course.id}
+                    imgUrl={course.avatar}
+                    title={course.title}
+                    url={`/protected/admin/courses/${course.id}/course-applicants?title=${course.title}`}
+                  />
+                );
+              })}
             </div>
           ) : (
             <div className="card my-24pt text-center py-3">
@@ -30,10 +40,12 @@ const Course = ({
   imgUrl,
   url,
   title,
+  id,
 }: {
   imgUrl: string;
   url: string;
   title: string;
+  id: string;
 }) => {
   return (
     <div className="col-lg-3 card-group-row__col">
