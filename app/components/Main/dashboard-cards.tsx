@@ -50,7 +50,7 @@ const DashboardCards = () => {
 
   return (
     <Container className="mt-5 m-auto">
-      <PageHeader title="Facilitator Dashboard" />
+      <PageHeader />
       <Row className="mt-4 ml-5 justify-content-center">
         {cardData.map((card, index) => (
           <Col key={index} md={6} lg={4} className="mb-4 mx-auto">
