@@ -1,9 +1,10 @@
 "use client";
-import Cookies from "universal-cookie";
-
+import { useRouter, useSearchParams } from "next/navigation";
 export default function PageHeader() {
-  const cookies = new Cookies();
-  const loggedInUser = cookies.get("param-lms-user");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const courseTitle = searchParams.get("title");
+  const studentName = searchParams.get("studentName");
 
   return (
     <>
@@ -11,7 +12,7 @@ export default function PageHeader() {
         <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
           <div className="flex d-flex justify-content-between flex-column flex-sm-row align-items-center mb-24pt mb-md-0">
             <div className="mb-24pt mb-sm-0 mr-sm-24pt">
-              <h2 className="mb-0">{loggedInUser.role} Dashboard</h2>
+              <h2 className="mb-0">{studentName} - Student Assessment</h2>
 
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">
@@ -19,11 +20,14 @@ export default function PageHeader() {
                 </li>
 
                 <li className="breadcrumb-item active">
-                  {loggedInUser.role} Dashboard
+                  {studentName} - Student Assessment
                 </li>
               </ol>
             </div>
           </div>
+          <button onClick={() => router.back()} className="btn btn-success">
+            Student Assessments
+          </button>
         </div>
       </div>
     </>

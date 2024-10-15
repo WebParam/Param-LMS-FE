@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import PageHeader from "@/app/components/PageHeaders/assessments/PageHeader";
+import PageHeader from "@/components/PageHeaders/assessments/PageHeader";
 
 function Layout({
   children,

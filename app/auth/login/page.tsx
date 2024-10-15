@@ -39,9 +39,14 @@ export default function Login() {
       if (user?.data?.id) {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
         localStorage.setItem("id", user?.data?.id);
-       
-        if (process.env.NEXT_PUBLIC_FREEMIUM ==="true") {
+
+        if (process.env.NEXT_PUBLIC_FREEMIUM === "true") {
           router.push("protected/home/projects");
+        } else if (
+          user?.data?.role === "Facilitator" ||
+          user?.data?.role === "Moderator"
+        ) {
+          router.push("/protected/home/facilitator");
         } else {
           router.push("/protected/home/courses");
         }
@@ -112,10 +117,7 @@ export default function Login() {
           </form>
           <p className="text-center text-dark">
             Lost your password?{" "}
-            <Link
-              href="/auth/login/reset-password"
-              className="text-primary"
-            >
+            <Link href="/auth/login/reset-password" className="text-primary">
               <u>Reset</u>
             </Link>
           </p>
