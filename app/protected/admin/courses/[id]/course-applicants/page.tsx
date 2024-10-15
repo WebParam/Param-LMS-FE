@@ -26,7 +26,7 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
 
 function Page({ params }: { params: { id: string } }) {
   const courseId = params.id;
-  const isFreemium = process.env.NEXT_PUBLIC_FREEMIUM === "true";
+  const isFreemium = process.env.NEXT_PUBLIC_FREEMIUM;
   const baseUrl = `https://${process.env.NEXT_PUBLIC_API_ENV}${
     isFreemium ? "-freemium" : ""
   }.thooto.com`;
@@ -77,28 +77,30 @@ function Page({ params }: { params: { id: string } }) {
     <ErrorBoundary>
       <PageHeader />
       <div className="container page__container page__container page-section">
-        {/* <div className="d-flex card flex-column p-3 mb-3 text-success">
-          <div className="d-flex align-items-center">
-            <div className="font-weight-bolder text-underline mr-2">
-              Student Registration:{" "}
-            </div>{" "}
-            <Link
-              target="_blank"
-              className="text-underline"
-              href={registrationUrl}
-            >
-              {registrationUrl}
-            </Link>
-          </div>
-          <div className="d-flex align-items-center">
-            <div className="font-weight-bolder text-underline mr-2">
-              Student Login:{" "}
-            </div>{" "}
-            <Link target="_blank" className="text-underline" href={loginUrl}>
-              {loginUrl}
-            </Link>
-          </div>
-        </div> */}
+       {
+        isFreemium  &&  <div className="d-flex card flex-column p-3 mb-3 text-success">
+        <div className="d-flex align-items-center">
+          <div className="font-weight-bolder text-underline mr-2">
+            Student Registration:{" "}
+          </div>{" "}
+          <Link
+            target="_blank"
+            className="text-underline"
+            href={registrationUrl}
+          >
+            {registrationUrl}
+          </Link>
+        </div>
+        <div className="d-flex align-items-center">
+          <div className="font-weight-bolder text-underline mr-2">
+            Student Login:{" "}
+          </div>{" "}
+          <Link target="_blank" className="text-underline" href={loginUrl}>
+            {loginUrl}
+          </Link>
+        </div>
+      </div>
+       }
         {graphsData ? (
           <>
             <Graphs Graphdata={graphsData} />

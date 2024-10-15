@@ -29,7 +29,6 @@ const DashboardCards = () => {
       icon: "schedule",
       title: "Schedule Class",
     },
-    { link: "#", icon: "createAssessment", title: "Schedule Assessment" },
     { link: "#", icon: "leaderBoard", title: "Leader Board" },
     {
       link: `/protected/admin/moderator-feedback/pages/assessments?title=${courseTitle}&id=${courseId}`,
@@ -41,6 +40,8 @@ const DashboardCards = () => {
       icon: "markAssessment",
       title: `Mark Assessments`,
     },
+    { link: "#", icon: "markAssessment", title: "Mark Assignments" },
+
     {
       link: `/protected/admin/logbook/pages/completed?title=${courseTitle}&id=${courseId}`,
       icon: "logbook",
