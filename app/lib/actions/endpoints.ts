@@ -1,6 +1,7 @@
 const test = "testing";
 const env = process.env.NEXT_PUBLIC_API_ENV
 
+
 export const wCourseUrl = `https://thooto-${env}-be-newcourse-write.azurewebsites.net/api/v1`;
 
 export const rCourseUrl = `https://thooto-${env}-be-newcourse-read.azurewebsites.net/api/v1`;
