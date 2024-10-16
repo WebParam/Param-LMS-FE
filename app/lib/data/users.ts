@@ -1,5 +1,3 @@
-
-
 import { get, post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
 import {
@@ -47,7 +45,7 @@ export const AdminResetPassword = async (
   }
 };
 
-export const AdminSendResetOTP = async (payload:any) => {
+export const AdminSendResetOTP = async (payload: any) => {
   try {
     const resp = await post(`${wUserUrl}/Users/SendResetPasswordOtp`, payload);
     const data = resp;
@@ -93,9 +91,7 @@ export const adminUpdateUserDetails = async (payload: IAdminUpdateUser) => {
 
 export const getAdminUser = async (userId: string) => {
   try {
-    const resp = await get(
-      `https://khumla-dev-user-read.azurewebsites.net/api/v1/Users/${userId}`
-    );
+    const resp = await get(`${rUserUrl}/${userId}`);
     console.log(resp);
     const data = resp.data;
 
@@ -127,6 +123,23 @@ export const getUser = async (id: string, role: number) => {
       `${rUserUrl}/RoleManagement/GetUserWithCourses/${id}?role=${role}`
     );
     console.log(resp);
+    const data = resp;
+
+    Diagnostic("SUCCESS ON GET, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON GET, returning", err);
+    console.error(err);
+  }
+};
+export const getUsersByRoleAndCourses = async (
+  courseId: string,
+  role: number
+) => {
+  try {
+    const resp = await get(
+      `${rUserUrl}/RoleManagement/GetUsersByRoleAndCourse/${courseId}?role=${role}`
+    );
     const data = resp;
 
     Diagnostic("SUCCESS ON GET, returning", data);

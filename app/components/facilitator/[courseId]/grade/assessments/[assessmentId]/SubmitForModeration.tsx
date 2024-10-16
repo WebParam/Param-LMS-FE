@@ -1,70 +1,54 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { submitForModeration } from "@/app/lib/actions/assessments";
 import { useParams, useRouter } from "next/navigation";
-import { getUsersByRole } from "@/app/lib/data/users";
+import { getUsers, getUsersByRoleAndCourses } from "@/app/lib/data/users";
 
 function SubmitForModeration(props: any) {
-  const [dueDate, setDueDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [selectedModerator, setSelectedModerator] = useState<IUser | any>();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [moderators, setModerators] = useState<IUser[]>([]);
+  const [selectedModerator, setSelectedModerator] = useState();
+  const [moderators, setModerators] = useState<any[]>([]);
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false)
-
-
-  const ITEMSPERPAGE = 3;
-  const indexOfLastItem = currentPage * ITEMSPERPAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-  const currentItems = moderators.slice(indexOfFirstItem, indexOfLastItem);
+  const [loading, setLoading] = useState(false);
 
   const handleModeratorChange = (e: any) => {
     setSelectedModerator(e.target.value);
-    console.log(e.target.value);
   };
 
   const router = useRouter();
-  const { assessmentId, id } = useParams<{ assessmentId: string; id: string }>();
+  const { courseId, assessmentId, id } = useParams<{
+    courseId: string;
+    assessmentId: string;
+    id: string;
+  }>();
 
   const submitModeration = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    formData.append("moderatorId", selectedModerator.id);
+    formData.append("moderatorId", selectedModerator || "");
     formData.append("assessmentId", assessmentId);
-    formData.append("studentId", "6674335c5f6ceeb4980ebb68");
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const submitResponse = await submitForModeration(formData);
-  
-      if (!submitResponse.id) {
-        setLoading(false)
+      await submitForModeration(formData);
 
-        setErrorMessage("Failed to submit moderation");
-        setSuccessMessage("");
-        return;
-      }
-      setLoading(false)
+      setLoading(false);
 
       setSuccessMessage("Moderation submitted successfully");
- 
+
       setTimeout(() => {
         setErrorMessage("");
 
         props.onHide();
         router.back();
-            }, 3000);
+      }, 3000);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
 
       console.error("Error submitting moderation:", error);
       setErrorMessage("Failed to submit moderation");
@@ -72,14 +56,23 @@ function SubmitForModeration(props: any) {
     }
   };
 
-  const getUser = async () => {
-    const users = await getUsersByRole("moderator");
-    setModerators(users);
-    console.log("users", users);
+  const getModerators = async () => {
+    const moderators: any[] = await getUsers();
+    const users = await getUsersByRoleAndCourses(courseId, 0);
+
+    const moderatorDetails = moderators.reduce((acc: any, moderator: any) => {
+      acc[moderator.userId] = moderator;
+      return acc;
+    }, {});
+
+    const moderatorsData = users.map(
+      (user: any) => moderatorDetails[user.userId]
+    );
+    setModerators(moderatorsData || []);
   };
 
   useEffect(() => {
-    getUser();
+    getModerators();
   }, []);
 
   return (
@@ -113,44 +106,19 @@ function SubmitForModeration(props: any) {
                   onChange={handleModeratorChange}
                 >
                   <option value="">Select a moderator...</option>
-                  {moderators.map((moderator: IUser, index) => (
-                    <option key={index} value={moderator.id}>
-                      {moderator.firstName} {moderator.lastName} - {moderator.email}
-                    </option>
-                  ))}
+                  {moderators.length > 0 &&
+                    moderators.map((moderator: any) => (
+                      <option key={moderator.userId} value={moderator.userId}>
+                        {moderator.firstName} {moderator.lastName} -{" "}
+                        {moderator.email}
+                      </option>
+                    ))}
                 </Form.Control>
               </Form.Group>
-              <h5>Moderation Due Date</h5>
-              <Form.Group controlId="dueDate">
-                <Form.Label>Due Date</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
-                />
-              </Form.Group>
-              <div className="d-flex align-items-center mt-3">
-                <Form.Group controlId="startTime" className="mr-3">
-                  <Form.Label>Start Time</Form.Label>
-                  <Form.Control
-                    type="time"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group controlId="endTime" className="ml-3">
-                  <Form.Label>End Time</Form.Label>
-                  <Form.Control
-                    type="time"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                  />
-                </Form.Group>
-              </div>
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <div className="d-flex justify-content-between w-100">
+            <div className="d-flex justify-content-center w-100">
               <div>
                 <Button
                   variant="secondary"
@@ -160,7 +128,11 @@ function SubmitForModeration(props: any) {
                   Cancel
                 </Button>
                 <Button variant="success" type="submit">
-                {!loading ? "Submit" : <div className="spinner-border text-white" role="status" /> }
+                  {!loading ? (
+                    "Submit"
+                  ) : (
+                    <div className="spinner-border text-white" role="status" />
+                  )}
                 </Button>
               </div>
             </div>
@@ -171,9 +143,7 @@ function SubmitForModeration(props: any) {
   );
 }
 
-export default dynamic(() => Promise.resolve(SubmitForModeration), {
-  ssr: false,
-});
+export default SubmitForModeration;
 
 export interface IUser {
   id: string;
