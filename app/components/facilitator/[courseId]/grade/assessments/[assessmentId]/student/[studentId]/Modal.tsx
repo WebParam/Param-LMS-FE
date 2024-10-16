@@ -1,14 +1,21 @@
 "use client";
-import { submitFacilitatorAssessment } from "@/app/lib/actions/assessments";
+import {
+  submitFacilitatorAssessment,
+  submitModeratorAssessment,
+} from "@/app/lib/actions/assessments";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Cookies from "universal-cookie";
 
 export default function FeedbackModal(props: any) {
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("param-lms-user");
+
   const router = useRouter();
-  const facilitatorId = "6580051b2b3b4e16f159792d";
-  const { assessmentId, studentId: id } = useParams<{
+  const facilitatorId = loggedInUser.id;
+  const { assessmentId, studentId } = useParams<{
     assessmentId: string;
     studentId: string;
   }>();
@@ -22,34 +29,66 @@ export default function FeedbackModal(props: any) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    formData.append("facilitatorId", facilitatorId);
-    formData.append("assessmentId", assessmentId);
-    formData.append("studentId", id);
-    formData.append("TotalMark", props.totalMark);
+    if (loggedInUser.role === "Facilitator") {
+      formData.append("facilitatorId", facilitatorId);
+      formData.append("assessmentId", assessmentId);
+      formData.append("studentId", studentId);
+      formData.append("TotalMark", props.totalMark);
 
-    try {
-      setLoading(true);
-      const submitResponse = await submitFacilitatorAssessment(formData);
-      if (!submitResponse.id) {
+      try {
+        setLoading(true);
+        const submitResponse = await submitFacilitatorAssessment(formData);
+        if (!submitResponse.id) {
+          setLoading(false);
+          setFormError("Failed to submit assessment");
+          setFormSuccess("");
+          return;
+        }
         setLoading(false);
+        setFormError("");
+        setFormSuccess("Assessment submitted successfully");
+
+        setTimeout(() => {
+          setFormSuccess("");
+          props.onHide();
+          router.back();
+        }, 3000);
+      } catch (error) {
+        setLoading(false);
+        console.error("Error submitting assessment:", error);
         setFormError("Failed to submit assessment");
         setFormSuccess("");
-        return;
       }
-      setLoading(false);
-      setFormError("");
-      setFormSuccess("Assessment submitted successfully");
+    } else if (loggedInUser.role === "Moderator") {
+      formData.append("moderatorId", facilitatorId);
+      formData.append("assessmentId", assessmentId);
+      formData.append("studentId", studentId);
+      formData.append("TotalMark", props.moderatorTotalMark);
 
-      setTimeout(() => {
+      try {
+        setLoading(true);
+        const submitResponse = await submitModeratorAssessment(formData);
+        if (!submitResponse.id) {
+          setLoading(false);
+          setFormError("Failed to submit assessment");
+          setFormSuccess("");
+          return;
+        }
+        setLoading(false);
+        setFormError("");
+        setFormSuccess("Assessment submitted successfully");
+
+        setTimeout(() => {
+          setFormSuccess("");
+          props.onHide();
+          router.back();
+        }, 3000);
+      } catch (error) {
+        setLoading(false);
+        console.error("Error submitting assessment:", error);
+        setFormError("Failed to submit assessment");
         setFormSuccess("");
-        props.onHide();
-        router.back();
-      }, 3000);
-    } catch (error) {
-      setLoading(false);
-      console.error("Error submitting assessment:", error);
-      setFormError("Failed to submit assessment");
-      setFormSuccess("");
+      }
     }
   };
 

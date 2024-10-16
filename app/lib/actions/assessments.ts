@@ -185,13 +185,14 @@ export const submitFacilitatorAssessment = async (payload: FormData) => {
 
 export const submitModeratorAssessment = async (payload: FormData) => {
   const body = {
-    moderatorId: payload.get("facilitatorId") ?? "",
+    moderatorId: payload.get("moderatorId") ?? "",
     assessmentId: payload.get("assessmentId"),
     studentId: payload.get("studentId"),
+    TotalMark: payload.get("TotalMark"),
   };
   try {
     const data = await post(
-      `${twAssessmentUrl}/StudentAnswers/FacilitatorSubmit`,
+      `${wAssessmentUrl}/StudentAnswers/ModeratorSubmit`,
       body
     );
     Diagnostic("SUCCESS ON POST, returning", data);
