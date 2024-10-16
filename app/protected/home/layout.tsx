@@ -6,6 +6,7 @@ import withAuth from "./AdminAuthWrapper";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Cookies from "universal-cookie";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +17,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const pathName = usePathname();
   const isHost = pathName == "/protected/host/host/completed";
   const [projectLength, setProjectLength] = useState<string | null>(null);
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("param-lms-user");
+  const adminRoles = ["Admin", "SuperAdmin", "Freemium"];
 
   useEffect(() => {
     setProjectLength(localStorage.getItem("len"));
@@ -50,7 +54,12 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="mdk-header-layout js-mdk-header-layout">
-        <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} />
+        <HeadNav
+          setIsOpen={setIsOpen}
+          isOpen={isOpen}
+          adminRoles={adminRoles}
+        />
+
         <div className="mdk-header-layout__content page-content ">
           <nav className="navbar navbar-light bg-alt border-bottom">
             <div className="container page__container">
@@ -63,8 +72,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
-
-      <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
+      {loggedInUser.role.includes(adminRoles) && (
+        <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
+      )}
     </>
   );
 }

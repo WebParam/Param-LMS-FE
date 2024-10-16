@@ -4,9 +4,10 @@ import Cookies from "universal-cookie";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
+const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean, adminRoles?: string[] }> = ({
   setIsOpen,
   isOpen,
+  adminRoles
 }) => {
   const cookies = new Cookies();
   const loggedInUser = cookies.get("param-lms-user");
@@ -17,6 +18,7 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const isAccount = pathName == "/protected/admin/account";
   const isHost =
     pathName == "/protected/host/host-company/478acbasa65s7xasvx56";
+  const hasAccess = !isHost && loggedInUser.role.includes(adminRoles);
 
   const hostName = "Sanlam";
 
@@ -39,7 +41,7 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
             id="default-navbar"
             data-primary
           >
-            {!isHost && (
+            { hasAccess && (
               <button
                 className="navbar-toggler d-block rounded-0"
                 onClick={() => {
@@ -51,7 +53,7 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                 <span className="material-icons">menu</span>
               </button>
             )}
-            <a className={`navbar-brand mr-16pt ${isHost && "ml-3"}`}>
+            <a className={`navbar-brand mr-16pt ${!hasAccess && "ml-3"}`}>
               <span
                 className=" d-lg-block"
                 style={{
