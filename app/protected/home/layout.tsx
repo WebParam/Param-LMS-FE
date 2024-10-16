@@ -72,7 +72,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
-      {loggedInUser.role.includes(adminRoles) && (
+      {adminRoles.includes(loggedInUser.role) && (
         <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
       )}
     </>

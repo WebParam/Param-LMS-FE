@@ -18,7 +18,7 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean, adminRoles?: st
   const isAccount = pathName == "/protected/admin/account";
   const isHost =
     pathName == "/protected/host/host-company/478acbasa65s7xasvx56";
-  const hasAccess = !isHost && loggedInUser.role.includes(adminRoles);
+  const hasAccess = !isHost && adminRoles?.includes(loggedInUser.role);
 
   const hostName = "Sanlam";
 
