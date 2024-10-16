@@ -9,6 +9,7 @@ type Props = {
   isMarked: boolean;
   questionNumber: number;
   setTotals: (total: number, index: number) => void;
+  setModeratorTotals: (total: number, index: number) => void;
   questionName: string;
   questionDescription: string;
   questionAnswer: string;
@@ -16,41 +17,62 @@ type Props = {
   rubric: IRubric[];
 };
 
-const cookies = new Cookies();
-const loggedInUser = cookies.get("param-lms-user");
-
 export default function ({
   isMarked,
   questionNumber,
   setTotals,
+  setModeratorTotals,
   questionName,
   questionAnswer,
   questionScore,
   rubric,
 }: Props) {
-  const gradedRubric =
-    loggedInUser.role == "Facilitator"
-      ? rubric.map((r) => r.facilitatorScore || 0)
-      : rubric.map((r) => r.moderatorScore || 0);
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("param-lms-user");
+
+  const isFacilitator = loggedInUser.role == "Facilitator";
+  const isModerator = loggedInUser.role == "Moderator";
+  const gradedRubric = rubric.map((r) => r.facilitatorScore || 0);
+  const moderatorGradedRubric = rubric.map((r) => r.moderatorScore || 0);
 
   const [grades, setGrades] = useState<number[]>(gradedRubric);
+  const [moderatorGrades, setModeratorGrades] = useState<number[]>(
+    moderatorGradedRubric
+  );
   const [isGraded, setIsGraded] = useState(false);
   const totalGrade = grades.reduce((acc, grade) => acc + grade, 0);
+  const moderatorTotalGrade = moderatorGrades.reduce(
+    (acc, grade) => acc + grade,
+    0
+  );
   const FACILITATOR_MARK_TYPE = 1;
   const MODERATOR_MARK_TYPE = 0;
-  const markType =
-    loggedInUser.role == "Facilitator"
-      ? FACILITATOR_MARK_TYPE
-      : MODERATOR_MARK_TYPE;
+  const markType = isFacilitator ? FACILITATOR_MARK_TYPE : MODERATOR_MARK_TYPE;
 
   useEffect(() => {
-    setIsGraded(totalGrade > 0);
+    if (isFacilitator) setIsGraded(totalGrade > 0);
   }, [totalGrade]);
+
+  useEffect(() => {
+    if (isModerator) setIsGraded(moderatorTotalGrade > 0);
+  }, [moderatorTotalGrade]);
 
   const handleGradeChange = async (index: number, grade: number) => {
     const newGrades = [...grades];
     newGrades[index] = grade;
     setGrades(newGrades);
+    await markStudent(
+      rubric[index].questionId,
+      rubric[index].id,
+      grade,
+      rubric[index].label
+    );
+  };
+
+  const handleModeratorGradeChange = async (index: number, grade: number) => {
+    const newGrades = [...moderatorGrades];
+    newGrades[index] = grade;
+    setModeratorGrades(newGrades);
     await markStudent(
       rubric[index].questionId,
       rubric[index].id,
@@ -83,7 +105,10 @@ export default function ({
     console.log(markResponse);
   };
 
-  const submitTotal = () => setTotals(totalGrade || 0, questionNumber);
+  const submitTotal = () => {
+    setModeratorTotals(moderatorTotalGrade || 0, questionNumber);
+    setTotals(totalGrade || 0, questionNumber);
+  };
 
   return (
     <div onMouseLeave={submitTotal} className="card table-responsive my-24pt">
@@ -118,9 +143,9 @@ export default function ({
                 className="py-2 d-flex justify-content-between align-items-center"
               >
                 <div className="d-flex flex-column align-items-start">
-                  {loggedInUser.role == "Moderator" && (
+                  {isModerator && (
                     <div style={{ color: "#77c13a" }} className=" d-flex">
-                      {Array(grades[index])
+                      {Array(moderatorGrades[index])
                         .fill(<i className="material-icons">check</i>)
                         .map((icon, i) => (
                           <span key={i} className="mr-1">
@@ -143,17 +168,21 @@ export default function ({
                 <div
                   className="d-flex"
                   style={{
-                    width: loggedInUser.role == "Moderator" ? "300px" : "200px",
+                    width: isModerator ? "300px" : "200px",
                   }}
                 >
                   <div className="d-flex w-75" style={{ gap: "20px" }}>
-                    {loggedInUser.role == "Moderator" ? (
+                    {isModerator ? (
                       <>
                         <GradeInput
                           isMarked={isMarked}
                           setIsGraded={setIsGraded}
-                          setGrade={(grade) => handleGradeChange(index, grade)}
-                          grade={choice.moderatorScore || grades[index]}
+                          setGrade={(grade) =>
+                            handleModeratorGradeChange(index, grade)
+                          }
+                          grade={
+                            choice.moderatorScore || moderatorGrades[index]
+                          }
                           questionScore={Number(choice.label)}
                         />
                         <input
@@ -189,6 +218,7 @@ export default function ({
                 questionType="short"
                 setIsGraded={setIsGraded}
                 grade={totalGrade}
+                moderatorGrade={moderatorTotalGrade}
                 questionScore={questionScore}
               />
             </td>
@@ -203,23 +233,25 @@ function Grade({
   questionType,
   setIsGraded,
   grade,
+  moderatorGrade,
   questionScore,
 }: {
   setIsGraded: (isGraded: boolean) => void;
   grade: number;
+  moderatorGrade: number;
   questionType?: string;
   questionScore: number;
 }) {
   return (
     <div className="d-flex w-100">
-      <div className="d-flex w-75">
+      <div className="d-flex w-100">
         <div className={`text-center w-100 py-2`}>
-          <h6
-            style={{ color: grade >= questionScore * 0.5 ? "green" : "" }}
-            className={`mb-1 ${grade < questionScore * 0.5 && "text-danger"}`}
-          >
-            Score: {grade} / {questionScore}
-          </h6>
+          <h6 style={{ color: "green" }} className={`mb-1`}>
+            Facilitator: {grade} / {questionScore}
+          </h6>{" "}
+          <h6 className={`mb-1 text-danger`}>
+            Moderator: {moderatorGrade} / {questionScore}
+          </h6>{" "}
         </div>
       </div>
       {!questionType && (

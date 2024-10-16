@@ -20,7 +20,11 @@ function Page({
   const [loading, setLoading] = useState(true);
   const [isMarked, setIsMarked] = useState(true);
   const [totalMark, setTotalMark] = useState(0);
+  const [moderatorTotalMark, setModeratorTotalMark] = useState(0);
   const [totalMarkArr, setTotalMarkArr] = useState<number[]>([]);
+  const [moderatorTotalMarkArr, setModeratorTotalMarkArr] = useState<number[]>(
+    []
+  );
   const currentItems = studentAssessment?.answers;
 
   const [modalShow, setModalShow] = useState(false);
@@ -33,9 +37,21 @@ function Page({
     setTotalMarkArr([...arr]);
   };
 
+  const setModeratorTotals = (newTotal: number, index: number) => {
+    const arr = [...moderatorTotalMarkArr];
+    arr[index] = newTotal;
+    setModeratorTotalMarkArr([...arr]);
+  };
+
   useEffect(() => {
     setTotalMark(totalMarkArr.reduce((a, b) => a + (b || 0), 0));
   }, [totalMarkArr]);
+
+  useEffect(() => {
+    setModeratorTotalMark(
+      moderatorTotalMarkArr.reduce((a, b) => a + (b || 0), 0)
+    );
+  }, [moderatorTotalMarkArr]);
 
   const getAssessments = async () => {
     try {
@@ -64,10 +80,19 @@ function Page({
       <PageHeader />
 
       <div className="container page__container page__container page-section">
-        <div className="mb-0">
-          <div className="page-separator">
-            <div className="page-separator__text">Total Score: {totalMark}</div>
+        <div className=" mb-0">
+          <div className="d-flex flex-column">
+            <div className="page-separator__text mb-2">Total Score</div>
+            <div className="d-flex mb-2">
+              <div className="page-separator__text mb-2">
+                Facilitator : {totalMark}
+              </div>
+              <div className="page-separator__text mb-2">
+                Moderator : {moderatorTotalMark}
+              </div>
+            </div>
           </div>
+          <div className="page-separator"></div>
 
           <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
             <div className="mx-1">
@@ -91,6 +116,7 @@ function Page({
               data.questionType === "Quiz" ? (
                 <MultipleChoiceQuestion
                   setTotals={setTotals}
+                  setModeratorTotals={setModeratorTotals}
                   key={index}
                   questionNumber={index}
                   questionName={data.description}
@@ -105,6 +131,7 @@ function Page({
                 <LongQuestion
                   isMarked={isMarked}
                   setTotals={setTotals}
+                  setModeratorTotals={setModeratorTotals}
                   key={index}
                   questionNumber={index}
                   questionName={data.description}
@@ -124,6 +151,7 @@ function Page({
 
             <FeedbackModal
               totalMark={totalMark}
+              moderatorTotalMark={moderatorTotalMark}
               show={modalShow}
               onHide={() => {
                 setModalShow(false);

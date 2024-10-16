@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 type Props = {
   questionNumber: number;
   setTotals: (total: number, index: number) => void;
+  setModeratorTotals: (total: number, index: number) => void;
   questionName: string;
   questionDescription: string;
   questionScore: number;
@@ -13,6 +14,7 @@ type Props = {
 export default function ({
   questionNumber,
   setTotals,
+  setModeratorTotals,
   questionName,
   questionDescription,
   questionScore,
@@ -42,6 +44,7 @@ export default function ({
                 setGrade((prevGrade) => {
                   const newGrade = questionScore;
                   setTotals(questionScore, questionNumber);
+                  setModeratorTotals(questionScore, questionNumber);
                   return newGrade;
                 });
               }
