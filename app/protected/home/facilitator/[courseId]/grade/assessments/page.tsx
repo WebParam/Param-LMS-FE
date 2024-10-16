@@ -8,7 +8,7 @@ const Page = async ({ params }: { params: { courseId: string } }) => {
 
   return (
     <>
-      <PageHeader courseId={courseId} />
+      <PageHeader />
 
       <div className="container page__container page__container page-section">
         <div className="card mb-0">
