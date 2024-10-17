@@ -36,24 +36,43 @@ export interface IAdminPasswordChangeReset {
     newPassword: string;
     confirmPassword: string;
   }
+
+  export interface IAdminUpdateUser {
+    userId: string;
+    email: string;
+    lastName: string;
+    firstName: string;
+  }
   
-
-export interface IUserRequestModel extends IUser{
-
-}
-
-export interface IUserResponseModel extends IUser{
-
-}
-
 
 export interface IUserLoginModel{
     Email:string, 
     Password:string
 }
 
-
-export interface IUserResetPasswordModel extends IUser{
-    Email:string, 
+export interface IUserRegisterModel{
+  Email:string, 
+  Password:string
 }
 
+export interface IUserRegisterFreeMiumModel{
+  firstName: string,  
+  lastName: string,
+  username: string,
+  email: string,
+  password: string,
+  image: string,
+  role: string,
+  loginType: number
+}
+
+
+export interface IUserResetPasswordModel {
+    email:string, 
+}
+
+export interface IUserResetPasswordRequest {
+  otp: string;
+  email: string;
+  password: string;
+}

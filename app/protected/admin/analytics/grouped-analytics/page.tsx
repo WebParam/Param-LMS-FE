@@ -24,7 +24,7 @@ const Body = ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      <div data-aos="flip-down" className="card mb-0">
+      <div className="card mb-0">
         <div
           className="table-responsive"
           data-toggle="lists"

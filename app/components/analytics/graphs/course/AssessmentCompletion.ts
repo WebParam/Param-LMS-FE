@@ -1,62 +1,166 @@
+export const AssessmentCompletionDataFiltersMapping = {
+  yellow: 'AssessmentCompletionData',
+  red: 'JanAssessmentCompletionData',
+  blue: 'FebAssessmentCompletionData',
+  green: 'MarAssessmentCompletionData',
+  orange: 'AprAssessmentCompletionData',
+  purple: 'MayAssessmentCompletionData',
+  pink: 'JunAssessmentCompletionData',
+  brown: 'JulAssessmentCompletionData',
+  cyan: 'AugAssessmentCompletionData',
+  magenta: 'SepAssessmentCompletionData',
+  teal: 'OctAssessmentCompletionData',
+  lavender: 'NovAssessmentCompletionData',
+  gray: 'DecAssessmentCompletionData',
+};
+
+export const AssessmentCompletionDataFilterOptions = [
+  { description: 'Year', color: 'yellow' },
+  { description: 'Jan', color: 'red' },
+  { description: 'Feb', color: 'blue' },
+  { description: 'Mar', color: 'green' },
+  { description: 'Apr', color: 'orange' },
+  { description: 'May', color: 'purple' },
+  { description: 'Jun', color: 'pink' },
+  { description: 'Jul', color: 'brown' },
+  { description: 'Aug', color: 'cyan' },
+  { description: 'Sep', color: 'magenta' },
+  { description: 'Oct', color: 'teal' },
+  { description: 'Nov', color: 'lavender' },
+  { description: 'Dec', color: 'gray' },
+];
+
+const commonOptions = {
+  chart: {
+    height: 350,
+    type: 'bar',
+    dropShadow: {
+      enabled: true,
+      color: '#000',
+      top: 18,
+      left: 7,
+      blur: 10,
+      opacity: 0.2,
+    },
+    zoom: { enabled: false },
+  },
+  colors: ['#007bff'],
+  dataLabels: { enabled: false },
+  stroke: {
+    show: false,
+    width: 2,
+    colors: ['#007bff', '#ff0000'],
+  },
+  title: { align: 'left' },
+  grid: {
+    borderColor: '#e7e7e7',
+    row: { colors: ['#f3f3f3', 'transparent'] },
+  },
+  markers: { size: 1 },
+  plotOptions: {
+    bar: {
+      horizontal: false,
+      columnWidth: '55%',
+      endingShape: 'rounded',
+      borderRadius: 10,
+    },
+  },
+};
+
 export const AssessmentCompletionData = {
-  series: [
-    {
-      name: 'Completed',
-      data: [3, 4, 4.5, 5, 4.9, 6, 7, 9.1, 12.5],
-    },
-    {
-      name: 'Incomplete',
-      data: [2, 3, 3.5, 4, 3.9, 5, 6, 8.1, 10.5],
-    },
-  ],
-  options: {
-    chart: {
-      type: 'bar' as 'bar', 
-      height: 350,
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: '55%',
-        endingShape: 'rounded',
-        borderRadius: 10, // Added for a nice rounded edge
+  AssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 60)) }],
+    options: {
+      ...commonOptions,
+      xaxis: {
+        categories: [
+          'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+        ],
       },
     },
-    dataLabels: {
-      enabled: false,
+  },
+  JanAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
     },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ['#007bff', '#ff0000'], // Changed color to blue and red
+  },
+  FebAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 28 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 28 }, (_, i) => (i + 1).toString()) },
     },
-    xaxis: {
-      categories: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-      ],
+  },
+  MarAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
     },
-    yaxis: {
-      title: {
-        text: 'Assessments (in hundreds)',
-      },
+  },
+  AprAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 30 }, (_, i) => (i + 1).toString()) },
     },
-    fill: {
-      opacity: 1,
+  },
+  MayAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
     },
-    tooltip: {
-      y: {
-        formatter: function (val:any) {
-          return `${val}00`;
-        },
-      },
+  },
+  JunAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 30 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  JulAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  AugAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  SepAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 30 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  OctAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  NovAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 30 }, (_, i) => (i + 1).toString()) },
+    },
+  },
+  DecAssessmentCompletionData: {
+    series: [{ name: 'Assessment Completion', data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 50)) }],
+    options: {
+      ...commonOptions,
+      xaxis: { categories: Array.from({ length: 31 }, (_, i) => (i + 1).toString()) },
     },
   },
 };

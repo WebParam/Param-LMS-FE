@@ -15,6 +15,7 @@ import { getOptions } from "@/app/lib/actions/options";
 import { getRubrics } from "@/app/lib/actions/rubrics";
 import { EditBtn } from "./Buttons";
 import { Rubric } from "@/app/interfaces/rubric";
+import { removeTags } from "@/app/lib/utils";
 
 export default function Question({ question }: { question: IQuestion }) {
   const [description, setDescription] = useState(question.description);
@@ -24,6 +25,7 @@ export default function Question({ question }: { question: IQuestion }) {
   const [rubrics, setRubrics] = useState<Rubric[]>([]);
   const searchParams = useSearchParams();
   const title = searchParams.get("title") || "";
+  const topicTitle = searchParams.get("topicTitle") || "";
   const refreshId = searchParams.get("refreshId");
   const ref = useRef<HTMLFormElement>(null);
 
@@ -45,9 +47,12 @@ export default function Question({ question }: { question: IQuestion }) {
     setIsSpinner(true);
     await deleteQuestion(question.id!);
     const date = new Date().toString();
-    router.replace(`${pathname}?title=${title}&refreshId=${date}`, {
-      scroll: false,
-    });
+    router.replace(
+      `${pathname}?title=${title}&topicTitle=${topicTitle}&refreshId=${date}`,
+      {
+        scroll: false,
+      }
+    );
   };
 
   useEffect(() => {
@@ -69,11 +74,12 @@ export default function Question({ question }: { question: IQuestion }) {
   const updateQuestionWithParams = updateQuestion.bind(
     null,
     question.id!,
-    description,
+    removeTags(description),
     courseId,
     moduleId,
     assessmentId,
-    title
+    title,
+    topicTitle
   );
 
   return (

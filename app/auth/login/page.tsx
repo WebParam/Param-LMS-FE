@@ -1,11 +1,9 @@
 "use client";
 import { useState } from "react";
-import { Api } from "../../lib/restapi/endpoints";
-import { IUserLoginModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import thooto from "@/app/images/thooto.png";
+import Link from "next/link";
+import { login } from "@/app/lib/data/users";
 
 const cookies = new Cookies();
 
@@ -17,10 +15,10 @@ export default function Login() {
 
   const router = useRouter();
 
-  const onChangeEmail = (e:any) => setEmail(e.target.value);
-  const onChangePassword = (e:any) => setPassword(e.target.value);
+  const onChangeEmail = (e: any) => setEmail(e.target.value);
+  const onChangePassword = (e: any) => setPassword(e.target.value);
 
-  async function LoginUser(event:any) {
+  async function LoginUser(event: any) {
     event.preventDefault();
     setDisable(true);
     setErrorMessage("");
@@ -35,14 +33,23 @@ export default function Login() {
       return;
     }
 
-    const payload = { Email: email, Password: password } as IUserLoginModel;
-
     try {
-      const user = await Api.POST_Login(payload);
+      const user = await login(email, password);
 
       if (user?.data?.id) {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
-        router.push("/protected/home/courses");
+        localStorage.setItem("id", user?.data?.id);
+
+        if (process.env.NEXT_PUBLIC_FREEMIUM === "true") {
+          router.push("/protected/home/projects");
+        } else if (
+          user?.data?.role === "Facilitator" ||
+          user?.data?.role === "Moderator"
+        ) {
+          router.push("/protected/home/facilitator");
+        } else {
+          router.push("/protected/home/courses");
+        }
       } else {
         setErrorMessage("Invalid login credentials");
         setDisable(false);
@@ -54,88 +61,67 @@ export default function Login() {
   }
 
   return (
-    <div className="d-flex" style={{ backgroundColor: "white" }}>
-      <div className="w-50 h-100">
-        <Image
-          className="w-100 h-100"
-          src={thooto}
-          width={500}
-          height={300}
-          alt="banner"
-          layout="responsive"
-        />
-      </div>
-
+    <div className="login-container">
       <div
-        className="p-4 w-50 h-100"
-        style={{
-          backgroundColor: "white",
-          boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.15)",
-          borderRadius: "8px",
-          padding: "40px",
-          maxWidth: "500px",
-          margin: "auto",
-          marginTop: "100px",
-        }}
+        className="d-flex justify-content-center align-items-center vh-100"
+        style={{ marginTop: "20px" }}
       >
-        <h2 className="text-center mb-4">Log in to your account</h2>
-        <p className="text-center mb-4">Welcome back! Please enter your details</p>
-
-        {errorMessage && (
-          <div className="alert alert-danger" role="alert">
-            {errorMessage}
-          </div>
-        )}
-
-        <form onSubmit={LoginUser}>
-          <div className="form-group mb-3">
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={onChangeEmail}
-              className="form-control"
-              placeholder="Enter Email *"
-              required
-              style={{ height: "50px", fontSize: "16px" }}
-            />
-          </div>
-          <div className="form-group mb-3">
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={onChangePassword}
-              className="form-control"
-              placeholder="Enter Password *"
-              required
-              style={{ height: "50px", fontSize: "16px" }}
-            />
-          </div>
-          <div
-            className="d-grid mb-3"
-            style={{ marginTop: "40px", textAlign: "center" }}
-          >
-            <button
-              type="submit"
-              disabled={disable}
-              className="btn btn-primary"
-              style={{
-                backgroundColor: "#24345c",
-                borderColor: "#24345c",
-                height: "50px",
-                fontSize: "16px",
-                width: "80%",
-              }}
+        <div className="card p-4" style={{ width: "450px", height: "480px" }}>
+          <h2 className="text-center mb-4">Log in to your account</h2>
+          <p className="text-center mb-4">
+            Welcome back! Please enter your details
+          </p>
+          <form>
+            <div className="form-group mb-3">
+              <input
+                id="email"
+                type="text"
+                value={email}
+                onChange={onChangeEmail}
+                className="form-control"
+                placeholder="Enter Email *"
+                style={{ height: "50px", fontSize: "16px" }}
+              />
+            </div>
+            <div className="form-group mb-3">
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={onChangePassword}
+                className="form-control"
+                placeholder="Enter Password *"
+                style={{ height: "50px", fontSize: "16px" }}
+              />
+            </div>
+            <div className="text-center mb-3 text-danger">{errorMessage}</div>
+            <div
+              className="d-grid mb-3"
+              style={{ marginTop: "40px", textAlign: "center" }}
             >
-              {disable ? (
-                <div className="spinner-border text-white" role="status" />
-              ) : (
-                "Log In"
-              )}
-            </button>
-          </div>
-        </form>
+              <button
+                disabled={disable}
+                onClick={LoginUser}
+                className="btn btn-primary"
+                style={{
+                  backgroundColor: "#24345c",
+                  borderColor: "#24345c",
+                  height: "50px",
+                  fontSize: "16px",
+                  width: "80%",
+                }}
+              >
+                Log In
+              </button>
+            </div>
+          </form>
+          <p className="text-center text-dark">
+            Lost your password?{" "}
+            <Link href="/auth/login/reset-password" className="text-primary">
+              <u>Reset</u>
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

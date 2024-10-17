@@ -1,11 +1,5 @@
-import DashboardCards from "@/app/components/facilitator/dashboard-cards";
+import DashboardCards from "@/components/Main/dashboard-cards";
 
-const Page = () => {
-  return (
-    <>
-    <DashboardCards/>
-    </>
-  );
-};
-
-export default Page;
+export default function Page() {
+  return <DashboardCards />;
+}

@@ -4,10 +4,9 @@ import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import Pagination from "@/app/components/Pagination";
 import { submitForModeration } from "@/app/lib/actions/assessments";
 import { useParams, useRouter } from "next/navigation";
-import { getUsersByRole } from "@/app/lib/actions/users";
+import { getUsersByRole } from "@/app/lib/data/users";
 
 function SubmitForModeration(props: any) {
   const [dueDate, setDueDate] = useState("");

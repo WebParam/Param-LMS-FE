@@ -16,4 +16,4 @@ export const options = {
     }]
   };
   
-  export const series = [64, 36]; // Data for each gender
+  export const series = ({data}:any) => data; 

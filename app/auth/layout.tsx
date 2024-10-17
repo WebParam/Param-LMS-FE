@@ -1,29 +1,37 @@
 "use client";
-import Image from "next/image";
-import Cookies from "universal-cookie";
+import { useState, useEffect } from 'react';
+import { useDeploymentTime } from "../components/maintenance/useDeploymentTime";
+import Banner from "../components/maintenance/Banner";
 import { ReduxProvider } from "../provider";
 import { usePathname } from "next/navigation";
-
-const cookies = new Cookies();
-
-const isLoggedIn = cookies.get("param-lms-user");
-
-console.log(isLoggedIn);
-
-const metadata = {
-  title: "Login",
-  description: "Supercharge your learning",
-};
 
 export default function RootLayout({
   children,
 }: {
   children?: React.ReactNode;
 }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const { showBanner } = useDeploymentTime();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) {
+    return null; // or a loading spinner
+  }
+
   return (
     <>
       <ReduxProvider>
-        <div>{children}</div>
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+          {showBanner ? (
+            <Banner />
+          ) : (
+            children
+          )}
+        </div>
       </ReduxProvider>
     </>
   );

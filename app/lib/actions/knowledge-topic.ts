@@ -100,6 +100,22 @@ export const getKnowledgeTopics = async (moduleId: string) => {
   }
 };
 
+
+export const reOrderKnowledgeTopic = async (payload:any) => {
+  try {
+    const resp = await put(
+      `${wCourseUrl}/KnowledgeTopics/ReOrder`,payload
+    );
+    const data = resp.data;
+    Diagnostic("SUCCESS ON PUT, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON PUT, returning", err);
+    console.error(err);
+  }
+};
+
+
 export const getKnowledgeTopic = async (topicId: string) => {
   try {
     const resp = await get(

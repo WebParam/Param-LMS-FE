@@ -40,16 +40,44 @@ function CreateAssessmentModal(props: any) {
         <Modal.Header closeButton>
           <Modal.Title>Create Assessment</Modal.Title>
         </Modal.Header>
-
         <Modal.Body>
           <div>
-            <h5>Name</h5>
-            <input
-              minLength={10}
-              className="form-control mb-3"
-              placeholder="Enter your title here..."
-              name="title"
-            />
+            <div>
+              <h5>Name</h5>
+              <input
+                minLength={10}
+                className="form-control mb-3"
+                placeholder="Enter your title here..."
+                name="title"
+              />
+            </div>
+            <div>
+              <h5>Type</h5>
+              <select className="form-control mb-3" name="type">
+                <option value="1">Formative</option>
+                <option value="0">Summative</option>
+              </select>
+            </div>
+            <div>
+              <h5>Total Marks</h5>
+              <input
+                min="0"
+                className="form-control mb-3"
+                placeholder="Enter total marks for Assessment here..."
+                name="totalMarks"
+                type="number"
+                defaultValue={0}
+              />
+            </div>{" "}
+            <div>
+              <h5>Due Date</h5>
+              <input
+                minLength={10}
+                className="form-control mb-3"
+                name="dueDate"
+                type="date"
+              />
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -62,6 +90,4 @@ function CreateAssessmentModal(props: any) {
     </Modal>
   );
 }
-export default dynamic(() => Promise.resolve(CreateAssessmentModal), {
-  ssr: false,
-});
+export default CreateAssessmentModal;

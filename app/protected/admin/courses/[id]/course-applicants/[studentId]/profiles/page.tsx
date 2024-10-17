@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getStudentProfile } from "@/app/lib/actions/courseStudents";
+import { getStudentData, getStudentProfile } from "@/app/lib/actions/courseStudents";
 import { useParams } from "next/navigation";
 import { getCodes } from "@/app/lib/actions/course";
 interface Code {
@@ -17,6 +17,7 @@ export interface codeStructure {
 const Body = () => {
   const [data, setData] = useState<any>();
   const [codes, setCodes] = useState<codeStructure[]>([]);
+  const [error, setError] = useState<string | null>(null);
   let studentName = "";
   if (data && data.firstName && data.surname)
     studentName = data.firstName + " " + data.surname;
@@ -25,34 +26,32 @@ const Body = () => {
   const { studentId } = useParams<{ studentId: string }>();
 
   const studentInformation = async () => {
-    const response = await getStudentProfile(studentId);
-    setData(response);
-    localStorage.setItem("email", response.email);
+    try {
+      const response = await getStudentData(studentId);
+      setData(response);
+      localStorage.setItem("email", response.email);
+    } catch (error) {
+      console.error("Error fetching student information:", error);
+      setError("Failed to fetch student information.");
+    }
   };
 
   const fetchCodes = async () => {
     try {
       const response = await getCodes();
       setCodes(response);
-      console.log("Fetched codes:", response);
     } catch (error) {
       console.error("Error fetching codes:", error);
+      setError("Failed to fetch codes.");
     }
   };
 
   const getDescription = (codeType: number, code: string) => {
-    console.log(`Getting description for type: ${codeType}, code: ${code}`);
-    const codeCategory = codes.find((c: any) => c.type === codeType);
+    const codeCategory = codes && codes.find((c: any) => c.type === codeType);
     if (!codeCategory) {
-      console.log(`No category found for type: ${codeType}`);
       return "N/A";
     }
     const codeObj = codeCategory.codes.find((c) => c.code === code);
-    if (!codeObj) {
-      console.log(
-        `No code object found for code: ${code} in type: ${codeType}`
-      );
-    }
     return codeObj ? codeObj.description : "N/A";
   };
 
@@ -60,6 +59,8 @@ const Body = () => {
     studentInformation();
     fetchCodes();
   }, []);
+
+
 
   return (
     <>

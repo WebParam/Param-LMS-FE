@@ -26,6 +26,7 @@ export const UserApi = {
     const response = await POST(`${userWriteUrl}/Users/AddUser`, payload);
     return response;
   },
+  
   POST_RegisterAdmin: async (
     payload: IUserRegisterModel
   ): Promise<IResponseObject<any>> => {

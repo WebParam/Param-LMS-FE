@@ -1,37 +1,91 @@
 "use server";
 import { redirect } from "next/navigation";
-import { get, post, put } from "../utils";
+import { post, put } from "../utils";
 import { Diagnostic } from "../logger/logger";
-import { rUserUrl, wUserUrl } from "./endpoints";
-import { IAdminPasswordChangeReset } from "@/app/interfaces/user";
+import { wUserUrl } from "./endpoints";
 
-export const getUsersByRole = async (role: string) => {
+export const createUser = async (adminId: string, formData: FormData) => {
+  const body = {
+    name: formData.get("name"),
+    surname: formData.get("surname"),
+    role: parseInt(formData.get("role") as string),
+    email: formData.get("email"),
+    phoneNumber: formData.get("phoneNumber"),
+    adminId,
+  };
+
+  let url = "";
   try {
-    const resp = await get(`${rUserUrl}/Users/ByRole/${role}`);
-    console.log(resp);
-    const data = resp.data;
+    const resp = await post(
+      `${wUserUrl}/RoleManagement/AddRoleManagement`,
+      body
+    );
+    const data = await resp.data;
 
-    // Assuming the structure is as provided
-    const users = data[0]?.users || [];
+    const date = new Date().toString();
+    url = `/protected/home/users?refreshId=${date}`;
 
-    Diagnostic("SUCCESS ON GET, returning", users);
-    return users;
+    Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
-    Diagnostic("ERROR ON GET, returning", err);
-    console.error(err);
+    Diagnostic("ERROR ON POST, returning", err);
+    throw err;
   }
+
+  redirect(url);
 };
 
-export const AdminResetPassword = async (payload: IAdminPasswordChangeReset) => {
-  try {
-    const resp = await put(`${wUserUrl}/Users/AdminResetPassword`, payload);
-    console.log(resp);
-    const data = resp.data;
+export const updateUser = async (userId: string, formData: FormData) => {
+  const body = {
+    userId,
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
+    role: parseInt(formData.get("role") as string),
+    email: formData.get("email"),
+    phoneNumber: formData.get("phoneNumber"),
+  };
 
-    Diagnostic("SUCCESS ON GET, returning", data);
-    return data;
+  let url = "";
+  try {
+    const resp = await put(
+      `${wUserUrl}/RoleManagement/UpdateUserDetails`,
+      body
+    );
+    const data = await resp;
+
+    url = `/protected/home/users/${userId}?pageTitle=Edit User Info&role=${body.role}`;
+    Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
-    Diagnostic("ERROR ON GET, returning", err);
-    console.error(err);
+    Diagnostic("ERROR ON POST, returning", err);
+    throw err;
   }
+
+  redirect(url);
+};
+
+export const updateUserCourses = async (
+  userId: string,
+  role: number,
+  courseId: string,
+  isAssign: boolean
+) => {
+  const body = {
+    userId,
+    role,
+    courseId,
+    isAssign,
+  };
+
+  let url = "";
+  try {
+    const resp = await put(`${wUserUrl}/RoleManagement/UpdateCourses`, body);
+    const data = await resp.data;
+
+    url = `/protected/home/users/${userId}/manage-courses?pageTitle=Manage Courses&role=${role}`;
+    Diagnostic("SUCCESS ON POST, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON POST, returning", err);
+    throw err;
+  }
+
+  redirect(url);
 };
