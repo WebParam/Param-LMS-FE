@@ -246,10 +246,10 @@ function Grade({
     <div className="d-flex w-100">
       <div className="d-flex w-100">
         <div className={`text-center w-100 py-2`}>
-          <h6 style={{ color: "green" }} className={`mb-1`}>
+          <h6 className={`mb-1 text-danger`}>
             Facilitator: {grade} / {questionScore}
           </h6>{" "}
-          <h6 className={`mb-1 text-danger`}>
+          <h6 style={{ color: "green" }} className={`mb-1`}>
             Moderator: {moderatorGrade} / {questionScore}
           </h6>{" "}
         </div>
