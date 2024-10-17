@@ -40,7 +40,11 @@ const DashboardCards = () => {
       icon: "markAssessment",
       title: `Mark Assessments`,
     },
-    { link: "#", icon: "markAssessment", title: "Mark Assignments" },
+    {
+      link: `/protected//admin/courses/${courseId}/grade/assignments/modules?title=${courseTitle}`,
+      icon: "markAssessment",
+      title: "Mark Assignments",
+    },
 
     {
       link: `/protected/admin/logbook/pages/completed?title=${courseTitle}&id=${courseId}`,

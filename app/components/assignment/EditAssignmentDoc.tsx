@@ -8,9 +8,13 @@ import {
   useSearchParams,
 } from "next/navigation";
 import { useEffect, useState } from "react";
-import { updateAssignment, uploadAssignment } from "@/app/lib/actions/assignments";
+import {
+  updateAssignment,
+  uploadAssignment,
+} from "@/app/lib/actions/assignments";
 import Cookies from "universal-cookie";
 import { IUpdateAssignment } from "@/app/interfaces/assignment";
+import QuestionAdd from "./Rubric";
 
 function EditAssignmentDoc(props: any) {
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
@@ -27,7 +31,8 @@ function EditAssignmentDoc(props: any) {
   const [fileName, setFileName] = useState<string>(props.name);
   const [desc, setDesc] = useState<string>(props.desc);
   const [date, setDate] = useState<Date | null>(new Date());
-  const searchParams= useSearchParams();
+  const [publish, setPublish] = useState<string>(props.isPublished ? "yes" : "no");
+  const searchParams = useSearchParams();
   const title = searchParams.get("title");
   const moduleTitle = searchParams.get("moduleTitle");
   const cookies = new Cookies();
@@ -65,7 +70,7 @@ function EditAssignmentDoc(props: any) {
       title: fileName,
       description: desc,
       scheduledDate: date!.toISOString(),
-      isPublished: true
+      isPublished: publish == "yes" ? true : false,
     };
     setSuccessMessage("");
     setErrorMessage("");
@@ -91,7 +96,6 @@ function EditAssignmentDoc(props: any) {
       setIsSpinner(false);
       setFileName("");
       setDesc("");
-      
     }
   }
 
@@ -137,12 +141,28 @@ function EditAssignmentDoc(props: any) {
             Scheduled Date:
           </label>
           <input
-            type="date" 
+            type="date"
             value={date ? date.toISOString().substring(0, 10) : ""}
-            onChange={(e) => setDate(e.target.value ? new Date(e.target.value) : null)}
+            onChange={(e) =>
+              setDate(e.target.value ? new Date(e.target.value) : null)
+            }
             className="form-control"
           />
         </div>
+
+        <div className="mb-3">
+          <label htmlFor="fileUrl" className="form-label">
+            Do you want to publish:
+          </label>
+          <select
+            onChange={(e: any) => setPublish(e.target.value)}
+            className="form-control"
+          >
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <QuestionAdd/>
       </Modal.Body>
       <Modal.Footer>
         {successMessage && (
