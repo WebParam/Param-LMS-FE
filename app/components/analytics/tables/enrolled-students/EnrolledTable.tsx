@@ -31,7 +31,7 @@ function EnrolledTable({ data, courseId }: TablePaginationProps) {
   const downloadAsXls = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
-    const filename = courseTitle;
+    const filename = courseTitle + "-" + new Date().toLocaleString();
     const fileExtension = "xlsx";
     const status = 0;
     const url = `${rUserUrl}/Student/ExportStudentInformation/${courseId}`;

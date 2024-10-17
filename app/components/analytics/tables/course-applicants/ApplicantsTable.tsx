@@ -31,10 +31,10 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
   const downloadAsXls = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
-    const filename = courseTitle;
+    const filename = courseTitle + "-" + new Date().toLocaleString();
     const fileExtension = "xlsx";
     const status = 3;
-    const url = `${rUserUrl}/Student/ExportStudentInformation/${courseId}/${status}`;
+    const url = `${rUserUrl}/Student/ExportStudentInformation/${courseId}`;
     const isGet = true;
     downloadFile(url, filename, fileExtension, setLoading, isGet);
   };
