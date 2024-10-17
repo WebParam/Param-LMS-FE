@@ -61,6 +61,28 @@ function Page({
       if (assessments && assessments.answers) {
         setLoading(false);
         setStudentAssessment(assessments);
+
+        if (assessments.isModerated) {
+          let totalGrade = 0;
+          let moderatorTotalGrade = 0;
+          for (let answer of assessments.answers) {
+            const grades = answer.rubrics.map(
+              (r: any) => r.facilitatorScore || 0
+            );
+            const moderatorGrades = answer.rubrics.map(
+              (r: any) => r.moderatorScore || 0
+            );
+
+            totalGrade += grades.reduce((acc, grade) => acc + grade, 0);
+            moderatorTotalGrade += moderatorGrades.reduce(
+              (acc, grade) => acc + grade,
+              0
+            );
+          }
+
+          setTotalMark(totalGrade);
+          setModeratorTotalMark(moderatorTotalGrade);
+        }
       } else {
         setLoading(false);
         console.error("Unexpected response structure:", assessments);
