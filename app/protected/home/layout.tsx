@@ -53,10 +53,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="mdk-header-layout js-mdk-header-layout">
-        <HeadNav
-          setIsOpen={setIsOpen}
-          isOpen={isOpen}
-        />
+        <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} />
 
         <div className="mdk-header-layout__content page-content ">
           <nav className="navbar navbar-light bg-alt border-bottom">
@@ -70,7 +67,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
-        <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
+      <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
     </>
   );
 }
