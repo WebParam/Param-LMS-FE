@@ -13,7 +13,7 @@ function EditKnowledgeTopicModal(props: any) {
     id: string;
     moduleId: string;
   }>();
-  const [description, setDescription] = useState(props.data.description);
+  const [description, setDescription] = useState(props?.data?.description);
   const searchParams = useSearchParams();
   const [closeEditModal, setCloseEditModal] = useState(false);
   const title = searchParams.get("title") || "";
@@ -22,7 +22,7 @@ function EditKnowledgeTopicModal(props: any) {
 
   const updateKnowledgeTopicWithParams = updateKnowledgeTopic.bind(
     null,
-    props.data.id,
+    props?.data?.id,
     description,
     courseId,
     moduleId,
@@ -50,7 +50,7 @@ function EditKnowledgeTopicModal(props: any) {
               className="form-control mb-3"
               placeholder="Enter your Topic Code. E.g KT01"
               name="topicCode"
-              defaultValue={props.data.topicCode}
+              defaultValue={props?.data?.topicCode}
             />
           </div>
           <div>
@@ -60,7 +60,7 @@ function EditKnowledgeTopicModal(props: any) {
               className="form-control mb-3"
               placeholder="Enter your title here..."
               name="name"
-              defaultValue={props.data.name}
+              defaultValue={props?.data?.name}
             />
           </div>
           <div>
@@ -78,7 +78,7 @@ function EditKnowledgeTopicModal(props: any) {
               placeholder="Enter the length of VideoScript title here..."
               name="lengthOfVideoScript"
               type="number"
-              defaultValue={props.data.lengthOfVideoScript}
+              defaultValue={props?.data?.lengthOfVideoScript}
             />
           </div>
         </Modal.Body>

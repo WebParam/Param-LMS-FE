@@ -17,11 +17,15 @@ const Body = ({ params }: { params: { assessmentId: string } }) => {
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
   const assessmentId = params.assessmentId;
+  const [loading, setLoading] = useState(true);
+
 
   const getAssessments = async () => {
+    setLoading(true)
     const assessments = await getStudentsAssessment(assessmentId);
     setList(assessments);
-    console.log("Assessments", assessments);
+    setLoading(false)
+  
   };
 
   useEffect(() => {
@@ -58,7 +62,7 @@ const Body = ({ params }: { params: { assessmentId: string } }) => {
                   <div
                     className="table-responsive"
                   >
-                    <Table list={currentItems} />
+                    <Table loading = {loading} list={currentItems} />
                   </div>
 
                   <Pagination

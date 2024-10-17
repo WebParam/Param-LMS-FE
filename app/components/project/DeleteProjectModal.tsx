@@ -3,7 +3,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { deleteProject } from "@/app/lib/actions/project";
+import { DELETE } from "@/app/lib/restapi/client";
+import { wUserUrl } from "@/app/lib/actions/endpoints";
 
 function DeleteProjectModal(props: any) {
   const [successMessage, setSuccessMessage] = useState<string>("");
@@ -24,7 +25,8 @@ function DeleteProjectModal(props: any) {
     setDisabled(true);
 
     try {
-      const resp = await deleteProject(props.id);
+      // const resp = await deleteProject(props.id);
+      const resp = await DELETE(`${wUserUrl}/OrganizationProgram/DeleteOrganizationProgram?id=${props.id}`)
 
       if (resp === "Successfully deleted the Organization Program") {
         setIsSpinner(false);

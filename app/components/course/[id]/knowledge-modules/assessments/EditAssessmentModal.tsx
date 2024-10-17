@@ -3,9 +3,7 @@ import dynamic from "next/dynamic";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useParams, useSearchParams } from "next/navigation";
-import { updateDocument } from "@/app/lib/actions/document";
-import { useState, useEffect } from "react";
-import { CreateAssesssmentBtn, EditAssesssmentBtn } from "./Buttons";
+import { EditAssesssmentBtn } from "./Buttons";
 import { updateAssessment } from "@/app/lib/actions/assessments";
 
 function EditAssessmentModal(props: any) {
@@ -15,7 +13,6 @@ function EditAssessmentModal(props: any) {
   }>();
 
   const searchParams = useSearchParams();
-  const [closeEditModal, setCloseEditModal] = useState(false);
   const title = searchParams.get("title") || "";
   const updateAssessmentWithParams = updateAssessment.bind(
     null,
@@ -25,6 +22,7 @@ function EditAssessmentModal(props: any) {
     title
   );
 
+  const dueDate = props.data.dueDate.split("T")[0];
   return (
     <Modal
       {...props}
@@ -39,14 +37,48 @@ function EditAssessmentModal(props: any) {
 
         <Modal.Body>
           <div>
-            <h5>Title</h5>
-            <input
-              minLength={10}
-              className="form-control mb-3"
-              placeholder="Enter your title here..."
-              name="title"
-              defaultValue={props.title}
-            />
+            <div>
+              <h5>Name</h5>
+              <input
+                minLength={10}
+                className="form-control mb-3"
+                placeholder="Enter your title here..."
+                name="title"
+                defaultValue={props.data.title}
+              />
+            </div>
+            <div>
+              <h5>Type</h5>
+              <select
+                defaultValue={props.data.type}
+                className="form-control mb-3"
+                name="type"
+              >
+                <option value="1">Formative</option>
+                <option value="0">Summative</option>
+              </select>
+            </div>
+            <div>
+              <h5>Total Marks</h5>
+              <input
+                min="0"
+                className="form-control mb-3"
+                placeholder="Enter total marks for Assessment here..."
+                name="totalMarks"
+                type="number"
+                defaultValue={props.data.totalMarks}
+              />
+            </div>{" "}
+            <div>
+              <h5>Due Date</h5>
+              <input
+                minLength={10}
+                className="form-control mb-3"
+                name="dueDate"
+                type="date"
+                defaultValue={dueDate}
+              />
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -59,6 +91,4 @@ function EditAssessmentModal(props: any) {
     </Modal>
   );
 }
-export default dynamic(() => Promise.resolve(EditAssessmentModal), {
-  ssr: false,
-});
+export default EditAssessmentModal;

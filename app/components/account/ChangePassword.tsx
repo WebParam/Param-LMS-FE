@@ -1,6 +1,6 @@
 "use client";
 import { IAdminPasswordChangeReset } from "@/app/interfaces/user";
-import { AdminResetPassword } from "@/app/lib/actions/users";
+import { AdminResetPassword } from "@/app/lib/data/users";
 import React, { useState } from "react";
 import Cookies from "universal-cookie";
 

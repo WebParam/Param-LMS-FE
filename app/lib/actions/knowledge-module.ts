@@ -82,6 +82,23 @@ export const getKnowledgeModule = async (id: string) => {
   }
 };
 
+
+export const reOrderKnowledgeModule = async (payload:any) => {
+  console.log("Payload",payload)
+  try {
+    const resp = await put(
+      `${wCourseUrl}/KnowledgeModules/ReOrder`,payload
+    );
+    const data = resp.data;
+    Diagnostic("SUCCESS ON PUT, returning", data);
+    return data;
+  } catch (err) {
+    Diagnostic("ERROR ON PUT, returning", err);
+    console.error(err);
+  }
+};
+
+
 export const updateKnowledgeModule = async (
   id: string,
   description: string,

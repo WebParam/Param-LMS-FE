@@ -40,17 +40,31 @@
   }
   
   .calendar-day {
-    padding: 1.5rem; /* Decreased padding to reduce height */
+    padding: 1.5rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
-    flex-direction: column; /* Ensure children are stacked vertically */
-    justify-content: flex-start; /* Align items to the top */
+    flex-direction: column; 
+    justify-content: flex-start; 
     align-items: center;
-    position: relative; /* Add this line */
-    height: 80px; /* Decreased height for consistency */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    position: relative; 
+    height: auto;
+    box-sizing: border-box;
+  }
+
+  .event{
+    /* display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center; */
+
+    position: relative;
+  }
+
+  .create-button-container {
+    position: relative;
+   
   }
   
   .calendar-day .event {
@@ -77,11 +91,11 @@
     display: block;
   }
   
-  .calendar-day:hover span {
+  .calendar-day:hover .calendar-day-number {
     display: none;
   }
   
-  .calendar-day span {
+  .calendar-day .calendar-day-number {
     display: block;
   }
   
@@ -92,16 +106,13 @@
   }
   
   .create-button {
-    font-size: 1.5rem;
+    font-size: 1rem;
     color: #28a745; /* Green color */
     border: none;
+    font-weight: bold;
     background: none;
     cursor: pointer;
     display: none;
-    position: absolute; /* Add this line */
-    top: 50%; /* Add this line */
-    left: 50%; /* Add this line */
-    transform: translate(-50%, -50%); /* Add this line */
   }
 
 .page-separator {

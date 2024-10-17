@@ -42,6 +42,9 @@ const Body = ({ params }: { params: { id: string; moduleId: string } }) => {
     const url = `${rCourseUrl}/KnowledgeTopics/ExportKnowledgeTopics?moduleId=${id}`;
     downloadFile(url, filename, fileExtension, setExportModal);
   };
+
+
+
   return (
     <>
       <CreateKnowledgeTopicModal
