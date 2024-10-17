@@ -1,108 +1,119 @@
 "use client";
-import { IUserResetPasswordModel } from "@/app/interfaces/user";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { BasicOTPComponent } from "./basic-otp";
 import {
   adminForgotResetPassword,
   AdminSendResetOTP,
-} from "@/app/lib/actions/users";
-import { useRouter } from "next/navigation";
+} from "@/app/lib/data/users";
 
 export default function ResetPassword() {
-  const [email, setEmail] = useState<string>("");
-  const [showPassInputs, setShowPassInputs] = useState<boolean>(true);
-  const [disable, setDisable] = useState<boolean>(false);
-  const [emailError, setEmailError] = useState<boolean>(false);
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [otp, setOTP] = useState<string>("");
-  const [otpLength, setOtpLength] = useState<number>(0);
-  const [showMessage, setShowMessage] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState<string>("");
-  const [alertType, setAlertType] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [otp, setOTP] = useState("");
+  const [showPassInputs, setShowPassInputs] = useState(true);
+  const [disable, setDisable] = useState(false);
+  const [sendEmailSuccess, setSendEmailSuccess] = useState(false);
+  const [sendEmailError, setSendEmailError] = useState(false);
+  const [sendOtpError, setSendOtpError] = useState(false);
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [passwordChangedSuccess ,setPasswordChangedSuccess] = useState(false);
+  const [disableChangePassBtn ,setDisableChangePassBtn] = useState(false);
+
+  const [wrongEmailError, setWrongEmailError] = useState(false);
   const router = useRouter();
 
-  const setOtp = (e: string) => {
-    setOTP(e);
-    setOtpLength(e.length);
-    setDisable(e.length !== 5);
+  const handleOTPChange = (otpValue: string) => {
+    setOTP(otpValue);
+    setDisable(otpValue.length !== 5);
   };
 
-  const ChangePassword = async (event: any) => {
+  const changePassword = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    setDisableChangePassBtn(true)
+    setSendEmailSuccess(false);
+    setSendEmailError(false);
+    setSendOtpError(false);
+    setPasswordMatchError(false);
+    setPasswordChangedSuccess(false);
+    setWrongEmailError(false);
     if (password !== confirmPassword) {
-      setAlertMessage("Passwords do not match.");
-      setAlertType("alert-danger");
+      setPasswordMatchError(true);
       return;
     }
 
     setDisable(true);
-
-    const payload = {
-      email: email,
-      password: password,
-      otp: otp,
-    };
-
     try {
-      const response = await adminForgotResetPassword(payload);
-      setAlertMessage("Password changed successfully. You may now login.");
-      setAlertType("alert-success");
+      const payload = { email, password, otp };
+     const response = await adminForgotResetPassword(payload);
+     if(response.id){
+      setSendOtpError(false);
       setShowPassInputs(false);
-      router.push("/auth/login");
+      setPasswordChangedSuccess(true);
+
+          setDisableChangePassBtn(false)
+      setTimeout(() =>{
+        router.push("/");
+      },5000)
+     }else{
+      setSendOtpError(true)
+     }
+  
     } catch (error: any) {
       console.error(error);
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        setAlertMessage(error.response.data.message);
-      } else {
-        setAlertMessage(
-          "An error occurred while changing the password. Please try again."
-        );
-      }
-      setAlertType("alert-danger");
-    } finally {
+      setSendOtpError(true)
       setDisable(false);
     }
   };
 
-  const SendOtp = async (event: any) => {
+  const sendOtp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (email.trim() === "") {
-      setEmailError(true);
-      setAlertMessage("Email is required.");
-      setAlertType("alert-danger");
+    setSendEmailSuccess(false);
+    setSendEmailError(false);
+    setSendOtpError(false);
+    setPasswordMatchError(false);
+    setPasswordChangedSuccess(false);
+    setWrongEmailError(false);
+    if (!email.trim()) {
+     
       return;
     }
 
-    setEmailError(false);
     setDisable(true);
-
     try {
-      const sendOtp = await AdminSendResetOTP(email);
-      if (sendOtp === "User does not exist") {
-        setAlertMessage(`User does not exist with email: ${email}.`);
-        setAlertType("alert-danger");
-        setShowPassInputs(false);
-      } else if (sendOtp.id) {
-        setAlertMessage(`OTP sent to ${email}.`);
-        setAlertType("alert-success");
-        setShowPassInputs(false);
+      const payload = { email };
+      const response = await AdminSendResetOTP(payload);
+      if (response == "User does not exist") {
+        setWrongEmailError(true)
+        setSendEmailSuccess(false);
+
+      } else if (response.data.id) {
+        setSendEmailError(false);
+        setSendEmailSuccess(true);
+      
+        setTimeout(() => {
+          setSendEmailError(false);
+          setSendEmailSuccess(false);
+          setShowPassInputs(false);
+          setDisable(false);
+        }, 4000);
       }
-      setShowMessage(true);
     } catch (error: any) {
-      console.error(error);
-      setAlertMessage("Error sending OTP. Please try again later.");
-      setAlertType("alert-danger");
+      console.error("Error", error);
     } finally {
       setDisable(false);
     }
   };
+
+  const resetValues = () => {
+    setSendEmailSuccess(false);
+    setSendEmailError(false);
+    setSendOtpError(false);
+    setPasswordMatchError(false);
+    setPasswordChangedSuccess(false);
+    setWrongEmailError(false);
+  }
 
   return (
     <>
@@ -112,81 +123,77 @@ export default function ResetPassword() {
             <h1 className="h2 mb-0">Reset Password</h1>
             <p className="text-breadcrumb">Account Management</p>
           </div>
-          <p className="d-sm-none" />
-          <a href="" className="btn btn-outline-secondary flex-column">
-            Need Help?
-            <span className="btn__secondary-text">Contact us</span>
-          </a>
+          {showPassInputs ? (
+            <a href="/" className="btn btn-success flex-column">
+              <span className="btn__secondary-text">Login</span>
+            </a>
+          ) : (
+            <div
+              onClick={() => 
+
+                {
+                  setShowPassInputs(true)
+                  resetValues()
+                }
+              }
+              className="btn btn-success flex-column"
+            >
+              <span className="btn__secondary-text">Resend OTP</span>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="page-section">
         {showPassInputs ? (
           <>
-            <div className="page-section">
-              <div className="container page__container">
-                <div className="page-separator">
-                  <div className="page-separator__text">Reset Password</div>
-                </div>
-                <div className="col-sm-6 p-0">
-                  {showMessage && (
-                    <div className={`alert ${alertType}`}>
-                      <div className="d-flex flex-wrap">
-                        <div className="mr-8pt">
-                          <i className="material-icons">check_circle</i>
-                        </div>
-                        <div className="flex" style={{ minWidth: 180 }}>
-                          <small className="text-100">{alertMessage}</small>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  <form>
-                    <div className="form-group">
-                      <label className="form-label">Email:</label>
-                      {emailError && (
-                        <span
-                          style={{
-                            color: "red",
-                            fontWeight: "600px",
-                            marginLeft: "1em",
-                          }}
-                        >
-                          * required field
-                        </span>
-                      )}
-                      <input
-                        value={email}
-                        type="text"
-                        className="form-control"
-                        placeholder="Your email address ..."
-                        onChange={(e: any) => {
-                          setDisable(false);
-                          setEmail(e.target.value);
-                        }}
-                      />
-                      <small className="form-text text-muted">
-                        We will email you with info on how to reset your
-                        password.
-                      </small>
-                    </div>
+            <div className="container page__container">
+              <div className="page-separator">
+                <div className="page-separator__text">Reset Password</div>
+              </div>
+              <div className="col-sm-6 p-0">
+                <form onSubmit={sendOtp}>
+                  <div className="form-group">
+                    <label className="form-label">Email:</label>
 
-                    <button
-                      disabled={disable}
-                      onClick={SendOtp}
-                      className="btn btn-success"
-                    >
-                      {disable ? (
-                        <div
-                          className="spinner-border text-white"
-                          role="status"
-                        />
-                      ) : (
-                        "Reset"
-                      )}
-                    </button>
-                  </form>
-                </div>
+                    <input
+                      value={email}
+                      type="email"
+                      className="form-control"
+                      required
+                      placeholder="Your email address ..."
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <small className="form-text text-muted">
+                      We will email you with info on how to reset your password.
+                    </small>
+                  </div>
+                  <button disabled={disable} className={disable ? "btn btn-secondary" : "btn btn-success" }>
+                    {disable ? (
+                      <div
+                        className="spinner-border text-white"
+                        role="status"
+                      />
+                    ) : (
+                      "Reset"
+                    )}
+                  </button>
+                  {sendEmailSuccess && (
+                    <span className=" ml-5 alert alert-success">
+                      OTP successfully sent to {email}
+                    </span>
+                  )}
+                  {sendEmailError && (
+                    <span className=" ml-5 alert alert-danger">
+                      Failed to send OTP sent to {email}
+                    </span>
+                  )}
+                  {wrongEmailError && (
+                  <span className=" ml-5 alert alert-danger">
+                  Kindly utilize an email address previously registered with us.
+                  </span>
+                )}
+                </form>
               </div>
             </div>
           </>
@@ -197,24 +204,25 @@ export default function ResetPassword() {
                 <div className="page-separator__text">Verify OTP</div>
               </div>
               <div style={{ width: "50%", marginBottom: "1em" }}>
-                <BasicOTPComponent onChange={setOtp} />
+                <BasicOTPComponent onChange={handleOTPChange} />
               </div>
 
               <div className="page-separator">
                 <div className="page-separator__text">Change Password</div>
               </div>
 
-              <form className="col-sm-5 p-0">
+              <form onSubmit={changePassword} className="col-sm-5 p-0">
                 <div className="form-group">
                   <label className="form-label" htmlFor="password">
                     Password:
                   </label>
                   <input
-                    onChange={(e: any) => setPassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
                     id="password"
                     type="password"
                     className="form-control"
                     placeholder="Type a new password ..."
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -222,21 +230,43 @@ export default function ResetPassword() {
                     Confirm Password:
                   </label>
                   <input
-                    onChange={(e: any) => setConfirmPassword(e.target.value)}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     id="password2"
                     type="password"
                     className="form-control"
                     placeholder="Confirm your new password ..."
+                    required
                   />
                 </div>
                 <button
                   disabled={disable}
-                  onClick={ChangePassword}
                   type="submit"
-                  className="btn btn-success"
+                  className={disable ? "btn btn-secondary" : "btn btn-success" }
                 >
-                  Save password
+                  {disableChangePassBtn ? (
+                      <div
+                        className="spinner-border text-white"
+                        role="status"
+                      />
+                    ) : (
+                      "Save Password"
+                    )}
                 </button>
+                {sendOtpError && (
+                  <span className=" ml-5 alert alert-danger">Invalid OTP</span>
+                )}
+
+                {passwordChangedSuccess && (
+                  <span className=" ml-5 alert alert-success">
+                    Password changed successfully
+                  </span>
+                )}
+                {passwordMatchError && (
+                  <span className=" ml-5 alert alert-danger">
+                    Passwords do not match
+                  </span>
+                )}
+                
               </form>
             </div>
           </>

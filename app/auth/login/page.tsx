@@ -1,11 +1,9 @@
 "use client";
 import { useState } from "react";
-import { Api } from "../../lib/restapi/endpoints";
-import { IUserLoginModel } from "../../interfaces/user";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { login } from "@/app/lib/actions/users";
+import { login } from "@/app/lib/data/users";
 
 const cookies = new Cookies();
 
@@ -42,8 +40,13 @@ export default function Login() {
         cookies.set("param-lms-user", JSON.stringify(user.data), { path: "/" });
         localStorage.setItem("id", user?.data?.id);
 
-        if (user?.data.role == "Freemium") {
-          router.push("protected/home/projects");
+        if (process.env.NEXT_PUBLIC_FREEMIUM === "true") {
+          router.push("/protected/home/projects");
+        } else if (
+          user?.data?.role === "Facilitator" ||
+          user?.data?.role === "Moderator"
+        ) {
+          router.push("/protected/home/facilitator");
         } else {
           router.push("/protected/home/courses");
         }
@@ -113,16 +116,9 @@ export default function Login() {
             </div>
           </form>
           <p className="text-center text-dark">
-            Don't have an account?{" "}
-            <Link
-              href={
-                process.env.NEXT_PUBLIC_isFreeMium
-                  ? "/auth/freemium-register"
-                  : "/auth/404"
-              }
-              className="text-primary"
-            >
-              <u>Register</u>
+            Lost your password?{" "}
+            <Link href="/auth/login/reset-password" className="text-primary">
+              <u>Reset</u>
             </Link>
           </p>
         </div>

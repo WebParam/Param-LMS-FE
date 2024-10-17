@@ -11,7 +11,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import SkeletonLoader from "@/components/skeleton/skeletonLoader";
 
-const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
+const TableBody: NextPage<{loading : boolean, list: ICourseAssessment[] }> = ({ list,loading }) => {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const [showDocumentModal, setShowDocumentModal] = useState(false)
   const pathname = usePathname();
@@ -48,8 +48,10 @@ const pdfWorkerUrl = `https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min
       </Modal.Body>
     </Modal>
       <tbody className="list" id="staff">
-        {list.length > 0 ?
-          list.map((data: ICourseAssessment) => (
+        {!loading  ?
+        <>
+        {
+          list.length > 0 ?   list.map((data: ICourseAssessment) => (
             <tr key={data.assessmentId} className="selected">
               <td
                 className={`${align.student_name} js-lists-values-projects small`}
@@ -103,7 +105,17 @@ const pdfWorkerUrl = `https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min
                 </Link>
               </td>
             </tr>
-          )) :  <>
+          )) : <tr className="selected">
+          <td className="text-center js-lists-values-projects small" colSpan={10}>
+           No Students Assignments
+          </td>
+          
+         </tr>
+        }
+        </>
+          
+          
+          :  <>
           <tr className="selected">
          <td colSpan={10}>
            <SkeletonLoader width="100%" height="2em" />

@@ -1,10 +1,8 @@
 "use client";
 import Table from "@/components/course/[id]/course-applicants/document/Table";
 import { useEffect, useState } from "react";
-import list from "@/components/course/[id]/course-applicants/document/data";
 import {
   useParams,
-
   useSearchParams,
 } from "next/navigation";
 import { getStudentDocuments } from "@/app/lib/actions/courseStudents";
@@ -15,17 +13,24 @@ const Body = () => {
   const refreshId = searchParams.get("refreshId");
 
   const [data, setData] = useState([]);
+  const [error, setError] = useState<string>();
 
   async function studentInformation() {
-    const response = await getStudentDocuments(studentId);
-    setData(response);
-
-    console.log("response", response);
+    try {
+      const response = await getStudentDocuments(studentId);
+      setData(response);
+      console.log("response", response);
+    } catch (err) {
+      console.error("Failed to fetch student documents:", err);
+      setError("Failed to load documents.");
+    }
   }
 
   useEffect(() => {
     studentInformation();
   }, [refreshId]);
+
+
 
   return (
     <>

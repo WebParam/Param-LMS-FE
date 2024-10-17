@@ -33,7 +33,7 @@ type DataTiles = {
   data: number;
 };
 
-export default async function SkeletonGraphs({ data }: any) {
+export default function SkeletonGraphs({ data }: any) {
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: 112 },
     { name: "Disabilities", icon: "book", data: 5 },

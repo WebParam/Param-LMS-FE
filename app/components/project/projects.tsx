@@ -19,6 +19,7 @@ export default function Projects({ data }: any) {
                   imgUrl={project.logo}
                   title={project.programTitle ?? "NA"}
                   url={`/protected/admin/courses/${project.id}/course-applicants?title=${project.programTitle}`}
+                  editUrl={`/protected/home/projects/${project.id}?title=${project.programTitle}`}
                 />
               ))}
             </div>
@@ -36,11 +37,13 @@ export default function Projects({ data }: any) {
 const Project = ({
   imgUrl,
   url,
+  editUrl,
   title,
   id,
 }: {
   imgUrl: string;
   url: string;
+  editUrl: string;
   title: string;
   id: string;
 }) => {
@@ -83,36 +86,18 @@ const Project = ({
           </div>
         </Link>
 
-        <div className="d-flex p-16pt">
-          <div className="d-flex flex-column flex">
-            <div className="d-flex justify-content-between align-items-center posts-card-popular__title card-body">
-              {" "}
-              <h4 className="card-title m-0">
-                <a href={url}>{title}</a>
-              </h4>
-              <div className="">
-              <i
-                onClick={() => setOpenModal(true)}
-                className="material-icons icon-holder--outline-success rounded-lg mr-8pt "
-                style={{
-                  fontSize: "19px",
-                  cursor: "pointer",
-                }}
-              >
-                delete
-              </i>
-              <i
-                onClick={() => router.push(`/protected/home/projects/${id}`)}
-                className="material-icons icon-holder--outline-success rounded-lg mr-8pt "
-                style={{
-                  fontSize: "19px",
-                  cursor: "pointer",
-                }}
-              >
-                edit
-              </i>
-              </div>
-            </div>
+        <div className="d-flex justify-content-between p-16pt">
+          <h4 className="card-title m-0">
+            <a href={url}>{title}</a>
+          </h4>
+          <div>
+            {" "}
+            <Link href={editUrl}>
+              <i className="material-icons">edit</i>
+            </Link>
+            <i onClick={() => setOpenModal(true)} className="material-icons">
+              delete
+            </i>
           </div>
         </div>
       </div>

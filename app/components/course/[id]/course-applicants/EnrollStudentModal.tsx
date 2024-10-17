@@ -22,7 +22,7 @@ function EnrollStudentModal(props: any) {
   const studentName = searchParams.get("studentName") || "";
   const date = new Date().toISOString();
   const homePath = `/protected/admin/courses/${courseId}/course-applicants?title=${title}&refreshId=${date}`;
-  const isFreemium = process.env.NEXT_PUBLIC_USER;
+  const isFreemium =  process.env.NEXT_PUBLIC_FREEMIUM ==="true";
 
   const enrollStudent = async () => {
     setIsSpinner(true);

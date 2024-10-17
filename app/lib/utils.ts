@@ -18,8 +18,12 @@ export const post = async (url: string, body: any) => {
       },
       body: JSON.stringify(body),
     });
+
+    console.log("payload:", body);
     const data = await res.json();
-    Diagnostic("SUCCESS ON POST, returning", data);
+    console.log("payload: ", body);
+    Diagnostic(`SUCCESS ON POST ${url}, returning`, data);
+    debugger;
     return data;
   } catch (err) {
     console.log(`[API ERROR : Method: POST; Endpoint: ${url}]`, err);
@@ -46,8 +50,11 @@ export const put = async (url: string, body: any) => {
       },
       body: JSON.stringify(body),
     });
+
     const data = await res.json();
-    Diagnostic("SUCCESS ON PUT, returning", data);
+
+    console.log("payload: ", body);
+    Diagnostic(`SUCCESS ON PUT ${url}, returning`, data);
     return data;
   } catch (err) {
     console.log(`[API ERROR : Method: PUT; Endpoint: ${url}]`, err);
@@ -72,7 +79,7 @@ export const del = async (url: string) => {
       },
     });
     const data = await res.json();
-    Diagnostic("SUCCESS ON DELETE, returning", data);
+    Diagnostic(`SUCCESS ON DELETE ${url}, returning`, data);
     return data;
   } catch (err) {
     console.log(`[API ERROR : Method: DELETE; Endpoint: ${url}]`, err);
@@ -105,7 +112,7 @@ export const get = async (url: string) => {
     }
 
     const data = await res.json();
-    Diagnostic("SUCCESS ON GET, returning", data);
+    Diagnostic(`SUCCESS ON GET ${url}, returning`, data);
     return data;
   } catch (err) {
     console.log(`[API ERROR : Method: GET; Endpoint: ${url}]`, err);
