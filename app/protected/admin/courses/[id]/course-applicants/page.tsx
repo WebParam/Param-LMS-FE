@@ -27,12 +27,12 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
 function Page({ params }: { params: { id: string } }) {
   const courseId = params.id;
   const isFreemium = process.env.NEXT_PUBLIC_FREEMIUM;
-  const baseUrl = `${process.env.NEXT_PUBLIC_FREEMIUM_LINK}`;
+  const baseUrl = `https://freemium.thooto.com`;
 
-  const registrationUrl = `${baseUrl}/auth/freemium?${
+  const registrationUrl = `${baseUrl}/register?${
     isFreemium ? "projectId" : "courseId"
   }=${courseId}`;
-  const loginUrl = `${baseUrl}/auth/login`;
+  const loginUrl = `${baseUrl}/login`;
   const [courseData, setCourseData] = useState<IProjectAnalytics | undefined>(
     undefined
   );
