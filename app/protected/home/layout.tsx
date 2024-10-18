@@ -19,7 +19,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const [projectLength, setProjectLength] = useState<string | null>(null);
   const cookies = new Cookies();
   const loggedInUser = cookies.get("param-lms-user");
-  const adminRoles = ["Admin", "SuperAdmin", "Freemium"];
 
   useEffect(() => {
     setProjectLength(localStorage.getItem("len"));
@@ -54,11 +53,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="mdk-header-layout js-mdk-header-layout">
-        <HeadNav
-          setIsOpen={setIsOpen}
-          isOpen={isOpen}
-          adminRoles={adminRoles}
-        />
+        <HeadNav setIsOpen={setIsOpen} isOpen={isOpen} />
 
         <div className="mdk-header-layout__content page-content ">
           <nav className="navbar navbar-light bg-alt border-bottom">
@@ -72,9 +67,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
-      {adminRoles.includes(loggedInUser.role) && (
-        <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
-      )}
+      <Drawer setIsOpen={setIsOpen} isOpen={isOpen} sideTabs={sideTabs} />
     </>
   );
 }

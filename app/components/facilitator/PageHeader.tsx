@@ -1,9 +1,42 @@
 "use client";
 import Cookies from "universal-cookie";
+import { useEffect, useState } from "react";
+import { getUserProfile } from "@/app/lib/actions/profile";
+import ProfileModal from "../profile/ProfileModal";
+import { Details } from "@/app/interfaces/profile";
 
 export default function PageHeader() {
   const cookies = new Cookies();
   const loggedInUser = cookies.get("param-lms-user");
+  const [remoteProfile, setRemoteProfile] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const existingDetails: Details = {
+    id: loggedInUser.id,
+    firstName: loggedInUser.firstName,
+    lastName: loggedInUser.lastName,
+    email: loggedInUser.email,
+  };
+
+  const fetchProfile = async () => {
+    try {
+      const response = await getUserProfile(existingDetails.id);
+      if (response.error) {
+        throw new Error(response.message || "Failed to fetch user profile");
+      }
+      if (response.data === null || !response.data.signature) {
+        setShowModal(true);
+      } else {
+        setRemoteProfile(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      setShowModal(true);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, [loggedInUser.id]);
 
   return (
     <>
@@ -26,6 +59,11 @@ export default function PageHeader() {
           </div>
         </div>
       </div>
+      <ProfileModal
+        show={showModal}
+        existingDetails={existingDetails}
+        onHide={() => setShowModal(false)}
+      />
     </>
   );
 }
