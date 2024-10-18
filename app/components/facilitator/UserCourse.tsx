@@ -12,7 +12,7 @@ function UserCourse({ data }: { data: any }) {
           className="d-flex align-items-center justify-content-center"
           style={{ height: "200px", border: "2px", position: "relative" }}
         >
-          <Link href={`${pathname}/${data.id}/grade/assessments`}>
+          <Link href={`${pathname}/${data.id}/grade/assessments?status=all`}>
             <p
               className="bg-success d-flex align-items-center justify-content-center font-size-32pt font-weight-bold"
               style={{

@@ -7,8 +7,14 @@ export default function Assessments({ list }: any) {
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
+  const status = searchParams.get("status");
   const homeTitle = "homeTitle=Mark Assessments";
   const buttonTitle = "button-title=Assessments";
+  const filterList =
+    status === "all"
+      ? list
+      : list.filter((assessment: any) => assessment.status === status);
+
   return (
     <>
       <div className="page-section bg-alt border-top-2">
@@ -20,7 +26,7 @@ export default function Assessments({ list }: any) {
                   key={assessment.id}
                   imgUrl={assessment.avatar}
                   title={assessment.title}
-                  url={`${pathName}/${assessment.id}?assessment-name=${assessment.title}&${homeTitle}&title=${courseTitle}&${buttonTitle}`}
+                  url={`${pathName}/${assessment.id}?assessment-name=${assessment.title}&${homeTitle}&title=${courseTitle}&${buttonTitle}&status=${status}`}
                 />
               ))}
           </div>
