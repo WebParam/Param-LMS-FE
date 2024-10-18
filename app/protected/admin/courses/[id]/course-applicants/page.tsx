@@ -27,9 +27,7 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
 function Page({ params }: { params: { id: string } }) {
   const courseId = params.id;
   const isFreemium = process.env.NEXT_PUBLIC_FREEMIUM;
-  const baseUrl = `https://${process.env.NEXT_PUBLIC_API_ENV}${
-    isFreemium ? "-freemium" : ""
-  }.thooto.com`;
+  const baseUrl = `https://freemium.thooto.com`;
 
   const registrationUrl = `${baseUrl}/register?${
     isFreemium ? "projectId" : "courseId"

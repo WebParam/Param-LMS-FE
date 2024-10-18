@@ -6,12 +6,16 @@ import { CourseApplicants } from "@/app/interfaces/courseApplicants";
 import TableFilter from "./TableFilter";
 import { downloadFile } from "@/app/lib/utils";
 import { rUserUrl } from "@/app/lib/actions/endpoints";
+import { useSearchParams } from "next/navigation";
 interface TablePaginationProps {
   data: CourseApplicants[];
   courseId?: string;
 }
 
 function ApplicantsTable({ data, courseId }: TablePaginationProps) {
+  const searchParams = useSearchParams();
+  const courseTitle = searchParams.get("title") || "";
+
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 6;
   const [filteredData, setFilteredData] = useState(data);
@@ -27,11 +31,12 @@ function ApplicantsTable({ data, courseId }: TablePaginationProps) {
   const downloadAsXls = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
-    const filename = "boundless-student-data";
+    const filename = courseTitle + "-" + new Date().toLocaleString();
     const fileExtension = "xlsx";
     const status = 3;
-    const url = `${rUserUrl}/Student/ExportStudentInformation/boundless/${courseId}/${status}`;
-    downloadFile(url, filename, fileExtension, setLoading);
+    const url = `${rUserUrl}/Student/ExportStudentInformation/${courseId}`;
+    const isGet = true;
+    downloadFile(url, filename, fileExtension, setLoading, isGet);
   };
 
   // Check the environment variable
