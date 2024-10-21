@@ -15,8 +15,11 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
   const courseTitle = searchParams.get("title") || "";
   const pathName = usePathname();
   const isAccount = pathName == "/protected/admin/account";
+  const adminRoles = ["Admin", "SuperAdmin", "Freemium"];
+
   const isHost =
     pathName == "/protected/host/host-company/478acbasa65s7xasvx56";
+  const hasAccess = !isHost && adminRoles.includes(loggedInUser.role);
 
   const hostName = "Sanlam";
 
@@ -39,7 +42,7 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
             id="default-navbar"
             data-primary
           >
-            {!isHost && (
+            {hasAccess && (
               <button
                 className="navbar-toggler d-block rounded-0"
                 onClick={() => {
@@ -51,7 +54,7 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                 <span className="material-icons">menu</span>
               </button>
             )}
-            <a className={`navbar-brand mr-16pt ${isHost && "ml-3"}`}>
+            <a className={`navbar-brand mr-16pt ${!hasAccess && "ml-3"}`}>
               <span
                 className=" d-lg-block"
                 style={{
@@ -92,7 +95,9 @@ const HeadNavDrawer: NextPage<{ setIsOpen: any; isOpen: boolean }> = ({
                     <strong>Account</strong>
                   </div>
                   <a className="dropdown-item">
-                    <Link href="/protected/admin/account/basic-info?account-title=Basic Information">Edit Account</Link>
+                    <Link href="/protected/admin/account/basic-info?account-title=Basic Information">
+                      Edit Account
+                    </Link>
                   </a>
                   <a className="dropdown-item" onClick={() => logout()}>
                     <Link href="">Logout</Link>

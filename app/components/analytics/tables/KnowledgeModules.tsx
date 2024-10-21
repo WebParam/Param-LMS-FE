@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Pagination from "@/components/Pagination";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { IUnitStandard } from "@/app/interfaces/unit-standard";
-import { getKnowledgeModules, getModules } from "@/app/lib/actions/module";
+import { getKnowledgeModules } from "@/app/lib/actions/knowledge-module";
 
 interface KnowledgeModulesProps {
   path?: string;

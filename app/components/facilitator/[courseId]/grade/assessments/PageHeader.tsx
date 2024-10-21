@@ -1,10 +1,13 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from "universal-cookie";
 
-export default function PageHeader({ courseId }: { courseId?: string }) {
+export default function PageHeader() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title");
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("param-lms-user");
 
   return (
     <>
@@ -25,13 +28,11 @@ export default function PageHeader({ courseId }: { courseId?: string }) {
           </div>
           <button
             onClick={() =>
-              router.push(
-                `/protected/home/facilitator?title=${courseTitle}`
-              )
+              router.push(`/protected/home/facilitator?title=${courseTitle}`)
             }
             className="btn btn-success"
           >
-            Facilitator Dashboard
+            {loggedInUser.role} Dashboard
           </button>
         </div>
       </div>

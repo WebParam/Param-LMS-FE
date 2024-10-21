@@ -128,6 +128,10 @@ export function generateRandomUserId(length?: number) {
   return result;
 }
 
+export function blobToFile(blob: Blob, fileName: string): File {
+  return new File([blob], fileName, { type: blob.type });
+}
+
 export const removeTags = (str: string) => {
   const textArea = document.createElement("textarea");
   textArea.innerHTML = str;

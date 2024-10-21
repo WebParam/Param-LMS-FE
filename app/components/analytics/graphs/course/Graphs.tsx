@@ -56,6 +56,9 @@ import {
   ModuleCompletionRatesFilterOptions,
   ModuleCompletionRatesFiltersMapping,
 } from "@/components/analytics/graphs/course/ModuleCompletion";
+import { getCourseGraphs } from "@/app/lib/actions/course";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 export default async function Graphs() {
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: 112 },
@@ -63,6 +66,19 @@ export default async function Graphs() {
     { name: "Quizzes", icon: "help", data: 10 },
     { name: "Assessments", icon: "list", data: 4 },
   ];
+
+  const searchParams = useSearchParams();
+  const courseId = searchParams.get("id")!;
+  
+  const fetchGraphs = async () => {
+    const response = await getCourseGraphs(courseId);
+    console.log("response",response)
+  }
+
+  useEffect(() => {
+    fetchGraphs()
+  }, [])
+  
 
   return (
     <>

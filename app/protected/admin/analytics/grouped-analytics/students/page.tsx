@@ -4,19 +4,21 @@ import Table from "@/app/components/analytics/tables/grouped-analytics/Table";
 import { useEffect, useState } from "react";
 import { getCourseTableAnalytics } from "@/app/lib/actions/course";
 import data from "./data";
+import { useSearchParams } from "next/navigation";
 
 const Body = ({ params }: { params: { id: string } }) => {
-  const [list, setList] = useState(data);
+  const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMSPERPAGE = 6;
   const indexOfLastItem = currentPage * ITEMSPERPAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
+  const searchParams = useSearchParams();
+  const courseId = searchParams.get("id");
 
   const fetchAnalytics = async () => {
-    const data = await getCourseTableAnalytics("6669f0ff8759b480859c10a7");
-    //   setList(data);
-    console.log(data)
+    const data = await getCourseTableAnalytics(courseId!);
+     setList(data);
   };
 
   useEffect(() => {
