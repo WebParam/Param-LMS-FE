@@ -1,11 +1,14 @@
 "use client";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 export default function Assignments({ list }: any) {
   const baseUrl = "/protected/admin/";
   const searchParams = useSearchParams();
   const courseTitle = searchParams.get("title") || "";
+  const {id} = useParams<{
+    id:string
+  }>();
   const pathName = usePathname();
   const pageUrl =
     pathName === "/protected/admin/moderator/pages/assignments"
@@ -20,15 +23,26 @@ export default function Assignments({ list }: any) {
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
           <div className="row card-group-row">
-            {list &&
-              list.map((assignment: any) => (
-                <Assignment
-                  key={assignment.id}
-                  imgUrl={assignment.avatar}
-                  title="Formative Extended Assignment"
-                  url={`${pageUrl}/${assignment.id}/grade-assignment?assessment-name=Formative Extended Assignment&${homeTitle}&title=${courseTitle}&${buttonTitle}`}
-                />
-              ))}
+            {list && list.length > 0 ? (
+              <>
+                {list.map((assignment: any) => (
+                  <Assignment
+                    key={assignment.id}
+                    imgUrl={assignment.avatar}
+                    title={assignment.title}
+                    url={`/protected/admin/courses/${id}/grade/assignments/${assignment.id}?assessment-name=${assignment.title}&title=${courseTitle}&${buttonTitle}`}
+                  />
+                ))}
+              </>
+            ) : (
+              <div
+              className="card my-24pt text-center d-flex align-items-center justify-content-center"
+              style={{ height: "300px", width: "100%" }}
+            >
+              No Assignments Available Yet...
+            </div>
+            
+            )}
           </div>
         </div>
       </div>

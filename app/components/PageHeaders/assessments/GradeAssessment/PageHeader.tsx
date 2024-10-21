@@ -11,7 +11,7 @@ export default function PageHeader() {
         <div className="container page__container d-flex flex-column flex-md-row align-items-center text-center text-sm-left">
           <div className="flex d-flex justify-content-between flex-column flex-sm-row align-items-center mb-24pt mb-md-0">
             <div className="mb-24pt mb-sm-0 mr-sm-24pt">
-              <h2 className="mb-0">{assessmentName} - Student Assessments</h2>
+              <h2 className="mb-0">{assessmentName} - Student Assignment</h2>
 
               <ol className="breadcrumb p-0 m-0">
                 <li className="breadcrumb-item">
@@ -32,7 +32,7 @@ export default function PageHeader() {
             }
             className="btn btn-success"
           >
-            Mark Assessments
+            Mark Assignments
           </button>
         </div>
       </div>

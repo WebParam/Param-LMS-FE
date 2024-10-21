@@ -1,15 +1,32 @@
 "use client";
-import { AvgTimeSpentData, AvgTimeSpentDatafiltersMapping,
-  AvgTimeSpentDataFilterOptions
-  } from "@/app/components/analytics/graphs/course/AvgTimeSpent";
+import {
+  AvgTimeSpentData,
+  AvgTimeSpentDatafiltersMapping,
+  AvgTimeSpentDataFilterOptions,
+} from "@/app/components/analytics/graphs/course/AvgTimeSpent";
 
-import { AssessmentCompletionData, AssessmentCompletionDataFilterOptions, AssessmentCompletionDataFiltersMapping } from "@/components/analytics/graphs/course/AssessmentCompletion";
-import { questionAskedData, questionAskedDataFilterOptions, questionAskedDataFiltersMapping } from "@/app/components/analytics/graphs/course/AvgQuestionsAsked";
+import {
+  AssessmentCompletionData,
+  AssessmentCompletionDataFilterOptions,
+  AssessmentCompletionDataFiltersMapping,
+} from "@/components/analytics/graphs/course/AssessmentCompletion";
+import {
+  questionAskedData,
+  questionAskedDataFilterOptions,
+  questionAskedDataFiltersMapping,
+} from "@/app/components/analytics/graphs/course/AvgQuestionsAsked";
 
-import { AvgQuizAttemptData, AvgQuizAttemptDataFilterOptions, AvgQuizAttemptDatafiltersMapping } from "@/app/components/analytics/graphs/course/AvgQuizAttempts";
+import {
+  AvgQuizAttemptData,
+  AvgQuizAttemptDataFilterOptions,
+  AvgQuizAttemptDatafiltersMapping,
+} from "@/app/components/analytics/graphs/course/AvgQuizAttempts";
 
-
-import { commentsSubmittedData, commentsSubmittedDataFilterOptions, commentsSubmittedDataFiltersMapping } from "@/app/components/analytics/graphs/course/AvgCommentsSubmitted";
+import {
+  commentsSubmittedData,
+  commentsSubmittedDataFilterOptions,
+  commentsSubmittedDataFiltersMapping,
+} from "@/app/components/analytics/graphs/course/AvgCommentsSubmitted";
 
 import {
   options as studentProgressRateOptions,
@@ -18,9 +35,11 @@ import {
 
 import ChartLayout from "@/app/components/analytics/graphs/ChartLayout";
 
-
-import { liveClassesAttendedData, liveClassesAttendedDatafiltersMapping,
-  liveClassesAttendedDatafilterOptions } from "@/app/components/analytics/graphs/course/LiveClassesAteended";
+import {
+  liveClassesAttendedData,
+  liveClassesAttendedDatafiltersMapping,
+  liveClassesAttendedDatafilterOptions,
+} from "@/app/components/analytics/graphs/course/LiveClassesAteended";
 
 type DataTiles = {
   name: string;
@@ -32,7 +51,14 @@ import KnowledgeModules from "@/app/components/analytics/tables/KnowledgeModules
 import "aos/dist/aos.css";
 import ChartProvider from "@/components/analytics/graphs/ChartProvider";
 import PieChart from "@/components/analytics/graphs/PieChart";
-import { ModuleCompletionRates, ModuleCompletionRatesFilterOptions, ModuleCompletionRatesFiltersMapping } from "@/components/analytics/graphs/course/ModuleCompletion";
+import {
+  ModuleCompletionRates,
+  ModuleCompletionRatesFilterOptions,
+  ModuleCompletionRatesFiltersMapping,
+} from "@/components/analytics/graphs/course/ModuleCompletion";
+import { getCourseGraphs } from "@/app/lib/actions/course";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 export default async function Graphs() {
   const dataTiles: DataTiles[] = [
     { name: "Students", icon: "person_outline", data: 112 },
@@ -40,6 +66,19 @@ export default async function Graphs() {
     { name: "Quizzes", icon: "help", data: 10 },
     { name: "Assessments", icon: "list", data: 4 },
   ];
+
+  const searchParams = useSearchParams();
+  const courseId = searchParams.get("id")!;
+  
+  const fetchGraphs = async () => {
+    const response = await getCourseGraphs(courseId);
+    console.log("response",response)
+  }
+
+  useEffect(() => {
+    fetchGraphs()
+  }, [])
+  
 
   return (
     <>
@@ -65,7 +104,7 @@ export default async function Graphs() {
       </div>
       <div className="row card-group-row">
         <div className="col-lg-6 col-md-12 card-group-row__col">
-        <ChartLayout
+          <ChartLayout
             hasFilter={true}
             title="Assessment Completion Rate"
             type="bar"
@@ -74,12 +113,12 @@ export default async function Graphs() {
             defaultFilter="yellow"
             filtersMapping={AssessmentCompletionDataFiltersMapping}
           >
-            <ChartProvider/>
+            <ChartProvider />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-        <ChartLayout
+          <ChartLayout
             hasFilter={true}
             title="Average Time Spent"
             type="bar"
@@ -88,7 +127,7 @@ export default async function Graphs() {
             defaultFilter="yellow"
             filtersMapping={AvgTimeSpentDatafiltersMapping}
           >
-            <ChartProvider/>
+            <ChartProvider />
           </ChartLayout>
         </div>
 
@@ -111,12 +150,12 @@ export default async function Graphs() {
             defaultFilter="yellow"
             filtersMapping={AvgQuizAttemptDatafiltersMapping}
           >
-            <ChartProvider/>
+            <ChartProvider />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 col-md-12 card-group-row__col">
-        <ChartLayout
+          <ChartLayout
             hasFilter={true}
             title="Average Questions Asked"
             type="bar"
@@ -125,11 +164,11 @@ export default async function Graphs() {
             defaultFilter="yellow"
             filtersMapping={questionAskedDataFiltersMapping}
           >
-            <ChartProvider/>
+            <ChartProvider />
           </ChartLayout>
         </div>
         <div className="col-lg-6 col-md-12 card-group-row__col">
-        <ChartLayout
+          <ChartLayout
             hasFilter={true}
             title="Average Comments Submitted"
             type="bar"
@@ -138,12 +177,12 @@ export default async function Graphs() {
             defaultFilter="yellow"
             filtersMapping={commentsSubmittedDataFiltersMapping}
           >
-            <ChartProvider/>
+            <ChartProvider />
           </ChartLayout>
         </div>
 
         <div className="col-lg-6 w-100 col-md-12 card-group-row__col">
-        <ChartLayout
+          <ChartLayout
             hasFilter={true}
             title="Average Live Classes Attended"
             type="line"
@@ -152,14 +191,12 @@ export default async function Graphs() {
             defaultFilter="yellow"
             filtersMapping={liveClassesAttendedDatafiltersMapping}
           >
-            <ChartProvider/>
+            <ChartProvider />
           </ChartLayout>
         </div>
 
-     
-
         <div className="col-lg-6 col-md-12 card-group-row__col">
-        <ChartLayout
+          <ChartLayout
             hasFilter={true}
             title="Modules Completion Rate"
             type="line"
@@ -168,7 +205,7 @@ export default async function Graphs() {
             defaultFilter="yellow"
             filtersMapping={ModuleCompletionRatesFiltersMapping}
           >
-            <ChartProvider/>
+            <ChartProvider />
           </ChartLayout>
         </div>
       </div>

@@ -2,10 +2,13 @@ import Assessments from "@/components/Assessment/Assessments";
 import { getAssessments } from "@/app/lib/actions/assessments";
 import Tabs from "@/components/Assessment/Tabs";
 import PageHeader from "@/components/PageHeaders/assessments/PageHeader";
+import Assignments from "@/components/assignment/Assignments";
+import { getAssignments } from "@/app/lib/actions/assignments";
 
-const Page = async ({ params }: { params: { id: string } }) => {
+const Page = async ({ params }: { params: {id:string, moduleId: string } }) => {
+  const moduleId = params.moduleId;
   const courseId = params.id;
-  const assessments = await getAssessments(courseId);
+  const assessments = await getAssignments(moduleId);
 
   return (
     <>
@@ -21,7 +24,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
             data-lists-sort-by="js-lists-values-employee-name"
             data-lists-values='["js-lists-values-employee-name", "js-lists-values-employer-name", "js-lists-values-projects", "js-lists-values-activity", "js-lists-values-earnings"]'
           >
-            <Assessments list={assessments} />
+            <Assignments list={assessments} />
           </div>
         </div>
       </div>

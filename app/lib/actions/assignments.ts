@@ -3,6 +3,7 @@ import { IUpdateAssignment } from "@/app/interfaces/assignment";
 import { Diagnostic } from "../logger/logger"; 
 import { rAssessmentUrl, wAssessmentUrl } from "./endpoints";
 import { del, get, put } from "./utils";
+import { unstable_noStore as noStore } from "next/cache";
 
 export const uploadAssignment = async (formData: any) => {
   try {
@@ -81,10 +82,26 @@ export const updateAssignmentFile = async (formData: any,id:string) => {
 
 
 export const getAssignments = async (id: string) => {
-  
+  noStore();
     try {
       const resp = await get(
         `${rAssessmentUrl}/Assignment/GetAssignments/${id}`
+      );
+      const data = resp.data;
+      Diagnostic("SUCCESS ON GET, returning", data);
+      return data;
+    } catch (err) {
+      Diagnostic("ERROR ON GET, returning", err);
+  
+      console.error(err);
+    }
+  };
+
+  export const getStudentSubmittedAssignments = async (id: string) => {
+  
+    try {
+      const resp = await get(
+        `${rAssessmentUrl}/StudentAssignment/GetSubmittedAssignments/${id}`
       );
       const data = resp.data;
       Diagnostic("SUCCESS ON GET, returning", data);
@@ -119,14 +136,12 @@ export const getAssignments = async (id: string) => {
         `${wAssessmentUrl}/Assignment/UpdateAssignment`,payload
       );
       const data = resp.data;
-      Diagnostic("SUCCESS ON GET, returning", data);
+      Diagnostic("SUCCESS ON PUT, returning", data);
       return data;
     } catch (err) {
-      Diagnostic("ERROR ON GET, returning", err);
+      Diagnostic("ERROR ON PUT, returning", err);
   
       console.error(err);
     }
   };
   
-
-

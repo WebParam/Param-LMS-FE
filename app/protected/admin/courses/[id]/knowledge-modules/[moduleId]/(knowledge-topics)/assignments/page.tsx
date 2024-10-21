@@ -48,9 +48,7 @@ function Page({ params }: { params: { id: string; moduleId: string } }) {
           if (content) {
                  setFileTitle(file.name)
             setSelectedFile(file);
-            
-            setEditModal(true);
-            
+            setEditModal(true); 
           }
         };
         reader.readAsText(file);
@@ -65,6 +63,7 @@ function Page({ params }: { params: { id: string; moduleId: string } }) {
     setLoading(true);
     const fetchAssignments: IAssignment[] = await getAssignments(moduleId);
     setAssignmentData(fetchAssignments);
+    console.log("fetchAssignments",fetchAssignments)
     setLoading(false);
   };
   useEffect(() => {
@@ -87,6 +86,7 @@ function Page({ params }: { params: { id: string; moduleId: string } }) {
         assignmentData.map((data) => {
           return (
             <AssignmentDoc
+            isPublished={data.isPublished}
               key={data.id}
               id ={data.id}
               name={data.title}

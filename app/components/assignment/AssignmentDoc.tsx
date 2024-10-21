@@ -1,12 +1,5 @@
 import Link from "next/link";
 import EditAssignmentDoc from "./EditAssignmentDoc";
-
-type Props = {
-  name: string;
-  desc: string;
-  id: string;
-  url: string;
-};
 import { useState } from "react";
 import ViewAssignment from "./ViewAssignment";
 import {
@@ -16,15 +9,22 @@ import {
 } from "@/app/lib/actions/assignments";
 import DeleteAssignmentModal from "./DeleteAssignment";
 
-export default function Module({ name, desc, id, url }: Props) {
+type Props = {
+  name: string;
+  desc: string;
+  id: string;
+  url: string;
+  isPublished: boolean; 
+};
+
+export default function Module({ name, desc, id, url, isPublished }: Props) {
   const [isEditModal, setIsEditModal] = useState(false);
   const [viewAssignment, setViewAssignment] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isFileUploaded, setIsFileUploaded] = useState(false);
-  const [isAssignmentDeleted, setIsAssignmentDeleted] = useState(false)
+  const [isAssignmentDeleted, setIsAssignmentDeleted] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-
 
   const handleAddAssignment = async () => {
     setErrorMessage("");
@@ -75,10 +75,10 @@ export default function Module({ name, desc, id, url }: Props) {
         name={name}
         desc={desc}
         id={id}
+        isPublished={isPublished}
         show={isEditModal}
         onHide={() => setIsEditModal(false)}
       />
-     
 
       <ViewAssignment
         showDocumentModal={viewAssignment}
@@ -105,7 +105,7 @@ export default function Module({ name, desc, id, url }: Props) {
                         position: "absolute",
                         right: "10px",
                       }}
-                      className=" alert-success"
+                      className="alert-success"
                     >
                       {successMessage}
                     </span>
@@ -116,7 +116,7 @@ export default function Module({ name, desc, id, url }: Props) {
                         position: "absolute",
                         right: "10px",
                       }}
-                      className=" alert-danger"
+                      className="alert-danger"
                     >
                       {errorMessage}
                     </span>
@@ -133,11 +133,12 @@ export default function Module({ name, desc, id, url }: Props) {
             </td>
             <td style={{ width: "300px" }} className="py-2">
               <ViewButton
-              isFileUploaded={isFileUploaded}
-                updateAssignment={() => handleAddAssignment()}
+                isPublished={isPublished}
+                isFileUploaded={isFileUploaded}
+                updateAssignment={handleAddAssignment}
                 setViewAssignment={() => setViewAssignment(true)}
                 setIsEditModal={() => setIsEditModal(true)}
-                name = {name}
+                name={name}
                 id={id}
               />
             </td>
@@ -150,27 +151,26 @@ export default function Module({ name, desc, id, url }: Props) {
 
 function ViewButton({
   setIsEditModal,
-  name ,
+  name,
   id,
   setViewAssignment,
   updateAssignment,
   isFileUploaded,
+  isPublished,
 }: {
   setIsEditModal: (isOpen: boolean) => void;
   setViewAssignment: (isOpen: boolean) => void;
   updateAssignment: () => void;
   isFileUploaded: boolean;
-  name:string;
-  id:string
+  name: string;
+  isPublished: boolean;
+  id: string;
 }) {
-
-const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   return (
-
-
     <div className="d-flex justify-content-end">
-       <DeleteAssignmentModal
+      <DeleteAssignmentModal
         id={id}
         show={openDeleteModal}
         onHide={() => setOpenDeleteModal(false)}
@@ -198,11 +198,9 @@ const [openDeleteModal, setOpenDeleteModal] = useState(false);
           className="ml-2"
           onClick={() => setOpenDeleteModal(true)}
         >
-
-<i className="material-icons icon-holder--outline-dark rounded-lg">
+          <i className="material-icons icon-holder--outline-dark rounded-lg">
             delete
           </i>
-        
         </Link>
       </div>
       <div>
@@ -210,7 +208,7 @@ const [openDeleteModal, setOpenDeleteModal] = useState(false);
           href="#"
           type="button"
           className="ml-2"
-          onClick={() => updateAssignment()}
+          onClick={updateAssignment}
         >
           {!isFileUploaded ? (
             <i className="material-icons icon-holder--outline-dark rounded-lg">
