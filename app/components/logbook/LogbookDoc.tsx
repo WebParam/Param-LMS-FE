@@ -1,44 +1,24 @@
-import Link from "next/link";
-import EditLogbookDoc from "./EditLogbookDoc"
+import { useState } from "react";
+import ViewLogbook from "./ViewLogbook";
 
 type Props = {
   name: string;
   url: string;
 };
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
-import ViewLogbook from "./ViewLogbook";
 
-export default function Module({
-  name,
-
-  url,
-}: Props) {
-  const searchParams = useSearchParams();
-  const refreshId = searchParams.get("refreshId");
-  const [isEditModal, setIsEditModal] = useState(false);
+export default function LogbookDoc({ name, url }: Props) {
   const [viewLogbook, setViewLogbook] = useState(false);
-
-
 
   return (
     <div className="card table-responsive my-2">
+      <ViewLogbook
+        showDocumentModal={viewLogbook}
+        setShowDocumentModal={setViewLogbook}
+        pdfWorkerUrl={url}
+        documentToView={name}
+      />
 
-<EditLogbookDoc
-name = {name}
-url = {url}
-show={isEditModal}
-onHide={() => setIsEditModal(false)}
-/>
-
-<ViewLogbook
-  showDocumentModal = {viewLogbook}
-  setShowDocumentModal={setViewLogbook}
-  pdfWorkerUrl={url}
-  documentToView={name}
-/>
-
-           <table className="table table-flush table--elevated">
+      <table className="table table-flush table--elevated">
         <thead>
           <tr>
             <th>
@@ -53,20 +33,20 @@ onHide={() => setIsEditModal(false)}
                 >
                   {name}
                 </div>
-               
               </div>
             </th>
-             </tr>
+          </tr>
         </thead>
         <tbody>
           <tr>
             <td style={{}} className="py-2">
-              <div>
-              {url}
-              </div>
+              <div>{url}</div>
             </td>
             <td style={{ width: "300px" }} className="py-2">
-              <ViewButton url={url} setViewLogbook = {() => setViewLogbook(true)} setIsEditModal={() => setIsEditModal(true)} setDeleteModal={() => {}} />
+              <ViewButton
+                url={url}
+                setViewLogbook={() => setViewLogbook(true)}
+              />
             </td>
           </tr>
         </tbody>
@@ -77,42 +57,20 @@ onHide={() => setIsEditModal(false)}
 
 function ViewButton({
   url,
-  setIsEditModal,
-  setDeleteModal,
-  setViewLogbook
+  setViewLogbook,
 }: {
   url: string;
-  setIsEditModal: (isOpen: boolean) => void;
-  setDeleteModal: (isOpen: boolean) => void;
   setViewLogbook: (isOpen: boolean) => void;
 }) {
   return (
     <div className="d-flex justify-content-end">
       <div>
-        <Link href="#" type="button" onClick={() => setIsEditModal(true)}>
-          <i className="material-icons icon-holder--outline-dark rounded-lg">
-            edit
-          </i>
-        </Link>
-      </div>
-      <div>
-
-      <i onClick={() => setViewLogbook(true)} className="material-icons icon-holder--outline-dark rounded-lg ml-2">
-            visibility
-          </i>
-    
-      </div>
-      <div>
-        <Link
-          href="#"
-          type="button"
-          className="ml-2"
-          onClick={() => setDeleteModal(true)}
+        <i
+          onClick={() => setViewLogbook(true)}
+          className="material-icons icon-holder--outline-dark rounded-lg ml-2"
         >
-          <i className="material-icons icon-holder--outline-dark rounded-lg">
-            delete
-          </i>
-        </Link>
+          visibility
+        </i>
       </div>
     </div>
   );
