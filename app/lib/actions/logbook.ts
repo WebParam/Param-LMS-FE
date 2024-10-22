@@ -98,3 +98,26 @@ export const getAllCourseLogbooksByCourse = async (courseId: string): Promise<{ 
     throw err;
   }
 }
+
+// /api/v1/CourseLogbooks/PreviewDocument/{courseLogbookId}
+export const previewDocument = async (courseLogbookId: string): Promise<Response> => {
+  try {
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+    
+    if (process.env.NEXT_PUBLIC_CLIENTKEY) {
+      headers["Client-Key"] = process.env.NEXT_PUBLIC_CLIENTKEY;
+    }
+
+    const resp = await fetch(`${rLogbookUrl}/CourseLogbooks/PreviewDocument/${courseLogbookId}`, {
+      method: "GET",
+      headers,
+    });
+    Diagnostic("SUCCESS ON PREVIEW DOCUMENT, returning", resp);
+    return resp;
+  } catch (err) {
+    Diagnostic("ERROR ON PREVIEW DOCUMENT, returning", err);
+    throw err;
+  }
+}

@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import LogbookDoc from "@/components/logbook/LogbookDoc";
 import Cookies from "universal-cookie";
 import { ICourseLogbook } from "@/app/interfaces/logbook";
-import { addCourseLogbook, getCourseLogbooksByCourse } from "@/app/lib/actions/logbook";
+import { addCourseLogbook, getCourseLogbooksByCourse, previewDocument } from "@/app/lib/actions/logbook";
 import { rLogbookUrl } from "@/app/lib/actions/endpoints";
 
 interface LogbookData {
@@ -19,6 +19,7 @@ function Page({ params }: { params: { id: string } }) {
   const loggedInUser = cookies.get("param-lms-user");
   const userId = loggedInUser.id;
   const [logbooks, setLogbooks] = useState<ICourseLogbook[]>([]);
+  const [streamFile, setStreamFile] = useState("");
   const arrUrl = pathname.split("/");
   arrUrl.pop();
 
@@ -30,12 +31,25 @@ function Page({ params }: { params: { id: string } }) {
     try {
       const response = await getCourseLogbooksByCourse(params.id);
       if (response.data) {
-        setLogbooks(Array.isArray(response.data) ? response.data : [response.data]);
+        const logbooksArray = Array.isArray(response.data) ? response.data : [response.data];
+        setLogbooks(logbooksArray);
+        if (logbooksArray.length > 0) {
+          await handlePreviewDocument(logbooksArray[0].id);
+        }
       }
     } catch (error) {
       console.error("Error fetching logbooks:", error);
     }
   };
+
+  const handlePreviewDocument = async (courseLogbookId: string) => {
+    const response = await previewDocument(courseLogbookId);
+    if (response.ok) {
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setStreamFile(url);
+    }
+  }
 
   const handleAddLogbook = async () => {
     const fileInput = document.createElement('input');
@@ -75,7 +89,7 @@ function Page({ params }: { params: { id: string } }) {
           <LogbookDoc 
             key={logbook.id} 
             name={`Logbook ${formatDate(logbook.dateUpdated || "")}`} 
-            url={`${rLogbookUrl}/CourseLogbooks/PreviewDocument/${logbook.id}`} 
+            url={streamFile} 
           />
         ))
       ) : (
