@@ -3,15 +3,12 @@ import TableBody from "./TableBody";
 import { NextPage } from "next";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
 
-const Table: NextPage<{ loading:boolean ,list: ICourseAssessment[] }> = ({
-  list , loading}) => {
-
+const Table: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   return (
     <>
-     
       <table className="table mb-0 thead-border-top-0 table-nowrap">
         <TableHead />
-        <TableBody loading = {loading} list={list} />
+        <TableBody list={list} />
       </table>
     </>
   );
