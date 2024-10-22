@@ -1,14 +1,11 @@
 "use client";
-import Module from "@/components/course/[id]/modules/Module";
 import { useEffect, useState } from "react";
-import Pagination from "@/components/Pagination";
-import { usePathname, useSearchParams } from "next/navigation";
-import { IUnitStandard } from "@/app/interfaces/unit-standard";
-import { getModules } from "@/app/lib/actions/module";
+import { usePathname } from "next/navigation";
 import LogbookDoc from "@/components/logbook/LogbookDoc";
 import Cookies from "universal-cookie";
 import { ICourseLogbook } from "@/app/interfaces/logbook";
 import { addCourseLogbook, getCourseLogbooksByCourse } from "@/app/lib/actions/logbook";
+import { rLogbookUrl } from "@/app/lib/actions/endpoints";
 
 interface LogbookData {
   id: number;
@@ -21,15 +18,7 @@ function Page({ params }: { params: { id: string } }) {
   const cookies = new Cookies();
   const loggedInUser = cookies.get("param-lms-user");
   const userId = loggedInUser.id;
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMSPERPAGE = 3;
-  const indexOfLastItem = currentPage * ITEMSPERPAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
   const [logbooks, setLogbooks] = useState<ICourseLogbook[]>([]);
-  const currentItems =
-  logbooks && logbooks.length > 0
-      ? logbooks.slice(indexOfFirstItem, indexOfLastItem)
-      : [];
   const arrUrl = pathname.split("/");
   arrUrl.pop();
 
@@ -42,7 +31,6 @@ function Page({ params }: { params: { id: string } }) {
       const response = await getCourseLogbooksByCourse(params.id);
       if (response.data) {
         setLogbooks(Array.isArray(response.data) ? response.data : [response.data]);
-        console.log(logbooks);
       }
     } catch (error) {
       console.error("Error fetching logbooks:", error);
@@ -87,7 +75,7 @@ function Page({ params }: { params: { id: string } }) {
           <LogbookDoc 
             key={logbook.id} 
             name={`Logbook ${formatDate(logbook.dateUpdated || "")}`} 
-            url={logbook.logBookFileUrl} 
+            url={`${rLogbookUrl}/CourseLogbooks/PreviewDocument/${logbook.id}`} 
           />
         ))
       ) : (

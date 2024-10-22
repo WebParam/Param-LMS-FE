@@ -14,8 +14,7 @@ export default function LogbookDoc({ name, url }: Props) {
       <ViewLogbook
         showDocumentModal={viewLogbook}
         setShowDocumentModal={setViewLogbook}
-        pdfWorkerUrl={url}
-        documentToView={name}
+        documentToView={url}
       />
 
       <table className="table table-flush table--elevated">
