@@ -26,7 +26,7 @@ export default function Assessments({ list }: any) {
                   key={assessment.id}
                   imgUrl={assessment.avatar}
                   title={assessment.title}
-                  url={`${pathName}/${assessment.id}?assessment-name=${assessment.title}&${homeTitle}&title=${courseTitle}&${buttonTitle}&status=${status}`}
+                  url={`${pathName}/${assessment.id}?assessment-name=${assessment.title}&${homeTitle}&title=${courseTitle}&${buttonTitle}&status=${status}&submitStatus=all`}
                 />
               ))}
           </div>

@@ -28,7 +28,7 @@ export default function PageHeader() {
           </div>
           <button
             onClick={() =>
-              router.push(`/protected/home/facilitator?title=${courseTitle}`)
+              router.push(`/protected/home/facilitator`)
             }
             className="btn btn-success"
           >

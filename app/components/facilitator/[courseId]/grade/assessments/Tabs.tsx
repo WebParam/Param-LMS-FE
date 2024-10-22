@@ -16,10 +16,6 @@ export default function Tabs() {
       status: `all`,
     },
     {
-      title: "Pending",
-      status: `pending`,
-    },
-    {
       title: "Available",
       status: `available`,
     },
