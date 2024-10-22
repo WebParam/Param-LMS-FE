@@ -5,15 +5,16 @@ import { Worker } from '@react-pdf-viewer/core';
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'; 
+const pdfVersion = "3.10.111";
+const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
 
 interface ViewLogbookProps {
   showDocumentModal: boolean;
   setShowDocumentModal: (value: boolean) => void;
-  pdfWorkerUrl: string;
   documentToView: string;
 }
 
-function ViewLogbook({ showDocumentModal, setShowDocumentModal, pdfWorkerUrl, documentToView }: ViewLogbookProps) {
+function ViewLogbook({ showDocumentModal, setShowDocumentModal, documentToView }: ViewLogbookProps) {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   return (
