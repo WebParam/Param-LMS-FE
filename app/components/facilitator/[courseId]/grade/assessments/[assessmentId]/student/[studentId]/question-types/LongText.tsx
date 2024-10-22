@@ -6,7 +6,9 @@ import { markStudentAssessment } from "@/app/lib/actions/assessments";
 import Cookies from "universal-cookie";
 
 type Props = {
-  isMarked: boolean;
+  isEvaluate: boolean;
+  isModerated: boolean;
+  isFacilitated: boolean;
   questionNumber: number;
   setTotals: (total: number, index: number) => void;
   setModeratorTotals: (total: number, index: number) => void;
@@ -18,7 +20,9 @@ type Props = {
 };
 
 export default function ({
-  isMarked,
+  isEvaluate,
+  isModerated,
+  isFacilitated,
   questionNumber,
   setTotals,
   setModeratorTotals,
@@ -106,8 +110,10 @@ export default function ({
   };
 
   const submitTotal = () => {
-    setModeratorTotals(moderatorTotalGrade || 0, questionNumber);
-    setTotals(totalGrade || 0, questionNumber);
+    if (!(isFacilitated || isModerated)) {
+      setModeratorTotals(moderatorTotalGrade || 0, questionNumber);
+      setTotals(totalGrade || 0, questionNumber);
+    }
   };
 
   return (
@@ -143,7 +149,16 @@ export default function ({
                 className="py-2 d-flex justify-content-between align-items-center"
               >
                 <div className="d-flex flex-column align-items-start">
-                  {isModerator && (
+                  <div className="text-danger d-flex">
+                    {Array(grades[index])
+                      .fill(<i className="material-icons">check</i>)
+                      .map((icon, i) => (
+                        <span key={i} className="mr-1">
+                          {icon}
+                        </span>
+                      ))}
+                  </div>{" "}
+                  {(isModerated || (isFacilitated && isModerator)) && (
                     <div style={{ color: "#77c13a" }} className=" d-flex">
                       {Array(moderatorGrades[index])
                         .fill(<i className="material-icons">check</i>)
@@ -154,28 +169,22 @@ export default function ({
                         ))}
                     </div>
                   )}
-                  <div className="text-danger d-flex">
-                    {Array(grades[index])
-                      .fill(<i className="material-icons">check</i>)
-                      .map((icon, i) => (
-                        <span key={i} className="mr-1">
-                          {icon}
-                        </span>
-                      ))}
-                  </div>
                   <span className="ml-2">{choice.description}</span>
                 </div>
                 <div
                   className="d-flex"
                   style={{
-                    width: isModerator ? "300px" : "200px",
+                    width:
+                      isModerated || (isFacilitated && isModerator)
+                        ? "300px"
+                        : "200px",
                   }}
                 >
                   <div className="d-flex w-75" style={{ gap: "20px" }}>
-                    {isModerator ? (
+                    {isModerated || (isFacilitated && isModerator) ? (
                       <>
                         <GradeInput
-                          isMarked={isMarked}
+                          isEvaluate={isEvaluate}
                           setIsGraded={setIsGraded}
                           setGrade={(grade) =>
                             handleModeratorGradeChange(index, grade)
@@ -194,7 +203,7 @@ export default function ({
                       </>
                     ) : (
                       <GradeInput
-                        isMarked={isMarked}
+                        isEvaluate={isEvaluate}
                         setIsGraded={setIsGraded}
                         setGrade={(grade) => handleGradeChange(index, grade)}
                         grade={choice.facilitatorScore || grades[index]}
@@ -220,6 +229,9 @@ export default function ({
                 grade={totalGrade}
                 moderatorGrade={moderatorTotalGrade}
                 questionScore={questionScore}
+                isModerated={isModerated}
+                isFacilitated={isFacilitated}
+                isModerator={isModerator}
               />
             </td>
           </tr>
@@ -235,12 +247,18 @@ function Grade({
   grade,
   moderatorGrade,
   questionScore,
+  isModerated,
+  isFacilitated,
+  isModerator,
 }: {
   setIsGraded: (isGraded: boolean) => void;
   grade: number;
   moderatorGrade: number;
   questionType?: string;
   questionScore: number;
+  isModerated: boolean;
+  isFacilitated: boolean;
+  isModerator: boolean;
 }) {
   return (
     <div className="d-flex w-100">
@@ -249,9 +267,11 @@ function Grade({
           <h6 className={`mb-1 text-danger`}>
             Facilitator: {grade} / {questionScore}
           </h6>{" "}
-          <h6 style={{ color: "green" }} className={`mb-1`}>
-            Moderator: {moderatorGrade} / {questionScore}
-          </h6>{" "}
+          {(isModerated || (isFacilitated && isModerator)) && (
+            <h6 style={{ color: "green" }} className={`mb-1`}>
+              Moderator: {moderatorGrade} / {questionScore}
+            </h6>
+          )}
         </div>
       </div>
       {!questionType && (
@@ -270,13 +290,13 @@ function Grade({
 }
 
 function GradeInput({
-  isMarked,
+  isEvaluate,
   setIsGraded,
   setGrade,
   grade,
   questionScore,
 }: {
-  isMarked: boolean;
+  isEvaluate: boolean;
   setIsGraded: (isGraded: boolean) => void;
   setGrade: (grade: number) => void;
   grade: number;
@@ -291,7 +311,7 @@ function GradeInput({
         min="0"
         max={questionScore}
         onChange={(e) => setGrade(Number(e.target.value))}
-        disabled={isMarked}
+        disabled={!isEvaluate}
       />
     </>
   );
