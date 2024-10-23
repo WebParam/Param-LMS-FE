@@ -12,9 +12,15 @@ interface ViewLogbookProps {
   showDocumentModal: boolean;
   setShowDocumentModal: (value: boolean) => void;
   documentToView: string;
+  workerUrl?: string;
 }
 
-function ViewLogbook({ showDocumentModal, setShowDocumentModal, documentToView }: ViewLogbookProps) {
+function ViewLogbook({ 
+  showDocumentModal, 
+  setShowDocumentModal, 
+  documentToView, 
+  workerUrl = pdfWorkerUrl 
+}: ViewLogbookProps) {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   return (
@@ -28,7 +34,7 @@ function ViewLogbook({ showDocumentModal, setShowDocumentModal, documentToView }
           <Modal.Title>Document Preview</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Worker workerUrl={pdfWorkerUrl}>
+        <Worker workerUrl={workerUrl}>
             <Viewer
                //fileUrl={`https://khumla-development-user-read.azurewebsites.net/api/Documents/PreviewDocument/66754b17c66474c142f6b9f6`}
               fileUrl={documentToView}

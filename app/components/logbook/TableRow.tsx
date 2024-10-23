@@ -53,7 +53,7 @@ const TableRow = ({ document }: { document: any }) => {
       <ViewLogbook
         showDocumentModal={viewLogbook}
         setShowDocumentModal={setViewLogbook}
-        pdfWorkerUrl={pdfWorkerUrl}
+        workerUrl={pdfWorkerUrl}
         documentToView={documentToView}
       />
       <tr className="selected">
