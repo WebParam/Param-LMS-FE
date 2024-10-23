@@ -1,25 +1,35 @@
 "use client";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { deleteAssessment } from "@/app/lib/actions/assessments";
+import { closeModeration } from "@/app/lib/actions/assessments";
+import Cookies from "universal-cookie";
 
 function CloseModerationModal(props: any) {
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
   const router = useRouter();
-  const pathname = usePathname();
+  const { courseId, assessmentId } = useParams<{
+    courseId: string;
+    assessmentId: string;
+  }>();
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("param-lms-user");
 
   const searchParams = useSearchParams();
-  const title = searchParams.get("title") || "";
+  const assessmentName = searchParams.get("assessment-name") || "";
 
-  const delUser = async () => {
+  const closeModerationFn = async () => {
     setIsSpinner(true);
-    await deleteAssessment(props.id!);
-    const date = new Date().toString();
-    router.replace(`${pathname}?title=${title}&refreshId=${date}`, {
-      scroll: false,
-    });
+    await closeModeration(assessmentId, loggedInUser.id);
+    setIsSpinner(false);
+    props.onHide();
+    router.replace(
+      `/protected/home/facilitator/${courseId}/grade/assessments?assessment-name=${assessmentName}&status=moderated`,
+      {
+        scroll: false,
+      }
+    );
   };
 
   return (
@@ -41,7 +51,7 @@ function CloseModerationModal(props: any) {
         <Button variant="secondary" onClick={props.onHide}>
           No
         </Button>
-        <button className="btn btn-success" onClick={() => delUser()}>
+        <button className="btn btn-success" onClick={() => closeModerationFn()}>
           {isSpinner ? (
             <span className="spinner-border text-white" role="status" />
           ) : (

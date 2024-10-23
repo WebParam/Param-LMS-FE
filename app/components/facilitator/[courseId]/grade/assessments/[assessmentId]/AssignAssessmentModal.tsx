@@ -3,23 +3,31 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { deleteAssessment } from "@/app/lib/actions/assessments";
+import { assignFacilitator } from "@/app/lib/actions/assessments";
+import Cookies from "universal-cookie";
 
 function AssignAssessmentModal(props: any) {
   const [isSpinner, setIsSpinner] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("param-lms-user");
 
   const searchParams = useSearchParams();
-  const title = searchParams.get("title") || "";
+  const assessmentName = searchParams.get("assessment-name") || "";
+  const submitStatus = searchParams.get("submitStatus") || "";
 
-  const delUser = async () => {
+  const assignFacilitatorFn = async () => {
     setIsSpinner(true);
-    await deleteAssessment(props.id!);
-    const date = new Date().toString();
-    router.replace(`${pathname}?title=${title}&refreshId=${date}`, {
-      scroll: false,
-    });
+    await assignFacilitator(props.id!, loggedInUser.id);
+    setIsSpinner(false);
+    props.onHide();
+    router.replace(
+      `${pathname}?assessment-name=${assessmentName}&status=inProgress&submitStatus=${submitStatus}`,
+      {
+        scroll: false,
+      }
+    );
   };
 
   return (
@@ -41,7 +49,10 @@ function AssignAssessmentModal(props: any) {
         <Button variant="secondary" onClick={props.onHide}>
           No
         </Button>
-        <button className="btn btn-success" onClick={() => delUser()}>
+        <button
+          className="btn btn-success"
+          onClick={() => assignFacilitatorFn()}
+        >
           {isSpinner ? (
             <span className="spinner-border text-white" role="status" />
           ) : (
