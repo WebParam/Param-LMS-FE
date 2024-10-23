@@ -8,7 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import { getUsers, getUsersByRoleAndCourses } from "@/app/lib/data/users";
 
 function SubmitForModeration(props: any) {
-  const [selectedModerator, setSelectedModerator] = useState();
+  const [selectedModerator, setSelectedModerator] = useState("");
   const [moderators, setModerators] = useState<any[]>([]);
   const [formError, setFormError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -30,26 +30,32 @@ function SubmitForModeration(props: any) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
+    if (selectedModerator === "") {
+      setErrorMessage("Please select a Moderator");
+      return;
+    }
+
     formData.append("moderatorId", selectedModerator || "");
     formData.append("assessmentId", assessmentId);
     setLoading(true);
 
     try {
-      await submitForModeration(formData);
-
+      const response = await submitForModeration(formData);
+      const { data, message } = response;
       setLoading(false);
 
-      setSuccessMessage("Moderation submitted successfully");
-
-      setTimeout(() => {
-        setErrorMessage("");
-
-        props.onHide();
-        router.back();
-      }, 3000);
+      if (data) {
+        setSuccessMessage("Moderation submitted successfully");
+        setTimeout(() => {
+          setErrorMessage("");
+          props.onHide();
+          router.back();
+        }, 3000);
+      } else {
+        setErrorMessage(message);
+      }
     } catch (error) {
       setLoading(false);
-
       console.error("Error submitting moderation:", error);
       setErrorMessage("Failed to submit moderation");
       setSuccessMessage("");
@@ -103,6 +109,7 @@ function SubmitForModeration(props: any) {
                 <Form.Control
                   as="select"
                   value={selectedModerator}
+                  onClick={() => setErrorMessage("")}
                   onChange={handleModeratorChange}
                 >
                   <option value="">Select a moderator...</option>

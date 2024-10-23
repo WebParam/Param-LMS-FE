@@ -215,7 +215,7 @@ export const submitForModeration = async (payload: FormData) => {
       body
     );
     Diagnostic("SUCCESS ON POST, returning", data);
-    return data.data;
+    return data;
   } catch (err) {
     Diagnostic("ERROR ON POST, returning", err);
     console.error("Error in submitFacilitatorAssessment:", err);
@@ -253,10 +253,7 @@ export const closeModeration = async (
   };
 
   try {
-    const data = await put(
-      `${wAssessmentUrl}/Assessments/Moderated`,
-      body
-    );
+    const data = await put(`${wAssessmentUrl}/Assessments/Moderated`, body);
     Diagnostic("SUCCESS ON PUT, returning", data);
   } catch (err) {
     Diagnostic("ERROR ON PUT, returning", err);
