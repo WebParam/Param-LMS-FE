@@ -6,10 +6,28 @@ import Tabs from "@/components/facilitator/[courseId]/grade/assessments/[assessm
 
 export default async function Page({
   params,
+  searchParams,
 }: {
   params: { assessmentId: string };
+  searchParams: { [key: string]: string };
 }) {
   const assessments = await getStudentsAssessment(params.assessmentId);
+  const { submitStatus } = searchParams;
+  let filterAssessments = assessments;
+
+  if (submitStatus === "pending") {
+    filterAssessments = assessments.filter(
+      (assessment: any) => assessment.factilitatorMark === -1
+    );
+  } else if (submitStatus === "graded") {
+    filterAssessments = assessments.filter(
+      (assessment: any) => assessment.factilitatorMark > -1
+    );
+  } else if (submitStatus === "moderated") {
+    filterAssessments = assessments.filter(
+      (assessment: any) => assessment.moderatorMark > -1
+    );
+  }
 
   return (
     <>
@@ -19,7 +37,7 @@ export default async function Page({
         <Moderation />
         <Tabs />
         <div data-aos="flip-up" className="card mb-0">
-          <StudentAssessments list={assessments} />
+          <StudentAssessments list={filterAssessments} />
         </div>
       </div>
     </>

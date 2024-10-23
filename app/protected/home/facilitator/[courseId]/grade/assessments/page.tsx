@@ -3,8 +3,12 @@ import PageHeader from "@/components/facilitator/[courseId]/grade/assessments/Pa
 import Assessments from "@/components/facilitator/[courseId]/grade/assessments/Assessments";
 import Tabs from "@/components/facilitator/[courseId]/grade/assessments/Tabs";
 
-const Page = async ({ params }: { params: { courseId: string } }) => {
-  const courseId = params.courseId;
+export default async function Page({
+  params,
+}: {
+  params: { courseId: string };
+}) {
+  const { courseId } = params;
   const assessments = await getAssessments(courseId);
 
   return (
@@ -27,6 +31,4 @@ const Page = async ({ params }: { params: { courseId: string } }) => {
       </div>
     </>
   );
-};
-
-export default Page;
+}

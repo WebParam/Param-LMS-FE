@@ -2,33 +2,65 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Cookies from "universal-cookie";
 
 export default function Assessments({ list }: any) {
   const pathName = usePathname();
   const searchParams = useSearchParams();
-  const courseTitle = searchParams.get("title") || "";
-  const status = searchParams.get("status");
-  const homeTitle = "homeTitle=Mark Assessments";
-  const buttonTitle = "button-title=Assessments";
-  const filterList =
-    status === "all"
-      ? list
-      : list.filter((assessment: any) => assessment.status === status);
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("param-lms-user");
+
+  const status = searchParams.get("status") || "";
+
+  let filterAssessments = [];
+  const statuses: any = {
+    available: 0,
+    inProgress: 1,
+    pendingModeration: 2,
+    moderated: 3,
+  };
+
+  if (status === "inProgress") {
+    filterAssessments = list.filter(
+      (assessment: any) =>
+        assessment.status === statuses[status] &&
+        assessment.facilitatorId === loggedInUser.id
+    );
+  } else if (status === "pendingModeration") {
+    filterAssessments =
+      loggedInUser.role === "Facilitator"
+        ? list.filter(
+            (assessment: any) => assessment.status === statuses[status]
+          )
+        : list.filter(
+            (assessment: any) =>
+              assessment.status === statuses[status] &&
+              assessment.moderatorId === loggedInUser.id
+          );
+  } else if (status !== "all") {
+    filterAssessments = list.filter(
+      (assessment: any) => assessment.status === statuses[status]
+    );
+  }
 
   return (
     <>
       <div className="page-section bg-alt border-top-2">
         <div className="container-fluid page__container page__container">
           <div className="row card-group-row">
-            {list &&
-              list.map((assessment: any) => (
+            {filterAssessments.length > 0 ? (
+              filterAssessments.map((assessment: any) => (
                 <Assessment
                   key={assessment.id}
-                  imgUrl={assessment.avatar}
                   title={assessment.title}
-                  url={`${pathName}/${assessment.id}?assessment-name=${assessment.title}&${homeTitle}&title=${courseTitle}&${buttonTitle}&status=${status}&submitStatus=all`}
+                  url={`${pathName}/${assessment.id}?assessment-name=${assessment.title}&status=${status}&submitStatus=all`}
                 />
-              ))}
+              ))
+            ) : (
+              <div className="card my-24pt w-100 text-center py-3">
+                No Assessments Available...
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -36,18 +68,9 @@ export default function Assessments({ list }: any) {
   );
 }
 
-const Assessment = ({
-  imgUrl,
-  url,
-  title,
-}: {
-  imgUrl: string;
-  url: string;
-  title: string;
-}) => {
+const Assessment = ({ url, title }: { url: string; title: string }) => {
   const [isFacilitator, setIsFacilitator] = useState(false);
 
-  const baseUrl = "/protected/admin/";
   const pathName = usePathname();
   useEffect(() => {
     if (
