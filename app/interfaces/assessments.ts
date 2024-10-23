@@ -40,6 +40,7 @@ export interface Option {
     answers: Answer[];
     submittedAt: string;
     fileUrl: string;
+    isModerated?: string;
   }
   
 

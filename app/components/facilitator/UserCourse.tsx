@@ -1,10 +1,12 @@
-import { updateUserCourses } from "@/app/lib/actions/users";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import Cookies from "universal-cookie";
 
 function UserCourse({ data }: { data: any }) {
   const pathname = usePathname();
+  const cookies = new Cookies();
+  const loggedInUser = cookies.get("param-lms-user");
+  const status = loggedInUser.role === "Facilitator" ? "all" : "pendingModeration"
   return (
     <div className="col-lg-3 card-group-row__col">
       <div className="card card-group-row__card">
@@ -12,7 +14,7 @@ function UserCourse({ data }: { data: any }) {
           className="d-flex align-items-center justify-content-center"
           style={{ height: "200px", border: "2px", position: "relative" }}
         >
-          <Link href={`${pathname}/${data.id}/grade/assessments`}>
+          <Link href={`${pathname}/${data.id}/grade/assessments?status=${status}`}>
             <p
               className="bg-success d-flex align-items-center justify-content-center font-size-32pt font-weight-bold"
               style={{

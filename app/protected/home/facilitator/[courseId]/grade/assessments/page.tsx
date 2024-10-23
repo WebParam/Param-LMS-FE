@@ -1,9 +1,14 @@
 import { getAssessments } from "@/app/lib/actions/assessments";
 import PageHeader from "@/components/facilitator/[courseId]/grade/assessments/PageHeader";
 import Assessments from "@/components/facilitator/[courseId]/grade/assessments/Assessments";
+import Tabs from "@/components/facilitator/[courseId]/grade/assessments/Tabs";
 
-const Page = async ({ params }: { params: { courseId: string } }) => {
-  const courseId = params.courseId;
+export default async function Page({
+  params,
+}: {
+  params: { courseId: string };
+}) {
+  const { courseId } = params;
   const assessments = await getAssessments(courseId);
 
   return (
@@ -11,6 +16,7 @@ const Page = async ({ params }: { params: { courseId: string } }) => {
       <PageHeader />
 
       <div className="container page__container page__container page-section">
+        <Tabs />
         <div className="card mb-0">
           <div
             data-aos="fade-up"
@@ -25,6 +31,4 @@ const Page = async ({ params }: { params: { courseId: string } }) => {
       </div>
     </>
   );
-};
-
-export default Page;
+}

@@ -223,12 +223,51 @@ export const submitForModeration = async (payload: FormData) => {
   }
 };
 
+export const assignFacilitator = async (
+  assessmentId: string,
+  facilitatorId: string
+) => {
+  const body = {
+    facilitatorId,
+    assessmentId,
+  };
+
+  try {
+    const data = await put(
+      `${wAssessmentUrl}/Assessments/AssignFacilitator`,
+      body
+    );
+    Diagnostic("SUCCESS ON PUT, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON PUT, returning", err);
+  }
+};
+
+export const closeModeration = async (
+  assessmentId: string,
+  moderatorId: string
+) => {
+  const body = {
+    moderatorId,
+    assessmentId,
+  };
+
+  try {
+    const data = await put(
+      `${wAssessmentUrl}/Assessments/Moderated`,
+      body
+    );
+    Diagnostic("SUCCESS ON PUT, returning", data);
+  } catch (err) {
+    Diagnostic("ERROR ON PUT, returning", err);
+  }
+};
+
 export const getModeratorStudentsAssessment = async (courseId: string) => {
   try {
     const resp = await get(
       `${rAggregatorUrl}/StudentAssessment/StudentsAssessments/${courseId}`
     );
-    console.log(resp);
     const data = resp.data;
     Diagnostic("SUCCESS ON GET, returning", data);
     return data;

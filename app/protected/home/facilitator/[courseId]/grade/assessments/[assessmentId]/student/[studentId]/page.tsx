@@ -9,16 +9,33 @@ import { data } from "@/components/facilitator/[courseId]/grade/assessments/[ass
 import PageHeader from "@/components/facilitator/[courseId]/grade/assessments/[assessmentId]/student/[studentId]/PageHeader";
 import FeedbackModal from "@/components/facilitator/[courseId]/grade/assessments/[assessmentId]/student/[studentId]/Modal";
 import LongQuestionSkeleton from "@/components/skeleton/LongQuestionSkeleton";
+import Cookies from "universal-cookie";
 
 function Page({
   params,
+  searchParams,
 }: {
   params: { assessmentId: string; studentId: string };
+  searchParams: { [key: string]: string };
 }) {
+  const { submitStatus } = searchParams;
+  const cookies = new Cookies();
+
+  const isFacilitated = submitStatus === "graded";
+  const isPending = submitStatus === "pending";
+  const isModerated = submitStatus === "moderated";
+
+  const loggedInUser = cookies.get("param-lms-user");
+
+  const isFacilitator = loggedInUser.role == "Facilitator";
+  const isModerator = loggedInUser.role == "Moderator";
+
   const [studentAssessment, setStudentAssessment] =
     useState<IAssessmentStudentAnswers | null>(data);
   const [loading, setLoading] = useState(true);
-  const [isMarked, setIsMarked] = useState(true);
+  const [isEvaluate, setIsEvaluate] = useState(
+    (isFacilitated && isModerator) || isPending
+  );
   const [totalMark, setTotalMark] = useState(0);
   const [moderatorTotalMark, setModeratorTotalMark] = useState(0);
   const [totalMarkArr, setTotalMarkArr] = useState<number[]>([]);
@@ -61,6 +78,28 @@ function Page({
       if (assessments && assessments.answers) {
         setLoading(false);
         setStudentAssessment(assessments);
+
+        if (isFacilitated || isModerated) {
+          let totalGrade = 0;
+          let moderatorTotalGrade = 0;
+          for (let answer of assessments.answers) {
+            const grades = answer.rubrics.map(
+              (r: any) => r.facilitatorScore || 0
+            );
+            const moderatorGrades = answer.rubrics.map(
+              (r: any) => r.moderatorScore || 0
+            );
+
+            totalGrade += grades.reduce((acc, grade) => acc + grade, 0);
+            moderatorTotalGrade += moderatorGrades.reduce(
+              (acc, grade) => acc + grade,
+              0
+            );
+          }
+
+          setTotalMark(totalGrade);
+          setModeratorTotalMark(moderatorTotalGrade);
+        }
       } else {
         setLoading(false);
         console.error("Unexpected response structure:", assessments);
@@ -81,29 +120,39 @@ function Page({
 
       <div className="container page__container page__container page-section">
         <div className=" mb-0">
-          <div className="d-flex flex-column">
-            <div className="page-separator__text mb-2">Total Score</div>
-            <div className="d-flex mb-2">
-              <div className="page-separator__text mb-2">
-                Facilitator : {totalMark}
-              </div>
-              <div className="page-separator__text mb-2">
-                Moderator : {moderatorTotalMark}
-              </div>
-            </div>
-          </div>
-          <div className="page-separator"></div>
+          {(isFacilitated || isModerated) && (
+            <>
+              <div className="d-flex flex-column">
+                <div className="page-separator__text mb-2">Total Score</div>
+                <div className="d-flex mb-2">
+                  <div className="page-separator__text mb-2">
+                    Facilitator : {totalMark}
+                  </div>
 
-          <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
-            <div className="mx-1">
-              <button
-                className="btn btn-success btn-block"
-                onClick={() => setIsMarked(false)}
-              >
-                Re - Evaluate
-              </button>
+                  {(isModerated || (isFacilitated && isModerator)) && (
+                    <div className="page-separator__text mb-2">
+                      Moderator : {moderatorTotalMark}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="page-separator"></div>
+            </>
+          )}
+
+          {((isFacilitated && isFacilitator) ||
+            (isModerated && isModerator)) && !isEvaluate && (
+            <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+              <div className="mx-1">
+                <button
+                  className="btn btn-success btn-block"
+                  onClick={() => setIsEvaluate(!isEvaluate)}
+                >
+                  Re - Evaluate
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           {loading ? (
             <>
@@ -129,7 +178,9 @@ function Page({
                 />
               ) : (
                 <LongQuestion
-                  isMarked={isMarked}
+                  isEvaluate={isEvaluate}
+                  isModerated={isModerated}
+                  isFacilitated={isFacilitated}
                   setTotals={setTotals}
                   setModeratorTotals={setModeratorTotals}
                   key={index}
@@ -144,20 +195,22 @@ function Page({
             )
           )}
 
-          <div className="card mb-0">
-            <Button variant="success" onClick={() => setModalShow(true)}>
-              Submit
-            </Button>
+          {isEvaluate && (
+            <div className="card mb-0">
+              <Button variant="success" onClick={() => setModalShow(true)}>
+                Submit
+              </Button>
 
-            <FeedbackModal
-              totalMark={totalMark}
-              moderatorTotalMark={moderatorTotalMark}
-              show={modalShow}
-              onHide={() => {
-                setModalShow(false);
-              }}
-            />
-          </div>
+              <FeedbackModal
+                totalMark={totalMark}
+                moderatorTotalMark={moderatorTotalMark}
+                show={modalShow}
+                onHide={() => {
+                  setModalShow(false);
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>

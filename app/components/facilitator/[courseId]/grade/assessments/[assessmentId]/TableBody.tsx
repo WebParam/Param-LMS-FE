@@ -2,15 +2,12 @@ import Link from "next/link";
 import { NextPage } from "next";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ICourseAssessment } from "@/app/interfaces/assessments";
-import SkeletonLoader from "@/components/skeleton/skeletonLoader";
 
-const TableBody: NextPage<{ loading: boolean; list: ICourseAssessment[] }> = ({
-  list,
-  loading,
-}) => {
+const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const title = searchParams.get("title")!;
+  const submitStatus = searchParams.get("submitStatus")!;
   const assessmentName = searchParams.get("assessment-name")!;
 
   const align = {
@@ -23,7 +20,7 @@ const TableBody: NextPage<{ loading: boolean; list: ICourseAssessment[] }> = ({
   return (
     <>
       <tbody className="list" id="staff">
-        {!loading ? (
+        {
           <>
             {list.length > 0 ? (
               list.map((data: ICourseAssessment) => {
@@ -76,7 +73,7 @@ const TableBody: NextPage<{ loading: boolean; list: ICourseAssessment[] }> = ({
                     >
                       <Link
                         className={`chip chip-outline-success text`}
-                        href={`${pathname}/student/${data.userId}?title=${title}&assessment_name=${assessmentName}&studentName=${name}&homeTitle=${assessmentName}`}
+                        href={`${pathname}/student/${data.userId}?assessment_name=${assessmentName}&studentName=${name}&homeTitle=${assessmentName}&submitStatus=${submitStatus}`}
                       >
                         Grade Assessment
                         <i className="material-icons ">assignment_turned_in</i>
@@ -96,25 +93,7 @@ const TableBody: NextPage<{ loading: boolean; list: ICourseAssessment[] }> = ({
               </tr>
             )}
           </>
-        ) : (
-          <>
-            <tr className="selected">
-              <td colSpan={10}>
-                <SkeletonLoader width="100%" height="2em" />
-              </td>
-            </tr>
-            <tr className="selected">
-              <td colSpan={10}>
-                <SkeletonLoader width="100%" height="2em" />
-              </td>
-            </tr>{" "}
-            <tr className="selected">
-              <td colSpan={10}>
-                <SkeletonLoader width="100%" height="2em" />
-              </td>
-            </tr>
-          </>
-        )}
+        }
       </tbody>
     </>
   );
