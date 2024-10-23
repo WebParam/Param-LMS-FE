@@ -12,10 +12,6 @@ export default function Tabs() {
 
   const facilitatorLinks = [
     {
-      title: "All",
-      status: `all`,
-    },
-    {
       title: "Available",
       status: `available`,
     },

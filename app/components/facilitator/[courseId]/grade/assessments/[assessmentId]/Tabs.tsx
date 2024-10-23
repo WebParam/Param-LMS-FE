@@ -13,7 +13,7 @@ export default function Tabs() {
   const submitStatus = searchParams.get("submitStatus") as string;
   const loggedInUser = cookies.get("param-lms-user");
 
-  const tabs: { [key: string]: any[] | any } = {
+  const tabs: { [key: string]: any[] } = {
     all: [
       {
         title: "All",
@@ -40,32 +40,20 @@ export default function Tabs() {
         status: `graded`,
       },
     ],
-    pendingModeration: {
-      Facilitator: [
-        {
-          title: "All",
-          status: `all`,
-        },
-        {
-          title: "Graded",
-          status: `graded`,
-        },
-      ],
-      Moderator: [
-        {
-          title: "All",
-          status: `all`,
-        },
-        {
-          title: "Graded",
-          status: `graded`,
-        },
-        {
-          title: "Moderated",
-          status: `moderated`,
-        },
-      ],
-    },
+    pendingModeration: [
+      {
+        title: "All",
+        status: `all`,
+      },
+      {
+        title: "Graded",
+        status: `graded`,
+      },
+      {
+        title: "Moderated",
+        status: `moderated`,
+      },
+    ],
     moderated: [
       {
         title: "All",
@@ -74,10 +62,7 @@ export default function Tabs() {
     ],
   };
 
-  const links =
-    status === "pendingModeration"
-      ? tabs[status][loggedInUser.role]
-      : tabs[status];
+  const links = tabs[status];
 
   return (
     <>
