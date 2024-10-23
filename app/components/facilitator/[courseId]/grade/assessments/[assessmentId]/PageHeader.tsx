@@ -6,7 +6,10 @@ import Link from "next/link";
 
 export default function PageHeader() {
   const searchParams = useSearchParams();
-  const { courseId } = useParams<{ courseId: string }>();
+  const { courseId, assessmentId } = useParams<{
+    courseId: string;
+    assessmentId: string;
+  }>();
   const assessmentName = searchParams.get("assessment-name");
   const status = searchParams.get("status") as string;
   const [openModal, setOpenModal] = useState(status === "available");
@@ -41,6 +44,7 @@ export default function PageHeader() {
           </div>
           <AssignAssessmentModal
             show={openModal}
+            id={assessmentId}
             onHide={() => {
               setOpenModal(false);
             }}
