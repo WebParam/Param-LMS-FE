@@ -4,16 +4,22 @@ import Modal from "react-bootstrap/Modal";
 import { CreateUserBtn } from "./Buttons";
 import { createUser } from "@/app/lib/actions/users";
 import Cookies from "universal-cookie";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 function CreateUserModal(props: any) {
   const cookies = new Cookies();
   const loggedInUser = cookies.get("param-lms-user");
   const createUserWithParam = createUser.bind(null, loggedInUser.id);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const error = searchParams.get("error");
 
   return (
     <Modal
       {...props}
       size="lg"
+      backdrop="static"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
@@ -23,6 +29,7 @@ function CreateUserModal(props: any) {
         </Modal.Header>
         <Modal.Body>
           <div>
+            {error && <div className="alert alert-danger">{error}</div>}
             <div className="row">
               <div className="col-6">
                 <h5>Name</h5>
@@ -72,7 +79,13 @@ function CreateUserModal(props: any) {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={props.onHide}>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              props.onHide();
+              if (error) router.push(pathname);
+            }}
+          >
             Close
           </Button>
           <CreateUserBtn />
