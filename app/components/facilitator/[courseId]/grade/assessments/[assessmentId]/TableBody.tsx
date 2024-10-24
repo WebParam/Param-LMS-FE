@@ -7,6 +7,7 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const title = searchParams.get("title")!;
+  const status = searchParams.get("status")!;
   const submitStatus = searchParams.get("submitStatus")!;
   const assessmentName = searchParams.get("assessment-name")!;
 
@@ -73,7 +74,7 @@ const TableBody: NextPage<{ list: ICourseAssessment[] }> = ({ list }) => {
                     >
                       <Link
                         className={`chip chip-outline-success text`}
-                        href={`${pathname}/student/${data.userId}?assessment_name=${assessmentName}&studentName=${name}&homeTitle=${assessmentName}&submitStatus=${submitStatus}`}
+                        href={`${pathname}/student/${data.userId}?assessment_name=${assessmentName}&studentName=${name}&homeTitle=${assessmentName}&status=${status}&submitStatus=${submitStatus}`}
                       >
                         Grade Assessment
                         <i className="material-icons ">assignment_turned_in</i>

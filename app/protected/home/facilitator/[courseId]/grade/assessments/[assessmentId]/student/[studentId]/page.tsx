@@ -10,6 +10,8 @@ import PageHeader from "@/components/facilitator/[courseId]/grade/assessments/[a
 import FeedbackModal from "@/components/facilitator/[courseId]/grade/assessments/[assessmentId]/student/[studentId]/Modal";
 import LongQuestionSkeleton from "@/components/skeleton/LongQuestionSkeleton";
 import Cookies from "universal-cookie";
+import { rAssessmentUrl } from "@/app/lib/actions/endpoints";
+import { downloadFile } from "@/app/lib/utils";
 
 function Page({
   params,
@@ -18,12 +20,13 @@ function Page({
   params: { assessmentId: string; studentId: string };
   searchParams: { [key: string]: string };
 }) {
-  const { submitStatus } = searchParams;
+  const { submitStatus, status, studentName } = searchParams;
   const cookies = new Cookies();
 
   const isFacilitated = submitStatus === "graded";
   const isPending = submitStatus === "pending";
   const isModerated = submitStatus === "moderated";
+  const isCompleteModeration = status === "moderated";
 
   const loggedInUser = cookies.get("param-lms-user");
 
@@ -33,6 +36,7 @@ function Page({
   const [studentAssessment, setStudentAssessment] =
     useState<IAssessmentStudentAnswers | null>(data);
   const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(false);
   const [isEvaluate, setIsEvaluate] = useState(
     (isFacilitated && isModerator) || isPending
   );
@@ -45,8 +49,7 @@ function Page({
   const currentItems = studentAssessment?.answers;
 
   const [modalShow, setModalShow] = useState(false);
-  const assessmentId = params.assessmentId;
-  const userId = params.studentId;
+  const { assessmentId, studentId } = params;
 
   const setTotals = (newTotal: number, index: number) => {
     const arr = [...totalMarkArr];
@@ -58,6 +61,16 @@ function Page({
     const arr = [...moderatorTotalMarkArr];
     arr[index] = newTotal;
     setModeratorTotalMarkArr([...arr]);
+  };
+
+  const downloadAssessment = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setLoader(true);
+    const filename = studentName + "-Assessment-" + new Date().toLocaleString();
+    const fileExtension = "pdf";
+    const url = `${rAssessmentUrl}/StudentAnswers/DownloadStudentAsssessment/${studentId}/${assessmentId}`;
+    const isGet = true;
+    downloadFile(url, filename, fileExtension, setLoader, isGet);
   };
 
   useEffect(() => {
@@ -73,7 +86,7 @@ function Page({
   const getAssessments = async () => {
     try {
       const assessments: IAssessmentStudentAnswers =
-        await getStudentAssessmentAnswers(userId, assessmentId);
+        await getStudentAssessmentAnswers(studentId, assessmentId);
 
       if (assessments && assessments.answers) {
         setLoading(false);
@@ -140,8 +153,28 @@ function Page({
             </>
           )}
 
+          {isCompleteModeration && (
+            <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
+              <div className="mx-1">
+                {loader ? (
+                  <button className={`btn btn-success`}>
+                    <div className="spinner-border text-white" role="status" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={downloadAssessment}
+                    style={{ cursor: "pointer" }}
+                    className={`btn btn-success`}
+                  >
+                    Download Assessment
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
           {((isFacilitated && isFacilitator) ||
-            (isModerated && isModerator)) && !isEvaluate && (
+            (isModerated && isModerator)) && (
             <div className="card mb-3 d-flex flex-row p-2 justify-content-end">
               <div className="mx-1">
                 <button
