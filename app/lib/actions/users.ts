@@ -20,10 +20,12 @@ export const createUser = async (adminId: string, formData: FormData) => {
       `${wUserUrl}/RoleManagement/AddRoleManagement`,
       body
     );
-    const data = await resp.data;
+    const { data, message } = await resp;
 
-    const date = new Date().toString();
-    url = `/protected/home/users?refreshId=${date}`;
+    if (data) {
+      const date = new Date().toString();
+      url = `/protected/home/users?refreshId=${date}`;
+    } else url = `/protected/home/users?error=${message}`;
 
     Diagnostic("SUCCESS ON POST, returning", data);
   } catch (err) {
